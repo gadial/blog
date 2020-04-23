@@ -48,13 +48,16 @@ tags:
 ועם זאת, זו תוכנית טובה להתחיל איתה, כי היא מאפשרת לנו לראות את מה שבהתחלה הוא החלק המסובך ביותר להתעסקות איתו - מנגנון הקלט והפלט של התוכנית. העניין הבסיסי הוא זה: קלט מהמשתמש (או מקובץ) נקרא בתור רצף של תווים. למשל, "sddfg” הוא קלט אפשרי אחד. הקלט הזה מיוצג ברוב שפות התכנות בתור מה שנקרא מחרוזת (String) - רצף של תווים. לא מספר. בשל כך, אי אפשר להפעיל פעולות חשבון רגילות על מחרוזות; כדי לבצע פעולת חשבון צריך קודם כל להגיד לשפת התכנות להמיר את הקלט שלה למספר. ברוב שפות התכנות צריך להגיד את זה באופן מפורש, כדי למנוע תקלות (מצב שבו התוכנית מחליטה "על דעת עצמה" להתייחס למחרוזת בתור מספר למרות שאנחנו לא רוצים - כמה פעמים קרה לכם שעבדתם באקסל וכתבתם מספר זהות של מישהו שמתחיל ב-0, ואקסל על דעת עצמו החליט למחוק את ה-0 בהתחלה? אה, לא קרה לכם? טוב, לי זה קרה המון).
 
 בואו נראה את התוכנית ברובי:
+<div class="code-block">
 {% highlight ruby %}
-puts &quot;Please insert the length of the sides of the rectangle&quot;
+puts "Please insert the length of the sides of the rectangle"
 a = gets.to_i
 b = gets.to_i
 circumference = 2*(a+b)
-puts &quot;For a rectangle with sides of length #{a} and #{b} the circumference is #{circumference}&quot;
+puts "For a rectangle with sides of length #{a} and #{b} the circumference is #{circumference}"
 {% endhighlight %}
+</div>
+
 השורה הראשונה, הקצת טרחנית, גורמת לתוכנית עם תחילת ריצתה להגיד למשתמש מה רוצים ממנו. זה דבר טוב באופן כללי - תוכנית שמתחילה לרוץ בלי שום פידבק לאיש שמריץ אותה זה לא משהו טוב - אבל במקרה של התוכנית הזו, שכולנו יודעים בדיוק מה היא אמורה לעשות, זה נראה מיותר. <strong>שיעור מס' 1</strong>: אני הולך להכניס לתוכנית הרבה דברים שנראים מיותרים, כי "בעולם הגדול" הם טובים. ואסביר גם למה.
 
 בואו נבין איך ההדפסה הזו עובדת, כי זו הדרך שבה כותבים דברים לפלט ברובי. ראשית כל כתוב puts - זו הפקודה הסטנדרטית ברובי לכתיבה של משהו לפלט ולהוסיף ירידת שורה בסוף. אחרי puts מגיע ה"משהו", שבמקרה הזה הוא מחרוזת - כזכור, סדרה של תווים. הדרך לזהות מחרוזת ברובי היא בתור משהו שמתחיל עם מרכאות כפולות ונמשך עד למופע הבא של מרכאות כפולות (אז איך אפשר לכתוב מרכאות כפולות בתוך מחרוזת? סבלנות).
@@ -68,28 +71,38 @@ puts &quot;For a rectangle with sides of length #{a} and #{b} the circumference 
 לסיום אני מדפיס את התוצאה, וכאן כבר אפשר לראות תעלול חדש. איך אני יכול לכתוב את התוכן של משתנה לפלט בתור חלק ממחרוזת גדולה יותר? התעלול הוא לכתוב את השם של המשתנה בתוך סוגריים מסולסלים שלפניהם יש סולמית. זו הדרך הסטנדרטית של רובי "לשתול" ערכים של משתנים בתוך מחרוזות. מה שקורה מאחורי הקלעים הוא שרובי לוקחת את הערך של המשתנה, מבצעת המרה שלו למחרוזת, ואז משבצת אותו במקום הנכון בתוך המחרוזת שהולכים להדפיס.
 
 יפה, זה מסביר לנו את התוכנית ברובי. עכשיו, למתקדמים יותר, בואו נראה את התוכנית בהסקל.
+<div class="code-block">
 {% highlight haskell %}
-circumference :: Int -&gt; Int -&gt; Int
+circumference :: Int -> Int -> Int
 circumference a b = 2*(a+b)
 
 main = do
-  putStrLn &quot;Please insert the length of the sides of the rectangle: &quot;
-  a &lt;- getLine
-  b &lt;- getLine
-  putStrLn (&quot;For a rectangle with sides of length &quot; ++ a ++ &quot; and &quot; ++ b ++ &quot; the circumference is &quot; ++ show (circumference (read a) (read b)))
+  putStrLn "Please insert the length of the sides of the rectangle: "
+  a <- getLine
+  b <- getLine
+  putStrLn ("For a rectangle with sides of length " ++ a ++ " and " ++ b ++ " the circumference is " ++ show (circumference (read a) (read b)))
 {% endhighlight %}
+</div>
 
 הסקל היא שפה פונקציונלית טהורה, ובלי להיכנס להסבר המורכב מה זה בכלל אומר, הרעיון הבסיסי הוא שהדבר העיקרי שאנחנו מגדירים בתוכנית הוא פונקציות - משהו שמקבל קלט ומחזיר פלט.
 
 בואו נתעלם לרגע משתי השורות הראשונות בתוכנית, שבהן מגדירים את הפונקציה שמעניינת אותנו כאן, ונקפוץ דווקא להמשך. את השורה של main = do עזבו - חשבו עליה בתור דרך לומר "כאן מתחילה ריצת התוכנית". מייד אחריה באה שורת הדפסה, בדומה לזו של התוכנית ברובי, ואחר כך שתי שורות שבהן קוראים ל-a,b את הערכים שלהם. שימו לב שכאן לא ביצעתי המרה ממחרוזת למספר עדיין. בשורה האחרונה אני מוציא את הפלט כמו ברובי, רק שכאשר השילוב של משתנים בתוך מחרוזת הוא מסורבל יותר- אני סוגר את המחרוזת ומשרשר לה את המחרוזות של המשתנים עם האופרטור ++. החלק המסובך ביותר הוא האחרון - אני משרשר למחרוזת את
-<p dir="ltr"><code>show (circumference (read a) (read b))</code></p>
+<div class="code-block">
+{% highlight haskell %}
+show (circumference (read a) (read b))
+{% endhighlight %}
+</div>
 מה הולך כאן? ובכן, אני מפעיל את הפונקציה circumference על שני קלטים - read a ו-read b.
 כפי שאפשר לנחש, read היא מה שממיר את המחרוזות של a,b למספרים, ו-show לוקח את הפלט המספרי של circumference וממיר אותה למחרוזת.
 
 עד כאן זה נראה כמו גרסה גרועה של רובי (וימשיך להיראות כך עד שלא נגיע לדברים מחוכמים יותר), אבל בואו ונסתכל על ההגדרה של circumference שנמצאת בשתי השורות הראשונות.
 
 ראשית בואו נסתכל על השורה השניה דווקא:
-<p dir="ltr"><code>circumference a b = 2*(a+b)</code></p>
+<div class="code-block">
+{% highlight haskell %}
+circumference a b = 2*(a+b)
+{% endhighlight %}
+</div>
 אנחנו מגדירים כאן את שם הפונקציה, circumference, ואת שני הקלטים שלה - a, b - שימו לב שאין פסיקים או משהו, רק רווחים. אחר כך מגיע סימן שוויון, ואז ההגדרה בפועל של הערך שהפונקציה מחשבת.
 
 השורה הראשונה היא אופציונלית (התוכנית תרוץ גם בלעדיה) ומטרתה להסביר לנו מה הפונקציה אמורה לקבל כקלט ולהחזיר כפלט. כאן כתוב שהפונקציה מקבלת שני קלטים מסוג Int (מספר שלם) ומחזירה פלט אחד מסוג Int, אבל סגנון הכתיבה נראה מאוד, מאוד מוזר למי שלא מכיר אותו. יש לו הסבר
@@ -99,36 +112,40 @@ main = do
 
 ועכשיו לתוכנית בג'אווהסקריפט, שהיא ארוכה משמעותית משתי האחרות:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 1&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 1</title>
+</head>
+<body>
+  <script type="text/javascript">
     compute_circumference = function(){
-		var a = parseInt(document.getElementById(&quot;a&quot;).value);
-		var b = parseInt(document.getElementById(&quot;b&quot;).value);
+		var a = parseInt(document.getElementById("a").value);
+		var b = parseInt(document.getElementById("b").value);
 		var circumference = 2*(a+b);
-		document.getElementById(&quot;circumference&quot;).value = circumference;
+		document.getElementById("circumference").value = circumference;
     }
-  &lt;/script&gt;
-  a = &lt;input type=&quot;textbox&quot; id=&quot;a&quot; value = &quot;0&quot; onkeyup = &quot;compute_circumference()&quot;/&gt;
-  &lt;br /&gt;
-  b = &lt;input type=&quot;textbox&quot; id=&quot;b&quot; value = &quot;0&quot; onkeyup = &quot;compute_circumference()&quot;/&gt;
-  &lt;br /&gt;
-  circumference = &lt;input type=&quot;textbox&quot; id=&quot;circumference&quot; value = &quot;0&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  a = <input type="textbox" id="a" value = "0" onkeyup = "compute_circumference()"/>
+  <br />
+  b = <input type="textbox" id="b" value = "0" onkeyup = "compute_circumference()"/>
+  <br />
+  circumference = <input type="textbox" id="circumference" value = "0"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 עיקר התוכנית הוא בכתיבת מסמך ההטמל שבתוכו מציגים את כל העסק. הדרך הפשוטה להבין מה קורה פה היא פשוט להריץ אותה, אז הנה <a href="http://www.gadial.net/stuff/StudentAndComp/targil1.html">לינק לקובץ</a>:
 
 עכשיו בואו נביט טיפה בקוד. השורה
 
+<div class="code-block">
 {% highlight html %}
-a = &lt;input type=&quot;textbox&quot; id=&quot;a&quot; value = &quot;0&quot; onkeyup = &quot;compute_circumference()&quot;/&gt;
+a = <input type="textbox" id="a" value = "0" onkeyup = "compute_circumference()"/>
 {% endhighlight %}
+</div>
 
 מייצרת לנו את הסימנים =a ומייד אחר כך תיבת טקסט (textbox) עם ערך התחלתי 0, מזהה ייחודי בשם "a”, ובנוסף לכך אומרת לתיבה הזו שבכל פעם שבה כותבים בה משהו, אז ברגע שבו המקש במקלדת מפסיק להיות לחוץ, היא מתבקשת להפעיל את הפונקציה compute_circumference() שהוגדרה
 קודם. זה מבטיח שהמשתמש ייראה את החישוב מתבצע אל מול עיניו כשהוא מזין מידע לתוך תיבות הטקסט כך שהעסק ירגיש אינטראקטיבי. אפשר היה גם לעשות את זה מסורבל - שקודם המשתמש יזין את המידע ואחר כך ילחץ על כפתור והחישוב יתבצע - אבל בשביל מה?
@@ -136,7 +153,12 @@ a = &lt;input type=&quot;textbox&quot; id=&quot;a&quot; value = &quot;0&quot; on
 מתחת לתיבה עבור a יש גם תיבות עבור b ועבור הפלט circumference. החישובים הרלוונטיים מתבצעים בסקריפט שלמעלה, שנמצא בין תגי ה-script. ראשית כל אנחנו מגדירים שיש פונקציה שנקראת
 compute_circumference, באופן הבא:
 
-<p dir="ltr"><code dir="ltr">compute_circumference = function(){</code></p>
+<div class="code-block">
+{% highlight html %}
+compute_circumference = function(){
+{% endhighlight %}
+</div>
+
 
 הסוגריים המסולסלים שפתחנו כאן נסגרים בסוף הפונקציה.
 

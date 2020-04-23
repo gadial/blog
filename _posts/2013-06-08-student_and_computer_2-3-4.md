@@ -16,14 +16,17 @@ tags:
 
 אם כן, הנה קוד ברובי שפותר את הבעיה:
 
+<div class="code-block">
 {% highlight ruby %}
 ANGLES_IN_TRIANGLE = 180
-puts &quot;Please insert two angles of the triangle&quot;
+puts "Please insert two angles of the triangle"
 first_angle = gets.to_i
 second_angle = gets.to_i
 third_angle = ANGLES_IN_TRIANGLE - (first_angle + second_angle)
-puts &quot;The angles in the triangle are #{first_angle}, #{second_angle}, #{third_angle}&quot;
+puts "The angles in the triangle are #{first_angle}, #{second_angle}, #{third_angle}"
 {% endhighlight %}
+
+</div>
 
 <strong></strong>הקוד הזה מאוד דומה לפתרון של תרגיל מס' 1, אבל הוספתי בו מרכיב חשוב בשפות תכנות - קבועים. השורה הראשונה בתוכנית מציבה את הערך המספרי 180 בקבוע ANGLES_IN_TRIANGLE. מה זה אומר שהמשתנה הזה הוא "קבוע"? פירוש הדבר הוא שמרגע שהצבנו בו ערך, בשורה הראשונה שבה הוא הופיע, לא ניתן לשנות יותר את הערך שנמצא בתוכו (למען האמת, המפרש של רובי יתן לנו <strong>אזהרה</strong> אבל לא יגרום לתוכנית לקרוס). אז בשביל מה צריך משתנה מוזר כזה שאי אפשר לשנות את הערך שלו? למה לא לכתוב בתוכנית 180 וזהו? או, טוב ששאלתם.
 
@@ -40,45 +43,49 @@ puts &quot;The angles in the triangle are #{first_angle}, #{second_angle}, #{thi
 
 ומה קורה בהסקל?
 
+<div class="code-block">
 {% highlight haskell %}
 angles_in_triangle = 180
-third_triangle_angle :: Int -&gt; (Int -&gt; Int)
+third_triangle_angle :: Int -> (Int -> Int)
 third_triangle_angle a b = angles_in_triangle - (a+b)
 
 main = do
-  putStrLn &quot;Please insert two angles of the triangle&quot;
-  a &lt;- getLine
-  b &lt;- getLine
-  putStrLn (&quot;The angles in the triangle are &quot; ++ a ++ &quot;, &quot; ++ b ++ &quot;, &quot; ++ show(third_triangle_angle (read a) (read b)))
+  putStrLn "Please insert two angles of the triangle"
+  a <- getLine
+  b <- getLine
+  putStrLn ("The angles in the triangle are " ++ a ++ ", " ++ b ++ ", " ++ show(third_triangle_angle (read a) (read b)))
 {% endhighlight %}
+</div>
 
 גם פה יש לנו קוד שדומה מאוד לזה של תרגיל 1. ההצהרה על הקבוע בהתחלה לא דורשת לא כיתוב של constant ולא אותיות גדולות או שום דבר אחר, עקב הגישה של הסקל לפיה "הכל הוא פונקציה". בעצם, כשאני כותב ש-angles_in_triangle שווה ל-180, אני לא אומר "angles_in_triangle הוא מספר שהערך שלו הוא 180" אלא ש-"angles_in_triangle היא <strong>פונקציה</strong> שמקבלת 0 קלטים ומחזירה את הפלט הקבוע 180". זה נשמע שקול, אבל מבחינה רעיונית יש הבדלים, והבסיסי שבהם הוא שהסקל לא מרשה לנו להגדיר מחדש פונקציות באמצע התוכנית, כך שאם אני אנסה להציב ב-angles_in_triangle ערך אחר, התוכנית לא תתקמפל. הסיבה שאני לא כותב את שם הקבוע באותיות גדולות היא שבהסקל באותיות גדולות מתחילים בכלל טיפוסים של ערכים (כמו Int שכבר ראינו) ואילו שמות של פונקציות מתחילים תמיד באותיות קטנות. כל שפה והמוזרויות שלה...
 
 ועכשיו לג'אווהסקריפט:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 2&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 2</title>
+</head>
+<body>
+  <script type="text/javascript">
     compute_angle = function(){
 		var ANLGES_IN_TRIANGLE = 180
-		var a = parseInt(document.getElementById(&quot;a&quot;).value);
-		var b = parseInt(document.getElementById(&quot;b&quot;).value);
+		var a = parseInt(document.getElementById("a").value);
+		var b = parseInt(document.getElementById("b").value);
 		var c = ANLGES_IN_TRIANGLE - (a+b);
-		document.getElementById(&quot;c&quot;).value = c;
+		document.getElementById("c").value = c;
     }
-  &lt;/script&gt;
-  angle a = &lt;input type=&quot;textbox&quot; id=&quot;a&quot; value = &quot;0&quot; onkeyup = &quot;compute_angle()&quot;/&gt;
-  &lt;br /&gt;
-  angle b = &lt;input type=&quot;textbox&quot; id=&quot;b&quot; value = &quot;0&quot; onkeyup = &quot;compute_angle()&quot;/&gt;
-  &lt;br /&gt;
-  angle c = &lt;input type=&quot;textbox&quot; id=&quot;c&quot; value = &quot;180&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  angle a = <input type="textbox" id="a" value = "0" onkeyup = "compute_angle()"/>
+  <br />
+  angle b = <input type="textbox" id="b" value = "0" onkeyup = "compute_angle()"/>
+  <br />
+  angle c = <input type="textbox" id="c" value = "180"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 
 כאן לכאורה אני מצהיר על הקבוע כמו שצריך - כותב var ואת השם שלו באותיות גדולות. רק שלמעשה, כאן זה אפילו פחות חזק מאשר ברובי - מבחינת ג'אווהסקריפט מדובר על משתנה לכל דבר ואפשר להציב בו ערכים חדשים. אני לא מכיר דרך להגדיר קבועים בג'אווהסקריפט (למרות שאם ממש מתאמצים יש דרכים למנוע ממשתנים מסויימים להשתנות).
@@ -91,12 +98,14 @@ main = do
 
 זו שאלה מעצבנת כי היא <strong>מקרה פרטי</strong> של השאלה הקודמת, כאשר שתי הזוויות שמתקבלות כקלט הן שוות. זה אומר שהקוד הולך לצאת <strong>פשוט יותר</strong> מאשר הקוד הקודם. אז איך אפשר לעשות איתו משהו מעניין? ברובי אני אציג משהו חדש - קלט מתוך שורת הפקודה ולא מתוך הקלדות המשתמש:
 
+<div class="code-block">
 {% highlight ruby %}
 ANGLES_IN_TRIANGLE = 180
 base_angle = ARGV[0].to_i
 head_angle = ANGLES_IN_TRIANGLE - (2*base_angle)
-puts &quot;The head angle in an isosceles triangle with base angle #{base_angle} is #{head_angle}&quot;
+puts "The head angle in an isosceles triangle with base angle #{base_angle} is #{head_angle}"
 {% endhighlight %}
+</div>
 
 הדבר החדש והמעניין כאן הוא הקבוע ARGV שצץ לו פתאום. כדי להבין אותו צריך להבין איך מריצים תוכניות בדרך כלל. רובנו רגילים פשוט ללחוץ על אייקון של קובץ ההרצה, אבל מה שקורה כשלוחצים על האייקון הזה הוא שמורצת <strong>פקודה</strong> כלשהי. לפעמים הפקודה כוללת רק את שם התוכנית, אבל לעתים קרובות אחרי שם התוכנית מופיעים עוד פרמטרים. הפרמטרים הללו הם מחרוזות, כשרווחים מפרידים בין כל שני פרמטרים. כשהתוכנית מתחילה לרוץ, מאותחל קבוע שנקרא ARGV שמכיל <strong>רשימה</strong> של כל הפרמטרים הללו. אני עדיין לא רוצה לדבר על מה זה בדיוק רשימות, ולכן בינתיים נסתפק בכך שלכתוב סוגריים מרובעים עם אפס בתוכם אחרי ARGV ניגש לאיבר הראשון ברשימה הזו.
 
@@ -104,43 +113,47 @@ puts &quot;The head angle in an isosceles triangle with base angle #{base_angle}
 
 עכשיו בואו נראה את התוכנית בהסקל. אני לא הולך לקרוא פרמטרים משורת הפקודה בה כי האופן שעושים את זה בהסקל הוא טיפה יותר מסובך, אז נעזוב את זה לבינתיים. תחת זאת אני אדגים משהו פשוט אחר: את הפונקציה ה"חדשה" של תרגיל 3 אני אכתוב בעזרת זו של תרגיל 2:
 
+<div class="code-block">
 {% highlight haskell %}
 angles_in_triangle = 180
 
-third_triangle_angle :: Int -&gt; (Int -&gt; Int)
+third_triangle_angle :: Int -> (Int -> Int)
 third_triangle_angle a b = angles_in_triangle - (a+b)
 
-head_triangle_angle :: Int -&gt; Int
+head_triangle_angle :: Int -> Int
 head_triangle_angle base = third_triangle_angle base base
 
 main = do
-  putStrLn &quot;Please insert the base angle of the triangle&quot;
-  base &lt;- getLine
-  putStrLn (&quot;The angles in the triangle are &quot; ++ base ++ &quot;, &quot; ++ base ++ &quot;, &quot; ++ show(head_triangle_angle (read base)))
+  putStrLn "Please insert the base angle of the triangle"
+  base <- getLine
+  putStrLn ("The angles in the triangle are " ++ base ++ ", " ++ base ++ ", " ++ show(head_triangle_angle (read base)))
 {% endhighlight %}
+</div>
 
 ורק בג'אווהסקריפט אין לי רעיון למשהו יצירתי לעשות. אין ARGV בג'אווהסקריפט כי התוכניות לא מורצות משורת הפקודה. מה שכן אפשר לעשות בג'אווהסקריפט הוא לקבל פרמטרים מהדפדפן, כחלק מהבקשה שהדפדפן מבצע כשהוא מבקש מהשרת את הדף; אני מעדיף לא להיכנס לפרטים הללו כרגע, מכיוון שאין מנגנון פשוט שמובנה בשפה ומאפשר להשיג אותם - צריך טיפה לעבוד או להשתמש בספריה סטנדרטית חשובה ביותר (jQuery) שאני נמנע מלהציג בינתיים. אז הנה הקוד הסתמי למדי:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 3&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 3</title>
+</head>
+<body>
+  <script type="text/javascript">
     compute_angle = function(){
 		var ANLGES_IN_TRIANGLE = 180
-		var base_angle = parseInt(document.getElementById(&quot;base&quot;).value);
+		var base_angle = parseInt(document.getElementById("base").value);
 		var head_angle = ANLGES_IN_TRIANGLE - (base_angle*2);
-		document.getElementById(&quot;head&quot;).value = head_angle;
+		document.getElementById("head").value = head_angle;
     }
-  &lt;/script&gt;
-  Base angle = &lt;input type=&quot;textbox&quot; id=&quot;base&quot; value = &quot;0&quot; onkeyup = &quot;compute_angle()&quot;/&gt;
-  &lt;br /&gt;
-  Head angle = &lt;input type=&quot;textbox&quot; id=&quot;head&quot; value = &quot;180&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  Base angle = <input type="textbox" id="base" value = "0" onkeyup = "compute_angle()"/>
+  <br />
+  Head angle = <input type="textbox" id="head" value = "180"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 טוב, מספיק עם זוויות ומשולשים ומלבנים, בואו נעבור לבעיה מס' 4:
 <h1>בעיה מס' 4</h1>
@@ -148,51 +161,57 @@ main = do
 
 כאשר הספר נכתב, ככל הנראה לא הייתה פונקציה לעיגול של מספרים שמובנית בתוך השפה, ולכן הפתרון שבו הכותב השתמש היה זה: הוסיף 0.5 למספר ואז המיר אותו למספר שלם, תוך הסתמכות על כך שהמרה כזו תמיד לוקחת את החלק השלם של המספר ומתעלמת מכל היתר. בשפות מודרניות כבר יש פונקציה מובנית בשפה עבור עיגול של מספרים, אבל עדיין אשתמש בשיטה של הספר כי אחרת התוכניות יצאו טריוויאליות <strong>מדי</strong>. הנה התוכנית ברובי:
 
+<div class="code-block">
 {% highlight ruby %}
-puts &quot;Please insert a number to round&quot;
+puts "Please insert a number to round"
 number = gets.to_f
-#puts &quot;The rounded number is #{number.round}&quot;
+#puts "The rounded number is #{number.round}"
 rounded_number = (number + 0.5).to_i
-puts &quot;The rounded number is #{rounded_number}&quot;
+puts "The rounded number is #{rounded_number}"
 {% endhighlight %}
+</div>
 
 השורה השלישית, זו שמתחילה ב-#, היא <strong>הערה;</strong> המטרה של הערות בקוד היא להקל על מי שקורא אותו להבין מה הולך כאן, ויש להן את המטרה המשנית של להוציא מהתוכנית באופן זמני קטעי קוד מסויימים שכרגע אנחנו לא רוצים להשתמש בהם אבל אולי נרצה להחזיר אחר כך וטוב לדעת שהם היו כאן. במקרה הנוכחי אני משתמש בהערה כדי לתת את השורה שהיא הפתרון ה"נכון" לבעיה הזו ברובי, רק כדי שנוכל לראות איך אמורים לעשות את זה. היתר הוא סטנדרטי ועושה בדיוק את מה שאמרתי: מוסיף 0.5 למספר ואז ממיר הכל למספר שלם.
 
 התוכנית בהסקל די דומה:
 
+<div class="code-block">
 {% highlight haskell %}
-myRound :: (RealFrac a, Integral b) =&gt; a -&gt; b
+myRound :: (RealFrac a, Integral b) => a -> b
 myRound num = floor (num + 0.5)
 
 main = do
-  putStrLn &quot;Please insert a number to round&quot;
-  num &lt;- getLine
-  putStrLn (&quot;The rounded number is &quot; ++ show (myRound (read num)))
+  putStrLn "Please insert a number to round"
+  num <- getLine
+  putStrLn ("The rounded number is " ++ show (myRound (read num)))
 {% endhighlight %}
+</div>
 
-אבל ההגדרה של myRound אולי נראית די מוזרה. פתאום יש שם גם חץ מהצורה &lt;=, ומה זה אומר? ובכן, זו דוגמה לפונקציה <strong>פולימורפית</strong>, כלומר לפונקציה שיכולה לקבל כקלט הרבה טיפוסים שונים ולהוציא כפלט הרבה טיפוסים שונים, כל עוד הטיפוסים הללו מצייתים לכל מני כללים. RealFrac שמופיע שם הוא לא טיפוס יחיד אלא אוסף של כמה טיפוסים אפשריים שונים, וכך גם Integral (למשל, Int הוא מקרה פרטי אחד של Integral). אז מה שכתוב שם הוא שהפונקציה מקבלת ערך מסוג a, כאשר a הוא סוג שהוא תת-טיפוס של RealFrac, ומוציאה ערך מסוג b, כאשר b הוא תת-טיפוס של Integral. זה עניין מסובך למדי ונחזור אליו בהמשך; כאן הוא רק בתור טעימה.
+אבל ההגדרה של myRound אולי נראית די מוזרה. פתאום יש שם גם חץ מהצורה <=, ומה זה אומר? ובכן, זו דוגמה לפונקציה <strong>פולימורפית</strong>, כלומר לפונקציה שיכולה לקבל כקלט הרבה טיפוסים שונים ולהוציא כפלט הרבה טיפוסים שונים, כל עוד הטיפוסים הללו מצייתים לכל מני כללים. RealFrac שמופיע שם הוא לא טיפוס יחיד אלא אוסף של כמה טיפוסים אפשריים שונים, וכך גם Integral (למשל, Int הוא מקרה פרטי אחד של Integral). אז מה שכתוב שם הוא שהפונקציה מקבלת ערך מסוג a, כאשר a הוא סוג שהוא תת-טיפוס של RealFrac, ומוציאה ערך מסוג b, כאשר b הוא תת-טיפוס של Integral. זה עניין מסובך למדי ונחזור אליו בהמשך; כאן הוא רק בתור טעימה.
 
 לסיום, הפתרון בג'אווהסקריפט:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 4&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 4</title>
+</head>
+<body>
+  <script type="text/javascript">
     compute_round = function(){
-		var num = parseFloat(document.getElementById(&quot;num&quot;).value);
+		var num = parseFloat(document.getElementById("num").value);
 		var rounded_num = Math.floor(num + 0.5)
-		document.getElementById(&quot;round&quot;).value = rounded_num;
+		document.getElementById("round").value = rounded_num;
     }
-  &lt;/script&gt;
-  Number = &lt;input type=&quot;textbox&quot; id=&quot;num&quot; value = &quot;0&quot; onkeyup = &quot;compute_round()&quot;/&gt;
-  &lt;br /&gt;
-  Rounded number = &lt;input type=&quot;textbox&quot; id=&quot;round&quot; value = &quot;0&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  Number = <input type="textbox" id="num" value = "0" onkeyup = "compute_round()"/>
+  <br />
+  Rounded number = <input type="textbox" id="round" value = "0"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 אין כאן משהו מיוחד, אבל שימו לב לשימוש ב-Math.floor; זו דוגמה לשימוש בפונקציית ספריה, ספציפית הספריה Math. כמו כן שימו שאני מבצע עכשיו parseFloat במקום parseInt.
 
