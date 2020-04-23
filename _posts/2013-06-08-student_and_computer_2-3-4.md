@@ -16,14 +16,14 @@ tags:
 
 אם כן, הנה קוד ברובי שפותר את הבעיה:
 
-[code language="ruby"]
+{% highlight ruby %}
 ANGLES_IN_TRIANGLE = 180
 puts &quot;Please insert two angles of the triangle&quot;
 first_angle = gets.to_i
 second_angle = gets.to_i
 third_angle = ANGLES_IN_TRIANGLE - (first_angle + second_angle)
 puts &quot;The angles in the triangle are #{first_angle}, #{second_angle}, #{third_angle}&quot;
-[/code]
+{% endhighlight %}
 
 <strong></strong>הקוד הזה מאוד דומה לפתרון של תרגיל מס' 1, אבל הוספתי בו מרכיב חשוב בשפות תכנות - קבועים. השורה הראשונה בתוכנית מציבה את הערך המספרי 180 בקבוע ANGLES_IN_TRIANGLE. מה זה אומר שהמשתנה הזה הוא "קבוע"? פירוש הדבר הוא שמרגע שהצבנו בו ערך, בשורה הראשונה שבה הוא הופיע, לא ניתן לשנות יותר את הערך שנמצא בתוכו (למען האמת, המפרש של רובי יתן לנו <strong>אזהרה</strong> אבל לא יגרום לתוכנית לקרוס). אז בשביל מה צריך משתנה מוזר כזה שאי אפשר לשנות את הערך שלו? למה לא לכתוב בתוכנית 180 וזהו? או, טוב ששאלתם.
 
@@ -40,7 +40,7 @@ puts &quot;The angles in the triangle are #{first_angle}, #{second_angle}, #{thi
 
 ומה קורה בהסקל?
 
-[code]
+{% highlight haskell %}
 angles_in_triangle = 180
 third_triangle_angle :: Int -&gt; (Int -&gt; Int)
 third_triangle_angle a b = angles_in_triangle - (a+b)
@@ -50,13 +50,13 @@ main = do
   a &lt;- getLine
   b &lt;- getLine
   putStrLn (&quot;The angles in the triangle are &quot; ++ a ++ &quot;, &quot; ++ b ++ &quot;, &quot; ++ show(third_triangle_angle (read a) (read b)))
-[/code]
+{% endhighlight %}
 
 גם פה יש לנו קוד שדומה מאוד לזה של תרגיל 1. ההצהרה על הקבוע בהתחלה לא דורשת לא כיתוב של constant ולא אותיות גדולות או שום דבר אחר, עקב הגישה של הסקל לפיה "הכל הוא פונקציה". בעצם, כשאני כותב ש-angles_in_triangle שווה ל-180, אני לא אומר "angles_in_triangle הוא מספר שהערך שלו הוא 180" אלא ש-"angles_in_triangle היא <strong>פונקציה</strong> שמקבלת 0 קלטים ומחזירה את הפלט הקבוע 180". זה נשמע שקול, אבל מבחינה רעיונית יש הבדלים, והבסיסי שבהם הוא שהסקל לא מרשה לנו להגדיר מחדש פונקציות באמצע התוכנית, כך שאם אני אנסה להציב ב-angles_in_triangle ערך אחר, התוכנית לא תתקמפל. הסיבה שאני לא כותב את שם הקבוע באותיות גדולות היא שבהסקל באותיות גדולות מתחילים בכלל טיפוסים של ערכים (כמו Int שכבר ראינו) ואילו שמות של פונקציות מתחילים תמיד באותיות קטנות. כל שפה והמוזרויות שלה...
 
 ועכשיו לג'אווהסקריפט:
 
-[code language="javascript"]
+{% highlight html %}
 &lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Targil 2&lt;/title&gt;
@@ -78,7 +78,7 @@ main = do
   angle c = &lt;input type=&quot;textbox&quot; id=&quot;c&quot; value = &quot;180&quot;/&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-[/code]
+{% endhighlight %}
 
 
 כאן לכאורה אני מצהיר על הקבוע כמו שצריך - כותב var ואת השם שלו באותיות גדולות. רק שלמעשה, כאן זה אפילו פחות חזק מאשר ברובי - מבחינת ג'אווהסקריפט מדובר על משתנה לכל דבר ואפשר להציב בו ערכים חדשים. אני לא מכיר דרך להגדיר קבועים בג'אווהסקריפט (למרות שאם ממש מתאמצים יש דרכים למנוע ממשתנים מסויימים להשתנות).
@@ -91,12 +91,12 @@ main = do
 
 זו שאלה מעצבנת כי היא <strong>מקרה פרטי</strong> של השאלה הקודמת, כאשר שתי הזוויות שמתקבלות כקלט הן שוות. זה אומר שהקוד הולך לצאת <strong>פשוט יותר</strong> מאשר הקוד הקודם. אז איך אפשר לעשות איתו משהו מעניין? ברובי אני אציג משהו חדש - קלט מתוך שורת הפקודה ולא מתוך הקלדות המשתמש:
 
-[code language="ruby"]
+{% highlight ruby %}
 ANGLES_IN_TRIANGLE = 180
 base_angle = ARGV[0].to_i
 head_angle = ANGLES_IN_TRIANGLE - (2*base_angle)
 puts &quot;The head angle in an isosceles triangle with base angle #{base_angle} is #{head_angle}&quot;
-[/code]
+{% endhighlight %}
 
 הדבר החדש והמעניין כאן הוא הקבוע ARGV שצץ לו פתאום. כדי להבין אותו צריך להבין איך מריצים תוכניות בדרך כלל. רובנו רגילים פשוט ללחוץ על אייקון של קובץ ההרצה, אבל מה שקורה כשלוחצים על האייקון הזה הוא שמורצת <strong>פקודה</strong> כלשהי. לפעמים הפקודה כוללת רק את שם התוכנית, אבל לעתים קרובות אחרי שם התוכנית מופיעים עוד פרמטרים. הפרמטרים הללו הם מחרוזות, כשרווחים מפרידים בין כל שני פרמטרים. כשהתוכנית מתחילה לרוץ, מאותחל קבוע שנקרא ARGV שמכיל <strong>רשימה</strong> של כל הפרמטרים הללו. אני עדיין לא רוצה לדבר על מה זה בדיוק רשימות, ולכן בינתיים נסתפק בכך שלכתוב סוגריים מרובעים עם אפס בתוכם אחרי ARGV ניגש לאיבר הראשון ברשימה הזו.
 
@@ -104,7 +104,7 @@ puts &quot;The head angle in an isosceles triangle with base angle #{base_angle}
 
 עכשיו בואו נראה את התוכנית בהסקל. אני לא הולך לקרוא פרמטרים משורת הפקודה בה כי האופן שעושים את זה בהסקל הוא טיפה יותר מסובך, אז נעזוב את זה לבינתיים. תחת זאת אני אדגים משהו פשוט אחר: את הפונקציה ה"חדשה" של תרגיל 3 אני אכתוב בעזרת זו של תרגיל 2:
 
-[code]
+{% highlight haskell %}
 angles_in_triangle = 180
 
 third_triangle_angle :: Int -&gt; (Int -&gt; Int)
@@ -117,11 +117,11 @@ main = do
   putStrLn &quot;Please insert the base angle of the triangle&quot;
   base &lt;- getLine
   putStrLn (&quot;The angles in the triangle are &quot; ++ base ++ &quot;, &quot; ++ base ++ &quot;, &quot; ++ show(head_triangle_angle (read base)))
-[/code]
+{% endhighlight %}
 
 ורק בג'אווהסקריפט אין לי רעיון למשהו יצירתי לעשות. אין ARGV בג'אווהסקריפט כי התוכניות לא מורצות משורת הפקודה. מה שכן אפשר לעשות בג'אווהסקריפט הוא לקבל פרמטרים מהדפדפן, כחלק מהבקשה שהדפדפן מבצע כשהוא מבקש מהשרת את הדף; אני מעדיף לא להיכנס לפרטים הללו כרגע, מכיוון שאין מנגנון פשוט שמובנה בשפה ומאפשר להשיג אותם - צריך טיפה לעבוד או להשתמש בספריה סטנדרטית חשובה ביותר (jQuery) שאני נמנע מלהציג בינתיים. אז הנה הקוד הסתמי למדי:
 
-[code language="javascript"]
+{% highlight html %}
 &lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Targil 3&lt;/title&gt;
@@ -140,7 +140,7 @@ main = do
   Head angle = &lt;input type=&quot;textbox&quot; id=&quot;head&quot; value = &quot;180&quot;/&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-[/code]
+{% endhighlight %}
 
 טוב, מספיק עם זוויות ומשולשים ומלבנים, בואו נעבור לבעיה מס' 4:
 <h1>בעיה מס' 4</h1>
@@ -148,19 +148,19 @@ main = do
 
 כאשר הספר נכתב, ככל הנראה לא הייתה פונקציה לעיגול של מספרים שמובנית בתוך השפה, ולכן הפתרון שבו הכותב השתמש היה זה: הוסיף 0.5 למספר ואז המיר אותו למספר שלם, תוך הסתמכות על כך שהמרה כזו תמיד לוקחת את החלק השלם של המספר ומתעלמת מכל היתר. בשפות מודרניות כבר יש פונקציה מובנית בשפה עבור עיגול של מספרים, אבל עדיין אשתמש בשיטה של הספר כי אחרת התוכניות יצאו טריוויאליות <strong>מדי</strong>. הנה התוכנית ברובי:
 
-[code language="ruby"]
+{% highlight ruby %}
 puts &quot;Please insert a number to round&quot;
 number = gets.to_f
 #puts &quot;The rounded number is #{number.round}&quot;
 rounded_number = (number + 0.5).to_i
 puts &quot;The rounded number is #{rounded_number}&quot;
-[/code]
+{% endhighlight %}
 
 השורה השלישית, זו שמתחילה ב-#, היא <strong>הערה;</strong> המטרה של הערות בקוד היא להקל על מי שקורא אותו להבין מה הולך כאן, ויש להן את המטרה המשנית של להוציא מהתוכנית באופן זמני קטעי קוד מסויימים שכרגע אנחנו לא רוצים להשתמש בהם אבל אולי נרצה להחזיר אחר כך וטוב לדעת שהם היו כאן. במקרה הנוכחי אני משתמש בהערה כדי לתת את השורה שהיא הפתרון ה"נכון" לבעיה הזו ברובי, רק כדי שנוכל לראות איך אמורים לעשות את זה. היתר הוא סטנדרטי ועושה בדיוק את מה שאמרתי: מוסיף 0.5 למספר ואז ממיר הכל למספר שלם.
 
 התוכנית בהסקל די דומה:
 
-[code]
+{% highlight haskell %}
 myRound :: (RealFrac a, Integral b) =&gt; a -&gt; b
 myRound num = floor (num + 0.5)
 
@@ -168,13 +168,13 @@ main = do
   putStrLn &quot;Please insert a number to round&quot;
   num &lt;- getLine
   putStrLn (&quot;The rounded number is &quot; ++ show (myRound (read num)))
-[/code]
+{% endhighlight %}
 
 אבל ההגדרה של myRound אולי נראית די מוזרה. פתאום יש שם גם חץ מהצורה &lt;=, ומה זה אומר? ובכן, זו דוגמה לפונקציה <strong>פולימורפית</strong>, כלומר לפונקציה שיכולה לקבל כקלט הרבה טיפוסים שונים ולהוציא כפלט הרבה טיפוסים שונים, כל עוד הטיפוסים הללו מצייתים לכל מני כללים. RealFrac שמופיע שם הוא לא טיפוס יחיד אלא אוסף של כמה טיפוסים אפשריים שונים, וכך גם Integral (למשל, Int הוא מקרה פרטי אחד של Integral). אז מה שכתוב שם הוא שהפונקציה מקבלת ערך מסוג a, כאשר a הוא סוג שהוא תת-טיפוס של RealFrac, ומוציאה ערך מסוג b, כאשר b הוא תת-טיפוס של Integral. זה עניין מסובך למדי ונחזור אליו בהמשך; כאן הוא רק בתור טעימה.
 
 לסיום, הפתרון בג'אווהסקריפט:
 
-[code langauge="javascript"]
+{% highlight html %}
 &lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Targil 4&lt;/title&gt;
@@ -192,7 +192,7 @@ main = do
   Rounded number = &lt;input type=&quot;textbox&quot; id=&quot;round&quot; value = &quot;0&quot;/&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-[/code]
+{% endhighlight %}
 
 אין כאן משהו מיוחד, אבל שימו לב לשימוש ב-Math.floor; זו דוגמה לשימוש בפונקציית ספריה, ספציפית הספריה Math. כמו כן שימו שאני מבצע עכשיו parseFloat במקום parseInt.
 

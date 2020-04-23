@@ -18,11 +18,11 @@ tags:
 
 ברובי זה קל מאוד:
 
-[code language="ruby"]
+{% highlight ruby %}
 x, y = ARGV[0].to_i, ARGV[1].to_i
 puts &quot;#{x} and #{y} have equal signs&quot; if x*y &gt;= 0
 puts &quot;#{x} and #{y} have different signs&quot; if x*y &lt; 0
-[/code]
+{% endhighlight %}
 
 אני חושב שהקוד קריא אפילו למי שבכלל לא מכיר את התחביר של רובי, אבל בכל זאת כדאי להתעמק טיפה במה שקורה פה. אנחנו מתחילים עם שורה של קליטת קלט רגילה, ואחריה מגיעה פקודת puts רגילה, אבל באותה שורה, אחרי פקודת ה-puts פתאום מופיע if, שמשמעותו - את מה שהיה כתוב בשורה הזו בצע רק אם תנאי מסויים מתקיים. ומה התנאי הזה? שהמכפלה של x,y היא גדולה או שווה ל-0.
 
@@ -33,7 +33,7 @@ puts &quot;#{x} and #{y} have different signs&quot; if x*y &lt; 0
 
 בואו נעבור לראות איך עושים משפטי תנאי בגישה שונה לחלוטין - הגישה ההסקלית:
 
-[code]
+{% highlight haskell %}
 sign_equality :: Int -&gt; (Int -&gt; String)
 sign_equality a b
 	| 0 &lt;= a*b 	= &quot;equal&quot;
@@ -44,7 +44,7 @@ main = do
   a &lt;- getLine
   b &lt;- getLine
   putStrLn (a ++ &quot; and &quot; ++ b ++ &quot; have &quot; ++ (sign_equality (read a) (read b)) ++ &quot; signs&quot;)
-[/code]
+{% endhighlight %}
 
 מה שאני עושה פה הוא להגדיר פונקציה שמקבלת שני מספרים ומחזירה את המחרוזת "equal" אם הסימנים שלהם שווים, ואת המחרוזת "different" אם הם שונים. הפונקציה הזו מוגדרת באופן כמו-מתמטי, באמצעות חלוקה למקרים, כשכל מקרה מתחיל בסימן | של קו עומד. כל קו עומד כזה נקרא Guard - "שומר". הרעיון בשומרים הוא פשוט: כדי לדעת איזה ערך הפונקציה תחזיר, היא עוברת שומר שומר. כל שומר מורכב מסימן הקו העומד, ואחריו תנאי, ולבסוף = וערך כלשהו. הפונקציה בודקת את התנאים באופן סדרתי עד שהיא מגיעה אל התנאי הראשון שמתקיים, ואז מחזירה את הערך שאחרי סימן ה-= שלו.
 
@@ -52,7 +52,7 @@ main = do
 
 וכעת לג'אווהסקריפט, שבה אני אנצל את ההזדמנות כדי להציג גישה <strong>נוספת</strong> לתנאים:
 
-[code language="javascript"]
+{% highlight html %}
 &lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Targil 5&lt;/title&gt;
@@ -73,7 +73,7 @@ main = do
   &lt;div type=&quot;label&quot; id=&quot;sign_relation&quot;/&gt;&lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-[/code]
+{% endhighlight %}
 
 אין ממש צורך לקרוא את הכל - שורת המפתח המעניינת פה היא זו:
 
@@ -99,7 +99,7 @@ CONDITION ? VAR_TRUE : VAR_FALSE
 
 הפתרון שלי ברובי יהיה שמרני משהו מבחינת הסגנון שלו, כדי להראות את הצורה ה"רגילה" שבה כותבים תנאים בשפות תכנות. בפרט אני הולך להכניס לתמונה את else שמטפל במה שקורה אם משפט תנאי <strong>לא</strong> מתקיים:
 
-[code language="ruby"]
+{% highlight ruby %}
 a, b, c = ARGV
 
 if (a == b and b == c)
@@ -109,7 +109,7 @@ elsif (a == b or b == c or a == c)
 else
   puts &quot;Not equilateral and not isosceles triangle&quot;
 end
-[/code]
+{% endhighlight %}
 
 שימו לב לקליטת הפרמטרים בהתחלה - אני אפילו לא טורח להמיר אותם למספרים, כי הערכים המספריים לא חשובים - רק אם הם שווים או שונים, ואת זה אפשר לבדוק גם עבור מחרוזות. כמו כן, צורת הכתיבה נראית קצת מוזרה - בצד שמאל יש לי שלושה משתנים ובצד ימין יש לי רק משתנה אחד - אבל המשתנה הזה, ARGV, הוא מערך - רשימה של ערכים - וכשאני כותב שלושה משתנים מופרדים בפסיקים בצד ימין ומבצע השמה זו דרך מקוצרת לומר "קח את שלושת הערכים הראשונים מתוך ARGV והצב אותם ב-a,b,c".
 
@@ -123,7 +123,7 @@ end
 
 נעבור לגישה ההסקלית:
 
-[code]
+{% highlight haskell %}
 triangle_type :: Int -&gt; (Int -&gt; (Int -&gt; String))
 triangle_type a b c
 	| a == b &amp;&amp; b == c				= &quot;Equilateral&quot;
@@ -137,13 +137,13 @@ main = do
   b &lt;- getLine
   c &lt;- getLine
   putStrLn ((triangle_type (read a) (read b) (read c)) ++ &quot; triangle&quot;)
-[/code]
+{% endhighlight %}
 
 כאן אפשר לראות שימוש ב-&& בתור האופרטור and וב-|| בתור האופרטור or, במיטב המסורת של C. כמו כן, אפשר לראות איך צורת הכתיבה ההסקלית מטפלת בתנאים בצורה יותר נקיה: אין צורך ב-else וב-elsif למיניהם, אלא פשוט בתנאים שהולכים על הראשון מביניהם שמתקיים וחסל.
 
 הקוד בג'אווהסקריפט הוא הסטנדרטי מכולם:
 
-[code language="javascript"]
+{% highlight html %}
 &lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Targil 6-7&lt;/title&gt;
@@ -176,6 +176,6 @@ main = do
   &lt;div type=&quot;label&quot; id=&quot;triangle_type&quot;/&gt;Equilateral triangle&lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-[/code]
+{% endhighlight %}
 
 מבחינה מהותית זה אותו הקוד כמו זה של רובי, רק עם התחביר השונה של ג'אווהסקריפט שמזכיר יותר את התחביר של C, עם סוגריים מסולסלים לכל בלוק, ועם else if במקום elsif (כאן else if הוא בדיוק זה - פקודת else שאחריה בלוק בן פקודה אחת - ובלוק כזה לא צריך סוגריים מסולסלים סביבו - כשאותה פקודה היא בעצמה פקודת if שבאה עם בלוק משל עצמה). חשוב לציין שאני משתמש כאן במוסכמת קוד אפשרית אחת - הסוגר המסולסל השמאלי של בלוק if בא מייד לאחר הסוגריים של התנאי (אגב, הסוגריים הללו הם רשות ברובי אבל ברוב השפות הן חובה). אפשר היה גם לשים אותם בשורה נפרדת משל עצמם. מיותר לציין שהמריבות בשאלה אם נכון לשים את הסוגר המסולסל בסוף הסוגריים של ה-if או שהוא צריך להיות בשורה משל עצמו מגמדות את המלחמות של ליליפוט ובלפוסקו.

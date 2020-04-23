@@ -128,20 +128,18 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>הנה הקוד:</p>
 
-<p>[code language=”ruby”]</p>
-<h1 id="puts-after-sorting-the-list-argvjoin--we-get-argvcollectx-xto_isortjoin-">puts "After sorting the list #{ARGV.join(", ")} we get #{ARGV.collect{|x| x.to_i}.sort.join(", ")}"</h1>
-<p>list = ARGV.collect{|x| x.to_i}
-sorted_list = []
-while not list.empty?
-  current_element = list.pop
-  current_index = 0
-  while current_index &lt; sorted_list.length and sorted_list[current_index] &lt; current_element
-    current_index = current_index + 1
-  end
-  sorted_list.insert(current_index, current_element)
-end
-puts "After sorting the list #{ARGV.join(", ")} we get #{sorted_list.join(", ")}"
-[/code]</p>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># puts &amp;quot;After sorting the list #{ARGV.join(&amp;quot;, &amp;quot;)} we get #{ARGV.collect{|x| x.to_i}.sort.join(&amp;quot;, &amp;quot;)}&amp;quot;</span>
+<span class="n">list</span> <span class="o">=</span> <span class="no">ARGV</span><span class="p">.</span><span class="nf">collect</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="p">.</span><span class="nf">to_i</span><span class="p">}</span>
+<span class="n">sorted_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">while</span> <span class="n">not</span> <span class="n">list</span><span class="p">.</span><span class="nf">empty?</span>
+  <span class="n">current_element</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">pop</span>
+  <span class="n">current_index</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="n">current_index</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">sorted_list</span><span class="p">.</span><span class="nf">length</span> <span class="n">and</span> <span class="n">sorted_list</span><span class="p">[</span><span class="n">current_index</span><span class="p">]</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">current_element</span>
+    <span class="n">current_index</span> <span class="o">=</span> <span class="n">current_index</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="k">end</span>
+  <span class="n">sorted_list</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="n">current_index</span><span class="p">,</span> <span class="n">current_element</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="nb">puts</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="no">After</span> <span class="n">sorting</span> <span class="n">the</span> <span class="n">list</span> <span class="c1">#{ARGV.join(&amp;quot;, &amp;quot;)} we get #{sorted_list.join(&amp;quot;, &amp;quot;)}&amp;quot;</span></code></pre></figure>
 
 <p>מה קורה פה? בשורה 2 אנחנו ממירים את הרשימה לרשימה של מספרים. בשורה 3 אנחנו מגדירים רשימה חדשה, ריקה, שתכיל את התוצאה הממוינת. בשורה 4 אנחנו כותבים while ולאחר מכן תנאי - זוהי תמיד ההתחלה של לולאת while. לאחר ה-while מופיע בלוק שמסתיים ב-end שבשורה 11, והרעיון ב-while הוא שכל עוד התנאי שנכתב בו מתקיים, כאשר הבלוק מגיע לסופו הוא ישוב להתחלה. ייתכן שהתנאי לא יתקיים אפילו בפעם הראשונה שבה אנחנו מגיעים ללולאה ואז הבלוק שלה פשוט לא יופעל.</p>
 
@@ -157,23 +155,21 @@ puts "After sorting the list #{ARGV.join(", ")} we get #{sorted_list.join(", ")}
 
 <p>הנה איך כל זה נראה בהסקל:</p>
 
-<p>[code]
-import System.Environment</p>
+<figure class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="nn">System.Environment</span>
 
-<p>toIntArray :: [String] -&gt; [Int]
-toIntArray array = [read(x) | x &lt;- array]</p>
+<span class="n">toIntArray</span> <span class="o">::</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]</span>
+<span class="n">toIntArray</span> <span class="n">array</span> <span class="o">=</span> <span class="p">[</span><span class="n">read</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">|</span> <span class="n">x</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span> <span class="n">array</span><span class="p">]</span>
 
-<p>quickSort :: Ord a =&gt; [a] -&gt; [a]
-quickSort [] 		= []
-quickSort (x:xs) 	= quickSort smaller ++ [x] ++ quickSort larger
-  where
-    smaller = [a | a &lt;- xs, a &lt; x]
-    larger  = [b | b &lt;- xs, b &gt;= x]</p>
+<span class="n">quickSort</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<span class="n">quickSort</span> <span class="kt">[]</span> 		<span class="o">=</span> <span class="kt">[]</span>
+<span class="n">quickSort</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">xs</span><span class="p">)</span> 	<span class="o">=</span> <span class="n">quickSort</span> <span class="n">smaller</span> <span class="o">++</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">++</span> <span class="n">quickSort</span> <span class="n">larger</span>
+  <span class="kr">where</span>
+    <span class="n">smaller</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">|</span> <span class="n">a</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span> <span class="n">xs</span><span class="p">,</span> <span class="n">a</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">x</span><span class="p">]</span>
+    <span class="n">larger</span>  <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="o">|</span> <span class="n">b</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span> <span class="n">xs</span><span class="p">,</span> <span class="n">b</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">=</span> <span class="n">x</span><span class="p">]</span>
 
-<p>main = do
-  args &lt;- getArgs
-  putStrLn (show(quickSort(toIntArray args)))
-[/code]</p>
+<span class="n">main</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">args</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span> <span class="n">getArgs</span>
+  <span class="n">putStrLn</span> <span class="p">(</span><span class="n">show</span><span class="p">(</span><span class="n">quickSort</span><span class="p">(</span><span class="n">toIntArray</span> <span class="n">args</span><span class="p">)))</span></code></pre></figure>
 
 <p>המיון עצמו הוא בשורות 6-11. ראשית, אני מגדיר את quickSort באופן גנרי, שיוכל לפעול על כל רשימה של איברים מטיפוס שניתן להשוות אותו (אגב, ברובי לא שמים לב לכך אבל גם שם זה מתקיים). זו המשמעות של ה-“ &lt;= Ord a”  שכתוב בהגדרת הפונקציה. בשורה 7 אני מגדיר שעל רשימה ריקה, quickSort יחזיר רשימה ריקה. בשורה 8 מגיע האקשן: אני מפרק את הרשימה לאיבר ראשון x ולכל יתר האיקסים, xs (נסו לקרוא את זה בקול!) ואז משרשר את המיון המהיר של smaller עם הרשימה שהאיבר היחיד שלה הוא איבר הציר x, עם המיון המהיר של larger. אבל מי הם smaller, larger? הם מוגדרים אחרי ה-where, באמצעות list comprehensions שראינו כבר בפוסט הקודם, כשכאן יש גם <strong>התניה</strong>, שמופיעה בצד ימין אחרי הפסיק.</p>
 
@@ -187,13 +183,12 @@ quickSort (x:xs) 	= quickSort smaller ++ [x] ++ quickSort larger
 
 <p>הנה הקוד:</p>
 
-<p>[code language=”javascript”]
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 9&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type="text/javascript"&gt;
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="ni">&amp;lt;</span>html<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>head<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>title<span class="ni">&amp;gt;</span>Targil 9<span class="ni">&amp;lt;</span>/title<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/head<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>body<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>script type=<span class="ni">&amp;quot;</span>text/javascript<span class="ni">&amp;quot;&amp;gt;</span>
   var norm_2_adic = function(a){
 	if (a == 0){
 		return 0;
@@ -204,25 +199,30 @@ quickSort (x:xs) 	= quickSort smaller ++ [x] ++ quickSort larger
 		norm /= 2;
 	}
 	return norm;
-  }</p>
+  }
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sort_by_2_adic_norm = function(){
-	var nums = document.getElementById(&amp;quot;nums&amp;quot;).value.split(&amp;quot; &amp;quot;);
-	nums.sort(function(a,b) {
-		var norm_a = norm_2_adic(parseInt(a));
-		var norm_b = norm_2_adic(parseInt(b));
-		if (norm_a &amp;lt; norm_b){
-			return -1;
-		}
-		if (norm_a &amp;gt; norm_b){
-			return 1;
-		}
-		return 0;
-	});
+    sort_by_2_adic_norm = function(){
+		var nums = document.getElementById(<span class="ni">&amp;quot;</span>nums<span class="ni">&amp;quot;</span>).value.split(<span class="ni">&amp;quot;</span> <span class="ni">&amp;quot;</span>);
+		nums.sort(function(a,b) {
+			var norm_a = norm_2_adic(parseInt(a));
+			var norm_b = norm_2_adic(parseInt(b));
+			if (norm_a <span class="ni">&amp;lt;</span> norm_b){
+				return -1;
+			}
+			if (norm_a <span class="ni">&amp;gt;</span> norm_b){
+				return 1;
+			}
+			return 0;
+		});
 
-	document.getElementById(&amp;quot;sorted&amp;quot;).value = nums.join(&amp;quot; &amp;quot;);
-}   &amp;lt;/script&amp;gt;   List = &amp;lt;input type=&amp;quot;textbox&amp;quot; id=&amp;quot;nums&amp;quot; value = &amp;quot;0&amp;quot; onkeyup = &amp;quot;sort_by_2_adic_norm()&amp;quot;/&amp;gt;   &amp;lt;br /&amp;gt;   Sorted = &amp;lt;input type=&amp;quot;textbox&amp;quot; id=&amp;quot;sorted&amp;quot; value = &amp;quot;0&amp;quot;/&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; [/code]
-</code></pre></div></div>
+		document.getElementById(<span class="ni">&amp;quot;</span>sorted<span class="ni">&amp;quot;</span>).value = nums.join(<span class="ni">&amp;quot;</span> <span class="ni">&amp;quot;</span>);
+    }
+  <span class="ni">&amp;lt;</span>/script<span class="ni">&amp;gt;</span>
+  List = <span class="ni">&amp;lt;</span>input type=<span class="ni">&amp;quot;</span>textbox<span class="ni">&amp;quot;</span> id=<span class="ni">&amp;quot;</span>nums<span class="ni">&amp;quot;</span> value = <span class="ni">&amp;quot;</span>0<span class="ni">&amp;quot;</span> onkeyup = <span class="ni">&amp;quot;</span>sort_by_2_adic_norm()<span class="ni">&amp;quot;</span>/<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>br /<span class="ni">&amp;gt;</span>
+  Sorted = <span class="ni">&amp;lt;</span>input type=<span class="ni">&amp;quot;</span>textbox<span class="ni">&amp;quot;</span> id=<span class="ni">&amp;quot;</span>sorted<span class="ni">&amp;quot;</span> value = <span class="ni">&amp;quot;</span>0<span class="ni">&amp;quot;</span>/<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/body<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/html<span class="ni">&amp;gt;</span></code></pre></figure>
 
 <p>שימו לב לשיקוץ אחד שאני עושה כאן - אני מגדיר את הפונקציה ש-sort מקבלת <strong>בתוך</strong> הקריאה ל-sort. זה לא הכרחי - יכלתי להגדיר את הפונקציה הזו גם בחוץ, אבל אז הייתי צריך לתת לה שם, וזה לעתים קרובות סתם מסורבל. כאן הפונקציה היא <strong>אנונימית</strong> - מקבלים אותה ואפשר להשתמש בה, אבל כשאני כותב אותה אני לא צריך לטרוח לתת לה שם במיוחד. בשפות כמו רובי קל מאוד לכתוב פונקציות כאלו בצורה קומפקטית ומנגנון הבלוקים הופך את העסק לאלגנטי יחסית ועוד נראה זאת בהמשך; בג’אווהסקריפט, לטעמי, זה נראה פשוט איום ונורא. אבל עושים את זה כל הזמן. גם אני.</p>
 

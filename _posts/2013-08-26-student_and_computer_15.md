@@ -66,7 +66,7 @@ puts
 
 בואו נעבור להסקל. מכיוון שאני רוצה להציג סיבוכים חדשים כאן ולא להתעסק בישנים, אני עושה משהו פשוט יחסית - טקסט שנע קצת על המסך ואז עוצר, בלי שיתחיל שוב מהצד השמאלי של המסך:
 
-[code]
+{% highlight haskell %}
 import Control.Concurrent (threadDelay)
 import Data.Time.Clock
 import System.IO
@@ -82,7 +82,7 @@ printAnimation ticksRemaining = do
 		printAnimation(ticksRemaining-1)
 
 main = do printAnimation(initialTicks)
-[/code]
+{% endhighlight %}
 
 יש כאן כמה דברים שדורשים הסבר. נתחיל מהקל: ההגדרה של printAnimation נראית כמו "משהו שמקבל Int ומחזיר IO ויש שם גם סוגריים לא ברורים". ובכן, לא. הסוגריים הלא ברורים בעצם אומרים "אין פלט לפונקציה". המשמעות של ה-IO היא שונה וזו הזדמנות טובה להציג אותה בפירוט.
 
@@ -100,7 +100,7 @@ main = do printAnimation(initialTicks)
 
 הנה הקוד, ומתחתיו הדגמה חיה של הקוד בפעולה:
 
-[javascript]
+{% highlight html %}
 &lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Targil 15&lt;/title&gt;
@@ -137,9 +137,9 @@ main = do printAnimation(initialTicks)
   &lt;pre id=&quot;animation&quot;&gt;&lt;/pre&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-[/javascript]
+{% endhighlight %}
 
-[js]
+<script>
 var animation_text;
   var animation_handle;
 
@@ -164,7 +164,7 @@ var animation_text;
 		document.getElementById("activation_button").value = "Start";
 	}
   }
-[/js]
+</script>
   Name: <input type="textbox" id="name" value="Hello World!"/>
 <input type="button" value="Start" id="activation_button" onclick="start_running()" />
   <pre id="animation"></pre>

@@ -180,23 +180,21 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>בואו נעבור להסקל. מכיוון שאני רוצה להציג סיבוכים חדשים כאן ולא להתעסק בישנים, אני עושה משהו פשוט יחסית - טקסט שנע קצת על המסך ואז עוצר, בלי שיתחיל שוב מהצד השמאלי של המסך:</p>
 
-<p>[code]
-import Control.Concurrent (threadDelay)
-import Data.Time.Clock
-import System.IO</p>
+<figure class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="nn">Control.Concurrent</span> <span class="p">(</span><span class="nf">threadDelay</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Data.Time.Clock</span>
+<span class="kr">import</span> <span class="nn">System.IO</span>
 
-<p>initialTicks = 10
-printAnimation :: Int -&gt; IO ()
-printAnimation 0 = do
-		putStrLn("")
-printAnimation ticksRemaining = do
- 		putStr("\r" ++ (replicate (initialTicks - ticksRemaining) ‘ ‘) ++ "Hello world!")
- 		hFlush stdout
-		threadDelay 100000
-		printAnimation(ticksRemaining-1)</p>
+<span class="n">initialTicks</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">printAnimation</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">printAnimation</span> <span class="mi">0</span> <span class="o">=</span> <span class="kr">do</span>
+		<span class="n">putStrLn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;)</span>
+<span class="n">printAnimation</span> <span class="n">ticksRemaining</span> <span class="o">=</span> <span class="kr">do</span>
+ 		<span class="n">putStr</span><span class="p">(</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="nf">\</span><span class="n">r</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span> <span class="o">++</span> <span class="p">(</span><span class="n">replicate</span> <span class="p">(</span><span class="n">initialTicks</span> <span class="o">-</span> <span class="n">ticksRemaining</span><span class="p">)</span> <span class="sc">' '</span><span class="p">)</span> <span class="o">++</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="kt">Hello</span> <span class="n">world</span><span class="o">!&amp;</span><span class="n">quot</span><span class="p">;)</span>
+ 		<span class="n">hFlush</span> <span class="n">stdout</span>
+		<span class="n">threadDelay</span> <span class="mi">100000</span>
+		<span class="n">printAnimation</span><span class="p">(</span><span class="n">ticksRemaining</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
-<p>main = do printAnimation(initialTicks)
-[/code]</p>
+<span class="n">main</span> <span class="o">=</span> <span class="kr">do</span> <span class="n">printAnimation</span><span class="p">(</span><span class="n">initialTicks</span><span class="p">)</span></code></pre></figure>
 
 <p>יש כאן כמה דברים שדורשים הסבר. נתחיל מהקל: ההגדרה של printAnimation נראית כמו “משהו שמקבל Int ומחזיר IO ויש שם גם סוגריים לא ברורים”. ובכן, לא. הסוגריים הלא ברורים בעצם אומרים “אין פלט לפונקציה”. המשמעות של ה-IO היא שונה וזו הזדמנות טובה להציג אותה בפירוט.</p>
 
@@ -214,27 +212,58 @@ printAnimation ticksRemaining = do
 
 <p>הנה הקוד, ומתחתיו הדגמה חיה של הקוד בפעולה:</p>
 
-<p>[javascript]
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 15&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type="text/javascript"&gt;
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="ni">&amp;lt;</span>html<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>head<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>title<span class="ni">&amp;gt;</span>Targil 15<span class="ni">&amp;lt;</span>/title<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/head<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>body<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>script type=<span class="ni">&amp;quot;</span>text/javascript<span class="ni">&amp;quot;&amp;gt;</span>
   var animation_text;
-  var animation_handle;</p>
+  var animation_handle;
 
-<p>var animation_step = function(){
-	if (animation_text.length &lt;= 55){
+  var animation_step = function(){
+	if (animation_text.length <span class="ni">&amp;lt;</span>= 55){
+		document.getElementById(<span class="ni">&amp;quot;</span>animation<span class="ni">&amp;quot;</span>).innerHTML = animation_text;
+		animation_text = <span class="ni">&amp;quot;</span> <span class="ni">&amp;quot;</span> + animation_text;
+	}
+	else{
+		animation_text = animation_text.trim();
+	}
+  }
+
+  var start_running = function(){
+	clearInterval(animation_handle);
+	if (document.getElementById(<span class="ni">&amp;quot;</span>activation_button<span class="ni">&amp;quot;</span>).value == <span class="ni">&amp;quot;</span>Start<span class="ni">&amp;quot;</span>){
+		document.getElementById(<span class="ni">&amp;quot;</span>activation_button<span class="ni">&amp;quot;</span>).value = <span class="ni">&amp;quot;</span>Stop<span class="ni">&amp;quot;</span>;
+		animation_text = document.getElementById(<span class="ni">&amp;quot;</span>name<span class="ni">&amp;quot;</span>).value;
+		animation_handle = setInterval(animation_step,50);
+	}
+	else{
+		document.getElementById(<span class="ni">&amp;quot;</span>activation_button<span class="ni">&amp;quot;</span>).value = <span class="ni">&amp;quot;</span>Start<span class="ni">&amp;quot;</span>;
+	}
+  }
+  <span class="ni">&amp;lt;</span>/script<span class="ni">&amp;gt;</span>
+  Name: <span class="ni">&amp;lt;</span>input type=<span class="ni">&amp;quot;</span>textbox<span class="ni">&amp;quot;</span> id=<span class="ni">&amp;quot;</span>name<span class="ni">&amp;quot;</span> value=<span class="ni">&amp;quot;</span>Hello World!<span class="ni">&amp;quot;</span>/<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>input type=<span class="ni">&amp;quot;</span>button<span class="ni">&amp;quot;</span> value=<span class="ni">&amp;quot;</span>Start<span class="ni">&amp;quot;</span> id=<span class="ni">&amp;quot;</span>activation_button<span class="ni">&amp;quot;</span> onclick=<span class="ni">&amp;quot;</span>start_running()<span class="ni">&amp;quot;</span> /<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>pre id=<span class="ni">&amp;quot;</span>animation<span class="ni">&amp;quot;&amp;gt;&amp;lt;</span>/pre<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/body<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/html<span class="ni">&amp;gt;</span></code></pre></figure>
+
+<script>
+var animation_text;
+  var animation_handle;
+
+  var animation_step = function(){
+	if (animation_text.length <= 55){
 		document.getElementById("animation").innerHTML = animation_text;
 		animation_text = " " + animation_text;
 	}
 	else{
 		animation_text = animation_text.trim();
 	}
-  }</p>
+  }
 
-<p>var start_running = function(){
+  var start_running = function(){
 	clearInterval(animation_handle);
 	if (document.getElementById("activation_button").value == "Start"){
 		document.getElementById("activation_button").value = "Stop";
@@ -245,41 +274,9 @@ printAnimation ticksRemaining = do
 		document.getElementById("activation_button").value = "Start";
 	}
   }
-  &lt;/script&gt;
-  Name: &lt;input type="textbox" id="name" value="Hello World!"/&gt;
-  &lt;input type="button" value="Start" id="activation_button" onclick="start_running()" /&gt;
-  &lt;pre id="animation"&gt;&lt;/pre&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-[/javascript]</p>
+</script>
 
-<p>[js]
-var animation_text;
-  var animation_handle;</p>
-
-<p>var animation_step = function(){
-	if (animation_text.length &lt;= 55){
-		document.getElementById(“animation”).innerHTML = animation_text;
-		animation_text = “ “ + animation_text;
-	}
-	else{
-		animation_text = animation_text.trim();
-	}
-  }</p>
-
-<p>var start_running = function(){
-	clearInterval(animation_handle);
-	if (document.getElementById(“activation_button”).value == “Start”){
-		document.getElementById(“activation_button”).value = “Stop”;
-		animation_text = document.getElementById(“name”).value;
-		animation_handle = setInterval(animation_step,50);
-	}
-	else{
-		document.getElementById(“activation_button”).value = “Start”;
-	}
-  }
-[/js]
-  Name: <input type="textbox" id="name" value="Hello World!" />
+<p>Name: <input type="textbox" id="name" value="Hello World!" />
 <input type="button" value="Start" id="activation_button" onclick="start_running()" /></p>
 <pre id="animation"></pre>
 
