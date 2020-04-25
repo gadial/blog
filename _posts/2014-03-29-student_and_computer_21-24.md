@@ -37,8 +37,8 @@ class Array
 end
 
 sides = ARGV.collect{|x| x.to_i}
-print &quot;il&quot; if sides.exist?{|a| 2*a &gt; sides.sum}
-puts &quot;legal triangle&quot;
+print "il" if sides.exist?{|a| 2*a > sides.sum}
+puts "legal triangle"
 {% endhighlight %}
 </div>
 

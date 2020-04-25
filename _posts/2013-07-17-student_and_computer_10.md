@@ -16,21 +16,23 @@ tags:
 
 אבל גם גישה נאיבית שכזו אפשר לבצע בדרכים שונות, ואני אנצל את קוד הרובי שלי כדי להציג את שתי הדרכים העיקריות - דרך אחת, הישירה והנאיבית יותר, תשמש לחישוב סכום הסדרה אם היא סדרה חשבונית; והדרך השניה, שיותר מתאימה לאופי של רובי, תשמש לחישוב סכום הסדרה אם היא סדרה הנדסית. האופן שבו בוחרים באיזו דרך פעולה לנקוט יהיה באמצעות עוד כלי נפוץ בשפות, שהוא מעין משפט if מחוכם - משפט case, שגם אותו אסביר. הנה הקוד:
 
+<div class="code-block">
 {% highlight ruby %}
 sum = 0
 case ARGV[0]
-when &quot;A&quot;
+when "A"
   a0, d, n = ARGV[1].to_i, ARGV[2].to_i, ARGV[3].to_i
   for i in (0...n) do
     sum = sum + a0+i*d
   end
-when &quot;G&quot;
+when "G"
     a0, q, n = ARGV[1].to_i, ARGV[2].to_i, ARGV[3].to_i
     sum = (0...n).collect{|i| a0*q**i}.inject(0){|temp_sum, x| temp_sum + x}
 end
 
-puts &quot;The sum is #{sum}&quot;
+puts "The sum is #{sum}"
 {% endhighlight %}
+</div>
 
 נתחיל מלהבין את ה-case. התחביר של משפט case הוא כזה: קודם כל כותבים case ואז שם של משתנה כלשהו, ואז נפתח אוטומטית בלוק (כלומר, צריך לכתוב end כדי לציין את המקום שבו העסק עם ה-case נגמר). בתוך הבלוק יש משפטים מהצורה when כשאחרי ה-when יש ערך כלשהו. מה שקורה בתוכנית הוא שמשווים את המשתנה שהופיע אחרי ה-case לערך הזה, ואם הם שווים, מבצעים את כל מה שנכתב אחרי ה-when ועד ל-when הבא (אם רוצים לכתוב באותה שורה את ה-when ואת מה שצריך לבצע אחריו צריך לכתוב then כדי להגיד לרובי איפה הערך שאליו צריך להשוות נגמר והקוד שצריך לבצע מתחיל).
 
@@ -38,9 +40,11 @@ puts &quot;The sum is #{sum}&quot;
 
 חישוב הסכום כשהסדרה היא חשבונית (מזהים את זה על ידי כך שהפרמטר הראשון שהתוכנית קיבלה היה "A") הוא בנאלי ולא ארחיב עליו (נסו לראות שאתם מבינים מה אני עושה שם!). מה שמעניין הוא חישוב הסכום כשהסדרה היא הנדסית, שנעשה כולו בשורה ארוכה אחת:
 
+<div class="code-block">
 {% highlight ruby %}
 sum = (0...n).collect{|i| a0*q**i}.inject(0){|temp_sum, x| temp_sum + x}
 {% endhighlight %}
+</div>
 
 מה שקורה כאן הוא דבר די נפוץ ברובי. אנחנו מתחילים מאובייקט שהוא אוסף של מספרים - במקרה הזה, כל המספרים בין 0 ל-9, שמיוצגים על ידי אובייקט של <strong>טווח</strong>, ואז מתחילים לעשות על האובייקט הזה סדרה של פעולות. הפעולה הראשונה היא collect שמחליפה כל מספר בטווח באיבר המתאים בסדרה ההנדסית. קיבלנו מערך שכולל את כל האיברים בסדרה ההנדסית, ונותר לסכום אותו. לצורך כך אנחנו מגייסים את המתודה inject שפועלת כך: בנוסף למערך שקורא לה היא מקבלת כקלט גם פרמטר נוסף, שבמקרה הזה הוא 0, שהוא "הערך ההתחלתי", ובלוק. בתוך הבלוק ישנם שני משתנים, שאני קורא להם temp_sum ו-x. הרעיון הוא כזה: ראשית inject מאתחלת את temp_sum להיות הערך שהועבר לה - 0 במקרה שלנו. כעת היא עוברת סדרתית על כל אברי המערך, מציבה כל אחד מהם בתוך x, מריצה את הבלוק ומציבה בתוך temp_sum את תוצאת הבלוק, שהיא במקרה הנוכחי הערך temp_sum+x. כל זה מתורגם לסכימה של איברי המערך ולכן להחזרה של התוצאה הנכונה.
 
@@ -48,23 +52,25 @@ sum = (0...n).collect{|i| a0*q**i}.inject(0){|temp_sum, x| temp_sum + x}
 
 בואו נעבור לראות איך עושים דבר דומה בהסקל. הרעיון הכללי זהה, אבל הפרטים קצת שונים:
 
+<div class="code-block">
 {% highlight haskell %}
 import System.Environment
 
-arithmetic_series_sum :: Int -&gt; (Int -&gt; (Int -&gt; Int))
-arithmetic_series_sum a0 d n = foldl (+) 0 [a0 + d*i | i &lt;- [0..n-1]]
+arithmetic_series_sum :: Int -> (Int -> (Int -> Int))
+arithmetic_series_sum a0 d n = foldl (+) 0 [a0 + d*i | i <- [0..n-1]]
 
-geometric_series_sum :: Int -&gt; (Int -&gt; (Int -&gt; Int))
-geometric_series_sum a0 q n = foldl (+) 0 [a0 * q^i | i &lt;- [0..n-1]]
+geometric_series_sum :: Int -> (Int -> (Int -> Int))
+geometric_series_sum a0 q n = foldl (+) 0 [a0 * q^i | i <- [0..n-1]]
 
-series_sum :: [String] -&gt; Int
-series_sum (&quot;A&quot;:a0:d:n:[]) = arithmetic_series_sum (read a0) (read d) (read n)
-series_sum (&quot;G&quot;:a0:q:n:[]) = geometric_series_sum (read a0) (read q) (read n)
+series_sum :: [String] -> Int
+series_sum ("A":a0:d:n:[]) = arithmetic_series_sum (read a0) (read d) (read n)
+series_sum ("G":a0:q:n:[]) = geometric_series_sum (read a0) (read q) (read n)
 
 main = do
-  args &lt;- getArgs
+  args <- getArgs
   putStrLn (show(series_sum args))
 {% endhighlight %}
+</div>
 
 כל החלק עם ה-series_sum לקראת הסוף בא במקום ה-case של רובי. שימו לב לשימוש שלי ב<strong>תבניות</strong> של הקלט ש-series_sum מצפה לקבל, ואיך הוא מאפשר לי לתת שמות שונים למשתנים (d אל מול q). אבל זה משהו שכבר ראינו בפוסטים קודמים - החידוש מגיע במימושים של פונקציות הסכום. בשתיהן אני משתמש ב-list comprehension כדי ליצור את רשימת כל איברי הסדרה; וכדי לחשב את הסכום אני מפעיל פונקציה שנקראת foldl ומקבלת שלושה פרמטרים: הראשון הוא האופרטור +, השני הוא הערך 0 והשלישי הוא המערך. כפי שניתן לנחש, foldl עוברת סדרתית על אברי המערך ומפעילה את האופרטור + בכל פעם על ערך זמני שיש לה (שאותחל להיות 0 על פי הפרמטר שהעברתי) והאיבר הבא בתור מהמערך. הנה איך אפשר לממש את הפונקציה הזו:
 {% highlight haskell %}
@@ -72,21 +78,23 @@ foldl f z []     = z
 foldl f z (x:xs) = let z' = z `f` x
                    in foldl f z' xs
 {% endhighlight %}
+</div>
 
 אבל אין צורך לכתוב את המימוש במפורש - הוא כאן רק כדי לעזור לכם להבין את הפונקציה, ובפועל foldl היא חלק סטנדרטי מהשפה. יש גם פונקציה foldr (ה-l,r בסוף הם מלשון left, right) אבל זו פונקציה בעייתית יותר ולא אכנס לדקויות הללו כרגע.
 
 בואו נעבור למימוש בג'אווהסקריפט שבו אין שום דבר מחוכם מבחינת חישוב הסכומים, אבל הוא כן מציג עוד משהו מבחינת הדברים שג'אווהסקריפט יכולה לעשות בדפדפן:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 10&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 10</title>
+</head>
+<body>
+  <script type="text/javascript">
     var arithmeticSeriesSum = function(a0, d, n){
       var sum = 0;
-      for (var i=0; i&lt;n; i++){
+      for (var i=0; i<n; i++){
 		sum = sum + (a0+i*d);
       }
       return sum;
@@ -94,50 +102,51 @@ foldl f z (x:xs) = let z' = z `f` x
 
     var geometricSeriesSum = function(a0, q, n){
       var sum = 0;
-      for (var i=0; i&lt;n; i++){
+      for (var i=0; i<n; i++){
 		sum = sum + (a0*Math.pow(q,i));
       }
       return sum;
     }
 
     var computeSum = function(){
-      var a0 = parseInt(document.getElementById(&quot;a0&quot;).value);
-      var d_or_q = parseInt(document.getElementById(&quot;d_or_q&quot;).value);
-      var n = parseInt(document.getElementById(&quot;n&quot;).value);
-      var type = document.getElementById(&quot;type&quot;).value;
+      var a0 = parseInt(document.getElementById("a0").value);
+      var d_or_q = parseInt(document.getElementById("d_or_q").value);
+      var n = parseInt(document.getElementById("n").value);
+      var type = document.getElementById("type").value;
       var result = 0;
       switch(type){
-		case &quot;A&quot;:
+		case "A":
 		  result = arithmeticSeriesSum(a0, d_or_q, n);
-		  document.getElementById(&quot;d_or_q_label&quot;).innerHTML = &quot;d&quot;;
+		  document.getElementById("d_or_q_label").innerHTML = "d";
 		  break;
-		case &quot;G&quot;:
+		case "G":
 		  result = geometricSeriesSum(a0, d_or_q, n);
-		  document.getElementById(&quot;d_or_q_label&quot;).innerHTML = &quot;q&quot;;
+		  document.getElementById("d_or_q_label").innerHTML = "q";
 		  break;
       }
-      document.getElementById(&quot;result&quot;).value = result;
+      document.getElementById("result").value = result;
     }
-  &lt;/script&gt;
-  a0 = &lt;input type=&quot;textbox&quot; id=&quot;a0&quot; value = &quot;0&quot; onkeyup = &quot;computeSum()&quot;/&gt;
-  &lt;span id=&quot;d_or_q_label&quot;&gt;d&lt;/span&gt; = &lt;input type=&quot;textbox&quot; id=&quot;d_or_q&quot; value = &quot;0&quot; onkeyup = &quot;computeSum()&quot;/&gt;
-  n = &lt;input type=&quot;textbox&quot; id=&quot;n&quot; value = &quot;0&quot; onkeyup = &quot;computeSum()&quot;/&gt;
-  &lt;br /&gt;
-  &lt;select id=&quot;type&quot; onchange = &quot;computeSum()&quot;&gt;
-    &lt;option value=&quot;A&quot; selected=&quot;selected&quot;&gt;Arithmetic series&lt;/option&gt;
-    &lt;option value=&quot;G&quot;&gt;Geometric series&lt;/option&gt;
-  &lt;/select&gt;
-  &lt;br /&gt;
-  Sum = &lt;input type=&quot;textbox&quot; id=&quot;result&quot; value = &quot;0&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  a0 = <input type="textbox" id="a0" value = "0" onkeyup = "computeSum()"/>
+  <span id="d_or_q_label">d</span> = <input type="textbox" id="d_or_q" value = "0" onkeyup = "computeSum()"/>
+  n = <input type="textbox" id="n" value = "0" onkeyup = "computeSum()"/>
+  <br />
+  <select id="type" onchange = "computeSum()">
+    <option value="A" selected="selected">Arithmetic series</option>
+    <option value="G">Geometric series</option>
+  </select>
+  <br />
+  Sum = <input type="textbox" id="result" value = "0"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 בכל הנוגע לחישוב הסכומים, אני עושה לולאת for "קלאסית" ובזה נגמר העניין. כדי להחליט האם לעשות טור חשבוני או הנדסי אני משתמש במשפט case, אבל התחביר שלו בג'אווהסקריפט שונה ממה שיש ברובי. ראשית, לא כותבים case ואז משתנה, אלא switch ואז משתנה (או ביטוי כלשהו שמתפרש בתור ערך) בסוגריים; אחרי זה פותחים בלוק עם סוגריים מסולסלים, ובתוכו כותבים case ואז ערך ואז נקודותיים עבור כל מקרה שבו אנחנו רוצים לטפל. אלא שבג'אווהסקריפט (ובשפות נוספות כמו C ו-++C) יש למשפטי case כאלו גם תכונה שנקראת fall-through: מרגע ש-case כלשהו התקיים, אנחנו מפעילים את הקוד שלו ו<strong>גם את הקוד של כל המקרים שאחריו</strong> אלא אם עוצרים אותנו במפורש מלעשות את זה על ידי פקודת break כמו שיש לי שם. מה ההגיון כאן? ובכן, אין לי דוגמה טובה כרגע, אבל לפעמים זה שימושי. לרוע המזל, זה מאוד, מאוד מסוכן; זה פתח לבאגים איומים ונוראיים. אני רוצה לספר כאן על הבאג האיום והנורא החביב עלי מסוג זה: Yeenoghu.
 
 אפשר לקרוא את הסיפור <a href="http://nethack.wikia.com/wiki/Yeenoghu">כאן</a>, אבל הנה תקציר: Yeenoghu הוא אחד מהשדים שנגדם נלחמים במשחק המחשב Nethack, שהוא משחק מבוכים מפורסם מאוד בקוד פתוח. יש לו התקפה מיוחדת שעושה משהו שאני לא זוכר, והוא נחשב לאויב סטנדרטי - לא קשוח יותר מדי (ביחס לכך שהוא שד ולכן נתקלים בו רק בשלב מתקדם במשחק). ואז עדכנו את Nethack והוסיפו למשחק את פרשי האפוקליפסה, ובראשם "מוות". למוות יש התקפה מיוחדת שאם השחקן נפגע ממנה, הוא פשוט מת. זהו. אבל בשביל זה צריך שההתקפה המיוחדת תעבוד. לשם כך מתבצעת בדיקה מקדימה, ואם ההתקפה הצליחה, עוברים לקטע הקוד שהורג את השחקן.
 
-קטע הקוד הזה נמצא בתוך משפט case ארוך שעוסק בשלל סוגים של התקפות מיוחדות .הרעיון הוא שאם התקפה מיוחדת הצליחה, עוברים ל-case הזה עם משתנה שאומר איזו התקפה הופעלה, ואז הקוד הרלוונטי עבורה מופעל. ועכשיו לעצם העניין - טרם העדכון, מייד אחרי הקוד של Yeenoghu הופיע הקוד שמטפל במקרה הכללי שבכל מקרה היה צריך להיות מופעל, ולכן לא היה break אחרי הקוד של Yeenoghu. ואז הוסיפו את ההתקפה המיוחדת של מוות אחרי הקוד של Yeenoghu ושכחו להוסיף break אצל Yeenoghu. התוצאה? Yeenoghu  הפך למפלצת קטלנית יותר מאשר מוות, כי ההתקפה המיוחדת של Yeenoghu היא בעלת סיכויי הצלחה גבוהים יותר, וכשהיא פוגעת - מופעל הקוד של Yeenoghu ומייד אחר כך הקוד של מוות, שפשוט הורג את השחקן.
+קטע הקוד הזה נמצא בתוך משפט case ארוך שעוסק בשלל סוגים של התקפות מיוחדות. הרעיון הוא שאם התקפה מיוחדת הצליחה, עוברים ל-case הזה עם משתנה שאומר איזו התקפה הופעלה, ואז הקוד הרלוונטי עבורה מופעל. ועכשיו לעצם העניין - טרם העדכון, מייד אחרי הקוד של Yeenoghu הופיע הקוד שמטפל במקרה הכללי שבכל מקרה היה צריך להיות מופעל, ולכן לא היה break אחרי הקוד של Yeenoghu. ואז הוסיפו את ההתקפה המיוחדת של מוות אחרי הקוד של Yeenoghu ושכחו להוסיף break אצל Yeenoghu. התוצאה? Yeenoghu  הפך למפלצת קטלנית יותר מאשר מוות, כי ההתקפה המיוחדת של Yeenoghu היא בעלת סיכויי הצלחה גבוהים יותר, וכשהיא פוגעת - מופעל הקוד של Yeenoghu ומייד אחר כך הקוד של מוות, שפשוט הורג את השחקן.
 
 ואנשים לא תפסו שזה מה שקורה. הם חשבו ש-Yeenoghu הורג אותם כי, ובכן, הוא מפלצת קשוחה. Yeenoghu  הפך לאימת המשחק. שחקנים קיללו את Yeenoghu. ואז אחד המפתחים הבחין בבאג ותיקן אותו חיש קל תוך שהוא מציין שזה באג מגוחך לחלוטין ולמה אף אחד לא הודיע לו.
 

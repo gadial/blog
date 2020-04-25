@@ -16,15 +16,17 @@ tags:
 
 בספר הבעיה הייתה "נתונים שלושה מספרים, הוצא כפלט את המקסימלי מביניהם". שזה נחמד בתור המחשה להסתעפות של תוכנית על בסיס משפטי תנאי: אם a גדול מ-b, אז השווה את c ל-a והדפס את הגדול מביניהם, ואחרת השווה את c ל-b והדפס את הגדול מביניהם. אבל אני מקווה שכבר הבנו את העקרונות הללו בתרגילים קודמים, ולא נרוויח הרבה מהתרגיל הזה בתור המחשה של עבודה עם תנאים נטו. אז במקום לדבר על מציאת המקסימום של שלושה מספרים, בואו נדבר על מציאת המקסימום של כמות <strong>כלשהי</strong> של מספרים, ששמורים במערך. מערך הוא רשימה של אובייקטים מאותו הסוג, כך שאפשר לעבור על הרשימה באופן סדרתי. למשל, לכל איבר במערך יש אינדקס (ובדרך כלל האינדקס מתחיל מ-0 ולא מ-1 כמו שאפשר לצפות מהחיים האמיתיים) ואפשר לגשת לכל איבר על ידי מעבר סדרתי על האינדקסים. אלא שאני הולך לנקוט גישה קצת שונה למעבר על מערך, שקצת יותר מתאימה לאופי של רובי:
 
+<div class="code-block">
 {% highlight ruby %}
-# puts &quot;The maximum among #{ARGV.join(&quot;, &quot;)} is #{ARGV.collect{|x| x.to_i}.max}&quot;
+# puts "The maximum among #{ARGV.join(", ")} is #{ARGV.collect{|x| x.to_i}.max}"
 array = ARGV.collect{|x| x.to_i}
 max = array.first
 for x in array
-  max = x if x &gt; max
+  max = x if x > max
 end
-puts &quot;The maximum among #{ARGV.join(&quot;, &quot;)} is #{max}&quot;
+puts "The maximum among #{ARGV.join(", ")} is #{max}"
 {% endhighlight %}
+</div>
 
 תתעלמו לרגע מהשורה הראשונה והשניה. בואו נניח שהמערך כבר נתון לנו - מה עושים איתו? ובכן, ראשית מגדירים את max להיות האיבר הראשון במערך; עכשיו עוברים סדרתית על כל האיברים במערך. כל איבר שכזה מכניסים לרגע למשתנה x, ואז משווים את x ל-max. אם x גדול יותר, אז משנים את max כך שיכיל את הערך של x. די בבירור, אחרי שסיימנו לעבור על כל המערך כך, הערך של max יהיה של האיבר המקסימלי במערך.
 
@@ -34,19 +36,24 @@ puts &quot;The maximum among #{ARGV.join(&quot;, &quot;)} is #{max}&quot;
 
 מבלבל? קצת, כן; איטרטורים הם הרעיון המורכב הראשון שבו אנחנו נתקלים ברובי. לכן הנה קטע קוד נוסף בשבילכם:
 
+<div class="code-block">
 {% highlight ruby %}
 a = [1,2,3,4,5]
 b = a.collect{|x| x*x}
 puts a.inspect
 puts b.inspect
 {% endhighlight %}
+</div>
 
 הפלט של קטע הקוד הזה יהיה
 
-<pre dir="ltr">
+<div class="code-block">
+{% highlight ruby %}
 [1, 2, 3, 4, 5]
 [1, 4, 9, 16, 25]
-</pre>
+{% endhighlight %}
+</div>
+
 
 חשוב להבין שהתחביר של collect הוא לא קסם. אני מקדים את המאוחר ולא אכנס עכשיו לכל הפרטים, אבל הרעיון בסוגריים המסולסלים הוא שהפונקציה collect מקבלת שני פרמטרים בתור קלט: היא מקבלת את המערך שעליו collect פועל בתור פרמטר אחד, והיא <strong>מקבלת את קטע הקוד</strong> שבין הסוגריים המסולסלים בתור פרמטר שני. מרגע שקטע הקוד הזה ברשותה היא יכולה לקרוא לו מתי שבא לה, על אילו ערכים שבא לה, אבל היא נחמדה ומפעילה אותם על אברי המערך, לפי הסדר, ואת הפלטים שמה בתוך מערך חדש.
 
@@ -58,23 +65,25 @@ puts b.inspect
 
 בואו נעבור עכשיו להסקל. גם כאן יש לנו תירוץ ללמוד כמה דברים חדשים:
 
+<div class="code-block">
 {% highlight haskell %}
 import System.Environment
 
-toIntArray :: [String] -&gt; [Int]
-toIntArray array = [read(x) | x &lt;- array]
+toIntArray :: [String] -> [Int]
+toIntArray array = [read(x) | x <- array]
 
-getMax :: [Int] -&gt; Int
+getMax :: [Int] -> Int
 getMax [x] 	= x
 getMax (x:xs)
-  | x &gt; m  	= x
-  | x &lt;= m 	= m
+  | x > m  	= x
+  | x <= m 	= m
   where m = getMax xs
 
 main = do
-  args &lt;- getArgs
+  args <- getArgs
   putStrLn (show(getMax(toIntArray args)))
 {% endhighlight %}
+</div>
 
 ה-import למעלה הוא בגלל שאני רוצה להתחיל להשתמש ב-ARGV גם כאן. אפשר לראות את השימוש הזה למטה, בקוד של ה-main: אני קולט את ARGV לתוך המשתנה args ואז מתעלל בו כרגיל. עדיין לא הסברתי מה בעצם קורה ב-main ומה זה החץ הזה וכדומה - אני בכוונה מסתיר את הפרטים הללו לבינתיים כי הגישה של הסקל לענייני קלט/פלט נראית הזויה לחלוטין במבט ראשון (אבל יש בה הגיון לא קטן).
 
@@ -84,11 +93,13 @@ main = do
 
 ועכשיו אנחנו מגיעים לאקשן - הפונקציה getMax (למה לא max? כי המילה הזו כבר תפוסה על ידי פונקציה קיימת, והסקל לא אוהב דריסות של שמות). כאן קורה משהו מוזר - נראה שאני מגדיר את הפונקציה פעמיים, ועם פרמטרים מוזרים. הנה לנו עוד תכונה נפלאה של הסקל: אפשר להגדיר את אותה הפונקציה בכמה צורות שונות, בהתאם ל<strong>תבנית</strong> של הקלט של הפונקציה. עוד נראה דוגמאות בהמשך, אבל הנה דוגמת צעצוע:
 
+<div class="code-block">
 {% highlight haskell %}
 f 1 = 0
 f 2 = 42
 f x = x*x
 {% endhighlight %}
+</div>
 
 זו הגדרה בשפת הסקל של הפונקציה הבאה:
 
@@ -104,29 +115,31 @@ f x = x*x
 
 בואו נשתמש בגרסת הג'אווהסקריפט כדי ללמוד את הדרך ה"קלאסית" להגדיר איטרטורים - לולאת for "רגילה", מהסוג שבו משתמשים בשפות כמו C ו-++C:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 8&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 8</title>
+</head>
+<body>
+  <script type="text/javascript">
     find_max = function(){
-		var nums = document.getElementById(&quot;nums&quot;).value.split(&quot; &quot;);
+		var nums = document.getElementById("nums").value.split(" ");
 		var max = parseInt(nums[0])
-		for (var i = 1; i &lt; nums.length; i++){
+		for (var i = 1; i < nums.length; i++){
 			var x = parseInt(nums[i]);
-			max = (x &gt; max)?(x):(max);
+			max = (x > max)?(x):(max);
 		}
-		document.getElementById(&quot;max&quot;).value = max;
+		document.getElementById("max").value = max;
     }
-  &lt;/script&gt;
-  List = &lt;input type=&quot;textbox&quot; id=&quot;nums&quot; value = &quot;0&quot; onkeyup = &quot;find_max()&quot;/&gt;
-  &lt;br /&gt;
-  Max = &lt;input type=&quot;textbox&quot; id=&quot;max&quot; value = &quot;0&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  List = <input type="textbox" id="nums" value = "0" onkeyup = "find_max()"/>
+  <br />
+  Max = <input type="textbox" id="max" value = "0"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 לפני שנגיע ל-for שימו לב ל-split שמפעילים שם בתחילת הפונקציה. זו במובן מסויים הפעולה המשלימה של join שראינו ברובי: לוקחים מחרוזת אחרת ומפרקים אותה להרבה תת מחרוזות, כשהאינדיקציה להפרדה בין שתי מחרוזות היא המחרוזת שמועברת כפרמטר - במקרה שלנו, רווח (הסימנים המפרידים עצמם נזרקים לפח ולא מוכנסים לאף מחרוזת).
 

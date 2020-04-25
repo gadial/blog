@@ -41,7 +41,7 @@ for x in (0..NUM) do
   for y in (0..NUM) do
     for z in (0..NUM) do
       if (x+y+z == NUM and A*x+B*y+C*z == SUM)
-	puts &quot;x = #{x}, y = #{y}, z = #{z}&quot;
+	puts "x = #{x}, y = #{y}, z = #{z}"
       end
     end
   end
@@ -56,8 +56,8 @@ end
 for x in (0..NUM) do
   for y in (0..NUM) do
     z = NUM - (x+y)
-    if (z &gt;= 0 and A*x+B*y+C*z == SUM)
-      puts &quot;x = #{x}, y = #{y}, z = #{z}&quot;
+    if (z >= 0 and A*x+B*y+C*z == SUM)
+      puts "x = #{x}, y = #{y}, z = #{z}"
     end
   end
 end
@@ -72,7 +72,7 @@ for x in (0..NUM) do
   for y in (0..(NUM-x)) do
     z = NUM - (x+y)
     if (A*x+B*y+C*z == SUM)
-      puts &quot;x = #{x}, y = #{y}, z = #{z}&quot;
+      puts "x = #{x}, y = #{y}, z = #{z}"
     end
   end
 end
@@ -87,7 +87,7 @@ for z in (0..SUM/C) do
   for y in (0..(SUM-C*z)/10) do
     x = NUM - (y+z)
     if (A*x+B*y+C*z == SUM)
-      puts &quot;x = #{x}, y = #{y}, z = #{z}&quot;
+      puts "x = #{x}, y = #{y}, z = #{z}"
     end
   end
 end
@@ -113,7 +113,7 @@ for z_val in range(11):
   x_val = sol[x].subs(z,z_val)
   y_val = sol[y].subs(z,z_val)
   if x_val.q == 1 and y_val.q == 1:
-    print &quot;x = %d, y = %d, z = %d&quot; % (x_val, y_val, z_val)
+    print "x = %d, y = %d, z = %d" % (x_val, y_val, z_val)
 {% endhighlight %}
 </div>
 
@@ -158,11 +158,11 @@ x = R*(D.solve_right(L*b) + matrix([[0,0,t]]).transpose())
 val = 0
 while true:
   ((a,),(b,),(c,)) = x.subs(t=val)
-  if a &gt; 0 and b &gt; 0 and c &gt; 0:
-    print &quot;x = %d, y = %d, z = %d&quot; % (a,b,c)
+  if a > 0 and b > 0 and c > 0:
+    print "x = %d, y = %d, z = %d" % (a,b,c)
     break
   val *= -1
-  if val &gt;= 0:
+  if val >= 0:
     val += 1
     {% endhighlight %}
 </div>

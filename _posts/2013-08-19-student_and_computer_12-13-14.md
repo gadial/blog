@@ -14,9 +14,11 @@ tags:
 
 הבעיה עצמה מנוסחת כך: נתון לוח שחמט (לוח ריבועי של 8 על 8 משבצות). הקלט הוא אורך הצלע של משבצת; הפלט צריך להיות שטח הלוח הכולל, וסכום אורכי הקווים הכולל בלוח. "קו בלוח" הוא קו ישר מקצה אחד של הלוח לקצה השני שמורכב מצלעות של משבצות. גם ארבעת הקווים ש"עוטפים" את הלוח נחשבים. אז מה החשבון? די פשוט. כדי לדעת מה שטח הלוח בודקים מהו שטח משבצת (אורך צלע בריבוע) וכופלים במספר המשבצות (8 בריבוע); כדי לדעת מה סכום אורכי הקווים בודקים כמה קווים אנכיים יש (9 - כי יש קווים בין כל שתי עמודות, ושני קווים שתוחמים את הלוח), כמה אופקיים יש (שוב, 9 - הלוח סימטרי), ומה אורך כל קו (8 כפול אורך צלע, כי כל קו נוגע ב-8 משבצות). לסיום מדפיסים את הכל:
 
+<div class="code-block">
 {% highlight ruby %}
-puts &quot;Board area: #{(8*ARGV[0].to_i)**2}, total lines length: #{2*ARGV[0].to_i*8*9}&quot;
+puts "Board area: #{(8*ARGV[0].to_i)**2}, total lines length: #{2*ARGV[0].to_i*8*9}"
 {% endhighlight %}
+</div>
 
 הדבר היחיד כאן שאולי חדש הוא השימוש ב-** (כוכבית כפולה) על מנת לתאר פעולת חזקה.
 
@@ -28,9 +30,11 @@ puts &quot;Board area: #{(8*ARGV[0].to_i)**2}, total lines length: #{2*ARGV[0].t
 
 נתחיל בכל זאת מהפתרון הפשוט. ברובי אפשר למצוא מחלקים בשורה אחת:
 
+<div class="code-block">
 {% highlight ruby %}
 (1..n).find_all{|k| n % k == 0}
 {% endhighlight %}
+</div>
 
 אין כאן משהו שלא ראינו קודם. עכשיו, איך אפשר לבדוק ראשוניות? הדבר המתבקש לבדוק הוא שהתוצאה של הפעלת השורה לעיל היא רשימה באורך 2 בדיוק (כי כאמור, כל רשימה כזו תכיל לפחות את 1 ואת n). אבל למה לכתוב שוב את השורה הזו אם כבר כתבתי אותה פעם אחת? תחת זאת אפשר לתת לה <strong>שם בעל משמעות</strong> ולהשתמש מכאן ואילך בשם הזה. זה, על קצה המזלג, הרעיון מאחורי אחד המושגים המרכזיים ביותר בתכנות - <strong>פונקציה</strong>.
 
@@ -39,6 +43,8 @@ puts &quot;Board area: #{(8*ARGV[0].to_i)**2}, total lines length: #{2*ARGV[0].t
 כדי להגדיר פונקציה כותבים def, ואז את שם הפונקציה, ואז סוגריים ורשימה (מופרדת בפסיקים אם יש צורך) של כל שמות הקלטים של הפונקציה (אפשר לקבל קלטים בצורה יותר מתוחכמת שלא אתאר כרגע). אחר כך מגיע קוד הפונקציה ולבסוף end שמסמל את הסגירה שלה. בשפות אחרות צריך לכתוב return במפורש כדי לסיים פונקציה ומה שמופיע אחרי ה-return הוא ערך ההחזרה שלה; ברובי, אם פונקציה הסתיימה בלי הפעלת return, הערך שהיא מחזירה הוא הערך של הביטוי האחרון שחושב בתוך הפונקציה. אני אמביוולנטי לגבי השמטת return שכזו; לפעמים אני עושה את זה כשזה נראה לי טוב, ולפעמים אני נמנע מזה כי אני מרגיש שזה פוגע בקריאות. קרוב לודאי שאני תמיד טועה.
 
 אם כן, הנה הקוד:
+
+<div class="code-block">
 {% highlight ruby %}
 def divisors(n)
   (1..n).find_all{|k| n % k == 0}
@@ -49,9 +55,10 @@ def is_prime?(n)
 end
 
 n = ARGV[0].to_i
-puts &quot;Divisors of #{n}: #{divisors(n).join(&quot;, &quot;)}&quot;
-puts &quot;#{n} is#{(is_prime?(n))?(&quot;&quot;):(&quot; not&quot;)} prime&quot;
+puts "Divisors of #{n}: #{divisors(n).join(", ")}"
+puts "#{n} is#{(is_prime?(n))?(""):(" not")} prime"
 {% endhighlight %}
+</div>
 
 הפונקציה divisors מחזירה מערך, והפונקציה ?is_prime מחזירה ערך בוליאני. כאן אולי חלקכם מרימים גבה, בפרט אלו מכם שיש לו נסיון בתכנות - בדרך כלל סימן שאלה הוא לא חלק לגיטימי משם של פונקציה. ברובי סימני שאלה וסימני קריאה הן סיומות לגיטימיות לשמות של פונקציה ואמורים לרמוז על התפקיד שלהן - פונקציה שמסתיימת ב-? בדרך כלל מבצעת בדיקה ומחזירה ערך בוליאני; פונקציה שמסתיימת ב-! היא בעלת side effect רציני שהמתכנת צריך להתחשב בו. בשני המקרים מדובר על קונבנציה, לא על דרישה אבסולוטית מהקוד; אין חוקים שקובעים מתי מותר ולא מותר להשתמש בסימנים הללו. אפשר גם לוותר עליהם לחלוטין אם הם מעצבנים אתכם (אבל אין מה לעשות - יש פונקציות ספריה שמשתמשות בהם, ועוד נראה את זה בהמשך).
 
@@ -63,13 +70,15 @@ puts &quot;#{n} is#{(is_prime?(n))?(&quot;&quot;):(&quot; not&quot;)} prime&quot
 
 איך נכתוב את אותן פונקציות בהסקל? בקלות:
 
+<div class="code-block">
 {% highlight haskell %}
-divisors :: Int -&gt; [Int]
-divisors n = [a | a &lt;- [1..n], (n `mod` a) == 0]
+divisors :: Int -> [Int]
+divisors n = [a | a <- [1..n], (n `mod` a) == 0]
 
-is_prime :: Int -&gt; Bool
+is_prime :: Int -> Bool
 is_prime n = length (divisors(n)) == 2
 {% endhighlight %}
+</div>
 
 אין כאן משהו חדש או מרגש למי שכבר מכיר הסקל אז לא אתעכב על הקוד יותר מדי - הרעיון הוא בדיוק אותו רעיון כמו ברובי.
 
@@ -79,19 +88,20 @@ is_prime n = length (divisors(n)) == 2
 
 הנה הקוד במלואו:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 13-14&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 13-14</title>
+</head>
+<body>
+  <script type="text/javascript">
   var divisors = function(n){
 	divisors_list = new Array();
-	for (var a = 1; a*a &lt;= n; a++){
+	for (var a = 1; a*a <= n; a++){
 		if (n % a == 0){
 			divisors_list.push(a);
-			if (n / a &gt; a){
+			if (n / a > a){
 				divisors_list.push(n/a);
 			}
 		}
@@ -101,7 +111,7 @@ is_prime n = length (divisors(n)) == 2
   }
 
   var is_prime = function(n){
-	for (a = 2; a*a &lt;= n; a++){
+	for (a = 2; a*a <= n; a++){
 		if (n % a == 0){
 			return false;
 		}
@@ -110,19 +120,20 @@ is_prime n = length (divisors(n)) == 2
   }
 
 	var find_divisors_and_primality = function(){
-		var n = parseInt(document.getElementById(&quot;n&quot;).value)
-		document.getElementById(&quot;divisors&quot;).value = divisors(n).join(&quot;, &quot;);
-		document.getElementById(&quot;is_prime&quot;).value = is_prime(n);
+		var n = parseInt(document.getElementById("n").value)
+		document.getElementById("divisors").value = divisors(n).join(", ");
+		document.getElementById("is_prime").value = is_prime(n);
 	}
-  &lt;/script&gt;
-  n = &lt;input type=&quot;textbox&quot; id=&quot;n&quot; value = &quot;0&quot; onkeyup = &quot;find_divisors_and_primality()&quot;/&gt;
-  &lt;br /&gt;
-  Divisors = &lt;input type=&quot;textbox&quot; id=&quot;divisors&quot; value = &quot;0&quot;/&gt;
-  &lt;br /&gt;
-  Is prime? &lt;input type=&quot;textbox&quot; id=&quot;is_prime&quot; value = &quot;0&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  n = <input type="textbox" id="n" value = "0" onkeyup = "find_divisors_and_primality()"/>
+  <br />
+  Divisors = <input type="textbox" id="divisors" value = "0"/>
+  <br />
+  Is prime? <input type="textbox" id="is_prime" value = "0"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 שימו לב לאופן המוזר שבו אני ממיין את הרשימה בסוף של divisors (למה בכלל צריך למיין?) - הוא נובע מכך שמיון מספרים בג'אווהסקריפט הוא בברירת מחדל כאילו היו מחרוזות ועל ידי ביצוע השוואה של מחרוזות, מה שגורם לתופעות מוזרות כמו 10 שבא לפני 4 וכדומה. לכן אני מעביר במפורש פונקציה שאומרת איך צריך למיין (בהינתן שני מספרים, היא מחזירה מספר חיובי אם השני בא לפני הראשון, שלילי אם הראשון בא לפני השני ואפס אם אין מבחינתנו חשיבות לסדר בין שניהם או אם הם זהים).
 

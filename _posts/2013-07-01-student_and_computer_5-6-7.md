@@ -18,11 +18,13 @@ tags:
 
 ברובי זה קל מאוד:
 
+<div class="code-block">
 {% highlight ruby %}
 x, y = ARGV[0].to_i, ARGV[1].to_i
-puts &quot;#{x} and #{y} have equal signs&quot; if x*y &gt;= 0
-puts &quot;#{x} and #{y} have different signs&quot; if x*y &lt; 0
+puts "#{x} and #{y} have equal signs" if x*y >= 0
+puts "#{x} and #{y} have different signs" if x*y < 0
 {% endhighlight %}
+</div>
 
 אני חושב שהקוד קריא אפילו למי שבכלל לא מכיר את התחביר של רובי, אבל בכל זאת כדאי להתעמק טיפה במה שקורה פה. אנחנו מתחילים עם שורה של קליטת קלט רגילה, ואחריה מגיעה פקודת puts רגילה, אבל באותה שורה, אחרי פקודת ה-puts פתאום מופיע if, שמשמעותו - את מה שהיה כתוב בשורה הזו בצע רק אם תנאי מסויים מתקיים. ומה התנאי הזה? שהמכפלה של x,y היא גדולה או שווה ל-0.
 
@@ -33,59 +35,70 @@ puts &quot;#{x} and #{y} have different signs&quot; if x*y &lt; 0
 
 בואו נעבור לראות איך עושים משפטי תנאי בגישה שונה לחלוטין - הגישה ההסקלית:
 
+<div class="code-block">
 {% highlight haskell %}
-sign_equality :: Int -&gt; (Int -&gt; String)
+sign_equality :: Int -> (Int -> String)
 sign_equality a b
-	| 0 &lt;= a*b 	= &quot;equal&quot;
-	| 0 &gt; a*b	= &quot;different&quot;
+	| 0 <= a*b 	= "equal"
+	| 0 > a*b	= "different"
 
 main = do
-  putStrLn &quot;Please insert two numbers to compare their signs&quot;
-  a &lt;- getLine
-  b &lt;- getLine
-  putStrLn (a ++ &quot; and &quot; ++ b ++ &quot; have &quot; ++ (sign_equality (read a) (read b)) ++ &quot; signs&quot;)
+  putStrLn "Please insert two numbers to compare their signs"
+  a <- getLine
+  b <- getLine
+  putStrLn (a ++ " and " ++ b ++ " have " ++ (sign_equality (read a) (read b)) ++ " signs")
 {% endhighlight %}
 
-מה שאני עושה פה הוא להגדיר פונקציה שמקבלת שני מספרים ומחזירה את המחרוזת "equal" אם הסימנים שלהם שווים, ואת המחרוזת "different" אם הם שונים. הפונקציה הזו מוגדרת באופן כמו-מתמטי, באמצעות חלוקה למקרים, כשכל מקרה מתחיל בסימן | של קו עומד. כל קו עומד כזה נקרא Guard - "שומר". הרעיון בשומרים הוא פשוט: כדי לדעת איזה ערך הפונקציה תחזיר, היא עוברת שומר שומר. כל שומר מורכב מסימן הקו העומד, ואחריו תנאי, ולבסוף = וערך כלשהו. הפונקציה בודקת את התנאים באופן סדרתי עד שהיא מגיעה אל התנאי הראשון שמתקיים, ואז מחזירה את הערך שאחרי סימן ה-= שלו.
+</div>
+
+מה שאני עושה פה הוא להגדיר פונקציה שמקבלת שני מספרים ומחזירה את המחרוזת "equal" אם הסימנים שלהם שווים, ואת המחרוזת "different" אם הם שונים. הפונקציה הזו מוגדרת באופן כמו-מתמטי, באמצעות חלוקה למקרים, כשכל מקרה מתחיל בסימן \| של קו עומד. כל קו עומד כזה נקרא Guard - "שומר". הרעיון בשומרים הוא פשוט: כדי לדעת איזה ערך הפונקציה תחזיר, היא עוברת שומר שומר. כל שומר מורכב מסימן הקו העומד, ואחריו תנאי, ולבסוף = וערך כלשהו. הפונקציה בודקת את התנאים באופן סדרתי עד שהיא מגיעה אל התנאי הראשון שמתקיים, ואז מחזירה את הערך שאחרי סימן ה-= שלו.
 
 אתם עשויים לתהות מה קורה אם אף אחד מהתנאים שאחרי השומרים לא מתקיים - מה הפונקציה תחזיר אז? ובכן, אין חוכמות - הפונקציה תיכשל והתוכנית תקרוס אם השגיאה הזו לא תטופל. לכן לרוב רצוי מאוד שהשומרים יטפלו בכל המקרים האפשריים; כדי לעשות את החיים פשוטים, נהוג להשתמש במילת המפתח otherwise עבור השומר האחרון (בפועל otherwise הוא פשוט שם אחר ל-True, מה שמבטיח שהתנאי הזה תמיד יתקיים) ולתת לו את ערך "ברירת המחדל" של הפונקציה; זה שאמור להיות מוחזר ממנה אם כל הבדיקות האחרות נכשלו. עוד נראה את זה בהמשך, אני מקווה.
 
 וכעת לג'אווהסקריפט, שבה אני אנצל את ההזדמנות כדי להציג גישה <strong>נוספת</strong> לתנאים:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 5&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 5</title>
+</head>
+<body>
+  <script type="text/javascript">
     compute_sign_relation = function(){
-		var a = parseInt(document.getElementById(&quot;a&quot;).value);
-		var b = parseInt(document.getElementById(&quot;b&quot;).value);
-		var sign_relation = (a*b &gt;= 0)?(&quot;equal&quot;):(&quot;different&quot;);
-		document.getElementById(&quot;sign_relation&quot;).innerHTML = &quot;Signs are &quot; + sign_relation;
+		var a = parseInt(document.getElementById("a").value);
+		var b = parseInt(document.getElementById("b").value);
+		var sign_relation = (a*b >= 0)?("equal"):("different");
+		document.getElementById("sign_relation").innerHTML = "Signs are " + sign_relation;
     }
-  &lt;/script&gt;
-  a = &lt;input type=&quot;textbox&quot; id=&quot;a&quot; value = &quot;0&quot; onkeyup = &quot;compute_sign_relation()&quot;/&gt;
-  &lt;br /&gt;
-  b = &lt;input type=&quot;textbox&quot; id=&quot;b&quot; value = &quot;0&quot; onkeyup = &quot;compute_sign_relation()&quot;/&gt;
-  &lt;br /&gt;
-  &lt;div type=&quot;label&quot; id=&quot;sign_relation&quot;/&gt;&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  a = <input type="textbox" id="a" value = "0" onkeyup = "compute_sign_relation()"/>
+  <br />
+  b = <input type="textbox" id="b" value = "0" onkeyup = "compute_sign_relation()"/>
+  <br />
+  <div type="label" id="sign_relation"/></div>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 אין ממש צורך לקרוא את הכל - שורת המפתח המעניינת פה היא זו:
 
-<p dir="ltr">
+<div class="code-block">
+{% highlight html %}
 sign_relation = (a*b >= 0)?("equal"):("different")
-</p>
+{% endhighlight %}
+</div>
+
 
 מה הולך פה? יש כאן שימוש ב<strong>אופרטור הטרנרי</strong> ("טרנרי" פירושו "על שלושה ערכים"). זה אופרטור שמקבל שלושה קלטים, כאשר בין הראשון לשני מפריד סימן שאלה ובין השני לשלישי מפרידות נקודותיים. הקלט הראשון אמור להיות ערך בוליאני, אבל שני האחרים יכולים להיות מה שתרצו. כך שהפעלה של האופרטור באופן כללי נראית כך:
 
-<p dir="ltr">
+<div class="code-block">
+{% highlight html %}
 CONDITION ? VAR_TRUE : VAR_FALSE
-</p>
+{% endhighlight %}
+</div>
+
 
 אם התנאי CONDITION הוא True, אז האופרטור יחזיר את הערך של VAR_TRUE. אם התנאי הוא False, אז האופרטור יחזיר את VAR_FALSE.
 
@@ -99,17 +112,19 @@ CONDITION ? VAR_TRUE : VAR_FALSE
 
 הפתרון שלי ברובי יהיה שמרני משהו מבחינת הסגנון שלו, כדי להראות את הצורה ה"רגילה" שבה כותבים תנאים בשפות תכנות. בפרט אני הולך להכניס לתמונה את else שמטפל במה שקורה אם משפט תנאי <strong>לא</strong> מתקיים:
 
+<div class="code-block">
 {% highlight ruby %}
 a, b, c = ARGV
 
 if (a == b and b == c)
-  puts &quot;Equilateral triangle&quot;
+  puts "Equilateral triangle"
 elsif (a == b or b == c or a == c)
-  puts &quot;Isosceles triangle&quot;
+  puts "Isosceles triangle"
 else
-  puts &quot;Not equilateral and not isosceles triangle&quot;
+  puts "Not equilateral and not isosceles triangle"
 end
 {% endhighlight %}
+</div>
 
 שימו לב לקליטת הפרמטרים בהתחלה - אני אפילו לא טורח להמיר אותם למספרים, כי הערכים המספריים לא חשובים - רק אם הם שווים או שונים, ואת זה אפשר לבדוק גם עבור מחרוזות. כמו כן, צורת הכתיבה נראית קצת מוזרה - בצד שמאל יש לי שלושה משתנים ובצד ימין יש לי רק משתנה אחד - אבל המשתנה הזה, ARGV, הוא מערך - רשימה של ערכים - וכשאני כותב שלושה משתנים מופרדים בפסיקים בצד ימין ומבצע השמה זו דרך מקוצרת לומר "קח את שלושת הערכים הראשונים מתוך ARGV והצב אותם ב-a,b,c".
 
@@ -123,59 +138,64 @@ end
 
 נעבור לגישה ההסקלית:
 
+<div class="code-block">
 {% highlight haskell %}
-triangle_type :: Int -&gt; (Int -&gt; (Int -&gt; String))
+triangle_type :: Int -> (Int -> (Int -> String))
 triangle_type a b c
-	| a == b &amp;&amp; b == c				= &quot;Equilateral&quot;
-	| a == b || b == c || a == c	= &quot;Isosceles&quot;
-	| otherwise						= &quot;Not equilateral and not isosceles&quot;
+	| a == b &amp;&amp; b == c				= "Equilateral"
+	| a == b || b == c || a == c	= "Isosceles"
+	| otherwise						= "Not equilateral and not isosceles"
 
 
 main = do
-  putStrLn &quot;Please insert two numbers to compare their signs&quot;
-  a &lt;- getLine
-  b &lt;- getLine
-  c &lt;- getLine
-  putStrLn ((triangle_type (read a) (read b) (read c)) ++ &quot; triangle&quot;)
+  putStrLn "Please insert two numbers to compare their signs"
+  a <- getLine
+  b <- getLine
+  c <- getLine
+  putStrLn ((triangle_type (read a) (read b) (read c)) ++ " triangle")
 {% endhighlight %}
 
-כאן אפשר לראות שימוש ב-&& בתור האופרטור and וב-|| בתור האופרטור or, במיטב המסורת של C. כמו כן, אפשר לראות איך צורת הכתיבה ההסקלית מטפלת בתנאים בצורה יותר נקיה: אין צורך ב-else וב-elsif למיניהם, אלא פשוט בתנאים שהולכים על הראשון מביניהם שמתקיים וחסל.
+</div>
+
+כאן אפשר לראות שימוש ב-&& בתור האופרטור and וב-\|\| בתור האופרטור or, במיטב המסורת של C. כמו כן, אפשר לראות איך צורת הכתיבה ההסקלית מטפלת בתנאים בצורה יותר נקיה: אין צורך ב-else וב-elsif למיניהם, אלא פשוט בתנאים שהולכים על הראשון מביניהם שמתקיים וחסל.
 
 הקוד בג'אווהסקריפט הוא הסטנדרטי מכולם:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 6-7&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 6-7</title>
+</head>
+<body>
+  <script type="text/javascript">
     check_triangle_type = function(){
-		var a = parseInt(document.getElementById(&quot;a&quot;).value);
-		var b = parseInt(document.getElementById(&quot;b&quot;).value);
-		var c = parseInt(document.getElementById(&quot;c&quot;).value);
+		var a = parseInt(document.getElementById("a").value);
+		var b = parseInt(document.getElementById("b").value);
+		var c = parseInt(document.getElementById("c").value);
 		var triangle_type;
 		if (a == b &amp;&amp; b == c){
-		  triangle_type = &quot;Equilateral triangle&quot;;
+		  triangle_type = "Equilateral triangle";
 		}
 		else if (a == b || b == c || a == c){
-		  triangle_type = &quot;Isosceles triangle&quot;;
+		  triangle_type = "Isosceles triangle";
 		}
 		else {
-		  triangle_type = &quot;Not equilateral and not isosceles triangle&quot;;
+		  triangle_type = "Not equilateral and not isosceles triangle";
 		}
-		document.getElementById(&quot;triangle_type&quot;).innerHTML = triangle_type;
+		document.getElementById("triangle_type").innerHTML = triangle_type;
     }
-  &lt;/script&gt;
-  a = &lt;input type=&quot;textbox&quot; id=&quot;a&quot; value = &quot;0&quot; onkeyup = &quot;check_triangle_type()&quot;/&gt;
-  &lt;br /&gt;
-  b = &lt;input type=&quot;textbox&quot; id=&quot;b&quot; value = &quot;0&quot; onkeyup = &quot;check_triangle_type()&quot;/&gt;
-  &lt;br /&gt;
-  c = &lt;input type=&quot;textbox&quot; id=&quot;c&quot; value = &quot;0&quot; onkeyup = &quot;check_triangle_type()&quot;/&gt;
-  &lt;br /&gt;
-  &lt;div type=&quot;label&quot; id=&quot;triangle_type&quot;/&gt;Equilateral triangle&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  a = <input type="textbox" id="a" value = "0" onkeyup = "check_triangle_type()"/>
+  <br />
+  b = <input type="textbox" id="b" value = "0" onkeyup = "check_triangle_type()"/>
+  <br />
+  c = <input type="textbox" id="c" value = "0" onkeyup = "check_triangle_type()"/>
+  <br />
+  <div type="label" id="triangle_type"/>Equilateral triangle</div>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 מבחינה מהותית זה אותו הקוד כמו זה של רובי, רק עם התחביר השונה של ג'אווהסקריפט שמזכיר יותר את התחביר של C, עם סוגריים מסולסלים לכל בלוק, ועם else if במקום elsif (כאן else if הוא בדיוק זה - פקודת else שאחריה בלוק בן פקודה אחת - ובלוק כזה לא צריך סוגריים מסולסלים סביבו - כשאותה פקודה היא בעצמה פקודת if שבאה עם בלוק משל עצמה). חשוב לציין שאני משתמש כאן במוסכמת קוד אפשרית אחת - הסוגר המסולסל השמאלי של בלוק if בא מייד לאחר הסוגריים של התנאי (אגב, הסוגריים הללו הם רשות ברובי אבל ברוב השפות הן חובה). אפשר היה גם לשים אותם בשורה נפרדת משל עצמם. מיותר לציין שהמריבות בשאלה אם נכון לשים את הסוגר המסולסל בסוף הסוגריים של ה-if או שהוא צריך להיות בשורה משל עצמו מגמדות את המלחמות של ליליפוט ובלפוסקו.

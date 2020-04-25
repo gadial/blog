@@ -128,7 +128,11 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>הבעיה עצמה מנוסחת כך: נתון לוח שחמט (לוח ריבועי של 8 על 8 משבצות). הקלט הוא אורך הצלע של משבצת; הפלט צריך להיות שטח הלוח הכולל, וסכום אורכי הקווים הכולל בלוח. “קו בלוח” הוא קו ישר מקצה אחד של הלוח לקצה השני שמורכב מצלעות של משבצות. גם ארבעת הקווים ש”עוטפים” את הלוח נחשבים. אז מה החשבון? די פשוט. כדי לדעת מה שטח הלוח בודקים מהו שטח משבצת (אורך צלע בריבוע) וכופלים במספר המשבצות (8 בריבוע); כדי לדעת מה סכום אורכי הקווים בודקים כמה קווים אנכיים יש (9 - כי יש קווים בין כל שתי עמודות, ושני קווים שתוחמים את הלוח), כמה אופקיים יש (שוב, 9 - הלוח סימטרי), ומה אורך כל קו (8 כפול אורך צלע, כי כל קו נוגע ב-8 משבצות). לסיום מדפיסים את הכל:</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">puts</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="no">Board</span> <span class="ss">area: </span><span class="c1">#{(8*ARGV[0].to_i)**2}, total lines length: #{2*ARGV[0].to_i*8*9}&amp;quot;</span></code></pre></figure>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">puts</span> <span class="s2">"Board area: </span><span class="si">#{</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="no">ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">to_i</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="si">}</span><span class="s2">, total lines length: </span><span class="si">#{</span><span class="mi">2</span><span class="o">*</span><span class="no">ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">to_i</span><span class="o">*</span><span class="mi">8</span><span class="o">*</span><span class="mi">9</span><span class="si">}</span><span class="s2">"</span></code></pre></figure>
+
+</div>
 
 <p>הדבר היחיד כאן שאולי חדש הוא השימוש ב-** (כוכבית כפולה) על מנת לתאר פעולת חזקה.</p>
 
@@ -140,7 +144,11 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>נתחיל בכל זאת מהפתרון הפשוט. ברובי אפשר למצוא מחלקים בשורה אחת:</p>
 
+<div class="code-block">
+
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="n">n</span><span class="p">).</span><span class="nf">find_all</span><span class="p">{</span><span class="o">|</span><span class="n">k</span><span class="o">|</span> <span class="n">n</span> <span class="o">%</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">}</span></code></pre></figure>
+
+</div>
 
 <p>אין כאן משהו שלא ראינו קודם. עכשיו, איך אפשר לבדוק ראשוניות? הדבר המתבקש לבדוק הוא שהתוצאה של הפעלת השורה לעיל היא רשימה באורך 2 בדיוק (כי כאמור, כל רשימה כזו תכיל לפחות את 1 ואת n). אבל למה לכתוב שוב את השורה הזו אם כבר כתבתי אותה פעם אחת? תחת זאת אפשר לתת לה <strong>שם בעל משמעות</strong> ולהשתמש מכאן ואילך בשם הזה. זה, על קצה המזלג, הרעיון מאחורי אחד המושגים המרכזיים ביותר בתכנות - <strong>פונקציה</strong>.</p>
 
@@ -149,6 +157,8 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 <p>כדי להגדיר פונקציה כותבים def, ואז את שם הפונקציה, ואז סוגריים ורשימה (מופרדת בפסיקים אם יש צורך) של כל שמות הקלטים של הפונקציה (אפשר לקבל קלטים בצורה יותר מתוחכמת שלא אתאר כרגע). אחר כך מגיע קוד הפונקציה ולבסוף end שמסמל את הסגירה שלה. בשפות אחרות צריך לכתוב return במפורש כדי לסיים פונקציה ומה שמופיע אחרי ה-return הוא ערך ההחזרה שלה; ברובי, אם פונקציה הסתיימה בלי הפעלת return, הערך שהיא מחזירה הוא הערך של הביטוי האחרון שחושב בתוך הפונקציה. אני אמביוולנטי לגבי השמטת return שכזו; לפעמים אני עושה את זה כשזה נראה לי טוב, ולפעמים אני נמנע מזה כי אני מרגיש שזה פוגע בקריאות. קרוב לודאי שאני תמיד טועה.</p>
 
 <p>אם כן, הנה הקוד:</p>
+
+<div class="code-block">
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">divisors</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="n">n</span><span class="p">).</span><span class="nf">find_all</span><span class="p">{</span><span class="o">|</span><span class="n">k</span><span class="o">|</span> <span class="n">n</span> <span class="o">%</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">}</span>
@@ -159,8 +169,10 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 <span class="k">end</span>
 
 <span class="n">n</span> <span class="o">=</span> <span class="no">ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">to_i</span>
-<span class="nb">puts</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="no">Divisors</span> <span class="n">of</span> <span class="c1">#{n}: #{divisors(n).join(&amp;quot;, &amp;quot;)}&amp;quot;</span>
-<span class="nb">puts</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="c1">#{n} is#{(is_prime?(n))?(&amp;quot;&amp;quot;):(&amp;quot; not&amp;quot;)} prime&amp;quot;</span></code></pre></figure>
+<span class="nb">puts</span> <span class="s2">"Divisors of </span><span class="si">#{</span><span class="n">n</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">divisors</span><span class="p">(</span><span class="n">n</span><span class="p">).</span><span class="nf">join</span><span class="p">(</span><span class="s2">", "</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+<span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">n</span><span class="si">}</span><span class="s2"> is</span><span class="si">#{</span><span class="p">(</span><span class="n">is_prime?</span><span class="p">(</span><span class="n">n</span><span class="p">))?(</span><span class="s2">""</span><span class="p">):(</span><span class="s2">" not"</span><span class="p">)</span><span class="si">}</span><span class="s2"> prime"</span></code></pre></figure>
+
+</div>
 
 <p>הפונקציה divisors מחזירה מערך, והפונקציה ?is_prime מחזירה ערך בוליאני. כאן אולי חלקכם מרימים גבה, בפרט אלו מכם שיש לו נסיון בתכנות - בדרך כלל סימן שאלה הוא לא חלק לגיטימי משם של פונקציה. ברובי סימני שאלה וסימני קריאה הן סיומות לגיטימיות לשמות של פונקציה ואמורים לרמוז על התפקיד שלהן - פונקציה שמסתיימת ב-? בדרך כלל מבצעת בדיקה ומחזירה ערך בוליאני; פונקציה שמסתיימת ב-! היא בעלת side effect רציני שהמתכנת צריך להתחשב בו. בשני המקרים מדובר על קונבנציה, לא על דרישה אבסולוטית מהקוד; אין חוקים שקובעים מתי מותר ולא מותר להשתמש בסימנים הללו. אפשר גם לוותר עליהם לחלוטין אם הם מעצבנים אתכם (אבל אין מה לעשות - יש פונקציות ספריה שמשתמשות בהם, ועוד נראה את זה בהמשך).</p>
 
@@ -172,11 +184,15 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>איך נכתוב את אותן פונקציות בהסקל? בקלות:</p>
 
-<figure class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="n">divisors</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]</span>
-<span class="n">divisors</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">|</span> <span class="n">a</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">-</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="n">n</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span> <span class="p">`</span><span class="n">mod</span><span class="p">`</span> <span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<div class="code-block">
 
-<span class="n">is_prime</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="kt">Bool</span>
+<figure class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="n">divisors</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]</span>
+<span class="n">divisors</span> <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">|</span> <span class="n">a</span> <span class="o">&lt;-</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="n">n</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span> <span class="p">`</span><span class="n">mod</span><span class="p">`</span> <span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">is_prime</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
 <span class="n">is_prime</span> <span class="n">n</span> <span class="o">=</span> <span class="n">length</span> <span class="p">(</span><span class="n">divisors</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span></code></pre></figure>
+
+</div>
 
 <p>אין כאן משהו חדש או מרגש למי שכבר מכיר הסקל אז לא אתעכב על הקוד יותר מדי - הרעיון הוא בדיוק אותו רעיון כמו ברובי.</p>
 
@@ -186,48 +202,52 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>הנה הקוד במלואו:</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="ni">&amp;lt;</span>html<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>head<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>title<span class="ni">&amp;gt;</span>Targil 13-14<span class="ni">&amp;lt;</span>/title<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/head<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>body<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>script type=<span class="ni">&amp;quot;</span>text/javascript<span class="ni">&amp;quot;&amp;gt;</span>
-  var divisors = function(n){
-	divisors_list = new Array();
-	for (var a = 1; a*a <span class="ni">&amp;lt;</span>= n; a++){
-		if (n % a == 0){
-			divisors_list.push(a);
-			if (n / a <span class="ni">&amp;gt;</span> a){
-				divisors_list.push(n/a);
-			}
-		}
-	}
-	divisors_list.sort(function(a,b){return a-b});
-	return divisors_list;
-  }
+<div class="code-block">
 
-  var is_prime = function(n){
-	for (a = 2; a*a <span class="ni">&amp;lt;</span>= n; a++){
-		if (n % a == 0){
-			return false;
-		}
-	}
-	return true;
-  }
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>Targil 13-14<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+  <span class="kd">var</span> <span class="nx">divisors</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+	<span class="nx">divisors_list</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">a</span><span class="o">*</span><span class="nx">a</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">a</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="nx">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+			<span class="nx">divisors_list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">/</span> <span class="nx">a</span> <span class="o">&gt;</span> <span class="nx">a</span><span class="p">){</span>
+				<span class="nx">divisors_list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">n</span><span class="o">/</span><span class="nx">a</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="nx">divisors_list</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span><span class="k">return</span> <span class="nx">a</span><span class="o">-</span><span class="nx">b</span><span class="p">});</span>
+	<span class="k">return</span> <span class="nx">divisors_list</span><span class="p">;</span>
+  <span class="p">}</span>
 
-	var find_divisors_and_primality = function(){
-		var n = parseInt(document.getElementById(<span class="ni">&amp;quot;</span>n<span class="ni">&amp;quot;</span>).value)
-		document.getElementById(<span class="ni">&amp;quot;</span>divisors<span class="ni">&amp;quot;</span>).value = divisors(n).join(<span class="ni">&amp;quot;</span>, <span class="ni">&amp;quot;</span>);
-		document.getElementById(<span class="ni">&amp;quot;</span>is_prime<span class="ni">&amp;quot;</span>).value = is_prime(n);
-	}
-  <span class="ni">&amp;lt;</span>/script<span class="ni">&amp;gt;</span>
-  n = <span class="ni">&amp;lt;</span>input type=<span class="ni">&amp;quot;</span>textbox<span class="ni">&amp;quot;</span> id=<span class="ni">&amp;quot;</span>n<span class="ni">&amp;quot;</span> value = <span class="ni">&amp;quot;</span>0<span class="ni">&amp;quot;</span> onkeyup = <span class="ni">&amp;quot;</span>find_divisors_and_primality()<span class="ni">&amp;quot;</span>/<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>br /<span class="ni">&amp;gt;</span>
-  Divisors = <span class="ni">&amp;lt;</span>input type=<span class="ni">&amp;quot;</span>textbox<span class="ni">&amp;quot;</span> id=<span class="ni">&amp;quot;</span>divisors<span class="ni">&amp;quot;</span> value = <span class="ni">&amp;quot;</span>0<span class="ni">&amp;quot;</span>/<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>br /<span class="ni">&amp;gt;</span>
-  Is prime? <span class="ni">&amp;lt;</span>input type=<span class="ni">&amp;quot;</span>textbox<span class="ni">&amp;quot;</span> id=<span class="ni">&amp;quot;</span>is_prime<span class="ni">&amp;quot;</span> value = <span class="ni">&amp;quot;</span>0<span class="ni">&amp;quot;</span>/<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/body<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/html<span class="ni">&amp;gt;</span></code></pre></figure>
+  <span class="kd">var</span> <span class="nx">is_prime</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+	<span class="k">for</span> <span class="p">(</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">a</span><span class="o">*</span><span class="nx">a</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">a</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="nx">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+	<span class="kd">var</span> <span class="nx">find_divisors_and_primality</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">n</span><span class="dl">"</span><span class="p">).</span><span class="nx">value</span><span class="p">)</span>
+		<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">divisors</span><span class="dl">"</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">divisors</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="dl">"</span><span class="s2">, </span><span class="dl">"</span><span class="p">);</span>
+		<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">is_prime</span><span class="dl">"</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">is_prime</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+	<span class="p">}</span>
+  <span class="nt">&lt;/script&gt;</span>
+  n = <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"textbox"</span> <span class="na">id=</span><span class="s">"n"</span> <span class="na">value = </span><span class="s">"0"</span> <span class="na">onkeyup = </span><span class="s">"find_divisors_and_primality()"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+  Divisors = <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"textbox"</span> <span class="na">id=</span><span class="s">"divisors"</span> <span class="na">value = </span><span class="s">"0"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+  Is prime? <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"textbox"</span> <span class="na">id=</span><span class="s">"is_prime"</span> <span class="na">value = </span><span class="s">"0"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre></figure>
+
+</div>
 
 <p>שימו לב לאופן המוזר שבו אני ממיין את הרשימה בסוף של divisors (למה בכלל צריך למיין?) - הוא נובע מכך שמיון מספרים בג’אווהסקריפט הוא בברירת מחדל כאילו היו מחרוזות ועל ידי ביצוע השוואה של מחרוזות, מה שגורם לתופעות מוזרות כמו 10 שבא לפני 4 וכדומה. לכן אני מעביר במפורש פונקציה שאומרת איך צריך למיין (בהינתן שני מספרים, היא מחזירה מספר חיובי אם השני בא לפני הראשון, שלילי אם הראשון בא לפני השני ואפס אם אין מבחינתנו חשיבות לסדר בין שניהם או אם הם זהים).</p>
 

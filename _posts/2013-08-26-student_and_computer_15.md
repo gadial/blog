@@ -18,7 +18,7 @@ tags:
 
 <div class="code-block">
 {% highlight ruby %}
-print &quot;Hello world!\n&quot;
+print "Hello world!\n"
 {% endhighlight %}
 </div>
 
@@ -38,7 +38,7 @@ CR בא לתאר את הפעולה של החזרת המחזיק לתחילת ה�
 
 <div class="code-block">
 {% highlight ruby %}
-100.times{|n| print &quot;\r&quot; + &quot; &quot;*n + &quot;Hello world!&quot;; sleep(0.1)}
+100.times{|n| print "\r" + " "*n + "Hello world!"; sleep(0.1)}
 {% endhighlight %}
 </div>
 
@@ -47,13 +47,13 @@ CR בא לתאר את הפעולה של החזרת המחזיק לתחילת ה�
 <div class="code-block">
 {% highlight ruby %}
 FRAMES_PER_SECOND = 20
-TEXT = &quot;Hello world!&quot;
+TEXT = "Hello world!"
 TOTAL_TIME = 10
 SCREEN_WIDTH = 50
 
 (TOTAL_TIME*FRAMES_PER_SECOND).times do |n|
-  print &quot;\r&quot; + &quot; &quot;*(SCREEN_WIDTH+TEXT.length) if n % SCREEN_WIDTH == 0
-  print &quot;\r&quot; + &quot; &quot;*(n % SCREEN_WIDTH) + TEXT
+  print "\r" + " "*(SCREEN_WIDTH+TEXT.length) if n % SCREEN_WIDTH == 0
+  print "\r" + " "*(n % SCREEN_WIDTH) + TEXT
   sleep(1.0 / FRAMES_PER_SECOND)
 end
 puts
@@ -66,23 +66,25 @@ puts
 
 בואו נעבור להסקל. מכיוון שאני רוצה להציג סיבוכים חדשים כאן ולא להתעסק בישנים, אני עושה משהו פשוט יחסית - טקסט שנע קצת על המסך ואז עוצר, בלי שיתחיל שוב מהצד השמאלי של המסך:
 
+<div class="code-block">
 {% highlight haskell %}
 import Control.Concurrent (threadDelay)
 import Data.Time.Clock
 import System.IO
 
 initialTicks = 10
-printAnimation :: Int -&gt; IO ()
+printAnimation :: Int -> IO ()
 printAnimation 0 = do
-		putStrLn(&quot;&quot;)
+		putStrLn("")
 printAnimation ticksRemaining = do
- 		putStr(&quot;\r&quot; ++ (replicate (initialTicks - ticksRemaining) ' ') ++ &quot;Hello world!&quot;)
+ 		putStr("\r" ++ (replicate (initialTicks - ticksRemaining) ' ') ++ "Hello world!")
  		hFlush stdout
 		threadDelay 100000
 		printAnimation(ticksRemaining-1)
 
 main = do printAnimation(initialTicks)
 {% endhighlight %}
+</div>
 
 יש כאן כמה דברים שדורשים הסבר. נתחיל מהקל: ההגדרה של printAnimation נראית כמו "משהו שמקבל Int ומחזיר IO ויש שם גם סוגריים לא ברורים". ובכן, לא. הסוגריים הלא ברורים בעצם אומרים "אין פלט לפונקציה". המשמעות של ה-IO היא שונה וזו הזדמנות טובה להציג אותה בפירוט.
 
@@ -100,20 +102,21 @@ main = do printAnimation(initialTicks)
 
 הנה הקוד, ומתחתיו הדגמה חיה של הקוד בפעולה:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 15&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 15</title>
+</head>
+<body>
+  <script type="text/javascript">
   var animation_text;
   var animation_handle;
 
   var animation_step = function(){
-	if (animation_text.length &lt;= 55){
-		document.getElementById(&quot;animation&quot;).innerHTML = animation_text;
-		animation_text = &quot; &quot; + animation_text;
+	if (animation_text.length <= 55){
+		document.getElementById("animation").innerHTML = animation_text;
+		animation_text = " " + animation_text;
 	}
 	else{
 		animation_text = animation_text.trim();
@@ -122,22 +125,23 @@ main = do printAnimation(initialTicks)
 
   var start_running = function(){
 	clearInterval(animation_handle);
-	if (document.getElementById(&quot;activation_button&quot;).value == &quot;Start&quot;){
-		document.getElementById(&quot;activation_button&quot;).value = &quot;Stop&quot;;
-		animation_text = document.getElementById(&quot;name&quot;).value;
+	if (document.getElementById("activation_button").value == "Start"){
+		document.getElementById("activation_button").value = "Stop";
+		animation_text = document.getElementById("name").value;
 		animation_handle = setInterval(animation_step,50);
 	}
 	else{
-		document.getElementById(&quot;activation_button&quot;).value = &quot;Start&quot;;
+		document.getElementById("activation_button").value = "Start";
 	}
   }
-  &lt;/script&gt;
-  Name: &lt;input type=&quot;textbox&quot; id=&quot;name&quot; value=&quot;Hello World!&quot;/&gt;
-  &lt;input type=&quot;button&quot; value=&quot;Start&quot; id=&quot;activation_button&quot; onclick=&quot;start_running()&quot; /&gt;
-  &lt;pre id=&quot;animation&quot;&gt;&lt;/pre&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  Name: <input type="textbox" id="name" value="Hello World!"/>
+  <input type="button" value="Start" id="activation_button" onclick="start_running()" />
+  <pre id="animation"></pre>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 <script>
 var animation_text;

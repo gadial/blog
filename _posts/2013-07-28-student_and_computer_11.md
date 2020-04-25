@@ -14,18 +14,22 @@ tags:
 
 פתרון בכוח גס הוא ברור - עוברים על כל המספרים מ-1 עד 1,000 ובודקים לכל אחד מהם אם הוא מקיים את ששת התנאים. זה לא יעיל במיוחד מבחינת זמן ריצה באופן כללי, אבל במספרים עד 1,000 זמן הריצה לא יהיה מורגש בכלל - התוכניות יעצרו מייד עם התשובה הנכונה - כך שלעת עתה אני עדיין לא נכנס לפרטים הללו. כמה מסובך לתכנת את הפתרון הזה? ובכן, ברובי זה פתרון של שורה אחת:
 
+<div class="code-block">
 {% highlight ruby %}
 puts (1..1000).reject{|n| (2..7).find{|k| (n % k) != k-1}}
 {% endhighlight %}
+</div>
 
 לא יכלתי להמנע מלתת קוד של שורה אחת, למען ההתלהבות שבדבר, אבל בפועל התוכנית שכתבתי הכילה טיפה יותר שורות:
 
+<div class="code-block">
 {% highlight ruby %}
 MAX_STEPS = 1000
 JUMP_SIZES = (2..7)
 
 puts (1..MAX_STEPS).reject{|n| JUMP_SIZES.find{|k| (n % k) != k-1}}
 {% endhighlight %}
+</div>
 
 חשוב לי להדגיש שהקטע הזה עם לתת שמות משמעותיים למספרי קסם הוא <strong>קריטי</strong> מבחינתי, אפילו אם המחיר הוא קפיצה מפתרון של שורה אחת לפתרון של כמה שורות.
 
@@ -40,11 +44,13 @@ puts (1..MAX_STEPS).reject{|n| JUMP_SIZES.find{|k| (n % k) != k-1}}
 אז בקוד שלי, אם נמצאה דוגמה נגדית כלשהי, הבלוק מתפרש בתור true, ואם לא נמצאה דוגמה נגדית והוחזר nil, הבלוק מתפרש בתור false (בקוד הספציפי הזה 0 לא יכל להיות דוגמה נגדית, אבל אולי עבור שאלה בניסוח שונה הוא כן יכול? הנה שוב סיבה מדוע אין סיבה אמיתית לפיה 0 ייחשב false וזו סתם גחמה חצי-שרירותית שנובעת מסיבות היסטוריות - מוצדקות לכשעצמן, אולי).
 
 הקוד בהסקל עושה בערך את אותו הדבר, רק עם קצת יותר שורות; ועדיין, יש בו נקודה חשובה שאני שמח שסוף סוף יצא לי להציג:
+
+<div class="code-block">
 {% highlight haskell %}
-gives_correct_remainder :: [Int] -&gt; Int -&gt; Bool
+gives_correct_remainder :: [Int] -> Int -> Bool
 gives_correct_remainder ms a = length bad_ms == 0
   where
-    bad_ms = [m | m &lt;- ms, (a `mod` m) /= m-1]
+    bad_ms = [m | m <- ms, (a `mod` m) /= m-1]
 
 max_steps = 1000
 jump_sizes = [2..7]
@@ -53,6 +59,7 @@ result = filter (gives_correct_remainder jump_sizes) [1..max_steps]
 main = do
    putStrLn (show(result))
 {% endhighlight %}
+</div>
 
 הסקל, מה לעשות, היא שפה קצת יותר קשיחה מאשר רובי ולכן אני צריך להתאמץ יותר ולכתוב פונקציה ייעודית שבודקת האם מספר נתון מקיים את תנאי המדרגות. הפונקציה מקבלת שני קלטים: הקלט הראשון הוא טווח המספרים שבהם צריך לחלק (אצלנו הוא מ-2 עד 7) והקלט השני הוא המספר שבודקים. הבדיקה עצמה היא סטנדרטית: אני בונה את רשימת המספרים שמהווים דוגמה נגדית (=/ הוא הסימון בהסקל לאי-שוויון) ובודק אם אורכה גדולה מאפס או לא. מה שמעניין הוא מה שקורה אחר כך - אני משתמש בפונקציה filter שמזכירה מאוד את reject של רובי אבל עם סדר הפוך - קודם כל היא מקבלת פונקציה להפעיל על איברי מערך, ואז היא מקבלת את המערך, ומפלטרת ממנו החוצה את כל מי שהפונקציה החזירה עליו False. החלק המעניין ביותר בכל הקוד הוא הפונקציה ש-filter מקבלת.
 
@@ -68,21 +75,22 @@ main = do
 
 נעבור כעת לג'אווהסקריפט. כאן אין חוכמות - הקוד הוא לולאה פשוטה וסטנדרטית, אבל גם איך עושים דברים כאלו צריך לראות. אלא שבגלל שהקוד הוא כל כך סטנדרטי, החלטתי להתחכם ולהוסיף משהו מיותר לחלוטין ושגם נראה איום ונורא, סתם כדי שנכיר משהו חדש. מה הוספתי? קוד ש<strong>יצייר</strong> את המדרגות. בואו נראה את הקוד ואז נדבר עליו:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 11&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 11</title>
+</head>
+<body>
+  <script type="text/javascript">
     var MAX_STEPS = 1000;
     var JUMP_SIZES = [2,3,4,5,6,7];
 
     var main = function(){
       var results = [];
-      for (var i=1; i &lt;= MAX_STEPS; i++){
+      for (var i=1; i <= MAX_STEPS; i++){
       var to_add = true;
-	for (var j=0; j &lt; JUMP_SIZES.length; j++){
+	for (var j=0; j < JUMP_SIZES.length; j++){
 	  var jump = JUMP_SIZES[j];
 	  if (i % jump != jump - 1){
 	    to_add = false;
@@ -92,7 +100,7 @@ main = do
 	  results.push(i);
 	}
       }
-      document.getElementById(&quot;result&quot;).innerHTML = results;
+      document.getElementById("result").innerHTML = results;
 
       drawStairs(results[0])
     }
@@ -100,10 +108,10 @@ main = do
     var drawStairs = function(n){
       var canvas = document.getElementById('stairs_canvas');
       var context = canvas.getContext('2d');
-      var stair_size = parseInt(document.getElementById(&quot;stair_size&quot;).value);
+      var stair_size = parseInt(document.getElementById("stair_size").value);
       canvas.width = stair_size * n;
       canvas.height = stair_size * n;
-      for (var i = 0; i &lt; n; i++){
+      for (var i = 0; i < n; i++){
 	context.moveTo(stair_size*i,stair_size*i);
 	context.lineTo(stair_size*i,stair_size*(i+1));
 	context.stroke();
@@ -115,17 +123,18 @@ main = do
     }
 
     window.onload = main;
-  &lt;/script&gt;
-  &lt;div id=&quot;result&quot;&gt;&lt;/div&gt;
-  &lt;div style=&quot;overflow: scroll; width: 500px; height: 500px;&quot;&gt;
-    &lt;canvas id=&quot;stairs_canvas&quot;&gt;
+  </script>
+  <div id="result"></div>
+  <div style="overflow: scroll; width: 500px; height: 500px;">
+    <canvas id="stairs_canvas">
       No Canvas for you!
-    &lt;/canvas&gt;
-  &lt;/div&gt;
-  Stair size = &lt;input type=&quot;textbox&quot; id=&quot;stair_size&quot; value = &quot;5&quot; onkeyup = &quot;main()&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    </canvas>
+  </div>
+  Stair size = <input type="textbox" id="stair_size" value = "5" onkeyup = "main()"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 הנה <a href="http://www.gadial.net/stuff/StudentAndComp/targil11.html">לינק</a> עבור מי שרוצה לראות איך הזוועה הזו נראית. הציור מתבצע על ידי שימוש ביישות html שנקראת Canvas ואינה נתמכת בדפדפנים ישנים, כך שאתם עשויים לא לראות אותה. Canvas הוא אחת מהתוספות הברוכות של HTML5 - אולי השימושית ביותר ששמעתי עליה עד כה. הרעיון באובייקט הזה פשוט למדי לכל מי שהתעסק עם כתיבת אפליקציות בעלות GUI (ממשק משתמש גרפי): זה איזור מוגדר במסך שאפשר לצייר בו ויש למשתמש מספר פונקציות פרימיטיביות שמאפשרות זאת - ציור של קו, עיגול וכדומה, אבל גם העתקה של תמונות שלמות. זה מספק למשתמש את הבסיס שנדרש - בעזרת הפונקציות הללו אפשר לצייר פחות או יותר כל מה שרוצים (כמובן, לאו דווקא באופן יעיל במיוחד). אני עצמי השתמשתי ב-canvas בבלוג, <a href="http://www.gadial.net/2013/03/28/tupper-formula/">בפוסט על נוסחת טאפר</a> ("הנוסחה שמציירת את עצמה") כשנתתי לקוראים אפשרות לצייר דברים בעצמם (לרוע המזל, מאז שהתחלתי את סדרת הפוסטים הנוכחית הקוד בפוסט ההוא לא עובד - במקום להריץ אותו, הבלוג מציג אותו למשתמש....)
 
@@ -137,6 +146,7 @@ main = do
 
 כמובן, כדי להשתמש במשפט השאריות הסיני צריך שיהיה לנו מימוש של אלגוריתם עבורו. ובכן, כחלק מפתרון חידות בפרוייקט אוילר כתבתי לעצמי ברובי לפני זמן רב ספריה מתמטית קטנה (ומאוד, מאוד, מאוד לא יעילה - אבל לצרכים שלי היא הספיקה). אני מעתיק את הקוד ממנה (לאחר כמה פישוטים) - ואני מזהיר מראש שאני משתמש בו במשהו שטרם הצגתי בסדרת הפוסטים הזו: פונקציות. במקרה הגרוע ביותר אני מזמין את הקוראים לחזור ולקרוא את הקוד בהמשך. עוד אזהרה אחת היא שמי שלא מבין איך משפט השאריות הסיני עובד לא כנראה יבין מה למען השם אני עושה בקוד הזה (אני לא הייתי מבין):
 
+<div class="code-block">
 {% highlight ruby %}
 class Array
   def sum
@@ -170,6 +180,7 @@ end
 
 puts chinese_remainder_theorem([2,3,4,6],[3,4,5,7])
 {% endhighlight %}
+</div>
 
 הקוד הזה מחזיר רק 419. כדי לקבל את הפתרון השני צריך להוסיף לו 420, שהוא המכפלה של ארבעת המודולוסים (למה זה עובד? שוב, זה נובע ממשפט השאריות הסיני). העובדה שהפתרון הוא 419 ומכפלת המודולוסים היא 420 הגדולה ממנו ב-1 עשויה להקפיץ אצלכם נורת אזהרה - ואכן, בעצם יש פתרון פשוט <strong>עוד יותר</strong> לחידת המדרגות (שהוצג בספר המקורי) ולא מצריך כלום מלבד עט, נייר וטיפה מחשבה.
 

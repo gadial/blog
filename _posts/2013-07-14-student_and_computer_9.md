@@ -14,20 +14,22 @@ tags:
 
 הנה הקוד:
 
+<div class="code-block">
 {% highlight ruby %}
-# puts &quot;After sorting the list #{ARGV.join(&quot;, &quot;)} we get #{ARGV.collect{|x| x.to_i}.sort.join(&quot;, &quot;)}&quot;
+# puts "After sorting the list #{ARGV.join(", ")} we get #{ARGV.collect{|x| x.to_i}.sort.join(", ")}"
 list = ARGV.collect{|x| x.to_i}
 sorted_list = []
 while not list.empty?
   current_element = list.pop
   current_index = 0
-  while current_index &lt; sorted_list.length and sorted_list[current_index] &lt; current_element
+  while current_index < sorted_list.length and sorted_list[current_index] < current_element
     current_index = current_index + 1
   end
   sorted_list.insert(current_index, current_element)
 end
-puts &quot;After sorting the list #{ARGV.join(&quot;, &quot;)} we get #{sorted_list.join(&quot;, &quot;)}&quot;
+puts "After sorting the list #{ARGV.join(", ")} we get #{sorted_list.join(", ")}"
 {% endhighlight %}
+</div>
 
 מה קורה פה? בשורה 2 אנחנו ממירים את הרשימה לרשימה של מספרים. בשורה 3 אנחנו מגדירים רשימה חדשה, ריקה, שתכיל את התוצאה הממוינת. בשורה 4 אנחנו כותבים while ולאחר מכן תנאי - זוהי תמיד ההתחלה של לולאת while. לאחר ה-while מופיע בלוק שמסתיים ב-end שבשורה 11, והרעיון ב-while הוא שכל עוד התנאי שנכתב בו מתקיים, כאשר הבלוק מגיע לסופו הוא ישוב להתחלה. ייתכן שהתנאי לא יתקיים אפילו בפעם הראשונה שבה אנחנו מגיעים ללולאה ואז הבלוק שלה פשוט לא יופעל.
 
@@ -43,23 +45,25 @@ puts &quot;After sorting the list #{ARGV.join(&quot;, &quot;)} we get #{sorted_l
 
 הנה איך כל זה נראה בהסקל:
 
+<div class="code-block">
 {% highlight haskell %}
 import System.Environment
 
-toIntArray :: [String] -&gt; [Int]
-toIntArray array = [read(x) | x &lt;- array]
+toIntArray :: [String] -> [Int]
+toIntArray array = [read(x) | x <- array]
 
-quickSort :: Ord a =&gt; [a] -&gt; [a]
+quickSort :: Ord a => [a] -> [a]
 quickSort [] 		= []
 quickSort (x:xs) 	= quickSort smaller ++ [x] ++ quickSort larger
   where
-    smaller = [a | a &lt;- xs, a &lt; x]
-    larger  = [b | b &lt;- xs, b &gt;= x]
+    smaller = [a | a <- xs, a < x]
+    larger  = [b | b <- xs, b >= x]
 
 main = do
-  args &lt;- getArgs
+  args <- getArgs
   putStrLn (show(quickSort(toIntArray args)))
 {% endhighlight %}
+</div>
 
 המיון עצמו הוא בשורות 6-11. ראשית, אני מגדיר את quickSort באופן גנרי, שיוכל לפעול על כל רשימה של איברים מטיפוס שניתן להשוות אותו (אגב, ברובי לא שמים לב לכך אבל גם שם זה מתקיים). זו המשמעות של ה-" <= Ord a"  שכתוב בהגדרת הפונקציה. בשורה 7 אני מגדיר שעל רשימה ריקה, quickSort יחזיר רשימה ריקה. בשורה 8 מגיע האקשן: אני מפרק את הרשימה לאיבר ראשון x ולכל יתר האיקסים, xs (נסו לקרוא את זה בקול!) ואז משרשר את המיון המהיר של smaller עם הרשימה שהאיבר היחיד שלה הוא איבר הציר x, עם המיון המהיר של larger. אבל מי הם smaller, larger? הם מוגדרים אחרי ה-where, באמצעות list comprehensions שראינו כבר בפוסט הקודם, כשכאן יש גם <strong>התניה</strong>, שמופיעה בצד ימין אחרי הפסיק.
 
@@ -73,13 +77,14 @@ main = do
 
 הנה הקוד:
 
+<div class="code-block">
 {% highlight html %}
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Targil 9&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;script type=&quot;text/javascript&quot;&gt;
+<html>
+<head>
+<title>Targil 9</title>
+</head>
+<body>
+  <script type="text/javascript">
   var norm_2_adic = function(a){
 	if (a == 0){
 		return 0;
@@ -93,27 +98,28 @@ main = do
   }
 
     sort_by_2_adic_norm = function(){
-		var nums = document.getElementById(&quot;nums&quot;).value.split(&quot; &quot;);
+		var nums = document.getElementById("nums").value.split(" ");
 		nums.sort(function(a,b) {
 			var norm_a = norm_2_adic(parseInt(a));
 			var norm_b = norm_2_adic(parseInt(b));
-			if (norm_a &lt; norm_b){
+			if (norm_a < norm_b){
 				return -1;
 			}
-			if (norm_a &gt; norm_b){
+			if (norm_a > norm_b){
 				return 1;
 			}
 			return 0;
 		});
 
-		document.getElementById(&quot;sorted&quot;).value = nums.join(&quot; &quot;);
+		document.getElementById("sorted").value = nums.join(" ");
     }
-  &lt;/script&gt;
-  List = &lt;input type=&quot;textbox&quot; id=&quot;nums&quot; value = &quot;0&quot; onkeyup = &quot;sort_by_2_adic_norm()&quot;/&gt;
-  &lt;br /&gt;
-  Sorted = &lt;input type=&quot;textbox&quot; id=&quot;sorted&quot; value = &quot;0&quot;/&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+  List = <input type="textbox" id="nums" value = "0" onkeyup = "sort_by_2_adic_norm()"/>
+  <br />
+  Sorted = <input type="textbox" id="sorted" value = "0"/>
+</body>
+</html>
 {% endhighlight %}
+</div>
 
 שימו לב לשיקוץ אחד שאני עושה כאן - אני מגדיר את הפונקציה ש-sort מקבלת <strong>בתוך</strong> הקריאה ל-sort. זה לא הכרחי - יכלתי להגדיר את הפונקציה הזו גם בחוץ, אבל אז הייתי צריך לתת לה שם, וזה לעתים קרובות סתם מסורבל. כאן הפונקציה היא <strong>אנונימית</strong> - מקבלים אותה ואפשר להשתמש בה, אבל כשאני כותב אותה אני לא צריך לטרוח לתת לה שם במיוחד. בשפות כמו רובי קל מאוד לכתוב פונקציות כאלו בצורה קומפקטית ומנגנון הבלוקים הופך את העסק לאלגנטי יחסית ועוד נראה זאת בהמשך; בג'אווהסקריפט, לטעמי, זה נראה פשוט איום ונורא. אבל עושים את זה כל הזמן. גם אני.

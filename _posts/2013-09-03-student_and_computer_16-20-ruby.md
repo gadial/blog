@@ -28,6 +28,8 @@ tags:
 זה מוביל אותנו לפורמט נפוץ ביותר של קבצי מידע שנקרא CSV, שפירושו הסטנדרטי הוא Comma-Separated Values ("ערכים המופרדים בפסיק"). קובץ CSV הוא פשוט קובץ טקסט שבו כל שורה מייצגת רשומת מידע כלשהי המורכבת משדות, כשבין כל שני שדות יש פסיק. אלא שלא כולם אוהבים להשתמש בפסיק דווקא, וכדי שיהיה מעניין וטיפה לא טריוויאלי אני אשתמש דווקא בתו הטאב כדי להפריד בין שדות. טאב הוא המקש הזה שברוב המקלדות נמצא ליד Q ובתוך עורך טקסט בדרך כלל מייצר מין "קפיצה" של כמה רווחים במקום רווח אחד - לא אכנס לדקויות המלאות שלו כרגע.
 
 אז ישבתי ובניתי קובץ ציונים עם שמות של דמויות מסדרת "שיר של אש ושל קרח":
+
+<div class="code-block">
 {% highlight ruby %}
 Eddard	Stark	43
 Catelyn	Tully	54
@@ -42,6 +44,7 @@ Jeyne	Poole	21
 Xaro Xhoan	Daxos	41
 Bran	Stark	60
 {% endhighlight %}
+</div>
 
 האתגר הראשון הוא לקרוא אותו לתוך מבנה נתונים כלשהו של רובי. במקרה שלנו מתבקש לתחזק מערך של רשומות. אבל מהי רשומה? אפשר לחשוב גם עליה בתור מערך, כמובן, אבל כאן לכל תא במערך יש משמעות מילולית די ברור - "שם פרטי", "שם משפחה", "ציון". זה יותר אינפורמטיבי מאשר "תא 0, תא 1, תא 2" שבו משתמשים כדי לתאר תאים במערך, ולכן מזמין שימוש במבנה נתונים אחר שיש ברובי - Hash. מבנה הנתונים הזה נקרא לפעמים, בשפות אחרות, גם "מילון", או "מערך אסוציאטיבי". מבחינה מעשית הוא דומה למערך, פרט לכך שבמקום אינדקסים שהם מספרים, יש לו אינדקסים שיכולים להיות הרבה מאוד סוגים אחרים של מידע; בהקשר של Hash לאינדקסים הללו לא קוראים "אינדקסים" אלא "מפתחות". הגמישות של Hash בנוגע למי יכול לתפקד כמפתח אצלו היא מאוד גבוהה, אבל לא אכנס כרגע לעובי הקורה הזה.
 
@@ -49,7 +52,7 @@ Bran	Stark	60
 
 <div class="code-block">
 {% highlight ruby %}
-{&quot;first_name&quot; =&gt; &quot;Eddard&quot;, &quot;last_name&quot; =&gt; &quot;Stark&quot;, &quot;grade&quot; =&gt; 43}
+{"first_name" => "Eddard", "last_name" => "Stark", "grade" => 43}
 {% endhighlight %}
 </div>
 
@@ -64,10 +67,10 @@ Bran	Stark	60
 <div class="code-block">
 {% highlight ruby %}
 :first_name
-:&quot;0-1-2-3-4&quot;
+:"0-1-2-3-4"
 :$23
 :___whaat
-:&quot;:':':&quot;
+:":':':"
 {% endhighlight %}
 </div>
 
@@ -77,7 +80,7 @@ Bran	Stark	60
 
 <div class="code-block">
 {% highlight ruby %}
-{:first_name =&gt; &quot;Eddard&quot;, :last_name =&gt; &quot;Stark&quot;, :grade =&gt; 43}
+{:first_name => "Eddard", :last_name => "Stark", :grade => 43}
 {% endhighlight %}
 </div>
 
@@ -87,7 +90,7 @@ Bran	Stark	60
 
 <div class="code-block">
 {% highlight ruby %}
-{first_name: &quot;Eddard&quot;, last_name: &quot;Stark&quot;, grade: 43}
+{first_name: "Eddard", last_name: "Stark", grade: 43}
 {% endhighlight %}
 </div>
 
@@ -96,10 +99,10 @@ Bran	Stark	60
 כל ההקדמה הזו לא הסבירה לנו איך אפשר לקחת קובץ CSV ולקבל ממנו מערך של Hash-ים שמתאימים לשורות שלו. אז הנה:
 <div class="code-block">
 {% highlight ruby %}
-lines = File.open(ARGV[0], &quot;r&quot;){|f| f.read.split(&quot;\n&quot;)}
+lines = File.open(ARGV[0], "r"){|f| f.read.split("\n")}
 data = lines.collect do |line|
-	parsed_line = line.split(&quot;\t&quot;)
-	{:first_name =&gt; parsed_line[0], :last_name =&gt; parsed_line[1], :grade =&gt; parsed_line[2].to_i}
+	parsed_line = line.split("\t")
+	{:first_name => parsed_line[0], :last_name => parsed_line[1], :grade => parsed_line[2].to_i}
 end
 {% endhighlight %}
 </div>
@@ -110,7 +113,7 @@ end
 
 <div class="code-block">
 {% highlight ruby %}
-data = CSV.read(ARGV[0], col_sep: &quot;\t&quot;).collect{|p| {:first_name =&gt; p[0], :last_name =&gt; p[1], :grade =&gt; p[2].to_i}}
+data = CSV.read(ARGV[0], col_sep: "\t").collect{|p| {:first_name => p[0], :last_name => p[1], :grade => p[2].to_i}}
 {% endhighlight %}
 </div>
 
@@ -139,7 +142,7 @@ f(x: 1, y: 2, z: 3, w: 4)
 
 <div class="code-block">
 {% highlight ruby %}
-CSV.read(ARGV[0], :col_sep =&gt; &quot;\t&quot;)
+CSV.read(ARGV[0], :col_sep => "\t")
 {% endhighlight %}
 </div>
 
@@ -150,25 +153,26 @@ CSV.read(ARGV[0], :col_sep =&gt; &quot;\t&quot;)
 <div class="code-block">
 {% highlight ruby %}
 require 'csv'
-data = CSV.read(ARGV[0], col_sep: &quot;\t&quot;).collect{|p| {:first_name =&gt; p[0], :last_name =&gt; p[1], :grade =&gt; p[2].to_i}}
+data = CSV.read(ARGV[0], col_sep: "\t").collect{|p| {:first_name => p[0], :last_name => p[1], :grade => p[2].to_i}}
 
 grades = data.collect{|d| d[:grade]}
 average = grades.inject(:+).to_f / grades.length
-best = data.max{|a,b| a[:grade] &lt;=&gt; b[:grade]}
-worst = data.max{|a,b| b[:grade] &lt;=&gt; a[:grade]}
+best = data.max{|a,b| a[:grade] <=> b[:grade]}
+worst = data.max{|a,b| b[:grade] <=> a[:grade]}
 last_name_p_students = data.find_all{|d| d[:last_name] =~ /^P/}
 
-puts &quot;Average = #{average}&quot;
-puts &quot;Reversed grade list: #{grades.reverse.inspect}&quot;
-puts &quot;Best student: #{best[:first_name]} #{best[:last_name]} (#{best[:grade]})&quot;
-puts &quot;Worst student: #{worst[:first_name]} #{worst[:last_name]} (#{worst[:grade]})&quot;
-puts &quot;#{grades.find_all{|g| (40..60).include? g}.length} students got between 40 and 60&quot;
-puts &quot;#{last_name_p_students.length} students whose last name starts with P: #{last_name_p_students.collect{|d| d[:first_name] + &quot; &quot; + d[:last_name]}.join(&quot;, &quot;)}&quot;
+puts "Average = #{average}"
+puts "Reversed grade list: #{grades.reverse.inspect}"
+puts "Best student: #{best[:first_name]} #{best[:last_name]} (#{best[:grade]})"
+puts "Worst student: #{worst[:first_name]} #{worst[:last_name]} (#{worst[:grade]})"
+puts "#{grades.find_all{|g| (40..60).include? g}.length} students got between 40 and 60"
+puts "#{last_name_p_students.length} students whose last name starts with P: #{last_name_p_students.collect{|d| d[:first_name] + " " + d[:last_name]}.join(", ")}"
 {% endhighlight %}
 </div>
 
 כאשר מפעילים את הקוד הזה על קובץ הטקסט שהצגתי קודם, הפלט הוא:
 
+<div class="code-block">
 {% highlight ruby %}
 Average = 64.0
 Reversed grade list: [60, 41, 21, 99, 78, 33, 89, 73, 100, 77, 54, 43]
@@ -177,6 +181,7 @@ Worst student: Jeyne Poole (21)
 4 students got between 40 and 60
 5 students whose last name starts with P: Ilyn Payne, Cortnay Penrose, Cotter Pyke, Hot Pie, Jeyne Poole
 {% endhighlight %}
+</div>
 
 בתוך הקוד הכנסתי כמה התחכמויות חדשות, אז בואו נעבור עליו שורה שורה כדי להבין מה הולך שם.
 
