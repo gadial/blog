@@ -85,6 +85,12 @@ def replace_tags(text):
         # print(text)
     return text
 
+def replace_images(text):
+    regex = r'\\includegraphics\{.*assets/img(.*)\}'
+    repl = '<img src="{{{{site.baseurl}}}}{{{{site.post_images}}}}{}" alt=""/>'
+    text = re.sub(regex, lambda match: repl.format(match.group(1)), text)
+    return text
+
 def remove_linebreaks(text):
     # tex has linebreaks in the middle of paragraphs for no reason
     text = re.sub(r'(?<!\r\n)\r\n(?!\r\n)', " ", text)
@@ -150,6 +156,7 @@ def perform_all_changes(text):
     text = remove_L_tag(text)
     text = replace_tags(text)
     text = remove_linebreaks(text)
+    text = replace_images(text)
 #    text = add_paragraph_tags(text)
     return text
 
