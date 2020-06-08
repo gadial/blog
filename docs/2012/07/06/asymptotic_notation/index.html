@@ -132,16 +132,18 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>הבעיה היא שחסם כזה לעתים קרובות לא עובד. בואו נחשוב על תוכנית מחשב שמקבלת כקלט רשימה בעלת <span>$latex n$</span> איברים שהם מספרים טבעיים, ומוצאת את את המספר המקסימלי והמינימלי ברשימה. הדרך הפשוטה לעשות זאת: לתחזק שני משתני עזר ששניהם מאותחלים להיות האיבר הראשון ברשימה; לאחר מכן לעבור סדרתית על הרשימה ולהשוות כל איבר ברשימה הן למקסימום והן למינימום הנוכחיים. אם האיבר החדש גדול מהמקסימום הנוכחי, משנים את המקסימום כך שישתווה לו; אם האיבר החדש קטן מהמינימום הנוכחי, משנים את המינימום כך שישתווה לו. בסיום המעבר על הרשימה המשתנים של המקסימום והמינימום יחזיקו את הערך הנכון. הנה פונקציה בשפת Ruby שעושה את זה:</p>
 
-<p> <pre dir="ltr" style="font-size:14px">
-def find_min_max(list)
-  min = max = list[0]
-  for k in 1...list.length do
-    min = list[k] if min &gt; list[k]
-    max = list[k] if max &lt; list[k]
-  end
-  return [min, max]
-end
-</pre> </p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">find_min_max</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="n">min</span> <span class="o">=</span> <span class="n">max</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">for</span> <span class="n">k</span> <span class="k">in</span> <span class="mi">1</span><span class="o">...</span><span class="n">list</span><span class="p">.</span><span class="nf">length</span> <span class="k">do</span>
+    <span class="n">min</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">if</span> <span class="n">min</span> <span class="o">&gt;</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">max</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">if</span> <span class="n">max</span> <span class="o">&lt;</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+  <span class="k">end</span>
+  <span class="k">return</span> <span class="p">[</span><span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">]</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
 
 <p>(למה רובי? כי זו אחת מהשפות הללו שבהן הקוד נראה פשוט כמעט כמו פסאודו-קוד ויש לו את היתרון שהוא גם עובד בפועל. אני לא בהכרח כותב בצורה שהכי מתאימה לרובי, כי המטרה היא ליצור קוד קריא גם למי שלא בקיאים בטריקים של השפה).</p>
 
@@ -149,26 +151,28 @@ end
 
 <p>בהערת אגב, לפעמים כן רוצים לשפר את הקבועים למרות שזה לא יבוא לידי ביטוי בסימון האסימפטוטי. כדאי להבהיר את הנקודה הזו מראש. יש תעלול נחמד שחוסך בערך רבע מהבדיקות עבור מציאת המינימום והמקסימום - במקום לבדוק כל פעם את האיבר הבא במערך, בודקים את <strong>שני</strong> האיברים הבאים; קודם משווים אותם זה לזה, ואז משווים את הגדול שבהם למקסימום, והקטן שבהם למינימום. באופן הזה במקום לבצע 4 בדיקות במקרה הגרוע ביותר (2 עבור כל אחד משני האיברים) מבצעים רק 3. הנה הקוד:</p>
 
-<p> <pre dir="ltr" style="font-size:14px">
-def faster_find_min_max(list)
-  min = max = list[0]
-  k = (list.length % 2 == 1)?(1):(0)
+<div class="code-block">
 
-  while k &lt; list.length
-    if (list[k] &lt; list[k+1])
-      min_candidate, max_candidate = list[k], list[k+1]
-    else
-      min_candidate, max_candidate = list[k+1], list[k]
-    end
-    max = max_candidate if max_candidate &gt; max
-    min = min_candidate if min_candidate &lt; min
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">faster_find_min_max</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="n">min</span> <span class="o">=</span> <span class="n">max</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">list</span><span class="p">.</span><span class="nf">length</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)?(</span><span class="mi">1</span><span class="p">):(</span><span class="mi">0</span><span class="p">)</span>
 
-    k = k + 2
-  end
+  <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">list</span><span class="p">.</span><span class="nf">length</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">min_candidate</span><span class="p">,</span> <span class="n">max_candidate</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span>
+      <span class="n">min_candidate</span><span class="p">,</span> <span class="n">max_candidate</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="k">end</span>
+    <span class="n">max</span> <span class="o">=</span> <span class="n">max_candidate</span> <span class="k">if</span> <span class="n">max_candidate</span> <span class="o">&gt;</span> <span class="n">max</span>
+    <span class="n">min</span> <span class="o">=</span> <span class="n">min_candidate</span> <span class="k">if</span> <span class="n">min_candidate</span> <span class="o">&lt;</span> <span class="n">min</span>
 
-  return [min, max]
-end
-</pre> </p>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">2</span>
+  <span class="k">end</span>
+
+  <span class="k">return</span> <span class="p">[</span><span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">]</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
 
 <p>שימו לב שהקוד מתחיל באיזו בדיקה האם הרשימה זוגית או אי זוגית באורכה כדי להמנע מחריגה מגבולות הרשימה לקראת הסוף. לכאורה כאן הוספתי עבודה ביחס לאלגוריתם הקודם, אבל זו בדיקה <strong>חד פעמית</strong> - הזמן שנדרש לבצע אותה לא תלוי באורך הרשימה, ולכן בדרך כלל אנחנו רק חוסכים כאן פעולות. החסכון לא נראה מהותי במיוחד כרגע, אבל באלגוריתמים כאלו תמיד צריך לזכור שבסופו של דבר התוכנית לא תרוץ בפני עצמה אלא בתור תת-תוכנית שבתוך תת-תוכנית שבתוך תת-תוכנית שבתוך תת-תוכנית של איזו תוכנית מורכבת שעושה חישובים מתוחכמים, ורצה על קלטים שהם רשימות שמכילות מיליוני איברים, ועושה את זה אלפי פעמים, כל הזמן. בסופו של דבר יש סיכוי טוב שקטע הקוד הקצרצר שלמעלה יהיה החלק העמוס ביותר בתוכנית שכוללת מיליוני שורות קוד, ושיפור כלשהו בקטע הקוד הזה - אפילו מינורי - יגרום לתוכנית לרוץ משמעותית מהר יותר.</p>
 

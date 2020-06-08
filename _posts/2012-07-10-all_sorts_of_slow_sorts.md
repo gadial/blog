@@ -28,26 +28,39 @@ tags:
 
 "מיון", בעברית, משמש באופן אומלל למדי לתיאור שני דברים שונים. האחד הוא Classification - בהינתן קבוצת אובייקטים, לחלק אותם לתת-קבוצות על פי תכונה שלהם ("יונקים", "זוחלים", "חרקים"). זו לא הבעיה שאני מדבר עליה, אלא Sorting - בהינתן רשימה של אובייקטים שמוגדר עליהם סדר כלשהו, לסדר אותה.
 
-לרשימה אני אקרא {% equation %}A{% endequation %}, ואת האיבר במקום ה-{% equation %}i{% endequation %} ברשימה אסמן בתור {% equation %}A\left[i\right]{% endequation %}. ההנחה היא שיש <strong>סדר</strong> על הרשימה, כלומר שלכל {% equation %}i\ne j{% endequation %} מתקיים {% equation %}A\left[i\right]&lt;A\left[j\right]{% endequation %} או {% equation %}A\left[j\right]&lt;A\left[i\right]{% endequation %}. המטרה היא לסדר מחדש את הרשימה כך שיתקיים {% equation %}A\left[0\right]&lt;A\left[1\right]&lt;A\left[2\right]&lt;\dots&lt;A\left[n\right]{% endequation %} (שימו לב שאני מתחיל את האינדקס מאפס, כפי שנהוג במדעי המחשב; יש לשיטה הזו יתרונות וחסרונות ואני בוחר בה כדי להתאים לקוד שאני אכתוב כאן).
+לרשימה אני אקרא {% equation %}A{% endequation %}, ואת האיבר במקום ה-{% equation %}i{% endequation %} ברשימה אסמן בתור {% equation %}A\left[i\right]{% endequation %}. ההנחה היא שיש <strong>סדר</strong> על הרשימה, כלומר שלכל {% equation %}i\ne j{% endequation %} מתקיים {% equation %}A\left[i\right]<A\left[j\right]{% endequation %} או {% equation %}A\left[j\right] < A\left[i\right]{% endequation %}. המטרה היא לסדר מחדש את הרשימה כך שיתקיים {% equation %}A\left[0\right] < A\left[1\right] < A\left[2\right]<\dots<A\left[n\right]{% endequation %} (שימו לב שאני מתחיל את האינדקס מאפס, כפי שנהוג במדעי המחשב; יש לשיטה הזו יתרונות וחסרונות ואני בוחר בה כדי להתאים לקוד שאני אכתוב כאן).
 
-מהם אברי הרשימה {% equation %}A{% endequation %}? אניח שהם מספרים שלמים, רק לצורך פשטות. באופן כללי הם יכולים להיות אובייקטים מורכבים מאוד, וההשוואה בין שניהם יכולה להיעשות בצורה מחוכמת מאוד. רוב האלגוריתמים שאציג פה לא יתעניינו בכך - כל מה שהם יצטרכו לדעת לצורך תהליך המיון זה המידע הבא: בהינתן שני איברים {% equation %}a,b{% endequation %} האם {% equation %}a&lt;b{% endequation %} או {% equation %}b&lt;a{% endequation %} (או שהם שווים). יש גם אלגוריתמים שיכולים להיעזר בכך שהם יודעים משהו על סוג האיברים שממיינים, אבל דיה לצרה בשעתה.
+מהם אברי הרשימה {% equation %}A{% endequation %}? אניח שהם מספרים שלמים, רק לצורך פשטות. באופן כללי הם יכולים להיות אובייקטים מורכבים מאוד, וההשוואה בין שניהם יכולה להיעשות בצורה מחוכמת מאוד. רוב האלגוריתמים שאציג פה לא יתעניינו בכך - כל מה שהם יצטרכו לדעת לצורך תהליך המיון זה המידע הבא: בהינתן שני איברים {% equation %}a,b{% endequation %} האם {% equation %}a<b{% endequation %} או {% equation %}b < a{% endequation %} (או שהם שווים). יש גם אלגוריתמים שיכולים להיעזר בכך שהם יודעים משהו על סוג האיברים שממיינים, אבל דיה לצרה בשעתה.
 
 אז הנה דוגמה פשוטה. נניח ש-{% equation %}A=\left[1,4,2,3\right]{% endequation %}. אחרי מיון נרצה לקבל {% equation %}A=\left[1,2,3,4\right]{% endequation %}. איך אפשר לעשות זאת? השיטה הראשונה שאני מעלה על דעתי היא זו: נעבור על {% equation %}A{% endequation %} ונמצא את האינדקס שבו נמצא האיבר הגדול ביותר. מצאנו? נחליף את האיבר הזה עם האיבר שנמצא כרגע בסוף הרשימה. עכשיו אנחנו יודעים שהאיבר בסוף הרשימה נמצא במקומו הנכון ולכן אפשר לחשוב על הסיטואציה כאילו הרשימה קטנה ב-1. נעבור מחדש על הרשימה הקטנה יותר ונמצא את האיבר המקסימלי <strong>בה</strong>, נחליף אותו עם האיבר שנמצא כרגע בסוף הרשימה (הרשימה הקטנה ב-1), וכן הלאה וכן הלאה. הנה קוד שעושה את זה:
-<pre style="font-size: 14px;" dir="ltr">def selection_sort(list)
+
+<div class="code-block">
+{% highlight ruby %}
+def selection_sort(list)
   list.length.downto(1) do |k|
     max_index = 0
     for i in 1...k do
-      max_index = i if list[max_index] &lt; list[i]
+      max_index = i if list[max_index] < list[i]
     end
     list.swap(max_index,k-1)
   end
   return list
-end</pre>
+end
+{% endhighlight %}
+</div>
+
 קצת על רובי, כדי שהקוד יהיה קריא בכל זאת גם למי שלא מכיר שפות תכנות בכלל:
 
 ברובי, def מתאר הכרזה על שם של פונקציה, כלומר קטע קוד שמקבל קלט (במקרה שלנו הקלט הוא ה-list שמופיע בסוגיים, שהוא על תפקיד ה-{% equation %}A{% endequation %} שלנו), ובסופו של דבר מחזיר פלט (אבל יותר מעניין אותנו כאן דווקא המניפולציות שעושים על הקלט - ממיינים את list ישירות, אם כי בסוף גם מחזירים אותה). הפונקציה מסתיימת ב-end שלמטה.
 
-בתוך הפונקציה יש <strong>לולאות</strong>. לולאה היא קטע קוד שחוזר על עצמו שוב ושוב; לפעמים יש משתנה מיוחד כלשהו (ה<strong>מונה</strong>) שהערך שלו משתנה בין כל הרצה של הלולאה (הרצה כזו נקראת <strong>איטרציה</strong>). כך גם אצלנו: list.length.dowto)1( do |k| זו דרך לרשום "עכשיו תעשה לולאה שהמונה שלה, שנקרא לו k מתחיל מהערך list.length (אורך הרשימה) ובכל איטרציה המונה קטן ב-1 עד שהוא מגיע ל-1 (וכשהוא מגיע ל-1 תריץ את הלולאה פעם אחת אחרונה וצא ממנה)".
+בתוך הפונקציה יש <strong>לולאות</strong>. לולאה היא קטע קוד שחוזר על עצמו שוב ושוב; לפעמים יש משתנה מיוחד כלשהו (ה<strong>מונה</strong>) שהערך שלו משתנה בין כל הרצה של הלולאה (הרצה כזו נקראת <strong>איטרציה</strong>). כך גם אצלנו:
+<div class="code-block">
+{% highlight ruby %}
+list.length.dowto(1) do |k|
+{% endhighlight %}
+</div>
+
+ זו דרך לרשום "עכשיו תעשה לולאה שהמונה שלה, שנקרא לו k מתחיל מהערך list.length (אורך הרשימה) ובכל איטרציה המונה קטן ב-1 עד שהוא מגיע ל-1 (וכשהוא מגיע ל-1 תריץ את הלולאה פעם אחת אחרונה וצא ממנה)".
 
 אחרי השורה הזו מגיע הגוף של הלולאה - מה שמתבצע בכל איטרציה - ומסתיים ב-end שלפני ה-return list (זו, באופן מפתיע, השורה שבה מחזירים את המערך הממויין).
 
@@ -60,7 +73,11 @@ end</pre>
 השורה הבאה מציבה ב-max_index את האינדקס של המספר הנוכחי שבודקים, i, אם האיבר במקום i גדול מהאיבר במקום max_index. שימו לב לסגנון הכתיבה - קודם כל ההשמה, ורק אחר כך הבדיקה. לטעמי זה משפר את הקריאות של הקוד, שמרגיש כמו שפה טבעית ויותר ברור מה הולך בו; אנשים אחרים <strong>מתעבים לחלוטין</strong> את סגנון הכתיבה הזה. לגיטימי.
 
 בסיום הלולאה הפנימית (ה-end שאחרי השורה של הבדיקה-והשמה) אנחנו מחליפים בין האיבר האחרון במערך כרגע (זה האיבר במקום {% equation %}k-1{% endequation %}) ובין האיבר במקום המקסימלי, וזאת על ידי הפקודה (list.swap(max_index, k-1. לא הסברתי איך אני מבצע החלפה בין שני איברים במערך. ברובי אפשר לעשות את זה בשורה אחת:
-<pre style="font-size: 14px;" dir="ltr">list[i], list[j] = list[j], list[i]</pre>
+<div class="code-block">
+{% highlight ruby %}
+list[i], list[j] = list[j], list[i]
+{% endhighlight %}
+</div>
 קטע הקוד הזה מחליף את האיברים במקומות {% equation %}i,j{% endequation %} ברשימה. אני משתמש ב-list.swap במקום זה רק כדי לשפר את הקריאות. בפועל, בשפה ברמה יותר בסיסית מאשר רובי, צריך להשתמש במשתנה עזר כלשהו כדי לזכור את הערך שהיה באחד המקומות ברשימה לצורך ההחלפה (תרגיל נחמד: כאשר הרשימה כוללת מספרים, אפשר להחליף שני תאים בלי שום משתני עזר - איך?)
 
 האם האלגוריתם שלמעלה (שאני קורא לו "מיון-בחירה", כי בוחרים בכל פעם את האיבר שצריך להיכנס לסוף הרשימה) הוא טוב או רע? ובכן, הוא פשוט מאוד להבנה, וזה טוב. אבל הוא עושה הרבה עבודה: מספר האיטרציות שלו הוא כגודל המערך, ובכל איטרציה יש לולאה פנימית, שעושה הרבה השוואות. באיטרציה הראשונה יש {% equation %}n-1{% endequation %} השוואות (כש-{% equation %}n{% endequation %} הוא אורך הרשימה); בשניה יש {% equation %}n-2{% endequation %} השוואות; בשלישית יש {% equation %}n-3{% endequation %} וכן הלאה. סך הכל {% equation %}\left(n-1\right)+\left(n-2\right)+\cdots+1=\frac{\left(n-1\right)\left(n-2\right)}{2}=\Theta\left(n^{2}\right){% endequation %} השוואות. בנוסף יש גם {% equation %}\Theta\left(n\right){% endequation %} החלפות, אבל זה פחות נורא. בסך הכל האלגוריתם הוא לא אסון אבל יש טובים ממנו שעוד נראה.
@@ -72,18 +89,23 @@ end</pre>
 השיטה הזו <strong>דואלית</strong> למיון בחירה במובן מסויים. במיון בחירה ידענו מראש בתחילת כל איטרציה <strong>לאן</strong> אנחנו רוצים להכניס את האיבר שאנחנו הולכים לבחור (המקסימלי) והעבודה שלנו הייתה למצוא אותו; במיון הכנסה אנחנו יודעים מראש מי האיברי שאנחנו רוצים להכניס, ונותר רק למצוא את המקום שבו נרצה להכניס אותו.
 
 בפועל המימוש של מיון הכנסה קצת יותר מסובך, בגלל שכדי להכניס איבר <strong>לתוך</strong> רשימה צריך "להזיז הצידה" את האיברים שבאים אחריו ברשימה. הנה הקוד:
-<pre style="font-size: 14px;" dir="ltr">def insertion_sort(list)
+<div class="code-block">
+{% highlight ruby %}
+def insertion_sort(list)
   for k in 1...list.length
     new_element = list[k]
     i = k-1
-    while i &gt;= 0 and list[i] &gt; new_element
+    while i >= 0 and list[i] > new_element
       list[i+1] = list[i]
       i = i - 1
     end
     list[i+1] = new_element
   end
   return list
-end</pre>
+end
+{% endhighlight %}
+</div>
+
 בתחילת ריצת האלגוריתם מתייחסים לתא 0 לבדו בתור "רשימה ממוינת" (לא חוכמה, זו רשימה של איבר אחד) ואילו כל היתר הוא מערב פרוע. לאט לאט מגדילים את האיזור הממויין על ידי כך שלוקחים את האיבר הראשון שהוא מחוץ לאיזור הממויין (האיבר במקום ה-k) ועוברים על האיזור הממויין מהסוף להתחלה תוך שאנו דוחפים קדימה את האיברים שאנו חולפים על פניהם, עד שאנו מוצאים את המקום הנכון להכניס אליו את האיבר החדש (בדיוק המקום שבו כל האיברים שחלפנו על פניהם היו גדולים מ-k והאיבר הראשון שטרם חלפנו על פניו קטן מ-k).
 
 ניתוח הסיבוכיות כאן יותר מסובך. ללולאה החיצונית יש n-1 איטרציות, אבל הלולאה הפנימית היא לולאה מסוג חדש - לולאת while, שממשיכה לרוץ כל עוד תנאי מסויים לא התקיים. התנאי הוא שטרם מצאנו את המקום שאליו צריך להכניס את האיבר החדש. לכל היותר זה ייקח לנו k צעדים, אבל ייתכן שזה יקח לנו גם הרבה פחות. אז מה עושים?
@@ -92,15 +114,20 @@ end</pre>
 
 מצד שני, הביצועים במקרה הגרוע ביותר הם ממש לא המדד היחיד שצריך לחשוב עליו. למיון-בחירה יש חסרון לפיו הוא <strong>תמיד</strong> ידרוש ביצוע של {% equation %}\Theta\left(n^{2}\right){% endequation %} השוואות; לעומת זאת מיון הכנסה עשוי לדרוש הרבה, הרבה פחות פעולות אם הקלט יהיה "נחמד" (למשל, אם הרשימה ממויינת ברובה כבר כך - סיטואציה מציאותית יחסית).
 
-בואו נעבור למיון פשוט נוסף - מיון בועות. השם של המיון הזה מגיע מכך שבשיטה שלו, בכל איטרציה האיבר הגדול ביותר שטרם טופל "מפעפע למעלה" למקומו במערך. השיטה פשוטה: מתחילים מהשוואה בין {% equation %}A\left[0\right]{% endequation %} ו-{% equation %}A\left[1\right]{% endequation %}. אם {% equation %}A\left[0\right]&lt;A\left[1\right]{% endequation %} הכל בסדר, אבל אם {% equation %}A\left[1\right]&lt;A\left[0\right]{% endequation %} אז מחליפים ביניהם. כעת אנו יודעים שב-{% equation %}A\left[1\right]{% endequation %} יש את האיבר הגדול מבין שני הראשונים; משווים אותו עם {% equation %}A\left[2\right]{% endequation %}. אם {% equation %}A\left[2\right]&lt;A\left[1\right]{% endequation %}, מחליפים, וכעת ב-{% equation %}A\left[2\right]{% endequation %} יש את האיבר הגדול מבין שלושת הראשונים. ממשיכים... ובסוף התהליך ב-{% equation %}A\left[n\right]{% endequation %} יהיה את האיבר הגדול ביותר ברשימה. עכשיו אפשר להתחיל את כל הסיפור מחדש אבל לעצור ב-{% equation %}A\left[n-1\right]{% endequation %}, וכן הלאה.
-<pre style="font-size: 14px;" dir="ltr">def bubble_sort(list)
+בואו נעבור למיון פשוט נוסף - מיון בועות. השם של המיון הזה מגיע מכך שבשיטה שלו, בכל איטרציה האיבר הגדול ביותר שטרם טופל "מפעפע למעלה" למקומו במערך. השיטה פשוטה: מתחילים מהשוואה בין {% equation %}A\left[0\right]{% endequation %} ו-{% equation %}A\left[1\right]{% endequation %}. אם {% equation %}A\left[0\right]<A\left[1\right]{% endequation %} הכל בסדר, אבל אם {% equation %}A\left[1\right]<A\left[0\right]{% endequation %} אז מחליפים ביניהם. כעת אנו יודעים שב-{% equation %}A\left[1\right]{% endequation %} יש את האיבר הגדול מבין שני הראשונים; משווים אותו עם {% equation %}A\left[2\right]{% endequation %}. אם {% equation %}A\left[2\right]<A\left[1\right]{% endequation %}, מחליפים, וכעת ב-{% equation %}A\left[2\right]{% endequation %} יש את האיבר הגדול מבין שלושת הראשונים. ממשיכים... ובסוף התהליך ב-{% equation %}A\left[n\right]{% endequation %} יהיה את האיבר הגדול ביותר ברשימה. עכשיו אפשר להתחיל את כל הסיפור מחדש אבל לעצור ב-{% equation %}A\left[n-1\right]{% endequation %}, וכן הלאה.
+
+<div class="code-block">
+{% highlight ruby %}
+def bubble_sort(list)
   list.length.downto(1) do |n|
     for i in 0...(n-1) do
-      list.swap(i,i+1) if list[i] &gt; list[i+1]
+      list.swap(i,i+1) if list[i] > list[i+1]
     end
   end
   return list
-end</pre>
+end
+{% endhighlight %}
+</div>
 האלגוריתם הזה הוא <strong>איום ונורא</strong>. הוא גם לא טריוויאלי לחלוטין להבנה מבחינה רעיונית (למרות שאחרי שמבינים, הקוד עצמו הוא פשוט מאוד), והוא גם משיג בפועל תוצאות שהן משמעותית גרועות יותר מאשר אלו של מיון הכנסה ומיון-בחירה. הסיבה לכך היא שהוא מבצע גם המון השוואות ({% equation %}\Theta\left(n^{2}\right){% endequation %} תמיד - למה?) וגם המון החלפות, במקרים גרועים. במקרה טוב, למשל אם המערך כבר ממוין, הוא ישיג ביצועים טובים יותר מאשר מיון-בחירה, אבל בדרך כלל הביצועים שלו יהיו גרועים משמעותית יותר מאלו של מיון-בחירה ומיון הכנסה. אל תשתמשו בו. פשוט אל.
 
 עד כה כל האלגוריתמים פעלו בזמן שהוא {% equation %}\Theta\left(n^{2}\right){% endequation %} במקרה הגרוע. הגיע הזמן לראות אלגוריתם מיון טוב, כזה שפועל בזמן {% equation %}\Theta\left(n\log n\right){% endequation %} ולכן משיג ביצועים טובים יותר משמעותית מכל האלגוריתמים שהצגתי. נתחיל ממיון שהוא פשוט יחסית להצגה, אבל הוא חזק מאוד (יש ספריות שמשתמשות בו בתור אלגוריתם המיון שלהן) - מיון מיזוג, שהומצא על ידי המתמטיקאי ג'ון פון-נוימן בשנת 1945 (ראשית ימי מדעי המחשב).
@@ -114,20 +141,26 @@ end</pre>
 איך עושים את זה? פשוט. מכינים בצד מקום לרשימה חדשה, בגודלה של הרשימה המקורית; ומתחילים לעבור בו זמנית על שתי תתי-הרשימות הממוינות. בכל צעד משווים את שני האיברים בתתי-הרשימות הממויינות שאנחנו רואים כרגע. את הקטן מבין השניים נכניס לרשימה שאנחנו בונים ונקדם את האינדקס של האיבר שאנחנו מסתכלים עליו ברשימה הזו ב-1. אם מתישהו סיימנו לעבור על אחת מהרשימות, נעתיק את כל יתר האיברים הרשימה השניה אל הרשימה שאנחנו בונים כמות שהם. הנכונות של המיזוג הזה נובעת מכך ששתי תתי-הרשימות כבר ממויינות.
 
 הנה הקוד של המיון:
-<pre style="font-size: 14px;" dir="ltr">
+<div class="code-block">
+{% highlight ruby %}
 def merge_sort(list)
-  return list if list.length &lt;= 1
+  return list if list.length <= 1
   k = list.length / 2
   list_a = merge_sort(list[0...k])
   list_b = merge_sort(list[k...list.length])
   return merge(list_a, list_b)
-end</pre>
+end
+{% endhighlight %}
+</div>
+
 כמו שאנחנו רואים, הוא פשוט מאוד - אפילו טריוויאלי. פשוט מחלקים את הרשימות לשני חלקים באמצע (אלא אם הרשימה שלנו מכילה לכל היותר איבר אחד ואז לא עושים כלום), ממיינים כל אחת משתי הרשימות בנפרד ובסוף ממזגים. כדי להשלים את התמונה צריך להציג את האלגוריתם שממזג. כאן, למרבה הצער, הקוד יוצא טיפה מסורבל, אם כי לא נורא:
-<pre style="font-size: 14px;" dir="ltr">def merge(list_a, list_b)
+<div class="code-block">
+{% highlight ruby %}
+def merge(list_a, list_b)
   i, j = 0, 0
   result = []
-  while i &lt; list_a.length and j &lt; list_b.length
-    if (list_a[i] &lt; list_b[j])
+  while i < list_a.length and j < list_b.length
+    if (list_a[i] < list_b[j])
       result.push(list_a[i])
       i = i + 1
     else
@@ -136,17 +169,19 @@ end</pre>
     end
   end
 
-  while i &lt; list_a.length
+  while i < list_a.length
         result.push(list_a[i])
         i = i + 1
   end
 
-  while j &lt; list_b.length
+  while j < list_b.length
         result.push(list_b[j])
         j = j + 1
   end
   return result
-end</pre>
+end
+{% endhighlight %}
+</div>
 נשאר רק להבין מה סיבוכיות זמן הריצה של האלגוריתם הזה. ראשית כל, שימו לב שאם merge מופעל על שתי רשימות שהארוכה מביניהן היא באורך {% equation %}n{% endequation %}, אז זמן הריצה שלו הוא {% equation %}\Theta\left(n\right){% endequation %} (עוברים על לכל היותר {% equation %}2n{% endequation %} איברים). במילים - מיזוג ניתן לבצע <strong>בזמן לינארי</strong>.
 
 כדי להבין כמה זמן נדרש מ-merge_sort לרוץ צריך להתאמץ טיפה יותר. הקושי כאן הוא שמדובר על אלגוריתם רקורסיבי - כזה שקורא לעצמו - ולכן צריך להתחכם קצת בניתוח. בואו נסמן את זמן הריצה של האלגוריתם ב-{% equation %}T\left(n\right){% endequation %}. אז ברור ש-{% equation %}T\left(1\right)=O\left(1\right){% endequation %} (כי על רשימה מגודל 1 האלגוריתם רק מבזבז זמן על בדיקה האם הרשימה מגודל 1 או פחות וזהו).
@@ -165,33 +200,33 @@ end</pre>
 
 ואז לומר "בואו נבחר {% equation %}k{% endequation %} כך ש-{% equation %}2^{k}=n{% endequation %} ואז נקבל {% equation %}T\left(n\right)=n+\Theta\left(n\right)=\Theta\left(n\right){% endequation %} וקיבלנו זמן ריצה לינארי של האלגוריתם". רק שזה <strong>לא נכון</strong>. זו נקודה עדינה ומבלבלת שחשוב להתייחס אליה, אז בואו נעשה את זה.
 
-מה {% equation %}T\left(n\right)=\Theta\left(n\right){% endequation %} אומר? שקיים קבוע {% equation %}c{% endequation %} וקיים {% equation %}N{% endequation %} כך ש-{% equation %}T\left(n\right)&lt;c\cdot n{% endequation %} לכל {% equation %}n&gt;N{% endequation %} (יש גם חסם מלמטה אבל הוא לא חשוב כרגע).
+מה {% equation %}T\left(n\right)=\Theta\left(n\right){% endequation %} אומר? שקיים קבוע {% equation %}c{% endequation %} וקיים {% equation %}N{% endequation %} כך ש-{% equation %}T\left(n\right)<c\cdot n{% endequation %} לכל {% equation %}n>N{% endequation %} (יש גם חסם מלמטה אבל הוא לא חשוב כרגע).
 
-מה {% equation %}T\left(n\right)=2^{k}T\left(\frac{n}{2^{k}}\right)+\Theta\left(n\right){% endequation %} אומר? שלכל {% equation %}k{% endequation %}, קיים קבוע {% equation %}c_{k}{% endequation %} וקבוע {% equation %}N_{k}{% endequation %} כך ש-{% equation %}T\left(n\right)&lt;2^{k}T\left(\frac{n}{2^{k}}\right)+c_{k}n{% endequation %} לכל {% equation %}n&gt;N_{k}{% endequation %}.
+מה {% equation %}T\left(n\right)=2^{k}T\left(\frac{n}{2^{k}}\right)+\Theta\left(n\right){% endequation %} אומר? שלכל {% equation %}k{% endequation %}, קיים קבוע {% equation %}c_{k}{% endequation %} וקבוע {% equation %}N_{k}{% endequation %} כך ש-{% equation %}T\left(n\right)<2^{k}T\left(\frac{n}{2^{k}}\right)+c_{k}n{% endequation %} לכל {% equation %}n>N_{k}{% endequation %}.
 
 האם אפשר לעבור מהטענה השניה לראשונה על ידי הצבת {% equation %}k=n{% endequation %}? לא! כי {% equation %}n{% endequation %} אינו קבוע. זכרו - אנחנו מנסים לחסום פה פונקציה של {% equation %}n{% endequation %}. בקיצור, האינטואיציה פכמהה מסוכנת ובעייתית. משחקי {% equation %}\Theta{% endequation %} עלולים להוביל לבעיות מסוג זה.
 
-הדרך להתגבר על הבעיה היא ניתוח קצת יותר זהיר. אנחנו יודעים ש-{% equation %}T\left(n\right)=2T\left(\frac{n}{2}\right)+\Theta\left(n\right){% endequation %}. זה אומר ש{% equation %}T\left(n\right)&lt;2T\left(\frac{n}{2}\right)+c\cdot n{% endequation %} לכל {% equation %}n&gt;N{% endequation %} עבור {% equation %}N,c{% endequation %} מסויימים. יפה. עכשיו ניטרלנו (לעת עתה) את הסימונים האסימפטוטיים מהמשוואה. כדי לסיים עם זה, נשים לב לכך שעבור {% equation %}n&lt;N{% endequation %} מתקיים {% equation %}T\left(n\right)&lt;d{% endequation %} עבור קבוע {% equation %}d{% endequation %} כלשהו. אם נבחר את {% equation %}c{% endequation %} להיות גדול מספיק, ובפרט גדול יותר מ-{% equation %}d{% endequation %}, נקבל ש-{% equation %}T\left(n\right)&lt;2T\left(\frac{n}{2}\right)+c\cdot n{% endequation %} היא משוואה שתקפה תמיד, לכל {% equation %}n{% endequation %}.
+הדרך להתגבר על הבעיה היא ניתוח קצת יותר זהיר. אנחנו יודעים ש-{% equation %}T\left(n\right)=2T\left(\frac{n}{2}\right)+\Theta\left(n\right){% endequation %}. זה אומר ש{% equation %}T\left(n\right)<2T\left(\frac{n}{2}\right)+c\cdot n{% endequation %} לכל {% equation %}n>N{% endequation %} עבור {% equation %}N,c{% endequation %} מסויימים. יפה. עכשיו ניטרלנו (לעת עתה) את הסימונים האסימפטוטיים מהמשוואה. כדי לסיים עם זה, נשים לב לכך שעבור {% equation %}n<N{% endequation %} מתקיים {% equation %}T\left(n\right)<d{% endequation %} עבור קבוע {% equation %}d{% endequation %} כלשהו. אם נבחר את {% equation %}c{% endequation %} להיות גדול מספיק, ובפרט גדול יותר מ-{% equation %}d{% endequation %}, נקבל ש-{% equation %}T\left(n\right) < 2T\left(\frac{n}{2}\right)+c\cdot n{% endequation %} היא משוואה שתקפה תמיד, לכל {% equation %}n{% endequation %}.
 
 עכשיו אפשר לעשות את התעלול הבא:
 
-{% equation %}T\left(n\right)&lt;2T\left(\frac{n}{2}\right)+c\cdot n&lt;2\left(2T\left(\frac{n}{4}\right)+c\cdot\frac{n}{2}\right)+c\cdot n=4T\left(\frac{n}{4}\right)+2cn{% endequation %}
+{% equation %}T\left(n\right)<2T\left(\frac{n}{2}\right)+c\cdot n<2\left(2T\left(\frac{n}{4}\right)+c\cdot\frac{n}{2}\right)+c\cdot n=4T\left(\frac{n}{4}\right)+2cn{% endequation %}
 
 שימו לב: ה-{% equation %}2cn{% endequation %} שבאגף ימין נבנה מה-{% equation %}cn{% endequation %} שהיה בהתחלה, ועוד פעמיים {% equation %}c\frac{n}{2}{% endequation %} (המחיר של הפעלת מיזוג על שני תתי-הרשימות).
 
 נחזור על הקסם שוב:
 
-{% equation %}4T\left(\frac{n}{4}\right)+2cn&lt;4\left(2T\left(\frac{n}{8}\right)+c\frac{n}{4}\right)+2cn=8T\left(\frac{n}{8}\right)+3cn{% endequation %}
+{% equation %}4T\left(\frac{n}{4}\right)+2cn<4\left(2T\left(\frac{n}{8}\right)+c\frac{n}{4}\right)+2cn=8T\left(\frac{n}{8}\right)+3cn{% endequation %}
 
 הבנתם את הרעיון. הנה המשוואה הכללית, שנכונה לכל {% equation %}k{% endequation %} טבעי:
 
-{% equation %}T\left(n\right)&lt;2^{k}T\left(\frac{n}{2^{k}}\right)+k\cdot cn{% endequation %}
+{% equation %}T\left(n\right)<2^{k}T\left(\frac{n}{2^{k}}\right)+k\cdot cn{% endequation %}
 
-ולכן עבור {% equation %}k{% endequation %} שמקיים {% equation %}2^{k}\ge n{% endequation %} יתקיים ש- {% equation %}T\left(\frac{n}{2^{k}}\right)&lt;d{% endequation %} עבור איזה שהוא קבוע {% equation %}d{% endequation %}. נשאלת רק השאלה איזה {% equation %}k{% endequation %} לבחור.
+ולכן עבור {% equation %}k{% endequation %} שמקיים {% equation %}2^{k}\ge n{% endequation %} יתקיים ש- {% equation %}T\left(\frac{n}{2^{k}}\right)<d{% endequation %} עבור איזה שהוא קבוע {% equation %}d{% endequation %}. נשאלת רק השאלה איזה {% equation %}k{% endequation %} לבחור.
 
 אם {% equation %}2^{k}=n{% endequation %}, יש סימון מיוחד ל-{% equation %}k{% endequation %} שמקיים את השוויון: {% equation %}k=\lg n{% endequation %} (זה מה שנקרא לוגריתם על בסיס 2). לא תמיד {% equation %}n{% endequation %} הוא בדיוק חזקה של 2, ולכן לא תמיד {% equation %}\lg n{% endequation %} יוצא מספר שלם. תמיד אפשר לעגל למעלה: {% equation %}k=\left\lceil \lg n\right\rceil {% endequation %}, והמספר שנקבל יקיים {% equation %}n\le2^{k}\le2n{% endequation %}. לכן אנחנו מקבלים בסופו של דבר את אי השוויון הבא:
 
-{% equation %}T\left(n\right)&lt;2n\cdot d+\left\lceil \lg n\right\rceil \cdot cn=O\left(n\log n\right){% endequation %}
+{% equation %}T\left(n\right)<2n\cdot d+\left\lceil \lg n\right\rceil \cdot cn=O\left(n\log n\right){% endequation %}
 
 (הסיבה שעברתי מ-{% equation %}\lg{% endequation %} ל-{% equation %}\log{% endequation %} היא שכדי לעבור בין שני בסיסים שונים של לוגריתם כופלים בקבוע: {% equation %}\log_{a}n=\left(\log_{a}b\right)^{-1}\cdot\log_{b}n{% endequation %}, ולכן {% equation %}\log_{a}n=\Theta\left(\log_{b}n\right){% endequation %}).
 

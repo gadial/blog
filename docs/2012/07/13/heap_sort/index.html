@@ -159,16 +159,21 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 <p>אחרי החלפה שכזו, העץ עשוי לאבד את תכונת הערימה, כי הצומת שבשורש עשוי להיות קטן מאחד מבניו. אז מה עושים? כמו במיון בועות, “מפעפעים” אותו למטה. משווים אותו לבנים שלו, ואם אחד מהם גדול ממנו, מחליפים ביניהם (אם שניהם גדולים ממנו אז מחליפים בינו לבין הגדול מביניהם), ואז חוזרים על הפעולה עבור תת-העץ שבו היה הבן קודם. באופן הזה מובטח לנו שכאשר התהליך הסתיים, העץ יקיים שוב את תכונת הערימה (ולכן בפרט השורש יכיל את המקסימום החדש). לפעולה הזו - ה”פעפוע” למטה של הצומת שמפר את תכונת הערימה - אקרא heapify (אל תהיו רעים אלי, זה מה ש-CLRS משתמשים בו).</p>
 
 <p>הנה הקוד:</p>
-<pre style="font-size: 14px;" dir="ltr">def heapify(list, n, heapsize)
-  max = n
-  l = 2*n+1 #left son
-  r = 2*n+2 #right son
-  max = r if r &lt; heapsize and list[max] &lt; list[r]
-  max = l if l &lt; heapsize and list[max] &lt; list[l]
-  return if max == n
-  list.swap(max, n)
-  heapify(list, max, heapsize)
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">heapify</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">heapsize</span><span class="p">)</span>
+  <span class="n">max</span> <span class="o">=</span> <span class="n">n</span>
+  <span class="n">l</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span> <span class="c1">#left son</span>
+  <span class="n">r</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span> <span class="c1">#right son</span>
+  <span class="n">max</span> <span class="o">=</span> <span class="n">r</span> <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">heapsize</span> <span class="n">and</span> <span class="n">list</span><span class="p">[</span><span class="n">max</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">list</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
+  <span class="n">max</span> <span class="o">=</span> <span class="n">l</span> <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">heapsize</span> <span class="n">and</span> <span class="n">list</span><span class="p">[</span><span class="n">max</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">list</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+  <span class="k">return</span> <span class="k">if</span> <span class="n">max</span> <span class="o">==</span> <span class="n">n</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">swap</span><span class="p">(</span><span class="n">max</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+  <span class="n">heapify</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">max</span><span class="p">,</span> <span class="n">heapsize</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>הקוד די מסביר את עצמו (אני מקוה). רק שימו לב לבדיקות אם r &lt; heapsize ו-l &lt; heapsize שמטרתן למנוע מאיתנו לגלוש אל מעבר לקצה הערימה (מה שעשוי להיות מסוכן כי האיזור הזה לא בהכרח ריק או מכיל ג’יבריש; הוא יהיה עשוי להכיל איברים שכבר מיינו) ולקריאה הרקורסיבית בסוף של heapify.</p>
 
 <p>היתרון האדיר שנותן לנו מעבר לחשיבה על הקלט בתור עץ במקום הישארות עם רשימה הוא שתהליך הפעפוע הזה לא יכול לקחת הרבה זמן; הוא בהכרח ידרוש לכל היותר <span>$latex \log n$</span> צעדים. למה? כי עומק של עץ בינארי כמעט מלא עם <span>$latex n$</span> צמתים הוא <span>$latex \log n$</span>. אסביר זאת בפירוט בהמשך. לעת עתה, בואו נטפל בשאלה האחרונה שנותרה פתוחה: איך בכלל בונים ערימה מתוך רשימה לא מסודרת?</p>
@@ -176,17 +181,27 @@ end</pre>
 <p>התשובה פשוטה. ראשית כל, אפשר לחשוב גם על רשימה מבולגנת בתור עץ בינארי כמעט מלא, פשוט כזה שלא מקיים בהכרח את תכונת הערימה. אז בואו פשוט נתחיל לתקן אותו. מה שכבר ראינו הוא ש-heapify מקבלת צומת n, ועושה הוקוס-פוקוס שמקיים את התנאי הבא: אם תת-העץ ששורשו n הוא ערימה תקנית פרט אולי לכך ש-n מפר את תכונת הערימה, אז אחרי הפעלת heapify תת-העץ כולו יקיים את תכונת הערימה.</p>
 
 <p>אם כן, אם יש לנו כרגע עץ שהוא בלאגן אחד גדול, להפעיל את heapify על השורש שלו לא הולך ליצור לנו ערימה מתוך העץ (כי העץ עשוי להפר את תכונת הערימה במקומות רבים ולא רק בשורש). לכן נטפל בעץ “מלמטה למעלה”. אנחנו יודעים שתת-העץ של כל עלה הוא מן הסתם רשימה חוקית (כי הוא מכיל רק צומת בודד), אז בואו נעבור על כל הצמתים מהרמה הלפני-אחרונה והלאה, ולכל אחד מהם נריץ את heapify על תת-העץ שלו:</p>
-<pre style="font-size: 14px;" dir="ltr">def make_heap(list)
-  (list.length-1).downto(0) |n| heapify(list,n, list.length)
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">make_heap</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">list</span><span class="p">.</span><span class="nf">length</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">downto</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">heapify</span><span class="p">(</span><span class="n">list</span><span class="p">,</span><span class="n">n</span><span class="p">,</span> <span class="n">list</span><span class="p">.</span><span class="nf">length</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>אני מציג כאן סגנון כתיבה סטנדרטי ברובי שהוא קצת חריג למי שלא מכיר את השפה. הנה דרך אחרת לכתוב את אותו הדבר בדיוק:</p>
-<pre style="font-size: 14px;" dir="ltr">def make_heap(list)
-  n = list.length
-  while n &gt; 0
-    n = n - 1
-    max_heapify(list,n, list.length)
-  end
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">make_heap</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="n">n</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">length</span>
+  <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">max_heapify</span><span class="p">(</span><span class="n">list</span><span class="p">,</span><span class="n">n</span><span class="p">,</span> <span class="n">list</span><span class="p">.</span><span class="nf">length</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>כלומר, תפקיד הסוגריים המסולסלות כאן הוא בסך הכל להכניס את הכל לאותה השורה, מה שאפקטיבי כאשר מריצים פקודות בנות שורה אחת.</p>
 
 <p>שימו לב שהקוד שלי טיפה בזבזני כי אני עובר על <strong>כל</strong> הצמתים ברשימה, כולל העלים. אפשר היה להתחיל גם מהחצי.</p>
@@ -194,14 +209,19 @@ end</pre>
 <p>מה זמן הריצה של make_heap? בבירור הוא <span>$latex O\left(n\log n\right)$</span>: אני עובר על כל הצמתים ברשימה, כלומר <span>$latex n$</span>, ולכל אחד אני מריץ את heapify שזמן הריצה שלו הוא <span>$latex O\left(\log n\right)$</span>. עם זאת, ניתוח קצת יותר זהיר של מה שהולך כאן שאציג בהמשך מראה שזמן הריצה הוא בעצם <span>$latex \Theta\left(n\right)$</span>. הסיבה לכך היא ש-heapify דורש פחות זמן ריצה כשהוא מורץ על צמתים נמוכים יותר, ואין כל כך הרבה צמתים גבוהים בעץ. נחזור לכך אחר כך.</p>
 
 <p>כעת אפשר סוף סוף להציג את הקוד של מיון ערימה. כצפוי, אין הבדל מהותי בינו לבין הקוד של מיון בחירה:</p>
-<pre style="font-size: 14px;" dir="ltr">def heapsort(list)
-  make_heap(list)
-  for n in 1..list.length
-    list.swap(0,list.length - n)
-    heapify(list, 0, list.length - n)
-  end
-  return list
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">heapsort</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="n">make_heap</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">n</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="n">list</span><span class="p">.</span><span class="nf">length</span>
+    <span class="n">list</span><span class="p">.</span><span class="nf">swap</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">list</span><span class="p">.</span><span class="nf">length</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">heapify</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">list</span><span class="p">.</span><span class="nf">length</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span>
+  <span class="k">end</span>
+  <span class="k">return</span> <span class="n">list</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>בהתחלה יוצרים ערימה. בכל איטרציה מעבירים את האיבר שב-0 (המקסימלי) לסוף, מקטינים ב-1 את גודל הערימה, ומתקנים את מה שקלקלנו עם heapify. לטעמי זה אלגוריתם פשוט, אלגנטי ונחמד.</p>
 
 <p>עכשיו בואו נעבור לניתוחים המתמטיים. ראשית כל אנחנו צריכים להבין עובדות בסיסיות על עצים בינאריים. נפתח בהגדרה: ה<strong>גובה</strong> של עץ בינארי הוא אורך המסלול הארוך ביותר בו, כאשר “מסלול” הוא פשוט סדרה של צמתים כך שכל אחד מהם הוא אביו של זה שבא אחריו. אפשר למדוד אורך של מסלול או על ידי מספר הצמתים הכולל בו, או על ידי מספר <strong>הצעדים</strong> שאנו מבצעים בו, כלומר מספר הצמתים במסלול פחות 1 (ולכן מסלול שמכיל רק צומת אחד - כלומר, כזה שבו אנו “נשארים במקום”, הוא מאורך 0). אני מעדיף את ההגדרה השניה ולכן בה אשתמש.</p>

@@ -123,12 +123,17 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
   <div class="post-content e-content" itemprop="articleBody">
     <p>מבין כל אלגוריתמי המיון המפורסמים, מיון מהיר הוא החביב עלי, בגלל שהוא כל כך מוזר. ראשית, זה אלגוריתם מיון שזמן הריצה שלו במקרה הגרוע שלו הוא <span>$latex \Theta\left(n^{2}\right)$</span>, ובפועל הביצועים שלו גרועים במקרה הזה יותר מאשר אלו של מיון בחירה ומיון הכנסה, ולמרות זאת במקרה ה”ממוצע” (מה זה? נסביר בהמשך) הביצועים שלו דווקא מצויינים; שנית, המקרה הגרוע ביותר עבור המימוש הנאיבי שלו הוא זה שבו <strong>המערך כבר ממוין</strong>, וזה משעשע. לבסוף, הוא כל כך פשוט מבחינה רעיונית שאפשר לתאר אותו, בשפת התכנות המתאימה, בעזרת קוד פשוט ביותר:</p>
-<pre style="font-size: 14px;" dir="ltr">quicksort :: Ord a =&gt; [a] -&gt; [a]
-quicksort []     = []
-quicksort (x:xs) = (quicksort smaller) ++ [x] ++ (quicksort larger)
-    where
-        smaller = [a | a &lt;- xs, a &lt;= x]
-        larger  = [b | b &lt;- xs, b &gt; x]</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="n">quicksort</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<span class="n">quicksort</span> <span class="kt">[]</span>     <span class="o">=</span> <span class="kt">[]</span>
+<span class="n">quicksort</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">xs</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">quicksort</span> <span class="n">smaller</span><span class="p">)</span> <span class="o">++</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">++</span> <span class="p">(</span><span class="n">quicksort</span> <span class="n">larger</span><span class="p">)</span>
+    <span class="kr">where</span>
+        <span class="n">smaller</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">|</span> <span class="n">a</span> <span class="o">&lt;-</span> <span class="n">xs</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">]</span>
+        <span class="n">larger</span>  <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="o">|</span> <span class="n">b</span> <span class="o">&lt;-</span> <span class="n">xs</span><span class="p">,</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">]</span></code></pre></figure>
+
+</div>
+
 <p>קטע הקוד הזה, בשפת Haskell, הוא דוגמה פופולרית בספרים/מאמרים על השפה (היפהפיה) הזו, שממחיש יפה את האופי ה”מתמטי” של ההגדרה של המיון. השורה הראשונה עשויה להיראות מפחיד למי שלא בקיאים בסינטקס של הסקל אבל היא בסך הכל אומרת ש-quicksort היא פונקציה שלוקחת רשימה של איברים מטיפוס a (כש-a הוא Ord - משהו שניתן להשוואה) ומחזירה רשימה של איברים מטיפוס a. כלומר, זו פשוט הגדרה מתמטית של פונקציה. השורה הבאה בסך הכל אומרת שעל רשימה ריקה, quicksort מחזיר רשימה ריקה. לאחר מכן מגיעה ההגדרה של מה ש-quicksort עושה בפועל: הוא מקבל קלט שעליו הוא חושב בתור איבר <span>$latex x$</span> (“איקס”) ועוד רשימה של איברים <span>$latex xs$</span> (“איקסים”). כלומר, אנחנו אוטומטית מפרקים את הרשימה שקיבלנו ל”איבר ראשון ועוד רשימה של כל יתר האיברים”. והפלט שאנחנו מחזירים הוא שרשור של שלוש רשימות: רשימה בשם smaller שאותה אנחנו ממיינים רקורסיבית עם quicksort; רשימה שהאיבר היחיד בה הוא <span>$latex x$</span>, ורשימה בשם larger שגם אותה אנחנו ממיינים עם quicksort. ואיך מוגדרות הרשימות הללו? זה מה שכתוב אחרי ה-where: הרשימה smaller כוללת את כל האיברים של <span>$latex xs$</span> שקטנים או שווים ל-<span>$latex x$</span>, ואילו larger כוללת את כל האיברים של <span>$latex xs$</span> שגדולים מ-<span>$latex x$</span>.</p>
 
 <p>זה הכל.</p>
@@ -138,13 +143,18 @@ quicksort (x:xs) = (quicksort smaller) ++ [x] ++ (quicksort larger)
 <p>ראינו כבר את מיון מיזוג, שהיה דוגמה קלאסית לאלגוריתם “הפרד ומשול” למיון: הוא חילק את הרשימה שלו לשני חלקים, מיין כל חלק בנפרד ואז מיזג אותן. במיון מיזוג פעולת ה”הפרד” הייתה טריוויאלית - פשוט בחרנו את נקודת האמצע וחילקנו בה, והעבודה האמיתית הייתה ב”ומשול” - שלב המיזוג של האלגוריתם. מיון מהיר נוקט את הגישה ההפוכה. שלב ה”ומשול” שלו טריוויאלי - אחרי ששתי תתי-הרשימות כבר מוינו, אין שום דבר נוסף לעשות ואפשר לסיים; החוכמה היא בשלב ה”הפרד” שגורמת לכך שהרשימה תופרד לשתי תתי-רשימות בעלות התכונה שכל איבר בראשונה קטן יותר מכל איבר בשניה. אחרי שהבנו את הרעיון הזה, האלגוריתם פשוט בונה את עצמו מאליו.</p>
 
 <p>כמובן שבקוד עבור שפה שהיא פחות מתמטית באופיה יהיה צורך לעשות את העניינים הללו קצת יותר במפורש. אז הנה הקוד בשפת רובי שמבצע את המיון עצמו:</p>
-<pre style="font-size: 14px;" dir="ltr">def quicksort(list, start = 0, finish = list.length - 1)
-  return list if start &gt;= finish
-  middle = partition(list, start, finish)
-  quicksort(list, start, middle-1)
-  quicksort(list, middle + 1, finish)
-  return list
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">quicksort</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">finish</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">list</span> <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="n">finish</span>
+  <span class="n">middle</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
+  <span class="n">quicksort</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">middle</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">quicksort</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">list</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>הקוד מקבל רשימה, וגם שני משתנים נוספים start, finish שאומרים לו איזה חלק של הרשימה צריך למיין כרגע (צריך למיין את כל האיברים החל מ-start ועד ל-finish). אם המשתנים הללו לא מועברים במפורש הערכים שהם מקבלים הם 0 ואורך הרשימה פחות 1 (כלומר, האינדקסים של האיבר הראשון והאחרון ברשימה). האלגוריתם חוזר מייד אם אין לו מה לעשות - כלומר, אם start לא קטן מ-finish (זה אומר שגודל הרשימה שמבקשים מאיתנו למיין הוא לא יותר מ-1).</p>
 
 <p>אחרת, האלגוריתם קורא לפונקציה partition, שעושה שני דברים: היא בוחרת איבר ציר, ולאחר מכן גם מסדרת מחדש את list (רק באיזור שבין start ו-finish, כמובן) כך שכל האיברים ברשימה שקטנים מהציר יהיו משמאלו וכל מי שגדולים מהציר יהיו מימינו; לסיום היא מחזירה את האינדקס של איבר הציר ברשימה המסודרת. כעת כל שנותר לעשות הוא לקרוא למיון מהיר מחדש על שתי תתי-הרשימות של “מי שקטנים מהציר” ו”מי שגדולים מהציר”. שימו לב שהציר עצמו אינו נכלל באף אחת מהרשימות, כך שבהכרח שתיהן קטנות יותר מהרשימה המקורית ולכן אין סיכוי שנקלע ללולאה אינסופית.</p>
@@ -152,20 +162,25 @@ end</pre>
 <p>צריך להשתכנע שהאלגוריתם באמת ממיין את הרשימות, אבל זה די ברור. אחרי שתי הקריאות הרקורסיביות למיון מהיר, אנחנו מקבלים ש-list מורכבת משלושה חלקים: כל מי שהיו קטנים מהציר, כשהם ממויינים; כל מי שגדולים מהציר, כשהם ממויינים; והציר באמצע בין שתי הרשימות הללו. אם הרשימה הכוללת לא הייתה ממויינת זה היה אומר שיש <span>$latex a,b$</span> כך ש-<span>$latex a&gt;b$</span> אבל <span>$latex a$</span> דווקא נמצא משמאל ל-<span>$latex b$</span> ברשימה. לא ייתכן ש-<span>$latex a,b$</span> שונים מהציר ושניהם משמאל או מימין לו כי זה היה מראה שאחת משתי תת-הרשימות לא ממויינת; ולכן <span>$latex a$</span> בהכרח נמצא מימין לאיבר הציר (או שווה לו) ו-<span>$latex b$</span> נמצא משמאל לאיבר הציר (או שווה לו). זהו זה.</p>
 
 <p>נשאר להבין איך מממשים את partition. קוד:</p>
-<pre style="font-size: 14px;" dir="ltr">def partition(list, start, finish)
-  pivot_index = choose_pivot(list, start, finish)
-  pivot = list[pivot_index]
-  list.swap(pivot_index, finish)
-  a = start - 1
-  for i in start...finish
-      if list[i] &lt; pivot
-	a = a + 1
-     	list.swap(a,i)
-      end
-  end
-  list.swap(finish, a+1)
-  return a+1
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">partition</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
+  <span class="n">pivot_index</span> <span class="o">=</span> <span class="n">choose_pivot</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
+  <span class="n">pivot</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="n">pivot_index</span><span class="p">]</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">swap</span><span class="p">(</span><span class="n">pivot_index</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
+  <span class="n">a</span> <span class="o">=</span> <span class="n">start</span> <span class="o">-</span> <span class="mi">1</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="n">start</span><span class="o">...</span><span class="n">finish</span>
+      <span class="k">if</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span>
+	<span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span>
+     	<span class="n">list</span><span class="p">.</span><span class="nf">swap</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+      <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">swap</span><span class="p">(</span><span class="n">finish</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>גם כאן הקוד עדיין לא שלם כי הוא תלוי במימוש של choose_pivot. בקוד ההסקל פשוט בחרנו את האיבר הראשון, אבל כאן אני מאפשר קצת יותר חופש בחירה (מסיבות שיובהרו בהמשך). אז קוראים ל-choose_pivot שמחזיר את האינדקס של איבר הציר, ואז pivot עצמו מקבל את הערך של איבר הציר, ואז אנחנו מעיפים את איבר הציר מהדרך - שמים אותו בסוף הרשימה. כעת אנחנו מתחזקים משתנה a שאומר “מה הקצה הימני של רשימת כל האיברים שקטנים מאיבר הציר”. בהתחלה זו רשימה ריקה, אז הקצה הימני הוא <strong>לפני</strong> תחילת הרשימה שאנחנו מטפלים בה (מיון מהיר מבלבל למדי מבחינת אינדקסים בקטע הזה, והתיאור המילולי שנתתי עוזר לזכור מה צריך לעשות, לדעתי).</p>
 
 <p>מכאן ואילך הפעולה שלנו פשוטה: אנחנו עוברים סדרתית על כל האינדקסים של איברים בחלק הרלוונטי ברשימה (החל מ-start ועד ל-finish לא כולל). אם נתקלנו באיבר שקטן מאיבר הציר, אנחנו מקדמים את a ב-1 ואז מחליפים את מי שכרגע נמצא במקום a עם האיבר במקום i (שימו לב שבהחלט עשוי לקרות בהתחלה שאיבר יוחלף <strong>עם עצמו</strong>). בסופו של דבר, אחרי שסיימנו לעבור על הרשימה, אנחנו שמים את איבר הציר במקום a+1 ומחזירים את האינדקס שלו.</p>
@@ -185,9 +200,14 @@ end</pre>
 <p>דרך אחרת לפתור את הבעיה, שנשמעת מטופשת אבל אין לזלזל בה, היא לטעון שבכלל אין בעיה. שאמנם, זמן הריצה של האלגוריתם עבור המקרה הגרוע ביותר הוא <span>$latex \Theta\left(n^{2}\right)$</span>, אבל עבור המקרה <strong>הממוצע</strong> זמן הריצה הוא מצוין. כאן נשאלת השאלה מהו המקרה ה”ממוצע”, וזה כמובן תלוי בשאלה מהו הקלט. אם, למשל, יש לנו רשימת שירים בנגנן מוזיקה שממויינת כרגע לפי אלבום ואנחנו עוברים למיין אותה לפי שם השיר, סביר להניח שתיראה “אקראית” ביחס לפרמטר הזה. לעומת זאת, ביחס לפרמטר “שם היוצר/להקה” הרשימה בוודאי לא תיראה אקראית (כי שירים ששייכים לאותו אלבום ישתייכו גם לאותה להקה, כנראה). בקיצור, זה עניין סבוך למדי להעריך מה סוג הקלטים שהולכים לטפל בו (עם זאת, בעולם האמיתי זה דבר שכדאי להתחשב בו כשבאים לבחור באיזה מיון להשתמש). אנחנו נבחר בגישה הפשוטה ונניח ש”המקרה הממוצע” הוא פשוט רשימה אקראית.</p>
 
 <p>זה מעביר אותנו לפתרון השלישי, שבמובן מסוים מכליל את השני והוא מה שאני רוצה להשתמש בו: נהפוך את מיון מהיר לאלגוריתם <strong>הסתברותי</strong>:</p>
-<pre style="font-size: 14px;" dir="ltr">def choose_pivot(list, start, finish)
-  return start + rand(finish-start)
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">choose_pivot</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">rand</span><span class="p">(</span><span class="n">finish</span><span class="o">-</span><span class="n">start</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>מה שקורה כאן הוא פשוט: במקום לבחור איבר ציר, אני מגריל אינדקס כלשהו בתוך הרשימה כדי שישמש כאיבר הציר. מה המשמעות של “הגרלה” שכזו - <a href="http://www.gadial.net/2009/04/08/random_numbers/">כתבתי על זה פוסט בשעתו</a> ואני לא ארחיב על כך כרגע. השאלה המעניינת כרגע היא איך לנתח סיבוכיות של אלגוריתם שכזה.</p>
 
 <p>ראשית, נשים לב לכך שמיו מהיר הוא דוגמה לאלגוריתם הסתברותי ש<strong>תמיד</strong> מחזיר את התוצאה הנכונה, וה”סכנה” היא שלא תמיד הוא יעשה זאת מהר. לאלגוריתם כזה קוראים <strong>אלגוריתם לאס-וגאס</strong>. סוג אחר של אלגוריתמים הסתברותיים, שנקרא <strong>אלגוריתמי מונטה-קרלו</strong>, פועל תמיד במהירות טובה אך תחת הסיכון שתהיה טעות כלשהי (<a href="http://www.gadial.net/2009/08/09/miller_rabin/">אלגוריתם מילר-רבין</a> לבדיקת ראשוניות שתיארתי בעבר בבלוג הוא דוגמה נאה לאלגוריתם מונטה-קרלו). שימו לב שאלגוריתם “הסתברותי” שאינו טועה אף פעם ותמיד רץ במהירות טובה אינו צריך להיות הסתברותי בכלל; אם כל הגרלה אפשרית נותנת תוצאות טובות, אפשר להמנע לחלוטין מביצוע ההגרלה ופשוט להשתמש תמיד בפלט אפשרי אחד של ההגרלה. לכן מלכתחילה דיונים על אלגוריתמים הסתברותיים הם מעניינים רק אם יש לנו “מה להפסיד” במקרה של הגרלה לא מוצלחת.</p>

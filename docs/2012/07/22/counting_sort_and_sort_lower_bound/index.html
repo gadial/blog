@@ -131,21 +131,26 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 <p>נעבור אל ה”כן” - קיימת הוכחה מתמטית לא מסובכת יותר מדי לפיה <strong>כל</strong> אלגוריתם מיון כללי ידרוש לפחות <span>$latex \Omega\left(n\log n\right)$</span> צעדי ריצה. מה זה אומר, “אלגוריתם כללי”? הכוונה כאן לאלגוריתם שהמידע <strong>היחיד</strong> שהוא יכול להפיק על אברי הרשימה שלו הוא מתוך השוואות של זוגות איברים. זה אומר שהאלגוריתם לא יכול להתבסס על ידע כלשהו לגבי ההתפלגויות האפשריות של האיברים ברשימה; ושהוא לא יכול לדעת שהם מספרים טבעיים או שלמים או כל דבר דומה. זו סיטואציה שאכן מתרחשת במקרים רבים בפועל, כך שהחסם התחתון הזה הוא ממשי מאוד.</p>
 
 <p>נתחיל מהמיון, שנקרא “מיון ספירה” (Counting Sort). הרעיון הוא אידיוטי לגמרי: יש לכם רשימה של מספרים טבעיים ואתם רוצים למיין אותה? תעברו עליה איבר-איבר ותספרו כמה פעמים 0 מופיע, כמה פעמים 1 מופיע, וכן הלאה. אחרי שסיימתם, תבדקו כמה פעמים 0 הופיע ותכתבו כמספר הזה פעמים 0 לפלט; אחר כך תבדקו כמה פעמים 1 הופיע ותכתבו כמספר הזה פעמים 1 לפלט, וכן הלאה. הנה כל העסק בקוד:</p>
-<pre style="font-size: 14px;" dir="ltr">def counting_sort(list)
-  max = list.max
-  values = [0] * (max + 1)
-  for a in list
-    values[a] += 1
-  end
-  pos = 0
-  for i in 0...values.length
-    for j in 0...values[i]
-      list[pos] = i
-      pos = pos + 1
-    end
-  end
-  return list
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">counting_sort</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="n">max</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">max</span>
+  <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">a</span> <span class="k">in</span> <span class="n">list</span>
+    <span class="n">values</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">end</span>
+  <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">...</span><span class="n">values</span><span class="p">.</span><span class="nf">length</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="mi">0</span><span class="o">...</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+      <span class="n">list</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+      <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="k">return</span> <span class="n">list</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>מה זמן הריצה שלנו? הלולאה הראשונית, זו שבה סופרים כמה פעמים מופיע כל מספר ברשימה, דורשת <span>$latex O\left(n\right)$</span> זמן (וכך גם מציאת המקסימום שאני מבצע בשורה הראשונה). הלולאה השניה מעניינת קצת יותר, כי היא תלויה בערך של <strong>האיבר המקסימלי</strong> ברשימה. בואו נסמן בתור <span>$latex m$</span> את הערך הזה, אז הלולאה השניה מתבצעת בזמן של <span>$latex O\left(m+n\right)$</span> (למי שלא רואה את זה, שימו לב לכך ש-<span>$latex i$</span> רץ מאפס עד <span>$latex m$</span> ואילו <span>$latex pos$</span> רץ מאפס עד <span>$latex n$</span>). לכן זמן הריצה הכולל של האלגוריתם הוא <span>$latex O\left(n+m\right)$</span>.</p>
 
 <p>זה דבר חדש: זמן ריצה של אלגוריתם שתלוי בשני פרמטרים ולא באחד. כמובן, ייתכן שהערך של <span>$latex m$</span> הוא קבוע בכל הריצות של האלגוריתם, בלי תלות בגודל הרשימה (למשל, אם הרשימה היא תמיד של מספרי זהות); במקרים כאלו נכון לומר שזמן הריצה של האלגוריתם הוא פשוט <span>$latex O\left(n\right)$</span> ו”לשכוח” מהפרמטר <span>$latex m$</span> (למרות שהוא יבוא לידי ביטוי בקבוע גדול בפונקציה שמתארת את זמן הריצה בפועל).</p>

@@ -134,34 +134,39 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>“מיון”, בעברית, משמש באופן אומלל למדי לתיאור שני דברים שונים. האחד הוא Classification - בהינתן קבוצת אובייקטים, לחלק אותם לתת-קבוצות על פי תכונה שלהם (“יונקים”, “זוחלים”, “חרקים”). זו לא הבעיה שאני מדבר עליה, אלא Sorting - בהינתן רשימה של אובייקטים שמוגדר עליהם סדר כלשהו, לסדר אותה.</p>
 
-<p>לרשימה אני אקרא <span>$latex A$</span>, ואת האיבר במקום ה-<span>$latex i$</span> ברשימה אסמן בתור <span>$latex A\left[i\right]$</span>. ההנחה היא שיש <strong>סדר</strong> על הרשימה, כלומר שלכל <span>$latex i\ne j$</span> מתקיים <span>$latex A\left[i\right]&lt;A\left[j\right]$</span> או <span>$latex A\left[j\right]&lt;A\left[i\right]$</span>. המטרה היא לסדר מחדש את הרשימה כך שיתקיים <span>$latex A\left[0\right]&lt;A\left[1\right]&lt;A\left[2\right]&lt;\dots&lt;A\left[n\right]$</span> (שימו לב שאני מתחיל את האינדקס מאפס, כפי שנהוג במדעי המחשב; יש לשיטה הזו יתרונות וחסרונות ואני בוחר בה כדי להתאים לקוד שאני אכתוב כאן).</p>
+<p>לרשימה אני אקרא <span>$latex A$</span>, ואת האיבר במקום ה-<span>$latex i$</span> ברשימה אסמן בתור <span>$latex A\left[i\right]$</span>. ההנחה היא שיש <strong>סדר</strong> על הרשימה, כלומר שלכל <span>$latex i\ne j$</span> מתקיים <span>$latex A\left[i\right]&lt;A\left[j\right]$</span> או <span>$latex A\left[j\right] &lt; A\left[i\right]$</span>. המטרה היא לסדר מחדש את הרשימה כך שיתקיים <span>$latex A\left[0\right] &lt; A\left[1\right] &lt; A\left[2\right]&lt;\dots&lt;A\left[n\right]$</span> (שימו לב שאני מתחיל את האינדקס מאפס, כפי שנהוג במדעי המחשב; יש לשיטה הזו יתרונות וחסרונות ואני בוחר בה כדי להתאים לקוד שאני אכתוב כאן).</p>
 
-<p>מהם אברי הרשימה <span>$latex A$</span>? אניח שהם מספרים שלמים, רק לצורך פשטות. באופן כללי הם יכולים להיות אובייקטים מורכבים מאוד, וההשוואה בין שניהם יכולה להיעשות בצורה מחוכמת מאוד. רוב האלגוריתמים שאציג פה לא יתעניינו בכך - כל מה שהם יצטרכו לדעת לצורך תהליך המיון זה המידע הבא: בהינתן שני איברים <span>$latex a,b$</span> האם <span>$latex a&lt;b$</span> או <span>$latex b&lt;a$</span> (או שהם שווים). יש גם אלגוריתמים שיכולים להיעזר בכך שהם יודעים משהו על סוג האיברים שממיינים, אבל דיה לצרה בשעתה.</p>
+<p>מהם אברי הרשימה <span>$latex A$</span>? אניח שהם מספרים שלמים, רק לצורך פשטות. באופן כללי הם יכולים להיות אובייקטים מורכבים מאוד, וההשוואה בין שניהם יכולה להיעשות בצורה מחוכמת מאוד. רוב האלגוריתמים שאציג פה לא יתעניינו בכך - כל מה שהם יצטרכו לדעת לצורך תהליך המיון זה המידע הבא: בהינתן שני איברים <span>$latex a,b$</span> האם <span>$latex a&lt;b$</span> או <span>$latex b &lt; a$</span> (או שהם שווים). יש גם אלגוריתמים שיכולים להיעזר בכך שהם יודעים משהו על סוג האיברים שממיינים, אבל דיה לצרה בשעתה.</p>
 
 <p>אז הנה דוגמה פשוטה. נניח ש-<span>$latex A=\left[1,4,2,3\right]$</span>. אחרי מיון נרצה לקבל <span>$latex A=\left[1,2,3,4\right]$</span>. איך אפשר לעשות זאת? השיטה הראשונה שאני מעלה על דעתי היא זו: נעבור על <span>$latex A$</span> ונמצא את האינדקס שבו נמצא האיבר הגדול ביותר. מצאנו? נחליף את האיבר הזה עם האיבר שנמצא כרגע בסוף הרשימה. עכשיו אנחנו יודעים שהאיבר בסוף הרשימה נמצא במקומו הנכון ולכן אפשר לחשוב על הסיטואציה כאילו הרשימה קטנה ב-1. נעבור מחדש על הרשימה הקטנה יותר ונמצא את האיבר המקסימלי <strong>בה</strong>, נחליף אותו עם האיבר שנמצא כרגע בסוף הרשימה (הרשימה הקטנה ב-1), וכן הלאה וכן הלאה. הנה קוד שעושה את זה:</p>
-<pre style="font-size: 14px;" dir="ltr">def selection_sort(list)
-  list.length.downto(1) do |k|
-    max_index = 0
-    for i in 1...k do
-      max_index = i if list[max_index] &lt; list[i]
-    end
-    list.swap(max_index,k-1)
-  end
-  return list
-end</pre>
+
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">selection_sort</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">length</span><span class="p">.</span><span class="nf">downto</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="o">|</span>
+    <span class="n">max_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">...</span><span class="n">k</span> <span class="k">do</span>
+      <span class="n">max_index</span> <span class="o">=</span> <span class="n">i</span> <span class="k">if</span> <span class="n">list</span><span class="p">[</span><span class="n">max_index</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">end</span>
+    <span class="n">list</span><span class="p">.</span><span class="nf">swap</span><span class="p">(</span><span class="n">max_index</span><span class="p">,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">end</span>
+  <span class="k">return</span> <span class="n">list</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>קצת על רובי, כדי שהקוד יהיה קריא בכל זאת גם למי שלא מכיר שפות תכנות בכלל:</p>
 
 <p>ברובי, def מתאר הכרזה על שם של פונקציה, כלומר קטע קוד שמקבל קלט (במקרה שלנו הקלט הוא ה-list שמופיע בסוגיים, שהוא על תפקיד ה-<span>$latex A$</span> שלנו), ובסופו של דבר מחזיר פלט (אבל יותר מעניין אותנו כאן דווקא המניפולציות שעושים על הקלט - ממיינים את list ישירות, אם כי בסוף גם מחזירים אותה). הפונקציה מסתיימת ב-end שלמטה.</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>בתוך הפונקציה יש <strong>לולאות</strong>. לולאה היא קטע קוד שחוזר על עצמו שוב ושוב; לפעמים יש משתנה מיוחד כלשהו (ה<strong>מונה</strong>) שהערך שלו משתנה בין כל הרצה של הלולאה (הרצה כזו נקראת <strong>איטרציה</strong>). כך גם אצלנו: list.length.dowto)1( do</td>
-      <td>k</td>
-      <td>זו דרך לרשום “עכשיו תעשה לולאה שהמונה שלה, שנקרא לו k מתחיל מהערך list.length (אורך הרשימה) ובכל איטרציה המונה קטן ב-1 עד שהוא מגיע ל-1 (וכשהוא מגיע ל-1 תריץ את הלולאה פעם אחת אחרונה וצא ממנה)”.</td>
-    </tr>
-  </tbody>
-</table>
+<p>בתוך הפונקציה יש <strong>לולאות</strong>. לולאה היא קטע קוד שחוזר על עצמו שוב ושוב; לפעמים יש משתנה מיוחד כלשהו (ה<strong>מונה</strong>) שהערך שלו משתנה בין כל הרצה של הלולאה (הרצה כזו נקראת <strong>איטרציה</strong>). כך גם אצלנו:</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">list</span><span class="p">.</span><span class="nf">length</span><span class="p">.</span><span class="nf">dowto</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="o">|</span></code></pre></figure>
+
+</div>
+
+<p>זו דרך לרשום “עכשיו תעשה לולאה שהמונה שלה, שנקרא לו k מתחיל מהערך list.length (אורך הרשימה) ובכל איטרציה המונה קטן ב-1 עד שהוא מגיע ל-1 (וכשהוא מגיע ל-1 תריץ את הלולאה פעם אחת אחרונה וצא ממנה)”.</p>
 
 <p>אחרי השורה הזו מגיע הגוף של הלולאה - מה שמתבצע בכל איטרציה - ומסתיים ב-end שלפני ה-return list (זו, באופן מפתיע, השורה שבה מחזירים את המערך הממויין).</p>
 
@@ -174,7 +179,11 @@ end</pre>
 <p>השורה הבאה מציבה ב-max_index את האינדקס של המספר הנוכחי שבודקים, i, אם האיבר במקום i גדול מהאיבר במקום max_index. שימו לב לסגנון הכתיבה - קודם כל ההשמה, ורק אחר כך הבדיקה. לטעמי זה משפר את הקריאות של הקוד, שמרגיש כמו שפה טבעית ויותר ברור מה הולך בו; אנשים אחרים <strong>מתעבים לחלוטין</strong> את סגנון הכתיבה הזה. לגיטימי.</p>
 
 <p>בסיום הלולאה הפנימית (ה-end שאחרי השורה של הבדיקה-והשמה) אנחנו מחליפים בין האיבר האחרון במערך כרגע (זה האיבר במקום <span>$latex k-1$</span>) ובין האיבר במקום המקסימלי, וזאת על ידי הפקודה (list.swap(max_index, k-1. לא הסברתי איך אני מבצע החלפה בין שני איברים במערך. ברובי אפשר לעשות את זה בשורה אחת:</p>
-<pre style="font-size: 14px;" dir="ltr">list[i], list[j] = list[j], list[i]</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></code></pre></figure>
+
+</div>
 <p>קטע הקוד הזה מחליף את האיברים במקומות <span>$latex i,j$</span> ברשימה. אני משתמש ב-list.swap במקום זה רק כדי לשפר את הקריאות. בפועל, בשפה ברמה יותר בסיסית מאשר רובי, צריך להשתמש במשתנה עזר כלשהו כדי לזכור את הערך שהיה באחד המקומות ברשימה לצורך ההחלפה (תרגיל נחמד: כאשר הרשימה כוללת מספרים, אפשר להחליף שני תאים בלי שום משתני עזר - איך?)</p>
 
 <p>האם האלגוריתם שלמעלה (שאני קורא לו “מיון-בחירה”, כי בוחרים בכל פעם את האיבר שצריך להיכנס לסוף הרשימה) הוא טוב או רע? ובכן, הוא פשוט מאוד להבנה, וזה טוב. אבל הוא עושה הרבה עבודה: מספר האיטרציות שלו הוא כגודל המערך, ובכל איטרציה יש לולאה פנימית, שעושה הרבה השוואות. באיטרציה הראשונה יש <span>$latex n-1$</span> השוואות (כש-<span>$latex n$</span> הוא אורך הרשימה); בשניה יש <span>$latex n-2$</span> השוואות; בשלישית יש <span>$latex n-3$</span> וכן הלאה. סך הכל <span>$latex \left(n-1\right)+\left(n-2\right)+\cdots+1=\frac{\left(n-1\right)\left(n-2\right)}{2}=\Theta\left(n^{2}\right)$</span> השוואות. בנוסף יש גם <span>$latex \Theta\left(n\right)$</span> החלפות, אבל זה פחות נורא. בסך הכל האלגוריתם הוא לא אסון אבל יש טובים ממנו שעוד נראה.</p>
@@ -186,18 +195,23 @@ end</pre>
 <p>השיטה הזו <strong>דואלית</strong> למיון בחירה במובן מסויים. במיון בחירה ידענו מראש בתחילת כל איטרציה <strong>לאן</strong> אנחנו רוצים להכניס את האיבר שאנחנו הולכים לבחור (המקסימלי) והעבודה שלנו הייתה למצוא אותו; במיון הכנסה אנחנו יודעים מראש מי האיברי שאנחנו רוצים להכניס, ונותר רק למצוא את המקום שבו נרצה להכניס אותו.</p>
 
 <p>בפועל המימוש של מיון הכנסה קצת יותר מסובך, בגלל שכדי להכניס איבר <strong>לתוך</strong> רשימה צריך “להזיז הצידה” את האיברים שבאים אחריו ברשימה. הנה הקוד:</p>
-<pre style="font-size: 14px;" dir="ltr">def insertion_sort(list)
-  for k in 1...list.length
-    new_element = list[k]
-    i = k-1
-    while i &gt;= 0 and list[i] &gt; new_element
-      list[i+1] = list[i]
-      i = i - 1
-    end
-    list[i+1] = new_element
-  end
-  return list
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">insertion_sort</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">k</span> <span class="k">in</span> <span class="mi">1</span><span class="o">...</span><span class="n">list</span><span class="p">.</span><span class="nf">length</span>
+    <span class="n">new_element</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="n">and</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">new_element</span>
+      <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+      <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">end</span>
+    <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_element</span>
+  <span class="k">end</span>
+  <span class="k">return</span> <span class="n">list</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>בתחילת ריצת האלגוריתם מתייחסים לתא 0 לבדו בתור “רשימה ממוינת” (לא חוכמה, זו רשימה של איבר אחד) ואילו כל היתר הוא מערב פרוע. לאט לאט מגדילים את האיזור הממויין על ידי כך שלוקחים את האיבר הראשון שהוא מחוץ לאיזור הממויין (האיבר במקום ה-k) ועוברים על האיזור הממויין מהסוף להתחלה תוך שאנו דוחפים קדימה את האיברים שאנו חולפים על פניהם, עד שאנו מוצאים את המקום הנכון להכניס אליו את האיבר החדש (בדיוק המקום שבו כל האיברים שחלפנו על פניהם היו גדולים מ-k והאיבר הראשון שטרם חלפנו על פניו קטן מ-k).</p>
 
 <p>ניתוח הסיבוכיות כאן יותר מסובך. ללולאה החיצונית יש n-1 איטרציות, אבל הלולאה הפנימית היא לולאה מסוג חדש - לולאת while, שממשיכה לרוץ כל עוד תנאי מסויים לא התקיים. התנאי הוא שטרם מצאנו את המקום שאליו צריך להכניס את האיבר החדש. לכל היותר זה ייקח לנו k צעדים, אבל ייתכן שזה יקח לנו גם הרבה פחות. אז מה עושים?</p>
@@ -207,14 +221,19 @@ end</pre>
 <p>מצד שני, הביצועים במקרה הגרוע ביותר הם ממש לא המדד היחיד שצריך לחשוב עליו. למיון-בחירה יש חסרון לפיו הוא <strong>תמיד</strong> ידרוש ביצוע של <span>$latex \Theta\left(n^{2}\right)$</span> השוואות; לעומת זאת מיון הכנסה עשוי לדרוש הרבה, הרבה פחות פעולות אם הקלט יהיה “נחמד” (למשל, אם הרשימה ממויינת ברובה כבר כך - סיטואציה מציאותית יחסית).</p>
 
 <p>בואו נעבור למיון פשוט נוסף - מיון בועות. השם של המיון הזה מגיע מכך שבשיטה שלו, בכל איטרציה האיבר הגדול ביותר שטרם טופל “מפעפע למעלה” למקומו במערך. השיטה פשוטה: מתחילים מהשוואה בין <span>$latex A\left[0\right]$</span> ו-<span>$latex A\left[1\right]$</span>. אם <span>$latex A\left[0\right]&lt;A\left[1\right]$</span> הכל בסדר, אבל אם <span>$latex A\left[1\right]&lt;A\left[0\right]$</span> אז מחליפים ביניהם. כעת אנו יודעים שב-<span>$latex A\left[1\right]$</span> יש את האיבר הגדול מבין שני הראשונים; משווים אותו עם <span>$latex A\left[2\right]$</span>. אם <span>$latex A\left[2\right]&lt;A\left[1\right]$</span>, מחליפים, וכעת ב-<span>$latex A\left[2\right]$</span> יש את האיבר הגדול מבין שלושת הראשונים. ממשיכים… ובסוף התהליך ב-<span>$latex A\left[n\right]$</span> יהיה את האיבר הגדול ביותר ברשימה. עכשיו אפשר להתחיל את כל הסיפור מחדש אבל לעצור ב-<span>$latex A\left[n-1\right]$</span>, וכן הלאה.</p>
-<pre style="font-size: 14px;" dir="ltr">def bubble_sort(list)
-  list.length.downto(1) do |n|
-    for i in 0...(n-1) do
-      list.swap(i,i+1) if list[i] &gt; list[i+1]
-    end
-  end
-  return list
-end</pre>
+
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">bubble_sort</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">length</span><span class="p">.</span><span class="nf">downto</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">...</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">do</span>
+      <span class="n">list</span><span class="p">.</span><span class="nf">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  <span class="k">return</span> <span class="n">list</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
 <p>האלגוריתם הזה הוא <strong>איום ונורא</strong>. הוא גם לא טריוויאלי לחלוטין להבנה מבחינה רעיונית (למרות שאחרי שמבינים, הקוד עצמו הוא פשוט מאוד), והוא גם משיג בפועל תוצאות שהן משמעותית גרועות יותר מאשר אלו של מיון הכנסה ומיון-בחירה. הסיבה לכך היא שהוא מבצע גם המון השוואות (<span>$latex \Theta\left(n^{2}\right)$</span> תמיד - למה?) וגם המון החלפות, במקרים גרועים. במקרה טוב, למשל אם המערך כבר ממוין, הוא ישיג ביצועים טובים יותר מאשר מיון-בחירה, אבל בדרך כלל הביצועים שלו יהיו גרועים משמעותית יותר מאלו של מיון-בחירה ומיון הכנסה. אל תשתמשו בו. פשוט אל.</p>
 
 <p>עד כה כל האלגוריתמים פעלו בזמן שהוא <span>$latex \Theta\left(n^{2}\right)$</span> במקרה הגרוע. הגיע הזמן לראות אלגוריתם מיון טוב, כזה שפועל בזמן <span>$latex \Theta\left(n\log n\right)$</span> ולכן משיג ביצועים טובים יותר משמעותית מכל האלגוריתמים שהצגתי. נתחיל ממיון שהוא פשוט יחסית להצגה, אבל הוא חזק מאוד (יש ספריות שמשתמשות בו בתור אלגוריתם המיון שלהן) - מיון מיזוג, שהומצא על ידי המתמטיקאי ג’ון פון-נוימן בשנת 1945 (ראשית ימי מדעי המחשב).</p>
@@ -228,39 +247,47 @@ end</pre>
 <p>איך עושים את זה? פשוט. מכינים בצד מקום לרשימה חדשה, בגודלה של הרשימה המקורית; ומתחילים לעבור בו זמנית על שתי תתי-הרשימות הממוינות. בכל צעד משווים את שני האיברים בתתי-הרשימות הממויינות שאנחנו רואים כרגע. את הקטן מבין השניים נכניס לרשימה שאנחנו בונים ונקדם את האינדקס של האיבר שאנחנו מסתכלים עליו ברשימה הזו ב-1. אם מתישהו סיימנו לעבור על אחת מהרשימות, נעתיק את כל יתר האיברים הרשימה השניה אל הרשימה שאנחנו בונים כמות שהם. הנכונות של המיזוג הזה נובעת מכך ששתי תתי-הרשימות כבר ממויינות.</p>
 
 <p>הנה הקוד של המיון:</p>
-<pre style="font-size: 14px;" dir="ltr">
-def merge_sort(list)
-  return list if list.length &lt;= 1
-  k = list.length / 2
-  list_a = merge_sort(list[0...k])
-  list_b = merge_sort(list[k...list.length])
-  return merge(list_a, list_b)
-end</pre>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">merge_sort</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">list</span> <span class="k">if</span> <span class="n">list</span><span class="p">.</span><span class="nf">length</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+  <span class="n">k</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">length</span> <span class="o">/</span> <span class="mi">2</span>
+  <span class="n">list_a</span> <span class="o">=</span> <span class="n">merge_sort</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="o">...</span><span class="n">k</span><span class="p">])</span>
+  <span class="n">list_b</span> <span class="o">=</span> <span class="n">merge_sort</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="n">k</span><span class="o">...</span><span class="n">list</span><span class="p">.</span><span class="nf">length</span><span class="p">])</span>
+  <span class="k">return</span> <span class="n">merge</span><span class="p">(</span><span class="n">list_a</span><span class="p">,</span> <span class="n">list_b</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
+
 <p>כמו שאנחנו רואים, הוא פשוט מאוד - אפילו טריוויאלי. פשוט מחלקים את הרשימות לשני חלקים באמצע (אלא אם הרשימה שלנו מכילה לכל היותר איבר אחד ואז לא עושים כלום), ממיינים כל אחת משתי הרשימות בנפרד ובסוף ממזגים. כדי להשלים את התמונה צריך להציג את האלגוריתם שממזג. כאן, למרבה הצער, הקוד יוצא טיפה מסורבל, אם כי לא נורא:</p>
-<pre style="font-size: 14px;" dir="ltr">def merge(list_a, list_b)
-  i, j = 0, 0
-  result = []
-  while i &lt; list_a.length and j &lt; list_b.length
-    if (list_a[i] &lt; list_b[j])
-      result.push(list_a[i])
-      i = i + 1
-    else
-      result.push(list_b[j])
-      j = j + 1
-    end
-  end
+<div class="code-block">
 
-  while i &lt; list_a.length
-        result.push(list_a[i])
-        i = i + 1
-  end
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">list_a</span><span class="p">,</span> <span class="n">list_b</span><span class="p">)</span>
+  <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">list_a</span><span class="p">.</span><span class="nf">length</span> <span class="n">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">list_b</span><span class="p">.</span><span class="nf">length</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">list_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">list_b</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+      <span class="n">result</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">list_a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+      <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">else</span>
+      <span class="n">result</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">list_b</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+      <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
 
-  while j &lt; list_b.length
-        result.push(list_b[j])
-        j = j + 1
-  end
-  return result
-end</pre>
+  <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">list_a</span><span class="p">.</span><span class="nf">length</span>
+        <span class="n">result</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">list_a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="k">end</span>
+
+  <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">list_b</span><span class="p">.</span><span class="nf">length</span>
+        <span class="n">result</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">list_b</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="k">end</span>
+  <span class="k">return</span> <span class="n">result</span>
+<span class="k">end</span></code></pre></figure>
+
+</div>
 <p>נשאר רק להבין מה סיבוכיות זמן הריצה של האלגוריתם הזה. ראשית כל, שימו לב שאם merge מופעל על שתי רשימות שהארוכה מביניהן היא באורך <span>$latex n$</span>, אז זמן הריצה שלו הוא <span>$latex \Theta\left(n\right)$</span> (עוברים על לכל היותר <span>$latex 2n$</span> איברים). במילים - מיזוג ניתן לבצע <strong>בזמן לינארי</strong>.</p>
 
 <p>כדי להבין כמה זמן נדרש מ-merge_sort לרוץ צריך להתאמץ טיפה יותר. הקושי כאן הוא שמדובר על אלגוריתם רקורסיבי - כזה שקורא לעצמו - ולכן צריך להתחכם קצת בניתוח. בואו נסמן את זמן הריצה של האלגוריתם ב-<span>$latex T\left(n\right)$</span>. אז ברור ש-<span>$latex T\left(1\right)=O\left(1\right)$</span> (כי על רשימה מגודל 1 האלגוריתם רק מבזבז זמן על בדיקה האם הרשימה מגודל 1 או פחות וזהו).</p>
@@ -285,7 +312,7 @@ end</pre>
 
 <p>האם אפשר לעבור מהטענה השניה לראשונה על ידי הצבת <span>$latex k=n$</span>? לא! כי <span>$latex n$</span> אינו קבוע. זכרו - אנחנו מנסים לחסום פה פונקציה של <span>$latex n$</span>. בקיצור, האינטואיציה פכמהה מסוכנת ובעייתית. משחקי <span>$latex \Theta$</span> עלולים להוביל לבעיות מסוג זה.</p>
 
-<p>הדרך להתגבר על הבעיה היא ניתוח קצת יותר זהיר. אנחנו יודעים ש-<span>$latex T\left(n\right)=2T\left(\frac{n}{2}\right)+\Theta\left(n\right)$</span>. זה אומר ש<span>$latex T\left(n\right)&lt;2T\left(\frac{n}{2}\right)+c\cdot n$</span> לכל <span>$latex n&gt;N$</span> עבור <span>$latex N,c$</span> מסויימים. יפה. עכשיו ניטרלנו (לעת עתה) את הסימונים האסימפטוטיים מהמשוואה. כדי לסיים עם זה, נשים לב לכך שעבור <span>$latex n&lt;N$</span> מתקיים <span>$latex T\left(n\right)&lt;d$</span> עבור קבוע <span>$latex d$</span> כלשהו. אם נבחר את <span>$latex c$</span> להיות גדול מספיק, ובפרט גדול יותר מ-<span>$latex d$</span>, נקבל ש-<span>$latex T\left(n\right)&lt;2T\left(\frac{n}{2}\right)+c\cdot n$</span> היא משוואה שתקפה תמיד, לכל <span>$latex n$</span>.</p>
+<p>הדרך להתגבר על הבעיה היא ניתוח קצת יותר זהיר. אנחנו יודעים ש-<span>$latex T\left(n\right)=2T\left(\frac{n}{2}\right)+\Theta\left(n\right)$</span>. זה אומר ש<span>$latex T\left(n\right)&lt;2T\left(\frac{n}{2}\right)+c\cdot n$</span> לכל <span>$latex n&gt;N$</span> עבור <span>$latex N,c$</span> מסויימים. יפה. עכשיו ניטרלנו (לעת עתה) את הסימונים האסימפטוטיים מהמשוואה. כדי לסיים עם זה, נשים לב לכך שעבור <span>$latex n&lt;N$</span> מתקיים <span>$latex T\left(n\right)&lt;d$</span> עבור קבוע <span>$latex d$</span> כלשהו. אם נבחר את <span>$latex c$</span> להיות גדול מספיק, ובפרט גדול יותר מ-<span>$latex d$</span>, נקבל ש-<span>$latex T\left(n\right) &lt; 2T\left(\frac{n}{2}\right)+c\cdot n$</span> היא משוואה שתקפה תמיד, לכל <span>$latex n$</span>.</p>
 
 <p>עכשיו אפשר לעשות את התעלול הבא:</p>
 
