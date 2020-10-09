@@ -49,7 +49,7 @@ twitter_description: "קצת מוקדם יותר החודש התבשרו על ת
 <ol> <li>(שלמות) אם {% equation %}x\in L{% endequation %} אז <strong>קיים</strong> {% equation %}\pi{% endequation %} כך ש-{% equation %}V\left(x,\pi\right)=\text{T}{% endequation %}.</li>
 
 
-<li>(נאותות) אם {% equation %}x\notin L{% endequation %} אז <strong>לכל</strong>{% equation %}\pi{% endequation %} מתקיים {% equation %}V\left(x,\pi\right)=\text{F}{% endequation %}.</li>
+<li>(נאותות) אם {% equation %}x\notin L{% endequation %} אז <strong>לכל</strong> {% equation %}\pi{% endequation %} מתקיים {% equation %}V\left(x,\pi\right)=\text{F}{% endequation %}.</li>
 
 </ol>
 
