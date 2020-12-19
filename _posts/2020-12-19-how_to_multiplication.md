@@ -14,6 +14,7 @@ tags:
 אפשר לתאר כפל ויזואלית באופן הבא: אם יש לנו {% equation %}a{% endequation %} משבצות, ואנחנו מסדרים אותן בעמודה ואז יוצרים {% equation %}b{% endequation %} עותקים של העמודה הזו, אנחנו מקבלים טבלה עם {% equation %}a\times b{% endequation %} משבצות - מספר המשבצות בטבלה של {% equation %}a{% endequation %} שורות ו-{% equation %}b{% endequation %} עמודות.
 
 <img src="{{site.baseurl}}{{site.post_images}}/2020/12/multi.png" alt=""/>
+
 נקודת המבט של הטבלה הזו נחמדה במיוחד כי אם אנחנו לוקחים את הטבלה ומסובבים אותה ב-90 מעלות, אנחנו מקבלים טבלה אחרת שבה מספרי השורות והעמודות התחלפו אבל מספר המשבצות <strong>נותר ללא שינוי</strong>, וזה עוזר לנו לקבל אינטואיציה לכך ש-{% equation %}a\times b=b\times a{% endequation %} - מה שנקרא <strong>חוק החילוף</strong> של כפל.
 
 <img src="{{site.baseurl}}{{site.post_images}}/2020/12/multi_commutative.png" alt=""/>
