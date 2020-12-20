@@ -86,7 +86,7 @@ tags:
 
 זהו, בצורה הזו לא הייתי צריך לכתוב את כל המספרים ואז לסכום אותם - עשיתי את זה "על הדרך", בעזרת שיטת הנשא. סיימנו עם הבעיה של הכפלת מספר עם מספר ספרות <strong>כלשהו</strong> במספר בן ספרה אחת. אבל מה קורה כשרוצים לכפול במספר בן שתי ספרות?
 
-בואו ננסה את מזלנו עם המכפלה {% equation %}23\times97{% endequation %}. חוק הפילוג עוזר לנו גם כאן: {% equation %}23\times97=23\times90+23\times7{% endequation %}. כלומר, אנחנו צריכים לקחת את {% equation %}23\times7{% endequation %} שאנחנו כבר יודעים לחשב, ואיכשהו להוסיף למשחק גם את {% equation %}23\times90{% endequation %}, שזה אותו דבר כמו {% equation %}23\times6{% endequation %} רק עם הזחה של צעד אחד שמאלה מראש. כלומר, מה שאני אעשה יהיה לכתוב <strong>שתי</strong> שורות ולחבר אותן: השורה הראשונה תוקדש למכפלה {% equation %}23\times7{% endequation %} והשניה תוקדש למכפלה {% equation %}23\times90{% endequation %}. קודם כל אכתוב את השורה הראשונה:
+בואו ננסה את מזלנו עם המכפלה {% equation %}23\times97{% endequation %}. חוק הפילוג עוזר לנו גם כאן: {% equation %}23\times97=23\times90+23\times7{% endequation %}. כלומר, אנחנו צריכים לקחת את {% equation %}23\times7{% endequation %} שאנחנו כבר יודעים לחשב, ואיכשהו להוסיף למשחק גם את {% equation %}23\times90{% endequation %}, שזה אותו דבר כמו {% equation %}23\times9{% endequation %} רק עם הזחה של צעד אחד שמאלה מראש. כלומר, מה שאני אעשה יהיה לכתוב <strong>שתי</strong> שורות ולחבר אותן: השורה הראשונה תוקדש למכפלה {% equation %}23\times7{% endequation %} והשניה תוקדש למכפלה {% equation %}23\times90{% endequation %}. קודם כל אכתוב את השורה הראשונה:
 
 {% equation %}\begin{array}{ccc}  & 2 & 3\\ \times & 9 & 7\\ \hline 1 & 6 & 1 \end{array}{% endequation %}
 
