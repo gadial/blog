@@ -41,12 +41,14 @@ tags:
 
 קשתות, לעומת זאת, אכן יהיו מיוצגות על ידי מערך של אובייקטים, כאשר כל אובייקט יורכב מזוג מספרים - הצמתים שאליו הם מחוברים - ואולי עוד פרטי מידע, למשל המשקל של הקשת (הרי אמרתי שאנחנו רוצים לעבוד עם גרפים ממושקלים). הנה אם כן הקוד שמגדיר את הפונקציה שמייצרת גרף חדש:
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 var Graph = function(n){
 	this.n = n;
 	this.E = new Array();
 }
-[/javascript]
+{% endhighlight %}
+</div>
 
 למי שנראה לו מוזר שאני מגדיר כאן משתנה בזמן שאני בעצם מגדיר פונקציה או משהו - כן, ברוכים הבאים ל-Javascript, זה הדבר הכי מוזר שכנראה תראו פה, אז פשוט תתעלמו. העיקר שאמור לעניין אותנו פה הוא שאני קולט <strong>מראש</strong> את מספר הצמתים בגרף - {% equation %}n{% endequation %} - ואני לא הולך לאפשר לשנות אותו בהמשך כי אין בכך צורך עבור הגרפים שלי. הקשתות, לעומת זאת, מתחילות בתור רשימה ריקה.
 
@@ -54,23 +56,26 @@ var Graph = function(n){
 
 עכשיו אני הולך להוסיף כמה פונקציות לגרף שאפשר להפעיל אותן, בהינתן גרף, על ידי כתיבת השם שלו, נקודה, ואז את שם הפונקציה, והפונקציה מקבלת את הגרף אוטומטית כפרמטר בשם this. לפונקציות כאלו קוראים <strong>מתודות</strong> של הגרף. בגלל הגישה המוזרה של Javascript לעניינים הללו, כל הפונקציות שאגדיר בהמשך נמצאות בין הסוגרים המסולסלים בקטע הקוד הבא:
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 Graph.prototype = {
 ...
 }
-[/javascript]
+{% endhighlight %}
+</div>
 
 (שלוש הנקודות הן לא קוד - הן "כל הפונקציות").
 
 בואו נתחיל עם פונקציה שמוסיפה קשת לגרף. כאן כבר יש לנו "בעיה", כי קשת מוגדרת על ידי זוג הקודקודים שהיא מחוברת אליהם, אבל הגרף לא מכוון, אז הקשת {% equation %}(3,5){% endequation %} היא אותו דבר כמו {% equation %}(5,3){% endequation %}. אז יש בדיקות מפורשות עבור זה ועבור עוד דברים:
 
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 add_edge: function(a,b,w){
-		if (a &gt;= this.n || b &gt;= this.n){
+		if (a >= this.n || b >= this.n){
 			return;
 		}
-		if (a &gt; b){
+		if (a > b){
 			this.add_edge(b,a,w);
 			return;
 		}
@@ -85,47 +90,55 @@ add_edge: function(a,b,w){
 		this.E.push(e)
 		return this;
 	},
-[/javascript]
+{% endhighlight %}
+</div>
 
 הפרמטר w הוא המשקל של הקשת - אם הוא לא ניתן כקלט, נותנים לקשת אוטומטית את המשקל אינסוף (היי, מגניב! ב-Javascript אינסוף הוא כבר חלק מתוך השפה! אפילו ברובי זה לא ככה! רגע, בעצם בגרסה 1.9.2 של רובי כבר יש, נו טוב, רובי מנצחת שוב!)
 
 אתם בטח תוהים מה זה has_edge - ובכן, זו עוד מתודה מתבקשת:
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 has_edge: function(a,b){
 		result = false;
 		this.each_edge(function(e){if ((e[0] == a &amp;&amp; e[1] == b) || (e[1] == a &amp;&amp; e[0] == b)) result = true;})
 		return result;
 	},
-[/javascript]
+{% endhighlight %}
+</div>
 
 המימוש פה הוא הכי נאיבי שאפשר - עוברים כל כל הקשתות ובודקים האם מצאנו את זו שאנחנו מחפשים. בשביל לעבור על כל הקשתות אני משתמש ב-each_edge שגם היא מתודה שכתבתי שפשוט עוברת קשת-קשת ומפעילה על כל קשת פונקציה שהועברה כפרמטר:
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 each_edge: function(f){
-		for (var i = 0; i &lt; this.E.length; i++){
+		for (var i = 0; i < this.E.length; i++){
 			f(this.E[i]);
 		}
 	},
-[/javascript]
+{% endhighlight %}
+</div>
 
 ואם אני לא רוצה סתם לבדוק אם קשת קיימת אלא ממש למצוא ולהחזיר אותה?
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 find_edge: function(a,b){
-		for (var i = 0; i &lt; this.E.length; i++){
+		for (var i = 0; i < this.E.length; i++){
 			var e = this.E[i];
 			if ((e[0] == a &amp;&amp; e[1] == b) || (e[1] == a &amp;&amp; e[0] == b))
 				return e;
 		}
 		return null;
 	},
-[/javascript]
+{% endhighlight %}
+</div>
 
 בהמשך אצטרך גם להסיר קשתות. האופן שבו מסירים איברים ממערך היא באמצעות הפונקציה splice שיש לה שם קצת מבלבל, אבל עושה כאן את מה שאנחנו מצפים שתעשה:
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 remove_edge: function(a,b){
-		for (var i = 0; i &lt; this.E.length; i++){
+		for (var i = 0; i < this.E.length; i++){
 			var e = this.E[i];
 			if ((e[0] == a &amp;&amp; e[1] == b) || (e[0] == b &amp;&amp; e[1] == a)){
 				this.E.splice(i,1);
@@ -133,52 +146,58 @@ remove_edge: function(a,b){
 			}
 		}
 	},
-[/javascript]
+{% endhighlight %}
+</div>
 
 וזהו זה לעת עתה. הקוד הזה בוודאי לא כתוב בצורה אופטימלית ויש כמה שכפולי קוד מעצבנים, אבל זה חלק מהמשחק - נסו לחשוב איך הייתם משפרים אותו.
 
 עכשיו, איך נחבר את זה עם מבוכים? ובכן, בואו ניצור אובייקט חדש של מבוך:
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 var Maze = {
 ...
 }
-[/javascript]
+{% endhighlight %}
+</div>
 
 שימו לב שאני יוצר את אובייקט המבוך הזה בצורה שונה מזו שבה יצרתי את האובייקט עבור גרף - הסיבה לכך היא שבקוד הנוכחי שלי אני לא הולך להניח שקיים יותר ממבוך אחד בו זמנית, ולכן מספיק שיהיה לי משתנה אחד שקוראים לו "מבוך", לעומת גרף שרציתי את האפשרות ליצור כמה עותקים שונים ממנו. שוב - אלו לא פרטים טכניים שחשוב להתעמק בהם כאן.
 
 עכשיו לפונקציה שיוצרת מבוך חדש, עם כל הקירות בפנים, ובונה גם את הגרף המתאים:
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 generate_raw: function(height, width){
 		this.G = new Graph(height*width);
 		this.height = height;
 		this.width = width;
 		this.cells = new Array();
-		for (var y = 0 ; y &lt; height; y++){
-			for (var x = 0; x &lt; width; x++){
+		for (var y = 0 ; y < height; y++){
+			for (var x = 0; x < width; x++){
 				this.cells.push([x,y]);
 			}
 		}
-		for (var y = 0 ; y &lt; height; y++){
-			for (var x = 0; x &lt; width; x++){
-				if (x &gt; 0){
+		for (var y = 0 ; y < height; y++){
+			for (var x = 0; x < width; x++){
+				if (x > 0){
 					this.G.add_edge(this.cell_index([x,y]),this.cell_index([x-1,y]),Math.random());
 				}
-				if (y &gt; 0){
+				if (y > 0){
 					this.G.add_edge(this.cell_index([x,y]),this.cell_index([x,y-1]),Math.random());
 				}
 			}
 		}
 	},
-[/javascript]
+{% endhighlight %}
+</div>
 
 אז מה אני עושה כאן? יוצר גרף חדש שמספר הצמתים בו הוא כמספר התאים במבוך. כמו כן אני יוצר בתוך האובייקט של המבוך מערך שמטרתו להכיל את התאים עצמם, ודוחף אליו את כל התאים (תא הוא זוג קואורדינטות - גובה ואורך). כעת יש לי התאמה בין התאים במבוך ובין הצמתים של הגרף - המספר של הצומת בתוך הגרף הוא האינדקס שלו בתוך מערך התאים.
 
 החל משורה 11 אני מוסיף קשתות לגרף: לכל תא במבוך, אם יש תא מעליו אני מוסיף קשת שמתארת את הקיר ביניהם, ואם יש תא משמאלו אני מוסיף קשת שמתארת את הקיר ביניהם. לכל הקשתות אני נותן משקל אקראי בין 0 ל-1 (זה מה ש-Math.random מחזירה).
 
 הורדה של קיר היא דבר קל - פשוט מסירים את הקשת המתאימה. בדומה, אני גם רוצה לאפשר צביעה של קירות בצבעים שונים (זה יהיה מועיל בהמשך) וגם זה מתבצע על ידי שינוי של הקשת המתאימה:
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 remove_wall: function(a,b){
 		this.G.remove_edge(Maze.cell_index(a),Maze.cell_index(b));
 	},
@@ -187,33 +206,37 @@ remove_wall: function(a,b){
 		e = Maze.G.find_edge(a,b);
 		e.color = color;
 	},
-[/javascript]
+{% endhighlight %}
+</div>
 
 ועכשיו בואו נעבור לציור של המבוך. כדי לצייר דברים ב-Javascript נהוג בימינו להשתמש במשהו שנקרא Canvas, שהוא אלמנט שיכול להופיע בתוך ה-HTML של העמוד - זה אחד מהשכלולים של HTML5. אני אניח שכבר יש אובייקט בשם Game שמטרתו לנהל את העניינים ובין היתר כבר העתיק לעצמו את אובייקט ה-Canvas שעליו צריך לצייר את המבוך. הציור ל-Canvas הזה נעשה דרך אובייקט של ה-Canvas שנקרא Context, ואני מניח שגם אותו כבר יש. זה מוביל אותנו למתודה הבאה:
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 draw: function(){
 		Game.context.clearRect(0,0,Game.canvas.width, Game.canvas.height);
-		for (var i = 0; i &lt; this.G.E.length; i++){
+		for (var i = 0; i < this.G.E.length; i++){
 			var e = this.G.E[i];
 			var a = this.cells[e[0]];
 			var b = this.cells[e[1]];
 			this.draw_wall(a,b, e.color);
 		}
-		for (var x = 0; x &lt; this.width; x++){
+		for (var x = 0; x < this.width; x++){
 			this.draw_wall([x,0],[x,-1]);
 			if (x != this.width-1)
 				this.draw_wall([x,this.height-1],[x,this.height]);
 		}
-		for (var y = 0; y &lt; this.height; y++){
+		for (var y = 0; y < this.height; y++){
 			this.draw_wall([0,y],[-1,y]);
 			this.draw_wall([this.width-1,y],[this.width,y]);
 		}
 	}
-[/javascript]
+{% endhighlight %}
+</div>
 
 כרגע כל מה שאני עושה הוא למחוק את התוכן הנוכחי של ה-Canvas ולהריץ שלוש לולאות. שתי האחרונות מציירות את הקירות שסביב המבוך, למעט הפינה הימנית-תחתונה שנותרת פרוצה ("כניסה" למבוך); הלולאה הראשונה היא מה שמצייר את הקירות הפנימיים, על פי הקשתות שיש כרגע בגרף. אבל כל עוד לא הראיתי את המימוש של draw_wall בעצם לא עשיתי כלום, אז הנה המימוש שהוא טיפה טכני ולא חייבים להבין את פרטיו:
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 draw_wall: function(a,b,color){
 		if (a == undefined || b == undefined || (Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1])) != 1){
 		 return;
@@ -230,17 +253,21 @@ draw_wall: function(a,b,color){
 			Game.context.fillRect(x-WALL_WIDTH,y-WALL_WIDTH,SQUARE_SIZE+2*WALL_WIDTH, WALL_WIDTH);
 		}
 	},
-[/javascript]
+{% endhighlight %}
+</div>
 
 כאן WALL_WIDTH ו-SQUARE_SIZE הם קבועים שנתתי להם ערכים קודם:
 
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 var SQUARE_SIZE = 20;
 var WALL_WIDTH = 3;
-[/javascript]
+{% endhighlight %}
+</div>
 
 לסיום, הנה האובייקט של המשחק שהוא קטן ופשוט יחסית כרגע:
-[javascript]
+<div class="code-block">
+{% highlight javascript %}
 var Game = {
 	start: function(){
 		Game.canvas = document.getElementById(&quot;canvas&quot;);
@@ -250,15 +277,16 @@ var Game = {
 		Maze.draw();
 	}
 }
-[/javascript]
+{% endhighlight %}
+</div>
 
 והנה ה-HTML שבו הולכים להשתמש בכל זה:
 [html]
-&lt;input type=&quot;range&quot; min=&quot;2&quot; max=&quot;20&quot; id=&quot;maze_size&quot;&gt;
-		&lt;input type=&quot;button&quot; value=&quot;ייצר!&quot; onclick=&quot;Game.start()&quot; /&gt;
-		&lt;br /&gt;
-		&lt;canvas id=&quot;canvas&quot; width=&quot;600&quot; height=&quot;600&quot;&gt;
-		&lt;/canvas&gt;
+<input type=&quot;range&quot; min=&quot;2&quot; max=&quot;20&quot; id=&quot;maze_size&quot;>
+		<input type=&quot;button&quot; value=&quot;ייצר!&quot; onclick=&quot;Game.start()&quot; />
+		<br />
+		<canvas id=&quot;canvas&quot; width=&quot;600&quot; height=&quot;600&quot;>
+		</canvas>
 [/html]
 
 וזהו זה. עכשיו בואו נראה איך זה עובד בפועל אצלנו:

@@ -152,12 +152,14 @@ if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNo
 
 <p>קשתות, לעומת זאת, אכן יהיו מיוצגות על ידי מערך של אובייקטים, כאשר כל אובייקט יורכב מזוג מספרים - הצמתים שאליו הם מחוברים - ואולי עוד פרטי מידע, למשל המשקל של הקשת (הרי אמרתי שאנחנו רוצים לעבוד עם גרפים ממושקלים). הנה אם כן הקוד שמגדיר את הפונקציה שמייצרת גרף חדש:</p>
 
-<p>[javascript]
-var Graph = function(n){
-	this.n = n;
-	this.E = new Array();
-}
-[/javascript]</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">Graph</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">n</span> <span class="o">=</span> <span class="nx">n</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">E</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
+
+</div>
 
 <p>למי שנראה לו מוזר שאני מגדיר כאן משתנה בזמן שאני בעצם מגדיר פונקציה או משהו - כן, ברוכים הבאים ל-Javascript, זה הדבר הכי מוזר שכנראה תראו פה, אז פשוט תתעלמו. העיקר שאמור לעניין אותנו פה הוא שאני קולט <strong>מראש</strong> את מספר הצמתים בגרף - <span>$latex n$</span> - ואני לא הולך לאפשר לשנות אותו בהמשך כי אין בכך צורך עבור הגרפים שלי. הקשתות, לעומת זאת, מתחילות בתור רשימה ריקה.</p>
 
@@ -165,208 +167,234 @@ var Graph = function(n){
 
 <p>עכשיו אני הולך להוסיף כמה פונקציות לגרף שאפשר להפעיל אותן, בהינתן גרף, על ידי כתיבת השם שלו, נקודה, ואז את שם הפונקציה, והפונקציה מקבלת את הגרף אוטומטית כפרמטר בשם this. לפונקציות כאלו קוראים <strong>מתודות</strong> של הגרף. בגלל הגישה המוזרה של Javascript לעניינים הללו, כל הפונקציות שאגדיר בהמשך נמצאות בין הסוגרים המסולסלים בקטע הקוד הבא:</p>
 
-<p>[javascript]
-Graph.prototype = {
-…
-}
-[/javascript]</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">Graph</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+<span class="p">...</span>
+<span class="p">}</span></code></pre></figure>
+
+</div>
 
 <p>(שלוש הנקודות הן לא קוד - הן “כל הפונקציות”).</p>
 
 <p>בואו נתחיל עם פונקציה שמוסיפה קשת לגרף. כאן כבר יש לנו “בעיה”, כי קשת מוגדרת על ידי זוג הקודקודים שהיא מחוברת אליהם, אבל הגרף לא מכוון, אז הקשת <span>$latex (3,5)$</span> היא אותו דבר כמו <span>$latex (5,3)$</span>. אז יש בדיקות מפורשות עבור זה ועבור עוד דברים:</p>
 
-<p>[javascript]
-add_edge: function(a,b,w){
-		if (a &gt;= this.n || b &gt;= this.n){
-			return;
-		}
-		if (a &gt; b){
-			this.add_edge(b,a,w);
-			return;
-		}
-		if (this.has_edge(a,b)){
-			return;
-		}
-		var e = [a,b];
-		if (‘undefined’ === typeof w){
-			w = Infinity;
-		}
-		e.w = w;
-		this.E.push(e)
-		return this;
-	},
-[/javascript]</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">add_edge</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">w</span><span class="p">){</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">&gt;=</span> <span class="k">this</span><span class="p">.</span><span class="nx">n</span> <span class="o">||</span> <span class="nx">b</span> <span class="o">&gt;=</span> <span class="k">this</span><span class="p">.</span><span class="nx">n</span><span class="p">){</span>
+			<span class="k">return</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">&gt;</span> <span class="nx">b</span><span class="p">){</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">add_edge</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">w</span><span class="p">);</span>
+			<span class="k">return</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">has_edge</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)){</span>
+			<span class="k">return</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="p">[</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">];</span>
+		<span class="k">if</span> <span class="p">(</span><span class="dl">'</span><span class="s1">undefined</span><span class="dl">'</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">){</span>
+			<span class="nx">w</span> <span class="o">=</span> <span class="kc">Infinity</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="nx">e</span><span class="p">.</span><span class="nx">w</span> <span class="o">=</span> <span class="nx">w</span><span class="p">;</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+	<span class="p">},</span></code></pre></figure>
+
+</div>
 
 <p>הפרמטר w הוא המשקל של הקשת - אם הוא לא ניתן כקלט, נותנים לקשת אוטומטית את המשקל אינסוף (היי, מגניב! ב-Javascript אינסוף הוא כבר חלק מתוך השפה! אפילו ברובי זה לא ככה! רגע, בעצם בגרסה 1.9.2 של רובי כבר יש, נו טוב, רובי מנצחת שוב!)</p>
 
 <p>אתם בטח תוהים מה זה has_edge - ובכן, זו עוד מתודה מתבקשת:</p>
 
-<p>[javascript]
-has_edge: function(a,b){
-		result = false;
-		this.each_edge(function(e){if ((e[0] == a &amp;&amp; e[1] == b) || (e[1] == a &amp;&amp; e[0] == b)) result = true;})
-		return result;
-	},
-[/javascript]</p>
+<div class="code-block">
 
-<p>המימוש פה הוא הכי נאיבי שאפשר - עוברים כל כל הקשתות ובודקים האם מצאנו את זו שאנחנו מחפשים. בשביל לעבור על כל הקשתות אני משתמש ב-each_edge שגם היא מתודה שכתבתי שפשוט עוברת קשת-קשת ומפעילה על כל קשת פונקציה שהועברה כפרמטר:
-[javascript]
-each_edge: function(f){
-		for (var i = 0; i &lt; this.E.length; i++){
-			f(this.E[i]);
-		}
-	},
-[/javascript]</p>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">has_edge</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+		<span class="nx">result</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">each_edge</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span><span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nx">a</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nx">b</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nx">a</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nx">b</span><span class="p">))</span> <span class="nx">result</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;})</span>
+		<span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+	<span class="p">},</span></code></pre></figure>
+
+</div>
+
+<p>המימוש פה הוא הכי נאיבי שאפשר - עוברים כל כל הקשתות ובודקים האם מצאנו את זו שאנחנו מחפשים. בשביל לעבור על כל הקשתות אני משתמש ב-each_edge שגם היא מתודה שכתבתי שפשוט עוברת קשת-קשת ומפעילה על כל קשת פונקציה שהועברה כפרמטר:</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">each_edge</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+			<span class="nx">f</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+		<span class="p">}</span>
+	<span class="p">},</span></code></pre></figure>
+
+</div>
 
 <p>ואם אני לא רוצה סתם לבדוק אם קשת קיימת אלא ממש למצוא ולהחזיר אותה?</p>
 
-<p>[javascript]
-find_edge: function(a,b){
-		for (var i = 0; i &lt; this.E.length; i++){
-			var e = this.E[i];
-			if ((e[0] == a &amp;&amp; e[1] == b) || (e[1] == a &amp;&amp; e[0] == b))
-				return e;
-		}
-		return null;
-	},
-[/javascript]</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">find_edge</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+			<span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+			<span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nx">a</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nx">b</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nx">a</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nx">b</span><span class="p">))</span>
+				<span class="k">return</span> <span class="nx">e</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+	<span class="p">},</span></code></pre></figure>
+
+</div>
 
 <p>בהמשך אצטרך גם להסיר קשתות. האופן שבו מסירים איברים ממערך היא באמצעות הפונקציה splice שיש לה שם קצת מבלבל, אבל עושה כאן את מה שאנחנו מצפים שתעשה:</p>
 
-<p>[javascript]
-remove_edge: function(a,b){
-		for (var i = 0; i &lt; this.E.length; i++){
-			var e = this.E[i];
-			if ((e[0] == a &amp;&amp; e[1] == b) || (e[0] == b &amp;&amp; e[1] == a)){
-				this.E.splice(i,1);
-				return;
-			}
-		}
-	},
-[/javascript]</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">remove_edge</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+			<span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+			<span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nx">a</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nx">b</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nx">b</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nx">a</span><span class="p">)){</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+				<span class="k">return</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">},</span></code></pre></figure>
+
+</div>
 
 <p>וזהו זה לעת עתה. הקוד הזה בוודאי לא כתוב בצורה אופטימלית ויש כמה שכפולי קוד מעצבנים, אבל זה חלק מהמשחק - נסו לחשוב איך הייתם משפרים אותו.</p>
 
 <p>עכשיו, איך נחבר את זה עם מבוכים? ובכן, בואו ניצור אובייקט חדש של מבוך:</p>
 
-<p>[javascript]
-var Maze = {
-…
-}
-[/javascript]</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">Maze</span> <span class="o">=</span> <span class="p">{</span>
+<span class="p">...</span>
+<span class="p">}</span></code></pre></figure>
+
+</div>
 
 <p>שימו לב שאני יוצר את אובייקט המבוך הזה בצורה שונה מזו שבה יצרתי את האובייקט עבור גרף - הסיבה לכך היא שבקוד הנוכחי שלי אני לא הולך להניח שקיים יותר ממבוך אחד בו זמנית, ולכן מספיק שיהיה לי משתנה אחד שקוראים לו “מבוך”, לעומת גרף שרציתי את האפשרות ליצור כמה עותקים שונים ממנו. שוב - אלו לא פרטים טכניים שחשוב להתעמק בהם כאן.</p>
 
 <p>עכשיו לפונקציה שיוצרת מבוך חדש, עם כל הקירות בפנים, ובונה גם את הגרף המתאים:</p>
 
-<p>[javascript]
-generate_raw: function(height, width){
-		this.G = new Graph(height*width);
-		this.height = height;
-		this.width = width;
-		this.cells = new Array();
-		for (var y = 0 ; y &lt; height; y++){
-			for (var x = 0; x &lt; width; x++){
-				this.cells.push([x,y]);
-			}
-		}
-		for (var y = 0 ; y &lt; height; y++){
-			for (var x = 0; x &lt; width; x++){
-				if (x &gt; 0){
-					this.G.add_edge(this.cell_index([x,y]),this.cell_index([x-1,y]),Math.random());
-				}
-				if (y &gt; 0){
-					this.G.add_edge(this.cell_index([x,y]),this.cell_index([x,y-1]),Math.random());
-				}
-			}
-		}
-	},
-[/javascript]</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">generate_raw</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">height</span><span class="p">,</span> <span class="nx">width</span><span class="p">){</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">G</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Graph</span><span class="p">(</span><span class="nx">height</span><span class="o">*</span><span class="nx">width</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">height</span><span class="p">;</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span><span class="p">;</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">cells</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">height</span><span class="p">;</span> <span class="nx">y</span><span class="o">++</span><span class="p">){</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">width</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">){</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">cells</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">]);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">height</span><span class="p">;</span> <span class="nx">y</span><span class="o">++</span><span class="p">){</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">width</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">){</span>
+				<span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">add_edge</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">]),</span><span class="k">this</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">([</span><span class="nx">x</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nx">y</span><span class="p">]),</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">());</span>
+				<span class="p">}</span>
+				<span class="k">if</span> <span class="p">(</span><span class="nx">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">add_edge</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">]),</span><span class="k">this</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">());</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">},</span></code></pre></figure>
+
+</div>
 
 <p>אז מה אני עושה כאן? יוצר גרף חדש שמספר הצמתים בו הוא כמספר התאים במבוך. כמו כן אני יוצר בתוך האובייקט של המבוך מערך שמטרתו להכיל את התאים עצמם, ודוחף אליו את כל התאים (תא הוא זוג קואורדינטות - גובה ואורך). כעת יש לי התאמה בין התאים במבוך ובין הצמתים של הגרף - המספר של הצומת בתוך הגרף הוא האינדקס שלו בתוך מערך התאים.</p>
 
 <p>החל משורה 11 אני מוסיף קשתות לגרף: לכל תא במבוך, אם יש תא מעליו אני מוסיף קשת שמתארת את הקיר ביניהם, ואם יש תא משמאלו אני מוסיף קשת שמתארת את הקיר ביניהם. לכל הקשתות אני נותן משקל אקראי בין 0 ל-1 (זה מה ש-Math.random מחזירה).</p>
 
-<p>הורדה של קיר היא דבר קל - פשוט מסירים את הקשת המתאימה. בדומה, אני גם רוצה לאפשר צביעה של קירות בצבעים שונים (זה יהיה מועיל בהמשך) וגם זה מתבצע על ידי שינוי של הקשת המתאימה:
-[javascript]
-remove_wall: function(a,b){
-		this.G.remove_edge(Maze.cell_index(a),Maze.cell_index(b));
-	},</p>
+<p>הורדה של קיר היא דבר קל - פשוט מסירים את הקשת המתאימה. בדומה, אני גם רוצה לאפשר צביעה של קירות בצבעים שונים (זה יהיה מועיל בהמשך) וגם זה מתבצע על ידי שינוי של הקשת המתאימה:</p>
+<div class="code-block">
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set_wall_color: function(a,b,color){
-	e = Maze.G.find_edge(a,b);
-	e.color = color;
-}, [/javascript]
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">remove_wall</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">remove_edge</span><span class="p">(</span><span class="nx">Maze</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span><span class="nx">Maze</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">(</span><span class="nx">b</span><span class="p">));</span>
+	<span class="p">},</span>
+
+	<span class="nx">set_wall_color</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">color</span><span class="p">){</span>
+		<span class="nx">e</span> <span class="o">=</span> <span class="nx">Maze</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">find_edge</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">);</span>
+		<span class="nx">e</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="nx">color</span><span class="p">;</span>
+	<span class="p">},</span></code></pre></figure>
+
+</div>
 
 <p>ועכשיו בואו נעבור לציור של המבוך. כדי לצייר דברים ב-Javascript נהוג בימינו להשתמש במשהו שנקרא Canvas, שהוא אלמנט שיכול להופיע בתוך ה-HTML של העמוד - זה אחד מהשכלולים של HTML5. אני אניח שכבר יש אובייקט בשם Game שמטרתו לנהל את העניינים ובין היתר כבר העתיק לעצמו את אובייקט ה-Canvas שעליו צריך לצייר את המבוך. הציור ל-Canvas הזה נעשה דרך אובייקט של ה-Canvas שנקרא Context, ואני מניח שגם אותו כבר יש. זה מוביל אותנו למתודה הבאה:</p>
 
-<p>[javascript]
-draw: function(){
-		Game.context.clearRect(0,0,Game.canvas.width, Game.canvas.height);
-		for (var i = 0; i &lt; this.G.E.length; i++){
-			var e = this.G.E[i];
-			var a = this.cells[e[0]];
-			var b = this.cells[e[1]];
-			this.draw_wall(a,b, e.color);
-		}
-		for (var x = 0; x &lt; this.width; x++){
-			this.draw_wall([x,0],[x,-1]);
-			if (x != this.width-1)
-				this.draw_wall([x,this.height-1],[x,this.height]);
-		}
-		for (var y = 0; y &lt; this.height; y++){
-			this.draw_wall([0,y],[-1,y]);
-			this.draw_wall([this.width-1,y],[this.width,y]);
-		}
-	}
-[/javascript]</p>
+<div class="code-block">
 
-<p>כרגע כל מה שאני עושה הוא למחוק את התוכן הנוכחי של ה-Canvas ולהריץ שלוש לולאות. שתי האחרונות מציירות את הקירות שסביב המבוך, למעט הפינה הימנית-תחתונה שנותרת פרוצה (“כניסה” למבוך); הלולאה הראשונה היא מה שמצייר את הקירות הפנימיים, על פי הקשתות שיש כרגע בגרף. אבל כל עוד לא הראיתי את המימוש של draw_wall בעצם לא עשיתי כלום, אז הנה המימוש שהוא טיפה טכני ולא חייבים להבין את פרטיו:
-[javascript]
-draw_wall: function(a,b,color){
-		if (a == undefined || b == undefined || (Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1])) != 1){
-		 return;
-		}
-		color = color || ‘#000000’;
-		Game.context.strokeStyle = color;
-		Game.context.fillStyle = color;
-		var x = WALL_WIDTH + Math.max(a[0],b[0])<em>(SQUARE_SIZE + WALL_WIDTH);
-		var y = WALL_WIDTH + Math.max(a[1],b[1])</em>(SQUARE_SIZE + WALL_WIDTH);
-		if (a[0] != b[0]){ //vertical wall
-			Game.context.fillRect(x-WALL_WIDTH,y-WALL_WIDTH,WALL_WIDTH,SQUARE_SIZE+2<em>WALL_WIDTH);
-		}
-		if (a[1] != b[1]) { //horizontal wall
-			Game.context.fillRect(x-WALL_WIDTH,y-WALL_WIDTH,SQUARE_SIZE+2</em>WALL_WIDTH, WALL_WIDTH);
-		}
-	},
-[/javascript]</p>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">draw</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">Game</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">Game</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+			<span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">E</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+			<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cells</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]];</span>
+			<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cells</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]];</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">){</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="nx">x</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">!=</span> <span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="nx">x</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="p">]);</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span> <span class="nx">y</span><span class="o">++</span><span class="p">){</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="nx">y</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nx">y</span><span class="p">]);</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nx">y</span><span class="p">],[</span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span><span class="nx">y</span><span class="p">]);</span>
+		<span class="p">}</span>
+	<span class="p">}</span></code></pre></figure>
+
+</div>
+
+<p>כרגע כל מה שאני עושה הוא למחוק את התוכן הנוכחי של ה-Canvas ולהריץ שלוש לולאות. שתי האחרונות מציירות את הקירות שסביב המבוך, למעט הפינה הימנית-תחתונה שנותרת פרוצה (“כניסה” למבוך); הלולאה הראשונה היא מה שמצייר את הקירות הפנימיים, על פי הקשתות שיש כרגע בגרף. אבל כל עוד לא הראיתי את המימוש של draw_wall בעצם לא עשיתי כלום, אז הנה המימוש שהוא טיפה טכני ולא חייבים להבין את פרטיו:</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">draw_wall</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">color</span><span class="p">){</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">==</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">b</span> <span class="o">==</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="nx">b</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="nx">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">){</span>
+		 <span class="k">return</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="nx">color</span> <span class="o">=</span> <span class="nx">color</span> <span class="o">||</span> <span class="dl">'</span><span class="s1">#000000</span><span class="dl">'</span><span class="p">;</span>
+		<span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="nx">color</span><span class="p">;</span>
+		<span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">color</span><span class="p">;</span>
+		<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">WALL_WIDTH</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nx">b</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="nx">SQUARE_SIZE</span> <span class="o">+</span> <span class="nx">WALL_WIDTH</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">WALL_WIDTH</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="nx">b</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="nx">SQUARE_SIZE</span> <span class="o">+</span> <span class="nx">WALL_WIDTH</span><span class="p">);</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]){</span> <span class="c1">//vertical wall</span>
+			<span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">x</span><span class="o">-</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">y</span><span class="o">-</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">SQUARE_SIZE</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="nx">WALL_WIDTH</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">b</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="c1">//horizontal wall</span>
+			<span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">x</span><span class="o">-</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">y</span><span class="o">-</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">SQUARE_SIZE</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="nx">WALL_WIDTH</span><span class="p">,</span> <span class="nx">WALL_WIDTH</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">},</span></code></pre></figure>
+
+</div>
 
 <p>כאן WALL_WIDTH ו-SQUARE_SIZE הם קבועים שנתתי להם ערכים קודם:</p>
 
-<p>[javascript]
-var SQUARE_SIZE = 20;
-var WALL_WIDTH = 3;
-[/javascript]</p>
+<div class="code-block">
 
-<p>לסיום, הנה האובייקט של המשחק שהוא קטן ופשוט יחסית כרגע:
-[javascript]
-var Game = {
-	start: function(){
-		Game.canvas = document.getElementById("canvas");
-		Game.context = canvas.getContext(‘2d’);
-		var size = parseInt(document.getElementById("maze_size").value);
-		Maze.generate_raw(size, size);
-		Maze.draw();
-	}
-}
-[/javascript]</p>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">SQUARE_SIZE</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">WALL_WIDTH</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span></code></pre></figure>
+
+</div>
+
+<p>לסיום, הנה האובייקט של המשחק שהוא קטן ופשוט יחסית כרגע:</p>
+<div class="code-block">
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">Game</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="na">start</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="nx">Game</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">canvas</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;);</span>
+		<span class="nx">Game</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">size</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">maze_size</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;).</span><span class="nx">value</span><span class="p">);</span>
+		<span class="nx">Maze</span><span class="p">.</span><span class="nx">generate_raw</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span> <span class="nx">size</span><span class="p">);</span>
+		<span class="nx">Maze</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+</div>
 
 <p>והנה ה-HTML שבו הולכים להשתמש בכל זה:
 [html]
 &lt;input type="range" min="2" max="20" id="maze_size"&gt;
 		&lt;input type="button" value="ייצר!" onclick="Game.start()" /&gt;
-		&lt;br /&gt;
+		<br />
 		&lt;canvas id="canvas" width="600" height="600"&gt;
 		&lt;/canvas&gt;
 [/html]</p>
