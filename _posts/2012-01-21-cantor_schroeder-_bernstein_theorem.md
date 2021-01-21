@@ -28,7 +28,7 @@ tags:
 
 אם כן, בואו נסמן {% equation %}C_{0}=A\backslash g\left(B\right)=\left\{ a\in A|a\notin g\left(B\right)\right\} {% endequation %} (ה-0 בא לרמז שעוד מעט נגדיר עוד קבוצות כאלו) . זו קבוצת כל ה"דחויים" - כל אלו שלא נבחרו על ידי איבר מ-{% equation %}B{% endequation %} באמצעות {% equation %}g{% endequation %}. מה אפשר לעשות איתם? ובכן, פשוט להפעיל עליהם את {% equation %}f{% endequation %}. במילים אחרות, הבה וננסה את ההגדרה הבאה:
 
-{% equation %}h\left(a\right)=\begin{cases}f\left(a\right) &amp; a\in C_{0}\\g^{-1}\left(a\right) &amp; a\notin C_{0}\end{cases}{% endequation %}
+{% equation %}h\left(a\right)=\begin{cases}f\left(a\right) & a\in C_{0}\\g^{-1}\left(a\right) & a\notin C_{0}\end{cases}{% endequation %}
 
 הפונקציה {% equation %}h{% endequation %} היא חוקית לגמרי, והיא בוודאי על {% equation %}B{% endequation %} בגלל שתמונת כל האיברים {% equation %}a\notin C_{0}{% endequation %} לבדם מכסה את {% equation %}B{% endequation %}, אבל כאן גם נעוצה הבעיה: היא לא חח"ע. ייתכן שיש התנגשות ו-{% equation %}h{% endequation %} מעבירה לאותו איבר ב-{% equation %}B{% endequation %} גם איבר של {% equation %}C_{0}{% endequation %} וגם איבר שאינו ב-{% equation %}C_{0}{% endequation %}. אז מה עושים? פשוט מאוד: איברים שאינם ב-{% equation %}C_{0}{% endequation %} ומתנגשים עם תמונה של איברים מ-{% equation %}C_{0}{% endequation %} - נפעיל עליהם את {% equation %}f{% endequation %}. החח"ע של {% equation %}f{% endequation %} תבטיח שהתמונה של אותם איברים לא תתנגש יותר עם כלום.
 
@@ -36,13 +36,13 @@ tags:
 
 עכשיו אפשר לנסות ולהגדיר את {% equation %}h{% endequation %} בצורה טובה יותר:
 
-{% equation %}h\left(a\right)=\begin{cases}f\left(a\right) &amp; a\in C_{0}\cup C_{1}\\g^{-1}\left(a\right) &amp; a\notin C_{0}\cup C_{1}\end{cases}{% endequation %}
+{% equation %}h\left(a\right)=\begin{cases}f\left(a\right) & a\in C_{0}\cup C_{1}\\g^{-1}\left(a\right) & a\notin C_{0}\cup C_{1}\end{cases}{% endequation %}
 
 אבל גם ההגדרה הזו נכשלת! כי שוב, מי יערוב לנו שאין איזה {% equation %}a{% endequation %} שאיננו ב-{% equation %}C_{0}\cup C_{1}{% endequation %} אבל {% equation %}g^{-1}\left(a\right){% endequation %} מתנגש עם התמונה של {% equation %}f{% endequation %} על איזה איבר של {% equation %}C_{0}\cup C_{1}{% endequation %}? למעשה, הדבר היחיד שיכול לקרות הוא התנגשות עם הפעלת {% equation %}f{% endequation %} על איבר של {% equation %}C_{1}{% endequation %} כי באלו של {% equation %}C_{0}{% endequation %} כבר טיפלנו (אם {% equation %}a\notin C_{1}{% endequation %} אז מובטח לנו ש-{% equation %}g^{-1}\left(a\right){% endequation %} לא מתנגש עם תמונה של איבר מ-{% equation %}C_{0}{% endequation %}) אז שוב, אפשר לנקוט באותו תעלול ולהגדיר קבוצה {% equation %}C_{2}=g\left(f\left(C_{1}\right)\right){% endequation %} ולהגדיר את {% equation %}h{% endequation %} הפעם בהסתמך על {% equation %}C_{0}\cup C_{1}\cup C_{2}{% endequation %}, אבל שוב זה יכול להיכשל! ולכן...
 
 כבר הבנתם לאן זה הולך. הגדרנו סדרה אינסופית של קבוצות, {% equation %}C_{0},C_{1},C_{2},\dots{% endequation %} באופן אינדוקטיבי, כך ש-{% equation %}C_{n+1}=g\left(f\left(C_{n}\right)\right){% endequation %}. אם נעצור אחרי מספר סופי של קבוצות, ניכשל, אבל אחרי מספר אינסופי? ובכן, שווה לנסות את זה, לכל הפחות. נגדיר {% equation %}C=\bigcup_{n=0}^{\infty}C_{n}{% endequation %}, וכעת נגדיר:
 
-{% equation %}h\left(a\right)=\begin{cases}f\left(a\right) &amp; a\in C\\g^{-1}\left(a\right) &amp; a\in A\backslash C\end{cases}{% endequation %}
+{% equation %}h\left(a\right)=\begin{cases}f\left(a\right) & a\in C\\g^{-1}\left(a\right) & a\in A\backslash C\end{cases}{% endequation %}
 
 ברור כי {% equation %}h{% endequation %} מוגדרת על כל אברי {% equation %}A{% endequation %}, כי זה מה שקורה בהגדרה: {% equation %}a\notin C{% endequation %} פירושו בעצם {% equation %}a\in A\backslash C{% endequation %}. נותר להראות שהיא חח"ע, ושהיא על. החח"ע הוא המעניין יותר, כי כל הבניה שלנו הוקדשה כדי להבטיח ש-{% equation %}h{% endequation %} תהיה חח"ע. אז למה זה עובד? עצרו שניה ונסו להוכיח זאת לעצמכם. זה קל עד להפתיע.
 

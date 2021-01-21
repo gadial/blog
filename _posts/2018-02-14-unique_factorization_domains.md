@@ -101,7 +101,7 @@ tags:
 
 להראות ש-{% equation %}a{% endequation %} ראשוני אם ורק אם {% equation %}\left\langle a\right\rangle {% endequation %} הוא אידאל ראשוני זה קל. הרי {% equation %}a|x{% endequation %} זה <strong>בדיוק אותו דבר</strong> כמו {% equation %}x\in\left\langle a\right\rangle {% endequation %}, מה שמאפשר לי לכתוב את הדיאגרמה הבאה:
 
-{% equation %}\begin{array}{ccc} a|bc &amp; \iff &amp; bc\in\left\langle a\right\rangle \\ \Downarrow &amp; &amp; \Downarrow\\ a|b\vee a|c &amp; \iff &amp; b\in\left\langle a\right\rangle \vee c\in\left\langle a\right\rangle \end{array}{% endequation %}
+{% equation %}\begin{array}{ccc} a|bc & \iff & bc\in\left\langle a\right\rangle \\ \Downarrow & & \Downarrow\\ a|b\vee a|c & \iff & b\in\left\langle a\right\rangle \vee c\in\left\langle a\right\rangle \end{array}{% endequation %}
 
 החץ השמאלי שמצביע למטה נכון אם {% equation %}a{% endequation %} ראשוני, והחץ הימני שמצביע למטה נכון אם {% equation %}\left\langle a\right\rangle {% endequation %} ראשוני; הדיאגרמה מראה שמספיק להניח את אחד מהדברים הללו כדי שהשני ינבע מאליו. הטענה הזו נכונה <strong>בכל תחום שלמות</strong>.
 

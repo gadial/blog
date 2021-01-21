@@ -54,7 +54,7 @@ end
 
 קצת יותר פורמלית, אם יש לנו אלגוריתם שמחזיר את המקסימום מבלי לקרוא את כל התאים, אז אפשר לבנות קלט ש<strong>יטעה</strong> את האלגוריתם. הטיעון הולך כך: נניח שיש לנו אלגוריתם למציאת מקסימום ברשימה כך ש<strong>קיימת</strong> רשימה {% equation %}A{% endequation %} שהאלגוריתם מחזיר עליה את התשובה הנכונה מבלי שיקרא את כל התאים. יהא {% equation %}k{% endequation %} מספרו של תא שאותו האלגוריתם לא קורא, ויהא {% equation %}m{% endequation %} הפלט של האלגוריתם על {% equation %}A{% endequation %}. נגדיר כעת רשימה חדשה {% equation %}B{% endequation %} באופן הבא:
 
-{% equation %}B\left[i\right]=\begin{cases}A\left[i\right] &amp; i\ne k\\m+1 &amp; i=k\end{cases}{% endequation %}
+{% equation %}B\left[i\right]=\begin{cases}A\left[i\right] & i\ne k\\m+1 & i=k\end{cases}{% endequation %}
 
 כעת, על הקלט {% equation %}B{% endequation %} האלגוריתם יחזיר <strong>בודאות</strong> את הפלט {% equation %}m{% endequation %}, שכן ההבדל היחיד בין {% equation %}A{% endequation %} ובין {% equation %}B{% endequation %} הוא בתוכן התא {% equation %}k{% endequation %} שאותו האלגוריתם <strong>לא קורא</strong>. לכן האלגוריתם יתנהג על {% equation %}B{% endequation %} בדיוק כפי שהיה מתנהג על {% equation %}A{% endequation %} ויחזיר את הפלט {% equation %}m{% endequation %} וזו כמובן טעות כי הערך המקסימלי ב-{% equation %}B{% endequation %} הוא {% equation %}m+1{% endequation %}.
 

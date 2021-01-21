@@ -25,7 +25,7 @@ tags:
 
 ה"פתרון" לבעיה של "אין מספיק וקטורים עצמיים" הוא צורת ז'ורדן. צורת ז'ורדן היא מטריצה "כמעט-אלכסונית" - הערכים העצמיים עדיין יושבים על האלכסון הראשי, אבל באלכסון שמעליו יכולים להופיע פה ושם 1-ים. אם להיות יותר מדויקים, צורת ז'ורדן היא מטריצה <strong>בלוקים</strong>, כשכל בלוק הוא תת-מטריצה בעצמו שאנחנו "שותלים" על האלכסון הראשי. בלוק ז'ורדן שכזה בנוי ממטריצה סקלרית (כלומר, כזו שיש על האלכסון הראשי שלה ערך קבוע יחיד) ו-1-ים בכל האלכסון שמעל האלכסון הראשי. משהו כזה:
 
-{% equation %}\left(\begin{array}{ccc}\lambda &amp; 1 &amp; 0\\0 &amp; \lambda &amp; 1\\0 &amp; 0 &amp; \lambda\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccc}\lambda & 1 & 0\\0 & \lambda & 1\\0 & 0 & \lambda\end{array}\right){% endequation %}
 
 זו דוגמה לבלוק ז'ורדן מגודל 3. על מטריצה אלכסונית אפשר לחשוב כאילו היא מורכבת כולה מבלוקי ז'ורדן מגודל 1, כך שצורת ז'ורדן מכלילה את הלכסון הרגיל. אם כן, האם הגענו אל המנוחה ואל הנחלה? כמעט. בשביל שלמטריצה כלשהי תהיה צורת ז'ורדן, צריך שכל הערכים העצמיים שלה <strong>יהיו בשדה שמעליו עובדים</strong>. מה זה אומר? קחו את הפולינום {% equation %}x^{2}+1{% endequation %} בתור דוגמה. השורשים של הפולינום הזה הם מספרים מדומים: {% equation %}i{% endequation %} ו-{% equation %}-i{% endequation %}. הם שייכים לשדה {% equation %}\mathbb{C}{% endequation %} אבל לא לשדה {% equation %}\mathbb{R}{% endequation %}. זה אומר שאם יש מטריצה שהפולינום האופייני שלה הוא {% equation %}x^{2}+1{% endequation %}, היא תהיה לכסינה מעל {% equation %}\mathbb{C}{% endequation %} אבל לא מעל {% equation %}\mathbb{R}{% endequation %}. למה? כי ה-{% equation %}P{% endequation %} המלכסנת תהיה חייבת להיות עם מקדמים שהם לא ממשיים (או באופן שקול, הבסיס שבו הטרנספורמציה הרלוונטית תיוצג על ידי מטריצה אלכסונית יהיה עם וקטורים שהכניסות שלהם לא כולן ממשיות).
 
@@ -37,7 +37,7 @@ tags:
 
 מטריצה בצורה הרציונלית היא גם כן מטריצת בלוקים, כאשר כל בלוק הוא <strong>מטריצה מלווה</strong> של פולינום מסויים. מה זו מטריצה מלווה? בהינתן פולינום מתוקן {% equation %}x^{d}+a_{d-1}x^{d-1}+\dots+a_{1}x+a_{0}{% endequation %}, המטריצה המלווה שלו היא המטריצה
 
-{% equation %}\left(\begin{array}{ccccc}0 &amp; 0 &amp; 0 &amp; \cdots &amp; -a_{0}\\1 &amp; 0 &amp; 0 &amp; \cdots &amp; -a_{1}\\0 &amp; 1 &amp; 0 &amp; \cdots &amp; -a_{2}\\\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\0 &amp; 0 &amp; 0 &amp; \cdots &amp; -a_{d-1}\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccccc}0 & 0 & 0 & \cdots & -a_{0}\\1 & 0 & 0 & \cdots & -a_{1}\\0 & 1 & 0 & \cdots & -a_{2}\\\vdots & \vdots & \vdots & \ddots & \vdots\\0 & 0 & 0 & \cdots & -a_{d-1}\end{array}\right){% endequation %}
 
 כלומר, מטריצה שכולה אפסים למעט האלכסון <strong>מתחת</strong> לאלכסון הראשי שכולו 1-ים, ולמעט הטור האחרון במטריצה שכולל את המקדמים של הפולינום, עם סימן מינוס עליהם. זה... זה לא נראה נחמד במיוחד, אני יודע. בטח נראה פחות נחמד מצורת ז'ורדן. עדיין, אני מקווה שנתיידד קצת עם היצור המוזר הזה בקרוב, אחרי שנבין מאיפה הצורה ה"מוזרה" שלו מגיעה.
 
@@ -45,7 +45,7 @@ tags:
 
 אחדד את זה על ידי כך שאצטט במפורש את המשפט הרלוונטי: לכל מטריצה ריבועית {% equation %}A{% endequation %}, מעל כל שדה, קיימת מטריצה יחידה {% equation %}B{% endequation %} כך ש-{% equation %}B=P^{-1}AP{% endequation %} עבור {% equation %}P{% endequation %} הפיכה כלשהי, ו-{% equation %}B{% endequation %} היא בצורה רציונלית, דהיינו היא מטריצת בלוקים שבה הבלוקים הם מטריצות מלווות של סדרת פולינומים {% equation %}p_{1},p_{2},\dots,p_{k}{% endequation %} שבה כל פולינום מחלק את קודמו:
 
-{% equation %}B=\left(\begin{array}{cccc}B_{1}\\ &amp; B_{2}\\ &amp; &amp; \ddots\\ &amp; &amp; &amp; B_{k}\end{array}\right){% endequation %}
+{% equation %}B=\left(\begin{array}{cccc}B_{1}\\ & B_{2}\\ & & \ddots\\ & & & B_{k}\end{array}\right){% endequation %}
 
 כך ש-{% equation %}B_{i}{% endequation %} היא המטריצה המלווה של הפולינום {% equation %}p_{i}{% endequation %}.
 
@@ -87,7 +87,7 @@ tags:
 </ol>
 אלמלא התנאי המעט שונה ב-3 והעובדה שאפשר לפעול גם על עמודות, זה היה בדיוק דירוג מטריצות כמו שרואים כשרק מתחילים להתעסק עם אלגברה לינארית. אבל מה היעד שלו? בדירוג מטריצות "רגיל" היעד הוא להגיע למטריצה שבה כל הכניסות הן 0 למעט כניסות שהן 1 ש"אי אפשר לוותר עליהן", ובמקרה שבו {% equation %}A{% endequation %} הפיכה נקבל שיש 1-ים בדיוק על האלכסון הראשי. במקרה שלנו מובטח שנוכל לאפס את כל מה שאינו על האלכסון הראשי, אבל על האלכסון הראשי עשויים להישאר פולינומים, ועל ידי החלפות מתאימות אפשר להביא את המטריצה לצורה הבאה:
 
-{% equation %}\left(\begin{array}{ccccccc}1\\ &amp; \ddots\\ &amp; &amp; 1\\ &amp; &amp; &amp; a_{1}\left(x\right)\\ &amp; &amp; &amp; &amp; a_{2}\left(x\right)\\ &amp; &amp; &amp; &amp; &amp; \ddots\\ &amp; &amp; &amp; &amp; &amp; &amp; a_{k}\left(x\right)\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccccccc}1\\ & \ddots\\ & & 1\\ & & & a_{1}\left(x\right)\\ & & & & a_{2}\left(x\right)\\ & & & & & \ddots\\ & & & & & & a_{k}\left(x\right)\end{array}\right){% endequation %}
 
 כאשר הפולינומים {% equation %}a\left(x\right){% endequation %} על האלכסון מקיימים את יחסי החלוקה שלנו (כל אחד מחלק את קודמו). הצורה הזו נקראת <strong>הצורה הנורמלית של סמית</strong> (לפעמים מגדירים הפוך, שכל פולינום מחלק את הבא אחריו, אבל מה זה משנה). להוכיח שכל זה באמת עובד? זה עניין לפוסט נפרד.
 
@@ -109,7 +109,7 @@ tags:
 
 אני, כאמור, טוען ש-{% equation %}N{% endequation %} היא נילפוטנטית. מה זו טרנספורמציה נילפוטנטית? כזו שאם מעלים אותה בחזקה מספיק פעמים, מקבלים את טרנספורמציית האפס. הנה דוגמה למטריצה נילפוטנטית:
 
-{% equation %}\left(\begin{array}{ccccc}0 &amp; 1 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 1 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0 &amp; 1\\0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccccc}0 & 1 & 0 & 0 & 0\\0 & 0 & 1 & 0 & 0\\0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 1\\0 & 0 & 0 & 0 & 0\end{array}\right){% endequation %}
 
 תעלו אותה בחזקה מספיק פעמים ותקבלו את מטריצת האפס. כעת, לא בחרתי את המטריצה הזו באקראי - בחרתי מטריצה שבה יש 1-ים רק במקום אחד: על האלכסון שמעל האלכסון הראשי. בדיוק כמו שקורה בצורת ז'ורדן. למעשה, המטריצה הזו היא-היא צורת ז'ורדן של טרנספורמציה כלשהי שכל הערכים העצמיים שלה הם 0.
 
@@ -121,15 +121,15 @@ tags:
 
 ולמה זה כל כך טוב? כי תחשבו שניה מהי המטריצה המלווה של הפולינום {% equation %}x^{t}{% endequation %}: כל העמודה האחרונה, שבדרך כלל מלאה מקדמים מכוערים עם מינוסים מכוערים, תהיה פשוט אפסים! זאת מכיוון שכל המקדמים של {% equation %}x^{t}{% endequation %} למעט המקדם המוביל (שלא מופיע במטריצה המלווה) הם אפס. זה אומר שהמטריצה המלווה תהיה מהצורה הבאה:
 
-{% equation %}\left(\begin{array}{ccccc}0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0\\1 &amp; 0 &amp; 0 &amp; \cdots &amp; 0\\0 &amp; 1 &amp; 0 &amp; \cdots &amp; 0\\\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccccc}0 & 0 & 0 & \cdots & 0\\1 & 0 & 0 & \cdots & 0\\0 & 1 & 0 & \cdots & 0\\\vdots & \vdots & \vdots & \ddots & \vdots\\0 & 0 & 0 & \cdots & 0\end{array}\right){% endequation %}
 
 זה כמעט בלוק ז'ורדן - רק עם 1-ים מתחת לאלכסון במקום מעל לאלכסון. זה לא קורה בגלל שהבסיס שאנחנו עובדים איתו שונה, אלא רק שה<strong>סדר</strong> של האיברים בבסיס צריך להיות הפוך. אם אנחנו מגדירים בסיס {% equation %}\mathcal{B}=\left\{ b_{0},b_{1},\dots,b_{n-1}\right\} {% endequation %} על ידי {% equation %}b_{i}=N^{i}u{% endequation %} עבור {% equation %}u{% endequation %} שהוא הוקטור הציקלי שלנו, אז המטריצה המייצגת של {% equation %}N{% endequation %} בבסיס הזה תהיה מה שלמעלה. אבל אם נהפוך את הסדר של האיברים בבסיס, כלומר נגדיר {% equation %}b_{i}=N^{\left(n-1\right)-i}u{% endequation %}, אז יתקיים {% equation %}N\left(b_{i}\right)=b_{i-1}{% endequation %} לכל {% equation %}1\le i&lt;n{% endequation %}, ואילו עבור {% equation %}b_{0}{% endequation %} יתקיים {% equation %}N\left(b_{0}\right)=N\left(N^{n-1}\right)u=N^{n}u=0{% endequation %}. לכן המטריצה המייצגת בבסיס ההפוך הזה תהיה
 
-{% equation %}\left(\begin{array}{ccccc}0 &amp; 1 &amp; 0 &amp; \cdots &amp; 0\\0 &amp; 0 &amp; 1 &amp; \cdots &amp; 0\\0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0\\\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\0 &amp; 0 &amp; 0 &amp; \cdots &amp; 1\\0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccccc}0 & 1 & 0 & \cdots & 0\\0 & 0 & 1 & \cdots & 0\\0 & 0 & 0 & \cdots & 0\\\vdots & \vdots & \vdots & \ddots & \vdots\\0 & 0 & 0 & \cdots & 1\\0 & 0 & 0 & \cdots & 0\end{array}\right){% endequation %}
 
 וזה בדיוק בלוק ז'ורדן.
 
-נסכם: התחלנו עם {% equation %}T{% endequation %}. אמרנו שנמצא מטריצה מייצגת עבור {% equation %}T{% endequation %} שבה לכל ערך עצמי {% equation %}\lambda{% endequation %} של {% equation %}T{% endequation %} יהיה לנו בלוק אחד במטריצה שהוא המטריצה המייצגת של {% equation %}T{% endequation %} המצומצמת למרחב {% equation %}W=\ker\left(\left(T-\lambda I\right)^{r}\right){% endequation %} - זה משפט הפירוק הפרימרי. ב-{% equation %}W{% endequation %} אמרנו שנפרק את {% equation %}T{% endequation %} לסכום {% equation %}T=D+N{% endequation %} כאשר {% equation %}D{% endequation %} סקלרית ואילו {% equation %}N{% endequation %} נילפוטנטית, ואז השתמשנו במשפט הפירוק הציקלי כדי להראות שהמטריצה המייצגת של {% equation %}N{% endequation %} היא מטריצת בלוקים שבה כל בלוק הוא בלוק ז'ורדן שמתאים לערך העצמי 0, כלומר עם 0 על האלכסון הראשי. המטריצה המייצגת של {% equation %}T{% endequation %} על {% equation %}W{% endequation %}, אם כן, היא סכום של שתי מטריצות שאחת מהן היא {% equation %}\left(\begin{array}{cccc}\lambda\\ &amp; \lambda\\ &amp; &amp; \ddots\\ &amp; &amp; &amp; \lambda\end{array}\right){% endequation %} והשניה היא 0 בכל מקום חוץ אולי מכמה 1-ים באלכסון שמעל האלכסון הראשי.
+נסכם: התחלנו עם {% equation %}T{% endequation %}. אמרנו שנמצא מטריצה מייצגת עבור {% equation %}T{% endequation %} שבה לכל ערך עצמי {% equation %}\lambda{% endequation %} של {% equation %}T{% endequation %} יהיה לנו בלוק אחד במטריצה שהוא המטריצה המייצגת של {% equation %}T{% endequation %} המצומצמת למרחב {% equation %}W=\ker\left(\left(T-\lambda I\right)^{r}\right){% endequation %} - זה משפט הפירוק הפרימרי. ב-{% equation %}W{% endequation %} אמרנו שנפרק את {% equation %}T{% endequation %} לסכום {% equation %}T=D+N{% endequation %} כאשר {% equation %}D{% endequation %} סקלרית ואילו {% equation %}N{% endequation %} נילפוטנטית, ואז השתמשנו במשפט הפירוק הציקלי כדי להראות שהמטריצה המייצגת של {% equation %}N{% endequation %} היא מטריצת בלוקים שבה כל בלוק הוא בלוק ז'ורדן שמתאים לערך העצמי 0, כלומר עם 0 על האלכסון הראשי. המטריצה המייצגת של {% equation %}T{% endequation %} על {% equation %}W{% endequation %}, אם כן, היא סכום של שתי מטריצות שאחת מהן היא {% equation %}\left(\begin{array}{cccc}\lambda\\ & \lambda\\ & & \ddots\\ & & & \lambda\end{array}\right){% endequation %} והשניה היא 0 בכל מקום חוץ אולי מכמה 1-ים באלכסון שמעל האלכסון הראשי.
 
 הראינו קיום, אבל מה עם יחידות? ובכן, הפירוק הפרימרי הוא בוודאי יחיד, כי קיים רק פירוק אחד לגורמים אי פריקים של הפולינום המינימלי (זה מתקשר לדוגמה שנתתי בתחילת הפוסט, של פירוק יחיד לאי פריקים במספרים הטבעיים; עם פולינומים זה אותו סיפור בדיוק). לכל בלוק שנותן הפירוק הפרימרי היחידות שלו נובעת מהיחידות של הצורה הרציונלית. זה מסיים גם את זה.
 

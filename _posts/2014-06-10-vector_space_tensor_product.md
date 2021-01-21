@@ -102,15 +102,15 @@ tags:
 
 טוב, אז אני מקווה שאנחנו מבינים מה זו מכפלה טנזורית ברמת ההגדרות ואפשר יהיה להשתמש במושג הזה יחסית בחופשיות בפוסטים שבהם אזדקק לו (מן הסתם מתוכננים כאלו). עכשיו אפשר לעבור לדוגמה כללית יחסית וחשובה מאוד - מכפלה טנזורית של מטריצות. כלומר, {% equation %}V{% endequation %} יהיה מרחב של מטריצות וגם {% equation %}W{% endequation %} יהיה מרחב של מטריצות. אין חשיבות לסדר של המטריצות - הוא יכול להיות שונה בצורה דרסטית. כעת, כדי לתאר את {% equation %}V\otimes W{% endequation %} מספיק לי לתאר איך נראה איבר כללי {% equation %}A\otimes B{% endequation %} עבור {% equation %}A\in V{% endequation %} ו-{% equation %}B\in W{% endequation %}. התיאור הוא פשוט ומקסים: בואו נכתוב בצורה כללית את {% equation %}A{% endequation %}:
 
-{% equation %}A=\left[\begin{array}{cccc}a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1m}\\a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2m}\\\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\a_{n1} &amp; a_{n2} &amp; \cdots &amp; a_{nm}\end{array}\right]{% endequation %}
+{% equation %}A=\left[\begin{array}{cccc}a_{11} & a_{12} & \cdots & a_{1m}\\a_{21} & a_{22} & \cdots & a_{2m}\\\vdots & \vdots & \ddots & \vdots\\a_{n1} & a_{n2} & \cdots & a_{nm}\end{array}\right]{% endequation %}
 
 כעת, {% equation %}A\otimes B{% endequation %} יוגדר כך:
 
-{% equation %}A\otimes B\triangleq\left[\begin{array}{cccc}a_{11}B &amp; a_{12}B &amp; \cdots &amp; a_{1m}B\\a_{21}B &amp; a_{22}B &amp; \cdots &amp; a_{2m}B\\\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\a_{n1}B &amp; a_{n2}B &amp; \cdots &amp; a_{nm}B\end{array}\right]{% endequation %}
+{% equation %}A\otimes B\triangleq\left[\begin{array}{cccc}a_{11}B & a_{12}B & \cdots & a_{1m}B\\a_{21}B & a_{22}B & \cdots & a_{2m}B\\\vdots & \vdots & \ddots & \vdots\\a_{n1}B & a_{n2}B & \cdots & a_{nm}B\end{array}\right]{% endequation %}
 
-הסימון הזה נראה מוזר - כאילו אנחנו דוחפים מטריצה לתוך הכניסות של מטריצה אחרת, ומה זה אומר בכלל. בפועל זה סימון מקובל עבור <strong>מטריצת בלוקים</strong>. הדרך הכי טובה להסביר היא פשוט לתת דוגמה: נבחר {% equation %}A=\left[\begin{array}{cc}1 &amp; 2\\3 &amp; 4\end{array}\right]{% endequation %} ו-{% equation %}B=\left[\begin{array}{cc}5 &amp; 0\\0 &amp; 5\end{array}\right]{% endequation %} ונקבל ש-
+הסימון הזה נראה מוזר - כאילו אנחנו דוחפים מטריצה לתוך הכניסות של מטריצה אחרת, ומה זה אומר בכלל. בפועל זה סימון מקובל עבור <strong>מטריצת בלוקים</strong>. הדרך הכי טובה להסביר היא פשוט לתת דוגמה: נבחר {% equation %}A=\left[\begin{array}{cc}1 & 2\\3 & 4\end{array}\right]{% endequation %} ו-{% equation %}B=\left[\begin{array}{cc}5 & 0\\0 & 5\end{array}\right]{% endequation %} ונקבל ש-
 
-{% equation %}A\otimes B=\left[\begin{array}{cccc}5 &amp; 0 &amp; 10 &amp; 0\\0 &amp; 5 &amp; 0 &amp; 10\\15 &amp; 0 &amp; 20 &amp; 0\\0 &amp; 15 &amp; 0 &amp; 20\end{array}\right]{% endequation %}
+{% equation %}A\otimes B=\left[\begin{array}{cccc}5 & 0 & 10 & 0\\0 & 5 & 0 & 10\\15 & 0 & 20 & 0\\0 & 15 & 0 & 20\end{array}\right]{% endequation %}
 
 רואים את ה"בלוקים"?
 

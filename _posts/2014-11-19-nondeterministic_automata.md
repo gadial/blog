@@ -117,7 +117,7 @@ tags:
 
 אם {% equation %}\varepsilon\notin L\left(A_{EM}\right){% endequation %} כל זה לא רלוונטי. אבל אם {% equation %}\varepsilon\in L\left(A_{EM}\right){% endequation %} אז אין לנו ברירה; אנחנו <strong>חייבים</strong> שיתקיים {% equation %}q_{0}\in F_{ND}{% endequation %} אחרת פשוט לא יתקיים {% equation %}\varepsilon\in L\left(A_{ND}\right){% endequation %}. מכאן אנחנו מקבלים את ההגדרה הבאה:
 
-{% equation %}F_{ND}=\begin{cases}F_{EM} &amp; \varepsilon\notin L\left(A_{EM}\right)\\F_{EM}\cup\left\{ q_{0}\right\} &amp; \varepsilon\in L\left(A_{EM}\right)\end{cases}{% endequation %}
+{% equation %}F_{ND}=\begin{cases}F_{EM} & \varepsilon\notin L\left(A_{EM}\right)\\F_{EM}\cup\left\{ q_{0}\right\} & \varepsilon\in L\left(A_{EM}\right)\end{cases}{% endequation %}
 
 השאלה היא האם ה"תיקון" הזה לא עשוי לקלקל לנו איכשהו את יתר השפה שהאוטומט מקבל. קל לראות שזה לא יכול לקרות, והנה הסבר בנפנוף ידיים: הדבר היחיד שיכול להשתבש הוא שבמקרה בו {% equation %}\varepsilon\in L\left(A_{EM}\right){% endequation %} תהיה מילה לא ריקה {% equation %}w{% endequation %} כך ש-{% equation %}w\notin L\left(A_{EM}\right){% endequation %} אבל {% equation %}q_{0}\in\hat{\delta}_{ND}\left(q_{0},w\right){% endequation %} . עצרו רגע להסביר לעצמכם למה זה המקרה הבעייתי היחיד.
 

@@ -69,7 +69,7 @@ tags:
 
 {% equation %}f_{q}=\sum_{p}a_{p}^{q}xf_{p}+\delta_{q}{% endequation %}
 
-כאשר {% equation %}a_{p}^{q}{% endequation %} הוא מספר המעברים מ-{% equation %}q{% endequation %} אל {% equation %}p{% endequation %} - פורמלית, {% equation %}a_{p}^{q}=\left|\left\{ \sigma\in\Sigma\ |\ \delta\left(q,\sigma\right)=p\right\} \right|{% endequation %}. כמו כן, {% equation %}\delta_{q}=\begin{cases}1 &amp; q\in F\\0 &amp; q\notin F\end{cases}{% endequation %}. למה המשוואה הזו נכונה? אין כאן שום דבר חדש, זו הפעלה של הכללים שכבר ראינו.
+כאשר {% equation %}a_{p}^{q}{% endequation %} הוא מספר המעברים מ-{% equation %}q{% endequation %} אל {% equation %}p{% endequation %} - פורמלית, {% equation %}a_{p}^{q}=\left|\left\{ \sigma\in\Sigma\ |\ \delta\left(q,\sigma\right)=p\right\} \right|{% endequation %}. כמו כן, {% equation %}\delta_{q}=\begin{cases}1 & q\in F\\0 & q\notin F\end{cases}{% endequation %}. למה המשוואה הזו נכונה? אין כאן שום דבר חדש, זו הפעלה של הכללים שכבר ראינו.
 
 מה שיפה במשוואה הזו היא שמדובר על משוואה <strong>לינארית</strong> - אין ל-{% equation %}f{% endequation %}-ים חזקות גבוהות שם. זה מאפשר לנו להשתמש בעולם המושגים של האלגברה הלינארית: נגדיר מטריצה {% equation %}A{% endequation %} כך ש-{% equation %}A_{qp}=a_{p}^{q}{% endequation %} ונגדיר וקטורים {% equation %}\overline{f},\overline{\delta}{% endequation %} שמייצגים את ה-{% equation %}f_{q}{% endequation %} וה-{% equation %}\delta_{q}{% endequation %}-ים, וקיבלנו שאפשר לכתוב את מערכת המשוואות כולה במשוואה קומפקטית אחת:
 

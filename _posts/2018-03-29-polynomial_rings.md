@@ -37,17 +37,17 @@ tags:
 
 אבל הכפל הוא כבר סיפור שונה לגמרי. הכפל מתאים לפעולה המתמטית שנקראת <strong>קונבולוציה</strong>, וזו פעולה מעניינת ושימושית מאוד. קונבולוציה של שתי סדרות מתבצעת כך: ראשית הופכים את הסדר של אחת מהסדרות, ואז כותבים את הסדרה האחת מעל השניה, כופלים את האיברים שנמצאים האחד מעל השני, ומחברים את כל המכפלות שמתקבלות בצורה הזו. <a href="http://gadial.net/2014/05/21/discrete_fourier_transform_intro/">תיארתי את זה בעבר בבלוג</a>, והנה זה שוב. ראשית נכתוב את הסדרות כך:
 
-{% equation %}\begin{array}{ccccccc} \cdots &amp; b_{2} &amp; b_{1} &amp; b_{0}\\ &amp; &amp; &amp; a_{0} &amp; a_{1} &amp; a_{2} &amp; \cdots \end{array}{% endequation %}
+{% equation %}\begin{array}{ccccccc} \cdots & b_{2} & b_{1} & b_{0}\\ & & & a_{0} & a_{1} & a_{2} & \cdots \end{array}{% endequation %}
 
 חשבו על מקומות ריקים בתור 0, ולכן איברים שמתחת או מעל להם יש מקום ריק לא יתרמו לסכום; הסכום שנקבל למעלה הוא פשוט {% equation %}a_{0}b_{0}{% endequation %}, וזה גם המקדם של {% equation %}x^{0}{% endequation %} במכפלה של שני הפולינומים.
 
 כעת נזיז את הסדרה העליונה מקום אחד ימינה ונקבל
 
-{% equation %}\begin{array}{ccccccc} \cdots &amp; b_{3} &amp; b_{2} &amp; b_{1} &amp; b_{0}\\ &amp; &amp; &amp; a_{0} &amp; a_{1} &amp; a_{2} &amp; \cdots \end{array}{% endequation %}
+{% equation %}\begin{array}{ccccccc} \cdots & b_{3} & b_{2} & b_{1} & b_{0}\\ & & & a_{0} & a_{1} & a_{2} & \cdots \end{array}{% endequation %}
 
 זה נותן לנו את הסכום {% equation %}a_{0}b_{1}+a_{1}b_{0}{% endequation %} שמתאים למקדם של {% equation %}x^{1}{% endequation %}, וכן הלאה. בסופו של דבר, מכיוון ששתי הסדרות סופיות, השלב האחרון יהיה
 
-{% equation %}\begin{array}{ccccccc} &amp; &amp; &amp; b_{m} &amp; b_{m-1} &amp; \cdots\\ &amp; \cdots &amp; a_{n-1} &amp; a_{n} \end{array}{% endequation %}
+{% equation %}\begin{array}{ccccccc} & & & b_{m} & b_{m-1} & \cdots\\ & \cdots & a_{n-1} & a_{n} \end{array}{% endequation %}
 
 שייתן לנו את המקדם {% equation %}a_{n}b_{m}{% endequation %} של {% equation %}x^{n+m}{% endequation %}. במילים אחרות, מכפלת שני הפולינומים {% equation %}\sum_{i=0}^{n}a_{i}x^{i}{% endequation %} ו-{% equation %}\sum_{i=0}^{m}b_{i}x^{i}{% endequation %} מייצרת לנו פולינום חדש, שמקדמיו הם כל הקונבולוציות האפשריות של הסדרות {% equation %}\left(a_{0},\dots,a_{n}\right){% endequation %} ו-{% equation %}\left(b_{0},\dots,b_{m}\right){% endequation %}.
 

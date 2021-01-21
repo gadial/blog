@@ -38,11 +38,11 @@ tags:
 
 שאלה אחרת היא מה המטריצה המייצגת של {% equation %}U{% endequation %} בבסיס של המרחב. לצורך כך בואו ניזכר בסימונים שלנו: אני אסמן {% equation %}p_{v}\left(x\right)=x^{d}+a_{d-1}x^{d-1}+\dots+a_{1}x+a_{0}{% endequation %}, ואני אסדר את הבסיס שלנו "מהסוף להתחלה", כלומר {% equation %}\left(T^{d-1}\left(v\right),T^{d-2}\left(v\right),\dots,T\left(v\right),v\right){% endequation %}. בצורה הזו, כשמפעילים את {% equation %}U{% endequation %} על כל איבר בסיס למעט הראשון מקבלים את איבר הבסיס שלפניו. וכשמפעילים על הראשון? מקבלים את {% equation %}-a_{0}T^{0}\left(v\right)-a_{1}T\left(v\right)-\dots-a_{d-1}T^{d-1}\left(v\right){% endequation %}. המטריצה המייצגת של {% equation %}U{% endequation %} היא וקטורי הקואורדינטות של הפעלות שכאלו, ולכן היא תהיה מהצורה
 
-{% equation %}\left(\begin{array}{ccccc}-a_{0} &amp; 1 &amp; 0 &amp; \cdots &amp; 0\\-a_{1} &amp; 0 &amp; 1 &amp; \cdots &amp; 0\\\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\-a_{d-2} &amp; 0 &amp; 0 &amp; \cdots &amp; 1\\-a_{d-1} &amp; 0 &amp; 0 &amp; \cdots &amp; 0\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccccc}-a_{0} & 1 & 0 & \cdots & 0\\-a_{1} & 0 & 1 & \cdots & 0\\\vdots & \vdots & \vdots & \ddots & \vdots\\-a_{d-2} & 0 & 0 & \cdots & 1\\-a_{d-1} & 0 & 0 & \cdots & 0\end{array}\right){% endequation %}
 
 אני כותב את המטריצה הזו בצורה קצת לא סטנדרטית. באופן סטנדרטי, בהינתן פולינום מתוקן {% equation %}x^{d}+a_{d-1}x^{d-1}+\dots+a_{1}x+a_{0}{% endequation %} נהוג להגדיר את ה<strong>מטריצה המלווה</strong> של הפולינום להיות המטריצה המאוד דומה הבאה:
 
-{% equation %}\left(\begin{array}{ccccc}0 &amp; 0 &amp; 0 &amp; \cdots &amp; -a_{0}\\1 &amp; 0 &amp; 0 &amp; \cdots\\0 &amp; 1 &amp; 0 &amp; \cdots &amp; -a_{1}\\\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\0 &amp; 0 &amp; 0 &amp; \cdots &amp; -a_{d-1}\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccccc}0 & 0 & 0 & \cdots & -a_{0}\\1 & 0 & 0 & \cdots\\0 & 1 & 0 & \cdots & -a_{1}\\\vdots & \vdots & \vdots & \ddots & \vdots\\0 & 0 & 0 & \cdots & -a_{d-1}\end{array}\right){% endequation %}
 
 שהיא מה שמקבלים כשהבסיס הסדור שלי מסודר בסדר הפוך. הסיבה שבחרתי בכל זאת להציג את המטריצה ה"הפוכה" היא שמהמטריצה ההפוכה הזו מתקבלת צורת ז'ורדן: הרעיון הכללי הוא שלכל בלוק ז'ורדן אפשר לפרק את הטרנספורמציה שמחפשים את צורת ז'ורדן שלה לסכום של טרנספורמציה סקלרית וטרנספורמציה <strong>נילפוטנטית</strong>, כלומר כזו שמקיימת {% equation %}T^{k}=0{% endequation %} עבור {% equation %}k{% endequation %} מסויים; למטריצה כזו, כל המקדמים {% equation %}a_{0},\dots,a_{k-1}{% endequation %} יהיו 0, ולכן נקבל מטריצה של 1-ים שאם נחבר לה את המטריצה האלכסונית של הטרנספורמציה הסקלרית נותנת לנו בדיוק בלוק ז'ורדן.
 

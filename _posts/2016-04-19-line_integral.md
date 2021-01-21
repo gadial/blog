@@ -32,7 +32,7 @@ tags:
 
 {% equation %}\gamma_{3}\left(x\right)=\left(1-x,1-x\right){% endequation %} על הקטע {% equation %}\left[0,1\right]{% endequation %}
 
-{% equation %}\gamma_{4}\left(x\right)=\begin{cases}\left(2x,2x\right) &amp; 0\le x\le\frac{1}{2}\\\left(2\left(1-x\right),2\left(1-x\right)\right) &amp; \frac{1}{2}\le x\le1\end{cases}{% endequation %}
+{% equation %}\gamma_{4}\left(x\right)=\begin{cases}\left(2x,2x\right) & 0\le x\le\frac{1}{2}\\\left(2\left(1-x\right),2\left(1-x\right)\right) & \frac{1}{2}\le x\le1\end{cases}{% endequation %}
 
 מה קורה כאן? {% equation %}\gamma_{1}{% endequation %} מתאימה כנראה לאינטואיציה הבסיסית שלנו. לעומת זאת, {% equation %}\gamma_{2}{% endequation %} עושה את הכל "מהר יותר" - אינטואיטיבית, היא מהירה פי 2 יותר מאשר {% equation %}\gamma_{1}{% endequation %}. לעומת זאת, {% equation %}\gamma_{3}{% endequation %} נעה "באותה מהירות" כמו {% equation %}\gamma_{1}{% endequation %} אבל <strong>לכיוון ההפוך</strong>, ו-{% equation %}\gamma_{4}{% endequation %} לוקחת את הטוב שבשני העולמות: אצה רצה לה בכיוון ה"נכון" אל {% equation %}\left(1,1\right){% endequation %}, מגיעה לשם באמצע ה"זמן" שלה, ואז פונה וחוזרת על עקבותיה, תוך שהיא עוברת במקומות שהיא כבר הייתה בהם קודם. לכל ארבע העקומות הללו יש, כאמור, את אותה תמונה, אבל הן מתארות דברים שונים.
 
@@ -110,9 +110,9 @@ tags:
 
 {% equation %}\gamma_{3}\left(x\right)=\left(1-x,1-x\right){% endequation %} על הקטע {% equation %}\left[0,1\right]{% endequation %}
 
-{% equation %}\gamma_{4}\left(x\right)=\begin{cases}\left(2x,2x\right) &amp; 0\le x\le\frac{1}{2}\\\left(2\left(1-x\right),2\left(1-x\right)\right) &amp; \frac{1}{2}\le x\le1\end{cases}{% endequation %}
+{% equation %}\gamma_{4}\left(x\right)=\begin{cases}\left(2x,2x\right) & 0\le x\le\frac{1}{2}\\\left(2\left(1-x\right),2\left(1-x\right)\right) & \frac{1}{2}\le x\le1\end{cases}{% endequation %}
 
-אז כאן למשל מתקיים {% equation %}\gamma_{2}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right){% endequation %} כאשר {% equation %}u\left(t\right)=2t{% endequation %}. וכמו כן מתקיים {% equation %}\gamma_{3}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right){% endequation %} כאשר {% equation %}u\left(t\right)=1-t{% endequation %}, ו-{% equation %}\gamma_{4}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right){% endequation %} עם {% equation %}u\left(t\right)=\begin{cases}2t &amp; 0\le t\le\frac{1}{2}\\2\left(1-t\right) &amp; \frac{1}{2}\le t\le1\end{cases}{% endequation %}.
+אז כאן למשל מתקיים {% equation %}\gamma_{2}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right){% endequation %} כאשר {% equation %}u\left(t\right)=2t{% endequation %}. וכמו כן מתקיים {% equation %}\gamma_{3}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right){% endequation %} כאשר {% equation %}u\left(t\right)=1-t{% endequation %}, ו-{% equation %}\gamma_{4}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right){% endequation %} עם {% equation %}u\left(t\right)=\begin{cases}2t & 0\le t\le\frac{1}{2}\\2\left(1-t\right) & \frac{1}{2}\le t\le1\end{cases}{% endequation %}.
 
 עכשיו, אם נחשב את האינטגרל הקווי של השדה הוקטורי {% equation %}f\left(x,y\right)=\left(x,y\right){% endequation %} עבור ארבעת העקומות הללו, מה נקבל?
 

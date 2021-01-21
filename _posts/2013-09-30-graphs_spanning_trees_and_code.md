@@ -101,7 +101,7 @@ add_edge: function(a,b,w){
 {% highlight javascript %}
 has_edge: function(a,b){
 		result = false;
-		this.each_edge(function(e){if ((e[0] == a &amp;&amp; e[1] == b) || (e[1] == a &amp;&amp; e[0] == b)) result = true;})
+		this.each_edge(function(e){if ((e[0] == a && e[1] == b) || (e[1] == a && e[0] == b)) result = true;})
 		return result;
 	},
 {% endhighlight %}
@@ -125,7 +125,7 @@ each_edge: function(f){
 find_edge: function(a,b){
 		for (var i = 0; i < this.E.length; i++){
 			var e = this.E[i];
-			if ((e[0] == a &amp;&amp; e[1] == b) || (e[1] == a &amp;&amp; e[0] == b))
+			if ((e[0] == a && e[1] == b) || (e[1] == a && e[0] == b))
 				return e;
 		}
 		return null;
@@ -140,7 +140,7 @@ find_edge: function(a,b){
 remove_edge: function(a,b){
 		for (var i = 0; i < this.E.length; i++){
 			var e = this.E[i];
-			if ((e[0] == a &amp;&amp; e[1] == b) || (e[0] == b &amp;&amp; e[1] == a)){
+			if ((e[0] == a && e[1] == b) || (e[0] == b && e[1] == a)){
 				this.E.splice(i,1);
 				return;
 			}

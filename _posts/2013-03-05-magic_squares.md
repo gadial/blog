@@ -22,11 +22,11 @@ tags:
 
 באופן כללי, ריבוע קסם הוא ריבוע של {% equation %}n\times n{% endequation %} משבצות שבתוכו כתובים מספרים (לעתים קרובות המספרים {% equation %}1,2,3,\dots,n^{2}{% endequation %} אבל לא חובה) כך שכל שורה וכל עמודה מסתכמת לאותו מספר, ואם עוד דברים (כמו האלכסונים) מסתכמים לאותו מספר על אחת כמה וכמה טוב. הנה דוגמה לריבוע קסם {% equation %}3\times3{% endequation %}, שעד סוף הפוסט כולנו נבין איך לבנות:
 
-<strong>{% equation %}\left[\begin{array}{ccc}2 &amp; 7 &amp; 6\\9 &amp; 5 &amp; 1\\4 &amp; 3 &amp; 8\end{array}\right]{% endequation %}</strong>
+<strong>{% equation %}\left[\begin{array}{ccc}2 & 7 & 6\\9 & 5 & 1\\4 & 3 & 8\end{array}\right]{% endequation %}</strong>
 
 והנה ריבוע הקסם של הקוסם בסרט:
 
-{% equation %}\left[\begin{array}{cccc}8 &amp; 11 &amp; 22 &amp; 1\\21 &amp; 2 &amp; 7 &amp; 12\\3 &amp; 24 &amp; 9 &amp; 6\\10 &amp; 5 &amp; 4 &amp; 23\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}8 & 11 & 22 & 1\\21 & 2 & 7 & 12\\3 & 24 & 9 & 6\\10 & 5 & 4 & 23\end{array}\right]{% endequation %}
 
 עזבו את השאלה איך הקוסם בכלל ידע שהמשתתף הולך לבחור 42. נניח שבאים אליכם ואומרים לכם שאתם צריכים לבנות ריבוע שבו כל שורה, כל עמודה, כל אלכסון וכל רבע מסתכמים ל-42 - איך בכלל תעשו את זה? ואם המספר לא היה 42 אלא, נאמר, 53, האם עדיין אפשר היה לעשות את זה? אפשר לחשוב על זה בתור חידה: הפסיקו לרגע את קריאת הפוסט, הסתכלו על הריבוע של הקוסם שלמעלה ונסו לחשוב איך אפשר להסיק ממנו שיטה כללית לבניית ריבוע בעל אותן תכונות מרהיבות עבור כל סכום שהוא מספר דו ספרתי, ובעצם עבור כל מספר שהוא גדול או שווה ל-10.
 
@@ -36,45 +36,45 @@ tags:
 
 פרמוטציות אפשר לתאר באמצעות <strong>מטריצות</strong>, שבהקשר שלנו הן בסך הכל שם אחר לטבלאות עם מספרים בתוכן. הנה מטריצה שמתארת את הפרמוטציה שכרגע הזכרתי:
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 0 &amp; 1 &amp; 0\\1 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 1 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 1\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 0 & 1 & 0\\1 & 0 & 0 & 0\\0 & 1 & 0 & 0\\0 & 0 & 0 & 1\end{array}\right]{% endequation %}
 
 מה קורה פה? עברו על המטריצה הזו שורה שורה ובדקו מהו מספר ה<strong>עמודה</strong> שבה יש 1. בשורה הראשונה זוהי עמודה 3; בשניה זוהי 1; בשלישית זוהי 2; ברביעית זוהי 4. הנה הפרמוטציה!
 
 המטריצה הזו היא יותר מאשר "סתם" דרך כתיבה משונה למשהו שכתבתי באופן פשוט יותר: אם <a href="http://www.gadial.net/2011/10/06/matrix_product/">כופלים</a> אותה בוקטור {% equation %}\left(1,2,3,4\right){% endequation %} מקבלים:
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 0 &amp; 1 &amp; 0\\1 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 1 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 1\end{array}\right]\left[\begin{array}{c}1\\2\\3\\4\end{array}\right]=\left[\begin{array}{c}3\\1\\2\\4\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 0 & 1 & 0\\1 & 0 & 0 & 0\\0 & 1 & 0 & 0\\0 & 0 & 0 & 1\end{array}\right]\left[\begin{array}{c}1\\2\\3\\4\end{array}\right]=\left[\begin{array}{c}3\\1\\2\\4\end{array}\right]{% endequation %}
 
 כלומר, מבחינה אלגברית, המטריצה הזו מתארת את הטרנספורמציה הלינארית שמבצעת את הפרמוטציה בפועל. אין צורך להבין את זה כדי להבין את המשך הפוסט, אבל זה קישור שלא רציתי לוותר עליו.
 
 עכשיו, איך כל זה קשור לריבוע של הקוסם שלנו? פשוט מאוד: המיקומים של מספרי ה"עשרים ומשהו" הם בדיוק המיקומים של ה-1-ים במטריצה שלעיל. אפשר לכתוב זאת כך:
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 0 &amp; 22 &amp; 0\\21 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 24 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 23\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 0 & 22 & 0\\21 & 0 & 0 & 0\\0 & 24 & 0 & 0\\0 & 0 & 0 & 23\end{array}\right]{% endequation %}
 
 אחרי שמבינים את זה, קל יותר לנחש מה ההמשך. אם הקוסם לקח רביעיה אחת של מספרים, 21,22,23,24 ופיזר אותה בתוך משבצות בריבוע שמהוות פרמוטציה, אולי הוא עשה את זה עם עוד רביעיות? אז כדאי לחפש מספרים בריבוע שערכיהם סמוכים. המספר הגדול ביותר בריבוע מלבד אלו של העשרים ומשהו הוא {% equation %}12{% endequation %}, אז אפשר לנחש שהרביעיה הבאה היא {% equation %}9,10,11,12{% endequation %}, ואכן, הם מפוזרים במקומות הבאים בריבוע:
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 11 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 12\\0 &amp; 0 &amp; 9 &amp; 0\\10 &amp; 0 &amp; 0 &amp; 0\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 11 & 0 & 0\\0 & 0 & 0 & 12\\0 & 0 & 9 & 0\\10 & 0 & 0 & 0\end{array}\right]{% endequation %}
 
 עכשיו כבר ברור שיהיו עוד שתי רביעיות, אחת של {% equation %}5,6,7,8{% endequation %} ואחת של {% equation %}1,2,3,4{% endequation %}. בסופו של דבר נקבל "פירוק" של הריבוע לסכום של ארבעה ריבועים:
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 0 &amp; 22 &amp; 0\\21 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 24 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 23\end{array}\right]+\left[\begin{array}{cccc}0 &amp; 11 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 12\\0 &amp; 0 &amp; 9 &amp; 0\\10 &amp; 0 &amp; 0 &amp; 0\end{array}\right]+\left[\begin{array}{cccc}8 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 7 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 6\\0 &amp; 5 &amp; 0 &amp; 0\end{array}\right]+\left[\begin{array}{cccc}0 &amp; 0 &amp; 0 &amp; 1\\0 &amp; 2 &amp; 0 &amp; 0\\3 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 4 &amp; 0\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 0 & 22 & 0\\21 & 0 & 0 & 0\\0 & 24 & 0 & 0\\0 & 0 & 0 & 23\end{array}\right]+\left[\begin{array}{cccc}0 & 11 & 0 & 0\\0 & 0 & 0 & 12\\0 & 0 & 9 & 0\\10 & 0 & 0 & 0\end{array}\right]+\left[\begin{array}{cccc}8 & 0 & 0 & 0\\0 & 0 & 7 & 0\\0 & 0 & 0 & 6\\0 & 5 & 0 & 0\end{array}\right]+\left[\begin{array}{cccc}0 & 0 & 0 & 1\\0 & 2 & 0 & 0\\3 & 0 & 0 & 0\\0 & 0 & 4 & 0\end{array}\right]{% endequation %}
 
 למה כדאי להסתכל על הריבוע של בתור הפירוק הזה? מהטעם הפשוט שאם ניקח את אחד מהריבועים, ונוסיף או נחסיר <strong>רק למספרים שבו</strong> מספר קבוע כלשהו, אז בבירור סכום כל העמודות והשורות בריבוע הקסם ישתנה בדיוק במספר הקבוע הזה. במילים אחרות, אם אחליף את הריבוע
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 0 &amp; 22 &amp; 0\\21 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 24 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 23\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 0 & 22 & 0\\21 & 0 & 0 & 0\\0 & 24 & 0 & 0\\0 & 0 & 0 & 23\end{array}\right]{% endequation %}
 
 בריבוע שבו החסרתי 20 מכל מספר, כלומר
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 0 &amp; 2 &amp; 0\\1 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 4 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 3\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 0 & 2 & 0\\1 & 0 & 0 & 0\\0 & 4 & 0 & 0\\0 & 0 & 0 & 3\end{array}\right]{% endequation %}
 
 אקבל שסכום כל שורה ועמודה ואלכסון ורבע בריבוע הקסם החדש הוא 22.
 
 כעת, לכל אחד מארבעת הריבועים בפירוק, המספרים בתוך כל ריבוע צריכים להיות שונים (כרגע זו עדיין תחושה בלבד; אסביר בקרוב למה זה הכרחי) אבל אין בעיה שאותו מספר יופיע ביותר מריבוע אחד. לכן, אם אני רוצה לקבל את הריבוע הפשוט ביותר שמציית לחוקיות של הריבוע של הקוסם, אני פשוט אחליף את המספרים בכל אחד מארבעת הריבועים בפירוק במספרים 1 עד 4 - כמובן, לפי סדר הגדלים שמופיע בכל ריבוע. התוצאה היא הפירוק הבא:
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 0 &amp; 2 &amp; 0\\1 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 4 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 3\end{array}\right]+\left[\begin{array}{cccc}0 &amp; 3 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 4\\0 &amp; 0 &amp; 1 &amp; 0\\2 &amp; 0 &amp; 0 &amp; 0\end{array}\right]+\left[\begin{array}{cccc}4 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 3 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 2\\0 &amp; 1 &amp; 0 &amp; 0\end{array}\right]+\left[\begin{array}{cccc}0 &amp; 0 &amp; 0 &amp; 1\\0 &amp; 2 &amp; 0 &amp; 0\\3 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 4 &amp; 0\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 0 & 2 & 0\\1 & 0 & 0 & 0\\0 & 4 & 0 & 0\\0 & 0 & 0 & 3\end{array}\right]+\left[\begin{array}{cccc}0 & 3 & 0 & 0\\0 & 0 & 0 & 4\\0 & 0 & 1 & 0\\2 & 0 & 0 & 0\end{array}\right]+\left[\begin{array}{cccc}4 & 0 & 0 & 0\\0 & 0 & 3 & 0\\0 & 0 & 0 & 2\\0 & 1 & 0 & 0\end{array}\right]+\left[\begin{array}{cccc}0 & 0 & 0 & 1\\0 & 2 & 0 & 0\\3 & 0 & 0 & 0\\0 & 0 & 4 & 0\end{array}\right]{% endequation %}
 
 והסכום של כל אלו נותן לי את הריבוע:
 
-{% equation %}\left[\begin{array}{cccc}4 &amp; 3 &amp; 2 &amp; 1\\1 &amp; 2 &amp; 3 &amp; 4\\3 &amp; 4 &amp; 1 &amp; 2\\2 &amp; 1 &amp; 4 &amp; 3\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}4 & 3 & 2 & 1\\1 & 2 & 3 & 4\\3 & 4 & 1 & 2\\2 & 1 & 4 & 3\end{array}\right]{% endequation %}
 
 קל לראות שהריבוע הזה הוא פתרון שאפשר לתת במקרה שבו צריך למצוא ריבוע קסם שמסתכם ל-10: זהו סכום השורות, העמודות, האלכסונים, הרבעים ועוד כהנה וכהנה דברים (הפינות, למשל). אם כן, כבר ברורה שיטה שבה אפשר לייצר ריבוע קסם למספר <strong>כלשהו</strong> שגדול או שווה ל-10; רק צריך לזכור את הריבוע שכתבתי זה עתה ואת הפירוק שלו לסכום של ארבע פרמוטציות, ואז אפשר לבחור פרמוטציה מבין הארבע ולהוסיף לכל איבריה מספר כלשהו. אם אבחר פרמוטציה ואוסיף לה, נאמר, 7, אקבל ריבוע קסם שבו השורות-עמודות-אלכסונים-רבעים מסתכמים כולם ל-17. נסו זאת! כמובן שאפשר להשיג את אותו האפקט גם בדרך אחרת: להוסיף 4 לאחת הפרמוטציות ולהוסיף 3 לאחרת.
 
@@ -93,7 +93,7 @@ tags:
 
 הנה דוגמה פשוטה לאופן שבו אפשר לבנות ריבוע לטיני, נאמר מסדר {% equation %}3\times3{% endequation %} עם המספרים {% equation %}1,2,3{% endequation %}: השורה הראשונה תהיה {% equation %}1,2,3{% endequation %}. השורה השניה תהיה {% equation %}2,3,1{% endequation %} שהיא מה שמתקבל כאשר "מזיזים שמאלה" את אברי הסדרה {% equation %}1,2,3{% endequation %} ואת המספר השמאלי ביותר בה מעבירים לצד הימני ביותר. להזזה כזו קוראים "הזזה ציקלית" (ציקלי מלשון מעגלי; חשבו ש-{% equation %}1,2,3{% endequation %} היו מסודרים במעגל ואז היינו מזיזים את כולם שמאלה). השורה השלישית תהיה הזזה ציקלית של השורה השניה, כלומר {% equation %}3,1,2{% endequation %}. נקבל:
 
-{% equation %}\left[\begin{array}{ccc}1 &amp; 2 &amp; 3\\2 &amp; 3 &amp; 1\\3 &amp; 1 &amp; 2\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}1 & 2 & 3\\2 & 3 & 1\\3 & 1 & 2\end{array}\right]{% endequation %}
 
 נסו להוכיח לעצמכם ששיטת הבניה שלי אכן עובדת תמיד. זה לא קשה.
 
@@ -101,13 +101,13 @@ tags:
 
 נניח שאני רוצה שסכום השורות והעמודות בריבוע שבניתי למעלה לא יהיה 6 אלא מספר אחר, נאמר 77, מה אעשה? ובכן, פתרון אחד הוא להחליף כל מופע של 1 ב-72:
 
-{% equation %}\left[\begin{array}{ccc}72 &amp; 2 &amp; 3\\2 &amp; 3 &amp; 72\\3 &amp; 72 &amp; 2\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}72 & 2 & 3\\2 & 3 & 72\\3 & 72 & 2\end{array}\right]{% endequation %}
 
 שכנעו את עצמכם שזה אכן יעבוד באופן כללי. מכיוון שזה כל כך קל, ריבוע קסם שבו רק סכומי השורות והעמודות הם זהים הוא "לא מעניין" וכדאי לדרוש עוד אילוצים. אפשר לדרוש, למשל, שגם סכומי האלכסונים יהיו שווים לסכומי השורות והעמודות, ונדבר על כך אחר כך; אבל לבינתיים אני רוצה לדרוש פשוט שכל אברי הריבוע יהיו שונים זה מזה. ברור שזה מחסל את שיטת הבניה הנוכחית שלי שבה מתחילים מריבוע שאותם שלוש מספרים מופיעים בו שלוש פעמים שונות וכדי לשנות את ערך הסכום שלו פשוט בוחרים אחד מהמספרים הללו ומגדילים אותו בערך קבוע. כדי להתמודד עם האילוץ החדש הזה אצטרך קצת יותר מאשר "סתם" ריבוע לטיני.
 
 בואו נחזור שניה אל הריבוע של הקוסם. אם נסתכל רק על הצבעים בו, נראה שגם מהבחינה הזו מדובר בריבוע לטיני; אמנם, אלו צבעים ולא מספרים, אבל מה ההבדל? אם נרצה, נוכל להתאים מספר לכל צבע. הדבר החשוב הוא שבכל שורה ובכל עמודה מופיעים כל צבע בדיוק פעם אחת. לכן הריבוע של הקוסם הוא בעצם <strong>שני</strong> ריבועים לטיניים ש"מונחים אחד על השני". תכונה 4 אומרת לנו מה הקשר ביניהם: כל זוג של מספר וצבע מופיע בדיוק פעם אחת. זו לא תכונה טריוויאלית; אם אקח את הריבוע הלטיני
 
-{% equation %}\left[\begin{array}{ccc}1 &amp; 2 &amp; 3\\2 &amp; 3 &amp; 1\\3 &amp; 1 &amp; 2\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}1 & 2 & 3\\2 & 3 & 1\\3 & 1 & 2\end{array}\right]{% endequation %}
 
 ובמקום להשתמש במספרים אתאר אותו בצבעים, אקבל שצבע אחד מופיע רק עם 1, צבע אחר רק עם 2 וכן הלאה. מכאן שאנחנו צריכים לקחת שני ריבועים לטיניים <strong>שונים</strong> שאיכשהו מתנהגים יפה אחד עם השני כדי לקבל ריבוע שדומה לזה של הקוסם. לזוג ריבועים כזה קוראים <strong>ריבועים לטיניים אורתוגונליים</strong>. עכשיו אני יכול גם להסביר למה בכלל קוראים לריבועים הללו "ריבועים לטיניים"; במקור אוילר לא השתמש במספרים וצבעים כדי לתאר את תוכן הריבועים, אלא באותיות יווניות ולטיניות (יווניות בריבוע אחד, לטיניות בריבוע אחר, כדי להימנע מבלבול). לזוג ריבועים אורתוגונליים קראו גם ריבוע יווני-לטיני (הוא נכתב על ידי כך שבמקום שני ריבועים שונים, בכל משבצת בריבוע יהיה הזוג של האות היוונית והאות הלטינית שמתאימות לאותה משבצת). עם הזמן שיטת הסימון של אוילר נשכחה וגם ה"יווני" נשכח ונותר הלטיני.
 
@@ -123,33 +123,33 @@ tags:
 
 נתחיל עם ריבוע לטיני בודד מסדר {% equation %}3\times3{% endequation %} מתבקש לבחור בתור השורה הראשונה את 1,2,3. בשביל השורה השניה אני יכול לבחור או את 2,3,1 או את 3,1,2; הראשון מביניהם נחמד יותר (הוא פשוט "הזזה ציקלית" של 1,2,3) ולכן נבחר אותו, ועכשיו השורה האחרונה נקבעת בצורה יחידה (פשוט תסתכלו בכל עמודה ותראו מה המספר שטרם הופיע. נקבל:
 
-{% equation %}\left[\begin{array}{ccc}1 &amp; 2 &amp; 3\\2 &amp; 3 &amp; 1\\3 &amp; 1 &amp; 2\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}1 & 2 & 3\\2 & 3 & 1\\3 & 1 & 2\end{array}\right]{% endequation %}
 
 עכשיו בואו נבנה ריבוע לטיני נוסף ונקווה שהוא יצא אורתוגונלי לריבוע שבנינו זה עתה. אשתמש, באופן הולם למדי, באותיות הלטיניות {% equation %}a,b,c{% endequation %} כדי לתאר את איבריו. השורה הראשונה תהיה אם כן {% equation %}a,b,c{% endequation %}. מה תהיה השורה השניה? אפשר {% equation %}b,c,a{% endequation %} אבל אז זה יהיה אותו הדבר כמו הריבוע שכבר בנינו ואין סיכוי שהם יהיו אורתוגונליים (כי אז, למשל, {% equation %}a{% endequation %} ו-1 תמיד יופיעו יחד). אז בואו נבחר את האפשרות האחרת: {% equation %}c,a,b{% endequation %}. נקבל:
 
-{% equation %}\left[\begin{array}{ccc}a &amp; b &amp; c\\c &amp; a &amp; b\\b &amp; c &amp; a\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}a & b & c\\c & a & b\\b & c & a\end{array}\right]{% endequation %}
 
 ועכשיו כשנשלב את שני הריבועים שבנינו יחד נקבל:
 
-{% equation %}\left[\begin{array}{ccc}\left(1,a\right) &amp; \left(2,b\right) &amp; \left(3,c\right)\\\left(2,c\right) &amp; \left(3,a\right) &amp; \left(1,b\right)\\\left(3,b\right) &amp; \left(1,c\right) &amp; \left(2,a\right)\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}\left(1,a\right) & \left(2,b\right) & \left(3,c\right)\\\left(2,c\right) & \left(3,a\right) & \left(1,b\right)\\\left(3,b\right) & \left(1,c\right) & \left(2,a\right)\end{array}\right]{% endequation %}
 
 כלומר, לשמחתנו הרבה אכן קיבלנו זוג ריבועים אורתוגונליים! כאן ממש נדחפנו לפתרון הזה - לא היה לנו שום חופש בחירה.
 
 עכשיו, איך נבנה ריבוע קסם מהדבר הזה? ובכן, את המספרים שהם שכנים של {% equation %}a{% endequation %} נותיר כמות שהם; את המספרים שהם שכנים של {% equation %}b{% endequation %} נגדיל ב-3, ואת המספרים שהם שכנים של {% equation %}c{% endequation %} נגדיל ב-6. נקבל:
 
-{% equation %}\left[\begin{array}{ccc}1 &amp; 5 &amp; 9\\8 &amp; 3 &amp; 4\\6 &amp; 7 &amp; 2\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}1 & 5 & 9\\8 & 3 & 4\\6 & 7 & 2\end{array}\right]{% endequation %}
 
 קיבלנו ריבוע של המספרים מ-1 עד 9 כאשר כל שורה וכל עמודה מסתכמת ל-15, <strong>אך לא האלכסונים</strong>. מה עשיתי לא נכון? אם תסתכלו על האלכסונים בריבוע האורתוגונלי שלמעלה, תראו שהם לא "נחמדים" - באחד מהם מופיע 3 בכל המשבצות, ובשני מופיע {% equation %}a{% endequation %} בכל המשבצות. במקרה של האלכסון {% equation %}\left(3,c\right),\left(3,a\right),\left(3,b\right){% endequation %} זה אומר שהסכום שלו יהיה 9 (הסכום של שלושת ה-3-ים) ועוד הערכים שאני נותן ל-{% equation %}a,b,c{% endequation %} שהם במקרה שלנו {% equation %}0,3,6{% endequation %}, כלומר הסכום הכולל יהיה 18 - לא מוצלח.
 
 אז בואו נכתוב את הריבוע האורתוגונלי כמו שאוילר התכוון - עם אותיות לטיניות ויווניות ובלי מספרים כלל:
 
-{% equation %}\left[\begin{array}{ccc}\left(\alpha,a\right) &amp; \left(\beta,b\right) &amp; \left(\gamma,c\right)\\\left(\beta,c\right) &amp; \left(\gamma,a\right) &amp; \left(\alpha,b\right)\\\left(\gamma,b\right) &amp; \left(\alpha,c\right) &amp; \left(\beta,a\right)\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}\left(\alpha,a\right) & \left(\beta,b\right) & \left(\gamma,c\right)\\\left(\beta,c\right) & \left(\gamma,a\right) & \left(\alpha,b\right)\\\left(\gamma,b\right) & \left(\alpha,c\right) & \left(\beta,a\right)\end{array}\right]{% endequation %}
 
 וכעת, כדי לקבל ריבוע קסם מהיצור הזה אנחנו צריכים לבחור ערכים מספריים לכל אות יוונית ולכל אות לטינית, ואז לכל משבצת בריבוע לחבר את המספרים שבחרו לאות היוונית והלטינית שמופיעות במשבצת. אנחנו יודעים שאוטומטית, הסכום של כל שורה ושל כל עמודה יהיה שווה ל-{% equation %}\left(a+b+c\right)+\left(\alpha+\beta+\gamma\right){% endequation %} ולכן כל שנותר לנו לדאוג לו הוא האלכסונים. הסכום של אחד האלכסונים הוא {% equation %}3\gamma+\left(a+b+c\right){% endequation %} והסכום של האלכסון השני הוא {% equation %}3a+\left(\alpha+\beta+\gamma\right){% endequation %}. מה עוד מגביל אותנו? אם אנחנו רוצים שכל המספרים יהיו שונים זה מזה ושכולם יהיו בטווח מ-1 עד 9, אנחנו חייבים לבחור עבור {% equation %}a,b,c{% endequation %} את הערכים 1,2,3 (לא בהכרח בהתאמה) ועבור {% equation %}\alpha,\beta,\gamma{% endequation %} את הערכים {% equation %}0,3,6{% endequation %} (לא בהכרח בהתאמה). כמובן, אפשר היה להגיד שדווקא האותיות הלטיניות צריכות לקבל 0,3,6 והיווניות 1,2,3 אבל זה לא היה משנה כלום.
 
 אם האותיות היווניות קיבלו 0,3,6 אז {% equation %}\alpha+\beta+\gamma=9{% endequation %} ולכן כדי שיתקיים {% equation %}\left(\alpha+\beta+\gamma\right)=15{% endequation %}{% equation %}3a+{% endequation %} בהכרח חייב להתקיים {% equation %}a=2{% endequation %}. בדומה, אם האותיות הלטיניות קיבלו את 1,2,3 אז {% equation %}\left(a+b+c\right)=9{% endequation %} אז {% equation %}3\gamma+\left(a+b+c\right)=15{% endequation %} גורר ש-{% equation %}\gamma=3{% endequation %}. את שאר המספרים אפשר לבחור בחופשיות (תחת המגבלות שכבר מצאנו). בואו נבחר {% equation %}\alpha=0,\beta=6,b=1,c=3{% endequation %} ונקבל את הריבוע הבא:
 
-{% equation %}\left[\begin{array}{ccc}2 &amp; 7 &amp; 6\\9 &amp; 5 &amp; 1\\4 &amp; 3 &amp; 8\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{ccc}2 & 7 & 6\\9 & 5 & 1\\4 & 3 & 8\end{array}\right]{% endequation %}
 
 וקיבלנו בדיוק את מה שרצינו - ריבוע קסם מסדר {% equation %}3\times3{% endequation %} עם המספרים מ-1 עד 9 שבו כל השורות, העמודות והאלכסונים מסתכמים ל-15. כפי שאפשר לראות, בסופו של דבר לא נדרש הרבה יותר מהגיון בריא בסיסי כדי למצוא את הריבוע הזה, וגם ילדים יכולים לעשות זאת (וכנראה עם הרבה פחות קשקושים מסביב ממני).
 
@@ -165,7 +165,7 @@ tags:
 
 אם נקפוץ קדימה לשלב שבו הקוסם מתחיל ליצור את ערימות הקלפים שירכיבו את ריבוע הקסם (1:22) נראה שהוא בונה ארבע ערימות באופן הדרגתי: בהתחלה מניח 8,7,9,10 (בסדר הזה), אחר כך מניח 11,1,6,3, אחר כך 2,12,4,5, ואז... הויסה, רגע. בואו ניזכר בפירוק לארבע פרמוטציות של ריבוע הקסם של הקוסם:
 
-{% equation %}\left[\begin{array}{cccc}0 &amp; 0 &amp; 22 &amp; 0\\21 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 24 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 23\end{array}\right]+\left[\begin{array}{cccc}0 &amp; 11 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 12\\0 &amp; 0 &amp; 9 &amp; 0\\10 &amp; 0 &amp; 0 &amp; 0\end{array}\right]+\left[\begin{array}{cccc}8 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 7 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 6\\0 &amp; 5 &amp; 0 &amp; 0\end{array}\right]+\left[\begin{array}{cccc}0 &amp; 0 &amp; 0 &amp; 1\\0 &amp; 2 &amp; 0 &amp; 0\\3 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 4 &amp; 0\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}0 & 0 & 22 & 0\\21 & 0 & 0 & 0\\0 & 24 & 0 & 0\\0 & 0 & 0 & 23\end{array}\right]+\left[\begin{array}{cccc}0 & 11 & 0 & 0\\0 & 0 & 0 & 12\\0 & 0 & 9 & 0\\10 & 0 & 0 & 0\end{array}\right]+\left[\begin{array}{cccc}8 & 0 & 0 & 0\\0 & 0 & 7 & 0\\0 & 0 & 0 & 6\\0 & 5 & 0 & 0\end{array}\right]+\left[\begin{array}{cccc}0 & 0 & 0 & 1\\0 & 2 & 0 & 0\\3 & 0 & 0 & 0\\0 & 0 & 4 & 0\end{array}\right]{% endequation %}
 
 ברור לגמרי שהקלפים הונדסו כך שבכל שלב של החילוק יונח קלף אחד בדיוק עבור כל רבע. למשל, הקלפים שהונחו ראשונים בכל שלב היו 8,11,2, שנמצאים ברבע השמאלי-עליון של הפרמוטציות - מלבד זו השמאלית ביותר שטרם הופיעה. אם עבור הפרמוטציה השמאלית ביותר היינו בוחרים את המספרים 1,2,3,4 היינו מקבלים שסכום כל שורה-טור-אלכסון-רבע הוא 22, המספר הראשון שהיה עשוי להיבחר על ידי המשתתף; כך שאפשר להניח בשקט ש-12 הקלפים שחולקו בשלב הזה הם חלק קבוע מסידור החפיסה שאינו תלוי בבחירה של המשתתף.
 

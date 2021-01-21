@@ -58,7 +58,7 @@ tags:
 
 כי מה קורה כשכופלים ב-{% equation %}q-1{% endequation %}? לכאורה מקבלים משהו הרבה יותר מסובך, אבל למעשה רוב האיברים בסכום שנקבל <strong>יבטלו זה את זה</strong>. נקבל מה שנקרא "טור טלסקופי" (כי הרעיון בו הוא שהוא נראה ארוך אבל אפשר "לכווץ" אותו לממדים זעירים, כמו שטלסקופ יכול להיות ארוך ואפשר לכווץ אותו). כדי לראות את זה, אני אכתוב את כל אברי המכפלה {% equation %}\left(q-1\right)\left(1+q+\dots+q^{n}\right){% endequation %} בשתי שורות: בשורה הראשונה התוצאה של הכפלת {% equation %}q{% endequation %} בסוגריים הימניים, ובשורה השניה התוצאה של הכפלת {% equation %}-1{% endequation %} בסוגריים הללו:
 
-{% equation %}\begin{array}{cccccc} &amp; q &amp; +q^{2} &amp; +\dots &amp; +q^{n} &amp; +q^{n+1}\\ -1 &amp; -q &amp; -q^{2} &amp; -\dots &amp; -q^{n} \end{array}{% endequation %}
+{% equation %}\begin{array}{cccccc} & q & +q^{2} & +\dots & +q^{n} & +q^{n+1}\\ -1 & -q & -q^{2} & -\dots & -q^{n} \end{array}{% endequation %}
 
 האיברים היחידים שלא מבטלים אלו את אלו הם {% equation %}q^{n+1}{% endequation %} (שהתקבל מהכפלה של {% equation %}q{% endequation %} עם האיבר הגדול בסוגריים, {% equation %}q^{n}{% endequation %}) ו-{% equation %}-1{% endequation %} (שהתקבל מהכפלה של {% equation %}-1{% endequation %} עם האיבר הקטן בסוגריים, {% equation %}1{% endequation %}). לכן התוצאה שנקבל היא {% equation %}q^{n+1}-1{% endequation %}, כלומר
 

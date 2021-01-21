@@ -95,19 +95,19 @@ tags:
 
 ברשותכם אכתוב את זה כמטריצה:
 
-{% equation %}\left(\begin{array}{ccc}1 &amp; 1 &amp; -2\\2 &amp; 0 &amp; 1\\1 &amp; -1 &amp; -1\end{array}\right)\left(\begin{array}{c}t_{1}\\t_{2}\\s\end{array}\right)=\left(\begin{array}{c}0\\1\\1\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccc}1 & 1 & -2\\2 & 0 & 1\\1 & -1 & -1\end{array}\right)\left(\begin{array}{c}t_{1}\\t_{2}\\s\end{array}\right)=\left(\begin{array}{c}0\\1\\1\end{array}\right){% endequation %}
 
 נחסיר את השורה הראשונה משתי האחרות (מהשניה, כשהראשונה מוכפלת פי 2) ונקבל
 
-{% equation %}\left(\begin{array}{ccc}1 &amp; 1 &amp; -2\\0 &amp; -2 &amp; 5\\0 &amp; -2 &amp; 1\end{array}\right)\left(\begin{array}{c}t_{1}\\t_{2}\\s\end{array}\right)=\left(\begin{array}{c}0\\1\\1\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccc}1 & 1 & -2\\0 & -2 & 5\\0 & -2 & 1\end{array}\right)\left(\begin{array}{c}t_{1}\\t_{2}\\s\end{array}\right)=\left(\begin{array}{c}0\\1\\1\end{array}\right){% endequation %}
 
 עכשיו נשתמש בשורה השלישית כדי לאפס את הקואורדינטה השניה בשתי האחרות:
 
-{% equation %}\left(\begin{array}{ccc}1 &amp; 0 &amp; -\frac{3}{2}\\0 &amp; 0 &amp; 4\\0 &amp; 1 &amp; -\frac{1}{2}\end{array}\right)\left(\begin{array}{c}t_{1}\\t_{2}\\s\end{array}\right)=\left(\begin{array}{c}\frac{1}{2}\\0\\-\frac{1}{2}\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccc}1 & 0 & -\frac{3}{2}\\0 & 0 & 4\\0 & 1 & -\frac{1}{2}\end{array}\right)\left(\begin{array}{c}t_{1}\\t_{2}\\s\end{array}\right)=\left(\begin{array}{c}\frac{1}{2}\\0\\-\frac{1}{2}\end{array}\right){% endequation %}
 
 בגלל שקיבלנו 0 בעמודת התוצאה בשורה השניה אנחנו יכולים להשתולל איתה חופשי ולאפס את שאר השורות בקואורדינטה הזו בלי לשנות את התוצאה. נקבל:
 
-{% equation %}\left(\begin{array}{ccc}1 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 1\\0 &amp; 1 &amp; 0\end{array}\right)\left(\begin{array}{c}t_{1}\\t_{2}\\s\end{array}\right)=\left(\begin{array}{c}\frac{1}{2}\\0\\-\frac{1}{2}\end{array}\right){% endequation %}
+{% equation %}\left(\begin{array}{ccc}1 & 0 & 0\\0 & 0 & 1\\0 & 1 & 0\end{array}\right)\left(\begin{array}{c}t_{1}\\t_{2}\\s\end{array}\right)=\left(\begin{array}{c}\frac{1}{2}\\0\\-\frac{1}{2}\end{array}\right){% endequation %}
 
 הפתרון פה הוא חד משמעי: {% equation %}t_{1}=\frac{1}{2},t_{2}=-\frac{1}{2}{% endequation %} ו-{% equation %}s=0{% endequation %}. מה שנחמד הוא שקל לבדוק את הפתרון הזה במפורש על ידי הצבה:
 
@@ -115,7 +115,7 @@ tags:
 
 קיבלנו, אם כן, שנקודת החיתוך היא {% equation %}A=\left(0,1,1\right){% endequation %} עצמה. מכיוון ש-{% equation %}\left|\left(0,1,1\right)-\left(0,0,0\right)\right|=\sqrt{2}{% endequation %} קיבלנו שהיא אכן על המעגל. נותר רק למצוא את השטח של המשולש {% equation %}\text{AOB}{% endequation %}. וזו שאלה מעניינת בפני עצמה בשבילי - איך מוצאים שטח של משולש בתלת מימד כשנתונות לי רק הקואורדינטות של הקודקודים שלו? אני זוכר במעורפל שזה קשור למכפלה וקטורית (ליתר דיוק, אני זוכר שזו מכפלת אורכי הוקטורים בסינוס הזווית ביניהם ואני זוכר שהדבר הזה הוא מכפלה וקטורית), ובדיקה זריזה מעלה שאכן כך הדבר - מכפילים וקטורית שתי צלעות של המשולש, לוקחים את גודל הוקטור שהתקבל, מחלקים ב-2. אויש, אני שונא מכפלות וקטורית. טוב, בואו נעשה את זה, אני זוכר את "שיטת הדטרמיננטה" לחישוב:
 
-{% equation %}\left|\begin{array}{ccc}\hat{x} &amp; \hat{y} &amp; \hat{z}\\1 &amp; 0 &amp; -1\\0 &amp; 1 &amp; 1\end{array}\right|=1\cdot\hat{x}-1\cdot\hat{y}+1\cdot\hat{z}{% endequation %}
+{% equation %}\left|\begin{array}{ccc}\hat{x} & \hat{y} & \hat{z}\\1 & 0 & -1\\0 & 1 & 1\end{array}\right|=1\cdot\hat{x}-1\cdot\hat{y}+1\cdot\hat{z}{% endequation %}
 
 ולכן קיבלנו שטח של {% equation %}\frac{\sqrt{1^{2}+1^{2}+1^{2}}}{2}=\frac{\sqrt{3}}{2}{% endequation %}.
 <h1>מה דעתי על השאלה?</h1>

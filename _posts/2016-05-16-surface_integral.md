@@ -70,11 +70,11 @@ tags:
 
 עכשיו, הביטויים בסוגריים נראים באופן חשוד כמו <strong>דטרמיננטה</strong> למי שמכיר את המושג. לכן אפשר לכתוב, ב"קיצור":
 
-{% equation %}v\times u=\left|\begin{array}{cc}v_{2} &amp; v_{3}\\u_{2} &amp; u_{3}\end{array}\right|\hat{x}+\left|\begin{array}{cc}v_{3} &amp; v_{1}\\u_{3} &amp; u_{2}\end{array}\right|\hat{y}+\left|\begin{array}{cc}v_{1} &amp; v_{2}\\u_{1} &amp; u_{2}\end{array}\right|\hat{z}{% endequation %}
+{% equation %}v\times u=\left|\begin{array}{cc}v_{2} & v_{3}\\u_{2} & u_{3}\end{array}\right|\hat{x}+\left|\begin{array}{cc}v_{3} & v_{1}\\u_{3} & u_{2}\end{array}\right|\hat{y}+\left|\begin{array}{cc}v_{1} & v_{2}\\u_{1} & u_{2}\end{array}\right|\hat{z}{% endequation %}
 
 והביטוי <strong>הזה</strong> מזכיר באופן חשוד את איך שנראה פיתוח של דטרמיננטה של מטריצה מסדר {% equation %}3\times3{% endequation %}. הגורם האמצעי קצת לא מסתדר, כי סדר האיברים בו הפוך ({% equation %}v_{3}{% endequation %} בא לפני {% equation %}v_{1}{% endequation %}), אבל זכרו שבפיתוח של דטרמיננטה, תת-הדטרמיננטות (מה שנקרא <strong>המינורים</strong>) לא סתם מחוברות אלא כופלים אותן במינוס 1 לפעמים; המחובר האמצעי כאן אמור להיות מינוס, וזה מתקזז בדיוק עם החלפת העמודה שנדרשת כדי לתקן את הסדר. לכן, אפשר לכתוב את כל {% equation %}v\times u{% endequation %} בתור פיתוח של משהו שמזכיר דטרמיננטה:
 
-{% equation %}v\times u=\left|\begin{array}{ccc}\hat{x} &amp; \hat{y} &amp; \hat{z}\\v_{1} &amp; v_{2} &amp; v_{3}\\u_{1} &amp; u_{2} &amp; u_{3}\end{array}\right|{% endequation %}
+{% equation %}v\times u=\left|\begin{array}{ccc}\hat{x} & \hat{y} & \hat{z}\\v_{1} & v_{2} & v_{3}\\u_{1} & u_{2} & u_{3}\end{array}\right|{% endequation %}
 
 אני אומר "משהו שמזכיר דטרמיננטה" כי דטרמיננטה היא בדרך כלל של מטריצות שכל אבריהן לקוחים מאותו שדה (או חוג). כאן השורה העליונה היא לא מספרים ממשיים אלא וקטורים; הדרך הקלה ביותר להחליק את העניין הזה היא לומר שמדובר על "דטרמיננטה פורמלית" (כלומר, לשכוח את המבנה האלגברי שקיים על הסמלים שבתוך המטריצה ולחשוב עליהם בתור סמלים ותו לא ועל "כפל" שלהם בתור לכתוב אותם אחד ליד השני). האם יש דרך אחרת לחשוב על העניין? כמובן! אבל לא נראה אותה כרגע אלא בפוסט מתקדם יותר שידבר על <strong>תבניות דיפרנציאליות</strong> והפורמליזם המתמטי שרלוונטי להן.
 
@@ -128,6 +128,6 @@ tags:
 
 עבור הרוטור אנחנו נקבל <strong>וקטור</strong>, על פי ההגדרה של מכפלה וקטורית; כלומר, הרוטור הוא אופרטור שמקבל שדה וקטורי ומחזיר שדה וקטורי אחר. לכתוב את תוצאת החישוב במפורש זה כמובן עניין מתיש, אבל בואו נעשה את זה:
 
-{% equation %}\nabla\times F=\left|\begin{array}{ccc}\hat{x} &amp; \hat{y} &amp; \hat{z}\\\frac{\partial}{\partial x} &amp; \frac{\partial}{\partial y} &amp; \frac{\partial}{\partial z}\\P &amp; Q &amp; R\end{array}\right|=\left(\frac{\partial R}{\partial y}-\frac{\partial Q}{\partial z}\right)\hat{x}+\left(\frac{\partial P}{\partial z}-\frac{\partial R}{\partial x}\right)\hat{y}+\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)\hat{z}{% endequation %}
+{% equation %}\nabla\times F=\left|\begin{array}{ccc}\hat{x} & \hat{y} & \hat{z}\\\frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\P & Q & R\end{array}\right|=\left(\frac{\partial R}{\partial y}-\frac{\partial Q}{\partial z}\right)\hat{x}+\left(\frac{\partial P}{\partial z}-\frac{\partial R}{\partial x}\right)\hat{y}+\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)\hat{z}{% endequation %}
 
 לסיום, אי אפשר להמנע מלהעיר עוד הערה קטנה על הסימון: {% equation %}\nabla{% endequation %} כבר הופיע לא אחת בפוסטים הללו בתיאור של ה<strong>גרדיאנט</strong> של פונקציה סקלרית - וקטור הנגזרות החלקיות שלה. {% equation %}\nabla f=\left(\frac{\partial f}{\partial x},\frac{\partial f}{\partial y},\frac{\partial f}{\partial z}\right){% endequation %}. הסימון הזה עקבי, כמובן, עם ההגדרה הסימבולית {% equation %}\nabla=\left(\frac{\partial}{\partial x},\frac{\partial}{\partial y},\frac{\partial}{\partial z}\right){% endequation %} - תחשבו שאנחנו כופלים את ה"וקטור" {% equation %}\nabla{% endequation %} ב"סקלר" {% equation %}f{% endequation %}. לאופרטור הזה, {% equation %}\nabla{% endequation %}, קוראים <strong>דל</strong>. לסמל עצמו, המשולש ההפוך, קוראים <strong>נבלה</strong> (הדמיון למילה "נבל" בעברית אינו מקרי) ולפעמים קוראים כך גם לאופרטור. עד כמה הסימון הזה גאוני? עד כדי כך שהצלחתי להגיע להגדרה המפורשת של הדיברגנץ והרוטור בלי לטעות ובלי להסתכל בספר!

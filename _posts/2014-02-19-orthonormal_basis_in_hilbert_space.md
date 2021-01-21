@@ -124,7 +124,7 @@ tags:
 
 אברי הסדרה שלנו יהיו האיברים הבאים: {% equation %}\varphi_{n}\left(x\right)=\frac{1}{\sqrt{2\pi}}e^{inx}{% endequation %} (אני משתמש ב-{% equation %}\varphi{% endequation %} כי {% equation %}e{% endequation %} תפוס על ידי הקבוע המתמטי), כאשר {% equation %}n{% endequation %} הוא מספר <strong>שלם</strong>, כלומר אנו מרשים גם מספרים שליליים. הסיבה להכפלה ב-{% equation %}\frac{1}{\sqrt{2\pi}}{% endequation %} היא כדי שנקבל שהנורמה של כל איבר היא 1 (תכף נעשה את החישוב) ואנחנו צריכים {% equation %}n{% endequation %}-ים שליליים אחרת הסדרה לא תהיה שלמה. כמובן, יש משהו קצת מוזר בכך שהסדרה שלנו אינסופית "לשני הכיוונים", אבל זו בסך הכל שיטת סימון קצת שונה שנועדה להקל עלינו; הייתי יכול באותה המידה להגדיר את הסדרה כך:
 
-{% equation %}\varphi_{n}\left(x\right)=\begin{cases}\frac{1}{\sqrt{2\pi}}e^{ikx} &amp; n=2k\\\frac{1}{\sqrt{2\pi}}e^{-ikx} &amp; n=2k+1\end{cases}{% endequation %}
+{% equation %}\varphi_{n}\left(x\right)=\begin{cases}\frac{1}{\sqrt{2\pi}}e^{ikx} & n=2k\\\frac{1}{\sqrt{2\pi}}e^{-ikx} & n=2k+1\end{cases}{% endequation %}
 
 אבל זה יותר מסובך מבחינת הסימונים, ומתמטיקאים שונאים דברים כאלו, ואני מסכים איתם.
 

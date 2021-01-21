@@ -101,7 +101,7 @@ tags:
 
 {% equation %}e_{i}\equiv_{m_{j}}\delta_{ij}{% endequation %}, כאשר {% equation %}\delta_{ij}{% endequation %} הוא <strong>הדלתא של קרונקר</strong>:
 
-{% equation %}\delta_{ij}=\begin{cases}1 &amp; i=j\\0 &amp; i\ne j\end{cases}{% endequation %}
+{% equation %}\delta_{ij}=\begin{cases}1 & i=j\\0 & i\ne j\end{cases}{% endequation %}
 
 כעת, נגדיר את הפתרון למערכת המשוואות: {% equation %}x=a_{1}e_{1}+a_{2}e_{2}+\dots+a_{k}e_{k}{% endequation %} (מודולו {% equation %}m{% endequation %}). כדי לראות שזה הפתרון המבוקש נשים לב לכך ש-{% equation %}x\equiv_{m_{i}}a_{1}\delta_{1i}+\dots+a_{k}\delta_{ik}=a_{i}{% endequation %}, כנדרש.
 

@@ -142,7 +142,7 @@ end
 {% highlight haskell %}
 triangle_type :: Int -> (Int -> (Int -> String))
 triangle_type a b c
-	| a == b &amp;&amp; b == c				= "Equilateral"
+	| a == b && b == c				= "Equilateral"
 	| a == b || b == c || a == c	= "Isosceles"
 	| otherwise						= "Not equilateral and not isosceles"
 
@@ -174,7 +174,7 @@ main = do
 		var b = parseInt(document.getElementById("b").value);
 		var c = parseInt(document.getElementById("c").value);
 		var triangle_type;
-		if (a == b &amp;&amp; b == c){
+		if (a == b && b == c){
 		  triangle_type = "Equilateral triangle";
 		}
 		else if (a == b || b == c || a == c){

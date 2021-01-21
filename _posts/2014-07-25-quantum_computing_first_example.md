@@ -27,7 +27,7 @@ tags:
 
 עכשיו אני הולך להתחיל להיות טכני, ולכן לפני כן אני אגלה לכם מה בדיוק עושים, כי זה באמת פשוט: אליס ובוב בודקים את הביטים שקיבלו. מי שקיבל 0 לא עושה כלום. מי שקיבל 1 מפעיל על הקיוביט שלו טרנספורמציה מסויימת שאתאר בהמשך (לכל אחד מהם יש טרנספורמציה אחרת). אחר כך הם מודדים את הקיוביטים שלהם ועונים לפי תוצאת המדידה. זה הכל; העיקר הוא כמובן בכך שהטרנספורמציה שהם ביצעו על הקיוביטים שלהם משפיעה איכשהו על תוצאת המדידה. כדי להבין איך נצטרך להיכנס לפרטים. אעיר מראש שפרט אחד שאני <strong>לא</strong> הולך להיכנס אליו בכלל הוא האופן שבו סדר הפעולות משפיע על החישוב - הוא לא, אבל כדי לראות את זה הפוסט יצטרך להתנפח עם עוד חישובים שמגיעים לאותה התוצאה. אם זה מפריע לכם אתם יכולים לבצע את הבדיקה בעצמכם.
 
-בואו נתאר שניה איך מבצעים פעולות על מערכת קוונטית. נתחיל עם מערכת של קיוביט בודד, עם מצבי בסיס {% equation %}\left|0\right\rangle {% endequation %} ו-{% equation %}\left|1\right\rangle {% endequation %}. כל פעולה (שאינה מדידה) שניתן לבצע על המערכת ניתנת לתיאור על ידי מטריצה {% equation %}2\times2{% endequation %} {% equation %}A{% endequation %} שהיא <strong>אוניטרית</strong>, כלומר {% equation %}AA^{*}=I{% endequation %} (והמשמעות: {% equation %}A{% endequation %} משמרת נורמה של וקטורים שהיא פועלת עליהם). דוגמה קלאסית לטרנספורמציה אוניטרית על מרחב ממימד 2 היא <strong>סיבוב</strong>. סיבוב בזווית של {% equation %}\theta {% endequation %} מעלות מתואר על ידי המטריצה {% equation %}A=\left[\begin{array}{cc}\cos\theta &amp; -\sin\theta\\\sin\theta &amp; \cos\theta\end{array}\right]{% endequation %}. דרך אחרת, שקולה, לתאר את {% equation %}A{% endequation %} היא לתאר את האופן שבו היא פועלת על מצבי הבסיס - לאן היא שולחת אותם:
+בואו נתאר שניה איך מבצעים פעולות על מערכת קוונטית. נתחיל עם מערכת של קיוביט בודד, עם מצבי בסיס {% equation %}\left|0\right\rangle {% endequation %} ו-{% equation %}\left|1\right\rangle {% endequation %}. כל פעולה (שאינה מדידה) שניתן לבצע על המערכת ניתנת לתיאור על ידי מטריצה {% equation %}2\times2{% endequation %} {% equation %}A{% endequation %} שהיא <strong>אוניטרית</strong>, כלומר {% equation %}AA^{*}=I{% endequation %} (והמשמעות: {% equation %}A{% endequation %} משמרת נורמה של וקטורים שהיא פועלת עליהם). דוגמה קלאסית לטרנספורמציה אוניטרית על מרחב ממימד 2 היא <strong>סיבוב</strong>. סיבוב בזווית של {% equation %}\theta {% endequation %} מעלות מתואר על ידי המטריצה {% equation %}A=\left[\begin{array}{cc}\cos\theta & -\sin\theta\\\sin\theta & \cos\theta\end{array}\right]{% endequation %}. דרך אחרת, שקולה, לתאר את {% equation %}A{% endequation %} היא לתאר את האופן שבו היא פועלת על מצבי הבסיס - לאן היא שולחת אותם:
 
 {% equation %}\left|0\right\rangle \mapsto\cos\theta\left|0\right\rangle +\sin\theta\left|1\right\rangle {% endequation %}
 
@@ -39,9 +39,9 @@ tags:
 
 כלומר, הטרנספורמציה הזו אכן מסוגלת לקחת מצב "מעורבב" של {% equation %}\left|0\right\rangle +\left|1\right\rangle {% endequation %} ולהעביר אותו למצב "טהור" (בדומה גם ל-{% equation %}\left|1\right\rangle {% endequation %} אפשר להגיע עם טרנספורמציה אחרת). אבל זה, כאמור, במערכת של קיוביט אחד. במערכת של שני הקיוביטים שלנו אם אליס תפעיל סיבוב ב-{% equation %}\theta{% endequation %} מעלות על הקיוביט שלה, הפעולה ה"כללית" היא בעצם שילוב של שתי פעולות: סיבוב של הקיוביט של אליס, והשארה ללא שינוי של הקיוביט של בוב, מה שמתואר על ידי המטריצה {% equation %}I{% endequation %}. שתי אלו הן מטריצות {% equation %}2\times2{% endequation %} - איך מקבלים מהן את המטריצה {% equation %}4\times4{% endequation %} שמתארת את הפעולה של אליס על המרחב של שני הקיוביטים?
 
-התשובה פשוטה: מכפלת קרונקר של המטריצות. מכפלת קרונקר, כזכור, פירושו לקחת את אחת המטריצות ולדחוף עותק שלה לתוך כל כניסה במטריצה השניה, תוך שהמטריצה מוכפלת בסקלר שהוא הערך של הכניסה של המטריצה השניה. במקרה שלנו אנחנו לוקחים את המטריצה {% equation %}\left[\begin{array}{cc}\cos\theta &amp; -\sin\theta\\\sin\theta &amp; \cos\theta\end{array}\right]{% endequation %} ודוחפים אותה לתוך המטריצה {% equation %}\left[\begin{array}{cc}1 &amp; 0\\0 &amp; 1\end{array}\right]{% endequation %}. נקבל את המטריצה
+התשובה פשוטה: מכפלת קרונקר של המטריצות. מכפלת קרונקר, כזכור, פירושו לקחת את אחת המטריצות ולדחוף עותק שלה לתוך כל כניסה במטריצה השניה, תוך שהמטריצה מוכפלת בסקלר שהוא הערך של הכניסה של המטריצה השניה. במקרה שלנו אנחנו לוקחים את המטריצה {% equation %}\left[\begin{array}{cc}\cos\theta & -\sin\theta\\\sin\theta & \cos\theta\end{array}\right]{% endequation %} ודוחפים אותה לתוך המטריצה {% equation %}\left[\begin{array}{cc}1 & 0\\0 & 1\end{array}\right]{% endequation %}. נקבל את המטריצה
 
-{% equation %}\left[\begin{array}{cccc}\cos\theta &amp; -\sin\theta &amp; 0 &amp; 0\\\sin\theta &amp; \cos\theta &amp; 0 &amp; 0\\0 &amp; 0 &amp; \cos\theta &amp; -\sin\theta\\0 &amp; 0 &amp; \sin\theta &amp; \cos\theta\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}\cos\theta & -\sin\theta & 0 & 0\\\sin\theta & \cos\theta & 0 & 0\\0 & 0 & \cos\theta & -\sin\theta\\0 & 0 & \sin\theta & \cos\theta\end{array}\right]{% endequation %}
 
 המטריצה הזו מבוססת על הנחה כלשהי שלי על הסדר של אברי הבסיס במכפלה הטנזורית - ספציפית, שהוא זה: {% equation %}\left|00\right\rangle ,\left|10\right\rangle ,\left|01\right\rangle ,\left|11\right\rangle {% endequation %}. כלומר, שאנחנו כל פעם מתקדמים קודם כל על פי הרכיב הראשון ואז הרכיב השני.
 
@@ -63,9 +63,9 @@ tags:
 
 {% equation %}\left|1\right\rangle \mapsto0\cdot\left|0\right\rangle +0\cdot\left|1\right\rangle {% endequation %}
 
-שהמטריצה שלה היא {% equation %}\left[\begin{array}{cc}1 &amp; 0\\0 &amp; 0\end{array}\right]{% endequation %} (שימו לב - לא מטריצה אוניטרית!). אחרי מכפלה טנזורית עם {% equation %}I{% endequation %} נקבל את המטריצה
+שהמטריצה שלה היא {% equation %}\left[\begin{array}{cc}1 & 0\\0 & 0\end{array}\right]{% endequation %} (שימו לב - לא מטריצה אוניטרית!). אחרי מכפלה טנזורית עם {% equation %}I{% endequation %} נקבל את המטריצה
 
-{% equation %}\left[\begin{array}{cccc}1 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 1 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}1 & 0 & 0 & 0\\0 & 0 & 0 & 0\\0 & 0 & 1 & 0\\0 & 0 & 0 & 0\end{array}\right]{% endequation %}
 
 שמתאימה לטרנספורמציה
 
@@ -103,15 +103,15 @@ tags:
 
 מכיוון שגם אליס וגם בוב מפעילים טרנספורמציות לינאריות, אולי הכי פשוט לראות מה קורה על ידי היעזרות בכפל מטריצות. המטריצה שמתארת את הפעולה של אליס היא זו:
 
-{% equation %}\left[\begin{array}{cccc}\cos\frac{\pi}{8} &amp; -\sin\frac{\pi}{8} &amp; 0 &amp; 0\\\sin\frac{\pi}{8} &amp; \cos\frac{\pi}{8} &amp; 0 &amp; 0\\0 &amp; 0 &amp; \cos\frac{\pi}{8} &amp; -\sin\frac{\pi}{8}\\0 &amp; 0 &amp; \sin\frac{\pi}{8} &amp; \cos\frac{\pi}{8}\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}\cos\frac{\pi}{8} & -\sin\frac{\pi}{8} & 0 & 0\\\sin\frac{\pi}{8} & \cos\frac{\pi}{8} & 0 & 0\\0 & 0 & \cos\frac{\pi}{8} & -\sin\frac{\pi}{8}\\0 & 0 & \sin\frac{\pi}{8} & \cos\frac{\pi}{8}\end{array}\right]{% endequation %}
 
 והמטריצה של בוב היא (בדקו!)
 
-{% equation %}\left[\begin{array}{cccc}\cos\frac{\pi}{8} &amp; 0 &amp; \sin\frac{\pi}{8} &amp; 0\\0 &amp; \cos\frac{\pi}{8} &amp; &amp; \sin\frac{\pi}{8}\\-\sin\frac{\pi}{8} &amp; 0 &amp; \cos\frac{\pi}{8} &amp; 0\\0 &amp; -\sin\frac{\pi}{8} &amp; 0 &amp; \cos\frac{\pi}{8}\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}\cos\frac{\pi}{8} & 0 & \sin\frac{\pi}{8} & 0\\0 & \cos\frac{\pi}{8} & & \sin\frac{\pi}{8}\\-\sin\frac{\pi}{8} & 0 & \cos\frac{\pi}{8} & 0\\0 & -\sin\frac{\pi}{8} & 0 & \cos\frac{\pi}{8}\end{array}\right]{% endequation %}
 
 כפל מטריצות הוא לא כל כך נורא - אפילו אני יכול לחשב אותו. מקבלים:
 
-{% equation %}\left[\begin{array}{cccc}\cos\frac{\pi}{8} &amp; -\sin\frac{\pi}{8} &amp; 0 &amp; 0\\\sin\frac{\pi}{8} &amp; \cos\frac{\pi}{8} &amp; 0 &amp; 0\\0 &amp; 0 &amp; \cos\frac{\pi}{8} &amp; -\sin\frac{\pi}{8}\\0 &amp; 0 &amp; \sin\frac{\pi}{8} &amp; \cos\frac{\pi}{8}\end{array}\right]\left[\begin{array}{cccc}\cos\frac{\pi}{8} &amp; 0 &amp; \sin\frac{\pi}{8} &amp; 0\\0 &amp; \cos\frac{\pi}{8} &amp; &amp; \sin\frac{\pi}{8}\\-\sin\frac{\pi}{8} &amp; 0 &amp; \cos\frac{\pi}{8} &amp; 0\\0 &amp; -\sin\frac{\pi}{8} &amp; 0 &amp; \cos\frac{\pi}{8}\end{array}\right]=\left[\begin{array}{cccc}\cos^{2}\frac{\pi}{8} &amp; \cdots &amp; \cdots &amp; -\sin^{2}\frac{\pi}{8}\\\frac{1}{2}\sin\frac{\pi}{4} &amp; &amp; &amp; \frac{1}{2}\sin\frac{\pi}{4}\\-\frac{1}{2}\sin\frac{\pi}{4} &amp; &amp; &amp; -\frac{1}{2}\sin\frac{\pi}{4}\\-\sin^{2}\frac{\pi}{8} &amp; \cdots &amp; \cdots &amp; \cos^{2}\frac{\pi}{8}\end{array}\right]{% endequation %}
+{% equation %}\left[\begin{array}{cccc}\cos\frac{\pi}{8} & -\sin\frac{\pi}{8} & 0 & 0\\\sin\frac{\pi}{8} & \cos\frac{\pi}{8} & 0 & 0\\0 & 0 & \cos\frac{\pi}{8} & -\sin\frac{\pi}{8}\\0 & 0 & \sin\frac{\pi}{8} & \cos\frac{\pi}{8}\end{array}\right]\left[\begin{array}{cccc}\cos\frac{\pi}{8} & 0 & \sin\frac{\pi}{8} & 0\\0 & \cos\frac{\pi}{8} & & \sin\frac{\pi}{8}\\-\sin\frac{\pi}{8} & 0 & \cos\frac{\pi}{8} & 0\\0 & -\sin\frac{\pi}{8} & 0 & \cos\frac{\pi}{8}\end{array}\right]=\left[\begin{array}{cccc}\cos^{2}\frac{\pi}{8} & \cdots & \cdots & -\sin^{2}\frac{\pi}{8}\\\frac{1}{2}\sin\frac{\pi}{4} & & & \frac{1}{2}\sin\frac{\pi}{4}\\-\frac{1}{2}\sin\frac{\pi}{4} & & & -\frac{1}{2}\sin\frac{\pi}{4}\\-\sin^{2}\frac{\pi}{8} & \cdots & \cdots & \cos^{2}\frac{\pi}{8}\end{array}\right]{% endequation %}
 
 לא טרחתי לחשב את העמודות במרכז כי כשנכפול את המטריצה במצב הקוונטי {% equation %}\left|00\right\rangle +\left|11\right\rangle {% endequation %} העמודות הללו לא ישפיעו. אחרי הכפל נקבל את המצב הבא:
 

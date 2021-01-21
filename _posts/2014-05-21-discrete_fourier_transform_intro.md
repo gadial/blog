@@ -63,11 +63,11 @@ tags:
 
 אם אסמן ב-{% equation %}\overline{a}{% endequation %} את הוקטור {% equation %}\overline{a}=\left(a_{0},a_{1},\dots,a_{N-1}\right){% endequation %} ובדומה אסמן גם את הוקטור {% equation %}\overline{b}{% endequation %}, אז נשים לב שמשוואות הסינתזה הן דרך לכתוב {% equation %}\overline{a}=W\cdot\overline{b}{% endequation %} כאשר {% equation %}W{% endequation %} היא מטריצה שמקודדת בתוכה את כל חזקות שורשי היחידה מסדר {% equation %}N{% endequation %}, בצורה הבאה: {% equation %}W_{nk}=\omega_{k}^{n}{% endequation %}. קונקרטית, הנה איך שהיא נראית:
 
-{% equation %}W=\left[\begin{array}{ccccc}1 &amp; 1 &amp; 1 &amp; \cdots &amp; 1\\1 &amp; \omega &amp; \omega_{2} &amp; \cdots &amp; \omega_{N-1}\\1 &amp; \omega^{2} &amp; \omega_{2}^{2} &amp; \dots &amp; \omega_{N-1}^{2}\\\vdots &amp; \vdots &amp; \vdots &amp; &amp; \vdots\\1 &amp; \omega^{N-1} &amp; \omega_{2}^{N-1} &amp; \cdots &amp; \omega_{N-1}^{N-1}\end{array}\right]{% endequation %}
+{% equation %}W=\left[\begin{array}{ccccc}1 & 1 & 1 & \cdots & 1\\1 & \omega & \omega_{2} & \cdots & \omega_{N-1}\\1 & \omega^{2} & \omega_{2}^{2} & \dots & \omega_{N-1}^{2}\\\vdots & \vdots & \vdots & & \vdots\\1 & \omega^{N-1} & \omega_{2}^{N-1} & \cdots & \omega_{N-1}^{N-1}\end{array}\right]{% endequation %}
 
 מה קורה כאן? כל עמודה מכילה את כל החזקות של אחד משורשי היחידה מסדר {% equation %}N{% endequation %}, החל מ-1 הטריוויאלי, עבור ב-{% equation %}\omega{% endequation %} וכלה בכל החזקות של {% equation %}\omega{% endequation %} עד {% equation %}\omega_{N-1}{% endequation %}. מטריצות כאלו הן מספיק מעניינות כדי לזכות לשם מיוחד משל עצמן - <strong>מטריצות ונדרמונדה</strong>, אם כי לרוב השם הזה מיועד למטריצות שבהן החזקות של האיברים הם <strong>בשורות</strong> ולא בעמודות. המבנה הכללי של מטריצת ונדרמונדה מסדר {% equation %}N\times N{% endequation %} על האיברים {% equation %}\alpha_{1},\dots,\alpha_{N}{% endequation %} הוא זה:
 
-{% equation %}V\left(\alpha_{1},\dots,\alpha_{N}\right)=\left[\begin{array}{cccc}\alpha_{1}^{0} &amp; \alpha_{1}^{1} &amp; \cdots &amp; \alpha_{1}^{N-1}\\\alpha_{2}^{0} &amp; \alpha_{2}^{1} &amp; \dots &amp; \alpha_{2}^{N-1}\\\vdots &amp; \vdots &amp; &amp; \vdots\\\alpha_{N-1}^{0} &amp; \alpha_{N-1}^{1} &amp; \cdots &amp; \alpha_{N-1}^{N-1}\end{array}\right]{% endequation %}
+{% equation %}V\left(\alpha_{1},\dots,\alpha_{N}\right)=\left[\begin{array}{cccc}\alpha_{1}^{0} & \alpha_{1}^{1} & \cdots & \alpha_{1}^{N-1}\\\alpha_{2}^{0} & \alpha_{2}^{1} & \dots & \alpha_{2}^{N-1}\\\vdots & \vdots & & \vdots\\\alpha_{N-1}^{0} & \alpha_{N-1}^{1} & \cdots & \alpha_{N-1}^{N-1}\end{array}\right]{% endequation %}
 
 אם נחשוב על זה לרגע נשים לב לכך ש-{% equation %}W{% endequation %} היא סימטרית, ולכן היא גם מטריצת ונדרמונדה במובן הרגיל של ההגדרה, אבל זה לא יהיה חשוב לנו כל כך כרגע.
 
@@ -97,11 +97,11 @@ tags:
 
 בפוסט הקודם הראיתי שיש קשר בין התמרת פורייה של פונקציות ממשיות כלליות ובין התמרת פורייה של פונקציות ממשיות מחזוריות ("טורי פורייה"), שבא לידי ביטוי ב<strong>דיאגרמה קומוטטיבית</strong>:
 
-{% equation %}\begin{array}{ccc}f &amp; \leftrightarrow &amp; \hat{f}\\\downarrow &amp; &amp; \downarrow\\g &amp; \leftrightarrow &amp; \hat{g}\end{array}{% endequation %}
+{% equation %}\begin{array}{ccc}f & \leftrightarrow & \hat{f}\\\downarrow & & \downarrow\\g & \leftrightarrow & \hat{g}\end{array}{% endequation %}
 
 כאשר המעבר מ-{% equation %}f{% endequation %} אל {% equation %}g{% endequation %} התבצע על ידי פעולה של <strong>סכימה</strong> (שלקחה פונקציה כללית והפכה אותה למחזורית) והמעבר מ-{% equation %}\hat{f}{% endequation %} אל {% equation %}\hat{g}{% endequation %} התבצע על ידי <strong>דגימה</strong> (שלקחה פונקציה על מרחב רציף והפכה אותה לפונקציה על מרחב בדיד). בצורה לא מפתיעה במיוחד, אותה דיאגרמה (עם אותן פעולות, עד כדי הפרמטרים שלהן שעשויים להיות שונים) מתאימה גם להתמרות שראינו הפעם - התמרה של פונקציה "כללית" על {% equation %}\mathbb{Z}{% endequation %} והתמרה של פונקציה מחזורית על {% equation %}\mathbb{Z}{% endequation %}. אז יש לנו עוד עותק של הדיאגרמה
 
-{% equation %}\begin{array}{ccc}u &amp; \leftrightarrow &amp; \hat{u}\\\downarrow &amp; &amp; \downarrow\\v &amp; \leftrightarrow &amp; \hat{v}\end{array}{% endequation %}
+{% equation %}\begin{array}{ccc}u & \leftrightarrow & \hat{u}\\\downarrow & & \downarrow\\v & \leftrightarrow & \hat{v}\end{array}{% endequation %}
 
 עכשיו, די בבירור יש לנו מעברים מהפונקציות {% equation %}f{% endequation %} אל {% equation %}u{% endequation %} ומ-{% equation %}g{% endequation %} אל {% equation %}v{% endequation %} על ידי דגימה (הסבירו לעצמכם למה!) ומ-{% equation %}\hat{f}{% endequation %} אל {% equation %}\hat{u}{% endequation %} ומ-{% equation %}\hat{g}{% endequation %} אל {% equation %}\hat{v}{% endequation %} על ידי סכימה (עם פרמטרים ספציפיים שונים לכל סכימה). אז אנחנו מקבלים דיאגרמה קומוטטיבית דמויית קוביה, שהדיאגרמה הראשונה שהראיתי היא הפאה העליונה שלה, והדיאגרמה השניה היא הפאה התחתונה שלה. נסו לצייר אותן!
 
@@ -125,13 +125,13 @@ tags:
 
 אני מאוד אוהב להציג את העניין הזה בצורה ציורית. בואו נכתוב את אברי הסדרה {% equation %}a_{n}{% endequation %}, ומעליהם נכתוב את אברי הסדרה {% equation %}b_{n}{% endequation %} אבל בסדר הפוך, כך שנקודת ה"חיבור" היחידה שלהם היא באיברים עם אינדקס 0:
 
-{% equation %}\begin{array}{ccccccc}\cdots &amp; b_{2} &amp; b_{1} &amp; b_{0}\\ &amp; &amp; &amp; a_{0} &amp; a_{1} &amp; a_{2} &amp; \cdots\end{array}{% endequation %}
+{% equation %}\begin{array}{ccccccc}\cdots & b_{2} & b_{1} & b_{0}\\ & & & a_{0} & a_{1} & a_{2} & \cdots\end{array}{% endequation %}
 
 חשבו על המקומות שנותרו ריקים בתור 0-ים.
 
 עכשיו נכפול כל איבר בשורה העליונה באיבר שבדיוק מתחתיו בשורה התחתונה, ונסכום הכל. די ברור שכל הכפולות פרט למספר סופי יהיו 0 כך שהסכום הוא בעצם סופי, ולכן מוגדר היטב, וגם קל לראות שהוא פשוט יהיה {% equation %}a_{0}b_{0}{% endequation %}. עד כאן, כתיבה מסובכת לדבר פשוט, אבל הנה האופן שבו אני מקבל את האיבר הבא בסכום: אקח את סדרת ה-{% equation %}b{% endequation %}-ים שבשורה העליונה ואזיז אותה צעד אחד ימינה:
 
-{% equation %}\begin{array}{ccccccc}\cdots &amp; b_{3} &amp; b_{2} &amp; b_{1} &amp; b_{0}\\ &amp; &amp; &amp; a_{0} &amp; a_{1} &amp; a_{2} &amp; \cdots\end{array}{% endequation %}
+{% equation %}\begin{array}{ccccccc}\cdots & b_{3} & b_{2} & b_{1} & b_{0}\\ & & & a_{0} & a_{1} & a_{2} & \cdots\end{array}{% endequation %}
 
 כעת הכפלה של כל זוג איברים וסכום של כולם תניב לי את {% equation %}a_{0}b_{1}+a_{1}b_{0}{% endequation %}, וכן הלאה וכן הלאה. {% equation %}c_{n}{% endequation %} יתקבל אחרי שאזיז את ה-{% equation %}b{% endequation %}-ים למעלה {% equation %}n{% endequation %} צעדים ימינה, אכפול ואסכום. התיאור הציורי הזה נותן לי אישית אינטואיציה טובה לגבי "מה הולך כאן בכלל".
 

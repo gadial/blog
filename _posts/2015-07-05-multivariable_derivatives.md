@@ -80,7 +80,7 @@ tags:
 
 בואו נראה דוגמה לפונקציה {% equation %}f:\mathbb{R}^{2}\to\mathbb{R}{% endequation %} שהגרדיאנט שלה קיים אבל היא לא גזירה:
 
-{% equation %}f\left(x,y\right)=\begin{cases}0 &amp; x=y=0\\\frac{x^{2}y}{x^{4}+y^{2}} &amp; \mbox{else}\end{cases}{% endequation %}
+{% equation %}f\left(x,y\right)=\begin{cases}0 & x=y=0\\\frac{x^{2}y}{x^{4}+y^{2}} & \mbox{else}\end{cases}{% endequation %}
 
 הרעיון כאן הוא ש-0 היא נקודה בעייתית עבור הפונקציה - הגדרנו את ערכה להיות 0 שם כי אם נקפיא את {% equation %}x{% endequation %} או את {% equation %}y{% endequation %} להיות 0 ונלך על הציר של המשתנה השני נקבל כל הזמן את הערך 0; אבל באותה מידה יכלנו להגדיר אותו להיות חצי, כי לאורך העקום {% equation %}\left(t,t^{2}\right){% endequation %} הערך של הפונקציה הוא {% equation %}\frac{1}{2}{% endequation %}. כלומר, אין דרך טובה להגדיר את {% equation %}f{% endequation %} כך שתהיה רציפה בראשית הצירים, ולא קשה לראות שכמו עבור פונקציות ממשיות, גם במקרה שלנו גזירות של פונקציה בנקודה גוררת רציפות שלה בנקודה.
 

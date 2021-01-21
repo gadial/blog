@@ -118,33 +118,33 @@ tags:
 
 עכשיו משהסכמנו על כך שהמילה המשותפת שנייצר תהיה סדרת קונפיגורציות שמתארת ריצה חוקית שעוצרת, נשאלת רק השאלה איך "לכפות" על המילה שנוצרת באמת לתאר ריצה כזו. לשם כך נצטרך להתבסס בצורה חזקה על הדרישה שיש לנו מ-PCP: שאותה סדרה תיווצר <strong>בשתי דרכים שונות</strong>, על ידי <strong>אותם אינדקסים</strong>. מה שנעשה הוא שניצור את המילה בצורה כזו שצד שמאל "רודף" כל הזמן אחרי צד ימין ומפגר אחריו בקונפיגורציה אחת בדיוק, וההזדמנות היחידה שלו להשיג את צד ימין ולהשלים את המילה היא אם צד ימין הגיע למצב הסופי {% equation %}q_{f}{% endequation %}. כדי לעשות את זה יותר ברור אני לא אצייר את המילים בתור צד שמאל וצד ימין אלא בתור למעלה ולמטה. בהתחלה שתי המילים שנבנות ייראו כך:
 
-{% equation %}\begin{array}{cc}\#\\\# &amp; q_{0}\flat\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cc}\#\\\# & q_{0}\flat\#\end{array}{% endequation %}
 
 כעת, כדי שלמילה למעלה יהיה סיכוי "להדביק" את המילה שלמטה ועדיין להיות זהה לה, האותיות הבאות שחייבות להתווסף אליה הן {% equation %}q_{0}\flat{% endequation %}. עכשיו, נניח שלמכונה יש את הצעד הבא: {% equation %}\delta\left(q_{0},\flat\right)=\left(q_{1},a,R\right){% endequation %}. אנחנו רוצים שאחרי הוספת הזוג הבא, המילים שאנחנו בונים ייראו כך:
 
-{% equation %}\begin{array}{ccc}\# &amp; q_{0}\flat\\\# &amp; q_{0}\flat &amp; \#aq_{1}\end{array}{% endequation %}
+{% equation %}\begin{array}{ccc}\# & q_{0}\flat\\\# & q_{0}\flat & \#aq_{1}\end{array}{% endequation %}
 
 כלומר, המילה שלמעלה "כיסתה" את החלק של {% equation %}q_{0}\flat{% endequation %} ואילצה את המילה שלמטה לבצע את המעבר שמקודד ב-{% equation %}\delta\left(q_{0},\flat\right){% endequation %}. איך נעשה את זה? פשוט מאוד: לרשימת הזוגות שלנו נוסיף את הזוג {% equation %}\left(q_{0}\flat,aq_{1}\right){% endequation %}. הוספת הזוג הזה למילה שנבנית יגרום בדיוק לתוצאה שאנחנו מעוניינים בה.
 
 עכשיו צריך לטפל ב-{% equation %}\#{% endequation %} שמסמן סוף קונפיגורציה ומעבר לבאה בתור. אנחנו רוצים לסגור את הקונפיגורציה בו זמנית בשתי המילים, אז נשתמש בזוג {% equation %}\left(\#,\#\right){% endequation %} ונקבל:
 
-{% equation %}\begin{array}{cccc}\# &amp; q_{0}\flat &amp; \#\\\# &amp; q_{0}\flat &amp; \# &amp; aq_{1}\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccc}\# & q_{0}\flat & \#\\\# & q_{0}\flat & \# & aq_{1}\#\end{array}{% endequation %}
 
 עכשיו, נניח שיש לנו את המעבר {% equation %}\delta\left(q_{1},\flat\right)=\left(q_{2},\flat,S\right){% endequation %}. איך נטפל בו? אנחנו אמורים להוסיף את הזוג {% equation %}\left(q_{1}\flat,q_{2}\flat\right){% endequation %} וזה בסדר גמור, אבל אם תשימו לב, במילה שלנו {% equation %}q_{1}{% endequation %} נמצא משמאל ל-{% equation %}\#{% endequation %} שמסמן את סוף הקונפיגורציה, ולא משמאל ל-{% equation %}\flat{% endequation %}. הרעיון הוא שהראש של המכונה הגיע אל הקצה של הסרט שכבר ראינו, ולכן במובלע נובע שיש שם {% equation %}\flat{% endequation %} אבל זה לא נכתב במפורש עדיין. איך נפתור את הבעיה הזו? פתרון מתבקש אחד הוא להוסיף מעבר מהצורה {% equation %}\left(q_{1}\#,q_{2}\flat\#\right){% endequation %} - אבל זה קצת מסורבל. אפשר להיות יותר חכמים ולמנוע את הבעיה מראש, כבר בשלב סגירת הקונפיגורציה: במקום להשתמש בזוג {% equation %}\left(\#,\#\right){% endequation %} אנחנו רוצים לאפשר גם להשתמש בזוג {% equation %}\left(\#,\flat\#\right){% endequation %} שאומר לקונפיגורציה למטה להוסיף {% equation %}\flat{% endequation %} כי אולי נזדקק לו תכף. אם היינו משתמשים בזוג הזה, זוג המילים שאנחנו בונים היה מהצורה:
 
-{% equation %}\begin{array}{cccc}\# &amp; q_{0}\flat &amp; \#\\\# &amp; q_{0}\flat &amp; \# &amp; aq_{1}\flat\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccc}\# & q_{0}\flat & \#\\\# & q_{0}\flat & \# & aq_{1}\flat\#\end{array}{% endequation %}
 
 וכעת אין בעיה; הזוג {% equation %}\left(q_{1}\flat,q_{2}\flat\right){% endequation %} מטפל בסיטואציה הנוכחית. האם סיימנו? לא, כי שימו לב ל-{% equation %}a{% endequation %} בתחילת הקונפיגורציה - זו האות הבאה שהמילה למעלה צריכה להוסיף לעצמה, וגם במילה למטה היא צריכה להופיע כי המכונה לא נוגעת בה בצעד הזה. אז נוסיף לנו זוג {% equation %}\left(a,a\right){% endequation %}, וכעת על ידי שימוש ב-{% equation %}\left(a,a\right){% endequation %} ואחריו ב-{% equation %}\left(q_{1}\flat,q_{2}\flat\right){% endequation %}, נקבל:
 
-{% equation %}\begin{array}{ccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1} &amp; \# &amp; aq_{2}\flat\end{array}{% endequation %}
+{% equation %}\begin{array}{ccccccc}\# & q_{0}\flat & \# & a & q_{1}\\\# & q_{0}\flat & \# & a & q_{1} & \# & aq_{2}\flat\end{array}{% endequation %}
 
 לבסוף, נסגור את הקונפיגורציה בצורה "רגילה" עם {% equation %}\left(\#,\#\right){% endequation %} ונקבל:
 
-{% equation %}\begin{array}{cccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\#\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccccc}\# & q_{0}\flat & \# & a & q_{1}\#\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat\#\end{array}{% endequation %}
 
 בואו נדבר עכשיו על תזוזה שמאלה של הראש, כלומר נניח שיש לנו את המעבר {% equation %}\delta\left(q_{2},\flat\right)=\left(q_{3},b,L\right){% endequation %}. מה קורה כאן? אנחנו רוצים לעבור לסיטואציה הבאה:
 
-{% equation %}\begin{array}{cccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}b\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat &amp; \# &amp; q_{3}ab\end{array}{% endequation %}
+{% equation %}\begin{array}{cccccccc}\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}b\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat & \# & q_{3}ab\end{array}{% endequation %}
 
 כלומר, ב"מחיר" של הוספת {% equation %}aq_{2}b{% endequation %} למעלה אנחנו רוצים להוסיף {% equation %}q_{3}ab{% endequation %} למטה. לכן נוסיף את הזוג {% equation %}\left(aq_{2}b,q_{3}ab\right){% endequation %} לרשימת הזוגות שלנו.
 
@@ -152,59 +152,59 @@ tags:
 
 ובכן, בואו ניתן למכונה הבדיונית המסכנה שלי להגיע אל המנוחה והנחלה - נניח שיש לנו את המעבר {% equation %}\delta\left(q_{3},a\right)=\left(q_{f},a,S\right){% endequation %}. קודם כל, הוא יתבטא, כרגיל, בזוג {% equation %}\left(q_{3}a,q_{f}a\right){% endequation %} ונגיע אל הסיטואציה הבאה:
 
-{% equation %}\begin{array}{ccccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}b &amp; \# &amp; q_{3}a\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat &amp; \# &amp; q_{3}a &amp; b\#q_{f}a\end{array}{% endequation %}
+{% equation %}\begin{array}{ccccccccc}\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}b & \# & q_{3}a\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat & \# & q_{3}a & b\#q_{f}a\end{array}{% endequation %}
 
 המילה שלמעלה עדיין צריכה להדביק את ה-{% equation %}b\#{% endequation %} שלמטה עד שתגיע למצב שבו היא צריכה להשוות את ה-{% equation %}q_{f}{% endequation %} שלמטה; את זה היא תעשה עם הזוגות {% equation %}\left(b,b\right){% endequation %} ו-{% equation %}\left(\#,\#\right){% endequation %}, ואז נגיע למצב הבא:
 
-{% equation %}\begin{array}{cccccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}b &amp; \# &amp; q_{3}a &amp; b\#\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}ab\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccccccccc}\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}b & \# & q_{3}a & b\#\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat & \# & q_{3}a & b\# & q_{f}ab\#\end{array}{% endequation %}
 
 מה היינו <strong>רוצים</strong> שיקרה עכשיו? ובכן, היינו שמחים אם היה לנו את הזוג הבא: {% equation %}\left(q_{f}ab\#\#,\#\right){% endequation %}, שהיה משלים אותנו למילה המשותפת הבאה:
 
-{% equation %}\begin{array}{cccccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}b &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}ab\#\#\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}ab\#\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccccccccc}\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}b & \# & q_{3}a & b\# & q_{f}ab\#\#\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat & \# & q_{3}a & b\# & q_{f}ab\#\#\end{array}{% endequation %}
 
 למה לא להוסיף זוג כזה, באמת? למה לא להוסיף זוגות מהצורה {% equation %}\left(q_{f}w\#,\#\right){% endequation %} כאשר {% equation %}w{% endequation %} הוא המשך של קונפיגורציה עד ה-{% equation %}\#{% endequation %} שבסוף שלה, וזאת לכל {% equation %}w{% endequation %} אפשרית? תיאורטית, זה בדיוק מה שהיינו רוצים לעשות. מעשית, זה בלתי אפשרי כי יש <strong>אינסוף</strong> ערכים אפשריים של {% equation %}w{% endequation %}, אבל בעיית PCP תמיד מורכבת ממספר <strong>סופי</strong> של זוגות. אז יש לנו כאן מגבלה טכנית קלה, ולכן יהיה לה פתרון טכני קל. במקום "לאכול" את כל הקונפיגורציה בבת אחת, נאכל אותה תו תו.
 
 מה זה אומר? זה אומר שנתחיל עם הזוג {% equation %}\left(q_{f}a,q_{f}\right){% endequation %}, ואחרי שנשתמש בו נגיע לסיטואציה הבאה:
 
-{% equation %}\begin{array}{ccccccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}b &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}a\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}a &amp; b\#q_{f}\end{array}{% endequation %}
+{% equation %}\begin{array}{ccccccccccc}\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}b & \# & q_{3}a & b\# & q_{f}a\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat & \# & q_{3}a & b\# & q_{f}a & b\#q_{f}\end{array}{% endequation %}
 
 עכשיו נעתיק את שארית הקונפיגורציה עד לפעם הבאה שבה המילה שלמעלה תצטרך לכתוב {% equation %}q_{f}{% endequation %}, ונגיע לדבר הבא:
 
-{% equation %}\begin{array}{cccccccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}b &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}a &amp; b\#\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}a &amp; b\# &amp; q_{f}b\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccccccccccc}\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}b & \# & q_{3}a & b\# & q_{f}a & b\#\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat & \# & q_{3}a & b\# & q_{f}a & b\# & q_{f}b\#\end{array}{% endequation %}
 
 מה קרה פה? אם נקרא רק את המילה למטה, זה נראה כאילו עברנו מהקונפיגורציה {% equation %}q_{f}ab{% endequation %} לקונפיגורציה {% equation %}q_{f}b{% endequation %} - כאילו ה-{% equation %}a{% endequation %} "נאכל" על ידי {% equation %}q_{f}{% endequation %}. זה בדיוק מה שהולך לקרות - {% equation %}q_{f}{% endequation %} הרעבתן הולך לבלוס את כל המילה שנמצאת מימינו בקונפיגורציה, אות אחרי אות. ומתי נוכל לסיים? כשיגיע הזמן לבלוס את ה-{% equation %}\#{% endequation %} שבסוף. כלומר, כשנגיע למצב הבא:
 
-{% equation %}\begin{array}{cccccccccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}b &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}a &amp; b\# &amp; q_{f}b &amp; \#\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}a &amp; b\# &amp; q_{f}b &amp; \# &amp; q_{f}\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccccccccccccc}\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}b & \# & q_{3}a & b\# & q_{f}a & b\# & q_{f}b & \#\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat & \# & q_{3}a & b\# & q_{f}a & b\# & q_{f}b & \# & q_{f}\#\end{array}{% endequation %}
 
 את זה אפשר לסיים על ידי הזוג {% equation %}\left(q_{f}\#\#,\#\right){% endequation %}, מה שיביא אותנו אל
 
-{% equation %}\begin{array}{cccccccccccccc}\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}b &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}a &amp; b\# &amp; q_{f}b &amp; \# &amp; q_{f}\#\#\\\# &amp; q_{0}\flat &amp; \# &amp; a &amp; q_{1}\# &amp; aq_{2}\flat &amp; \# &amp; q_{3}a &amp; b\# &amp; q_{f}a &amp; b\# &amp; q_{f}b &amp; \# &amp; q_{f}\#\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccccccccccccc}\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}b & \# & q_{3}a & b\# & q_{f}a & b\# & q_{f}b & \# & q_{f}\#\#\\\# & q_{0}\flat & \# & a & q_{1}\# & aq_{2}\flat & \# & q_{3}a & b\# & q_{f}a & b\# & q_{f}b & \# & q_{f}\#\#\end{array}{% endequation %}
 
 וסיימנו!
 
 יש עוד נקודה עדינה שצריך להתייחס אליה - {% equation %}q_{f}{% endequation %} יצטרך לאכול גם סימנים שמשמאלו בקונפיגורציה אם יש כאלו. כדי לראות את זה, בואו נתחיל דוגמה חדשה:
 
-{% equation %}\begin{array}{cc}\#q_{0}\flat\#\\\#q_{0}\flat\# &amp; aq_{f}\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cc}\#q_{0}\flat\#\\\#q_{0}\flat\# & aq_{f}\#\end{array}{% endequation %}
 
 מה עכשיו? כדי להשוות את ה-{% equation %}a{% endequation %} שיש למטה, חייבים להשתמש בזוג {% equation %}\left(a,a\right){% endequation %}, ואז נגיע לסיטואציה הבאה:
 
-{% equation %}\begin{array}{ccc}\#q_{0}\flat\# &amp; a\\\#q_{0}\flat\# &amp; a &amp; q_{f}\#a\end{array}{% endequation %}
+{% equation %}\begin{array}{ccc}\#q_{0}\flat\# & a\\\#q_{0}\flat\# & a & q_{f}\#a\end{array}{% endequation %}
 
 אבל עכשיו אם נשתמש בזוג {% equation %}\left(q_{f}\#\#,\#\right){% endequation %}, מה שנגיע אליו יהיה
 
-{% equation %}\begin{array}{cccc}\#q_{0}\flat\# &amp; a &amp; q_{f}\#\#\\\#q_{0}\flat\# &amp; a &amp; q_{f}\#a &amp; \#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccc}\#q_{0}\flat\# & a & q_{f}\#\#\\\#q_{0}\flat\# & a & q_{f}\#a & \#\end{array}{% endequation %}
 
 ויש לנו כאן בבירור אי התאמה. לכן אין מנוס - נצטרך "לאכול" את ה-{% equation %}a{% endequation %} עם זוג מהצורה {% equation %}\left(aq_{f},q_{f}\right){% endequation %}. יחד איתנו נגיע ישירות מהמצב הבא:
 
-{% equation %}\begin{array}{cc}\#q_{0}\flat\#\\\#q_{0}\flat\# &amp; aq_{f}\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cc}\#q_{0}\flat\#\\\#q_{0}\flat\# & aq_{f}\#\end{array}{% endequation %}
 
 אל המצב הזה:
 
-{% equation %}\begin{array}{ccc}\#q_{0}\flat\# &amp; aq_{f}\\\#q_{0}\flat\# &amp; aq_{f} &amp; \#q_{f}\end{array}{% endequation %}
+{% equation %}\begin{array}{ccc}\#q_{0}\flat\# & aq_{f}\\\#q_{0}\flat\# & aq_{f} & \#q_{f}\end{array}{% endequation %}
 
 ומכאן נגיע אל
 
-{% equation %}\begin{array}{cccc}\#q_{0}\flat\# &amp; aq_{f} &amp; \#\\\#q_{0}\flat\# &amp; aq_{f} &amp; \# &amp; q_{f}\#\end{array}{% endequation %}
+{% equation %}\begin{array}{cccc}\#q_{0}\flat\# & aq_{f} & \#\\\#q_{0}\flat\# & aq_{f} & \# & q_{f}\#\end{array}{% endequation %}
 
 ומפה כבר נסתדר. ועכשיו זה באמת מסיים את כל הפינות האפלות של הבניה (תוך שימוש מובלע בהנחות שציינתי קודם, למשל שהמכונה אף פעם לא מנסה לפנות שמאלה כשהיא בקצה השמאלי של הסרט).
 

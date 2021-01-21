@@ -72,7 +72,7 @@ tags:
 
 הפונקציה בסך הכל תקבל את הערכים 1 ו-{% equation %}-1{% endequation %}, כשהיא מחליפה ביניהם אחרי מרחק של {% equation %}\pi{% endequation %}. כלומר, נגדיר
 
-{% equation %}f\left(x\right)=\begin{cases}-1 &amp; -\pi\le x&lt;0\\1 &amp; 0\le x\le\pi\end{cases}{% endequation %}
+{% equation %}f\left(x\right)=\begin{cases}-1 & -\pi\le x&lt;0\\1 & 0\le x\le\pi\end{cases}{% endequation %}
 
 וכמובן, אפשר להרחיב את הפונקציה הזו לכל {% equation %}\mathbb{R}{% endequation %} באופן מחזורי (כלומר, שיתקיים {% equation %}f\left(x+2\pi\right)=f\left(x\right){% endequation %}). התוצאה היא פונקציה שנראית כך:
 
@@ -92,7 +92,7 @@ tags:
 
 עכשיו הכל תלוי בשאלה מהו {% equation %}\cos n\pi{% endequation %}. אם {% equation %}n{% endequation %} זוגי, אז {% equation %}\cos n\pi=1{% endequation %}; לעומת זאת, אם {% equation %}n{% endequation %} אי זוגי אז {% equation %}\cos n\pi=-1{% endequation %}. במקרה שבו {% equation %}n{% endequation %} זוגי המונה יתאפס ונקבל מקדם 0; במקרה השני נקבל {% equation %}\frac{4}{\pi n}{% endequation %}. אם לסכם:
 
-{% equation %}\left\langle f,\sin nx\right\rangle =\begin{cases}\frac{4}{\pi n} &amp; n\equiv_{2}1\\0 &amp; n\equiv_{2}0\end{cases}{% endequation %}
+{% equation %}\left\langle f,\sin nx\right\rangle =\begin{cases}\frac{4}{\pi n} & n\equiv_{2}1\\0 & n\equiv_{2}0\end{cases}{% endequation %}
 
 ולכן אפשר לכתוב את טור הפורייה הבא:
 

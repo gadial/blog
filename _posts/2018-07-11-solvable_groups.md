@@ -83,7 +83,7 @@ tags:
 
 האם הצלחתי לעבוד עליכם? השורה למעלה לא פשוטה כמו שזה נשמע. לא מספיק לומר ש"על ידי הצמדות" נקבל את כל ה-3-מעגלים; אנחנו יודעים רק ש-{% equation %}N{% endequation %} נורמלית ב-{% equation %}A_{n}{% endequation %}, לא שהיא נורמלית ב-{% equation %}S_{n}{% endequation %}. ההצמדות חייבות להיות עם איבר מ-{% equation %}A_{n}{% endequation %}. למרבה המזל, קל לעשות את זה אם {% equation %}n\ge5{% endequation %}. נניח שאנחנו רוצים להעביר את {% equation %}\left(1\ 2\ 3\right){% endequation %} למעגל {% equation %}\left(a_{1}\ a_{2}\ a_{3}\right){% endequation %}. אז נגדיר את התמורה הבאה:
 
-{% equation %}\sigma=\left(\begin{array}{ccccc} 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5\\ a_{1} &amp; a_{2} &amp; a_{3} &amp; x &amp; y \end{array}\cdots\right){% endequation %}
+{% equation %}\sigma=\left(\begin{array}{ccccc} 1 & 2 & 3 & 4 & 5\\ a_{1} & a_{2} & a_{3} & x & y \end{array}\cdots\right){% endequation %}
 
 כאשר {% equation %}x,y{% endequation %} איברים שרירותיים לחלוטין ששונים מ-{% equation %}a_{1},a_{2},a_{3}{% endequation %}. אז אנחנו יודעים איך הצמדה נראית (תיארתי את זה <a href="https://gadial.net/2017/03/14/permutation_groups/">בפוסט שלי</a> על תמורות):
 

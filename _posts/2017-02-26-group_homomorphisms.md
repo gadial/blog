@@ -20,9 +20,9 @@ tags:
 
 בואו נראה עכשיו שתי דוגמאות לפונקציות. שתיהן יוגדרו על {% equation %}\mathbb{Z}_{4}=\left\{ 0,1,2,3\right\} {% endequation %} עם חיבור מודולו 4 - החבורה הציקלית היחידה עם 4 איברים. הטווח יהיה {% equation %}\mathbb{C}{% endequation %}, המספרים המרוכבים. ואני אכתוב אותן במפורש:
 
-{% equation %}f\left(n\right)=\begin{cases}1 &amp; n=0\\i &amp; n=1\\-1 &amp; n=2\\-i &amp; n=3\end{cases}{% endequation %}
+{% equation %}f\left(n\right)=\begin{cases}1 & n=0\\i & n=1\\-1 & n=2\\-i & n=3\end{cases}{% endequation %}
 
-{% equation %}g\left(n\right)=\begin{cases}i &amp; n=0\\1 &amp; n=1\\-i &amp; n=2\\-1 &amp; n=3\end{cases}{% endequation %}
+{% equation %}g\left(n\right)=\begin{cases}i & n=0\\1 & n=1\\-i & n=2\\-1 & n=3\end{cases}{% endequation %}
 
 בשני המקרים התמונה של הפונקציות היא הקבוצה {% equation %}\left\{ 1,i,-1,-i\right\} {% endequation %} שמן הסתם לא נבחרה במקרה. הקבוצה הזו היא בעצמה חבורה, עם פעולת הכפל הרגילה. יותר מכך: {% equation %}i{% endequation %} הוא יוצר שלה (כי {% equation %}i^{2}=-1{% endequation %} ו-{% equation %}i^{3}=-i{% endequation %} ו-{% equation %}i^{4}=1{% endequation %}). אז הקבוצה הזו היא חבורה ציקלית, דרך אחרת לכתוב את {% equation %}\mathbb{Z}_{4}{% endequation %}. יש לה אפילו שם: <strong>חבורת שורשי היחידה מסדר </strong><strong>4</strong>, דהיינו החבורה של כל הפתרונות המרוכבים למשוואה {% equation %}x^{4}=1{% endequation %}. באופן כללי חבורת שורשי היחידה מסדר {% equation %}n{% endequation %}, אוסף כל הפתרונות המרוכבים ל-{% equation %}x^{n}=1{% endequation %} גם היא מהווה חבורה ציקלית מסדר {% equation %}n{% endequation %}, וחבורת כל שורשי היחידה היא עסק מגניב לגמרי כי היא חבורה שבנויה "מכל החבורות הציקליות הסופיות ביחד", אבל אני כל כך מתלהב שסטיתי לגמרי מהנושא. נחזור לזה בהמשך.
 
