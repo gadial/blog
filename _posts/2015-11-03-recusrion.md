@@ -212,8 +212,8 @@ end
 <div class="code-block">
 {% highlight ruby %}
 def print_maze(maze)
-	sym = {0 =&gt; &quot; &quot;, 1 =&gt; &quot;+&quot;, 2 =&gt; &quot;.&quot;, 3 =&gt; &quot; &quot;}
-	maze.map{|row| row.map{|v| sym[v]}}.each{|row| puts row.join(&quot;&quot;)}
+	sym = {0 =&gt; " ", 1 =&gt; "+", 2 =&gt; ".", 3 =&gt; " "}
+	maze.map{|row| row.map{|v| sym[v]}}.each{|row| puts row.join("")}
 end
 maze = [[0, 0, 1, 1, 1, 1, 1],
 		[1, 0, 1, 1, 1, 0, 1],

@@ -270,9 +270,9 @@ var WALL_WIDTH = 3;
 {% highlight javascript %}
 var Game = {
 	start: function(){
-		Game.canvas = document.getElementById(&quot;canvas&quot;);
+		Game.canvas = document.getElementById("canvas");
 		Game.context = canvas.getContext('2d');
-		var size = parseInt(document.getElementById(&quot;maze_size&quot;).value);
+		var size = parseInt(document.getElementById("maze_size").value);
 		Maze.generate_raw(size, size);
 		Maze.draw();
 	}
@@ -282,10 +282,10 @@ var Game = {
 
 והנה ה-HTML שבו הולכים להשתמש בכל זה:
 [html]
-<input type=&quot;range&quot; min=&quot;2&quot; max=&quot;20&quot; id=&quot;maze_size&quot;>
-		<input type=&quot;button&quot; value=&quot;ייצר!&quot; onclick=&quot;Game.start()&quot; />
+<input type="range" min="2" max="20" id="maze_size">
+		<input type="button" value="ייצר!" onclick="Game.start()" />
 		<br />
-		<canvas id=&quot;canvas&quot; width=&quot;600&quot; height=&quot;600&quot;>
+		<canvas id="canvas" width="600" height="600">
 		</canvas>
 [/html]
 

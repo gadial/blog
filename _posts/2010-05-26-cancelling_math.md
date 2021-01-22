@@ -47,7 +47,7 @@ tags:
 </blockquote>
 אז כן, אני רוצה שגם האדם ברחוב יהיה בעל ידע במדע, ולכן גם בעל ידע במתמטיקה. אחרת בסופו של דבר זה מחלחל גם לחיי היום יום שלנו, כמו בקומיקס הנפלא של PhD comics על מחזור החיים של ידיעה מדעית, כלומר על האופן שבו האדם ברחוב מסוגל לעכל אותה:
 
-<strong><img class="alignnone" title="Science news cycle" src="http://www.phdcomics.com/comics/archive/phd051809s.gif" alt="PhD comics' &quot;Science news cycle&quot;" width="600" height="667" />
+<strong><img class="alignnone" title="Science news cycle" src="http://www.phdcomics.com/comics/archive/phd051809s.gif" alt="PhD comics' "Science news cycle"" width="600" height="667" />
 </strong>
 
 וטוב יהיה אם פרופסורים באוניברסיטה לא יעודדו בורות.
