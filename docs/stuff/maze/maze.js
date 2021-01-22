@@ -56,11 +56,14 @@ var SQUARE_SIZE = 20;
 var WALL_WIDTH = 3;
 
 var Maze = {    
+    cell_index: function(a){
+        return a[1]*this.width + a[0];
+    },
     generate_raw: function(height, width){
 		this.G = new Graph(height*width);
 		this.height = height;
 		this.width = width;
-		this.cells = new Array();
+        this.cells = new Array();
 		for (var y = 0 ; y < height; y++){
 			for (var x = 0; x < width; x++){
 				this.cells.push([x,y]);
@@ -122,6 +125,7 @@ var Maze = {
 }
 var Game = {
     start: function(){
+        console.log("Hello world!");
         Game.canvas = document.getElementById("canvas");
         Game.context = canvas.getContext('2d');
         var size = parseInt(document.getElementById("maze_size").value);

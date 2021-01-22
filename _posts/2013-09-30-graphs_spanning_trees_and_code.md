@@ -281,22 +281,25 @@ var Game = {
 </div>
 
 והנה ה-HTML שבו הולכים להשתמש בכל זה:
-[html]
-<input type="range" min="2" max="20" id="maze_size">
-		<input type="button" value="ייצר!" onclick="Game.start()" />
-		<br />
-		<canvas id="canvas" width="600" height="600">
-		</canvas>
-[/html]
+<div class="code-block">
+{% highlight html %}
+<input type="range" min="2" max="20" id="maze_size" onChange="Game.start()">
+<br />
+<canvas id="canvas" width="480" height="480"></canvas>
+{% endhighlight %}
+</div>
 
 וזהו זה. עכשיו בואו נראה איך זה עובד בפועל אצלנו:
 
-[cf]maze_js[/cf]
+<script type="text/javascript" src="/stuff/maze/maze.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script type="text/javascript">
+  $(function() {
+      Game.start();
+  }); 
+</script>
+<input type="range" min="2" max="20" id="maze_size" onChange="Game.start()">
+<br />
+<canvas id="canvas" width="480" height="480"></canvas>
 
-<input type="range" min="2" max="20" id="maze_size">
-		<input type="button" value="ייצר!" onclick="Game.start()" />
-		<br />
-		<canvas id="canvas" width="600" height="600">
-		</canvas>
-
-לא הכי מרשים, חייבים להודות - כרגע ה"מבוך" הזה כולל את כל הקירות וכל מה שאפשר לשלוט עליו הוא הגודל שלו. בפוסט הבא נסביר מה הרעיון התיאורטי הכללי מאחורי קרוסקל ופרים, ונציג את פרים במלואו, כולל קוד להכל. תתכוננו להופעת אורח מרגשת של מבנה נתונים חדש!
+לא הכי מרשים, חייבים להודות - כרגע ה"מבוך" הזה כולל את כל הקירות וכל מה שאפשר לשלוט עליו הוא הגודל שלו. בפוסט הבא נסביר מה הרעיון התיאורטי הכללי מאחורי קרוסקל ופרים.
