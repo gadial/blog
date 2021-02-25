@@ -2,9 +2,10 @@
 layout: default
 ---
 <h1>פוסטים אקראיים</h1>
+<script src="/assets/js/underscore-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="/assets/js/underscore-min.js"></script>
+
 
 <button id="reroll">להגריל מחדש</button>
 <div id="post-list">
