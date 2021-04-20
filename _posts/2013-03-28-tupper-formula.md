@@ -32,9 +32,9 @@ tags:
 חלקכם כבר מנחשים, למראה המספר, שכאן בעצם מסתתרת החוכמה האמיתית - איכשהו הציור "מתחבא" בתוך המספר הזה. אבל איך?
 
 לפני התשובה, הנה לכם משחק אינטראקטיבי - הזינו פנימה ערך של {% equation %}k{% endequation %} (אפשר עם רווחים) וקבלו את התמונה עבור {% equation %}0\le x\le105{% endequation %} ו-{% equation %}k\le y\le k+16{% endequation %}:
-[cf]bigint_js[/cf]
-[js]
 
+<script src="{{site.baseurl}}/assets/js/bigint.js" type="text/javascript"></script>
+<script type="text/javascript">
 var square_size = 4;
 var get_and_draw = function(){
 var t=document.getElementById('number');
@@ -48,8 +48,8 @@ var c=document.getElementById('formula');
 var ctx=c.getContext('2d');
 ctx.clearRect ( 0 , 0 , c.width , c.height );
 divInt_(k,17);
-for (x=105; x&gt;=0; x=x-1){
-for (y=0; y&lt;17; y++){
+for (x=105; x>=0; x=x-1){
+for (y=0; y<17; y++){
 var bit = modInt(k,2);
 if (bit == 1){
 draw_pixel(x,y,ctx);
@@ -66,8 +66,8 @@ ctx.fillRect(x*square_size, y*square_size, square_size, square_size);
 var init = function() {
 draw_from_k(ctx,k);
 }
+</script>
 
-[/js]
 <canvas id="formula" style="border: 1px solid #000000;" width="424" height="68"></canvas>
 <input id="number" type="text" /> <input onclick="get_and_draw()" type="button" value="ציירו!" />
 
