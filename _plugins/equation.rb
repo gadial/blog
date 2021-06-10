@@ -8,7 +8,7 @@ module Jekyll
   
       def render(context)
         text = super
-        "<span>$latex #{text}$</span>"
+        "<span>\\( #{text} \\)</span>"
       end
     end
   end
