@@ -86,9 +86,9 @@ def replace_tags(text):
     return text
 
 def replace_images(text):
-    regex = r'\\includegraphics\{.*assets/img(.*)\}'
-    repl = '<img src="{{{{site.baseurl}}}}{{{{site.post_images}}}}{}" alt=""/>'
-    text = re.sub(regex, lambda match: repl.format(match.group(1)), text)
+    regex = r'\\includegraphics\{.*assets_img_(\d+)_(.*)\.eps\}'
+    repl = '<img src="{{{{site.baseurl}}}}{{{{site.post_images}}}}/{}/{}.png" alt=""/>'
+    text = re.sub(regex, lambda match: repl.format(match.group(1),match.group(2)), text)
     return text
 
 def remove_linebreaks(text):
