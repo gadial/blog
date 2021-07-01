@@ -60,7 +60,7 @@ tags:
 
 עכשיו, בואו נחבר את שתי המשוואות הללו:
 
-{% equation %}a^{2}+b^{2}=2ab\cos\theta+\left(ac\cos\beta+bc\cos\alpha\right){% endequation %}
+{% equation %}a^{2}+b^{2}=2ab\cos\gamma+\left(ac\cos\beta+bc\cos\alpha\right){% endequation %}
 
 בבירור הגורם בסוגריים הוא פשוט {% equation %}c^{2}{% endequation %} ולכן אחרי שנעביר אגף נקבל
 
