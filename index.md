@@ -9,6 +9,5 @@ layout: main
 </p>
 
 <h3 style="text-align: center;"><a href="{{site.baseurl}}/how_i_create_posts">איך אני מעלה פוסטים לבלוג?</a></h3>
-
 {%- include features.html -%} 
 </main>
