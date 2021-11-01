@@ -1,4 +1,5 @@
 ---
+layout: clear
 title: סיפורונובמבר
 ---
 
