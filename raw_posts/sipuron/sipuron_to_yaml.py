@@ -16,13 +16,13 @@ with open("sipuron.csv", encoding="utf8") as csvfile:
             'story': row[3],
             'length': len(row[3])
             })
-        if row[1] not in authors:
+        if not row[1] in authors:
             authors.append(row[1])
-        if row[2] not in keywords:
-            authors.append(row[2])
+        if not row[2] in keywords:
+            keywords.append(row[2])
 
 result = {
-    'result': stories,
+    'stories': stories,
     'keywords': keywords,
     'authors': authors
 }
