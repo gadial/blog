@@ -7,8 +7,6 @@ title: סיפורונובמבר - הסיפורים
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <div id="sipuron-list">
-  <button class="sort" data-sort="name">מיון על פי שם</button>
-  <button class="sort" data-sort="timestamp">מיון על פי תאריך</button>
   <ul class="list" id="post-list">
   {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
   {%- for sipuron in site.data.sipuron -%}
