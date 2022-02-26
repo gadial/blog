@@ -7,6 +7,8 @@ categories:
   - אנליזה מתמטית
 tags: 
   - טורי פורייה
+js_libraries:
+  - flot/jquery.flot
 ---
 מתמטיקאים אוהבים לפרק דברים לגורמים. כל מספר טבעי קל יותר להבין אם מפרקים אותו למכפלה של ראשוניים. גם עם פונקציות ממשיות זה עובד כך - אחד מהדברים האהובים על מתמטיקאים הוא לקחת פונקציה ממשית {% equation %}f\left(x\right){% endequation %} ולכתוב אותה בתור <strong>טור חזקות</strong>: {% equation %}f\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n}{% endequation %}. בצורה הזו הפונקציה נכתבת כסכום אינסופי של פונקציות פשוטות במיוחד - {% equation %}x^{n}{% endequation %} - כשלכל פונקציה פשוטה שכזו יש <strong>מקדם</strong>, {% equation %}a_{n}{% endequation %}, שהוא מספר ממשי שמלמד אותנו עד כמה הרכיב {% equation %}x^{n}{% endequation %} משתתף בסכום שמהווה את {% equation %}f\left(x\right){% endequation %}. אם אנחנו יודעים ייצוג של {% equation %}f\left(x\right){% endequation %} כטור חזקות קל מאוד לעשות איתה דברים מסויימים - למשל, כדי לגזור אותה די לנו לגזור את הטור "איבר איבר", ואת זה קל מאוד לעשות כי אנחנו יודעים איך גוזרים פונקציה פשוטה כמו {% equation %}x^{n}{% endequation %} - מקבלים {% equation %}f^{\prime}\left(x\right)=\sum_{n=1}^{\infty}na_{n}x^{n-1}{% endequation %}. באופן דומה גם אינטגרל לפונקציה ניתן לתיאור על ידי ביצוע אינטגרציה לטור "איבר איבר". אמנם, לא כל פונקציה אפשר לתאר כטור שכזה, ולא תמיד קל למצוא את הטור, אבל זו המחשה פשוטה ונאה לכוח שבפירוק שכזה.
 
@@ -105,15 +107,8 @@ tags:
 <a href="{{site.baseurl}}{{site.post_images}}/2014/04/step_fourier_15.png"><img class="alignnone size-full wp-image-3098" src="{{site.baseurl}}{{site.post_images}}/2014/04/step_fourier_15.png" alt="step_fourier_15" width="858" height="463" /></a>
 
 זה נראה די טוב! המבנה הכללי זהה לזה של הפונקציה שאנחנו מנסים לקרב עם הטור. ה-0 ב-{% equation %}x=0{% endequation %} די ברור כעת - זה בדיוק השלב שבו הטור (שמגדיר פונקציה רציפה) "מטייל" בין {% equation %}1{% endequation %} ל-{% equation %}-1{% endequation %}. הדבר היחיד שנראה קצת מציק הוא הצ'ופצ'יקים הבולטים בקצוות של הקטעים, בדיוק ליד נקודות אי-הרציפות של הפונקציה המקורית. הצ'ופצ'יקים הללו נמצאים שם לא במקרה - מדובר על תופעה שנקראת <strong>אפקט גיבס</strong> ואולי אתאר מתישהו בפוסט נפרד. לבינתיים, הנה משהו שחלקכם יוכלו לשחק איתו: גרסה אינטראקטיבית של הטור שבה אתם יכולים לבחור את כמות האיברים בסכום ולראות מה קורה - איך מתרחש הקסם שבו אוסף של סינוסים הופך לאט לאט למשהו שנראה בדיוק כמו {% equation %}f{% endequation %} (ושימו לב איך הקפיצה ליד נקודות אי הרציפות אמנם מתכווצת מבחינת הרוחב שלה, אבל הגובה שלה נותר תמיד מעל רמה מסויימת ולא טריוויאלית של שגיאה).
-<div id="content"></div>
+<div id="content"><div id="fourier_graph" class="demo-placeholder"></div></div>
 <input id="n_slider" style="direction: ltr;" max="50" min="1" type="range" value="1" />
-
-[cf]flot_js[/cf]
-
-
-[js]
-start();
-[/js]
 
 יש עוד נקודה שכדאי לתת עליה את הדעת בדוגמה שלי. אמרנו שטור פורייה הוא טור של סינוסים וקוסינוסים, אז איפה הקוסינוסים? ובכן, בחישוב הפורמלי ראינו שהמקדמים של כולם יצאו 0, אבל האם זה מקרי? כמובן שלא. {% equation %}f{% endequation %} שלנו היא בבירור פונקציה <strong>אנטי-סימטרית</strong> סביב {% equation %}x=0{% endequation %} כמעט בכל נקודה, בדיוק כמו סינוס עצמה. זה מבטיח שהמקדמים של {% equation %}\cos x{% endequation %} עבורה יצאו 0 ונקבל טור טיילור שהוא טור סינוסים בלבד. באופן דומה, פונקציה <strong>סימטרית </strong>תהיה בעלת טור קוסינוסים בלבד. בשני המקרים הסימטריה או האנטי-סימטריה לא חייבות להיות מושלמות - גם אם הן נכשלות במספר סופי של נקודות זה לא ישפיע על כלום כי אינטגרל של פונקציה לא משתנה אם משנים את הפונקציה במספר סופי של נקודות. יותר מכך, אם {% equation %}f{% endequation %} היא אנטיסימטרית אז {% equation %}f\left(x\right)\sin nx{% endequation %} היא סימטרית, ואם {% equation %}f{% endequation %} סימטרית כך גם {% equation %}f\left(x\right)\cos nx{% endequation %}. זה אומר שאפשר לפשט טיפה את נוסחת האינטגרל ולהתעסק רק עם חצי מהתחום:
 
@@ -156,3 +151,58 @@ start();
 {% equation %}\sum_{n=1}^{\infty}\frac{1}{n^{2}}=\frac{\pi^{2}}{6}{% endequation %}
 
 השוויון הזה הוא אחת התוצאות החביבות עלי במתמטיקה - באגף שמאל יש לנו את אחד הטורים המתכנסים הפשוטים ביותר. על פניו בכלל לא ברור איך לחשב את סכומו; ופתאום, באגף ימין יש לנו את הסכום באופן מדויק, וצץ שם {% equation %}\pi{% endequation %} השד יודע מאיפה למרות שלסכום הזה אין לכאורה שום קשר למעגלים. לדעתי זה נפלא. אם אתם רוצים לראות עוד הוכחות (ההוכחה של אוילר נפלאה אפילו עוד יותר) - כאמור, <a href="http://www.gadial.net/2010/03/14/happy_pi_day/">כבר יש לי פוסט</a> על התוצאה הזו. עם זאת, אפשר להשתמש בטורי פורייה של פונקציות נוספות כדי לקבל עוד סכומים דומים, אבל לבינתיים נראה לי שהנקודה הובהרה.
+
+<script type="text/javascript">
+	$(function() {
+		var n = 15;
+		
+		function piTickGenerator(axis) {
+			var res = [], i = Math.floor(axis.min / Math.PI);
+			do {
+			  var v = i * Math.PI;
+			  res.push([v, i + "\u03c0"]);
+			  ++i;
+			} while (v < axis.max);
+			
+			return res;
+		  }
+  
+		function f(x){
+			var sum = 0;
+			for (var i = 0; i < n; i++){
+				var k = 2*i+1;
+				sum += Math.sin(k*x) / k
+			}
+			return sum*4/Math.PI;
+		}
+		function g(x){
+			if (x < -Math.PI)
+				return g(x+2*Math.PI);
+			if (x > Math.PI)
+				return g(x-2*Math.PI);
+			if (x < 0)
+				return -1;
+			return 1;
+		}
+		
+		function plot_functions(fs){
+			var d = [];
+			for (var k = 0; k < fs.length; k++){
+				var vals = [];
+				for (var i = -2*Math.PI; i <= 2*Math.PI+0.01; i += 0.001) {
+					vals.push([i, fs[k](i)]);
+				}
+				d.push(vals);
+			}
+			return d;
+		}
+		
+		function plot(){
+			$.plot("#fourier_graph", plot_functions([g,f]), {xaxis:{ticks:piTickGenerator}});
+		}
+		
+		$("#n_slider").on("change", function(){n = this.value; plot();})
+		plot();
+	});
+
+	</script>
