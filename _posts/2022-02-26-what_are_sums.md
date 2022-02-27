@@ -147,7 +147,7 @@ image: "/2022/dichotomy-paradox.png"
 
 אז באופן כללי יותר, אם {% equation %}f\left(n\right){% endequation %} היא פונקציה כלשהי על קלט כלשהו {% equation %}n{% endequation %}, ו-{% equation %}a,b{% endequation %} הם מספרים, אז הסכום
 
-{% equation %}\sum_{n=a}^{n}f\left(n\right){% endequation %}
+{% equation %}\sum_{n=a}^{b}f\left(n\right){% endequation %}
 
 הוא תיאור קומפקטי של האלגוריתם
 
