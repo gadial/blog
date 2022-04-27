@@ -6,7 +6,7 @@ categories:
 tags:
   - סכום
 description: 'מה זה בעצם סכום? איך מסמנים אותו? למה הוא יכול להיות אינסופי?'
-image: "/2022/dichotomy-paradox.png"
+image: "2022/dichotomy-paradox.png"
 
 ---
 
