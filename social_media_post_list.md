@@ -7,7 +7,7 @@
       "date": "{{ post.date }}",
       "title": "{{ post.title }}",
       "description": "{{ post.description}}",
-      "url": "{{ post.url }}",
+      "url": "{{ post.url }}"
     },
     {% endif %}
   {% endfor %}
