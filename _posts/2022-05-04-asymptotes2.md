@@ -247,7 +247,7 @@ image: "2022/sqrt_complicated.png"
 
 {% equation %}\left|\frac{f\left(x\right)}{x}-m\right|=\left|\frac{f\left(x\right)}{x}-\frac{g\left(x\right)}{x}+\frac{g\left(x\right)}{x}-m\right|{% endequation %}
 
-ועכשיו אני אשתמש בכלי המרכזי של החדו"א: <strong>אי שוויון המשולש</strong>. זו הטענה שמתקיים {% equation %}\left|A+B\right|\le\left|A\right|+\left|B\right|{% endequation %}. למה קוראים לו ככה ואיפה המשולש פה - ובכן, שולי הפוסט הזה צריך מלהיכנס לזה. אני פשוט אשתמש בו:
+ועכשיו אני אשתמש בכלי המרכזי של החדו"א: <strong>אי שוויון המשולש</strong>. זו הטענה שמתקיים {% equation %}\left|A+B\right|\le\left|A\right|+\left|B\right|{% endequation %}. למה קוראים לו ככה ואיפה המשולש פה - ובכן, שולי הפוסט הזה צרים מלהיכנס לזה. אני פשוט אשתמש בו:
 
 {% equation %}\left|\frac{f\left(x\right)}{x}-\frac{g\left(x\right)}{x}+\frac{g\left(x\right)}{x}-m\right|\le\left|\frac{f\left(x\right)}{x}-\frac{g\left(x\right)}{x}\right|+\left|\frac{g\left(x\right)}{x}-m\right|{% endequation %}
 

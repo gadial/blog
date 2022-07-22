@@ -8,6 +8,7 @@ categories:
   - תכנות
 tags: 
   - הפניה עצמית
+social_media_share: true
 ---
 בואו ניגש ללב העניין. התבוננו בנוסחה הבאה:
 

@@ -7,6 +7,7 @@ categories:
   - תכנות
 tags: 
   - רקורסיה
+social_media_share: true
 ---
 <a href="{{site.baseurl}}{{site.post_images}}/2015/11/escher_hands.jpg"><img class="aligncenter size-full wp-image-3304" alt="escher_hands" src="{{site.baseurl}}{{site.post_images}}/2015/11/escher_hands.jpg" width="259" height="194" /></a>
 

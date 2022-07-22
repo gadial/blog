@@ -10,6 +10,7 @@ tags:
   - פרוייקט "תוצאות מפתיעות בסיבוכיות"
   - תוצאות לא אינטואיטיביות
   - תורת הסיבוכיות
+social_media_share: true
 ---
 בשעה טובה אנו עוברים לתיאור התוצאה השניה ב"<a href="http://www.gadial.net/2011/01/09/surprising_results_in_complexity_prologue/">תוצאות מפתיעות בסיבוכיות</a>" - הטענה {% equation %}\mbox{NL=coNL}{% endequation %}, או בשמה הקליט יותר, משפט אימרמן-סזלפסני (Immerman–Szelepcsényi - אין לי מושג איך לתעתק נכון), ומכאן ואילך - משפט אימרמן. אז על מה מדובר בכלל?
 

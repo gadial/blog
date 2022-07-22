@@ -6,7 +6,7 @@ categories:
 tags:
   - מערכת הוכחה אינטראקטיבית
   - חישוב קוונטי
-twitter_description: "אחרי הפוסט הזה אני מקווה שיותר ברור מה התוצאה, אבל עוד יותר מקווה שיותר ברור למה היא נשמעת כמו משהו שבכלל לא אמור להתקיים"
+description: "אחרי הפוסט הזה אני מקווה שיותר ברור מה התוצאה, אבל עוד יותר מקווה שיותר ברור למה היא נשמעת כמו משהו שבכלל לא אמור להתקיים"
 ---
 
 <a href="https://gadial.net/2020/01/23/what_is_mipstar_equals_re_part_1/">בפוסט הקודם</a>התחלתי לדבר על ההוכחה ש-{% equation %}\text{MIP}^{*}=\text{RE}{% endequation %} והסברתי מה זו {% equation %}\text{RE}{% endequation %}. הפעם אני ארצה לנסות להבין מה זו {% equation %}\text{MIP}^{*}{% endequation %}, ולשם כך נבין קודם כל מה זו {% equation %}\text{MIP}{% endequation %} ולשם כך נבין קודם כל מה זו {% equation %}\text{IP}{% endequation %} ולשם כך קודם כל ניזכר במה שקרה בפוסט הקודם.

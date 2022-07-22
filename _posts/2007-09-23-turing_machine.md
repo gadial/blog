@@ -5,6 +5,7 @@ date: 2007-09-23 00:14:15
 layout: post
 categories: 
   - חישוביות
+social_media_share: true
 ---
 בשעה טובה הגענו לתיאור הרעיון של <a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%9F_%D7%98%D7%99%D7%95%D7%A8%D7%99%D7%A0%D7%92">טיורינג</a>. טיורינג חיפש מודל מתמטי תיאורטי של "<a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%92%D7%95%D7%A8%D7%99%D7%AA%D7%9D">אלגוריתם</a>", והמודל שהמציא הוא כה פשוט לתיאור וכה מזכיר מחשבים "<a href="http://he.wikipedia.org/wiki/Athlon">אמיתיים</a>", שבמהרה הוא הפך לסטנדרט שבו משתמשים בתורות החישוביות והסיבוכיות.
 

@@ -10,6 +10,7 @@ tags:
   - מיון מניה
   - מיונים
   - עצי החלטה
+social_media_share: true
 ---
 עד כה כל אלגוריתמי המיון שראינו פעלו בזמן של {% equation %}\Omega\left(n\log n\right){% endequation %}, כלומר דרשו לפחות זמן ריצה אסימפטוטי של לפחות {% equation %}n\log n{% endequation %} (כאשר {% equation %}n{% endequation %} הוא גודל רשימת האיברים שאותה ממיינים). השאלה הראשונה שמתעוררת היא - האם אפשר טוב יותר מזה, או ש<strong>כל</strong> אלגוריתם מיון ידרוש זמן ריצה של לפחות {% equation %}n\log n{% endequation %} צעדים?
 

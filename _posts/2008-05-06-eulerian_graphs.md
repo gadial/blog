@@ -6,6 +6,7 @@ layout: post
 categories: 
   - משחקים וחידות מתמטיות
   - תורת הגרפים
+social_media_share: true
 ---
 שעשוע ידוע שנהוג לתת לילדים הוא זה:
 

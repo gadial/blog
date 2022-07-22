@@ -7,6 +7,7 @@ categories:
   - משחקים וחידות מתמטיות
 tags: 
   - ריבוע קסם
+social_media_share: true
 ---
 בואו נתחיל עם צפיה <a href="http://vimeo.com/60852161">בקסם המרהיב</a> שבסרטון בלינק הבא:
 

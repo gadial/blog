@@ -5,6 +5,7 @@ date: 2009-01-30 15:03:32
 layout: post
 categories: 
   - אלגברה מופשטת
+social_media_share: true
 ---
 כזכור, <a href="http://www.gadial.net/2009/01/06/field_extensions/">בפוסטים</a> <a href="http://www.gadial.net/2009/01/28/field_extensions_extended/">האחרונים</a> אנו עוסקים ב<a href="http://www.gadial.net/2008/12/23/straightedge_and_compas_constructions/">בניות בסרגל ומחוגה.</a> על בניות כאלו אפשר לחשוב כ"משחק" שבו יוצרים מספרים חדשים ממספרים קיימים בעזרת ארבע פעולות החשבון והוצאת שורש, כשהמספר שממנו מתחילים הוא 1. האתגר: להראות שכמה מספרים, שמתאימים לבעיות בנייה "קלאסיות" שהטרידו את היוונים, אינם ניתנים לבנייה במשחק הזה.
 

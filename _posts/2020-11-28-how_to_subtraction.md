@@ -4,7 +4,8 @@ layout: post
 categories:
   - מספרים
 tags:
-  - חיבור
+  - חיסור
+social_media_share: true
 ---
 
 <a href="https://gadial.net/2020/11/18/how_to_addition/">בפוסט הקודם</a> דיברתי על פעולת ה<strong>חיבור</strong> של מספרים טבעיים והפעם אני רוצה לדבר על הפעולה ה"משלימה" לה - <strong>חיסור</strong>. למה אני אומר "משלימה"? כי אם חיבור עונה לנו על השאלה "לאן הגענו מ-{% equation %}a{% endequation %} אחרי שהלכנו עוד מרחק {% equation %}b{% endequation %}?" אז חיסור עונה לנו על השאלה "אם הגענו מ-{% equation %}a{% endequation %} אל {% equation %}b{% endequation %}, כמה הלכנו?". או במשוואה, אם חיבור עונה על השאלה מהו {% equation %}x{% endequation %} בביטוי {% equation %}a+b=x{% endequation %}, אז חיסור עונה על השאלה מהו {% equation %}x{% endequation %} בביטוי {% equation %}a+x=b{% endequation %}.

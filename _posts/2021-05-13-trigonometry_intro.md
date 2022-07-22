@@ -5,6 +5,7 @@ categories:
   - כללי
 tags:
   - טריגונומטריה
+social_media_share: true
 ---
 
 

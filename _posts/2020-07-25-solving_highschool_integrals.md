@@ -5,6 +5,7 @@ categories:
   - אנליזה מתמטית
 tags:
   - אינטגרלים
+social_media_share: true
 ---
 
 

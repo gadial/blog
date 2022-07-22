@@ -11,6 +11,7 @@ tags:
   - דויד הילברט
   - ההיסטוריה של המתמטיקה
   - נשים במתמטיקה
+social_media_share: true
 ---
 <a href="{{site.baseurl}}{{site.post_images}}/2014/02/emmynoether.jpg"><img class="alignnone size-full wp-image-3066" alt="emmynoether" src="{{site.baseurl}}{{site.post_images}}/2014/02/emmynoether.jpg" width="274" height="326" /></a>
 

@@ -9,6 +9,7 @@ tags:
   - Casus irreducibilis
   - משוואה ממעלה שלישית
   - תורת גלואה
+social_media_share: true
 ---
 הפעם הראשונה שבה פגשתי את המושג "מספר מרוכב" הייתה בספר לימוד אלגברה של בני גורן. מה שגורן אומר הוא זה: "למשוואה {% equation %}x^{2}+1=0{% endequation %} אין פתרון כי לא קיים <strong>מספר ממשי</strong> {% equation %}x{% endequation %} המקיים {% equation %}x^{2}=-1{% endequation %}. כדי שיהיה פתרון למשוואות מהסוג הנ"ל נצרף למערכת המספרים הממשיים "מספר" חדש שנסמנו ב-{% equation %}i{% endequation %} ונגדירו בתור מספר שמקיים {% equation %}i^{2}=-1{% endequation %}".
 
