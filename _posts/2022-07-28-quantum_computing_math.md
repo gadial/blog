@@ -72,7 +72,7 @@ image: "2022/quantum_computer.png"
 
 נתחיל עם 2. מה זו טרנספורמציה לינארית אנחנו כבר יודעים, אבל לא <strong>כל</strong> טרנספורמציה לינארית היא חוקית בהקשר הזה; אמרתי שהערכים שקיוביט יכול לקבל הם רק כאלו מנורמה 1, ולכן אם אני מפעיל טרנספורמציה על קיוביט, היא צריכה להיות כזו שמעבירה וקטור מנורמה 1 לוקטור מנורמה 1. טרנספורמציות כאלו נקראות <strong>אוניטריות</strong>. באופן כללי, טרנספורמציה {% equation %}T:V\to V{% endequation %} היא אוניטרית אם {% equation %}TT^{\dagger}=T^{\dagger}T=I{% endequation %} , כשהסימון {% equation %}T^{\dagger}{% endequation %} מייצג את הצמוד ההרמיטי - השחלוף והצמדה של {% equation %}T{% endequation %} (במתמטיקה בדרך כלל מייצגים זאת בתור {% equation %}T^{*}{% endequation %} אבל אני משתמש בסימון הפיזיקלי שמקובל בחישוב קוונטי). 
 
-למה התכונה הזו מוכיחה שהנורמה משתמרת? ובכן, התכונה הבסיסית (שלא אוכיח) של צמוד הרמיטי של אופרטור כלשהו היא ש-{% equation %}\left\langle Tv|u\right\rangle =\left\langle v|T^{\dagger}v\right\rangle {% endequation %} - אפשר "להעביר צד" את {% equation %}T{% endequation %} כשהיא בתוך מכפלה פנימית, במחיר מעבר לצמוד ההרמיטי. עכשיו נעשה את זה על נורמה:
+למה התכונה הזו מוכיחה שהנורמה משתמרת? ובכן, התכונה הבסיסית (שלא אוכיח) של צמוד הרמיטי של אופרטור כלשהו היא ש-{% equation %}\left\langle Tv|u\right\rangle =\left\langle v|T^{\dagger}u\right\rangle {% endequation %} - אפשר "להעביר צד" את {% equation %}T{% endequation %} כשהיא בתוך מכפלה פנימית, במחיר מעבר לצמוד ההרמיטי. עכשיו נעשה את זה על נורמה:
 
 {% equation %}\|Tv\|=\sqrt{\left\langle Tv,Tv\right\rangle }=\sqrt{\left\langle T^{\dagger}Tv,v\right\rangle }=\sqrt{\left\langle v,v\right\rangle }=\|v\|{% endequation %}
 
