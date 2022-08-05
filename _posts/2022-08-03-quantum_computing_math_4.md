@@ -69,7 +69,7 @@ image: "2022/bell_pair_circuit.png"
 
 הפעלת ה-{% equation %}\text{CX}{% endequation %} תתבצע על פי התיאור על אברי הבסיס שנתתי למעלה:
 
-{% equation %}\text{CX}\left(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\right)=\frac{\text{CX}\left|00\right\rangle +\text{CX}\left|11\right\rangle }{\sqrt{2}}=\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}{% endequation %}
+{% equation %}\text{CX}\left(\frac{\left|00\right\rangle +\left|10\right\rangle }{\sqrt{2}}\right)=\frac{\text{CX}\left|00\right\rangle +\text{CX}\left|10\right\rangle }{\sqrt{2}}=\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}{% endequation %}
 
 והנה, באופן בלתי מפתיע ביותר, קיבלנו את {% equation %}\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}{% endequation %} שהבטחתי, ועל הדרך למדנו איך מתאים שערים קוונטיים וראינו אותם בפעולה.
 
