@@ -1,0 +1,4546 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language hebrew
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "default" "David"
+\font_sans "default" "David"
+\font_typewriter "default" "David"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index אינדקס
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+חישוב קוונטי בגישה מתמטית, חלק ה': אלגוריתם דויטש-ג'וזה
+\end_layout
+
+\begin_layout Description
+קטגוריות: תורת הסיבוכיות
+\end_layout
+
+\begin_layout Description
+תגים: חישוב קוונטי
+\end_layout
+
+\begin_layout Description
+מזהה:
+\family roman
+\series bold
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+quantum_computing_math_5
+\end_layout
+
+\begin_layout Section
+מה אנחנו רוצים לפתור?
+\end_layout
+
+\begin_layout Standard
+עד עכשיו בסדרת הפוסטים על חישוב קוונטי ראינו את הבסיס המתמטית שאפשר לצמצם
+ לכמה משפטי מחץ:
+\end_layout
+
+\begin_layout Itemize
+בחישוב קוונטי האובייקט שמשתנה עם הזמן הוא 
+\series bold
+המצב הקוונטי
+\series default
+ של המערכת, שמיוצג בתור וקטור 
+\begin_inset Formula $\left|\psi\right\rangle \in\mathbb{C}^{2^{n}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+סוג אחד של שינוי הוא כפל המצב 
+\begin_inset Formula $v$
+\end_inset
+
+ במטריצה אוניטרית 
+\begin_inset Formula $U\in\mathbb{C}^{2^{n}\times2^{n}}$
+\end_inset
+
+, כלומר מבצעים 
+\begin_inset Formula $\left|\psi\right\rangle \leftarrow U\left|\psi\right\rangle $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+סוג נוסף של שינוי הוא 
+\series bold
+מדידה
+\series default
+, שבגרסה הפשוטה שלנו מוגדרת לכל קיוביט עבור שני אופרטורים 
+\begin_inset Formula $M_{0},M_{1}$
+\end_inset
+
+ )שתלויים בקיוביט(, בחירת 
+\begin_inset Formula $M_{0}$
+\end_inset
+
+ בהסתברות 
+\begin_inset Formula $\left\langle \psi\right|M_{0}\left|\psi\right\rangle $
+\end_inset
+
+ ובחירת 
+\begin_inset Formula $M_{1}$
+\end_inset
+
+ בהסתברות 
+\begin_inset Formula $\left\langle \psi\right|M_{1}\left|\psi\right\rangle $
+\end_inset
+
+ ובהינתן ש-
+\begin_inset Formula $M_{i}$
+\end_inset
+
+ עלה בגורל, הפלט שחוזר מהמדידה הוא 
+\begin_inset Formula $i$
+\end_inset
+
+ והיא מעבירה את המצב הקוונטי של המערכת למצב 
+\begin_inset Formula $\left|\psi\right\rangle \leftarrow\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}\left|\psi\right\rangle }}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+זה הכל.
+ מה שמעניין פה הוא שאלו הם חישובים שלא מסובך במיוחד לתכנת גם במחשב סטנדרטי.
+ אמנם אין לנו יכולת לשמור מספרים מרוכבים ברמת דיוק אינסופית, אבל אנחנו לא
+ באמת צריכים את זה - הייצוגים הקיימים של מרוכבים במחשב עובדים מספיק טוב.
+ למעשה, אין שום בעיה עקרונית לכתוב סימולטור של חישוב קוונטי שרץ במחשב רגיל,
+ וזה אפילו תרגיל נחמד למי שרוצה ללמוד את התחום )מגלים מהר מאוד שהפעלת אופרטורים
+ זה עסק קצת מעצבן ויש דרכי קיצור(.
+ זה גורם לאתגר הגדול של בניית מחשבים קוונטיים להיראות קצת מיותר - מה הטעם
+ ליצור מכשיר הנדסי מסובך שהחישוב שהוא מבצע זה משהו שאפשר לעשות במחשב רגיל?
+\end_layout
+
+\begin_layout Standard
+לנקודה הזו כבר התייחסתי בעבר.
+ מכיוון שהאובייקט הספציפי שאנחנו שומרים ופועלים עליו הוא וקטור ב-
+\begin_inset Formula $\mathbb{C}^{2^{n}}$
+\end_inset
+
+, כמות המידע שצריך לשמור, והזמן שלוקח לפעול עליה, גדלה 
+\series bold
+אקספוננציאלית
+\series default
+ עם 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ עבור
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+50
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+קיוביטים, למחשבים רגילים מאוד מאתגר לסמלץ חישוב קוונטי; עבור
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+100
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+קיוביטים כבר אין על מה לדבר.
+ נכון לכתיבת שורות אלו יש ליבמ מחשב קוונטי פעיל של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+127
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+קיוביטים, למרות שהחישוב בו לא חף מבעיות )מתישהו אני מקווה בסדרת הפוסטים
+ הזו להגיע לדבר על רעשים ותיקון שגיאות(, וזו רק תחילת הדרך.
+ כשיהיה חישוב קוונטי רציני, לא יהיה שום סיכוי לסמלץ אותו במחשב.
+\end_layout
+
+\begin_layout Standard
+אבל זה עדיין לא עונה על השאלה האמיתית - 
+\series bold
+בשביל מה זה טוב
+\series default
+? אילו בעיות נוכל לפתור עם מחשבים קוונטיים שלא נוכל לפתור במחשב רגיל? הדוגמא
+ הנפוצה שנזרקת לחלל באוויר בשלב הזה היא 
+\series bold
+בעיית הפירוק לגורמים
+\series default
+ שהאלגוריתם הקוונטי של שור פותר ביעילות.
+ זו דוגמא מצויינת, אבל יש בה בעיה פשוטה - זה אלגוריתם מסובך יחסית וקשה להציג
+ אותו ישר אחרי שמבינים איך עובד חישוב קוונטי.
+ אז בפוסט הזה אני רוצה להציג בעיה פשוטה הרבה יותר, שנפתרת על ידי אלגוריתם
+ פשוט בצורה קיצונית, אבל כבר היא מספיקה לתת תחושה טובה למה בחישוב קוונטי
+ יש 
+\begin_inset Quotes eld
+\end_inset
+
+יותר
+\begin_inset Quotes erd
+\end_inset
+
+ מאשר בחישוב קלאסי.
+ האלגוריתם שאציג נקרא 
+\series bold
+אלגוריתם דויטש-ג'וזה
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+נתחיל עם להציג את הבעיה עצמה.
+ אני מזהיר מראש שזו 
+\series bold
+לא
+\series default
+ בעיה 
+\begin_inset Quotes eld
+\end_inset
+
+מעניינת
+\begin_inset Quotes erd
+\end_inset
+
+.
+ לפתור אותה לא הולך לשבור מערכות הצפנה.
+ היא אפילו נראית די מלאכותית.
+ היופי בבעיה הוא שקל מאוד להבין למה נסיון לפתור אותה קלאסית יהיה קשה, ואז
+ העובדה שהיא נפתרת בקלות קוונטית מחדדת מאוד את ההבדל.
+\end_layout
+
+\begin_layout Standard
+הקלט לבעיה הוא פונקציה 
+\begin_inset Formula $f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\} $
+\end_inset
+
+, כלומר פונקציה 
+\series bold
+בינארית
+\series default
+ שמקבלת קלט שהוא מחרוזת באורך 
+\begin_inset Formula $n$
+\end_inset
+
+ של ביטים )אפשר לחשוב עליה בתור מספר טבעי בתחום 
+\begin_inset Formula $0,1,\ldots,2^{n}-1$
+\end_inset
+
+( ועל כל קלט כזה מחזירה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+או
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+.
+ הפונקציה נתונה לנו בתור 
+\series bold
+קופסה שחורה
+\series default
+, כלומר משהו שאנחנו לא יכולים לראות איך המימוש שלו עובד; הדבר היחיד שאנחנו
+ יכולים לעשות הוא לחשב את 
+\begin_inset Formula $f$
+\end_inset
+
+ על קלטים מסוימים.
+ תחשבו על 
+\begin_inset Formula $f$
+\end_inset
+
+ כאילו מה שמחשב אותו יושב על מחשב מרוחק, וכל מה שאנחנו יכולים לעשות הוא
+ לשלוח לו מחרוזות של 
+\begin_inset Formula $n$
+\end_inset
+
+ ביטים ולקבל חזרה פלט של ביט בודד.
+\end_layout
+
+\begin_layout Standard
+מה שידוע לנו על 
+\begin_inset Formula $f$
+\end_inset
+
+ זה שהיא בדיוק אחד משני הבאים:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f$
+\end_inset
+
+ 
+\series bold
+קבועה
+\series default
+, כלומר לכל קלט 
+\begin_inset Formula $x$
+\end_inset
+
+ מתקיים 
+\begin_inset Formula $f\left(x\right)=0$
+\end_inset
+
+, או שלכל קלט 
+\begin_inset Formula $x$
+\end_inset
+
+ מתקיים 
+\begin_inset Formula $f\left(x\right)=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f$
+\end_inset
+
+ 
+\series bold
+מאוזנת
+\series default
+, כלומר בדיוק על חצי מהקלטים מתקבל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ועל החצי השני מתקבל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+.
+ אם נסמן 
+\begin_inset Formula $N=2^{n}$
+\end_inset
+
+, זה אומר ש-
+\begin_inset Formula $\left|\left\{ x\in\left\{ 0,1\right\} ^{n}\ |\ f\left(x\right)=0\right\} \right|=\left|\left\{ x\in\left\{ 0,1\right\} ^{n}\ |\ f\left(x\right)=1\right\} \right|=\frac{N}{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+המשימה שלנו: לקבל מה משני המקרים הללו מתקיים.
+\end_layout
+
+\begin_layout Standard
+איך עושים את זה באופן קלאסי? ובכן, אם לא מערבים הסתברות בסיפור, די ברור
+ שאנחנו חייבים 
+\begin_inset Formula $\frac{N}{2}+1$
+\end_inset
+
+ קריאות ל-
+\begin_inset Formula $f$
+\end_inset
+
+.
+ למה? כי אנחנו תמיד חושבים מה יקרה 
+\series bold
+במקרה הגרוע ביותר
+\series default
+, והמקרה הגרוע ביותר הוא זה שבו אין לנו מזל - ש-
+\begin_inset Formula $f$
+\end_inset
+
+ היא מאוזנת, ואיכשהו כל 
+\begin_inset Formula $\frac{N}{2}$
+\end_inset
+
+ ההפעלות הראשונות שלה שביצענו נפלו 
+\series bold
+בדיוק
+\series default
+ על כל הערכים שעליהם 
+\begin_inset Formula $f$
+\end_inset
+
+ נותנת
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+ בשלב הזה אנחנו עדיין לא יכולים להגיד בודאות האם 
+\begin_inset Formula $f$
+\end_inset
+
+ תהיה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+על הכל, או רק על חצי.
+ רק כשנחשב את הערך שלה על האיבר ה-
+\begin_inset Formula $\frac{N}{2}+1$
+\end_inset
+
+ נוכל להיות בטוחים: אם קיבלנו 
+\begin_inset Formula $0$
+\end_inset
+
+ אז 
+\begin_inset Formula $f$
+\end_inset
+
+ קבועה, ואם קיבלנו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אז 
+\begin_inset Formula $f$
+\end_inset
+
+ מאוזנת.
+\end_layout
+
+\begin_layout Standard
+להראות שגם אם מערבים הסתברות עדיין נזדקק למספר גדול של שאילות זה חישוב מסובך
+ יותר ולא אעשה אותו כרגע, כי אני לא צריך - אלגוריתם דויטש-ג'וזה הולך להשתמש
+ בקריאה 
+\series bold
+אחת בלבד
+\series default
+ לפונקציה, ולהחזיר תשובה שהיא 
+\series bold
+נכונה תמיד
+\series default
+, ב-
+\numeric on
+100
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אחוז מהמקרים, אפילו אם חישוב קוונטי הוא לכאורה עניין הסתברותי.
+ איך זה יעבוד? ובכן, זה דורש מהקופסה השחורה שמחשבת את 
+\begin_inset Formula $f$
+\end_inset
+
+ להיות קוונטית בעצמה: במקום לחשב את 
+\begin_inset Formula $f$
+\end_inset
+
+ על ביט ספציפי 
+\begin_inset Formula $x$
+\end_inset
+
+ שנותנים, לחשב את 
+\begin_inset Formula $f$
+\end_inset
+
+ על 
+\series bold
+סופרפוזיציה
+\series default
+, כלומר: הקלט ש-
+\begin_inset Formula $f$
+\end_inset
+
+ תקבל יהיה מצב על 
+\begin_inset Formula $n$
+\end_inset
+
+ קיוביטים, 
+\begin_inset Formula $\left|\psi\right\rangle =\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}\left|x\right\rangle $
+\end_inset
+
+ ואינטואיטיבית, הפלט יהיה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}\left|x\right\rangle \right)=\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}f\left(\left|x\right\rangle \right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+האינטואיציה הזו לא מלאה; בדויטש-ג'וזה נשתמש בקופסה שחורה שמתנהגת קצת שונה,
+ ואחר כך נסביר איך עוברים מהאינטואיציה שאני מציג כאן אל הקופסה השחורה של
+ דויטש-ג'וזה.
+\end_layout
+
+\begin_layout Standard
+ייתכן מאוד שהצלחתי לאכזב אתכם עם ה
+\begin_inset Quotes erd
+\end_inset
+
+הקופסה השחורה תהיה קוונטית
+\begin_inset Quotes erd
+\end_inset
+
+.
+ זה נשמע כאילו שיניתי פתאום את הגדרת הבעיה, ואין פלא שעם מחשב קוונטי אפשר
+ להשיג יותר.
+ אבל נניח שהייתי אומר מלכתחילה שהקופסה השחורה היא קוונטית, האם מחשב קלאסי
+ היה מצליח יותר? הוא לא מסוגל לייצר סופרפוזיציה של מצבים קוונטיים, כל מה
+ שהוא היה יכול לעשות הוא לשלוח מצבי בסיס 
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+.
+ זה שהקופסה השחורה היא קוונטית לא עוזר לנו בלי שיהיה לנו מחשב קוונטי שמנצל
+ את זה.
+ עדיין, אני לגמרי מסכים שזו לא דוגמת מחץ כמו האלגוריתם של שור, שלא נזקק
+ לקופסאות שחורות קוונטיות שכאלו; תזכרו שמה שאני עושה כרגע הוא לא לתת דוגמת
+ מחץ לעליונות החישוב הקוונטי, אלא לתת תחושה ראשונית של הקסם הנחמד הזה.
+\end_layout
+
+\begin_layout Section
+איך דויטש-ג'וזה עובד?
+\end_layout
+
+\begin_layout Standard
+דויטש-ג'וזה הוא אלגוריתם פשוט בצורה קיצונית:
+\end_layout
+
+\begin_layout Enumerate
+אתחלו מצב קוונטי אל 
+\begin_inset Formula $\left|0^{n}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+הפעילו 
+\begin_inset Formula $H$
+\end_inset
+
+ על כל הקיוביטים.
+\end_layout
+
+\begin_layout Enumerate
+הפעילו את הקופסה השחורה על המצב שקיבלתם.
+\end_layout
+
+\begin_layout Enumerate
+הפעילו 
+\begin_inset Formula $H$
+\end_inset
+
+ על המצב שקיבלתם.
+\end_layout
+
+\begin_layout Enumerate
+מדדו את כל הקיוביטים במצב שקיבלתם.
+\end_layout
+
+\begin_layout Enumerate
+אם קיבלתם
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $0^{n}$
+\end_inset
+
+, אז 
+\begin_inset Formula $f$
+\end_inset
+
+ קבועה; אם קיבלתם משהו אחר, אז 
+\begin_inset Formula $f$
+\end_inset
+
+ מאוזנת.
+\end_layout
+
+\begin_layout Standard
+הדבר היחיד שלא הסברתי עדיין איך הוא בדיוק עובד הוא שלב 
+\begin_inset Quotes eld
+\end_inset
+
+הפעלת הקופסה השחורה
+\begin_inset Quotes erd
+\end_inset
+
+.
+ לצורך כך אני מניח שיש לי אופרטור אוניטרי 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+ שפועל בצורה הבאה על איבר בסיס 
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+במילים אחרות: אם 
+\begin_inset Formula $f\left(x\right)=0$
+\end_inset
+
+ אז 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+ לא משנה את 
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+ , ואם 
+\begin_inset Formula $f\left(x\right)=1$
+\end_inset
+
+ אז הוא מכפיל אותו ב-
+\begin_inset Formula $-1$
+\end_inset
+
+.
+ זה מזכיר את האופרטור 
+\begin_inset Formula $Z$
+\end_inset
+
+, רק כזה שפועל בבת אחת על 
+\begin_inset Formula $n$
+\end_inset
+
+ קיוביטים ותלוי בתכונות הספציפיות של 
+\begin_inset Formula $f$
+\end_inset
+
+.
+ איך אפשר לממש אופרטור קוונטי כזה? נדבר על זה בהמשך.
+\end_layout
+
+\begin_layout Standard
+הנה איור סכמטי של האלגוריתם, במקרה של שלושה קיוביטים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/gadia/Dropbox/Websites/blog/assets/img/2022/deutsch_jozsa_3_qubits.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אפשר גם לצייר את זה באופן כללי ל-
+\begin_inset Formula $n$
+\end_inset
+
+ קיוביטים בצורה קומפקטית:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/gadia/Dropbox/Websites/blog/assets/img/2022/deutsch_jozsa_n_qubits.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+הסימן שנראה כמו מחוג של מכשיר מדידה בצד ימין הוא, ובכן, מדידה.
+ ה-
+\begin_inset Formula $H^{\otimes n}$
+\end_inset
+
+ הוא הפעלת 
+\begin_inset Formula $H$
+\end_inset
+
+ על כל השערים, שתכף אתאר; אני מניח שהרעיון ברור.
+\end_layout
+
+\begin_layout Standard
+כרגע אני רוצה לראות איך האלגוריתם פותר לנו את הבעיה.
+ בסופו של דבר, להבין את האלגוריתם קם ונופל על להבין משהו כללי קצת יותר ושימושי
+ מאוד: מה בעצם הפעלת 
+\begin_inset Formula $H$
+\end_inset
+
+ על כל הקיוביטים עושה.
+\end_layout
+
+\begin_layout Standard
+כזכור, 
+\begin_inset Formula $H$
+\end_inset
+
+ הוא האופרטור שיוצר לנו סופרפוזיציה אחידה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $H\left|0\right\rangle =\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $H\left|1\right\rangle =\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אבל זה עבור קיוביט יחיד.
+ מה קורה כשמפעילים 
+\begin_inset Formula $H$
+\end_inset
+
+ על כל אחד מהקיוביטים? מקבלים את ההרכבה של 
+\begin_inset Formula $H\otimes I\otimes\ldots\otimes I$
+\end_inset
+
+ ו-
+\begin_inset Formula $I\otimes H\otimes\ldots\otimes I$
+\end_inset
+
+ וכן הלאה - זה יוצא האופטור 
+\begin_inset Formula $H\otimes H\otimes\ldots\otimes H$
+\end_inset
+
+, או בסימון מקוצר, 
+\begin_inset Formula $H^{\otimes n}$
+\end_inset
+
+.
+ עכשיו, אם נפעיל את האופרטור הזה על המצב ההתחלתי 
+\begin_inset Formula $\left|0^{n}\right\rangle $
+\end_inset
+
+ נקבל:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $H^{\otimes n}\left|0^{n}\right\rangle =\left(H\left|0\right\rangle \right)\otimes\ldots\otimes\left(H\left|0\right\rangle \right)=\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)\otimes\ldots\otimes\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מה שצריך לזכור על מכפלה טנזורית הוא האופן שבו היא מתנהגת בדומה למכפלה רגילה
+ - אפשר להוציא החוצה סקלרים )את כל ה-
+\begin_inset Formula $\frac{1}{\sqrt{n}}$
+\end_inset
+
+(, ואפשר להשתמש בדיסטריביוטיביות.
+ יש לנו כאן מכפלה של 
+\begin_inset Formula $n$
+\end_inset
+
+ מחוברים מהצורה 
+\begin_inset Formula $\left(\left|0\right\rangle +\left|1\right\rangle \right)$
+\end_inset
+
+; זו סיטואציה שמזכירה, למשל, את הבינום של ניוטון.
+ כשאנחנו פותחים סוגריים, אנחנו מקבלים סכום שכולל את כל המחוברים שהם מהצורה
+ של מכפלה של 
+\begin_inset Formula $n$
+\end_inset
+
+ איברים שכל אחד מהם הוא או 
+\begin_inset Formula $\left|0\right\rangle $
+\end_inset
+
+ או 
+\begin_inset Formula $\left|1\right\rangle $
+\end_inset
+
+ - במילים אחרות, הסכום 
+\begin_inset Formula $\sum_{y\in\left\{ 0,1\right\} ^{n}}\left|y\right\rangle $
+\end_inset
+
+.
+ לכן בסך הכל קיבלנו:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $H^{\otimes n}\left|0^{n}\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left|y\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זה מתאים יפה לאינטואיציה שלפיה 
+\begin_inset Formula $H$
+\end_inset
+
+ יוצר סופרפוזיציה אחידה: כשהפעלנו אותו על כל הקיוביטים, קיבלנו סופרפוזיציה
+ אחידה של כל 
+\begin_inset Formula $2^{n}$
+\end_inset
+
+ אברי הבסיס האפשריים.
+ שימו לב, זה כבר קסם בפני עצמו - הפעלנו רק 
+\begin_inset Formula $n$
+\end_inset
+
+ שערים )זה לוקח זמן קצר( וקיבלנו סופרפוזיציה של מספר אקספוננציאלי של איברים.
+\end_layout
+
+\begin_layout Standard
+מה שעשינו פה הוא להבין איך 
+\begin_inset Formula $H^{\otimes n}$
+\end_inset
+
+ עובד על מצב בסיס אחד ספציפי: 
+\begin_inset Formula $\left|0^{n}\right\rangle $
+\end_inset
+
+.
+ אבל איך הוא עובד על מצבים אחרים, כאלו שיש בהם גם
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+-ים? כאן אנחנו מגיעים לנקודה הכי טכנית בפוסט, אבל גם הכי יפה שלו.
+ כמו שתמיד כדאי כדי להבין משהו מסובך, כדאי להסתכל על דוגמא פשוטה קודם.
+\end_layout
+
+\begin_layout Standard
+נניח שאני מפעיל את 
+\begin_inset Formula $H^{\otimes3}$
+\end_inset
+
+ על המצב 
+\begin_inset Formula $\left|101\right\rangle $
+\end_inset
+
+.
+ מה אני אקבל? על פי מה שראינו קודם, נקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $H^{\otimes3}\left|101\right\rangle =\frac{1}{\sqrt{2^{3}}}\left(\left|0\right\rangle -\left|1\right\rangle \right)\left(\left|0\right\rangle +\left|1\right\rangle \right)\left(\left|0\right\rangle -\left|1\right\rangle \right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כשאני פותח סוגריים אני עדיין אקבל את כל האיברים מהצורה 
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+, אבל הפעם חלקם יהיו עם מקדם 
+\series bold
+מינוס
+\series default
+.
+ מתי? ובכן, בואו נתחיל לפתוח את הסוגריים.
+ נניח שאני בוחר מכל אחד משלושת הסוגרים את האיבר 
+\series bold
+הראשון
+\series default
+, אני אכפיל שלושה איברים מהצורה 
+\begin_inset Formula $\left|0\right\rangle $
+\end_inset
+
+ ואקבל 
+\begin_inset Formula $\left|000\right\rangle $
+\end_inset
+
+ - בלי סימן מינוס.
+ ולמה שיהיה סימן מינוס? על ה-
+\begin_inset Formula $\left|0\right\rangle $
+\end_inset
+
+-ים אין מינוס בכלל.
+ כדי שיהיה מינוס, חייב להשתתף 
+\begin_inset Formula $\left|1\right\rangle $
+\end_inset
+
+ בסיפור הזה.
+ למשל, אם אני אקח את האיבר 
+\series bold
+השני
+\series default
+ מהסוגר הראשון, ומשני האחרים את האיבר 
+\series bold
+הראשון
+\series default
+, אני אקבל 
+\begin_inset Formula $-\left|100\right\rangle $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+לעומת זאת, אם אני אקח את האיבר 
+\series bold
+השני
+\series default
+ מהסוג 
+\series bold
+השני
+\series default
+ ומשני האחרים את הראשון, אני אקבל 
+\begin_inset Formula $\left|010\right\rangle $
+\end_inset
+
+, בלי מינוס.
+ למה? כי בסוגר השני, ה-
+\begin_inset Formula $\left|1\right\rangle $
+\end_inset
+
+ מופיע בלי סימן מינוס.
+ ולמה לא? כי במצב המקורי שעליו פעלנו, 
+\begin_inset Formula $\left|101\right\rangle $
+\end_inset
+
+, הסוגר השני מתאים לאיבר השני במחרוזת, כלומר אל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+ מכאן המסקנה היא שכדי לקבל מינוס, אני חייב לקחת את 
+\begin_inset Formula $\left|1\right\rangle $
+\end_inset
+
+ מתוך סוגריים ששייכים לאיבר בקלט שהיה 
+\begin_inset Formula $\left|1\right\rangle $
+\end_inset
+
+ בעצמו.
+\end_layout
+
+\begin_layout Standard
+זה תנאי 
+\series bold
+הכרחי
+\series default
+ כדי לקבל מינוס, אבל הוא לא מספיק, כי בואו נראה למשל מה שקורה כשאני לוקח
+ את ה-
+\begin_inset Formula $\left|1\right\rangle $
+\end_inset
+
+ מכל שלושת זוגות הסוגריים.
+ אני מקבל את המכפלה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $-\left|1\right\rangle \otimes\left|1\right\rangle \otimes\left(-\left|1\right\rangle \right)=\left|111\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כלומר, הפעם קיבלתי איבר ללא מינוס כי בדיוק 
+\series bold
+שני
+\series default
+ איברים במכפלה היו עם סימן מינוס.
+ הסימן באיבר שאקבל בסוף תלוי בשאלות הבאות:
+\end_layout
+
+\begin_layout Itemize
+האם מופיעים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+-ים במצב שעליו פעלנו?
+\end_layout
+
+\begin_layout Itemize
+האם מופיעים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+-ים במצב שאנחנו מסתכלים עליו כרגע בפלט?
+\end_layout
+
+\begin_layout Itemize
+האם יש אינדקסים שבהם מופיע
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+גם בקלט 
+\series bold
+וגם
+\series default
+ בפלט?
+\end_layout
+
+\begin_layout Itemize
+האם המספר של האינדקסים הללו הוא 
+\series bold
+אי זוגי
+\series default
+?
+\end_layout
+
+\begin_layout Standard
+זה מאוד מסורבל לדבר על זה ככה, אבל למרבה השמחה יש כלי מתמטי פשוט מאוד שמאפשר
+ לתאר את זה בצורה שקל לעבוד איתה: 
+\series bold
+מכפלה סקלרית מודולו
+\family roman
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\series default
+\numeric off
+.
+ בהינתן שני וקטורים מאותו אורך, 
+\begin_inset Formula $x=\left(x_{1},\ldots,x_{k}\right)$
+\end_inset
+
+ ו-
+\begin_inset Formula $y=\left(y_{1},\ldots,y_{k}\right)$
+\end_inset
+
+, המכפלה הסקלרית שלהם היא 
+\begin_inset Formula $x\cdot y=\sum_{i=1}^{k}x_{i}y_{i}$
+\end_inset
+
+.
+ אם 
+\begin_inset Formula $x,y\in\left\{ 0,1\right\} ^{k}$
+\end_inset
+
+ אז המכפלה הסקלרית שלהם תהיה מספר שלם, ואפשר לקחת אותו מודולו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+)לחלק ב-
+\numeric on
+2
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ולהחזיר את השארית;
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אם המספר זוגי ו-
+\numeric on
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אם הוא אי זוגי(.
+ 
+\end_layout
+
+\begin_layout Standard
+אולי אתן אומרות 
+\begin_inset Quotes eld
+\end_inset
+
+היי, זו כמו מכפלה פנימית!
+\begin_inset Quotes erd
+\end_inset
+
+ וזה נכון - אפשר לחשוב על מכפלות פנימיות כאילו הן מוגדרות בעזרת סכום כזה,
+ אבל אין למכפלה פנימית משמעות מעל 
+\begin_inset Formula $\mathbb{Z}_{2}$
+\end_inset
+
+ )השדה שמעליו אנחנו עובדים כרגע במובלע( אלא רק מעל 
+\begin_inset Formula $\mathbb{R},\mathbb{C}$
+\end_inset
+
+; כי למשל, אחת הדרישות ממכפלה פנימית היא שאם 
+\begin_inset Formula $x\ne0$
+\end_inset
+
+ אז 
+\begin_inset Formula $\left\langle x,x\right\rangle >0$
+\end_inset
+
+ וזה בוודאי לא מתקיים כאן )חשבו על הוקטור 
+\begin_inset Formula $x=11$
+\end_inset
+
+(.
+ אבל גם בלי להיות מכפלה פנימית, למכפלה סקלרית כזו יש תכונות אלגבריות נחמדות,
+ למשל 
+\begin_inset Formula $\left(x+y\right)\cdot z=x\cdot z+y\cdot z$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+בעזרת מכפלה סקלרית אפשר לנסח מאוד בקלות את המהומה שהלכה קודם:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $H^{\otimes n}\left|x\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot y}\left|y\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כי מה קורה כאן? המכפלה הסקלרית 
+\begin_inset Formula $x\cdot y=\sum_{i=1}^{k}x_{i}y_{i}$
+\end_inset
+
+ בעצם סופרת את מספר האינדקסים 
+\begin_inset Formula $i$
+\end_inset
+
+ שבהם 
+\series bold
+גם
+\series default
+ 
+\begin_inset Formula $x_{i}=1$
+\end_inset
+
+ 
+\series bold
+וגם
+\series default
+ 
+\begin_inset Formula $y_{i}=1$
+\end_inset
+
+, ביחד - אלו שני הדברים שהיו חייבים להתקיים סימולטנית כדי שהאינדקס 
+\begin_inset Formula $i$
+\end_inset
+
+ יתרום 
+\begin_inset Formula $-1$
+\end_inset
+
+ למקדם של 
+\begin_inset Formula $\left|y\right\rangle $
+\end_inset
+
+.
+ כשלוקחים את זה מודולו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\numeric off
+, מקבלים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אם מספר המוכפלים זוגי )ולכן המקדם הכולל יהיה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+( ו-
+\begin_inset Formula $1$
+\end_inset
+
+ אם הוא יהיה אי זוגי )ולכן המקדם הכולל יהיה 
+\begin_inset Formula $-1$
+\end_inset
+
+(.
+ הטריק הזה של להעלות את 
+\begin_inset Formula $-1$
+\end_inset
+
+ בחזקה שהיא או זוגית או אי זוגית כדי לקבל אפקט של כפל ב-
+\numeric on
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+או ב-
+\begin_inset Formula $-1$
+\end_inset
+
+ הוא נפוץ ביותר בכל חלקי המתמטיקה ומשרת אותנו גם כאן.
+\end_layout
+
+\begin_layout Standard
+במקרה הפרטי שראינו בהתחלה, זה שבו 
+\begin_inset Formula $x=0^{n}$
+\end_inset
+
+, פשוט מתקיים 
+\begin_inset Formula $x\cdot y=0$
+\end_inset
+
+ לכל 
+\begin_inset Formula $y$
+\end_inset
+
+, ולכן המקדם יוצא תמיד חיובי ואנחנו מקבלים את הסכום הנחמד שראינו קודם: 
+\begin_inset Formula $H^{\otimes n}\left|0^{n}\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+עכשיו אפשר לחזור סוף סוף אל דויטש-ג'וזה ולהבין מה קורה בו: כל מה שנשאר לנו
+ הוא חשבון פשוט ביותר.
+\end_layout
+
+\begin_layout Standard
+ההתחלה של דויטש-ג'וזה מאפסת מצב התחלתי 
+\begin_inset Formula $\left|0^{n}\right\rangle $
+\end_inset
+
+ ואז מפעילה עליו 
+\begin_inset Formula $H^{\otimes n}$
+\end_inset
+
+, כלומר אנחנו מגיעים אל 
+\begin_inset Formula $\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle $
+\end_inset
+
+.
+ בשלב הבא מפעילים את הקופסה השחורה על המצב הזה.
+ נזכיר מה היא עושה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ולכן נקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U_{f}\left(\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \right)=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}U_{f}\left(\left|x\right\rangle \right)=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\left|x\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו על כל זה אני מפעיל שוב 
+\begin_inset Formula $H^{\otimes n}$
+\end_inset
+
+ ומקבל סכום כפול:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $H^{\otimes n}\left(\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \right)=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}H^{\otimes n}\left(\left|x\right\rangle \right)=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot y}\left|y\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זה סכום סופי, אז קל להפוך בו את סדר הסכימה: לכל 
+\begin_inset Formula $y\in\left\{ 0,1\right\} ^{n}$
+\end_inset
+
+, לקבץ את האיברים שמתאימים למקדם 
+\begin_inset Formula $\left|y\right\rangle $
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\frac{1}{2^{n}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ה-
+\begin_inset Formula $\left|y\right\rangle $
+\end_inset
+
+ השונים הם תוצאות המדידה השונות האפשריות, והמקדם שאני מחשב ילמד אותי מה
+ ההסתברות להעלות את 
+\begin_inset Formula $\left|y\right\rangle $
+\end_inset
+
+ בגורל.
+ האלגוריתם, כזכור, מכריע את ההכרעה שלו על פי השאלה האם 
+\begin_inset Formula $\left|0^{n}\right\rangle $
+\end_inset
+
+ עלה בגורל, אז בואו נבדוק ספציפית את המקדם של 
+\begin_inset Formula $y=0^{n}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו, אם 
+\begin_inset Formula $f$
+\end_inset
+
+ היא פונקציה קבועה, כל האיברים בסכום יהיו 
+\series bold
+אותו הדבר
+\series default
+ ולכן נקבל 
+\begin_inset Formula $\frac{1}{2^{n}}\cdot\left(\pm2^{n}\right)=\pm1$
+\end_inset
+
+.
+ זה לא משנה אם המקדם חיובי או שלילי, כי כזכור - כדי לקבל את ההסתברות אנחנו
+ לוקחים ערך מוחלט של המקדם ומעלים אותו בריבוע, ולכן בכל אחד מהמקרים הללו
+ נקבל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+: בהסתברות של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בדיוק מובטח לנו שנקבל את המצב 
+\begin_inset Formula $0^{n}$
+\end_inset
+
+, כמו שאמור לקרות.
+\end_layout
+
+\begin_layout Standard
+אם 
+\begin_inset Formula $f$
+\end_inset
+
+ היא פונקציה מאוזנת, אז 
+\begin_inset Formula $\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}$
+\end_inset
+
+ הולך לכלול את אותו מספר של 
+\begin_inset Formula $+1$
+\end_inset
+
+ ושל 
+\begin_inset Formula $-1$
+\end_inset
+
+, וכולם יבטלו זה את זה, כך שאני אקבל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+ עזבו אתכם ממה שקורה עם שאר המקדמים של שאר האיברים במצב שהגעתי אליו - המקדם
+ של 
+\begin_inset Formula $0^{n}$
+\end_inset
+
+ הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+, ולכן אין לי סיכוי לקבל אותו.
+ אני בודאות אקבל תוצאה אחרת ולכן האלגוריתם יענה נכון גם במקרה הזה.
+ זה מסיים את ההוכחה שהוא עובד, וגם נותן לנו תחושה טובה מאיפה הגיעו ה
+\begin_inset Quotes erd
+\end_inset
+
+פונקציה קבועה או מאוזנת
+\begin_inset Quotes erd
+\end_inset
+
+ הללו; נראה כאילו היה לנו כאן אלגוריתם שחיפש בעיה לפתור, אבל זה לא משנה
+ את זה שהפתרון מרהיב ממש באלגנטיות המתמטית שלו.
+\end_layout
+
+\begin_layout Section
+אלגוריתם ברנשטיין-וזירני
+\end_layout
+
+\begin_layout Standard
+אמרתי שדויטש-ג'וזה נשמע כמו אלגוריתם שמחפש בעיה לפתור, והיופי פה הוא שבעצם
+ יש 
+\series bold
+עוד
+\series default
+ בעיה שאפשר לפתור, בצורה כזו שלא זורקת הצידה את תוצאת המדידה אם היא שונה
+ מ-
+\begin_inset Formula $0^{n}$
+\end_inset
+
+.
+ גם הבעיה הנוספת הזו עדיין מרגישה קצת מלאכותית, אבל אולי פחות? בהקשר של
+ הבעיה הזו, אלגוריתם דויטש-ג'וזה נקרא גם 
+\series bold
+אלגוריתם ברנשטיין-וזירני
+\series default
+ למרות שזה אותו אלגוריתם בדיוק; המאמר המקורי של ברנשטיין ווזריני הוא גדול
+ ומורכב ועוסק בהגדרות של מחלקות סיבוכיות קוונטיות והפרדה שלהן ממחלקות סיבוכיות
+ הסתברותיות ובהקשר הזה מופיע השימוש שאני מתאר כאן; זה לא שברנשטיין-וזירני
+ ישבו ואמרו 
+\begin_inset Quotes eld
+\end_inset
+
+היי, תראו, יש עוד משמעות לדויטש-ג'וזה
+\begin_inset Quotes erd
+\end_inset
+
+ וישבו לכתוב על זה מאמר.
+\end_layout
+
+\begin_layout Standard
+דויטש-ג'וזה עוסק בנסיון להבין פונקציה 
+\begin_inset Formula $f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\} $
+\end_inset
+
+ כלשהי שהיא או קבועה, או מאוזנת.
+ ברנשטיין-וזירני עוסק בנסיון להבין פונקציה 
+\begin_inset Formula $f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\} $
+\end_inset
+
+ שהיא לאו דווקא קבועה או מאוזנת, אבל היא 
+\series bold
+לינארית
+\series default
+, כלומר 
+\begin_inset Formula $f\left(x+y\right)=f\left(x\right)+f\left(y\right)$
+\end_inset
+
+ וגם 
+\begin_inset Formula $f\left(\lambda x\right)=\lambda f\left(x\right)$
+\end_inset
+
+ )לא כזה מרשים כי 
+\begin_inset Formula $\lambda\in\left\{ 0,1\right\} $
+\end_inset
+
+(, כשהחיבור והכפל בסקלר הם מעל 
+\begin_inset Formula $\mathbb{Z}_{2}^{n}$
+\end_inset
+
+.
+ בואו נראה שאפשר לחשוב על הפונקציה הזו בתור מכפלה סקלרית, כלומר שקיים 
+\begin_inset Formula $w\in\left\{ 0,1\right\} ^{n}$
+\end_inset
+
+ כך ש-
+\begin_inset Formula $f\left(x\right)=w\cdot x$
+\end_inset
+
+: 
+\end_layout
+
+\begin_layout Standard
+אם נגדיר 
+\begin_inset Formula $e_{i}=\left(0,\ldots,1,\ldots,0\right)$
+\end_inset
+
+, כלומר ה-
+\begin_inset Formula $1$
+\end_inset
+
+ נמצא רק במקום ה-
+\begin_inset Formula $i$
+\end_inset
+
+ של 
+\begin_inset Formula $e_{i}$
+\end_inset
+
+, אז נקבל בסיס של 
+\begin_inset Formula $\mathbb{Z}_{2}^{n}$
+\end_inset
+
+: אפשר להציג כל 
+\begin_inset Formula $x\in\mathbb{Z}_{2}^{n}$
+\end_inset
+
+ בתור 
+\begin_inset Formula $x=\sum_{i=1}^{n}x_{i}e_{i}$
+\end_inset
+
+.
+ מתכונת הלינאריות של 
+\begin_inset Formula $f$
+\end_inset
+
+ נקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f\left(x\right)=f\left(\sum_{i=1}^{n}x_{i}e_{i}\right)=\sum_{i=1}^{n}x_{i}f\left(e_{i}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אז פשוט נגדיר 
+\begin_inset Formula $w_{i}=f\left(e_{i}\right)$
+\end_inset
+
+ ונקבל שאכן, 
+\begin_inset Formula $f\left(x\right)=w\cdot x$
+\end_inset
+
+ לכל 
+\begin_inset Formula $x\in\mathbb{Z}_{2}^{n}$
+\end_inset
+
+.
+ שימו לב שרוב הפונקציות אינן לינאריות; יש 
+\begin_inset Formula $2^{2^{n}}$
+\end_inset
+
+ פונקציות מ-
+\begin_inset Formula $\left\{ 0,1\right\} ^{n}$
+\end_inset
+
+ אל 
+\begin_inset Formula $\left\{ 0,1\right\} $
+\end_inset
+
+, אבל מכיוון שיש רק
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $2^{n}$
+\end_inset
+
+ איברים 
+\begin_inset Formula $w\in\left\{ 0,1\right\} ^{n}$
+\end_inset
+
+ יש רק 
+\begin_inset Formula $2^{n}$
+\end_inset
+
+ פונקציות לינאריות.
+ מכאן שברנשטיין-וזירני מראש מטפל רק במחלקה קטנה יחסית של פונקציות, בדומה
+ לדויטש-ג'וזה.
+\end_layout
+
+\begin_layout Standard
+המשימה של ברנשטיין-וזירני היא זו: בהינתן 
+\begin_inset Formula $f$
+\end_inset
+
+ לינארית שכזו, למצוא את ה-
+\begin_inset Formula $w$
+\end_inset
+
+ שמגדיר אותה.
+ שימו לב: בניגוד לדויטש-ג'וזה, כאן אנחנו לא רוצים להכריע בין שתי סיטואציות
+ אלא ממש למצוא משהו.
+ אבל אותו אלגוריתם יעבוד:
+\end_layout
+
+\begin_layout Enumerate
+אתחלו מצב קוונטי אל 
+\begin_inset Formula $\left|0^{n}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+הפעילו 
+\begin_inset Formula $H$
+\end_inset
+
+ על כל הקיוביטים.
+\end_layout
+
+\begin_layout Enumerate
+הפעילו את הקופסה השחורה על המצב שקיבלתם.
+\end_layout
+
+\begin_layout Enumerate
+הפעילו 
+\begin_inset Formula $H$
+\end_inset
+
+ על המצב שקיבלתם.
+\end_layout
+
+\begin_layout Enumerate
+מדדו את כל הקיוביטים במצב שקיבלתם.
+\end_layout
+
+\begin_layout Enumerate
+תוצאת המדידות 
+\begin_inset Formula $w$
+\end_inset
+
+ היא הערך המבוקש.
+\end_layout
+
+\begin_layout Standard
+לי זה נראה כמו קסם, שפתאום נקבל את ה-
+\begin_inset Formula $w$
+\end_inset
+
+ הזה, אבל האמת היא שזה די פשוט.
+ בואו ניזכר מה מקבלים אחרי שלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\numeric off
+, כי כבר ביצענו את החישוב קודם:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{1}{2^{n}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו, ה-
+\begin_inset Formula $f\left(x\right)+x\cdot y$
+\end_inset
+
+ הזה שלמעלה נהיה פשוט יותר במקרה שלנו, כי 
+\begin_inset Formula $f\left(x\right)=w\cdot x=x\cdot w$
+\end_inset
+
+ ולכן נקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f\left(x\right)+x\cdot y=x\cdot w+x\cdot y=x\cdot\left(w+y\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו, במקרה שבו 
+\begin_inset Formula $w=y$
+\end_inset
+
+ אנחנו מקבלים 
+\begin_inset Formula $w+y=2y=0$
+\end_inset
+
+ )כי זכרו, אנחנו מעל 
+\begin_inset Formula $\mathbb{Z}_{2}$
+\end_inset
+
+( ולכן המקדם של 
+\begin_inset Formula $\left|y\right\rangle =\left|w\right\rangle $
+\end_inset
+
+ יהיה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{0}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}1=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+קסם!
+\end_layout
+
+\begin_layout Standard
+בשלב הזה אני כבר ממש מוטרד.
+ זה מרגיש כמו 
+\begin_inset Quotes eld
+\end_inset
+
+קסם
+\begin_inset Quotes erd
+\end_inset
+
+ במובן של אחיזת עיניים של קוסם, שגורם לנו כל הזמן להתמקד במקום אחד - במקרה
+ זה, במקדם של ה-
+\begin_inset Formula $\left|y\right\rangle $
+\end_inset
+
+ הספציפי שמעניין אותנו, ובגלל שהוא יוצא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אנחנו אמורים איכשהו להיות מרוצים ולהניח שכל שאר המקדמים יוצאים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+ אבל למה? ובכן, זה די קל: בואו ניקח 
+\begin_inset Formula $y\ne w$
+\end_inset
+
+, אז זה אומר ש-
+\begin_inset Formula $y+w\ne0$
+\end_inset
+
+ לפחות באינדקס אחד.
+ נניח בלי הגבלת הכלליות שזה האינדקס הראשון, אז אפשר לכתוב 
+\begin_inset Formula $y+w=1z^{\prime}$
+\end_inset
+
+ כאשר 
+\begin_inset Formula $z^{\prime}\in\left\{ 0,1\right\} ^{n-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+עכשיו, אנחנו מסתכלים על הסכום 
+\begin_inset Formula $\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}$
+\end_inset
+
+, שאחרי הפישוטים שלנו יוצא 
+\begin_inset Formula $\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot1z^{\prime}}$
+\end_inset
+
+.
+ אני הולך לחלק את ה-
+\begin_inset Formula $x$
+\end_inset
+
+-ים לשתי קבוצות: אלו שמתחילים ב-
+\numeric on
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ואלו שמתחילים ב-
+\numeric on
+1
+\numeric off
+.
+ מן הסתם שתי הקבוצות הללו מאותו גודל, אבל שימו לב לכך שאם 
+\begin_inset Formula $x=0x^{\prime}$
+\end_inset
+
+ אז 
+\begin_inset Formula $x\cdot1z^{\prime}=x^{\prime}\cdot z^{\prime}$
+\end_inset
+
+ ואילו אם 
+\begin_inset Formula $x=1x^{\prime}$
+\end_inset
+
+ אז 
+\begin_inset Formula $x\cdot1z^{\prime}=1+x^{\prime}\cdot z^{\prime}$
+\end_inset
+
+.
+ במילים אחרות, הזוג 
+\begin_inset Formula $0x^{\prime},1x^{\prime}$
+\end_inset
+
+ יניב תוצאות שונות כשמעלים את 
+\begin_inset Formula $-1$
+\end_inset
+
+ בחזקת 
+\begin_inset Formula $x\cdot1z^{\prime}$
+\end_inset
+
+, ולכן הסכום של שניהם יצא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+ בצורה הזו חילקנו את 
+\series bold
+כל
+\series default
+ ה-
+\begin_inset Formula $x$
+\end_inset
+
+-ים שלנו לזוגות שמבטלים זה את זה, ולכן באמת נקבל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+ אני מקווה שזה משכנע גם את מי שכמוני קשה לו לקבל את זה שאם המקדם של איבר
+ אחד יצא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+זה אומר ששאר המקדמים הם בהכרח
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+\end_layout
+
+\begin_layout Section
+מה למדנו מכל זה?
+\end_layout
+
+\begin_layout Standard
+כאמור, אני לא מביא את האלגוריתמים הללו בשביל להוכיח את עליונות החישוב הקוונטי
+ על החישוב הרגיל, והטיעון המתמטי המדויק שרלוונטי לנסח בהקשר הזה הוא ארוך
+ ומסובך למדי ואין לי כוח אליו.
+ אני מביא אותם כדי שנרגיש מה הולך באלגוריתמים קוונטיים.
+ באופן מאוד גס אוהבים לומר שהכוח של אלגוריתם קוונטי נובע משלושה היבטים של
+ חישוב קוונטי:
+\end_layout
+
+\begin_layout Itemize
+סופרפוזיציה
+\end_layout
+
+\begin_layout Itemize
+שזירה
+\end_layout
+
+\begin_layout Itemize
+התאבכות
+\end_layout
+
+\begin_layout Standard
+בדויטש-ג'וזה-ברנשטיין-וזירני אין ממש שזירה )ה-
+\begin_inset Formula $H$
+\end_inset
+
+-ים בהתחלה ובסוף לא יוצרים שזירה, וגם ה-
+\begin_inset Formula $U$
+\end_inset
+
+ באמצע לא חייבת ליצור שזירה(.
+ בהחלט יש סופרפוזיציה - זה מה שה-
+\begin_inset Formula $H$
+\end_inset
+
+ בהתחלה עושה לנו מייד.
+ אבל האספקט המעניין שטרם ראינו הוא שיש כאן 
+\series bold
+התאבכות
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+בפיזיקה, במשמעות המקורית של המילהת 
+\begin_inset Quotes eld
+\end_inset
+
+התאבכות
+\begin_inset Quotes erd
+\end_inset
+
+ באה לתאר סיטואציה שבה גלים שונים ש
+\begin_inset Quotes erd
+\end_inset
+
+מתנגשים
+\begin_inset Quotes erd
+\end_inset
+
+ יכולים לחזק או להחליש זה את זה בנקודות ההתנגשות, בהתאם למצב הנוכחי שלהם.
+ אפשר לחשוב על גל בתור משהו שכל הזמן עולה ויורד.
+ אם בנקודת ההתנגשות של שני גלים, שנים בנקודה הגבוהה ביותר שלהם, הם יחזקו
+ זה את זה ונקבל גל עוד יותר גבוה )
+\begin_inset Quotes erd
+\end_inset
+
+התאבכות בונה
+\begin_inset Quotes erd
+\end_inset
+
+( ואם הם ייפגשו בנקודה הנמוכה ביותר שלהם התוצאה תהיה עוד יותר נמוכה וגם
+ זו תהיה התאבכות בונה.
+ אבל אם גל אחד יהיה גבוה והשני נמוך, הם יבטלו זה את זה ונקבל איזור שבו לא
+ רואים שום דבר )
+\begin_inset Quotes erd
+\end_inset
+
+התאבכות הורסת
+\begin_inset Quotes erd
+\end_inset
+
+(.
+ מה שיפה בדויטש-ג'וזה הוא שזה בדיוק מה שקורה גם כאן.
+\end_layout
+
+\begin_layout Standard
+כשביצענו את הסופרפוזיציה הראשונית עם 
+\begin_inset Formula $H^{\otimes n}$
+\end_inset
+
+, אפשר לחשוב על כך כאילו לקחנו את המצב 
+\begin_inset Formula $\left|0^{n}\right\rangle $
+\end_inset
+
+ ופירקנו אותו לסכום של 
+\begin_inset Formula $2^{n}$
+\end_inset
+
+ גלים שונים: 
+\begin_inset Formula $\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle $
+\end_inset
+
+.
+ ברגע הזה, כל הגלים נמצאים באיזור ה
+\begin_inset Quotes erd
+\end_inset
+
+גבוה
+\begin_inset Quotes erd
+\end_inset
+
+ שלהם, שבא לידי ביטוי בפאזה החיובית שלהם )הפאזה בהקשר הנוכחי היא הסימן של
+ המקדם של 
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+(.
+\end_layout
+
+\begin_layout Standard
+אחר כך אנחנו מפעילים את 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+, וההשפעה שלו היא פשוטה: הוא משנה את הפאזה של 
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+-ים מסויימים, מחיובית לשלילית.
+ במקום שכל הגלים יהיו מסונכרנים, 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+ פיצל את הגלים לשתי קבוצות, כל אחת עם הסינכרון שלה.
+ לבסוף מגיע ה-
+\begin_inset Formula $H^{\otimes n}$
+\end_inset
+
+ השני, ומה שהוא עושה הוא לגרום לכל הגלים להתנגש ולהסתכל מה קרה.
+ כשהגלים 
+\begin_inset Quotes eld
+\end_inset
+
+מתנגשים
+\begin_inset Quotes erd
+\end_inset
+
+, לכל 
+\begin_inset Formula $\left|y\right\rangle $
+\end_inset
+
+ אנחנו מקבלים בנקודת ההתנגשות את
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{1}{\sqrt{2^{n}}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+בברנשטיין-וזירני, עבור רוב ערכי ה-
+\begin_inset Formula $\left|y\right\rangle $
+\end_inset
+
+, ההתאבכות תהיה הורסת והם ייעלמו לגמרי.
+ המקום היחיד שבו תהיה התאבכות בונה הוא ה-
+\begin_inset Formula $\left|y\right\rangle $
+\end_inset
+
+ שאנו חפצים ביקרו.
+ בדויטש-ג'וזה תהיה התאבכות בונה ב-
+\begin_inset Formula $\left|0^{n}\right\rangle $
+\end_inset
+
+ רק אם הפונקציה קבועה, ואחרת תהיה שם התאבכות הורסת.
+\end_layout
+
+\begin_layout Standard
+זו בעצם המהות של רבים מהאלגוריתמים הקוונטיים: לגרום איכשהו לחלקים השונים
+ של הסופרפוזיציה 
+\begin_inset Quotes eld
+\end_inset
+
+להתנגש
+\begin_inset Quotes erd
+\end_inset
+
+ אלו באלו, כך שהחלקים הלא מועילים מתבטלים, והחלקים המועילים נשארים.
+ בדויטש-ג'וזה, בגלל הפשטות הגדולה שלו, אנחנו יכולים לראות בדיוק מה גורם
+ להתאבכויות הללו לעבוד - העובדה שהמקדמים של ה-
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+-ים יכולים להיות 
+\series bold
+שליליים
+\series default
+.
+ וכאן אנחנו מגיעים אל מה שהוא אולי לב-לבו של ההבדל המרכזי בין חישוב קוונטי
+ וחישוב הסתברותי 
+\begin_inset Quotes eld
+\end_inset
+
+רגיל
+\begin_inset Quotes erd
+\end_inset
+
+.
+ ריצ'ארד פיינמן, בהרצאה מפורסמת שלו, 
+\lang english
+Simulating Physics with Computers
+\lang hebrew
+, אמר )כחלק מתיאור יותר מפורט, כמובן(
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+The only difference between a probabilistic classical world and the equations
+ of the quantum world is that somehow or other it appears as if the probabilitie
+s would have to go negative.
+\end_layout
+
+\begin_layout Standard
+וזה בדיוק מה שקורה פה.
+ אם אני מבצע חישוב הסתברותי 
+\begin_inset Quotes eld
+\end_inset
+
+רגיל
+\begin_inset Quotes erd
+\end_inset
+
+ שבו אני מגריל מחרוזת 
+\begin_inset Formula $x\in\left\{ 0,1\right\} ^{n}$
+\end_inset
+
+ בהתפלגות אחידה, אפשר יהיה לחשוב על מצב החישוב שלי אחרי השלב הראשון הזה
+ כאילו הוא ב
+\begin_inset Quotes erd
+\end_inset
+
+סופרפוזיציה
+\begin_inset Quotes erd
+\end_inset
+
+ שבו ההסתברות של כל 
+\begin_inset Formula $x$
+\end_inset
+
+ היא בדיוק 
+\begin_inset Formula $\frac{1}{2^{n}}$
+\end_inset
+
+.
+ אחר כך אני יכול לבצע חישובים שעבור 
+\begin_inset Formula $x$
+\end_inset
+
+-ים שונים יובילו לאותה תוצאה, ובכך 
+\begin_inset Quotes eld
+\end_inset
+
+לחזק
+\begin_inset Quotes erd
+\end_inset
+
+ את ההסתברות של אותה תוצאה להתקבל.
+ אבל האופן שבו ה
+\begin_inset Quotes erd
+\end_inset
+
+חיזוק
+\begin_inset Quotes erd
+\end_inset
+
+ הזה מתבצע הוא על ידי חיבור הסתברויות, אין לי חיסור.
+ אם לחדד: אפשר לתאר חישוב הסתברותי רגיל בתור כפל של וקטור 
+\series bold
+סטוכסטי
+\series default
+ )וקטור שבו כל הכניסות בין
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ ל-
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ומסתכמות ל-
+\numeric on
+1
+\numeric off
+( במטריצה 
+\series bold
+סטוכסטית
+\series default
+ )מטריצה שבה כל הכניסות בין
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ל-
+\numeric on
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+וכל שורה מסתכמת ל-
+\numeric on
+1
+\numeric off
+(.
+ זה נותן הרבה, אבל זה פשוט לא מאפשר לנו לבצע את אותה אלגברה שאנחנו עושים
+ בחישוב קוונטי, עם מטריצות שיש בהן גם מספרים שליליים.
+\end_layout
+
+\begin_layout Standard
+עוד דרך לחשוב על זה: בחישוב הסתברותי, מה שיש לנו ביד בכל רגע נתון הוא ההסתברויות
+ של התוצאות האפשריות.
+ בחישוב קוונטי, מה שיש לנו ביד בכל רגע נתון הוא 
+\series bold
+האמפליטודות
+\series default
+ של החישוב - אותן 
+\begin_inset Formula $\alpha_{x}$
+\end_inset
+
+-ים.
+ ה-
+\begin_inset Formula $\alpha_{x}$
+\end_inset
+
+-ים הן 
+\series bold
+לא
+\series default
+ הסתברויות; הן מספרים שיכולים להיות גם שליליים וגם מרוכבים, ואת ההסתברויות
+ אנחנו מחשבים מתוכן בעזרת שלב הביניים 
+\begin_inset Formula $\left|\alpha_{x}\right|^{2}$
+\end_inset
+
+.
+ כלומר, אנחנו מסוגלים לבצע אלגברה יותר מתוחכמת, ש
+\begin_inset Quotes erd
+\end_inset
+
+מוסתרת
+\begin_inset Quotes erd
+\end_inset
+
+ בסופו של דבר בידי המעבר מ-
+\begin_inset Formula $\alpha_{x}$
+\end_inset
+
+ אל 
+\begin_inset Formula $\left|\alpha_{x}\right|^{2}$
+\end_inset
+
+.
+ אבל כל עוד לא מדדנו, אנחנו עדיין בעולם של האלגברה המתוחכמת יותר, והיא זו
+ שמאפשרת לנו להשיג את האפקט של ההתאבכות.
+ חישוב קוונטי מאפשר לנו לרתום את הטבע עצמו כדי לבצע אלגברה שהיא יותר מתוחכמת
+ מאלגברה בוליאנית.
+\end_layout
+
+\begin_layout Standard
+זהו, זו הדרך הכי טובה שיש לי לתת את האינטואיציה האישית שלי לסיבה שבגללה
+ חישוב קוונטי הוא 
+\begin_inset Quotes eld
+\end_inset
+
+יותר
+\begin_inset Quotes erd
+\end_inset
+
+ מחישוב רגיל.
+ עכשיו רק נשאר לי לסגור את החוב מתחילת הפוסט לגבי הקופסאות השחורות.
+\end_layout
+
+\begin_layout Section
+אז איך מממשים קופסא שחורה קוונטית?
+\end_layout
+
+\begin_layout Standard
+בתחילת הפוסט מלמלתי משהו על חישוב של 
+\begin_inset Formula $f$
+\end_inset
+
+ בעזרת קופסא שחורה ואז קפצתי לכך שיש לנו אופרטור 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+ שעושה את הקסם 
+\begin_inset Formula $U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle $
+\end_inset
+
+.
+ אני עדיין צריך להסביר איך כזה דבר עובד.
+\end_layout
+
+\begin_layout Standard
+אם תחשבו על זה רגע, עדיין בסדרת הפוסטים לא הסברתי איך מבצעים חישוב 
+\series bold
+רגיל
+\series default
+ בעזרת מחשב קוונטי.
+ אמנם, אמרתי ש-
+\begin_inset Formula $X$
+\end_inset
+
+ זה כמו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+NOT
+\lang hebrew
+, אבל אין לי שום פעולה שהיא כמו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+AND
+\lang hebrew
+, למשל: פעולה שמחזירה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+רק אם שני הקלטים היו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+, ואחרת מחזירה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+ ויש סיבה טובה שבגללה אין לי כזו: כי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+AND
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+היא פעולה 
+\series bold
+לא הפיכה
+\series default
+ אבל בחישוב קוונטי כל פעולה צריכה להיות אופרטור אוניטרי, כלומר הפיכה.
+ אם ב-
+\lang english
+AND
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+קיבלתי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+, אני לא יודע אם זה בגלל ששני הקלטים היו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+, או בגלל שאחד מהם היה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+והשני
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+, ואיזה מהם.
+ אינפורמציה הלכה לאיבוד.
+\end_layout
+
+\begin_layout Standard
+האם זה אומר שלא ניתן לממש פעולת
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+AND
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בחישוב קוונטי? לא בדיוק.
+ אפשר, אבל צריך יהיה לשלם מחיר כלשהו.
+ המחיר הוא שימוש בקיוביט 
+\begin_inset Quotes eld
+\end_inset
+
+זבל
+\begin_inset Quotes erd
+\end_inset
+
+ שישתתף בחישוב בתור מעין משתתף זמני ואחר כך נוכל לשכוח מערכו.
+ אני לא אכנס לפרטים הללו עכשיו אלא אציג פוסט יותר מפורט עליהם בהמשך.
+ למה לא הראיתי את זה קודם? כי זו אחת מהבעיות הללו שכל עוד לא מרגישים שחסר
+ לה פתרון, קצת טרחני להציג אותו.
+\end_layout
+
+\begin_layout Standard
+אז נניח שיש לנו מעגל קוונטי שיודע גם לבצע חישוב רגיל.
+ יש לו 
+\begin_inset Formula $n$
+\end_inset
+
+ קיוביטי קלט, וקיוביט נוסף שאנו מניחים שמאותחל ל-
+\begin_inset Formula $\left|0\right\rangle $
+\end_inset
+
+ ובסוף החישוב יהיה בו הפלט, ואולי גם קיוביט עזר שלא נטרח לכתוב.
+ כלומר, מה שיש לנו הוא מעגל שמחשב
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{f}\left(\left|x\right\rangle \otimes\left|0\right\rangle \right)=\left|x\right\rangle \otimes\left|f\left(x\right)\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+שימו לב: כאן במכפלה הטנזורית, הרכיב השמאלי, 
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+, הוא בעצמו מכפלה טנזורית של 
+\begin_inset Formula $n$
+\end_inset
+
+ קיוביטים, בעוד שהרכיב הימני הוא קיוביט בודד.
+\end_layout
+
+\begin_layout Standard
+הבעיה עם ההגדרה שנתתי כרגע היא שזו עדיין לא הגדרה שלמה.
+ הגדרתי את 
+\begin_inset Formula $O_{f}$
+\end_inset
+
+ 
+\series bold
+לחלק 
+\series default
+מהקלטים שהם אברי בסיס, אבל לא לכולם.
+ מה עם הקלטים מהצורה 
+\begin_inset Formula $\left|x\right\rangle \otimes\left|1\right\rangle $
+\end_inset
+
+? כדי לטפל בכל המקרים, אני אגדיר
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{f}\left(\left|x\right\rangle \otimes\left|b\right\rangle \right)=\left|x\right\rangle \otimes\left|f\left(x\right)\oplus b\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאן 
+\begin_inset Formula $\oplus$
+\end_inset
+
+ מציין חיבור מודולו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\numeric off
+, ולכן מה ש-
+\begin_inset Formula $O_{f}$
+\end_inset
+
+ עושה הוא או להחזיר את 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ )אם הקלט הנוסף הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+( או את 
+\begin_inset Formula $\neg f\left(x\right)$
+\end_inset
+
+ )אם הקלט הנוסף הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+(.
+ מה שאני רוצה להסביר עכשיו הוא איך לבנות את 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+ שבו השתמשתי קודם מתוך 
+\begin_inset Formula $O_{f}$
+\end_inset
+
+ הזה.
+ הטריק הוא חמוד ממש: במקום להפעיל את 
+\begin_inset Formula $O_{f}$
+\end_inset
+
+ על 
+\begin_inset Formula $\left|x\right\rangle \otimes\left|0\right\rangle $
+\end_inset
+
+ או על 
+\begin_inset Formula $\left|x\right\rangle \otimes\left|1\right\rangle $
+\end_inset
+
+, אני אפעיל אותו על 
+\begin_inset Formula $\left|x\right\rangle \otimes\left|-\right\rangle $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+כזכור, 
+\begin_inset Formula $\left|-\right\rangle $
+\end_inset
+
+ הוא המצב הקוונטי שמתקבל מ-
+\begin_inset Formula $H\left|1\right\rangle $
+\end_inset
+
+, כלומר 
+\begin_inset Formula $\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}$
+\end_inset
+
+.
+ בואו נראה מה 
+\begin_inset Formula $O_{f}$
+\end_inset
+
+ עושה כשהוא מקבל קלט כזה, תוך התבססות על הלינאריות שלו:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{f}\left(\left|x\right\rangle \otimes\left|-\right\rangle \right)=\frac{1}{\sqrt{2}}\left[O_{f}\left(\left|x\right\rangle \otimes\left|0\right\rangle \right)-O_{f}\left(\left|x\right\rangle \otimes\left|1\right\rangle \right)\right]=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\frac{1}{\sqrt{2}}\left[\left|x\right\rangle \left|f\left(x\right)\right\rangle -\left|x\right\rangle \left|f\left(x\right)\oplus1\right\rangle \right]=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\left|x\right\rangle \frac{\left|f\left(x\right)\right\rangle -\left|f\left(x\right)\oplus1\right\rangle }{\sqrt{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו, בואו נבדיל בין שני המקרים האפשריים:
+\end_layout
+
+\begin_layout Itemize
+אם 
+\begin_inset Formula $f\left(x\right)=0$
+\end_inset
+
+ אז מה שקיבלנו מימין ל-
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+ הוא את 
+\begin_inset Formula $\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}=\left|-\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+אם 
+\begin_inset Formula $f\left(x\right)=1$
+\end_inset
+
+ אז מה שקיבלנו מימין ל-
+\begin_inset Formula $\left|x\right\rangle $
+\end_inset
+
+ הוא את 
+\begin_inset Formula $\frac{\left|1\right\rangle -\left|0\right\rangle }{\sqrt{2}}=-\left|-\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ובמילים אחרות, קיבלנו ש-
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{f}\left(\left|x\right\rangle \left|-\right\rangle \right)=\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \left|-\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+קיבלנו שהפעלה של 
+\begin_inset Formula $O_{f}$
+\end_inset
+
+ לא משנה את המצב הקוונטי כלל, חוץ מאשר על ידי כפל שלו ב-
+\begin_inset Formula $\left(-1\right)^{f\left(x\right)}$
+\end_inset
+
+.
+ לכן, אם נסתכל על האפקט רק ל-
+\begin_inset Formula $n$
+\end_inset
+
+ הקיוביטים הראשונים, נקבל בדיוק את 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+ שרצינו.
+ זה מסיים גם את ההסבר שלי לגבי הופעת הקופסה השחורה המסתורת 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+, אבל עדיין נשאר לי חוב של להסביר איך בכלל מבצעים חישובים רגילים בעזרת חישוב
+ קוונטי.
+ אל זה נגיע בעתיד.
+ אסיים עם האיור שנותן לנו את כל דויטש-ג'וזה בעזרת 
+\begin_inset Formula $O_{f}$
+\end_inset
+
+ הזה, שכן גם באיור הזה אפשר להיתקל לפעמים ושווה לראות אותו, עכשיו כשאנחנו
+ מבינים שזה אותו הדבר:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/gadia/Dropbox/Websites/blog/assets/img/2022/deutsch_jozsa_full.png
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
