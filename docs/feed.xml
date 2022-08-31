@@ -1,4 +1,311 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2022-08-03T15:26:00+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">חישוב קוונטי בגישה מתמטית, חלק ד’: שערים קוונטיים</title><link href="http://gadial.net/2022/08/03/quantum_computing_math_4/" rel="alternate" type="text/html" title="חישוב קוונטי בגישה מתמטית, חלק ד': שערים קוונטיים" /><published>2022-08-03T00:00:00+00:00</published><updated>2022-08-03T00:00:00+00:00</updated><id>http://gadial.net/2022/08/03/quantum_computing_math_4</id><content type="html" xml:base="http://gadial.net/2022/08/03/quantum_computing_math_4/">&lt;h2&gt;מעגלים קוונטיים&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2022-08-31T09:48:56+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">חישוב קוונטי בגישה מתמטית, חלק ה’: אלגוריתם דויטש-ג’וזה</title><link href="http://gadial.net/2022/08/07/quantum_computing_math_5/" rel="alternate" type="text/html" title="חישוב קוונטי בגישה מתמטית, חלק ה': אלגוריתם דויטש-ג'וזה" /><published>2022-08-07T00:00:00+00:00</published><updated>2022-08-07T00:00:00+00:00</updated><id>http://gadial.net/2022/08/07/quantum_computing_math_5</id><content type="html" xml:base="http://gadial.net/2022/08/07/quantum_computing_math_5/">&lt;h2&gt;מה אנחנו רוצים לפתור?&lt;/h2&gt;
+
+&lt;p&gt;עד עכשיו בסדרת הפוסטים על חישוב קוונטי ראינו את הבסיס המתמטית שאפשר לצמצם לכמה משפטי מחץ:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;בחישוב קוונטי האובייקט שמשתנה עם הזמן הוא &lt;strong&gt;המצב הקוונטי&lt;/strong&gt; של המערכת, שמיוצג בתור וקטור &lt;span&gt;\( \left|\psi\right\rangle \in\mathbb{C}^{2^{n}} \)&lt;/span&gt;.&lt;/li&gt;
+
+
+&lt;li&gt;סוג אחד של שינוי הוא כפל המצב &lt;span&gt;\( v \)&lt;/span&gt; במטריצה אוניטרית &lt;span&gt;\( U\in\mathbb{C}^{2^{n}\times2^{n}} \)&lt;/span&gt;, כלומר מבצעים &lt;span&gt;\( \left|\psi\right\rangle \leftarrow U\left|\psi\right\rangle  \)&lt;/span&gt;.&lt;/li&gt;
+
+
+&lt;li&gt;סוג נוסף של שינוי הוא &lt;strong&gt;מדידה&lt;/strong&gt;, שבגרסה הפשוטה שלנו מוגדרת לכל קיוביט עבור שני אופרטורים &lt;span&gt;\( M_{0},M_{1} \)&lt;/span&gt; (שתלויים בקיוביט), בחירת &lt;span&gt;\( M_{0} \)&lt;/span&gt; בהסתברות &lt;span&gt;\( \left\langle \psi\right|M_{0}\left|\psi\right\rangle  \)&lt;/span&gt; ובחירת &lt;span&gt;\( M_{1} \)&lt;/span&gt; בהסתברות &lt;span&gt;\( \left\langle \psi\right|M_{1}\left|\psi\right\rangle  \)&lt;/span&gt; ובהינתן ש-&lt;span&gt;\( M_{i} \)&lt;/span&gt; עלה בגורל, הפלט שחוזר מהמדידה הוא &lt;span&gt;\( i \)&lt;/span&gt; והיא מעבירה את המצב הקוונטי של המערכת למצב &lt;span&gt;\( \left|\psi\right\rangle \leftarrow\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}\left|\psi\right\rangle }} \)&lt;/span&gt;.&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;זה הכל. מה שמעניין פה הוא שאלו הם חישובים שלא מסובך במיוחד לתכנת גם במחשב סטנדרטי. אמנם אין לנו יכולת לשמור מספרים מרוכבים ברמת דיוק אינסופית, אבל אנחנו לא באמת צריכים את זה - הייצוגים הקיימים של מרוכבים במחשב עובדים מספיק טוב. למעשה, אין שום בעיה עקרונית לכתוב סימולטור של חישוב קוונטי שרץ במחשב רגיל, וזה אפילו תרגיל נחמד למי שרוצה ללמוד את התחום (מגלים מהר מאוד שהפעלת אופרטורים זה עסק קצת מעצבן ויש דרכי קיצור). זה גורם לאתגר הגדול של בניית מחשבים קוונטיים להיראות קצת מיותר - מה הטעם ליצור מכשיר הנדסי מסובך שהחישוב שהוא מבצע זה משהו שאפשר לעשות במחשב רגיל?&lt;/p&gt;
+
+&lt;p&gt;לנקודה הזו כבר התייחסתי בעבר. מכיוון שהאובייקט הספציפי שאנחנו שומרים ופועלים עליו הוא וקטור ב-&lt;span&gt;\( \mathbb{C}^{2^{n}} \)&lt;/span&gt;, כמות המידע שצריך לשמור, והזמן שלוקח לפעול עליה, גדלה &lt;strong&gt;אקספוננציאלית&lt;/strong&gt; עם &lt;span&gt;\( n \)&lt;/span&gt;. עבור 50 קיוביטים, למחשבים רגילים מאוד מאתגר לסמלץ חישוב קוונטי; עבור 100 קיוביטים כבר אין על מה לדבר. נכון לכתיבת שורות אלו יש ליבמ מחשב קוונטי פעיל של 127 קיוביטים, למרות שהחישוב בו לא חף מבעיות (מתישהו אני מקווה בסדרת הפוסטים הזו להגיע לדבר על רעשים ותיקון שגיאות), וזו רק תחילת הדרך. כשיהיה חישוב קוונטי רציני, לא יהיה שום סיכוי לסמלץ אותו במחשב.&lt;/p&gt;
+
+&lt;p&gt;אבל זה עדיין לא עונה על השאלה האמיתית - &lt;strong&gt;בשביל מה זה טוב&lt;/strong&gt;? אילו בעיות נוכל לפתור עם מחשבים קוונטיים שלא נוכל לפתור במחשב רגיל? הדוגמא הנפוצה שנזרקת לחלל באוויר בשלב הזה היא &lt;strong&gt;בעיית הפירוק לגורמים&lt;/strong&gt; שהאלגוריתם הקוונטי של שור פותר ביעילות. זו דוגמא מצויינת, אבל יש בה בעיה פשוטה - זה אלגוריתם מסובך יחסית וקשה להציג אותו ישר אחרי שמבינים איך עובד חישוב קוונטי. אז בפוסט הזה אני רוצה להציג בעיה פשוטה הרבה יותר, שנפתרת על ידי אלגוריתם פשוט בצורה קיצונית, אבל כבר היא מספיקה לתת תחושה טובה למה בחישוב קוונטי יש “יותר” מאשר בחישוב קלאסי. האלגוריתם שאציג נקרא &lt;strong&gt;אלגוריתם דויטש-ג'וזה&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;נתחיל עם להציג את הבעיה עצמה. אני מזהיר מראש שזו &lt;strong&gt;לא&lt;/strong&gt; בעיה “מעניינת”. לפתור אותה לא הולך לשבור מערכות הצפנה. היא אפילו נראית די מלאכותית. היופי בבעיה הוא שקל מאוד להבין למה נסיון לפתור אותה קלאסית יהיה קשה, ואז העובדה שהיא נפתרת בקלות קוונטית מחדדת מאוד את ההבדל.&lt;/p&gt;
+
+&lt;p&gt;הקלט לבעיה הוא פונקציה &lt;span&gt;\( f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\}  \)&lt;/span&gt;, כלומר פונקציה &lt;strong&gt;בינארית&lt;/strong&gt; שמקבלת קלט שהוא מחרוזת באורך &lt;span&gt;\( n \)&lt;/span&gt; של ביטים (אפשר לחשוב עליה בתור מספר טבעי בתחום &lt;span&gt;\( 0,1,\ldots,2^{n}-1 \)&lt;/span&gt;) ועל כל קלט כזה מחזירה 0 או 1. הפונקציה נתונה לנו בתור &lt;strong&gt;קופסה שחורה&lt;/strong&gt;, כלומר משהו שאנחנו לא יכולים לראות איך המימוש שלו עובד; הדבר היחיד שאנחנו יכולים לעשות הוא לחשב את &lt;span&gt;\( f \)&lt;/span&gt; על קלטים מסוימים. תחשבו על &lt;span&gt;\( f \)&lt;/span&gt; כאילו מה שמחשב אותו יושב על מחשב מרוחק, וכל מה שאנחנו יכולים לעשות הוא לשלוח לו מחרוזות של &lt;span&gt;\( n \)&lt;/span&gt; ביטים ולקבל חזרה פלט של ביט בודד.&lt;/p&gt;
+
+&lt;p&gt;מה שידוע לנו על &lt;span&gt;\( f \)&lt;/span&gt; זה שהיא בדיוק אחד משני הבאים:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( f \)&lt;/span&gt; &lt;strong&gt;קבועה&lt;/strong&gt;, כלומר לכל קלט &lt;span&gt;\( x \)&lt;/span&gt; מתקיים &lt;span&gt;\( f\left(x\right)=0 \)&lt;/span&gt;, או שלכל קלט &lt;span&gt;\( x \)&lt;/span&gt; מתקיים &lt;span&gt;\( f\left(x\right)=1 \)&lt;/span&gt;.&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( f \)&lt;/span&gt; &lt;strong&gt;מאוזנת&lt;/strong&gt;, כלומר בדיוק על חצי מהקלטים מתקבל 0 ועל החצי השני מתקבל 1. אם נסמן &lt;span&gt;\( N=2^{n} \)&lt;/span&gt;, זה אומר ש-&lt;span&gt;\( \left|\left\{ x\in\left\{ 0,1\right\} ^{n}\ |\ f\left(x\right)=0\right\} \right|=\left|\left\{ x\in\left\{ 0,1\right\} ^{n}\ |\ f\left(x\right)=1\right\} \right|=\frac{N}{2} \)&lt;/span&gt;.&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;המשימה שלנו: לקבל מה משני המקרים הללו מתקיים.&lt;/p&gt;
+
+&lt;p&gt;איך עושים את זה באופן קלאסי? ובכן, אם לא מערבים הסתברות בסיפור, די ברור שאנחנו חייבים &lt;span&gt;\( \frac{N}{2}+1 \)&lt;/span&gt; קריאות ל-&lt;span&gt;\( f \)&lt;/span&gt;. למה? כי אנחנו תמיד חושבים מה יקרה &lt;strong&gt;במקרה הגרוע ביותר&lt;/strong&gt;, והמקרה הגרוע ביותר הוא זה שבו אין לנו מזל - ש-&lt;span&gt;\( f \)&lt;/span&gt; היא מאוזנת, ואיכשהו כל &lt;span&gt;\( \frac{N}{2} \)&lt;/span&gt; ההפעלות הראשונות שלה שביצענו נפלו &lt;strong&gt;בדיוק&lt;/strong&gt; על כל הערכים שעליהם &lt;span&gt;\( f \)&lt;/span&gt; נותנת 0. בשלב הזה אנחנו עדיין לא יכולים להגיד בודאות האם &lt;span&gt;\( f \)&lt;/span&gt; תהיה 0 על הכל, או רק על חצי. רק כשנחשב את הערך שלה על האיבר ה-&lt;span&gt;\( \frac{N}{2}+1 \)&lt;/span&gt; נוכל להיות בטוחים: אם קיבלנו &lt;span&gt;\( 0 \)&lt;/span&gt; אז &lt;span&gt;\( f \)&lt;/span&gt; קבועה, ואם קיבלנו 1 אז &lt;span&gt;\( f \)&lt;/span&gt; מאוזנת.&lt;/p&gt;
+
+&lt;p&gt;להראות שגם אם מערבים הסתברות עדיין נזדקק למספר גדול של שאילות זה חישוב מסובך יותר ולא אעשה אותו כרגע, כי אני לא צריך - אלגוריתם דויטש-ג’וזה הולך להשתמש בקריאה &lt;strong&gt;אחת בלבד&lt;/strong&gt; לפונקציה, ולהחזיר תשובה שהיא &lt;strong&gt;נכונה תמיד&lt;/strong&gt;, ב-100 אחוז מהמקרים, אפילו אם חישוב קוונטי הוא לכאורה עניין הסתברותי. איך זה יעבוד? ובכן, זה דורש מהקופסה השחורה שמחשבת את &lt;span&gt;\( f \)&lt;/span&gt; להיות קוונטית בעצמה: במקום לחשב את &lt;span&gt;\( f \)&lt;/span&gt; על ביט ספציפי &lt;span&gt;\( x \)&lt;/span&gt; שנותנים, לחשב את &lt;span&gt;\( f \)&lt;/span&gt; על &lt;strong&gt;סופרפוזיציה&lt;/strong&gt;, כלומר: הקלט ש-&lt;span&gt;\( f \)&lt;/span&gt; תקבל יהיה מצב על &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים, &lt;span&gt;\( \left|\psi\right\rangle =\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}\left|x\right\rangle  \)&lt;/span&gt; ואינטואיטיבית, הפלט יהיה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( f\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}\left|x\right\rangle \right)=\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}f\left(\left|x\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;האינטואיציה הזו לא מלאה; בדויטש-ג’וזה נשתמש בקופסה שחורה שמתנהגת קצת שונה, ואחר כך נסביר איך עוברים מהאינטואיציה שאני מציג כאן אל הקופסה השחורה של דויטש-ג’וזה.&lt;/p&gt;
+
+&lt;p&gt;ייתכן מאוד שהצלחתי לאכזב אתכם עם ה”הקופסה השחורה תהיה קוונטית”. זה נשמע כאילו שיניתי פתאום את הגדרת הבעיה, ואין פלא שעם מחשב קוונטי אפשר להשיג יותר. אבל נניח שהייתי אומר מלכתחילה שהקופסה השחורה היא קוונטית, האם מחשב קלאסי היה מצליח יותר? הוא לא מסוגל לייצר סופרפוזיציה של מצבים קוונטיים, כל מה שהוא היה יכול לעשות הוא לשלוח מצבי בסיס &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt;. זה שהקופסה השחורה היא קוונטית לא עוזר לנו בלי שיהיה לנו מחשב קוונטי שמנצל את זה. עדיין, אני לגמרי מסכים שזו לא דוגמת מחץ כמו האלגוריתם של שור, שלא נזקק לקופסאות שחורות קוונטיות שכאלו; תזכרו שמה שאני עושה כרגע הוא לא לתת דוגמת מחץ לעליונות החישוב הקוונטי, אלא לתת תחושה ראשונית של הקסם הנחמד הזה.&lt;/p&gt;
+
+&lt;h2&gt;איך דויטש-ג'וזה עובד?&lt;/h2&gt;
+
+&lt;p&gt;דויטש-ג’וזה הוא אלגוריתם פשוט בצורה קיצונית:&lt;/p&gt;
+
+&lt;ol&gt; &lt;li&gt;אתחלו מצב קוונטי אל &lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;הפעילו &lt;span&gt;\( H \)&lt;/span&gt; על כל הקיוביטים.&lt;/li&gt;
+
+
+&lt;li&gt;הפעילו את הקופסה השחורה על המצב שקיבלתם.&lt;/li&gt;
+
+
+&lt;li&gt;הפעילו &lt;span&gt;\( H \)&lt;/span&gt; על המצב שקיבלתם.&lt;/li&gt;
+
+
+&lt;li&gt;מדדו את כל הקיוביטים במצב שקיבלתם.&lt;/li&gt;
+
+
+&lt;li&gt;אם קיבלתם &lt;span&gt;\( 0^{n} \)&lt;/span&gt;, אז &lt;span&gt;\( f \)&lt;/span&gt; קבועה; אם קיבלתם משהו אחר, אז &lt;span&gt;\( f \)&lt;/span&gt; מאוזנת.&lt;/li&gt;
+
+&lt;/ol&gt;
+
+&lt;p&gt;הדבר היחיד שלא הסברתי עדיין איך הוא בדיוק עובד הוא שלב “הפעלת הקופסה השחורה”. לצורך כך אני מניח שיש לי אופרטור אוניטרי &lt;span&gt;\( U_{f} \)&lt;/span&gt; שפועל בצורה הבאה על איבר בסיס &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle  \)&lt;/span&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;במילים אחרות: אם &lt;span&gt;\( f\left(x\right)=0 \)&lt;/span&gt; אז &lt;span&gt;\( U_{f} \)&lt;/span&gt; לא משנה את &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt; , ואם &lt;span&gt;\( f\left(x\right)=1 \)&lt;/span&gt; אז הוא מכפיל אותו ב-&lt;span&gt;\( -1 \)&lt;/span&gt;. זה מזכיר את האופרטור &lt;span&gt;\( Z \)&lt;/span&gt;, רק כזה שפועל בבת אחת על &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים ותלוי בתכונות הספציפיות של &lt;span&gt;\( f \)&lt;/span&gt;. איך אפשר לממש אופרטור קוונטי כזה? נדבר על זה בהמשך.&lt;/p&gt;
+
+&lt;p&gt;הנה איור סכמטי של האלגוריתם, במקרה של שלושה קיוביטים:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/deutsch_jozsa_3_qubits.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;אפשר גם לצייר את זה באופן כללי ל-&lt;span&gt;\( n \)&lt;/span&gt; קיוביטים בצורה קומפקטית:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/deutsch_jozsa_n_qubits.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;הסימן שנראה כמו מחוג של מכשיר מדידה בצד ימין הוא, ובכן, מדידה. ה-&lt;span&gt;\( H^{\otimes n} \)&lt;/span&gt; הוא הפעלת &lt;span&gt;\( H \)&lt;/span&gt; על כל השערים, שתכף אתאר; אני מניח שהרעיון ברור.&lt;/p&gt;
+
+&lt;p&gt;כרגע אני רוצה לראות איך האלגוריתם פותר לנו את הבעיה. בסופו של דבר, להבין את האלגוריתם קם ונופל על להבין משהו כללי קצת יותר ושימושי מאוד: מה בעצם הפעלת &lt;span&gt;\( H \)&lt;/span&gt; על כל הקיוביטים עושה.&lt;/p&gt;
+
+&lt;p&gt;כזכור, &lt;span&gt;\( H \)&lt;/span&gt; הוא האופרטור שיוצר לנו סופרפוזיציה אחידה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( H\left|0\right\rangle =\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( H\left|1\right\rangle =\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אבל זה עבור קיוביט יחיד. מה קורה כשמפעילים &lt;span&gt;\( H \)&lt;/span&gt; על כל אחד מהקיוביטים? מקבלים את ההרכבה של &lt;span&gt;\( H\otimes I\otimes\ldots\otimes I \)&lt;/span&gt; ו-&lt;span&gt;\( I\otimes H\otimes\ldots\otimes I \)&lt;/span&gt; וכן הלאה - זה יוצא האופטור &lt;span&gt;\( H\otimes H\otimes\ldots\otimes H \)&lt;/span&gt;, או בסימון מקוצר, &lt;span&gt;\( H^{\otimes n} \)&lt;/span&gt;. עכשיו, אם נפעיל את האופרטור הזה על המצב ההתחלתי &lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt; נקבל:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( H^{\otimes n}\left|0^{n}\right\rangle =\left(H\left|0\right\rangle \right)\otimes\ldots\otimes\left(H\left|0\right\rangle \right)=\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)\otimes\ldots\otimes\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מה שצריך לזכור על מכפלה טנזורית הוא האופן שבו היא מתנהגת בדומה למכפלה רגילה - אפשר להוציא החוצה סקלרים (את כל ה-&lt;span&gt;\( \frac{1}{\sqrt{n}} \)&lt;/span&gt;), ואפשר להשתמש בדיסטריביוטיביות. יש לנו כאן מכפלה של &lt;span&gt;\( n \)&lt;/span&gt; מחוברים מהצורה &lt;span&gt;\( \left(\left|0\right\rangle +\left|1\right\rangle \right) \)&lt;/span&gt;; זו סיטואציה שמזכירה, למשל, את הבינום של ניוטון. כשאנחנו פותחים סוגריים, אנחנו מקבלים סכום שכולל את כל המחוברים שהם מהצורה של מכפלה של &lt;span&gt;\( n \)&lt;/span&gt; איברים שכל אחד מהם הוא או &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; או &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; - במילים אחרות, הסכום &lt;span&gt;\( \sum_{y\in\left\{ 0,1\right\} ^{n}}\left|y\right\rangle  \)&lt;/span&gt;. לכן בסך הכל קיבלנו:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( H^{\otimes n}\left|0^{n}\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left|y\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה מתאים יפה לאינטואיציה שלפיה &lt;span&gt;\( H \)&lt;/span&gt; יוצר סופרפוזיציה אחידה: כשהפעלנו אותו על כל הקיוביטים, קיבלנו סופרפוזיציה אחידה של כל &lt;span&gt;\( 2^{n} \)&lt;/span&gt; אברי הבסיס האפשריים. שימו לב, זה כבר קסם בפני עצמו - הפעלנו רק &lt;span&gt;\( n \)&lt;/span&gt; שערים (זה לוקח זמן קצר) וקיבלנו סופרפוזיציה של מספר אקספוננציאלי של איברים.&lt;/p&gt;
+
+&lt;p&gt;מה שעשינו פה הוא להבין איך &lt;span&gt;\( H^{\otimes n} \)&lt;/span&gt; עובד על מצב בסיס אחד ספציפי: &lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt;. אבל איך הוא עובד על מצבים אחרים, כאלו שיש בהם גם 1-ים? כאן אנחנו מגיעים לנקודה הכי טכנית בפוסט, אבל גם הכי יפה שלו. כמו שתמיד כדאי כדי להבין משהו מסובך, כדאי להסתכל על דוגמא פשוטה קודם.&lt;/p&gt;
+
+&lt;p&gt;נניח שאני מפעיל את &lt;span&gt;\( H^{\otimes3} \)&lt;/span&gt; על המצב &lt;span&gt;\( \left|101\right\rangle  \)&lt;/span&gt;. מה אני אקבל? על פי מה שראינו קודם, נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( H^{\otimes3}\left|101\right\rangle =\frac{1}{\sqrt{2^{3}}}\left(\left|0\right\rangle -\left|1\right\rangle \right)\left(\left|0\right\rangle +\left|1\right\rangle \right)\left(\left|0\right\rangle -\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כשאני פותח סוגריים אני עדיין אקבל את כל האיברים מהצורה &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt;, אבל הפעם חלקם יהיו עם מקדם &lt;strong&gt;מינוס&lt;/strong&gt;. מתי? ובכן, בואו נתחיל לפתוח את הסוגריים. נניח שאני בוחר מכל אחד משלושת הסוגרים את האיבר &lt;strong&gt;הראשון&lt;/strong&gt;, אני אכפיל שלושה איברים מהצורה &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ואקבל &lt;span&gt;\( \left|000\right\rangle  \)&lt;/span&gt; - בלי סימן מינוס. ולמה שיהיה סימן מינוס? על ה-&lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt;-ים אין מינוס בכלל. כדי שיהיה מינוס, חייב להשתתף &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; בסיפור הזה. למשל, אם אני אקח את האיבר &lt;strong&gt;השני&lt;/strong&gt; מהסוגר הראשון, ומשני האחרים את האיבר &lt;strong&gt;הראשון&lt;/strong&gt;, אני אקבל &lt;span&gt;\( -\left|100\right\rangle  \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;לעומת זאת, אם אני אקח את האיבר &lt;strong&gt;השני&lt;/strong&gt; מהסוג &lt;strong&gt;השני&lt;/strong&gt; ומשני האחרים את הראשון, אני אקבל &lt;span&gt;\( \left|010\right\rangle  \)&lt;/span&gt;, בלי מינוס. למה? כי בסוגר השני, ה-&lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; מופיע בלי סימן מינוס. ולמה לא? כי במצב המקורי שעליו פעלנו, &lt;span&gt;\( \left|101\right\rangle  \)&lt;/span&gt;, הסוגר השני מתאים לאיבר השני במחרוזת, כלומר אל 0. מכאן המסקנה היא שכדי לקבל מינוס, אני חייב לקחת את &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; מתוך סוגריים ששייכים לאיבר בקלט שהיה &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; בעצמו.&lt;/p&gt;
+
+&lt;p&gt;זה תנאי &lt;strong&gt;הכרחי&lt;/strong&gt; כדי לקבל מינוס, אבל הוא לא מספיק, כי בואו נראה למשל מה שקורה כשאני לוקח את ה-&lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; מכל שלושת זוגות הסוגריים. אני מקבל את המכפלה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( -\left|1\right\rangle \otimes\left|1\right\rangle \otimes\left(-\left|1\right\rangle \right)=\left|111\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, הפעם קיבלתי איבר ללא מינוס כי בדיוק &lt;strong&gt;שני&lt;/strong&gt; איברים במכפלה היו עם סימן מינוס. הסימן באיבר שאקבל בסוף תלוי בשאלות הבאות:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;האם מופיעים 1-ים במצב שעליו פעלנו?&lt;/li&gt;
+
+
+&lt;li&gt;האם מופיעים 1-ים במצב שאנחנו מסתכלים עליו כרגע בפלט?&lt;/li&gt;
+
+
+&lt;li&gt;האם יש אינדקסים שבהם מופיע 1 גם בקלט &lt;strong&gt;וגם&lt;/strong&gt; בפלט?&lt;/li&gt;
+
+
+&lt;li&gt;האם המספר של האינדקסים הללו הוא &lt;strong&gt;אי זוגי&lt;/strong&gt;?&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;זה מאוד מסורבל לדבר על זה ככה, אבל למרבה השמחה יש כלי מתמטי פשוט מאוד שמאפשר לתאר את זה בצורה שקל לעבוד איתה: &lt;strong&gt;מכפלה סקלרית מודולו &lt;/strong&gt;&lt;strong&gt;2&lt;/strong&gt;. בהינתן שני וקטורים מאותו אורך, &lt;span&gt;\( x=\left(x_{1},\ldots,x_{k}\right) \)&lt;/span&gt; ו-&lt;span&gt;\( y=\left(y_{1},\ldots,y_{k}\right) \)&lt;/span&gt;, המכפלה הסקלרית שלהם היא &lt;span&gt;\( x\cdot y=\sum_{i=1}^{k}x_{i}y_{i} \)&lt;/span&gt;. אם &lt;span&gt;\( x,y\in\left\{ 0,1\right\} ^{k} \)&lt;/span&gt; אז המכפלה הסקלרית שלהם תהיה מספר שלם, ואפשר לקחת אותו מודולו 2 (לחלק ב-2 ולהחזיר את השארית; 0 אם המספר זוגי ו-1 אם הוא אי זוגי).&lt;/p&gt;
+
+&lt;p&gt;אולי אתן אומרות “היי, זו כמו מכפלה פנימית!” וזה נכון - אפשר לחשוב על מכפלות פנימיות כאילו הן מוגדרות בעזרת סכום כזה, אבל אין למכפלה פנימית משמעות מעל &lt;span&gt;\( \mathbb{Z}_{2} \)&lt;/span&gt; (השדה שמעליו אנחנו עובדים כרגע במובלע) אלא רק מעל &lt;span&gt;\( \mathbb{R},\mathbb{C} \)&lt;/span&gt;; כי למשל, אחת הדרישות ממכפלה פנימית היא שאם &lt;span&gt;\( x\ne0 \)&lt;/span&gt; אז &lt;span&gt;\( \left\langle x,x\right\rangle &amp;gt;0 \)&lt;/span&gt; וזה בוודאי לא מתקיים כאן (חשבו על הוקטור &lt;span&gt;\( x=11 \)&lt;/span&gt;). אבל גם בלי להיות מכפלה פנימית, למכפלה סקלרית כזו יש תכונות אלגבריות נחמדות, למשל &lt;span&gt;\( \left(x+y\right)\cdot z=x\cdot z+y\cdot z \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;בעזרת מכפלה סקלרית אפשר לנסח מאוד בקלות את המהומה שהלכה קודם:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( H^{\otimes n}\left|x\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot y}\left|y\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כי מה קורה כאן? המכפלה הסקלרית &lt;span&gt;\( x\cdot y=\sum_{i=1}^{k}x_{i}y_{i} \)&lt;/span&gt; בעצם סופרת את מספר האינדקסים &lt;span&gt;\( i \)&lt;/span&gt; שבהם &lt;strong&gt;גם&lt;/strong&gt; &lt;span&gt;\( x_{i}=1 \)&lt;/span&gt; &lt;strong&gt;וגם&lt;/strong&gt; &lt;span&gt;\( y_{i}=1 \)&lt;/span&gt;, ביחד - אלו שני הדברים שהיו חייבים להתקיים סימולטנית כדי שהאינדקס &lt;span&gt;\( i \)&lt;/span&gt; יתרום &lt;span&gt;\( -1 \)&lt;/span&gt; למקדם של &lt;span&gt;\( \left|y\right\rangle  \)&lt;/span&gt;. כשלוקחים את זה מודולו 2, מקבלים 0 אם מספר המוכפלים זוגי (ולכן המקדם הכולל יהיה 1) ו-&lt;span&gt;\( 1 \)&lt;/span&gt; אם הוא יהיה אי זוגי (ולכן המקדם הכולל יהיה &lt;span&gt;\( -1 \)&lt;/span&gt;). הטריק הזה של להעלות את &lt;span&gt;\( -1 \)&lt;/span&gt; בחזקה שהיא או זוגית או אי זוגית כדי לקבל אפקט של כפל ב-1 או ב-&lt;span&gt;\( -1 \)&lt;/span&gt; הוא נפוץ ביותר בכל חלקי המתמטיקה ומשרת אותנו גם כאן.&lt;/p&gt;
+
+&lt;p&gt;במקרה הפרטי שראינו בהתחלה, זה שבו &lt;span&gt;\( x=0^{n} \)&lt;/span&gt;, פשוט מתקיים &lt;span&gt;\( x\cdot y=0 \)&lt;/span&gt; לכל &lt;span&gt;\( y \)&lt;/span&gt;, ולכן המקדם יוצא תמיד חיובי ואנחנו מקבלים את הסכום הנחמד שראינו קודם: &lt;span&gt;\( H^{\otimes n}\left|0^{n}\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle  \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עכשיו אפשר לחזור סוף סוף אל דויטש-ג’וזה ולהבין מה קורה בו: כל מה שנשאר לנו הוא חשבון פשוט ביותר.&lt;/p&gt;
+
+&lt;p&gt;ההתחלה של דויטש-ג’וזה מאפסת מצב התחלתי &lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt; ואז מפעילה עליו &lt;span&gt;\( H^{\otimes n} \)&lt;/span&gt;, כלומר אנחנו מגיעים אל &lt;span&gt;\( \frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle  \)&lt;/span&gt;. בשלב הבא מפעילים את הקופסה השחורה על המצב הזה. נזכיר מה היא עושה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( U_{f}\left(\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \right)=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}U_{f}\left(\left|x\right\rangle \right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\left|x\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו על כל זה אני מפעיל שוב &lt;span&gt;\( H^{\otimes n} \)&lt;/span&gt; ומקבל סכום כפול:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( H^{\otimes n}\left(\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \right)=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}H^{\otimes n}\left(\left|x\right\rangle \right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot y}\left|y\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה סכום סופי, אז קל להפוך בו את סדר הסכימה: לכל &lt;span&gt;\( y\in\left\{ 0,1\right\} ^{n} \)&lt;/span&gt;, לקבץ את האיברים שמתאימים למקדם &lt;span&gt;\( \left|y\right\rangle  \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{2^{n}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ה-&lt;span&gt;\( \left|y\right\rangle  \)&lt;/span&gt; השונים הם תוצאות המדידה השונות האפשריות, והמקדם שאני מחשב ילמד אותי מה ההסתברות להעלות את &lt;span&gt;\( \left|y\right\rangle  \)&lt;/span&gt; בגורל. האלגוריתם, כזכור, מכריע את ההכרעה שלו על פי השאלה האם &lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt; עלה בגורל, אז בואו נבדוק ספציפית את המקדם של &lt;span&gt;\( y=0^{n} \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, אם &lt;span&gt;\( f \)&lt;/span&gt; היא פונקציה קבועה, כל האיברים בסכום יהיו &lt;strong&gt;אותו הדבר&lt;/strong&gt; ולכן נקבל &lt;span&gt;\( \frac{1}{2^{n}}\cdot\left(\pm2^{n}\right)=\pm1 \)&lt;/span&gt;. זה לא משנה אם המקדם חיובי או שלילי, כי כזכור - כדי לקבל את ההסתברות אנחנו לוקחים ערך מוחלט של המקדם ומעלים אותו בריבוע, ולכן בכל אחד מהמקרים הללו נקבל 1: בהסתברות של 1 בדיוק מובטח לנו שנקבל את המצב &lt;span&gt;\( 0^{n} \)&lt;/span&gt;, כמו שאמור לקרות.&lt;/p&gt;
+
+&lt;p&gt;אם &lt;span&gt;\( f \)&lt;/span&gt; היא פונקציה מאוזנת, אז &lt;span&gt;\( \sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)} \)&lt;/span&gt; הולך לכלול את אותו מספר של &lt;span&gt;\( +1 \)&lt;/span&gt; ושל &lt;span&gt;\( -1 \)&lt;/span&gt;, וכולם יבטלו זה את זה, כך שאני אקבל 0. עזבו אתכם ממה שקורה עם שאר המקדמים של שאר האיברים במצב שהגעתי אליו - המקדם של &lt;span&gt;\( 0^{n} \)&lt;/span&gt; הוא 0, ולכן אין לי סיכוי לקבל אותו. אני בודאות אקבל תוצאה אחרת ולכן האלגוריתם יענה נכון גם במקרה הזה. זה מסיים את ההוכחה שהוא עובד, וגם נותן לנו תחושה טובה מאיפה הגיעו ה”פונקציה קבועה או מאוזנת” הללו; נראה כאילו היה לנו כאן אלגוריתם שחיפש בעיה לפתור, אבל זה לא משנה את זה שהפתרון מרהיב ממש באלגנטיות המתמטית שלו.&lt;/p&gt;
+
+&lt;h2&gt;אלגוריתם ברנשטיין-וזירני&lt;/h2&gt;
+
+&lt;p&gt;אמרתי שדויטש-ג’וזה נשמע כמו אלגוריתם שמחפש בעיה לפתור, והיופי פה הוא שבעצם יש &lt;strong&gt;עוד&lt;/strong&gt; בעיה שאפשר לפתור, בצורה כזו שלא זורקת הצידה את תוצאת המדידה אם היא שונה מ-&lt;span&gt;\( 0^{n} \)&lt;/span&gt;. גם הבעיה הנוספת הזו עדיין מרגישה קצת מלאכותית, אבל אולי פחות? בהקשר של הבעיה הזו, אלגוריתם דויטש-ג’וזה נקרא גם &lt;strong&gt;אלגוריתם ברנשטיין-וזירני&lt;/strong&gt; למרות שזה אותו אלגוריתם בדיוק; המאמר המקורי של ברנשטיין ווזריני הוא גדול ומורכב ועוסק בהגדרות של מחלקות סיבוכיות קוונטיות והפרדה שלהן ממחלקות סיבוכיות הסתברותיות ובהקשר הזה מופיע השימוש שאני מתאר כאן; זה לא שברנשטיין-וזירני ישבו ואמרו “היי, תראו, יש עוד משמעות לדויטש-ג’וזה” וישבו לכתוב על זה מאמר.&lt;/p&gt;
+
+&lt;p&gt;דויטש-ג’וזה עוסק בנסיון להבין פונקציה &lt;span&gt;\( f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\}  \)&lt;/span&gt; כלשהי שהיא או קבועה, או מאוזנת. ברנשטיין-וזירני עוסק בנסיון להבין פונקציה &lt;span&gt;\( f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\}  \)&lt;/span&gt; שהיא לאו דווקא קבועה או מאוזנת, אבל היא &lt;strong&gt;לינארית&lt;/strong&gt;, כלומר &lt;span&gt;\( f\left(x+y\right)=f\left(x\right)+f\left(y\right) \)&lt;/span&gt; וגם &lt;span&gt;\( f\left(\lambda x\right)=\lambda f\left(x\right) \)&lt;/span&gt; (לא כזה מרשים כי &lt;span&gt;\( \lambda\in\left\{ 0,1\right\}  \)&lt;/span&gt;), כשהחיבור והכפל בסקלר הם מעל &lt;span&gt;\( \mathbb{Z}_{2}^{n} \)&lt;/span&gt;. בואו נראה שאפשר לחשוב על הפונקציה הזו בתור מכפלה סקלרית, כלומר שקיים &lt;span&gt;\( w\in\left\{ 0,1\right\} ^{n} \)&lt;/span&gt; כך ש-&lt;span&gt;\( f\left(x\right)=w\cdot x \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;אם נגדיר &lt;span&gt;\( e_{i}=\left(0,\ldots,1,\ldots,0\right) \)&lt;/span&gt;, כלומר ה-&lt;span&gt;\( 1 \)&lt;/span&gt; נמצא רק במקום ה-&lt;span&gt;\( i \)&lt;/span&gt; של &lt;span&gt;\( e_{i} \)&lt;/span&gt;, אז נקבל בסיס של &lt;span&gt;\( \mathbb{Z}_{2}^{n} \)&lt;/span&gt;: אפשר להציג כל &lt;span&gt;\( x\in\mathbb{Z}_{2}^{n} \)&lt;/span&gt; בתור &lt;span&gt;\( x=\sum_{i=1}^{n}x_{i}e_{i} \)&lt;/span&gt;. מתכונת הלינאריות של &lt;span&gt;\( f \)&lt;/span&gt; נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( f\left(x\right)=f\left(\sum_{i=1}^{n}x_{i}e_{i}\right)=\sum_{i=1}^{n}x_{i}f\left(e_{i}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אז פשוט נגדיר &lt;span&gt;\( w_{i}=f\left(e_{i}\right) \)&lt;/span&gt; ונקבל שאכן, &lt;span&gt;\( f\left(x\right)=w\cdot x \)&lt;/span&gt; לכל &lt;span&gt;\( x\in\mathbb{Z}_{2}^{n} \)&lt;/span&gt;. שימו לב שרוב הפונקציות אינן לינאריות; יש &lt;span&gt;\( 2^{2^{n}} \)&lt;/span&gt; פונקציות מ-&lt;span&gt;\( \left\{ 0,1\right\} ^{n} \)&lt;/span&gt; אל &lt;span&gt;\( \left\{ 0,1\right\}  \)&lt;/span&gt;, אבל מכיוון שיש רק &lt;span&gt;\( 2^{n} \)&lt;/span&gt; איברים &lt;span&gt;\( w\in\left\{ 0,1\right\} ^{n} \)&lt;/span&gt; יש רק &lt;span&gt;\( 2^{n} \)&lt;/span&gt; פונקציות לינאריות. מכאן שברנשטיין-וזירני מראש מטפל רק במחלקה קטנה יחסית של פונקציות, בדומה לדויטש-ג’וזה.&lt;/p&gt;
+
+&lt;p&gt;המשימה של ברנשטיין-וזירני היא זו: בהינתן &lt;span&gt;\( f \)&lt;/span&gt; לינארית שכזו, למצוא את ה-&lt;span&gt;\( w \)&lt;/span&gt; שמגדיר אותה. שימו לב: בניגוד לדויטש-ג’וזה, כאן אנחנו לא רוצים להכריע בין שתי סיטואציות אלא ממש למצוא משהו. אבל אותו אלגוריתם יעבוד:&lt;/p&gt;
+
+&lt;ol&gt; &lt;li&gt;אתחלו מצב קוונטי אל &lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;הפעילו &lt;span&gt;\( H \)&lt;/span&gt; על כל הקיוביטים.&lt;/li&gt;
+
+
+&lt;li&gt;הפעילו את הקופסה השחורה על המצב שקיבלתם.&lt;/li&gt;
+
+
+&lt;li&gt;הפעילו &lt;span&gt;\( H \)&lt;/span&gt; על המצב שקיבלתם.&lt;/li&gt;
+
+
+&lt;li&gt;מדדו את כל הקיוביטים במצב שקיבלתם.&lt;/li&gt;
+
+
+&lt;li&gt;תוצאת המדידות &lt;span&gt;\( w \)&lt;/span&gt; היא הערך המבוקש.&lt;/li&gt;
+
+&lt;/ol&gt;
+
+&lt;p&gt;לי זה נראה כמו קסם, שפתאום נקבל את ה-&lt;span&gt;\( w \)&lt;/span&gt; הזה, אבל האמת היא שזה די פשוט. בואו ניזכר מה מקבלים אחרי שלב 4, כי כבר ביצענו את החישוב קודם:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{2^{n}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, ה-&lt;span&gt;\( f\left(x\right)+x\cdot y \)&lt;/span&gt; הזה שלמעלה נהיה פשוט יותר במקרה שלנו, כי &lt;span&gt;\( f\left(x\right)=w\cdot x=x\cdot w \)&lt;/span&gt; ולכן נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( f\left(x\right)+x\cdot y=x\cdot w+x\cdot y=x\cdot\left(w+y\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, במקרה שבו &lt;span&gt;\( w=y \)&lt;/span&gt; אנחנו מקבלים &lt;span&gt;\( w+y=2y=0 \)&lt;/span&gt; (כי זכרו, אנחנו מעל &lt;span&gt;\( \mathbb{Z}_{2} \)&lt;/span&gt;) ולכן המקדם של &lt;span&gt;\( \left|y\right\rangle =\left|w\right\rangle  \)&lt;/span&gt; יהיה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{0}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}1=1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;קסם!&lt;/p&gt;
+
+&lt;p&gt;בשלב הזה אני כבר ממש מוטרד. זה מרגיש כמו “קסם” במובן של אחיזת עיניים של קוסם, שגורם לנו כל הזמן להתמקד במקום אחד - במקרה זה, במקדם של ה-&lt;span&gt;\( \left|y\right\rangle  \)&lt;/span&gt; הספציפי שמעניין אותנו, ובגלל שהוא יוצא 1 אנחנו אמורים איכשהו להיות מרוצים ולהניח שכל שאר המקדמים יוצאים 0. אבל למה? ובכן, זה די קל: בואו ניקח &lt;span&gt;\( y\ne w \)&lt;/span&gt;, אז זה אומר ש-&lt;span&gt;\( y+w\ne0 \)&lt;/span&gt; לפחות באינדקס אחד. נניח בלי הגבלת הכלליות שזה האינדקס הראשון, אז אפשר לכתוב &lt;span&gt;\( y+w=1z^{\prime} \)&lt;/span&gt; כאשר &lt;span&gt;\( z^{\prime}\in\left\{ 0,1\right\} ^{n-1} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, אנחנו מסתכלים על הסכום &lt;span&gt;\( \sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y} \)&lt;/span&gt;, שאחרי הפישוטים שלנו יוצא &lt;span&gt;\( \sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot1z^{\prime}} \)&lt;/span&gt;. אני הולך לחלק את ה-&lt;span&gt;\( x \)&lt;/span&gt;-ים לשתי קבוצות: אלו שמתחילים ב-0 ואלו שמתחילים ב-1. מן הסתם שתי הקבוצות הללו מאותו גודל, אבל שימו לב לכך שאם &lt;span&gt;\( x=0x^{\prime} \)&lt;/span&gt; אז &lt;span&gt;\( x\cdot1z^{\prime}=x^{\prime}\cdot z^{\prime} \)&lt;/span&gt; ואילו אם &lt;span&gt;\( x=1x^{\prime} \)&lt;/span&gt; אז &lt;span&gt;\( x\cdot1z^{\prime}=1+x^{\prime}\cdot z^{\prime} \)&lt;/span&gt;. במילים אחרות, הזוג &lt;span&gt;\( 0x^{\prime},1x^{\prime} \)&lt;/span&gt; יניב תוצאות שונות כשמעלים את &lt;span&gt;\( -1 \)&lt;/span&gt; בחזקת &lt;span&gt;\( x\cdot1z^{\prime} \)&lt;/span&gt;, ולכן הסכום של שניהם יצא 0. בצורה הזו חילקנו את &lt;strong&gt;כל&lt;/strong&gt; ה-&lt;span&gt;\( x \)&lt;/span&gt;-ים שלנו לזוגות שמבטלים זה את זה, ולכן באמת נקבל 0. אני מקווה שזה משכנע גם את מי שכמוני קשה לו לקבל את זה שאם המקדם של איבר אחד יצא 1 זה אומר ששאר המקדמים הם בהכרח 0.&lt;/p&gt;
+
+&lt;h2&gt;מה למדנו מכל זה?&lt;/h2&gt;
+
+&lt;p&gt;כאמור, אני לא מביא את האלגוריתמים הללו בשביל להוכיח את עליונות החישוב הקוונטי על החישוב הרגיל, והטיעון המתמטי המדויק שרלוונטי לנסח בהקשר הזה הוא ארוך ומסובך למדי ואין לי כוח אליו. אני מביא אותם כדי שנרגיש מה הולך באלגוריתמים קוונטיים. באופן מאוד גס אוהבים לומר שהכוח של אלגוריתם קוונטי נובע משלושה היבטים של חישוב קוונטי:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;סופרפוזיציה&lt;/li&gt;
+
+
+&lt;li&gt;שזירה&lt;/li&gt;
+
+
+&lt;li&gt;התאבכות&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;בדויטש-ג’וזה-ברנשטיין-וזירני אין ממש שזירה (ה-&lt;span&gt;\( H \)&lt;/span&gt;-ים בהתחלה ובסוף לא יוצרים שזירה, וגם ה-&lt;span&gt;\( U \)&lt;/span&gt; באמצע לא חייבת ליצור שזירה). בהחלט יש סופרפוזיציה - זה מה שה-&lt;span&gt;\( H \)&lt;/span&gt; בהתחלה עושה לנו מייד. אבל האספקט המעניין שטרם ראינו הוא שיש כאן &lt;strong&gt;התאבכות&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;בפיזיקה, במשמעות המקורית של המילהת “התאבכות” באה לתאר סיטואציה שבה גלים שונים ש”מתנגשים” יכולים לחזק או להחליש זה את זה בנקודות ההתנגשות, בהתאם למצב הנוכחי שלהם. אפשר לחשוב על גל בתור משהו שכל הזמן עולה ויורד. אם בנקודת ההתנגשות של שני גלים, שנים בנקודה הגבוהה ביותר שלהם, הם יחזקו זה את זה ונקבל גל עוד יותר גבוה (“התאבכות בונה”) ואם הם ייפגשו בנקודה הנמוכה ביותר שלהם התוצאה תהיה עוד יותר נמוכה וגם זו תהיה התאבכות בונה. אבל אם גל אחד יהיה גבוה והשני נמוך, הם יבטלו זה את זה ונקבל איזור שבו לא רואים שום דבר (“התאבכות הורסת”). מה שיפה בדויטש-ג’וזה הוא שזה בדיוק מה שקורה גם כאן.&lt;/p&gt;
+
+&lt;p&gt;כשביצענו את הסופרפוזיציה הראשונית עם &lt;span&gt;\( H^{\otimes n} \)&lt;/span&gt;, אפשר לחשוב על כך כאילו לקחנו את המצב &lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt; ופירקנו אותו לסכום של &lt;span&gt;\( 2^{n} \)&lt;/span&gt; גלים שונים: &lt;span&gt;\( \frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle  \)&lt;/span&gt;. ברגע הזה, כל הגלים נמצאים באיזור ה”גבוה” שלהם, שבא לידי ביטוי בפאזה החיובית שלהם (הפאזה בהקשר הנוכחי היא הסימן של המקדם של &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt;).&lt;/p&gt;
+
+&lt;p&gt;אחר כך אנחנו מפעילים את &lt;span&gt;\( U_{f} \)&lt;/span&gt;, וההשפעה שלו היא פשוטה: הוא משנה את הפאזה של &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt;-ים מסויימים, מחיובית לשלילית. במקום שכל הגלים יהיו מסונכרנים, &lt;span&gt;\( U_{f} \)&lt;/span&gt; פיצל את הגלים לשתי קבוצות, כל אחת עם הסינכרון שלה. לבסוף מגיע ה-&lt;span&gt;\( H^{\otimes n} \)&lt;/span&gt; השני, ומה שהוא עושה הוא לגרום לכל הגלים להתנגש ולהסתכל מה קרה. כשהגלים “מתנגשים”, לכל &lt;span&gt;\( \left|y\right\rangle  \)&lt;/span&gt; אנחנו מקבלים בנקודת ההתנגשות את&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{\sqrt{2^{n}}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;בברנשטיין-וזירני, עבור רוב ערכי ה-&lt;span&gt;\( \left|y\right\rangle  \)&lt;/span&gt;, ההתאבכות תהיה הורסת והם ייעלמו לגמרי. המקום היחיד שבו תהיה התאבכות בונה הוא ה-&lt;span&gt;\( \left|y\right\rangle  \)&lt;/span&gt; שאנו חפצים ביקרו. בדויטש-ג’וזה תהיה התאבכות בונה ב-&lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt; רק אם הפונקציה קבועה, ואחרת תהיה שם התאבכות הורסת.&lt;/p&gt;
+
+&lt;p&gt;זו בעצם המהות של רבים מהאלגוריתמים הקוונטיים: לגרום איכשהו לחלקים השונים של הסופרפוזיציה “להתנגש” אלו באלו, כך שהחלקים הלא מועילים מתבטלים, והחלקים המועילים נשארים. בדויטש-ג’וזה, בגלל הפשטות הגדולה שלו, אנחנו יכולים לראות בדיוק מה גורם להתאבכויות הללו לעבוד - העובדה שהמקדמים של ה-&lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt;-ים יכולים להיות &lt;strong&gt;שליליים&lt;/strong&gt;. וכאן אנחנו מגיעים אל מה שהוא אולי לב-לבו של ההבדל המרכזי בין חישוב קוונטי וחישוב הסתברותי “רגיל”. ריצ’ארד פיינמן, בהרצאה מפורסמת שלו, Simulating Physics with Computers, אמר (כחלק מתיאור יותר מפורט, כמובן)&lt;/p&gt;
+
+&lt;blockquote dir=&quot;ltr&quot; style=&quot;text-align:left&quot;&gt;
+  &lt;p&gt;The only difference between a probabilistic classical world and the equations of the quantum world is that somehow or other it appears as if the probabilities would have to go negative.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;וזה בדיוק מה שקורה פה. אם אני מבצע חישוב הסתברותי “רגיל” שבו אני מגריל מחרוזת &lt;span&gt;\( x\in\left\{ 0,1\right\} ^{n} \)&lt;/span&gt; בהתפלגות אחידה, אפשר יהיה לחשוב על מצב החישוב שלי אחרי השלב הראשון הזה כאילו הוא ב”סופרפוזיציה” שבו ההסתברות של כל &lt;span&gt;\( x \)&lt;/span&gt; היא בדיוק &lt;span&gt;\( \frac{1}{2^{n}} \)&lt;/span&gt;. אחר כך אני יכול לבצע חישובים שעבור &lt;span&gt;\( x \)&lt;/span&gt;-ים שונים יובילו לאותה תוצאה, ובכך “לחזק” את ההסתברות של אותה תוצאה להתקבל. אבל האופן שבו ה”חיזוק” הזה מתבצע הוא על ידי חיבור הסתברויות, אין לי חיסור. אם לחדד: אפשר לתאר חישוב הסתברותי רגיל בתור כפל של וקטור &lt;strong&gt;סטוכסטי&lt;/strong&gt; (וקטור שבו כל הכניסות בין 0 ל-1 ומסתכמות ל-1) במטריצה &lt;strong&gt;סטוכסטית&lt;/strong&gt; (מטריצה שבה כל הכניסות בין 0 ל-1 וכל שורה מסתכמת ל-1). זה נותן הרבה, אבל זה פשוט לא מאפשר לנו לבצע את אותה אלגברה שאנחנו עושים בחישוב קוונטי, עם מטריצות שיש בהן גם מספרים שליליים.&lt;/p&gt;
+
+&lt;p&gt;עוד דרך לחשוב על זה: בחישוב הסתברותי, מה שיש לנו ביד בכל רגע נתון הוא ההסתברויות של התוצאות האפשריות. בחישוב קוונטי, מה שיש לנו ביד בכל רגע נתון הוא &lt;strong&gt;האמפליטודות&lt;/strong&gt; של החישוב - אותן &lt;span&gt;\( \alpha_{x} \)&lt;/span&gt;-ים. ה-&lt;span&gt;\( \alpha_{x} \)&lt;/span&gt;-ים הן &lt;strong&gt;לא&lt;/strong&gt; הסתברויות; הן מספרים שיכולים להיות גם שליליים וגם מרוכבים, ואת ההסתברויות אנחנו מחשבים מתוכן בעזרת שלב הביניים &lt;span&gt;\( \left|\alpha_{x}\right|^{2} \)&lt;/span&gt;. כלומר, אנחנו מסוגלים לבצע אלגברה יותר מתוחכמת, ש”מוסתרת” בסופו של דבר בידי המעבר מ-&lt;span&gt;\( \alpha_{x} \)&lt;/span&gt; אל &lt;span&gt;\( \left|\alpha_{x}\right|^{2} \)&lt;/span&gt;. אבל כל עוד לא מדדנו, אנחנו עדיין בעולם של האלגברה המתוחכמת יותר, והיא זו שמאפשרת לנו להשיג את האפקט של ההתאבכות. חישוב קוונטי מאפשר לנו לרתום את הטבע עצמו כדי לבצע אלגברה שהיא יותר מתוחכמת מאלגברה בוליאנית.&lt;/p&gt;
+
+&lt;p&gt;זהו, זו הדרך הכי טובה שיש לי לתת את האינטואיציה האישית שלי לסיבה שבגללה חישוב קוונטי הוא “יותר” מחישוב רגיל. עכשיו רק נשאר לי לסגור את החוב מתחילת הפוסט לגבי הקופסאות השחורות.&lt;/p&gt;
+
+&lt;h2&gt;אז איך מממשים קופסא שחורה קוונטית?&lt;/h2&gt;
+
+&lt;p&gt;בתחילת הפוסט מלמלתי משהו על חישוב של &lt;span&gt;\( f \)&lt;/span&gt; בעזרת קופסא שחורה ואז קפצתי לכך שיש לנו אופרטור &lt;span&gt;\( U_{f} \)&lt;/span&gt; שעושה את הקסם &lt;span&gt;\( U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle  \)&lt;/span&gt;. אני עדיין צריך להסביר איך כזה דבר עובד.&lt;/p&gt;
+
+&lt;p&gt;אם תחשבו על זה רגע, עדיין בסדרת הפוסטים לא הסברתי איך מבצעים חישוב &lt;strong&gt;רגיל&lt;/strong&gt; בעזרת מחשב קוונטי. אמנם, אמרתי ש-&lt;span&gt;\( X \)&lt;/span&gt; זה כמו NOT, אבל אין לי שום פעולה שהיא כמו AND, למשל: פעולה שמחזירה 1 רק אם שני הקלטים היו 1, ואחרת מחזירה 0. ויש סיבה טובה שבגללה אין לי כזו: כי AND היא פעולה &lt;strong&gt;לא הפיכה&lt;/strong&gt; אבל בחישוב קוונטי כל פעולה צריכה להיות אופרטור אוניטרי, כלומר הפיכה. אם ב-AND קיבלתי 0, אני לא יודע אם זה בגלל ששני הקלטים היו 0, או בגלל שאחד מהם היה 0 והשני 1, ואיזה מהם. אינפורמציה הלכה לאיבוד.&lt;/p&gt;
+
+&lt;p&gt;האם זה אומר שלא ניתן לממש פעולת AND בחישוב קוונטי? לא בדיוק. אפשר, אבל צריך יהיה לשלם מחיר כלשהו. המחיר הוא שימוש בקיוביט “זבל” שישתתף בחישוב בתור מעין משתתף זמני ואחר כך נוכל לשכוח מערכו. אני לא אכנס לפרטים הללו עכשיו אלא אציג פוסט יותר מפורט עליהם בהמשך. למה לא הראיתי את זה קודם? כי זו אחת מהבעיות הללו שכל עוד לא מרגישים שחסר לה פתרון, קצת טרחני להציג אותו.&lt;/p&gt;
+
+&lt;p&gt;אז נניח שיש לנו מעגל קוונטי שיודע גם לבצע חישוב רגיל. יש לו &lt;span&gt;\( n \)&lt;/span&gt; קיוביטי קלט, וקיוביט נוסף שאנו מניחים שמאותחל ל-&lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ובסוף החישוב יהיה בו הפלט, ואולי גם קיוביט עזר שלא נטרח לכתוב. כלומר, מה שיש לנו הוא מעגל שמחשב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( O_{f}\left(\left|x\right\rangle \otimes\left|0\right\rangle \right)=\left|x\right\rangle \otimes\left|f\left(x\right)\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;שימו לב: כאן במכפלה הטנזורית, הרכיב השמאלי, &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt;, הוא בעצמו מכפלה טנזורית של &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים, בעוד שהרכיב הימני הוא קיוביט בודד.&lt;/p&gt;
+
+&lt;p&gt;הבעיה עם ההגדרה שנתתי כרגע היא שזו עדיין לא הגדרה שלמה. הגדרתי את &lt;span&gt;\( O_{f} \)&lt;/span&gt; &lt;strong&gt;לחלק &lt;/strong&gt;מהקלטים שהם אברי בסיס, אבל לא לכולם. מה עם הקלטים מהצורה &lt;span&gt;\( \left|x\right\rangle \otimes\left|1\right\rangle  \)&lt;/span&gt;? כדי לטפל בכל המקרים, אני אגדיר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( O_{f}\left(\left|x\right\rangle \otimes\left|b\right\rangle \right)=\left|x\right\rangle \otimes\left|f\left(x\right)\oplus b\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאן &lt;span&gt;\( \oplus \)&lt;/span&gt; מציין חיבור מודולו 2, ולכן מה ש-&lt;span&gt;\( O_{f} \)&lt;/span&gt; עושה הוא או להחזיר את &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; (אם הקלט הנוסף הוא 0) או את &lt;span&gt;\( \neg f\left(x\right) \)&lt;/span&gt; (אם הקלט הנוסף הוא 1). מה שאני רוצה להסביר עכשיו הוא איך לבנות את &lt;span&gt;\( U_{f} \)&lt;/span&gt; שבו השתמשתי קודם מתוך &lt;span&gt;\( O_{f} \)&lt;/span&gt; הזה. הטריק הוא חמוד ממש: במקום להפעיל את &lt;span&gt;\( O_{f} \)&lt;/span&gt; על &lt;span&gt;\( \left|x\right\rangle \otimes\left|0\right\rangle  \)&lt;/span&gt; או על &lt;span&gt;\( \left|x\right\rangle \otimes\left|1\right\rangle  \)&lt;/span&gt;, אני אפעיל אותו על &lt;span&gt;\( \left|x\right\rangle \otimes\left|-\right\rangle  \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;כזכור, &lt;span&gt;\( \left|-\right\rangle  \)&lt;/span&gt; הוא המצב הקוונטי שמתקבל מ-&lt;span&gt;\( H\left|1\right\rangle  \)&lt;/span&gt;, כלומר &lt;span&gt;\( \frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}} \)&lt;/span&gt;. בואו נראה מה &lt;span&gt;\( O_{f} \)&lt;/span&gt; עושה כשהוא מקבל קלט כזה, תוך התבססות על הלינאריות שלו:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( O_{f}\left(\left|x\right\rangle \otimes\left|-\right\rangle \right)=\frac{1}{\sqrt{2}}\left[O_{f}\left(\left|x\right\rangle \otimes\left|0\right\rangle \right)-O_{f}\left(\left|x\right\rangle \otimes\left|1\right\rangle \right)\right]= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{\sqrt{2}}\left[\left|x\right\rangle \left|f\left(x\right)\right\rangle -\left|x\right\rangle \left|f\left(x\right)\oplus1\right\rangle \right]= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\left|x\right\rangle \frac{\left|f\left(x\right)\right\rangle -\left|f\left(x\right)\oplus1\right\rangle }{\sqrt{2}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, בואו נבדיל בין שני המקרים האפשריים:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;אם &lt;span&gt;\( f\left(x\right)=0 \)&lt;/span&gt; אז מה שקיבלנו מימין ל-&lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt; הוא את &lt;span&gt;\( \frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}=\left|-\right\rangle  \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;אם &lt;span&gt;\( f\left(x\right)=1 \)&lt;/span&gt; אז מה שקיבלנו מימין ל-&lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt; הוא את &lt;span&gt;\( \frac{\left|1\right\rangle -\left|0\right\rangle }{\sqrt{2}}=-\left|-\right\rangle  \)&lt;/span&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;ובמילים אחרות, קיבלנו ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( O_{f}\left(\left|x\right\rangle \left|-\right\rangle \right)=\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \left|-\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;קיבלנו שהפעלה של &lt;span&gt;\( O_{f} \)&lt;/span&gt; לא משנה את המצב הקוונטי כלל, חוץ מאשר על ידי כפל שלו ב-&lt;span&gt;\( \left(-1\right)^{f\left(x\right)} \)&lt;/span&gt;. לכן, אם נסתכל על האפקט רק ל-&lt;span&gt;\( n \)&lt;/span&gt; הקיוביטים הראשונים, נקבל בדיוק את &lt;span&gt;\( U_{f} \)&lt;/span&gt; שרצינו. זה מסיים גם את ההסבר שלי לגבי הופעת הקופסה השחורה המסתורת &lt;span&gt;\( U_{f} \)&lt;/span&gt;, אבל עדיין נשאר לי חוב של להסביר איך בכלל מבצעים חישובים רגילים בעזרת חישוב קוונטי. אל זה נגיע בעתיד. אסיים עם האיור שנותן לנו את כל דויטש-ג’וזה בעזרת &lt;span&gt;\( O_{f} \)&lt;/span&gt; הזה, שכן גם באיור הזה אפשר להיתקל לפעמים ושווה לראות אותו, עכשיו כשאנחנו מבינים שזה אותו הדבר:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/deutsch_jozsa_full.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="חישוב קוונטי" /><summary type="html">מה אנחנו רוצים לפתור?</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/deutsch_jozsa_3_qubits.png" /></entry><entry><title type="html">חישוב קוונטי בגישה מתמטית, חלק ד’: שערים קוונטיים</title><link href="http://gadial.net/2022/08/03/quantum_computing_math_4/" rel="alternate" type="text/html" title="חישוב קוונטי בגישה מתמטית, חלק ד': שערים קוונטיים" /><published>2022-08-03T00:00:00+00:00</published><updated>2022-08-03T00:00:00+00:00</updated><id>http://gadial.net/2022/08/03/quantum_computing_math_4</id><content type="html" xml:base="http://gadial.net/2022/08/03/quantum_computing_math_4/">&lt;h2&gt;מעגלים קוונטיים&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://gadial.net/2022/08/01/quantum_computing_math_3/&quot;&gt;בפוסט הקודם שלי&lt;/a&gt; על חישוב קוונטי ראינו איך בהינתן מערכת של &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים אנחנו יכולים “לתרגם” אופרטור שפועל על קיוביט אחד לאופרטור שפועל על כל המערכת: אם האופרטור הוא למשל &lt;span&gt;\( X \)&lt;/span&gt; שמופעל על הקיוביט הראשון, אנחנו בונים את האופרטור &lt;span&gt;\( X\otimes I\otimes I\otimes\cdots\otimes I \)&lt;/span&gt; שפירושו “תפעיל את &lt;span&gt;\( X \)&lt;/span&gt; על הקיוביט הראשון ועל היתר אל תעשה כלום”. אפשר כמובן גם לעשות דברים כמו &lt;span&gt;\( X\otimes Z \)&lt;/span&gt; שפירושים “תפעיל את &lt;span&gt;\( X \)&lt;/span&gt; על הקיוביט הראשון ואת &lt;span&gt;\( Z \)&lt;/span&gt; על הקיוביט השני”, ודבר כזה יכול להתרחש במחשב קוונטי אמיתי על ידי כך שקודם מפעילים את &lt;span&gt;\( X \)&lt;/span&gt; על הקיוביט הראשון (כלומר עושים &lt;span&gt;\( X\otimes I \)&lt;/span&gt;) ואז את &lt;span&gt;\( Z \)&lt;/span&gt; על הקיוביט השני (כלומר עושים &lt;span&gt;\( I\otimes Z \)&lt;/span&gt;).&lt;/p&gt;
 
@@ -57,7 +364,7 @@
 
 &lt;p&gt;הפעלת ה-&lt;span&gt;\( \text{CX} \)&lt;/span&gt; תתבצע על פי התיאור על אברי הבסיס שנתתי למעלה:&lt;/p&gt;
 
-&lt;p&gt;&lt;span&gt;\( \text{CX}\left(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\right)=\frac{\text{CX}\left|00\right\rangle +\text{CX}\left|11\right\rangle }{\sqrt{2}}=\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}} \)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;\( \text{CX}\left(\frac{\left|00\right\rangle +\left|10\right\rangle }{\sqrt{2}}\right)=\frac{\text{CX}\left|00\right\rangle +\text{CX}\left|10\right\rangle }{\sqrt{2}}=\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}} \)&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;והנה, באופן בלתי מפתיע ביותר, קיבלנו את &lt;span&gt;\( \frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}} \)&lt;/span&gt; שהבטחתי, ועל הדרך למדנו איך מתאים שערים קוונטיים וראינו אותם בפעולה.&lt;/p&gt;
 
@@ -1809,82 +2116,4 @@
 
 &lt;p&gt;אז מה המסקנה שלי? שסטטיסטיקה זה עסק רציני שלא צריך לעסוק בו כלאחר יד, בטח לא על בסיס נתון מספרי חלקי מאוד שמופץ באינטרנט. לרוע המזל, זה &lt;strong&gt;בדיוק&lt;/strong&gt; מה שעושה רוב האינטרנט (וגם אני, ללא ספק, חוטא בזה לעתים קרובות). בידי רמאים ושקרנים פרדוקס סימפסון הוא נשק רב עוצמה ביותר - רוב האנשים שיפיצו הלאה שקר כמו זה של “תוצאת” המחקר המדומה שלי למעלה לא יבינו בכלל איך משהו פה יכול להשתבש. הם לא יעלו על דעתם שיש משהו כמו פרדוקס סימפסון בעולם. אולי כדאי ללמד עליו בבתי הספר? אבל גם אז, מי יזכור? מי יקשר את מה שנלמד בבית הספר למגיפה האיומה שפוגעת בנו כאן ועכשיו ויש לנו חוסר ביטחון גדול בנוגע לכל אספקט של ההתמודדות איתה, ובפרט החיסון?&lt;/p&gt;
 
-&lt;p&gt;כבר מראשית ימי הבלוג רציתי לכתוב על פרדוקס סימפסון ולא יצא. ניסיתי להמציא כל מני תרחישים דמיוניים שיהיה כיף לכתוב עליהם, כל מני דברים עם חדי קרן שיורקים קשת בענן ומה קורה אם נותנים להם סוכריות טופי שונות ומשונות, ושאר דברים כיפיים. לא יצא, ועכשיו הדוגמא שלי מגיעה בדיוק מאותו עולם שרציתי להימנע ממנו - מגיפות. אני רציתי להימנע מהעולם הזה, אבל העולם הזה לא רצה להימנע מאיתנו, וזה מכריח את כולנו להתייחס אליו ברצינות, גם ברמת הבנת המתמטיקה שלו. או לכל הפחות, להכיר בכך שזה גדול עלינו ולא לעסוק בזה, כי מהפצת טענות שקריות לגמרי נפגעים אנשים אמיתיים לגמרי.&lt;/p&gt;</content><author><name></name></author><category term="פרדוקס סימפסון" /><category term="סטטיסטיקה" /><summary type="html">מאז שבא חיסון הקורונה לעולם קרו שני דברים: הראשון, שהוא הציל חיי אדם ומנע סבל בסדרי גודל אסטרונומיים; והשני, שהוא זכה למתקפה כוללת עליו מצד אנשים שאינם מבינים כלום בחיסונים, או במדע, או במתמטיקה, או בכלל, עד לרמת הטענות ש&quot;החיסון עושה אותנו חולים&quot;, ולמתקפה הזו יש שלל תוצאות - למשל, אנשים שמעדיפים לקחת תרופה נגד תולעים שמיועדת לסוסים מאשר להתחסן. זה לא באמת מצחיק. מגיפת הקורונה היא הזדמנות לראות כמה נזק יכולה לגרום קבוצה קטנה של שקרנים מקצועיים והקבוצה הרחבה מאוד של אנשים שלא מבינים כלום בתחום שעליו הם מדברים ומהדהדים את השקרים הלאה.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2021/simpson_paradox.png" /></entry><entry><title type="html">מה בעצם הולך בטריגונומטריה בתיכון? (חלק ו’ - רדיאנים)</title><link href="http://gadial.net/2021/08/18/trigonometry_intro_6/" rel="alternate" type="text/html" title="מה בעצם הולך בטריגונומטריה בתיכון? (חלק ו' - רדיאנים)" /><published>2021-08-18T00:00:00+00:00</published><updated>2021-08-18T00:00:00+00:00</updated><id>http://gadial.net/2021/08/18/trigonometry_intro_6</id><content type="html" xml:base="http://gadial.net/2021/08/18/trigonometry_intro_6/">&lt;p&gt;בסדרת הפוסטים שלי על נוסחאות טריגונומטריות כבר כיסינו את כל הנוסחאות שבדף הנוסחאות שלי, למעט שתי אלו שמזכירות &lt;strong&gt;רדיאנים&lt;/strong&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2021/trigo_formulas.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;אז בואו נדבר על מה זה רדיאנים. בפשטות, רדיאן היא &lt;strong&gt;יחידת מידה לזווית&lt;/strong&gt; שבמובן מסויים היא “טבעית” ומועיל להשתמש בה. החוק להמרה בין יחידת המידה הסטנדרטית שלנו, שנקראת &lt;strong&gt;מעלה&lt;/strong&gt; ובין רדיאן הוא זה: מעלה אחת שווה ל-&lt;span&gt;\( \frac{\pi}{180}\approx0.01745\ldots \)&lt;/span&gt; רדיאנים. זה נראה… חסר כל פשר? מצוין, עד סוף הפוסט הזה נבין את הכל, אני מקווה, וזה לא יהיה קשה במיוחד.&lt;/p&gt;
-
-&lt;p&gt;מכיוון שאנו עוסקים בהגדרות בסיסיות, כדאי לחזור לבסיס של הבסיס ולתהות מה זו בעצם “זווית”. הרעיון בזווית הוא שיש לנו שני קווים שמחוברים בקודקוד משותף, והזווית בין שניהם היא &lt;strong&gt;כמות הסיבוב&lt;/strong&gt; שנדרשת כשמסובבים אחד מהם כדי שיגיע אל השני.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2021/radians1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;האיור קצת מטעה כי הרי אפשר לסובב את הקווים בכמה דרכים: אפשר לסובב את הקו התחתון נגד כיוון השעון עד שיגיע אל העליון, ולכמות הסיבוב הזו אני קורא &lt;span&gt;\( \alpha \)&lt;/span&gt;; ואפשר גם לסובב את העליון עם כיוון השעון עד שיגיע לתחתון וגם כמות הסיבוב הזו תהיה &lt;span&gt;\( \alpha \)&lt;/span&gt;, אבל אפשר גם ללכת בדרך הארוכה ולסובב את הקו התחתון עם כיוון השעון - הוא יעשה סיבוב מאוד ארוך אבל בסוף יגיע לקו השני, וגם כמות הסיבוב הזו היא זווית שבין שני הקווים. לכן כשמגדירים זווית כדאי שיהיה ברור לאיזו מהזוויות האפשריות הכוונה; כמעט תמיד אין סכנה לבלבול (למשל, לא הייתה כזו בכל הדברים שעשינו עד כה בסדרת הפוסטים הזו).&lt;/p&gt;
-
-&lt;p&gt;“כמות סיבוב” נשמע כמו מושג כמעט אבסטרקטי; איך מודדים כמות של סיבוב? גישה אחת היא לתת איזו יחידת מידה לסיבוב &lt;strong&gt;שלם&lt;/strong&gt; שבסופו חוזרים לאותו מקום, ואז לדבר על חלקים של הסיבוב הזה - למשל, רבע סיבוב שלם הוא מה שאנחנו קוראים לו “זווית ישרה”. כשעובדים במעלות זו הגישה שבה משתמשים, ועוד אחזור לכך. אבל יש עוד גישה שגם היא טבעית למדי ותהיה לנו שימושית מאוד. בואו נקשר את מדידת הזווית למדידה של &lt;strong&gt;מרחק&lt;/strong&gt; - המרחק שאנחנו עוברים בזמן הסיבוב.&lt;/p&gt;
-
-&lt;p&gt;בואו נשחק את המשחק הבא: ניקח את שני הקווים שלנו ונדביק מכחול בצבע אדום לקצה של אחד מהם. נסובב אותו אל הקו השני ובחזרה, ונבדוק איך נראית הצורה שהמכחול צייר. זה מה שנראה:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2021/radians2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;הקו האדום הוא &lt;strong&gt;קשת&lt;/strong&gt;, חלק ממעגל. המשותף לכל הנקודות על הקשת הזו הוא שהמרחק שלהן מנקודת החיבור של שני הקווים שלנו זהה - הוא שווה לאורך של הקו העליון, שהוא ה&lt;strong&gt;רדיוס&lt;/strong&gt; של המעגל שאת חלקו ציירתי. מה שנחמד עם קשת כזו הוא שזה גודל שאפשר למדוד - למשל, עם חוט שיכול להתאים את עצמו לצורת הקשת ואחר כך להימתח לקו ישר שאותו קל למדוד עם סרגל. אז אפשר לנסות &lt;strong&gt;להגדיר&lt;/strong&gt; את גודל הזווית &lt;span&gt;\( \alpha \)&lt;/span&gt; בתור האורך של הקשת האדומה. אבל צריך להיזהר פה - האורך של הקשת הזו תלוי באורך של הרדיוס שאנחנו מסובבים. ככל שהקו יותר ארוך, הקשת האדומה תהיה גדולה יותר עבור אותה זווית סיבוב בדיוק. כמה גדולה יותר היא תהיה? אם נכפיל את אורך הרדיוס פי 2, גם אורך הקשת יגדל פי 2. על זה אומרים שאורך הקשת &lt;strong&gt;פרופורציוני&lt;/strong&gt; לאורך הרדיוס.&lt;/p&gt;
-
-&lt;p&gt;לא לגמרי טריוויאלי להוכיח שאורך הקשת פרופורציוני לאורך הרדיוס, אבל זו כנראה אחת מהתוצאות המתמטיות המוכרות ביותר, במובלע. כמעט כל אדם מכיר את הקבוע המתמטי &lt;span&gt;\( \pi \)&lt;/span&gt;. מה הקבוע הזה מייצג? את היחס בין היקף מעגל (כלומר, אורך הקשת של “סיבוב שלם”) לקוטר שלו (כלומר, פעמיים הרדיוס). העובדה ש-&lt;span&gt;\( \pi \)&lt;/span&gt; הוא קבוע שלא תלוי באורך הרדיוס של המעגל היא לב העניין פה; היא אומרת שאם ניקח את אורך הקשת של סיבוב שלם ונחלק ברדיוס של המעגל, נקבל &lt;strong&gt;תמיד&lt;/strong&gt; את הערך &lt;span&gt;\( 2\pi \)&lt;/span&gt; (כי אם היינו מחלקים בקוטר, שגדול פי 2, היינו מקבלים &lt;span&gt;\( \pi \)&lt;/span&gt;). ולכן אם ניקח חצי סיבוב נקבל &lt;span&gt;\( \pi \)&lt;/span&gt;, ואם ניקח רבע סיבוב נקבל &lt;span&gt;\( \frac{\pi}{2} \)&lt;/span&gt; וכדומה.&lt;/p&gt;
-
-&lt;p&gt;אם כן, זו ההגדרה של מדידת זוויות ברדיאנים: בהינתן זווית, קחו מעגל שבו הזווית הזו היא זווית &lt;strong&gt;מרכזית&lt;/strong&gt; (כלומר, נקודת המפגש בין שני הקווים שיוצרים את הזווית היא בדיוק מרכז המעגל), קחו את הקשת שנשענת על הזווית הזו, כלומר את החלק מהמעגל ש”כלוא” בין שני הקווים שיוצרים את הזווית, וחלקו אותה ברדיוס המעגל - כלומר באורך של הקווים שיוצרים את הזווית עד לנקודה שבה הם נוגעים במעגל. בתמונה (הקצת עקומה) הזו זה הגודל &lt;span&gt;\( \frac{S}{R} \)&lt;/span&gt;, אורך הקו האדום חלקי אורך הקו הכחול:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2021/radians3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;אספקט מעניין של ההגדרה הזו היא שהמספר שמתקבל הוא &lt;strong&gt;נטול יחידות&lt;/strong&gt;. למה הכוונה? ובכן, נניח שאנחנו מודדים אורך בסנטימטרים, אז האורך של המעגל אינו נטול יחידה; הוא בעל היחידה “ס”מ”. אבל אם אנחנו מחלקים את האורך של שני דברים ששניהם נספרים בס”מ, התוצאה תהיה מספר שהוא לא ס”מ בעצמו - אנחנו אומרים “היקף המעגל גדול פי &lt;span&gt;\( 2\pi \)&lt;/span&gt; מרדיוס המעגל” ולא “היקף המעגל גדול פי &lt;span&gt;\( 2\pi \)&lt;/span&gt; ס”מ מרדיוס המעגל” (זו אמירה חסרת משמעות). זו אחת הסיבות שאוהבים מדידה ברדיאנים - היא לא מכניסה יחידת מידה שרירותית נוספת למערכת המדידה שלנו.&lt;/p&gt;
-
-&lt;p&gt;עכשיו, אחרי שקצת התפוגג הערפל סביב מה זה רדיאן, בואו נדבר על מה זה מעלות. כאשר מודדים סיבוב ב&lt;strong&gt;מעלות&lt;/strong&gt;, הרעיון הוא שסיבוב שלם, שבסופו חוזרים לנקודת ההתחלה, הוא בדיוק מגודל &lt;span&gt;\( 360 \)&lt;/span&gt; מעלות, ואנחנו מסמנים שמספר מציין מעלות על ידי עיגול קטן למעלה, כלומר &lt;span&gt;\( 360^{\circ} \)&lt;/span&gt;. מאיפה הגיעה השיטה הזו? למה דווקא 360 ולא 17? ובכן, לגבי מקורות השיטה התשובה היא שאנחנו לא באמת יודעים. היא מלווה אותנו כבר משחר המין האנושי והשתמשו בה במקומות שונים באופן כנראה בלתי תלוי, ומשם היא הגיעה אל יוון העתיקה שבה נולדה המתמטיקה כפי שאנו מכירים כיום. יש שיטות נוספות למדידת זוויות פרט למעלות ורדיאנים אבל הן הרבה, הרבה פחות נפוצות ולא אדבר עליהן כאן (דרך אלגנטית להסתיר את זה שאני לא באמת יודע שום דבר מעניין לומר עליהן).&lt;/p&gt;
-
-&lt;p&gt;עם זאת, אפשר להעלות שתי הצדקות לשימוש במספר 360. ראשית, מספר הימים בשנה הוא 365 כך ש-360 הוא קירוב לא רע אליו. זה לכשעצמו מפחית מהשרירותיות של השימוש במספר הזה (“יום” ו”שנה” הם מושגים אובייקטיביים שנובעים מתופעות אסטרונומיות במערכת של כדור הארץ והשמש; אין כאן החלטה אנושית שרירותית). אבל אז אפשר לשאול למה 360 ולא 365. היתרון הגדול של 360 הוא בכך שזה מספר &lt;strong&gt;עם המון מחלקים שלמים&lt;/strong&gt;. 360 מתחלק ב-24 המספרים הבאים ללא שארית:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( 1,2,3,4,5,6,8,9,10,12,15,18,20,24,30,36,40,45,60,72,90,120,180,360 \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;המשמעות של התחלקות כזו היא שאפשר לדבר על הרבה חלקים של סיבוב באמצעות מספר שלם: למשל, “שליש סיבוב” הוא 120 מעלות; “אחד חלקי תריסר סיבוב” הוא &lt;span&gt;\( 30 \)&lt;/span&gt; מעלות, וכן הלאה. אם מקבלים את זה שיותר נוח לנו לחשוב ולעבוד עם מספרים שלמים מאשר עם שברים (ולי לכל הפחות נוח יותר) זה מסביר את השימושיות של מספר כמו 360, שמצד אחד הוא לא &lt;strong&gt;עד כדי כך&lt;/strong&gt; גדול ומצד שני באמת שיש לו המון מחלקים.&lt;/p&gt;
-
-&lt;p&gt;אפשר לפרמל מתמטית את ה”המון מחלקים” הזה. מגדירים במתמטיקה “מספר פריק במיוחד” בתור מספר שיש לו יותר מחלקים מאשר כל מספר שבא לפניו. הנה המספרים הפריקים במיוחד הראשונים:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( 1,2,4,6,12,24,36,48,60,120,180,240,360 \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;פרט ל-360 אפשר לראות ברשימה הזו עוד ידידים שרירותיים-לכאורה של המין האנושי: ה-24 שאנחנו נעזרים בו כדי לחלק את היממה (תופעה אסטרונומית אובייקטיבית) ל-24 שעות (חלוקה שרירותית לגמרי) וה-60 שאנחנו נעזרים בו כדי לחלק את השעות לדקות ואת הדקות לשניות. אפשר גם לחזק עוד יותר את ההגדרה של “המון מחלקים” אל “המון מחלקים ביחס לגודל המספר” (אבל לא אכנס לפרטים הטכניים של זה, זה לא כזה מעניין) ועדיין 360 יככב ברשימה (אבל 24 לא, ולכן אני לא אוהב ללכת בכיוון הזה!).&lt;/p&gt;
-
-&lt;p&gt;עכשיו, מה הקשר בין מעלות ורדיאנים? במעלות, המספר שמתאר “סיבוב שלם” הוא 360 שהוא כאמור מספר שרירותי שכנראה נבחר כי הוא יפה. ברדיאנים, המספר שמתאר “סיבוב שלם” הוא &lt;span&gt;\( 2\pi \)&lt;/span&gt; שנבחר בגלל שזה היחס בין היקף של מעגל שלם ובין הרדיוס שלו. זה אומר שמתקיים הקשר הבא בין מעלות ורדיאנים: &lt;span&gt;\( 360^{\circ}=2\pi \)&lt;/span&gt;. כלומר, כדי לדעת לכמה רדיאנים שווה מעלה אחת, נחלק ב-360 ונקבל &lt;span&gt;\( 1^{\circ}=\frac{2\pi}{360}=\frac{\pi}{180}\approx0.01745\ldots \)&lt;/span&gt; שזה המספר שהראיתי בתחילת הפוסט. אין שום טעם לזכור את המספר הזה; כשרוצים להמיר ממעלות לרדיאנים אפשר פשוט לחלק ב-180 ולכפול ב-&lt;span&gt;\( \pi \)&lt;/span&gt;. למשל, זווית של &lt;span&gt;\( 90^{\circ} \)&lt;/span&gt; תהפוך ל-&lt;span&gt;\( \frac{\pi}{2} \)&lt;/span&gt;. הכיוון ההפוך קצת יותר קל - מחלקים ב-&lt;span&gt;\( \pi \)&lt;/span&gt; (מה שלרוב מפשט את העניינים כי זוויות קונקרטיות ברדיאנים נתונות לרוב בתור &lt;span&gt;\( \pi \)&lt;/span&gt; כפול משהו) וכופלים ב-180. למשל, &lt;span&gt;\( \frac{\pi}{4} \)&lt;/span&gt; יהפוך ל-&lt;span&gt;\( 45^{\circ} \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;אני כבר רגיל לשימוש ברדיאנים וכשאני רואה משהו כמו &lt;span&gt;\( \frac{\pi}{2} \)&lt;/span&gt; המוח שלי אוטומטית חושב על “זווית של 90 מעלות”, אבל התרגום האוטומטי הזה גם ממחיש שאני רגיל לחשוב במעלות על הכל. לטעמי מעלות הן יחידת מידה סבבה לגמרי. אני מאוד אוהב אותן וזה לא מקרי שהשתמשתי בהן בכל סדרת הפוסטים הזו. אבל היה מקום אחד בסדרת הפוסטים שבו אמרתי שחד משמעית אי אפשר להשתמש בהן - &lt;strong&gt;טורי הטיילור&lt;/strong&gt; של הפונקציות הטריגונומטריות. בואו נזכיר אחד מהם:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \sin x=x-\frac{x^{3}}{3!}+\frac{x^{5}}{5!}-\frac{x^{7}}{7!}+\ldots \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;מה שקורה בנוסחה הזו הוא ש-&lt;span&gt;\( x \)&lt;/span&gt; משמש אותנו &lt;strong&gt;בשני תפקידים שונים&lt;/strong&gt;: מצד שמאל, &lt;span&gt;\( x \)&lt;/span&gt; הוא “הדבר הזה שתוקעים לתוך סינוס ומקבלים מספר”. פונקציית הסינוס יודעת לזהות אם הקלט שלה נתון במעלות או בצורה אחרת ולהוציא פלט מתאים (הטהרנים יכתוב &lt;span&gt;\( \sin^{\circ} \)&lt;/span&gt; כדי לתאר את הפונקציה שמקבלת את הקלט במעלות - ברשותכם, אוותר על זה). בצד ימין אין שום דבר כזה - &lt;span&gt;\( x \)&lt;/span&gt; כאן הוא מספר שמעלים בחזקה כלשהי ומחברים ומחסרים וכדומה. באגף ימין אין שום “עיבוד מקדים” של &lt;span&gt;\( x \)&lt;/span&gt;. אם נבחר שיטת מדידה של 400 מעלות במעגל במקום 360 מעלות (וקיימת כזו), ההבדל הזה בין 360 ו-400 לא יבוא לידי ביטוי בשום צורה באגף ימין. כלומר, מלכתחילה אין סיבה להניח שאגף ימין יעבוד עם שיטת מדידה שרירותית כלשהי. ה”קסם” הוא שעבור שיטת המדידה שמשתמשת ברדיאנים זה כן יעבוד. אבל למה? ובכן, זה ידרוש ממני גלישה לפרטים טכניים שאני לא מניח שתכירו, אבל לא חייבים להבין אותם עד הסוף; זו הזדמנות טובה להכיר את הקיום של המושגים הללו גם בלי להבין לגמרי מהם.&lt;/p&gt;
-
-&lt;p&gt;אם כן, אנחנו רוצים להבין איך מוכיחים את הנוסחה &lt;span&gt;\( \sin x=x-\frac{x^{3}}{3!}+\frac{x^{5}}{5!}-\frac{x^{7}}{7!}+\ldots \)&lt;/span&gt;. פרטי ההוכחה של הנוסחה הזו גוררים אותנו לשטח של &lt;strong&gt;חשבון דיפרנציאלי ואינטגרלי&lt;/strong&gt;, ואני לא אכנס לפרטים אבל כן אספר שההוכחה מסתמכת בצורה חזקה על מושג שנקרא &lt;strong&gt;נגזרת&lt;/strong&gt;: בפרט, על כך שמתקיימת הנוסחה &lt;span&gt;\( \sin^{\prime}x=\cos x \)&lt;/span&gt;. הנוסחה הזו גם כן נכונה אך ורק כאשר &lt;span&gt;\( x \)&lt;/span&gt; נתון ברדיאנים ולא במעלות. ואת הנוסחה הזו מוכיחים בעזרת &lt;strong&gt;הגבול&lt;/strong&gt; הבא: &lt;span&gt;\( \lim_{x\to0}\frac{\sin x}{x}=1 \)&lt;/span&gt; שגם הוא נכון רק ברדיאנים ולא במעלות. הגבול הזה הוא לב הסיפור - הוא הבסיס של כל החשבון הדיפרנצאלי והאינטגרלי של פונקציות טריגונומטריות אם אנחנו בוחרים להגדיר אותן בגישה שראינו עד כה (כאמור, יש גישה להגדיר את סינוס באמצעות &lt;span&gt;\( \sin x=x-\frac{x^{3}}{3!}+\frac{x^{5}}{5!}-\frac{x^{7}}{7!}+\ldots \)&lt;/span&gt; וזו דווקא גישה די טובה).&lt;/p&gt;
-
-&lt;p&gt;אבל רגע, מה זה בכלל “גבול”? ובכן, אין צורך להציג את ההגדרה המלאה עבור הביטוי &lt;span&gt;\( \lim_{x\to0}\frac{\sin x}{x}=1 \)&lt;/span&gt; (זו לא הגדרה פשוטה - ההגדרה של גבול היא אולי הדבר הכי קשה לעיכול כשמתחילים ללמוד מתמטיקה באוניברסיטה). מספיק אם נגיד שהרעיון הוא שכאשר &lt;span&gt;\( x \)&lt;/span&gt; קטן, אז &lt;span&gt;\( \sin x \)&lt;/span&gt; מאוד קרוב אליו במובן הזה שה&lt;strong&gt;יחס&lt;/strong&gt; בין שניהם הוא כמעט זהה (זהירות! אם למשל &lt;span&gt;\( x=0.00001 \)&lt;/span&gt; אבל &lt;span&gt;\( \sin x=0.000000000001 \)&lt;/span&gt; אז בוודאי שהמרחק בין שני המספרים הללו הוא קטן כי שניהם קטנים; אבל היחס בין שניהם הוא גדול יחסית).&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://gadial.net/2008/01/20/lim_sin_x_over_x/&quot;&gt;יש לי פוסט&lt;/a&gt;על האופן שבו מוכיחים את הגבול הזה, ובפוסט מופיע האיור הבא, שמשתמשים בו כחלק מההוכחה:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2021/sinxx.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;באיור הזה המעגל הוא מעגל היחידה, כלומר מעגל מרדיוס 1. הזווית &lt;span&gt;\( x \)&lt;/span&gt; נמדדת ברדיאנים, כלומר אורך הקשת &lt;span&gt;\( EB \)&lt;/span&gt; הוא &lt;span&gt;\( x \)&lt;/span&gt; (כי אורך הקשת חלקי אורך הרדיוס שווה &lt;span&gt;\( x \)&lt;/span&gt;, אבל אורך הרדיוס הוא 1). הקו &lt;span&gt;\( ED \)&lt;/span&gt; שווה ל-&lt;span&gt;\( \sin x \)&lt;/span&gt;, והטענה &lt;span&gt;\( \lim_{x\to0}\frac{\sin x}{x}=1 \)&lt;/span&gt; אומרת שככל שהזווית &lt;span&gt;\( x \)&lt;/span&gt; קטנה יותר, כך הקו &lt;span&gt;\( ED \)&lt;/span&gt; הולך ומתקרב באורכו אל הקשת &lt;span&gt;\( EB \)&lt;/span&gt;. זה מאוד אינטואיטיבי; הרי הקשת הזו מתחילה בתור קו אנכי שעולה למעלה מהנקודה &lt;span&gt;\( B \)&lt;/span&gt;, כמו ש-&lt;span&gt;\( ED \)&lt;/span&gt; עולה למעלה מהנקודה &lt;span&gt;\( D \)&lt;/span&gt;, אבל ככל שמתקדמים למעלה כך הקו של הקשת מתעקל שמאלה, אל עבר &lt;span&gt;\( E \)&lt;/span&gt;. ככל שהזווית קטנה יותר, ההתעקלות שמאלה קטנה יותר. זו אינטואיציה בלבד; ההוכחה האמיתית מסובכת יותר (אפילו &lt;strong&gt;הרבה&lt;/strong&gt; יותר, כפי שאפשר לראות מהחפירות שלי בפוסט ההוא).&lt;/p&gt;
-
-&lt;p&gt;בשביל מה זה טוב? בשביל לראות איפה מתרחש ה”קסם” שגורם לרדיאנים להיות יחידת המידה שבגללה הנוסחאות במתמטיקה יוצאות יפות כל כך. אם היינו עובדים במעלות ולא ברדיאנים, מה היה משתנה? כדי לעבור ממעלות לרדיאנים צריך, כזכור, לכפול ב-&lt;span&gt;\( \pi \)&lt;/span&gt; ולחלק ב-180; היינו מקבלים משהו כזה:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \sin x^{\circ}=\frac{\pi x}{180}-\frac{\pi^{3}x^{3}}{3!180^{3}}+\frac{\pi^{5}x^{5}}{5!180^{5}}-\frac{\pi^{7}x^{7}}{7!180^{7}}+\ldots \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;אפשר, כמובן, לחיות גם עם נוסחאות כאלו - אבל הן בהחלט מרגישות מסורבלות מדי שלא לצורך. עם רדיאנים הנוסחאות יוצאות פשוטות, וזו סיבה מרכזית למה אוהבים אותם כל כך בחלקים מסויימים של המתמטיקה.&lt;/p&gt;
-
-&lt;p&gt;עכשיו אפשר לחזור אל דף הנוסחאות:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2021/trigo_formulas.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;מה שנקרא שם “אורך קשת של &lt;span&gt;\( \alpha \)&lt;/span&gt; רדיאנים” הוא בעצם ההגדרה: אם אורך הקשת שנשענת על זווית &lt;span&gt;\( \alpha \)&lt;/span&gt; הוא &lt;span&gt;\( l \)&lt;/span&gt; ורדיוס המעגל שבו הקשת נמצאת הוא &lt;span&gt;\( R \)&lt;/span&gt;, אז &lt;span&gt;\( \alpha=\frac{l}{R} \)&lt;/span&gt; הייתה &lt;strong&gt;ההגדרה&lt;/strong&gt; של הזווית ברדיאנים. נכפול ב-&lt;span&gt;\( R \)&lt;/span&gt; ונקבל את &lt;span&gt;\( l=\alpha R \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;שטח גזרה&lt;/strong&gt; זה כבר מושג שלא תיארתי, אבל קל לתאר. בואו נחזור לאיור שראינו קודם:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2021/radians3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ה&lt;strong&gt;גזרה&lt;/strong&gt; שמתאימה לזווית &lt;span&gt;\( \alpha \)&lt;/span&gt; היא השטח ש”נגזר” מתוך המעגל אם חותכים את שני הקווים ש-&lt;span&gt;\( \alpha \)&lt;/span&gt; כלואה ביניהם ומקבלים משולש פיצה מתאים. איך אפשר לדעת מה השטח של משולש הפיצה הזה? ובכן, צריך לדעת בשביל זה את הנוסחה לשטח עיגול: השטח של עיגול עם רדיוס &lt;span&gt;\( R \)&lt;/span&gt; הוא &lt;span&gt;\( \pi R^{2} \)&lt;/span&gt;. מהעיגול הזה חתכנו חתיכה כלשהי, אז צריך לחלק את השטח הכולל במספר שמתאים לחתיכה שחתכנו. אם למשל היינו חותכים בדיוק רבע עיגול, מה שמתאים לזווית &lt;span&gt;\( \frac{\pi}{2} \)&lt;/span&gt;, אז שטח הגזרה המתאים היה &lt;span&gt;\( \frac{\pi R^{2}}{4} \)&lt;/span&gt;. אם היינו חותכים חצי עיגול, כלומר זווית של &lt;span&gt;\( \pi \)&lt;/span&gt;, אז שטח הגזרה המתאים היה &lt;span&gt;\( \frac{\pi R^{2}}{2} \)&lt;/span&gt;. אפשר לראות פה את המגמה. באופן כללי, אם הזווית היא &lt;span&gt;\( \alpha \)&lt;/span&gt;, אז היא מתארת חיתוך של בדיוק &lt;span&gt;\( \frac{\alpha}{2\pi} \)&lt;/span&gt; מהעיגול (היחס בין &lt;span&gt;\( \alpha \)&lt;/span&gt; ובין “סיבוב שלם” שהוא &lt;span&gt;\( 2\pi \)&lt;/span&gt;) ולכן נקבל שטח גזרה של &lt;span&gt;\( \pi R^{2}\cdot\frac{\alpha}{2\pi}=\frac{\alpha R^{2}}{2} \)&lt;/span&gt;, וזה מה שמופיע בנוסחה השניה.&lt;/p&gt;
-
-&lt;p&gt;בזאת, למרבה השמחה, סיימנו לטפל בכל דף הנוסחאות! ראינו את ההסבר לכל נוסחה שמופיעה בו! האם סיימנו בזאת עם טריגונומטריה תיכונית? &lt;strong&gt;לחלוטין לא&lt;/strong&gt;! למעשה, לא דיברתי עדיין על פונקציית ה&lt;strong&gt;טנגנס&lt;/strong&gt;, שהיא אחד מהדברים החשובים ביותר שאפשר לדבר עליהם בהקשר הזה. אבל זה יהיה בפעם הבאה.&lt;/p&gt;</content><author><name></name></author><category term="טריגונומטריה" /><summary type="html">בסדרת הפוסטים שלי על נוסחאות טריגונומטריות כבר כיסינו את כל הנוסחאות שבדף הנוסחאות שלי, למעט שתי אלו שמזכירות רדיאנים:</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2021/radians2.png" /></entry></feed>
+&lt;p&gt;כבר מראשית ימי הבלוג רציתי לכתוב על פרדוקס סימפסון ולא יצא. ניסיתי להמציא כל מני תרחישים דמיוניים שיהיה כיף לכתוב עליהם, כל מני דברים עם חדי קרן שיורקים קשת בענן ומה קורה אם נותנים להם סוכריות טופי שונות ומשונות, ושאר דברים כיפיים. לא יצא, ועכשיו הדוגמא שלי מגיעה בדיוק מאותו עולם שרציתי להימנע ממנו - מגיפות. אני רציתי להימנע מהעולם הזה, אבל העולם הזה לא רצה להימנע מאיתנו, וזה מכריח את כולנו להתייחס אליו ברצינות, גם ברמת הבנת המתמטיקה שלו. או לכל הפחות, להכיר בכך שזה גדול עלינו ולא לעסוק בזה, כי מהפצת טענות שקריות לגמרי נפגעים אנשים אמיתיים לגמרי.&lt;/p&gt;</content><author><name></name></author><category term="פרדוקס סימפסון" /><category term="סטטיסטיקה" /><summary type="html">מאז שבא חיסון הקורונה לעולם קרו שני דברים: הראשון, שהוא הציל חיי אדם ומנע סבל בסדרי גודל אסטרונומיים; והשני, שהוא זכה למתקפה כוללת עליו מצד אנשים שאינם מבינים כלום בחיסונים, או במדע, או במתמטיקה, או בכלל, עד לרמת הטענות ש&quot;החיסון עושה אותנו חולים&quot;, ולמתקפה הזו יש שלל תוצאות - למשל, אנשים שמעדיפים לקחת תרופה נגד תולעים שמיועדת לסוסים מאשר להתחסן. זה לא באמת מצחיק. מגיפת הקורונה היא הזדמנות לראות כמה נזק יכולה לגרום קבוצה קטנה של שקרנים מקצועיים והקבוצה הרחבה מאוד של אנשים שלא מבינים כלום בתחום שעליו הם מדברים ומהדהדים את השקרים הלאה.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2021/simpson_paradox.png" /></entry></feed>
