@@ -1,4 +1,314 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2022-09-01T12:22:50+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">חישוב קוונטי בגישה מתמטית, חלק ה’: אלגוריתם דויטש-ג’וזה</title><link href="http://gadial.net/2022/08/07/quantum_computing_math_5/" rel="alternate" type="text/html" title="חישוב קוונטי בגישה מתמטית, חלק ה': אלגוריתם דויטש-ג'וזה" /><published>2022-08-07T00:00:00+00:00</published><updated>2022-08-07T00:00:00+00:00</updated><id>http://gadial.net/2022/08/07/quantum_computing_math_5</id><content type="html" xml:base="http://gadial.net/2022/08/07/quantum_computing_math_5/">&lt;h2&gt;מה אנחנו רוצים לפתור?&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2022-09-01T18:20:02+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">התמרת פורייה הקוונטית</title><link href="http://gadial.net/2022/09/01/quantum_fourier_transform/" rel="alternate" type="text/html" title="התמרת פורייה הקוונטית" /><published>2022-09-01T00:00:00+00:00</published><updated>2022-09-01T00:00:00+00:00</updated><id>http://gadial.net/2022/09/01/quantum_fourier_transform</id><content type="html" xml:base="http://gadial.net/2022/09/01/quantum_fourier_transform/">&lt;h2&gt;מה זה בכלל ובשביל מה זה טוב?&lt;/h2&gt;
+
+&lt;p&gt;בסדרת הפוסטים הקודמת שלי על חישוב קוונטי, מטרת העל שלי הייתה הגעה אל &lt;strong&gt;האלגוריתם של שור&lt;/strong&gt;, לפירוק מהיר של מספרים לגורמים. בגלל ההשלכות המהותיות שיהיו לאלגוריתם הזה אם ימומש בפועל בצורה אמינה, הוא הפך להיות “הגביע הקדוש” של הצגה פופולרית של חישוב קוונטי - הפואנטה שמנסים להגיע אליה. וזה גרם לי קצת לרוץ על מה שקורה בדרך אליו, ובפרט דחסתי ב&lt;a href=&quot;https://gadial.net/2014/08/24/shor_algorithm/&quot;&gt;התחלה של הפוסט עליו&lt;/a&gt; את הכלי המרכזי שעליו הוא מסתמך - &lt;strong&gt;התמרת פורייה המהירה&lt;/strong&gt;. לכלי הזה מגיע פוסט משל עצמו, ועכשיו סוף סוף אתקן את המעוות.&lt;/p&gt;
+
+&lt;p&gt;“התמרת פורייה” היא קסם שמופיע בשלל מקומות ברחבי המתמטיקה. בגדול, הרעיון בה הוא לקחת פריט מידע כלשהו ולפרק אותו לגורמים שמאפשרים לראות דברים שחבויים לרוב מתחת לפני השטח. הדוגמא הקלאסית היא &lt;strong&gt;גל קול&lt;/strong&gt;. התיאור הכללי של גל קול נותן את העוצמה שלו (“אמפליטודה”) לאורך זמן. אם ניקח את גל הקול הזה ונבצע עליו התמרת פורייה, נקבל מעין פירוק שלו לאינספור גלים פשוטים, כאלו שאפשר לתאר בעזרת סינוסים וקוסינוסים, שמתאימים לתדירויות שונות ש”מתחבאות” בתוך גל הקול. אם גל הקול הוא של להקה, אז תדירויות שונות בפירוק הפורייה יתאימו לכלי נגינה שונים - יש תדירויות שמתאימות לסולנית, וכאלו שמתאימות לגיטרה בס, וכאלו שמתאימות לקלידים; ואם נחזק או נחליש תדירויות מסויימות, אז בגל הקול המקורי נשמע טוב יותר או פחות את כלי הנגינה המתאים. זה סוג של ניתוח שאפשר לבצע באמצעות התמרת פורייה שנותן אינטואיציה גם להפעלה שלה על תחומים שונים בעליל.&lt;/p&gt;
+
+&lt;p&gt;בפוסט הזה אני לא אכנס לשימושים - בפוסט הבא יופיע שימוש חזק מאוד, שנקרא &lt;strong&gt;הערכת פאזה&lt;/strong&gt; והוא מה שמוביל גם לאלגוריתם של שור. אני אסתפק בלהציג את ההגדרות הפורמליות ואיך עושים את זה קוונטית.&lt;/p&gt;
+
+&lt;h2&gt;מה זו התמרת פורייה?&lt;/h2&gt;
+
+&lt;p&gt;יש לי סדרה של פוסטים על &lt;a href=&quot;https://gadial.net/2014/04/28/fourier_series_intro/&quot;&gt;התמרות פורייה&lt;/a&gt; למיניהן, אז לא אכנס כאן לתיאור רחב של כל הסוגים שלהן והקשרים ביניהם (אבל יש הרבה סוגים ויש קשרים ביניהם וזה מגניב). מה שמעניין אותנו ספציפית בפוסט הזה הוא מה שנקרא &lt;strong&gt;התמרת פורייה הבדידה&lt;/strong&gt; ומוגדר כך:&lt;/p&gt;
+
+&lt;p&gt;אם &lt;span&gt;\( N \)&lt;/span&gt; הוא מספר טבעי כלשהו ו-&lt;span&gt;\( \left(a_{0},a_{1},\ldots,a_{N-1}\right)\in\mathbb{C}^{N} \)&lt;/span&gt; היא סדרה של &lt;span&gt;\( N \)&lt;/span&gt; מספרים מרוכבים, אז התמרת פורייה הבדידה שלה היא סדרה אחרת של &lt;span&gt;\( N \)&lt;/span&gt; מספרים מרוכבים, &lt;span&gt;\( \left(b_{0},\ldots,b_{N-1}\right) \)&lt;/span&gt; שמקיימת&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b_{j}=\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}a_{k}e^{\frac{2\pi i}{N}jk} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זו נוסחה טיפה מפחידה במבט ראשון ויהיה קריטי לנו להתרגל אליה, אז בואו נדבר שניה על מה זה &lt;span&gt;\( e^{\frac{2\pi i}{N}jk} \)&lt;/span&gt;. זו בסך הכל שיטת סימון למספר מרוכב מסוים, ולא סתם מספר מרוכב אלא &lt;strong&gt;שורש יחידה&lt;/strong&gt; מסדר &lt;span&gt;\( N \)&lt;/span&gt;, כלומר מספר מרוכב &lt;span&gt;\( z \)&lt;/span&gt; שמקיים &lt;span&gt;\( z^{N}=1 \)&lt;/span&gt;. למשל, שורשי היחידה מסדר 4 הם &lt;span&gt;\( \left\{ 1,-1,i,-i\right\}  \)&lt;/span&gt;. אז התמרת פורייה הבדידה היא בסך הכל “כדי לקבל את האיבר ה-&lt;span&gt;\( k \)&lt;/span&gt; של ההתמרה, בואו נחבר את כל ה-&lt;span&gt;\( a \)&lt;/span&gt;-ים של הסדרה המקורית כשהם מוכפלים בשורשי יחידה מסויימים ש-&lt;span&gt;\( k \)&lt;/span&gt; מגדיר לנו”. זה הכל, וזה לא כזה נורא מבחינה קונספטואלית.&lt;/p&gt;
+
+&lt;p&gt;איך כל זה קשור למספר &lt;span&gt;\( e \)&lt;/span&gt;? ובכן, אחת הנוסחאות הבסיסיות באנליזה מרוכבת היא &lt;strong&gt;נוסחת אוילר&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( e^{i\theta}=\cos\theta+i\sin\theta \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;על המספר המרוכב &lt;span&gt;\( \cos\theta+i\sin\theta \)&lt;/span&gt; אפשר לחשוב בתור נקודה במישור, עם קואורדינטות &lt;span&gt;\( \left(\cos\theta,\sin\theta\right) \)&lt;/span&gt;; אם זוכרים ש-&lt;span&gt;\( \cos^{2}\theta+\sin^{2}\theta=1 \)&lt;/span&gt; אז רואים שהמרחק של הנקודה הזו מראשית הצירים הוא 1, כך שאפשר לחשוב על כל הנקודות מהצורה הזו בתור &lt;strong&gt;מעגל&lt;/strong&gt; - מעגל היחידה. הזווית &lt;span&gt;\( \theta \)&lt;/span&gt; היא הזווית שיוצר קו מראשית הצירים אל הנקודה הזו ביחס לכיוון החיובי של ציר &lt;span&gt;\( x \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/euler_formula.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;לא כזה קריטי להבין מדוע הנוסחה הזו נכונה עכשיו - מבחינתנו אפשר לחשוב עליה בתור דרך קומפקטית לכתוב מספרים מרוכבים. מה שרלוונטי לנו הוא להבין מה קורה אם מציבים &lt;span&gt;\( \theta=2\pi \)&lt;/span&gt;. במקרה הזה, אפשר לחשוב על המספר בתור מה שמקבלים כשמתחילים על הנקודה &lt;span&gt;\( \left(1,0\right) \)&lt;/span&gt; במישור ואז מבצעים סיבוב של &lt;span&gt;\( 2\pi \)&lt;/span&gt; מעלות סביב ראשית הצירים. כזכור, &lt;span&gt;\( 2\pi \)&lt;/span&gt; זו הדרך להגיד ברדיאנים את מה שנקרא “360 מעלות” בשפת בני אנוש - סיבוב שלם, שמחזיר אותנו אל &lt;span&gt;\( \left(1,0\right) \)&lt;/span&gt;. שורשי היחידה הם מה שמקבלים כשלוקחים את הסיבוב השלם הזה וחותכים אותו לחתיכות מאורך שווה - למשל, שורשי היחידה מסדר 4 מתקבלים כשמחלקים את ה-360 מעלות הללו ל-4, ומקבלים סיבובים של 90 מעלות, או &lt;span&gt;\( \frac{\pi}{2} \)&lt;/span&gt; בשפת הרדיאנים. כך למשל &lt;span&gt;\( i=e^{i\frac{\pi}{2}} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;את הביטוי המפחיד &lt;span&gt;\( e^{\frac{2\pi i}{N}jk} \)&lt;/span&gt; אפשר להציג, אם כן, בתור דבר קצת יותר רגוע:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( e^{\frac{2\pi i}{N}jk}=\left(e^{i\cdot\frac{2\pi}{N}k}\right)^{j} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, כדי לחשב את &lt;span&gt;\( b_{j} \)&lt;/span&gt;, אנחנו קודם כל לוקחים את שורשי היחידה מסדר &lt;span&gt;\( N \)&lt;/span&gt;, שהם איברים מהצורה &lt;span&gt;\( e^{i\cdot\frac{2\pi}{N}\cdot k} \)&lt;/span&gt; עבור &lt;span&gt;\( k=0,1,\ldots,N-1 \)&lt;/span&gt;, ואז אנחנו מעלים את כולם בחזקת &lt;span&gt;\( j \)&lt;/span&gt;, כופלים ב-&lt;span&gt;\( a_{n} \)&lt;/span&gt;-ים המתאימים ומחברים. למשל, עבור &lt;span&gt;\( N=4 \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b_{j}=a_{0}\cdot1^{j}+a_{1}\cdot i^{j}+a_{2}\cdot\left(-1\right)^{j}+a_{3}\cdot\left(-i\right)^{j} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה יניב כל מני סכומים מורכבים יותר ופחות, כתלות בערך של &lt;span&gt;\( k \)&lt;/span&gt;. למשל עבור &lt;span&gt;\( j=0 \)&lt;/span&gt; נקבל פשוט&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b_{0}=\frac{1}{2}\left(a_{0}+a_{1}+a_{2}+a_{3}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עבור &lt;span&gt;\( j=1 \)&lt;/span&gt; כל שורשי היחידה השונים יככבו בסכום:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b_{1}=\frac{1}{2}\left(a_{0}+ia_{1}-a_{2}-ia_{3}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עבור &lt;span&gt;\( j=2 \)&lt;/span&gt; דברים הולכים להתבטל כי &lt;span&gt;\( \left(-1\right)^{2}=1 \)&lt;/span&gt; ו-&lt;span&gt;\( \left(\pm i\right)^{2}=-1 \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b_{2}=\frac{1}{2}\left(a_{0}-a_{1}+a_{2}-a_{3}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וכן הלאה - אני מקווה שהעיקרון ברור.&lt;/p&gt;
+
+&lt;p&gt;החישוב של ההתמרה לא נראה פה כמו עניין קשה במיוחד, והוא באמת לא קשה במיוחד אם &lt;span&gt;\( N \)&lt;/span&gt; לא גדול. אבל אנחנו רוצים כן לטפל במקרה שבו &lt;span&gt;\( N \)&lt;/span&gt; גדול. חישוב נאיבי של ההתמרה לוקח בערך &lt;span&gt;\( O\left(N^{2}\right) \)&lt;/span&gt; פעולות, אבל היופי בכל הסיפור הזה הוא שקיימות שיטות מחוכמות לביצוע &lt;strong&gt;מהיר&lt;/strong&gt; של התמרת פורייה הזו, שלוקחות זמן של &lt;span&gt;\( O\left(N\log N\right) \)&lt;/span&gt;. &lt;a href=&quot;https://gadial.net/2014/05/27/fast_fourier_transform/&quot;&gt;יש לי תיאור&lt;/a&gt; של אחת מהשיטות הללו בבלוג וזה אכן יופי של דבר. כל הדברים הללו קשורים לחישוב &lt;strong&gt;קלאסי&lt;/strong&gt;, בלי מחשב קוונטי.&lt;/p&gt;
+
+&lt;p&gt;בחישוב קוונטי אפשר לבצע את התמרת פורייה הזו בזמן &lt;span&gt;\( O\left(\log^{2}N\right) \)&lt;/span&gt;. שימו לב להבדל: בהתמרה קלאסית, הזמן הוא &lt;span&gt;\( O\left(N\log N\right) \)&lt;/span&gt;. בקוונטית הוא &lt;span&gt;\( O\left(\log^{2}N\right) \)&lt;/span&gt;. זה שינוי עצום. אנחנו נעבוד עם המקרה שבו &lt;span&gt;\( N=2^{n} \)&lt;/span&gt; עבור &lt;span&gt;\( n \)&lt;/span&gt; כלשהו; במקרה הזה, &lt;span&gt;\( O\left(\log^{2}N\right)=O\left(n^{2}\right) \)&lt;/span&gt; בזמן ש-&lt;span&gt;\( O\left(N\log N\right)=O\left(n\cdot2^{n}\right) \)&lt;/span&gt; - אקספוננציאלי ב-&lt;span&gt;\( n \)&lt;/span&gt; מול פולינומי ב-&lt;span&gt;\( n \)&lt;/span&gt;. זו הדגמה יפה מאוד של הכוח של חישוב קוונטי ביחס לחישוב רגיל.&lt;/p&gt;
+
+&lt;p&gt;אבל מה? התמרת פורייה הקוונטית היא גם המחשה מצויינת ל&lt;strong&gt;חולשה&lt;/strong&gt; של חישוב קוונטי אל מול חישוב רגיל. בחישוב רגיל, אנחנו מתחילים עם הסדרה &lt;span&gt;\( a_{0},a_{1},\ldots,a_{N-1} \)&lt;/span&gt; ביד ומסיימים עם הסדרה &lt;span&gt;\( b_{0},b_{1},\ldots,b_{N-1} \)&lt;/span&gt; ביד; לעומת זאת בחישוב קוונטי מה שיהיה לנו בסוף הוא &lt;strong&gt;סופרפוזיציה&lt;/strong&gt; כלשהי של אברי הסדרה &lt;span&gt;\( b_{0},b_{1},\ldots,b_{N-1} \)&lt;/span&gt; (ההגדרה המדויקת תכף תגיע). אנחנו לא יודעים לקרוא את ה-&lt;span&gt;\( b \)&lt;/span&gt;-ים מתוך הסופרפוזיציה הזו; רק למדוד אותה ולקוות לטוב, או לעשות איתה עוד דברים בהמשך החישוב, ואז למדוד אותה ולקוות לטוב. ה”מידע” של התמרת הפורייה לא נגיש לנו ישירות, אלא רק דרך אפקט עקיף. כפי שנראה בהמשך, גם האפקט העקיף הזה יכול להיות חזק מאוד, בשימושים המתאימים.&lt;/p&gt;
+
+&lt;h2&gt;איך נראית התמרת פורייה הקוונטית?&lt;/h2&gt;
+
+&lt;p&gt;כאשר &lt;span&gt;\( N=2^{n} \)&lt;/span&gt;, התמרת פורייה הקוונטית היא אופרטור שפועל על &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים. כזכור, המצב הכללי של &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים הוא סופרפוזיציה מהצורה &lt;span&gt;\( \sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}\left|x\right\rangle  \)&lt;/span&gt;, כאשר ה-&lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt;-ים הללו הם אברי הבסיס של המצב הקוונטי. בשביל התמרת פורייה אנקוט בשיטת סימון טיפ-טיפה שונה: הרי על כל &lt;span&gt;\( x\in\left\{ 0,1\right\} ^{n} \)&lt;/span&gt; כזה אפשר לחשוב בתור &lt;strong&gt;ייצוג בינארי&lt;/strong&gt; של מספר, למשל &lt;span&gt;\( 110 \)&lt;/span&gt; הוא הייצוג הבינארי של &lt;span&gt;\( 1\cdot2^{2}+1\cdot2^{1}+0\cdot2^{0}=6 \)&lt;/span&gt;. אז במקום לדבר על המצב &lt;span&gt;\( \left|110\right\rangle  \)&lt;/span&gt; אני אדבר על המצב &lt;span&gt;\( \left|6\right\rangle  \)&lt;/span&gt;. ובאופן כללי - המצבים שלי יהיו מהצורה &lt;span&gt;\( \left|j\right\rangle  \)&lt;/span&gt; כאשר &lt;span&gt;\( 0\le j\le N-1 \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;שימו לב כי בשיטת הייצוג הזו, הערך של הקיוביט הראשון הוא &lt;strong&gt;הספרה המשמעותית ביותר&lt;/strong&gt; ב-&lt;span&gt;\( j \)&lt;/span&gt; והערך של הקיוביט האחרון הוא הספרה הכי פחות משמעותית; זו בחירה שרירותית, כמובן, אבל היא תשפיע על הסימונים שלנו מכאן ואילך.&lt;/p&gt;
+
+&lt;p&gt;כעת, כדי להגדיר אופרטור אוניטרי על &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים, מספיק להגדיר אותו על אברי הבסיס. אז הבה ונגדיר את האופרטור &lt;span&gt;\( \text{QFT}_{N} \)&lt;/span&gt; (ראשי תיבות של Quantum Fourier Transform):&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)=\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{\frac{2\pi i}{N}jk}\left|k\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, אם אנחנו מפעילים את &lt;span&gt;\( \text{QFT}_{N} \)&lt;/span&gt; על סופרפוזיציה &lt;span&gt;\( \sum_{j=0}^{N-1}a_{j}\left|j\right\rangle  \)&lt;/span&gt;, הפלט יהיה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{j=0}^{N-1}a_{j}\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{\frac{2\pi i}{N}jk}\left|k\right\rangle =\sum_{k=0}^{N-1}\left(\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}a_{j}e^{\frac{2\pi i}{N}jk}\right)\left|k\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\sum_{k=0}^{N-1}b_{k}\left|k\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, כשמפעילים את &lt;span&gt;\( \text{QFT}_{N} \)&lt;/span&gt; על סופרפוזיציה שמקדמיה הם הסדרה &lt;span&gt;\( \left(a_{0},a_{1},\ldots,a_{N-1}\right) \)&lt;/span&gt; מקבלים כפלט סופרפוזיציה שמקדמיה הם הסדרה &lt;span&gt;\( \left(b_{0},\ldots,b_{N-1}\right) \)&lt;/span&gt;. כלומר, במקרה הזה גם סדרת הקלט וגם סדרת הפלט נתונות בצורה מובלעת; לא בתור קלט מפורש אלא בתור מקדמים של סופרפוזיציה.&lt;/p&gt;
+
+&lt;p&gt;ההגדרה &lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)=\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{\frac{2\pi i}{N}jk}\left|k\right\rangle  \)&lt;/span&gt; מתאימה להגדרה ה”קלאסית”, ותהיה מוכרת ונעימה למי שרגילים להתמרת פורייה הבדידה. אבל יש עוד דרך לתאר את אגף ימין פה - לא בתור סכום של &lt;span&gt;\( 2^{n} \)&lt;/span&gt; מצבים על &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים, אלא בתור &lt;strong&gt;מכפלה טנזורית&lt;/strong&gt; של &lt;span&gt;\( n \)&lt;/span&gt; מצבים, אחד לכל קיוביט. שיטת הייצוג הנוספת הזו תהיה חדשה גם למי שמכירים את התמרת פורייה, ובמבט ראשון היא תהיה &lt;strong&gt;מפחידה ביותר&lt;/strong&gt;. כל כך מפחידה, עד שגם אני, כשכתבתי בעבר דברים על התמרת פורייה הקוונטית, ניסיתי בכוח להתחמק ממנה - עד שהגעתי לשימושים בפועל בה וזה התפוצץ לי בפרצוף. האמת היא ששיטת הייצוג הזו היא גם נוחה מאוד לשימוש וגם לא כזו נוראית, אחרי שמתרגלים אליה. ומכיוון שאני לא מאמין בלשמור אתכם במתח אני אציג אותה מייד, וננסה להבין מה הולך שם ולמה זה מתאים להגדרה ה”רגילה”:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)\frac{1}{\sqrt{N}}\bigotimes_{t=1}^{n}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{\left(\left|0\right\rangle +e^{2\pi i0.j_{n}}\left|1\right\rangle \right)\otimes\left(\left|0\right\rangle +e^{2\pi i0.j_{n-1}j_{n}}\left|1\right\rangle \right)\otimes\cdots\otimes\left(\left|0\right\rangle +e^{2\pi i0.j_{1}\ldots j_{n}}\left|1\right\rangle \right)}{\sqrt{N}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ככל הנראה הדבר הכי קשה לעיכול בנוסחה הזו הוא מה שקורה בחזקה של &lt;span&gt;\( e \)&lt;/span&gt;, אז אני אתחיל עם זה. בואו ננסה להבין איך נראה האיבר &lt;span&gt;\( e^{\frac{2\pi i}{N}jk} \)&lt;/span&gt; עבור &lt;span&gt;\( j \)&lt;/span&gt; כלשהו. נתחיל עם המקרה שבו &lt;span&gt;\( k=1 \)&lt;/span&gt;. ראשית, אפשר לכתוב &lt;span&gt;\( e^{\frac{2\pi i}{N}jk}=e^{2\pi i\cdot\frac{j}{N}} \)&lt;/span&gt;, כלומר החלק שאנחנו צריכים להבין הוא את &lt;span&gt;\( \frac{j}{N} \)&lt;/span&gt;. שנית, אנחנו יודעים ש-&lt;span&gt;\( 0\le j\le N-1 \)&lt;/span&gt;, ולכן &lt;span&gt;\( \frac{j}{N} \)&lt;/span&gt; הולך להיות &lt;strong&gt;שבר&lt;/strong&gt;: מספר בין 0 ל-1. מספרים כאלו אנחנו מייצגים בדרך כלל בייצוג עשרוני, נאמר &lt;span&gt;\( 0.125 \)&lt;/span&gt; בא לתאר את הסכום&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 1\cdot\frac{1}{10}+2\cdot\frac{1}{100}+5\cdot\frac{1}{1000}=\frac{125}{1000}=\frac{1}{8} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כמו שאפשר לראות מהדוגמא, קל להבין איך ייראו הספרות של שבר כלשהו אם יש לנו הצגה שלו חלקי חזקה כלשהי של 10: מכיוון שהשבר שלנו היה מהצורה &lt;span&gt;\( \frac{125}{1000} \)&lt;/span&gt;, ידענו שהוא ייכתב בתור &lt;span&gt;\( 0.125 \)&lt;/span&gt;. אם אני מסתכל על השבר &lt;span&gt;\( \frac{523}{1000} \)&lt;/span&gt; אני כבר יודע שהוא ייכתב בתור &lt;span&gt;\( 0.523 \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;ומה קורה אם אני רוצה להציג את המספר לא בשיטה העשרונית, אלא בשיטה &lt;strong&gt;הבינארית&lt;/strong&gt;? בשיטה הזו אני עדיין יכול לכתוב ספרות שהן או 0 או 1 מימין לנקודה, ולקבל סכום של חזקות שליליות של 2. אם נסתכל על מספר עם שלוש ספרות מימין לנקודה, &lt;span&gt;\( 0.j_{1}j_{2}j_{3} \)&lt;/span&gt;, הוא מייצג את&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( j_{1}\cdot\frac{1}{2^{-1}}+j_{2}+\frac{1}{2^{-2}}+j_{3}\cdot\frac{1}{2^{-3}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובאופן כללי, &lt;span&gt;\( 0.j_{1}j_{2}\ldots j_{n} \)&lt;/span&gt; הולך לייצג את &lt;span&gt;\( \sum_{r=1}^{n}j_{r}\frac{1}{2^{r}} \)&lt;/span&gt;. וכמו במקרה העשרוני, אם יש לי מספר שברי שמראש נתון בתור “משהו חלקי חזקה של 2”, ברור לי איך ייראה הייצוג שלו: אם החזקה שבמכנה היא &lt;span&gt;\( 2^{n} \)&lt;/span&gt;, אז אני אקח ייצוג בינארי שלו בעזרת &lt;span&gt;\( n \)&lt;/span&gt; ספרות, והן מה שיופיע מימין לנקודה. במילים אחרות, אם נתון לי &lt;span&gt;\( \frac{j}{2^{n}} \)&lt;/span&gt;, אז אני אכתוב את &lt;span&gt;\( j \)&lt;/span&gt; בתור &lt;span&gt;\( j=\sum_{r=1}^{n}j_{r}2^{n-r} \)&lt;/span&gt; (כלומר, כאן &lt;span&gt;\( j_{1} \)&lt;/span&gt; היא הספרה המשמעותית ביותר, &lt;span&gt;\( j_{2} \)&lt;/span&gt; הבאה בתור אחריה וכן הלאה; לרוב אנחנו עושים ההפך ולכן זו עשויה להיות נקודה מבלבלת). ואז אני אקבל את הייצוג הבינארי השברי&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{j}{2^{n}}=0.j_{1}j_{2}\ldots j_{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אם הנקודה הזו (שלא קשורה לקוונטים או לאלגברה לינארית, סתם לייצוג של מספרים בבסיסי ספירה שונים) ברורה לכם - ברכותי! אני מקווה שהרע ביותר כבר מאחורינו.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, מה קורה אם אני לוקח את המספר &lt;span&gt;\( \frac{j}{2^{n}}=0.j_{1}j_{2}\ldots j_{n} \)&lt;/span&gt; ומכפיל אותו פי 2? כמו שהכפלת ייצוג עשרוני רגיל ב-10 מזיזה את כל הספרות צעד אחד שמאלה, למשל &lt;span&gt;\( 10\cdot0.125=1.25 \)&lt;/span&gt;, אז גם בייצוג בינארי כל הספרות יזוזו צעד אחד שמאלה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 2\cdot\frac{j}{2^{n}}=j_{1}.j_{2}j_{3}\ldots j_{n} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;ובאופן כללי, אם אנחנו כופלים בחזקה כלשהי של 2, נאמר &lt;span&gt;\( 2^{t} \)&lt;/span&gt; כאשר &lt;span&gt;\( t\le n \)&lt;/span&gt;, האפקט יהיה הזזת הספרות &lt;span&gt;\( t \)&lt;/span&gt; צעדים שמאלה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 2^{t}\cdot\frac{j}{2^{n}}=j_{1}j_{2}\ldots j_{t}.j_{t+1}\ldots j_{n} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;אוקיי, התרגלנו קצת לצורת הכתיב הזו. עכשיו מגיע הפאנץ’. בואו נחזור שניה אל הביטוי &lt;span&gt;\( e^{\frac{2\pi i}{N}jk} \)&lt;/span&gt; שכבר ראינו לא מעט כאן. אני יכול לכתוב אותו שוב פעם באופן קצת שונה: &lt;span&gt;\( e^{2\pi i\cdot\left(k\cdot\frac{j}{N}\right)} \)&lt;/span&gt;. כעת, מכיוון שאצלנו &lt;span&gt;\( N=2^{n} \)&lt;/span&gt; אפשר לכתוב אותו בתור&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( e^{2\pi i\cdot\left(k\cdot\frac{j}{2^{n}}\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ואם נניח ש-&lt;span&gt;\( k \)&lt;/span&gt; הוא חזקה כלשהי של 2, נאמר &lt;span&gt;\( k=2^{n-t} \)&lt;/span&gt; (למה לא &lt;span&gt;\( k=2^{t} \)&lt;/span&gt;? כי דווקא בראשון נשתמש בהמשך), אז אפשר לכתוב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( k\cdot\frac{j}{2^{n}}=j_{1}j_{2}\ldots j_{n-t}.j_{n-t+1}\ldots j_{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ועכשיו הפאנץ’: את כל החלק שמשמאל לנקודה הבינארית &lt;strong&gt;אנחנו יכולים להעלים&lt;/strong&gt;. למה? בגלל שיש לנו אקספוננט בחזקת &lt;span&gt;\( 2\pi i \)&lt;/span&gt; כפול משהו. בואו נראה את זה: אם יש לי מספר מהצורה &lt;span&gt;\( a+b \)&lt;/span&gt; כך ש-&lt;span&gt;\( a \)&lt;/span&gt; הוא מספר שלם, אז מתקיים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( e^{2i\pi\left(a+b\right)}=e^{2i\pi a}\cdot e^{2i\pi b}=\left(e^{2i\pi}\right)^{a}\cdot e^{2i\pi b}=1\cdot e^{2i\pi b}=e^{2i\pi b} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, כל החלק של &lt;span&gt;\( a \)&lt;/span&gt; נעלם, כי הוא מייצג כמות שלמה של סיבובים מלאים סביב ראשית הצירים, שלא משפיעה על התוצאה הסופית. איפה היה חשוב ש-&lt;span&gt;\( a \)&lt;/span&gt; הוא שלם? במעבר &lt;span&gt;\( e^{2i\pi a}=\left(e^{2i\pi}\right)^{a} \)&lt;/span&gt; שאינו נכון באופן כללי אבל כן נכון עבור שלמים.&lt;/p&gt;
+
+&lt;p&gt;חזרה אל המקרה שלנו, שבו יש לנו מספר בייצוג בינארי שאפשר להפריד לסכום של “מה שמשמאל לנקודה” ו”מה שמימין לנקודה”:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( k\cdot\frac{j}{2^{n}}=j_{1}j_{2}\ldots j_{n-t}.j_{n-t+1}\ldots j_{n}=j_{1}j_{2}\ldots j_{n-t}+0.j_{n-t+1}\ldots j_{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן נקבל, עבור &lt;span&gt;\( k=2^{n-t} \)&lt;/span&gt;, שמתקיים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( e^{2\pi i\cdot\left(k\cdot\frac{j}{2^{n}}\right)}=e^{2\pi i0.j_{n-t+1}\ldots j_{n}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזה בדיוק מה שהופיע בנוסחה המוזרה של &lt;span&gt;\( \text{QFT} \)&lt;/span&gt; שנתתי:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)\frac{1}{\sqrt{N}}\bigotimes_{t=1}^{n}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, הבנו את המשמעות של הרכיב הכי בעייתי בנוסחה; עכשיו בואו נבין למה היא נכונה ושקולה אל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)=\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{\frac{2\pi i}{N}jk}\left|k\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אין כאן יותר מאשר חישוב טכני. אני לא אוהב דברים שאין בהם יותר מאשר חישוב טכני. קשה לפתח ככה אינטואיציה, והרבה ספרים פשוט נותנים את החישוב הטכני וזהו. אז לפני שנעשה את החישוב הטכני, בואו נראה דוגמא קצת יותר פשוטה: הפולינום &lt;span&gt;\( \left(1+x\right)\left(1+x^{2}\right)\left(1+x^{3}\right) \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;נניח שנותנים לנו את הפולינום הזה ומבקשים מאיתנו לפתוח סוגריים. זה יהיה טכני, אין ספק, אבל מה בעצם נעשה? אנחנו בעצם יוצרים 8 שלשות: כל שלשה נבנית על ידי כך שאני בוחר איבר מהסוגריים הראשונים, איבר מהשניים ואיבר מהשלישיים, וכופל את כולם. את כל 8 התוצאות שאקבל אני מחבר. עכשיו, בגלל שבכל אחד מהסוגריים אחד האיברים הוא 1, הכפלה בו לא עושה כלום, מה שדי מפשט את מה שאני מקבל:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 1+x+x^{2}+x^{3}+x\cdot x^{2}+x\cdot x^{3}+x^{2}\cdot x^{3}+x\cdot x^{2}+x^{3}= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =1+x+x^{2}+x^{3}+x^{3}+x^{4}+x^{5}+x^{6} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו אפשר לעשות את אותו דבר עם המכפלה הטנזורית שלנו:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \bigotimes_{t=1}^{n}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כזכור, מה שיפה במכפלות טנזוריות הוא שהן משחקות יפה עם חוקי הכפל והחיבור הרגילים. אם למשל יש לי את המכפלה הפשוטה יחסית&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(\left|0\right\rangle +a\left|1\right\rangle \right)\otimes\left(\left|0\right\rangle +b\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ואני פותח את המכפלה על פי חוקי הדיסטריביוטיביות, &lt;a href=&quot;https://gadial.net/2022/07/31/quantum_computing_math_2/&quot;&gt;כמו שכבר ראינו&lt;/a&gt; שאפשר לעשות במהלך סדרת הפוסטים הזו, אז אני אקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|00\right\rangle +b\left|01\right\rangle +a\left|10\right\rangle +ab\left|11\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, על ידי התבוננות בספרות של &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt; אני יודע אילו איברים יופיעו במקדם של האיבר הזה: אם הספרה השמאלית, המשמעותית יותר, היא 1 אז יופיע &lt;span&gt;\( a \)&lt;/span&gt;, ואם הספרה הימנית היא 1 אז יופיע &lt;span&gt;\( b \)&lt;/span&gt;, ואם שתיהן 1 אז שניהם יופיעו. אותו הדבר יקרה גם עבור הביטוי&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \bigotimes_{t=1}^{n}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כשאני אפתח אותו, אני אקבל סכום של כל האיברים מהצורה &lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt; כך של-&lt;span&gt;\( x \)&lt;/span&gt; יש &lt;span&gt;\( n \)&lt;/span&gt; ספרות, והמקדמים של ה-&lt;span&gt;\( \left|x\right\rangle  \)&lt;/span&gt; הזה יהיו מכפלות של כל ה-&lt;span&gt;\( e \)&lt;/span&gt;-ים המפלצתיים שמתאימים לכניסות של &lt;span&gt;\( x \)&lt;/span&gt; שהן 1.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, כשאני מרגיש שהבנו קצת יותר טוב מה הולך ב”ביטוי המפלצתי”, אני דווקא רוצה לחזור אל ההגדרה ה”רגילה” של ההתמרה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)=\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{\frac{2\pi i}{N}jk}\left|k\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובואו ננסה להגיע ממנה אל “הביטוי המפלצתי”. הדבר היחיד בהגדרה הרגילה שעדיין לא מסתדר לנו טוב הוא ה-&lt;span&gt;\( k \)&lt;/span&gt; הזה. כזכור, הפישוט המאוד נחמד של &lt;span&gt;\( e^{2\pi i\cdot\left(k\cdot\frac{j}{2^{n}}\right)} \)&lt;/span&gt; שעשיתי קודם שבו נפטרתי מכל הספרות משמאל לנקודה הניח ש-&lt;span&gt;\( k \)&lt;/span&gt; הוא &lt;strong&gt;חזקה של &lt;/strong&gt;&lt;strong&gt;2&lt;/strong&gt; וזה בוודאי לא מה שקורה כשמריצים את &lt;span&gt;\( k \)&lt;/span&gt; על כל המספרים מ-0 עד &lt;span&gt;\( N-1 \)&lt;/span&gt;. כדי להתמודד עם הבעיה הזו, אנחנו עוברים להתבונן על &lt;strong&gt;הייצוג הבינארי&lt;/strong&gt; של &lt;span&gt;\( k \)&lt;/span&gt;. מכיוון ש-&lt;span&gt;\( 0\le k\le N-1=2^{n}-1 \)&lt;/span&gt; אפשר לייצג את &lt;span&gt;\( k \)&lt;/span&gt; בעזרת &lt;span&gt;\( n \)&lt;/span&gt; ספרות בינאריות. נכתוב &lt;span&gt;\( k=k_{1}k_{2}\ldots k_{n} \)&lt;/span&gt;, כלומר שוב ה-&lt;span&gt;\( k_{1} \)&lt;/span&gt; יהיה הספרה המשמעותית ביותר, מה שאומר שבייצוג בתור סכום נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( k=\sum_{t=1}^{n}2^{n-t}k_{i} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זוכרות שקודם מתישהו כפלתי ב-&lt;span&gt;\( 2^{n-t} \)&lt;/span&gt; במקום ב-&lt;span&gt;\( 2^{t} \)&lt;/span&gt; שנראה יותר טבעי? אז הנה איך &lt;span&gt;\( 2^{n-t} \)&lt;/span&gt; צץ לו.&lt;/p&gt;
+
+&lt;p&gt;עכשיו אפשר להתחיל לעשות חשבון:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)=\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{\frac{2\pi i}{N}jk}\left|k\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{\sqrt{N}}\sum_{k_{1}k_{2}\ldots k_{n}=0}^{N-1}e^{\frac{2\pi i}{N}j\sum_{t=1}^{n}2^{n-t}k_{t}}\left|k_{1}\ldots k_{n}\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{\sqrt{N}}\sum_{k_{1}k_{2}\ldots k_{n}=0}^{N-1}\prod_{t=1}^{n}e^{\frac{2\pi i}{N}j2^{n-t}k_{t}}\left|k_{1}\ldots k_{n}\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כשהמעבר האחרון נובע מכך שחיבור במעריך של &lt;span&gt;\( e \)&lt;/span&gt; הופך למכפלה, כמו בנוסחה &lt;span&gt;\( e^{a+b}=e^{a}\cdot e^{b} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;נעצור עכשיו לשניה ונסתכל על מה שהולך במעריך של ה-&lt;span&gt;\( e \)&lt;/span&gt; הזה: אם &lt;span&gt;\( k_{t}=0 \)&lt;/span&gt;, אז &lt;span&gt;\( e^{\frac{2\pi i}{N}j2^{n-t}k_{t}}=e^{0}=1 \)&lt;/span&gt; - המקדם נעלם כולו. אם לעומת זאת &lt;span&gt;\( k_{t}=1 \)&lt;/span&gt; אנחנו נשארים עם &lt;span&gt;\( e^{\frac{2\pi i}{N}j2^{n-t}}=e^{2\pi i\cdot0.0.j_{n-t+1}\ldots j_{n}} \)&lt;/span&gt; שכבר מוכרים לנו בשלב הזה. אם כן, הדבר העיקרי שאנחנו צריכים לעשות עכשיו הוא לעבור מסכום של &lt;span&gt;\( N \)&lt;/span&gt; מכפלות של &lt;span&gt;\( n \)&lt;/span&gt; איברים אל מכפלה הטנזורית של &lt;span&gt;\( n \)&lt;/span&gt; איברים שכל אחד מהם הוא סכום של שניים:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{\sqrt{N}}\sum_{k_{1}k_{2}\ldots k_{n}=0}^{N-1}\prod_{t=1}^{n}e^{\frac{2\pi i}{N}j2^{n-t}k_{t}}\left|k_{1}\ldots k_{n}\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{\sqrt{N}}\bigotimes_{t=1}^{n}\left(e^{\frac{2\pi i}{N}j2^{n-t}\cdot0}\left|0\right\rangle +e^{\frac{2\pi i}{N}j2^{n-t}\cdot1}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ועל פי הפישוטים שהראיתי לפני רגע, אנחנו מקבלים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{\sqrt{N}}\bigotimes_{t=1}^{n}\left(e^{\frac{2\pi i}{N}j2^{n-t}\cdot0}\left|0\right\rangle +e^{\frac{2\pi i}{N}j2^{n-t}\cdot1}\left|1\right\rangle \right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{\sqrt{N}}\bigotimes_{t=1}^{n}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזו בדיוק הנוסחה שרצינו. זהו, החלק הגרוע ביותר הסתיים - עכשיו אנחנו יודעים איך התמרת הפורייה הקוונטית נראית בצורה שלה שתהיה לנו שימושית יותר, וגם יהיה לנו יחסית קל להבין למה המעגל הקוונטי שתכף אתאר מחשב אותה. יש רק עוד פישוט אחד אחרון שאולי כדאי לעשות: מכיוון ש-&lt;span&gt;\( N=2^{n} \)&lt;/span&gt; הרי שאפשר לכתוב &lt;span&gt;\( \sqrt{N}=2^{\frac{n}{2}} \)&lt;/span&gt; ולקבל את הנוסחה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{2^{n/2}}\bigotimes_{t=1}^{n}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולפעמים אפילו כותבים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;בתור התמרת פורייה הקוונטית. אני אישית מאוד מחבב את הצורה האחרונה, כי אחרי שמתעסקים מספיק זמן עם חישוב קוונטי כבר מתרגלים לאהוב &lt;span&gt;\( \sqrt{2} \)&lt;/span&gt; מוזרים שנדחפים לכל מקום, וכפי שנראה עוד רגע - זו גם תהיה הצורה הכי מועילה עבורנו.&lt;/p&gt;
+
+&lt;h2&gt;אז איך מחשבים את זה?&lt;/h2&gt;
+
+&lt;p&gt;סיכום החלק הקודם הוא פשוט: אנחנו רוצים לממש אופרטור קוונטי בשם &lt;span&gt;\( \text{QFT}_{N} \)&lt;/span&gt; שמקיים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)=\bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הייצוג באגף ימין, שנראה אולי מפחיד בהתחלה, מועיל &lt;strong&gt;מאוד&lt;/strong&gt; להבין מה צריך לעשות, כי זה ייצוג של מצב קוונטי בצורה פשוטה מאוד, שבה המצב של כל קיוביט מתואר &lt;strong&gt;בנפרד&lt;/strong&gt;. זה לא מצב שזור; כדי להבין איך מגיעים אליו מספיק להסתכל על כל קיוביט בתורו.&lt;/p&gt;
+
+&lt;p&gt;ראשית, בואו ניזכר בזהירות מה &lt;strong&gt;הקלט&lt;/strong&gt; שלנו פה. יש למעגל &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים, והמצב שלהם הוא &lt;span&gt;\( \left|j\right\rangle  \)&lt;/span&gt;, שאותו אני מתאר בתור &lt;span&gt;\( \left|j_{1}j_{2}\ldots j_{n}\right\rangle  \)&lt;/span&gt; - כל &lt;span&gt;\( j_{t} \)&lt;/span&gt; כאן הוא או 0 או 1.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, בואו נתחיל מהערך שאמור להגיע אל הקיוביט &lt;strong&gt;הראשון&lt;/strong&gt;. כלומר, בנוסחה לעיל זה המקרה &lt;span&gt;\( t=1 \)&lt;/span&gt; - המצב הבא:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה מצב פשוט מאוד, אבל הוא מסווה את זה היטב עם השימוש הזה ב-&lt;span&gt;\( e \)&lt;/span&gt;. בואו נראה את זה: ל-&lt;span&gt;\( j_{n} \)&lt;/span&gt; יש בדיוק שני ערכים אפשריים: או 0 או 1. אם &lt;span&gt;\( j_{n}=0 \)&lt;/span&gt; אז &lt;span&gt;\( e^{2\pi i0.j_{n}}=1 \)&lt;/span&gt; ולכן המצב הוא &lt;span&gt;\( \frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}} \)&lt;/span&gt;. אם לעומת זאת &lt;span&gt;\( j_{n}=1 \)&lt;/span&gt; אז &lt;span&gt;\( 0.j_{n}=\frac{1}{2} \)&lt;/span&gt; (זכרו - &lt;span&gt;\( 0.j_{n} \)&lt;/span&gt; הוא לא ייצוג עשרוני אלא ייצוג בינארי) ולכן &lt;span&gt;\( e^{2\pi i0.j_{n}}=e^{\pi i}=-1 \)&lt;/span&gt; (סיבוב של 180 מעלות) ונקבל &lt;span&gt;\( \frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;אז במילים אחרות, המצב שצריך לקבל תלוי בערך של &lt;span&gt;\( j_{n} \)&lt;/span&gt;, והוא&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \begin{cases} \frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}} &amp;amp; j_{n}=0\\ \frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}} &amp;amp; j_{n}=1 \end{cases} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;נראה מוכר? המצב הזה הוא &lt;strong&gt;בדיוק&lt;/strong&gt; התוצאה של &lt;span&gt;\( H\left(\left|j_{n}\right\rangle \right) \)&lt;/span&gt;. ככה &lt;span&gt;\( H \)&lt;/span&gt; מוגדר. אז ברור לנו מה לעשות - כדי לקבל את הערך שאמור להגיע אל הקיוביט &lt;strong&gt;הראשון&lt;/strong&gt; אנחנו רק צריכים להפעיל &lt;span&gt;\( H \)&lt;/span&gt; על הקיוביט &lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt;, כלומר על הקיוביט &lt;strong&gt;האחרון&lt;/strong&gt;. רגע רגע רגע, משהו לא מסתדר פה.&lt;/p&gt;
+
+&lt;p&gt;תזכרו - אם אנחנו מפעילים &lt;span&gt;\( H \)&lt;/span&gt; על הקיוביט &lt;strong&gt;האחרון&lt;/strong&gt; אנחנו משנים את הקיוביט &lt;strong&gt;האחרון&lt;/strong&gt;. זה מה ששערים עושים - משנים את הקיוביט שעליו הם מופעלים. אז מה נעשה? פשוט מאוד: נפעיל את &lt;span&gt;\( H \)&lt;/span&gt; על הקיוביט האחרון. למעשה, כל מה שיקרה מעתה ואילך הולך לייצר לנו את הפלטים &lt;strong&gt;בסדר הפוך&lt;/strong&gt; ממה שרצינו בהתחלה. זה לא נורא, כי אחרי שמסיימים לייצר את המצב שרצינו רק עם סדר קיוביטים הפוך, אפשר להפעיל שערי SWAP שמחליפים את הקיוביטים.&lt;/p&gt;
+
+&lt;p&gt;פורמלית, שער SWAP על שני קיוביטים מוגדר כך:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{SWAP}\left(\left|00\right\rangle \right)=\left|00\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{SWAP}\left(\left|01\right\rangle \right)=\left|10\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{SWAP}\left(\left|10\right\rangle \right)=\left|01\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{SWAP}\left(\left|11\right\rangle \right)=\left|11\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אם נפעיל אותו על שני קיוביטים לא שזורים, שאחד במצב &lt;span&gt;\( \alpha\left|0\right\rangle +\beta\left|1\right\rangle  \)&lt;/span&gt; והשני במצב &lt;span&gt;\( \gamma\left|0\right\rangle +\delta\left|1\right\rangle  \)&lt;/span&gt;, כלומר הם במצב המשותף&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \right)\otimes\left(\gamma\left|0\right\rangle +\delta\left|1\right\rangle \right)=\alpha\gamma\left|00\right\rangle +\alpha\delta\left|01\right\rangle +\beta\gamma\left|10\right\rangle +\beta\delta\left|11\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;נגיע אל המצב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \alpha\gamma\left|00\right\rangle +\beta\gamma\left|01\right\rangle +\alpha\delta\left|10\right\rangle +\beta\delta\left|11\right\rangle =\left(\gamma\left|0\right\rangle +\delta\left|1\right\rangle \right)\otimes\left(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, זה ישיג בדיוק את האפקט שרצינו, של החלפת הקיוביטים. איך אפשר לממש &lt;span&gt;\( \text{SWAP} \)&lt;/span&gt; שכזה? אפשר כמובן לעשות את זה כבר ברמת החומרה של המחשב הקונטי, אבל אפשר גם להשתמש בשלושה שערי &lt;span&gt;\( \text{CX} \)&lt;/span&gt; בזה אחר זה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{SWAP}_{1,2}=\text{CX}_{1,2}\text{CX}_{2,1}\text{CX}_{1,2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/swap_gate.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;עשו את החישוב בעצמכם על ארבעת אברי הבסיס ותראו שהבניה הזו אכן עובדת. אז שערי SWAP הם לא בעיה משמעותית, ומעתה ואילך נמשיך לבנות את המעגל של התמרת הפורייה הקוונטית בלי לחשוש מכך שהוא מייצר לנו את הפלטים בסדר הפוך.&lt;/p&gt;
+
+&lt;p&gt;נעבור עכשיו אל המצב השני שצריך לייצר: &lt;span&gt;\( \frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-1}j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;. כאן הסיפור כבר מסתבך כי בחזקה של &lt;span&gt;\( e \)&lt;/span&gt; מעורבות &lt;strong&gt;שתי&lt;/strong&gt; ספרות של &lt;span&gt;\( j \)&lt;/span&gt;, גם &lt;span&gt;\( j_{n} \)&lt;/span&gt; וגם &lt;span&gt;\( j_{n-1} \)&lt;/span&gt;. אם קודם פעלנו על הקיוביט &lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt;, עכשיו אנחנו רוצים לפעול על &lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt;, אבל מכיוון שהמצב שאנחנו צריכים להגיע אליו מערב גם את &lt;span&gt;\( j_{n} \)&lt;/span&gt; ברור שהקיוביט &lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt; צריך להשפיע איכשהו. ההשפעה שלו תבוא לידי ביטוי בכך שנפעיל על &lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt; שער &lt;strong&gt;מותנה&lt;/strong&gt;, כלומר כזה שמופעל אם &lt;span&gt;\( j_{n}=1 \)&lt;/span&gt; ולא מופעל אם &lt;span&gt;\( j_{n}=0 \)&lt;/span&gt;. בשביל שזה יעבוד כמו שצריך, השער המותנה הזה צריך להיות מופעל &lt;strong&gt;לפני&lt;/strong&gt; שאנחנו עושים את ה-&lt;span&gt;\( H \)&lt;/span&gt; על &lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt;, אחרת נקבל סמטוחה; זכרו שכדי לייצר מצב שזור (שזה &lt;strong&gt;לא&lt;/strong&gt; מה שאנחנו רוצים פה!) מפעילים &lt;span&gt;\( H \)&lt;/span&gt; על קיוביט כלשהו ואז &lt;span&gt;\( CX \)&lt;/span&gt; על קיוביט אחר, כך שה-&lt;span&gt;\( CX \)&lt;/span&gt; מותנה בקיוביט שהפעלנו עליו &lt;span&gt;\( H \)&lt;/span&gt;. כלומר, מה שאני מתאר עכשיו הולך לקרות &lt;strong&gt;לפני&lt;/strong&gt; הפעלת ה-&lt;span&gt;\( H \)&lt;/span&gt; על &lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt; (לא לדאוג! עוד מעט אראה דוגמא של המעגל השלם עבור שלושה קיוביטים ואז הכל יהיה ברור).&lt;/p&gt;
+
+&lt;p&gt;עכשיו, בואו ננסה להבין מה אנחנו רוצים לעשות לקיוביט &lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt;. אנחנו רוצים לייצר ממנו את &lt;span&gt;\( \left|0\right\rangle +e^{2\pi i0.j_{n-1}j_{n}}\left|1\right\rangle  \)&lt;/span&gt;, כלומר ליצור סופרפוזיציה, כשבסופרפוזיציה הזו לא מתעסקים עם &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; אבל כן מתעללים קשות במקדם של &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt;. ראינו ש-&lt;span&gt;\( H \)&lt;/span&gt; שמופעל על &lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt; הוא בעל אפקט כזה: הוא עוזב את &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; בשקט אבל כופל את המקדם של &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; ב-&lt;span&gt;\( e^{2\pi i\cdot0.j_{n-1}} \)&lt;/span&gt;. עכשיו, מה עם &lt;span&gt;\( j_{n} \)&lt;/span&gt;? ובכן, יש לנו פה את הסיטואציה הרגילה שסכום במעריך הופך למכפלה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( e^{2\pi i0.j_{n-1}j_{n}}=e^{2\pi i\left(0.j_{n-1}+0.0j_{n}\right)}=e^{2\pi i0.j_{n-1}}\cdot e^{2\pi i0.0j_{n}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, אנחנו רוצים להפעיל על המצב הקוונטי ש-&lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt; הולך אליו שער שכופל ב-1 אם &lt;span&gt;\( j_{n}=0 \)&lt;/span&gt;, אז אם &lt;span&gt;\( j_{n}=1 \)&lt;/span&gt; אז הוא כופל ב-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( e^{2\pi i\cdot0.01}=e^{\frac{2\pi i}{4}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;גם זה שער מוכר לנו: &lt;span&gt;\( e^{\frac{2\pi i}{4}}=e^{\frac{\pi i}{2}}=i \)&lt;/span&gt;, ולכן השער שרוצים לכפול בו הוא &lt;span&gt;\( S \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( S=\left(\begin{array}{cc} 1 &amp;amp; 0\\ 0 &amp;amp; i \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אבל ה-&lt;span&gt;\( S \)&lt;/span&gt; הזה, שמופעל על &lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt;, צריך להיות מותנה ב-&lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt;. איך מייצרים שער מותנה? &lt;a href=&quot;https://gadial.net/2022/08/03/quantum_computing_math_4/&quot;&gt;כבר תיארתי את זה&lt;/a&gt; בפוסט על שערים קוונטיים: אם רוצים ליצור גרסה מותנית של האופרטור &lt;span&gt;\( U \)&lt;/span&gt; מסתכלים על מטריצת הבלוקים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(\begin{array}{cc} I &amp;amp; 0\\ 0 &amp;amp; U \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, במקרה הנוכחי מפעילים את האופרטור&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(\begin{array}{cccc} 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0\\ 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; i \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזהו, זה משיג את האפקט שרצינו ואנו מקבלים &lt;span&gt;\( \left|0\right\rangle +e^{2\pi i0.j_{n-1}j_{n}}\left|1\right\rangle  \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עוד צעד אחד וכבר נבין מה קורה באופן כללי: עכשיו אנחנו רוצים לייצר מ-&lt;span&gt;\( \left|j_{n-2}\right\rangle  \)&lt;/span&gt; את המצב &lt;span&gt;\( \left|0\right\rangle +e^{2\pi i0.j_{n-2}j_{n-1}j_{n}}\left|1\right\rangle  \)&lt;/span&gt;. הרעיון כבר ברור: נפעיל &lt;span&gt;\( H \)&lt;/span&gt; על &lt;span&gt;\( \left|j_{n-2}\right\rangle  \)&lt;/span&gt; עצמו, ונפעיל &lt;span&gt;\( S \)&lt;/span&gt; מותנה על &lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt;, אבל עכשיו בשביל &lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt; צריך שער חדש - שער שהאפקט שלו הוא להשאיר את &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ללא שינוי אבל לכפול את &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; ב-&lt;span&gt;\( e^{2\pi i0.00j_{n}} \)&lt;/span&gt;, כלומר במקרה שבו &lt;span&gt;\( j_{n}=0 \)&lt;/span&gt; לא לעשות כלום (את זה משיגים בכך שהשער יהיה מותנה ב-&lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt;) ואם &lt;span&gt;\( j_{n=1} \)&lt;/span&gt; אז לכפול ב-&lt;span&gt;\( e^{2\pi i0.001}=e^{\frac{2\pi i}{2^{3}}} \)&lt;/span&gt;. אמנם, גם השער הזה חשוב מספיק כדי שיהיה לו שם משל עצמו (שער T, ועוד אדבר עליו בהמשך) אבל אנחנו מנסים להבין את הרעיון הכללי ולכן לא רוצים להמשיך להשתמש בשמות פרטניים לשערים. בשלב הזה כבר ברור שאנחנו צריכים לתת סימן כללי לשערים מהצורה &lt;span&gt;\( e^{\frac{2\pi i}{2^{s}}} \)&lt;/span&gt; עבור &lt;span&gt;\( s\ge0 \)&lt;/span&gt;. הסימון המקובל הוא&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( R_{s}=\left(\begin{array}{cc} 1 &amp;amp; 0\\ 0 &amp;amp; e^{\frac{2\pi i}{2^{s}}} \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אם כן, &lt;span&gt;\( R_{1}=Z,R_{2}=S,R_{3}=T \)&lt;/span&gt; ומשם והלאה אנחנו לא טורחים לתת להם שמות. אפשר לחשוב על זה גם ככה: &lt;span&gt;\( R_{s+1}=\sqrt{R_{s}} \)&lt;/span&gt; (כשיש לנו מטריצה אלכסונית, השורש שלה הוא המטריצה שהאיברים על האלכסון שלה הם השורש של האיברים על האלכסון במטריצה המקורית; אבל “שורש” במספרים מרוכבים הוא עניין מסובך יותר מזה ולכן זו אינטואיציה בלבד).&lt;/p&gt;
+
+&lt;p&gt;אם כן, מה שאנחנו עושים ל-&lt;span&gt;\( \left|j_{n-2}\right\rangle  \)&lt;/span&gt; הוא שלושה דברים:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;מפעילים שער &lt;span&gt;\( H \)&lt;/span&gt; על &lt;span&gt;\( \left|j_{n-2}\right\rangle  \)&lt;/span&gt; - זה מה שמייצר את הסופרפוזיציה הראשונית של &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ו-&lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; ועל הדרך גם כופל את &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; ב-&lt;span&gt;\( -1 \)&lt;/span&gt; אם &lt;span&gt;\( j_{n-2}=1 \)&lt;/span&gt; (שימו לב שאנחנו &lt;strong&gt;לא&lt;/strong&gt; משתמשים פה ב-&lt;span&gt;\( R_{1}=Z \)&lt;/span&gt;).&lt;/li&gt;
+
+
+&lt;li&gt;מפעילים על &lt;span&gt;\( \left|j_{n-2}\right\rangle  \)&lt;/span&gt; שער &lt;span&gt;\( R_{2} \)&lt;/span&gt; שמותנה ב-&lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt;.&lt;/li&gt;
+
+
+&lt;li&gt;מפעילים על &lt;span&gt;\( \left|j_{n-2}\right\rangle  \)&lt;/span&gt; שער &lt;span&gt;\( R_{3} \)&lt;/span&gt; שמותנה ב-&lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;כל זה קורה &lt;strong&gt;לפני&lt;/strong&gt; שאנחנו מטפלים בקיוביטים &lt;span&gt;\( \left|j_{n-1}\right\rangle  \)&lt;/span&gt; ו-&lt;span&gt;\( \left|j_{n}\right\rangle  \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;אם &lt;span&gt;\( n=3 \)&lt;/span&gt;, אחרי הטיפול ב-&lt;span&gt;\( \left|j_{n-2}\right\rangle =\left|j_{1}\right\rangle  \)&lt;/span&gt; בעצם סיימנו את תיאור הפעולות שאנחנו מבצעים על כל הקיוביטים במעגל. רק צריך לזכור שבסוף המעגל עושים SWAP ל-&lt;span&gt;\( \left|j_{1}\right\rangle  \)&lt;/span&gt; ול-&lt;span&gt;\( \left|j_{3}\right\rangle  \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;כך נראה המעגל במקרה הזה (האיקסים שמחוברים בקו בסיום מייצגים את ה-SWAP):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/QFT_3_qubits.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;מכאן כבר די ברור מה צריך לקרות באופן כללי כשיש לנו &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים. עבור הקיוביט ה-&lt;span&gt;\( t \)&lt;/span&gt;-י (&lt;span&gt;\( 1\le t\le n \)&lt;/span&gt;), ראשית נפעיל עליו שער &lt;span&gt;\( H \)&lt;/span&gt; ולאחר מכן נפעיל עליו באופן סדרתי את השערים &lt;span&gt;\( R_{2},R_{3},\ldots,R_{n+1-t} \)&lt;/span&gt;, כאשר השער &lt;span&gt;\( R_{k} \)&lt;/span&gt; בסדרה הזו נשלט על ידי הקיוביט ה-&lt;span&gt;\( k+t-1 \)&lt;/span&gt;. בסיום סדרת השערים הזו מתבצעים SWAP-ים: לכל &lt;span&gt;\( 1\le t\le n \)&lt;/span&gt;, הקיוביט &lt;span&gt;\( t \)&lt;/span&gt; מוחלף עם הקיוביט &lt;span&gt;\( n+1-t \)&lt;/span&gt; (כשיש מספר אי זוגי של קיוביטים מן הסתם הקיוביט האמצעי לא יוחלף עם עצמו אלא פשוט לא נעשה לו כלום.&lt;/p&gt;
+
+&lt;p&gt;המעגל הזה פשוט עד להפתיע, ביחס לכל כאב הראש שעברנו עד אליו. הוא גם קטן: יש &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים ועל כל אחד מהם מופעלים &lt;span&gt;\( O\left(n\right) \)&lt;/span&gt; שערים, כך שבסך הכל המעגל דורש &lt;span&gt;\( O\left(n^{2}\right)=O\left(\log^{2}N\right) \)&lt;/span&gt; שערים, כמו שהבטחתי בהתחלה.&lt;/p&gt;
+
+&lt;p&gt;הנה איך שזה נראה באופן כללי, רק בלי שערי ה-SWAP בסוף שקצת בעייתי לצייר:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/QFT_n_qubits.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;מה עדיין חסר לנו? שימוש כלשהו שיראה למה כל זה היה טוב. שימוש מרהיב כזה יהיה בפוסט הבא; לרוע המזל, השימוש אמנם משתמש בפורייה בצורה מרהיבה אבל אחרי הפוסט הבא כנראה נשאל את עצמנו בשביל מה משתמשים בשימוש הזה. ואז יגיע האלגוריתם של שור.&lt;/p&gt;</content><author><name></name></author><category term="חישוב קוונטי" /><summary type="html">מה זה בכלל ובשביל מה זה טוב?</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/QFT_3_qubits.png" /></entry><entry><title type="html">חישוב קוונטי בגישה מתמטית, חלק ה’: אלגוריתם דויטש-ג’וזה</title><link href="http://gadial.net/2022/08/07/quantum_computing_math_5/" rel="alternate" type="text/html" title="חישוב קוונטי בגישה מתמטית, חלק ה': אלגוריתם דויטש-ג'וזה" /><published>2022-08-07T00:00:00+00:00</published><updated>2022-08-07T00:00:00+00:00</updated><id>http://gadial.net/2022/08/07/quantum_computing_math_5</id><content type="html" xml:base="http://gadial.net/2022/08/07/quantum_computing_math_5/">&lt;h2&gt;מה אנחנו רוצים לפתור?&lt;/h2&gt;
 
 &lt;p&gt;עד עכשיו בסדרת הפוסטים על חישוב קוונטי ראינו את הבסיס המתמטית שאפשר לצמצם לכמה משפטי מחץ:&lt;/p&gt;
 
@@ -2000,120 +2310,4 @@
 
 &lt;p&gt;כל הסיפור הזה מתקשר לבעיה כללית הרבה יותר בתורת הפונקציות המרוכבות. יש כמה וכמה סיטואציות שבהן יש לנו “פונקציות” כמו שורש שיכולות להחזיר יותר מתוצאה אחת; אפשר לחשוב עליהן כאילו הן מחזירות קבוצה של תוצאות אפשריות. לעתים קרובות מה שמועיל לעשות הוא לקחת פונקציה כזו וליצור ממנה פונקציה שכן מחזירה ערך מספרי יחיד לכל קלט - פונקציה כזו נקראת &lt;strong&gt;ענף&lt;/strong&gt; של הפונקציה המקורית. האתגר הוא לבחור את הענף הזה כך שיקיים תכונות נחמדות ככל האפשר - למשל, &lt;strong&gt;רציפות&lt;/strong&gt;, כלומר ששינויים קטנים בקלט לא יובילו לשינויים גדולים בפלט. מה שראינו פה הוא שהענף של פונקציית השורש &lt;strong&gt;על המספרים הממשיים&lt;/strong&gt; שמוגדר בתור “קחו תמיד את השורש החיובי” מקיים תכונת &lt;strong&gt;כפליות&lt;/strong&gt; (פונקציה &lt;span&gt;\( f \)&lt;/span&gt; היא כפלית אם &lt;span&gt;\( f\left(ab\right)=f\left(a\right)f\left(b\right) \)&lt;/span&gt;) אבל על המספרים המרוכבים אין לנו ענף שיקיים כפליות. זה אחד מהחסרונות של שימוש במרוכבים; היתרונות כל כך גדולים שאנחנו יכולים לקבל את זה בשמחה.&lt;/p&gt;
 
-&lt;p&gt;אם כן, לסיכום: אין סתירה במתמטיקה; אין בעיה עם השימוש ב-&lt;span&gt;\( i \)&lt;/span&gt;; ואין בעיה עם &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; כל עוד אנחנו יודעים באיזה הקשר אנחנו משתמשים בו. מה שכן יש פה הוא תירוץ נפלא לכתוב פוסטים על מרוכבים.&lt;/p&gt;</content><author><name></name></author><category term="מספרים מרוכבים" /><summary type="html">המטרה שלי בפוסט הזה היא להסביר את הסתירה השערורייתית הזו במתמטיקה שאפשר לראות פה ושם:</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2021/fake_complex_root.png" /></entry><entry><title type="html">פרדוקס סימפסון</title><link href="http://gadial.net/2021/09/06/simpson_paradox/" rel="alternate" type="text/html" title="פרדוקס סימפסון" /><published>2021-09-06T00:00:00+00:00</published><updated>2021-09-06T00:00:00+00:00</updated><id>http://gadial.net/2021/09/06/simpson_paradox</id><content type="html" xml:base="http://gadial.net/2021/09/06/simpson_paradox/">&lt;p&gt;מאז שבא חיסון הקורונה לעולם קרו שני דברים: הראשון, שהוא הציל חיי אדם ומנע סבל בסדרי גודל אסטרונומיים; והשני, שהוא זכה למתקפה כוללת עליו מצד אנשים שאינם מבינים כלום בחיסונים, או במדע, או במתמטיקה, או בכלל, עד לרמת הטענות ש&lt;a href=&quot;/assets/img/2021/corona_vaccine_false_claim.png&quot;&gt;&quot;החיסון עושה אותנו חולים&quot;&lt;/a&gt;, ולמתקפה הזו יש שלל תוצאות - למשל, אנשים שמעדיפים לקחת תרופה נגד תולעים שמיועדת לסוסים מאשר להתחסן. זה לא באמת מצחיק. מגיפת הקורונה היא הזדמנות לראות כמה נזק יכולה לגרום קבוצה קטנה של שקרנים מקצועיים והקבוצה הרחבה מאוד של אנשים שלא מבינים כלום בתחום שעליו הם מדברים ומהדהדים את השקרים הלאה.&lt;/p&gt;
-
-&lt;p&gt;בפוסט הזה אני לא הולך לדבר על מגיפת הקורונה או החיסון - זה דיון שצריך להשאיר לאנשי המקצוע בתחום (אני רק אומר - אם זה עדיין רלוונטי עבורכם, תתחסנו!). אני הולך לדבר על משהו מתמטי פשוט מאוד, ועם זאת &lt;strong&gt;מאוד&lt;/strong&gt; לא אינטואיטיבי ומבלבל, שמכונה “פרדוקס סימפסון” שאומר, במשפט מחץ אחד, שמגמה כלשהי שבאה לידי ביטוי בשתי קבוצות שונות של נתונים עשויה להתהפך כשמאחדים את קבוצות הנתונים הללו. לפרדוקס הזה יכולות להיות שלל השלכות שונות ומשונות, אבל בהקשר שלנו הדוגמא המומצאת שבה אני הולך להשתמש כדי להדגים את המתמטיקה שלו היא זו: האם ייתכן שהסטטיסטיקה של חיסוני הקורונה תראה שאלו דווקא אלו ש&lt;strong&gt;אינם מחוסנים&lt;/strong&gt; שנפגעים פחות קשה מהנגיף, למרות שחד משמעית מי שמחוסנים דווקא מוגנים &lt;strong&gt;יותר&lt;/strong&gt; מפגיעה קשה של הנגיף? התשובה היא שזה בהחלט ייתכן, וזה תמרור אזהרה &lt;strong&gt;ענקי&lt;/strong&gt; מפני ציטוט חסר מחשבה של נתונים סטטיסטיים שטחיים מדי.&lt;/p&gt;
-
-&lt;p&gt;אם כן, הבה נעזוב את הקורונה ונדבר על נגיף בדיוני שנקרא “שרונה”. שרונה דומה לקורונה בכך שהפגיעה שלו במבוגרים היא קשה משמעותית יותר מהפגיעה שלו בילדים: בקרב מבוגרים, אחד מכל שני מבוגרים שחלה בשרונה יגיע למצב קשה; בקרב ילדים, רק אחד מכל מאה ילדים שחלה בשרונה יגיע למצב קשה. אנחנו אומרים על זה ש&lt;strong&gt;ההסתברות&lt;/strong&gt; של מבוגר לחלות קשה היא &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; וההסתברות של ילד היא &lt;span&gt;\( \frac{1}{100} \)&lt;/span&gt;. אם ניקח מדגם אקראי של בערך 1000 מבוגרים שחלו בשרונה, נצפה שבערך 500 מהם יגיעו למצב קשה; אם ניקח מדגם כזה עבור ילדים נצפה שרק 10 מהם יגיעו למצב קשה.&lt;/p&gt;
-
-&lt;p&gt;והנה הגיע היום המיוחל והחל מבצע חיסון נגד שרונה. מכיוון שאני מספר כל-יודע ואני זה שקובע מה קורה &lt;strong&gt;באמת&lt;/strong&gt; לשרונה בגלל החיסון, אספר לכם שההשפעה של החיסון היא זו: הוא מפחית פי 5 את כמות החולים קשה, ומציל בזאת את בתי החולים מקריסה ואת המדינה מאפוקליפסה. חיסון טוב!&lt;/p&gt;
-
-&lt;p&gt;כלומר, בקרב המבוגרים, החיסון מפחית את ההסתברות שמבוגר יגיע למצב קשה מ-&lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; אל &lt;span&gt;\( \frac{1}{10} \)&lt;/span&gt;. בקרב ילדים, ההסתברות יורדת מ-&lt;span&gt;\( \frac{1}{100} \)&lt;/span&gt; אל &lt;span&gt;\( \frac{1}{500} \)&lt;/span&gt; - רק אחד מבין 500 ילדים חולים יגיע למצב קשה. חיסון טוב!&lt;/p&gt;
-
-&lt;p&gt;זמן מה לאחר תחילת מבצע החיסונים, נערך מחקר שמטרתו לקבוע האם החיסון מסייע או לא. המחקר נערך בדקדקנות: מדגם בן 10,000 איש מאוכלוסיית החולים נבחר כך ש-5,000 איש ממנו מחוסנים, ו-5,000 אינם מחוסנים. כעת נבדק מי מהחולים הגיע למצב קשה. במחקר התבררו הנתונים הבאים:&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;מבין &lt;strong&gt;המחוסנים&lt;/strong&gt;, 451 איש הגיעו למצב קשה. כלומר, בערך &lt;span&gt;\( 9\% \)&lt;/span&gt; מהמחוסנים.&lt;/li&gt;
-
-
-&lt;li&gt;מבין &lt;strong&gt;הלא מחוסנים&lt;/strong&gt;, 295 איש הגיעו למצב קשה. כלומר, &lt;span&gt;\( 5.9\% \)&lt;/span&gt; מהלא-מחוסנים.&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;הנתון המזעזע והחד משמעי הזה מופץ תוך שלוש שניות ברשתות החברתיות תחת הטענה שהחיסון &lt;strong&gt;מגדיל&lt;/strong&gt; את הסיכון לחלות קשה ולכן &lt;strong&gt;אסור בשום פנים ואופן להתחסן&lt;/strong&gt;. מבצע החיסונים נעצר, בתי החולים עולים על גדותיהם עקב המחלה והמדינה קורסת לאפוקליפסה. הכל בגלל מחקר קטן!&lt;/p&gt;
-
-&lt;p&gt;מה הלך פה? הרי אמרתי שאני כל יודע והבטחתי לכם חגיגית שהחיסון מסייע. מה הוביל לתוצאות המזעזעות הללו של המחקר? ובכן, נפלנו קורבן לפרדוקס סימפסון.&lt;/p&gt;
-
-&lt;p&gt;האם שיקרתי לגבי הנתונים המספריים? ודאי שלא, ואני הולך לפרט באופן מדוקדק את כל החישובים שלי כדי שנראה שהכל מסתדר.&lt;/p&gt;
-
-&lt;p&gt;הנתון ש”הינדסתי” (כלומר, שיחקתי איתו באקסל עד שהמספרים יסתדרו לי יפה) הוא כמות המחוסנים והלא מחוסנים מקרב המבוגרים והילדים שהשתתפו במחקר. בסופו של דבר קבעתי את הדבר הבא:&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;במחקר יהיו 5,000 מבוגרים שמתוכם 4,500 מחוסנים ו-500 אינם מחוסנים.&lt;/li&gt;
-
-
-&lt;li&gt;במחקר יהיו 5,000 ילדים שמתוכם 500 מחוסנים ו-4,500 אינם מחוסנים.&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;האם סיטואציה כזו היא מציאותית בכלל? ובכן, אני &lt;strong&gt;לא צריך&lt;/strong&gt; שהיא תהיה מציאותית כי אני מדגים כאן עיקרון מתמטי, אבל למעשה גם במגיפת הקורונה קרה דבר דומה - כמות המחוסנים בקרב מבוגרים הייתה גדולה משמעותית מכמות המחוסנים בקרב הילדים. במקרה של הקורונה היו לכך שתי סיבות: ראשית, חלק גדול מהילדים &lt;strong&gt;לא יכלו להתחסן&lt;/strong&gt; כלל כי החיסון ניתן בתחילה רק לגילאים 18 ומעלה, ולקח זמן רק עד שהרחיבו אותו לבני 12 ומעלה; ושנית, מכיוון שמחלת הקורונה פוגעת &lt;strong&gt;פחות&lt;/strong&gt; בילדים (אבל עדיין פוגעת), הורים לילדים נטו פחות לחסן אותם ויותר להסס. באופן כללי, ככל ששכבת הגיל עלתה ולכן הסיכון מפגיעת הקורונה עלה, כך עלה גם אחוז החיסון באותה שכבת גיל.&lt;/p&gt;
-
-&lt;p&gt;אם כן, החלוקה למחוסנים/לא מחוסנים שהצעתי היא סבירה והגיונית, והיא גם &lt;strong&gt;מובילה ישירות&lt;/strong&gt; לתוצאת המחקר המוזרה שקיבלנו. אתם כבר יכולים לעשות בעצמכם את החישובים על סמך הנתונים שנתתי, אבל אני אפרט אותם בכל מקרה.&lt;/p&gt;
-
-&lt;table&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;חולה קשה&lt;/th&gt;
-&lt;th&gt;חולה קל&lt;/th&gt;
-&lt;th&gt;סך הכל&lt;/th&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;מבוגר מחוסן&lt;/td&gt;
-&lt;td&gt;450&lt;/td&gt;
-&lt;td&gt;4050&lt;/td&gt;
-&lt;td&gt;4500&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;מבוגר לא מחוסן&lt;/td&gt;
-&lt;td&gt;250&lt;/td&gt;
-&lt;td&gt;250&lt;/td&gt;
-&lt;td&gt;500&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;ילד מחוסן&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;499&lt;/td&gt;
-&lt;td&gt;500&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;ילד לא מחוסן&lt;/td&gt;
-&lt;td&gt;45&lt;/td&gt;
-&lt;td&gt;4455&lt;/td&gt;
-&lt;td&gt;4500&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;מחוסנים סך הכל&lt;/td&gt;
-&lt;td&gt;451&lt;/td&gt;
-&lt;td&gt;4549&lt;/td&gt;
-&lt;td&gt;5000&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;לא מחוסנים סך הכל&lt;/td&gt;
-&lt;td&gt;295&lt;/td&gt;
-&lt;td&gt;4705&lt;/td&gt;
-&lt;td&gt;5000&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;/table&gt;
-
-&lt;p&gt;אם כן, אמרתי שיש 500 מבוגרים &lt;strong&gt;לא מחוסנים&lt;/strong&gt; והסיכוי של מבוגר לא מחוסן לחלות קשה היא &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt;, אז יהיו לי 250 מבוגרים לא מחוסנים חולים קשה, ו-250 חולים קל (במציאות המציאותית המספרים אף פעם לא יהיו מדויקים כל כך, אבל יותר קל לראות את העיקרון המתמטי אם שומרים על המספרים פשוטים). יש 4,500 מבוגרים &lt;strong&gt;מחוסנים&lt;/strong&gt; ואצלם הסיכוי לחלות קשה ירד ל-&lt;span&gt;\( \frac{1}{10} \)&lt;/span&gt;, כלומר יהיו רק 450 חולים קשה והיתר חולים קל.&lt;/p&gt;
-
-&lt;p&gt;נעבור לילדים: אצל הלא מחוסנים, רק 1 מכל מאה חולה קשה, ומכיוון שיש 4,500 לא מחוסנים, יהיו לנו 45 חולים קשה. לעומת זאת בקרב המחוסנים רק 1 מכל 500 חולה קשה, ובאופן פלאי (!) בחרתי את המספרים כך שיהיו בדיוק 500 מחוסנים כך שבדיוק 1 מהם חולה קשה.&lt;/p&gt;
-
-&lt;p&gt;אם כן, נסכם: מספר החולים קשה הכולל &lt;strong&gt;בקרב מחוסנים&lt;/strong&gt; הוא &lt;span&gt;\( 450+1=451 \)&lt;/span&gt;, ואילו מספר החולים קשה &lt;strong&gt;בקרב לא מחוסנים&lt;/strong&gt; הוא &lt;span&gt;\( 250+45=295 \)&lt;/span&gt;. זה מוביל לתוצאה המפתיעה שתיארתי.&lt;/p&gt;
-
-&lt;p&gt;ובכן, החישוב המתמטי היה &lt;strong&gt;פשוט מאוד&lt;/strong&gt;, אפשר להסביר אותו גם לתלמידי בית ספר יסודי. אבל מה הולך פה? איך יוצא שהמחקר מראה שהחיסון מזיק, בזמן שהוא מועיל?&lt;/p&gt;
-
-&lt;p&gt;אפשר היה אולי להבין את זה אם החיסון היה מועיל &lt;strong&gt;פחות&lt;/strong&gt; לילדים. נאמר, במקום להקטין את ההסתברות לחלות קשה פי 5, היה מקטין אותה רק פי 2. גם בסיטואציה כזו עדיין נראה לא הגיוני שהמחקר הכולל יגיד שהחיסון רק מזיק, בהתחשב בכך שהוא מועיל לכולם, אבל לפחות אפשר לנחש שחלק מהבעיה נובעת מהאופן השונה שבו אוכלוסיית הילדים מגיבה לחיסון. אבל פה הינדסתי את הנתונים בכוונה כדי שזה לא יהיה רלוונטי - החיסון משפיע &lt;strong&gt;באותה צורה בדיוק&lt;/strong&gt; על שתי האוכלוסיות מבחינת הקטנת רמת הסיכון למחלה קשה, ועדיין המחקר לא מראה את זה.&lt;/p&gt;
-
-&lt;p&gt;בעיה פוטנציאלית אחרת שהינדסתי את הנתונים כדי שנראה שאינה מתקיימת היא &lt;strong&gt;חלוקה לא מאוזנת&lt;/strong&gt; של המדגם. כפי שאמרתי, המדגם נבחר בקפידה כדי שבדיוק חצי ממנו יהיו מחוסנים וחצי לא מחוסנים, אבל בנוסף לכך בדיוק חצי ממנו הוא מבוגרים וחצי הוא ילדים, כך שברור שהתוצאה המוזרה לא נובעת מכך שלקחתי, נאמר, הרבה יותר ילדים משהייתי אמור.&lt;/p&gt;
-
-&lt;p&gt;אם כן, מה &lt;strong&gt;כן&lt;/strong&gt; גורם לבעיה? מן הסתם, הדברים היחידים שמבדילים בין ילדים למבוגרים - כמה כל אוכלוסיה פגיעה מלכתחילה למחלה, ומה רמת החיסון בכל אוכלוסיה. מכיוון שיש הרבה יותר מחוסנים בקרב המבוגרים &lt;strong&gt;וגם&lt;/strong&gt; מבוגרים נוטים לחלות קשה הרבה יותר מילדים, &lt;strong&gt;גם עם החיסון&lt;/strong&gt;, כמות החולים קשה בקרב המחוסנים יוצאת גבוהה. מכיוון שרוב הלא מחוסנים הם ילדים, והם ממילא נפגעים הרבה פחות, יש הרבה פחות לא מחוסנים שחלו קשה. שימו לב שאין כאן שום עניין אקראי או סתם חוסר מזל: בפועל, אנחנו בהחלט מצפים שתהיה קורלציה בין “כמה קשה האוכלוסיה נפגעת” ו”כמה האוכלוסיה מחוסנת” כי מי שנפגעים יותר קשה יהיו אלו שיקפידו יותר להתחסן כדי לצמצם את הפגיעה הזו. כלומר, האפקט של פרדוקס סימפסון אפילו &lt;strong&gt;צפוי&lt;/strong&gt; להופיע בסיטואציה כמו זו.&lt;/p&gt;
-
-&lt;p&gt;אז מה “הפתרון” של הפרדוקס? כמו בכל דבר שמצמידים לו את השם “פרדוקס”, אין ממש “פתרון” משביע רצון שלו כי אין פה שום טעות. סיטואציה פרדוקסלית היא כזו שגורמת לנו להבין שמשהו היה שגוי עם הנחות היסוד שלנו - בראש ובראשונה, הציפייה שמחקר כמו זה שתיארתי לעיל יתן תוצאה בעלת משמעות ולא ג’יבריש. מחקר שמנותח בצורה נאיבית כל כך פשוט &lt;strong&gt;לא יכול&lt;/strong&gt; לתת תוצאות שאינן ג’יבריש. צריך להביא בחשבון בצורה זהירה מאוד את האפשרות שהתופעה שאותה חוקרים אינה אחידה בכל האוכלוסיה, ולהתחשב בכך באופן ביצוע המחקר. ה”פתרון” הוא פשוט לא להסתכל על &lt;strong&gt;סך הכל&lt;/strong&gt;, כי אותו “סך הכל” לא נותן לי אינפורמציה מועילה; אני &lt;strong&gt;חייב&lt;/strong&gt; להפריד לתת-אוכלוסיות כדי להסיק מידע מועיל.&lt;/p&gt;
-
-&lt;p&gt;בואו נראה את זה בפעולה. כזכור, בניסוי השגוי המקורי הסתכלתי על כמות החולים קשה מבין המחוסנים/לא מחוסנים והסקתי מסקנה כך: מבין המחוסנים היו 451 חולים קשה מתוך 5,000, כלומר 9%. מבין הלא מחוסנים היו 295 חולים קשה מתוך 5,000, כלומר 5.9%. ה”מסקנה”: החיסון מגדיל את הסיכוי לחלות בערך פי 1.5.&lt;/p&gt;
-
-&lt;p&gt;אם נסתכל על המבוגרים בלבד, לעומת זאת, נראה שמבין המחוסנים היו 450 חולים קשה מתוך 4,500, כלומר 10%. מבין הלא מחוסנים היו 250 חולים קשה מתוך 500, כלומר 50%. המסקנה: החיסון מקטין את הסיכוי לחלות בקרב מבוגרים פי 5.&lt;/p&gt;
-
-&lt;p&gt;אם נסתכל על הילדים בלבד, נראה שמבין המחוסנים היה חולה קשה אחד מתוך 500, כלומר 0.2%. מבין הלא מחוסנים היו 45 מתוך 4,500, כלומר 1%. המסקנה: החיסון מקטין את הסיכוי לחלות בקרב ילדים פי 5.&lt;/p&gt;
-
-&lt;p&gt;במקרה שלנו, אלו התוצאות הנכונות - אחרי שפילחנו נכון את המחקר על פי המשתנה הנוסף הרלוונטי (מבוגר/ילד) הפקנו את האינפורמציה האמיתית שבבסיס המודל שלי. אבל אם נקבל דבר כזה במציאות, האם זה סוף הסיפור? בוודאי שלא. גם אחרי פילוח כזה פרדוקס סימפסון עשוי להכות אותנו - אולי צריך לפלח עוד יותר את תת-האוכלוסיות, על פי נתונים רלוונטיים נוספים? זכרו שפרדוקס סימפסון יכול להטות את הכף גם לצד השני - לגרום לחיסון &lt;strong&gt;מזיק&lt;/strong&gt; להיראות כאילו הוא מועיל.&lt;/p&gt;
-
-&lt;p&gt;אז מה המסקנה שלי? שסטטיסטיקה זה עסק רציני שלא צריך לעסוק בו כלאחר יד, בטח לא על בסיס נתון מספרי חלקי מאוד שמופץ באינטרנט. לרוע המזל, זה &lt;strong&gt;בדיוק&lt;/strong&gt; מה שעושה רוב האינטרנט (וגם אני, ללא ספק, חוטא בזה לעתים קרובות). בידי רמאים ושקרנים פרדוקס סימפסון הוא נשק רב עוצמה ביותר - רוב האנשים שיפיצו הלאה שקר כמו זה של “תוצאת” המחקר המדומה שלי למעלה לא יבינו בכלל איך משהו פה יכול להשתבש. הם לא יעלו על דעתם שיש משהו כמו פרדוקס סימפסון בעולם. אולי כדאי ללמד עליו בבתי הספר? אבל גם אז, מי יזכור? מי יקשר את מה שנלמד בבית הספר למגיפה האיומה שפוגעת בנו כאן ועכשיו ויש לנו חוסר ביטחון גדול בנוגע לכל אספקט של ההתמודדות איתה, ובפרט החיסון?&lt;/p&gt;
-
-&lt;p&gt;כבר מראשית ימי הבלוג רציתי לכתוב על פרדוקס סימפסון ולא יצא. ניסיתי להמציא כל מני תרחישים דמיוניים שיהיה כיף לכתוב עליהם, כל מני דברים עם חדי קרן שיורקים קשת בענן ומה קורה אם נותנים להם סוכריות טופי שונות ומשונות, ושאר דברים כיפיים. לא יצא, ועכשיו הדוגמא שלי מגיעה בדיוק מאותו עולם שרציתי להימנע ממנו - מגיפות. אני רציתי להימנע מהעולם הזה, אבל העולם הזה לא רצה להימנע מאיתנו, וזה מכריח את כולנו להתייחס אליו ברצינות, גם ברמת הבנת המתמטיקה שלו. או לכל הפחות, להכיר בכך שזה גדול עלינו ולא לעסוק בזה, כי מהפצת טענות שקריות לגמרי נפגעים אנשים אמיתיים לגמרי.&lt;/p&gt;</content><author><name></name></author><category term="פרדוקס סימפסון" /><category term="סטטיסטיקה" /><summary type="html">מאז שבא חיסון הקורונה לעולם קרו שני דברים: הראשון, שהוא הציל חיי אדם ומנע סבל בסדרי גודל אסטרונומיים; והשני, שהוא זכה למתקפה כוללת עליו מצד אנשים שאינם מבינים כלום בחיסונים, או במדע, או במתמטיקה, או בכלל, עד לרמת הטענות ש&quot;החיסון עושה אותנו חולים&quot;, ולמתקפה הזו יש שלל תוצאות - למשל, אנשים שמעדיפים לקחת תרופה נגד תולעים שמיועדת לסוסים מאשר להתחסן. זה לא באמת מצחיק. מגיפת הקורונה היא הזדמנות לראות כמה נזק יכולה לגרום קבוצה קטנה של שקרנים מקצועיים והקבוצה הרחבה מאוד של אנשים שלא מבינים כלום בתחום שעליו הם מדברים ומהדהדים את השקרים הלאה.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2021/simpson_paradox.png" /></entry></feed>
+&lt;p&gt;אם כן, לסיכום: אין סתירה במתמטיקה; אין בעיה עם השימוש ב-&lt;span&gt;\( i \)&lt;/span&gt;; ואין בעיה עם &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; כל עוד אנחנו יודעים באיזה הקשר אנחנו משתמשים בו. מה שכן יש פה הוא תירוץ נפלא לכתוב פוסטים על מרוכבים.&lt;/p&gt;</content><author><name></name></author><category term="מספרים מרוכבים" /><summary type="html">המטרה שלי בפוסט הזה היא להסביר את הסתירה השערורייתית הזו במתמטיקה שאפשר לראות פה ושם:</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2021/fake_complex_root.png" /></entry></feed>
