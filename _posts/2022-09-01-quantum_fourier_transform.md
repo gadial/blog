@@ -177,7 +177,7 @@ image: "2022/QFT_3_qubits.png"
 
 ובואו ננסה להגיע ממנה אל "הביטוי המפלצתי". הדבר היחיד בהגדרה הרגילה שעדיין לא מסתדר לנו טוב הוא ה-{% equation %}k{% endequation %} הזה. כזכור, הפישוט המאוד נחמד של {% equation %}e^{2\pi i\cdot\left(k\cdot\frac{j}{2^{n}}\right)}{% endequation %} שעשיתי קודם שבו נפטרתי מכל הספרות משמאל לנקודה הניח ש-{% equation %}k{% endequation %} הוא <strong>חזקה של </strong><strong>2</strong> וזה בוודאי לא מה שקורה כשמריצים את {% equation %}k{% endequation %} על כל המספרים מ-0 עד {% equation %}N-1{% endequation %}. כדי להתמודד עם הבעיה הזו, אנחנו עוברים להתבונן על <strong>הייצוג הבינארי</strong> של {% equation %}k{% endequation %}. מכיוון ש-{% equation %}0\le k\le N-1=2^{n}-1{% endequation %} אפשר לייצג את {% equation %}k{% endequation %} בעזרת {% equation %}n{% endequation %} ספרות בינאריות. נכתוב {% equation %}k=k_{1}k_{2}\ldots k_{n}{% endequation %}, כלומר שוב ה-{% equation %}k_{1}{% endequation %} יהיה הספרה המשמעותית ביותר, מה שאומר שבייצוג בתור סכום נקבל
 
-{% equation %}k=\sum_{t=1}^{n}2^{n-t}k_{i}{% endequation %}
+{% equation %}k=\sum_{t=1}^{n}2^{n-t}k_{t}{% endequation %}
 
 זוכרות שקודם מתישהו כפלתי ב-{% equation %}2^{n-t}{% endequation %} במקום ב-{% equation %}2^{t}{% endequation %} שנראה יותר טבעי? אז הנה איך {% equation %}2^{n-t}{% endequation %} צץ לו.
 
