@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>חישוב קוונטי: אלגוריתם הערכת פאזה | לא מדויק</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="חישוב קוונטי: אלגוריתם הערכת פאזה" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="התמרת פורייה הקוונטית הייתה קסם, והערכת פאזה מתבססת עליה כדי לעשות קסם בריבוע" />
+<meta property="og:description" content="התמרת פורייה הקוונטית הייתה קסם, והערכת פאזה מתבססת עליה כדי לעשות קסם בריבוע" />
+<link rel="canonical" href="http://gadial.net/2022/09/06/phase_estimation_algorithm/" />
+<meta property="og:url" content="http://gadial.net/2022/09/06/phase_estimation_algorithm/" />
+<meta property="og:site_name" content="לא מדויק" />
+<meta property="og:image" content="http://gadial.net/2022/phase_estimation.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-06T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:image" content="http://gadial.net/2022/phase_estimation.png" />
+<meta property="twitter:title" content="חישוב קוונטי: אלגוריתם הערכת פאזה" />
+<meta name="twitter:site" content="@" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","url":"http://gadial.net/2022/09/06/phase_estimation_algorithm/","image":"http://gadial.net/2022/phase_estimation.png","headline":"חישוב קוונטי: אלגוריתם הערכת פאזה","dateModified":"2022-09-06T00:00:00+00:00","datePublished":"2022-09-06T00:00:00+00:00","description":"התמרת פורייה הקוונטית הייתה קסם, והערכת פאזה מתבססת עליה כדי לעשות קסם בריבוע","mainEntityOfPage":{"@type":"WebPage","@id":"http://gadial.net/2022/09/06/phase_estimation_algorithm/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link href="/assets/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon"><link type="application/atom+xml" rel="alternate" href="http://gadial.net/feed.xml" title="לא מדויק" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-3924539-2', 'auto');
+  ga('send', 'pageview');
+}
+</script>
+  
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        processEscapes: true
+      },
+      TeX: {extensions: ["AMSmath.js","AMSsymbols.js"]},
+      "HTML-CSS": { 
+        linebreaks: { automatic: true }
+      },
+      SVG: { 
+        linebreaks: { automatic: true } 
+      }
+    });
+  </script>
+  <!-- "https://www.gadial.net/wp-includes/js/xypic.js" -->
+
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+
+</head>
+<body><header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="/">לא מדויק</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/lecture_notes">סיכומי הרצאות</a>
+            </li>
+            
+        
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">דף הבית</a>
+            </li>
+            
+        
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/categories">קטגוריות</a>
+            </li>
+            
+        
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/random">דף אקראי</a>
+            </li>
+            
+        
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/about/">אודות</a>
+            </li>
+            
+        
+      </ul>
+      <form class="form-inline mt-2 mt-md-0" action="/post_list/" method="get">
+        <input class="form-control mr-sm-2" type="text" placeholder="חיפוש" aria-label="חיפוש" name="s">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">חיפוש</button>
+      </form>
+    </div>
+  </nav>
+</header><main class="page-content" aria-label="Content" role="main">
+      <div class="wrapper text-right">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting"><div class="PageNavigation">
+    
+      <a class="prev" href="/2022/09/01/quantum_fourier_transform/">&laquo; התמרת פורייה הקוונטית</a>
+    
+    
+  </div><header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">חישוב קוונטי: אלגוריתם הערכת פאזה</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-09-06T00:00:00+00:00" itemprop="datePublished">Sep 6, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2>מה זה בכלל ובשביל מה זה טוב?</h2>
+
+<p>האלגוריתם הקוונטי שאני רוצה להציג בפוסט הזה, <strong>אלגוריתם הערכת פאזה</strong>, הוא פשוט קסם. מה שהוא עושה הוא קסם. האופן שבו הוא עושה את זה הוא קסם. האופן שבו זה משתלב עם התמרת פורייה הקוונטית שעליה <a href="https://gadial.net/2022/09/01/quantum_fourier_transform/">דיברתי בפוסט הקודם</a> הוא קסם. הדבר היחיד שאינו קסם, חוץ מההוכחה הפורמלית שהכל עובד והיא טכנית למדי, הוא להבין בשביל מה זה טוב. אז אני אשתמש באותו תירוץ שהשתמשתי בו בפוסט על התמרת פורייה הקוונטית - זה הכלי המרכזי שבו משתמש האלגוריתם של שור לפירוק לגורמים. למעשה, אפשר לחשוב על כל החלק הקוונטי באלגוריתם של שור בתור מקרה פרטי של אלגוריתם הערכת פאזה. אבל בשביל זה באמת צריך להסביר מה זה האלגוריתם הזה ומה הוא עושה.</p>
+
+<p>הרעיון בהערכת פאזה הוא זה: נניח שיש לנו מרחב על <span>\( m \)</span> קיוביטים, כלומר <span>\( \mathbb{C}^{2^{m}} \)</span>, ועל המרחב הזה מוגדר לנו אופרטור אוניטרי <span>\( U:\mathbb{C}^{2^{m}}\to\mathbb{C}^{2^{m}} \)</span>, ואני מניח שלאופרטור הזה יש וקטור עצמי, <span>\( \left|u\right\rangle  \)</span>. עכשיו, הערכים העצמיים של אופרטורים אוניטריים הם תמיד מנורמה 1, אז אפשר לכתוב את הערך העצמי שמתאים ל-<span>\( \left|u\right\rangle  \)</span> בתור <span>\( e^{2i\pi\cdot\varphi} \)</span>, כאשר המספר <span>\( \varphi \)</span> נקרא <strong>הפאזה</strong> של הערך העצמי. המטרה שלנו היא לחשב את <span>\( \varphi \)</span>, עד רמת דיוק מסויימת שנוכל לשלוט עליה ולהגדיל אותה כרצוננו; אבל מכיוון שתמיד נקבל מספר רציונלי ו-<span>\( \varphi \)</span> עשוי להיות אי רציונלי, גם ברמת דיוק גבוהה עדיין ייתכן שנקבל רק <strong>הערכה</strong> של הערך של <span>\( \varphi \)</span>, ומכאן שם האלגוריתם.</p>
+
+<p>זה אלגוריתם מעניין למדי כבר בשלב הזה, כי הוא עושה משהו שלא ראינו עד כה - מחשב ערך מספרי כלשהו ומחזיר אותו לנו. לא לגמרי ברור איך עושים את זה, או למה זה חשוב; עד סוף הפוסט אני מקווה שחלק מהערפל הזה קצת יתבהר, אבל לשימושים לא נגיע הפעם.</p>
+
+<h2>אלגוריתם הערכת פאזה, תיאור פורמלי וקסום</h2>
+
+<p>אבני הבניין שמהן אנו בונים את אלגוריתם הערכת הפאזה הן שלוש: קודם כל, אנו נעזרים ב-<span>\( n \)</span> קיוביטים שמאותחלים ל-<span>\( \left|0^{n}\right\rangle  \)</span>, כאשר <span>\( n \)</span> מתאר את רמת הדיוק שלנו - אנחנו הולכים לקבל כפלט מספר בן <span>\( n \)</span> ספרות בינאריות אחרי הנקודה שהוא קירוב של <span>\( \varphi \)</span> (ואם <span>\( \varphi \)</span> עצמו ניתן לתיאור מדויק באמצעות <span>\( n \)</span> ספרות בינאריות אחרי הנקודה, נקבל אותו במדויק). שנית, אנו נעזרים ב-<span>\( t \)</span> קיוביטים נוספים שהמצב שלהם בתחילת האלגוריתם הוא <span>\( \left|u\right\rangle  \)</span>, הוקטור העצמי שאת הפאזה שלו מחפשים (בפוסט על האלגוריתם של שור נראה שלא באמת <strong>חייבים</strong> לדעת את <span>\( \left|u\right\rangle  \)</span>). לבסוף, אנחנו מניחים שיש לנו יכולת לבנות מעגל שמחשב את <span>\( U \)</span>, אבל יותר מזה - גם את <span>\( U^{2},U^{4},U^{8},\ldots \)</span> וכדומה, עבור חזקות <span>\( U^{2^{t}} \)</span> עם <span>\( t\ge0 \)</span>. למה רק חזקות של 2? כי נראה שהן יספיקו לנו כדי לחשב את כל החזקות של <span>\( U \)</span> שנזדקק להן.</p>
+
+<p>בהינתן שיש לנו את כל אלו (וזו לא הנחה טריוויאלית), אלגוריתם הערכת הפאזה די קל לתיאור קונספטואלי. אני אקרא לקיוביטים שאותחלו ל-<span>\( \left|0^{n}\right\rangle  \)</span> בשם “הרגיסטר הראשון” ולקיוביטים שמהווים את <span>\( \left|u\right\rangle  \)</span> בשם “הרגיסטר השני”, וכעת מה שעושים הוא:</p>
+
+<ul> <li>מפעילים <span>\( H \)</span> על כל אברי הרגיסטר הראשון.</li>
+
+
+<li>מפעילים את הטרנספורמציה <span>\( \left|k\right\rangle \left|u\right\rangle \mapsto\left|k\right\rangle U^{k}\left|u\right\rangle  \)</span> על שני הרגיסטרים.</li>
+
+
+<li>מפעילים את <span>\( \text{QFT}_{N}^{\dagger} \)</span> על הרגיסטר הראשון.</li>
+
+
+<li>מודדים את הרגיסטר הראשון. תוצאת המדידה תהיה הקירוב המבוקש.</li>
+
+</ul>
+
+<p>בתור מין מעגל סכמטי, זה נראה כך:</p>
+
+<p><img src="/assets/img/2022/phase_estimation_overview.png" alt="" /></p>
+
+<p>אבל כרגע רב הנסתר על המרובה. להפעיל <span>\( H \)</span> על אברי הרגיסטר הראשון - את זה אנחנו כבר מבינים, וגם יודעים שזה מייצר לנו את המצב <span>\( \left|+^{n}\right\rangle  \)</span>. אבל איך מבצעים את הטרנספורמציה <span>\( \left|k\right\rangle \left|u\right\rangle \mapsto\left|k\right\rangle U^{k}\left|u\right\rangle  \)</span> ומה זה <span>\( \text{QFT}_{N}^{\dagger} \)</span>? נתחיל מהשני. בפוסט הקודם על התמרת פורייה תיארנו מעגל שמחשב את <span>\( \text{QFT}_{N} \)</span>. הסימון <span>\( \text{QFT}_{N}^{\dagger} \)</span> פשוט מייצג את הטרנספורמציה <strong>ההופכית</strong>. קל לחשב אותה, כי חישוב קוונטי שלא מערב מדידות הוא <strong>הפיך</strong> - פשוט לוקחים את המעגל של <span>\( \text{QFT}_{N} \)</span> ושמים את כל השערים שלו בסדר הפוך. פורמלית, מה שמשתמשים בו בהערכת פאזה הוא לא “התמרת פורייה הקוונטית” אלא “התמרת פורייה הקוונטית ההפוכה”, ועוד מעט ייפול לנו גם האסימון למה.</p>
+
+<p>השאלה השניה היא איך מחשבים את <span>\( \left|k\right\rangle \left|u\right\rangle \mapsto\left|k\right\rangle U^{k}\left|u\right\rangle  \)</span>, וכאן זה הולך להיות דומה <strong>מאוד</strong> למה שקרה בהתמרת פורייה הקוונטית. כל כך דומה, שאני ממליץ בחום לחזור ולקרוא את הפוסט ההוא למי שדילגו עליו (מצד שני, אולי זה פשוט יותר כאן, ויקל על מי שנתקעו בפוסט ההוא?)</p>
+
+<p>כזכור, אנחנו אוהבים ייצוג <strong>בינארי</strong> של מספרים. הייצוג הבינארי של מספר <span>\( k \)</span> הוא ייצוג בתור <span>\( k=\sum_{t=1}^{n}2^{n-t}k_{t} \)</span> כך ש-<span>\( k_{t}\in\left\{ 0,1\right\}  \)</span>. עכשיו, אפשר לפרק העלאה כללית בחזקת <span>\( k \)</span> למכפלה של העלאות בחזקות של 2:</p>
+
+<p><span>\( U^{k}=U^{\sum_{t=1}^{n}2^{n-t}k_{t}}=\prod_{t=1}^{n}U^{2^{n-t}k_{t}}=\prod_{k_{t}=1}U^{2^{n-t}} \)</span></p>
+
+<p>אז האפקט שאנחנו רוצים הוא בעצם:</p>
+
+<p><span>\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle \left|u\right\rangle \mapsto\left|k_{1}k_{2}\ldots k_{n}\right\rangle \prod_{k_{t}=1}U^{2^{n-t}}\left|u\right\rangle  \)</span></p>
+
+<p>ראינו משהו דומה לזה בפוסט על פורייה, ושם הטריק שלנו היה שאפשר לעבור מסכום של <span>\( 2^{n} \)</span> איברים שכל אחד מהם הוא מכפלה של <span>\( n \)</span> קיוביטים (כלומר, הסכום הוא על כל המכפלות האפשריות) אל מכפלה טנזורית של <span>\( n \)</span> הקיוביטים שכל אחד מהם הוא בסופרפוזיציה של בדיוק שני מצבים. אני ארצה לעשות את זה גם כאן, אבל בגלל שמעורבים פה שני רגיסטרים קוונטיים שונים, אחד עם <span>\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle  \)</span> ואחד עם <span>\( \left|u\right\rangle  \)</span>, זה יותר מסובך - אני צריך להוציא החוצה את <span>\( \left|u\right\rangle  \)</span> איכשהו, וקל לי לעשות את זה כי <span>\( \left|u\right\rangle  \)</span> הוא <strong>וקטור עצמי</strong> של <span>\( U \)</span> ולכן הפעולה של <span>\( U \)</span> עליו מתורגמת לכפל בסקלר, ואת הסקלר אני יכול להעביר אל <span>\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle  \)</span>:</p>
+
+<p><span>\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle \prod_{k_{t}=1}U^{2^{n-t}}\left|u\right\rangle =\left|k_{1}k_{2}\ldots k_{n}\right\rangle \prod_{k_{t}=1}e^{2\pi i\varphi\cdot2^{n-t}}\left|u\right\rangle = \)</span></p>
+
+<p><span>\( \prod_{k_{t}=1}e^{2\pi i\varphi\cdot2^{n-t}}\left|k_{1}k_{2}\ldots k_{n}\right\rangle \left|u\right\rangle  \)</span></p>
+
+<p>עכשיו בואו נעשה טריק כמו בפורייה: ראשית ניקח סכום של כל <span>\( 2^{n} \)</span> מצבי הבסיס <span>\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle  \)</span>. הוא יצטרך להיות משוקלל, כלומר נחלק אותו ב-<span>\( \frac{1}{2^{n/2}} \)</span>. נקבל שצריך להגיע אל</p>
+
+<p><span>\( \frac{1}{2^{n/2}}\sum_{k=0}^{2^{n}-1}\prod_{k_{t}=1}e^{2\pi i\varphi\cdot2^{n-t}}\left|k_{1}k_{2}\ldots k_{n}\right\rangle \left|u\right\rangle = \)</span></p>
+
+<p><span>\( =\frac{1}{2^{n/2}}\bigotimes_{t=1}^{n}\left(\left|0\right\rangle +e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle \right)\left|u\right\rangle  \)</span></p>
+
+<p><span>\( =\bigotimes_{t=1}^{n}\left(\frac{\left|0\right\rangle +e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle }{\sqrt{2}}\right)\left|u\right\rangle  \)</span></p>
+
+<p>מה שאנחנו רואים פה הוא שאפשר לחשוב על היעד שלנו בתור משהו שבו <span>\( \left|u\right\rangle  \)</span> המקורי לא השתנה, אבל ברגיסטר הראשון הקיוביט ה-<span>\( t \)</span> התחלף מ-<span>\( \left|0\right\rangle  \)</span> תמים אל <span>\( \frac{\left|0\right\rangle +e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle }{\sqrt{2}} \)</span>. איך משיגים אפקט כזה? ראשית, כמו שאמרתי כבר, מפעילים <span>\( H \)</span> בהתחלה על כל הקיוביטים ברגיסטר הזה - זה מעביר כל אחד מהם אל <span>\( \frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}} \)</span>. עכשיו רק צריך להכניס את הפאזה <span>\( e^{2\pi i\varphi\cdot2^{n-t}} \)</span> לתוך המקדם של <span>\( \left|1\right\rangle  \)</span> מבלי לגעת ב-<span>\( \left|0\right\rangle  \)</span>. את זה אפשר לעשות עם שער <strong>מותנה</strong>. מה שאני רוצה שיקרה הוא</p>
+
+<ul> <li><span>\( \left|0\right\rangle \left|u\right\rangle \mapsto\left|0\right\rangle \left|u\right\rangle  \)</span></li>
+
+
+<li><span>\( \left|1\right\rangle \left|u\right\rangle \mapsto\left|1\right\rangle U^{2^{n-t}}\left|u\right\rangle =e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle \left|u\right\rangle  \)</span></li>
+
+</ul>
+
+<p>אז אני הולך להפעיל שער <span>\( U^{2^{n-t}} \)</span> שמותנה בקיוביט ה-<span>\( t \)</span>-י. ככה זה הולך להיראות:</p>
+
+<p><img src="/assets/img/2022/phase_estimation.png" alt="" /></p>
+
+<p>אפשר כמובן לשאול איך בונים שערי <span>\( U^{2^{t}} \)</span> מותנים בפועל - זו שאלה שאלגוריתם הערכת הפאזה עצמו לא מתעסק בה; הוא אומר “אם <span>\( U \)</span> הוא נחמד ואתם יכולים לבנות את השערים הללו עבורו, אז אפשר להפעיל הערכת פאזה” אבל בשימוש ספציפי, כמו אלגוריתם שור, אכן נצטרך להסביר איך לעשות את זה.</p>
+
+<p>שימו לב שעל פניו, קורה כאן משהו מוזר <strong>מאוד</strong>: אחרי שערי ה-<span>\( H \)</span> בהתחלה, לכאורה על שערי הרגיסטר הראשון לא מופעל שום דבר שמשנה אותם - רק שערים שמותנים בהם. והרגיסטר השני? מופעלים עליו <span>\( U^{j} \)</span>-ים, אבל בגלל ש-<span>\( \left|u\right\rangle  \)</span> הוא וקטור עצמי של <span>\( U \)</span> זה לא משנה את <span>\( \left|u\right\rangle  \)</span> - רק מכפיל אותו בסקלר כלשהו, ואחר כך אנחנו בכל מקרה לא מודדים את <span>\( \left|u\right\rangle  \)</span> אז לכאורה הסקלר אמור “להיעלם”. מה הולך כאן? זה נראה כמו קסם - מעגל שלא עושה כלום ומחשב בדיוק את מה שהוא אמור.</p>
+
+<p>כמובן שאין פה קסם - הסקלר של <span>\( \left|u\right\rangle  \)</span> לא הולך להיעלם אלא להצטבר בצורה חכמה בתוך הסופרפוזיציה שמהווים אברי הרגיסטר הראשון. איך זה ייתכן, אם אנחנו לא פועלים עליהם? ובכן, אין דבר כזה בחישוב קוונטי, לומר בנחרצות כזו שאנחנו לא פועלים על משהו; שערים מותנים הם לא משהו שפועל על כל קיוביט בנפרד אלא על זוג קיוביטים ביחד, וצריך לחשוב על ההשפעה שלהם בתור משהו שמשפיע על שני הקיוביטים הללו יחד. כבר ראינו איך זה בא לידי ביטוי פורמלי.</p>
+
+<p>עכשיו אנחנו קרובים בצורה מפתיעה לסיום ההבנה של “למה זה עובד”. נשאר רק דבר אחד, בעצם. בואו נסתכל על מצב הרגיסטר הראשון אחרי סיום ריצת המעגל:</p>
+
+<p><span>\( \bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle \right) \)</span></p>
+
+<p>ובוא נזכיר לעצמנו מה עשתה התמרת פורייה הקוונטית, בפוסט הקודם:</p>
+
+<p><span>\( \text{QFT}_{N}\left(\left|j\right\rangle \right)=\bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)</span></p>
+
+<p>הדמיון בין שני הביטויים עצום, והוא יגדל עוד יותר אם נזכיר לעצמנו מה בעצם הולך בביטוי <span>\( \varphi\cdot2^{n-t} \)</span>. הפאזה <span>\( \varphi \)</span> עצמה היא מספר בין 0 ל-1, כלומר אפשר לכתוב <span>\( \varphi=0.\varphi_{1}\varphi_{2}\ldots \)</span> בייצוג בינארי. עכשיו, לכפול את זה ב-<span>\( 2^{n-t} \)</span> פירושו “להזיז שמאלה” את הספרות <span>\( n-t \)</span> צעדים, ומכיוון שכל זה קורה במעריך של <span>\( e^{2\pi i} \)</span>, הספרות שמשמאל לנקודה הבינארית פשוט ייעלמו (זה היה הטריק המרכזי שלנו בהתמרת פורייה הקוונטית). אז מה שבעצם הגענו אליו הוא</p>
+
+<p><span>\( \bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.\varphi_{n-t+1}\ldots\varphi_{n}\ldots}\left|1\right\rangle \right) \)</span></p>
+
+<p>עכשיו, אם <span>\( \varphi=0.\varphi_{1}\varphi_{2}\ldots\varphi_{n} \)</span> הוא ייצוג <strong>מדויק</strong> של <span>\( \varphi \)</span> באמצעות <span>\( n \)</span> ספרות בינאריות, אז מה שקיבלנו הוא <strong>בדיוק</strong></p>
+
+<p><span>\( \bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.\varphi_{n-t+1}\ldots\varphi_{n}}\left|1\right\rangle \right)=\text{QFT}_{N}\left(\left|\varphi_{1}\varphi_{2}\ldots\varphi_{n}\right\rangle \right) \)</span></p>
+
+<p>ולכן, אם אחרי המעגל שכבר הראינו אנחנו מוסיפים <span>\( \text{QFT}_{N}^{\dagger} \)</span>, נסיים במצב הקוונטי הבודד <span>\( \left|\varphi_{1}\varphi_{2}\ldots\varphi_{n}\right\rangle  \)</span>, וכשנמדוד אותו נקבל את סדרת הספרות <span>\( \varphi_{1}\varphi_{2}\ldots\varphi_{n} \)</span> בהסתברות 1.</p>
+
+<p>זה ממש קסם.</p>
+
+<h2>ועכשיו לחלק הפחות קסום</h2>
+
+<p>אם אפשר לייצג את הפאזה <span>\( \varphi \)</span> בעזרת <span>\( n \)</span> ספרות בינאריות, האלגוריתם עובד מושלם. אבל אם אי אפשר לייצג כך את הפאזה, הכל הופך ליותר מסובך וטכני. במקרה הזה בודאות לא נוכל לקבל את <span>\( \varphi \)</span> במדויק ולכן בכל מקרה נקבל <strong>קירוב</strong> שלו; אנחנו רוצים להשתכנע שגם במקרה הזה, בהסתברות טובה נקבל קירוב <strong>טוב</strong>.</p>
+
+<p>אני הולך להיכנס לפרטים הטכניים של הניתוח עד הסוף, אבל מי שמתייאשים באמצע לא חייבים לסבול; אפשר לקפוץ לתחילת החלק הבא שבו אסכם את כל מה שצריך לדעת.</p>
+
+<p>בשביל הניתוח במקרה הזה, יהיה לנו יותר נוח לחשוב על ייצוג המצב בתור סכום של <span>\( N=2^{n} \)</span> מחוברים. אז בואו ניזכר מה קורה בשני השלבים הראשונים:</p>
+
+<p><span>\( \left|0^{n}\right\rangle \left|u\right\rangle \mapsto\frac{1}{2^{n/2}}\sum_{k=0}^{2^{n}-1}\left|k\right\rangle \left|u\right\rangle \mapsto\frac{1}{2^{n/2}}\sum_{k=0}^{2^{n}-1}\left|k\right\rangle U^{k}\left|u\right\rangle = \)</span></p>
+
+<p><span>\( =\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{2\pi i\varphi\cdot k}\left|k\right\rangle \left|u\right\rangle  \)</span></p>
+
+<p>עכשיו, מה הפעלת <span>\( \text{QFT}_{N}^{\dagger} \)</span> עושה? כזכור</p>
+
+<p><span>\( \text{QFT}_{N}\left(\left|j\right\rangle \right)\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}e^{\frac{2\pi i}{N}jk}\left|k\right\rangle  \)</span></p>
+
+<p>כדי לקבל את <span>\( \text{QFT}_{N}^{\dagger} \)</span> אפשר פשוט להפעיל צמוד מרוכב על אגף ימין; הדבר היחיד שהוא עושה הוא להחליף את <span>\( i \)</span> (המספר המרוכב <span>\( i \)</span>; זה לא אינדקס) ב-<span>\( -i \)</span>. אז בואו נכתוב את זה - ואני גם אחליף את הסימונים של מצבי הקלט והפלט, כך שהקלט יהיה דווקא <span>\( k \)</span> והפלט דווקא <span>\( j \)</span>, כי עדיין קונספטואלית אני הופך את הסדר, וזה גם מתאים לשימוש שתכף אבצע בזה:</p>
+
+<p><span>\( \text{QFT}_{N}^{\dagger}\left(\left|k\right\rangle \right)\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}e^{-\frac{2\pi i}{N}jk}\left|j\right\rangle  \)</span></p>
+
+<p>ולכן הפעלת <span>\( \text{QFT}_{N}^{\dagger} \)</span> על המצב שהגענו אליו ברגיסטר הראשון תניב</p>
+
+<p><span>\( \text{QFT}_{N}^{\dagger}\left(\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{2\pi i\varphi\cdot k}\left|k\right\rangle \right)= \)</span></p>
+
+<p><span>\( \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{2\pi i\varphi\cdot k}\text{QFT}_{N}^{\dagger}\left(\left|k\right\rangle \right)= \)</span></p>
+
+<p><span>\( =\frac{1}{N}\sum_{k=0}^{N-1}\sum_{j=0}^{N-1}e^{2\pi i\varphi\cdot k}e^{-2\pi i\cdot\frac{jk}{N}}\left|j\right\rangle = \)</span></p>
+
+<p><span>\( =\frac{1}{N}\sum_{j=0}^{N-1}\sum_{k=0}^{N-1}e^{2\pi i\left(\varphi-\frac{j}{N}\right)k}\left|j\right\rangle  \)</span></p>
+
+<p>קיבלנו פה סופרפוזיציה של הרבה מצבים; כדי להבין מה ההסתברות שמדידה תעלה בגורל מצב <span>\( \left|j\right\rangle  \)</span> נסתכל על המקדם שלו, מה שאני מכנה <strong>האמפליטודה</strong> שלו ומסמן <span>\( \alpha_{j} \)</span>; ההעלאה בריבוע של הערך המוחלט של האמפליטודה תיתן לנו את ההסתברות ש-<span>\( \left|j\right\rangle  \)</span> יעלה בגורל. באופן כללי האמפליטודה הזו תהיה</p>
+
+<p><span>\( \alpha_{j}=\frac{1}{N}\sum_{k=0}^{N-1}e^{2\pi i\left(\varphi-\frac{j}{N}\right)k} \)</span></p>
+
+<p>האם אפשר לפשט את זה קצת? בהחלט, יש לנו פה טור הנדסי! אם נזכור את חוקי החזקות: <span>\( e^{ab}=\left(e^{a}\right)^{b} \)</span> אפשר לראות שבעצם קיבלנו פה את הסכום</p>
+
+<p><span>\( \alpha_{j}=\frac{1}{N}\sum_{k=0}^{N-1}\left[e^{2\pi i\left(\varphi-\frac{j}{N}\right)}\right]^{k} \)</span></p>
+
+<p>וזה טור הנדסי, כלומר ביטוי מהצורה <span>\( \sum_{k=0}^{N-1}q^{k} \)</span> כאשר במקרה שלנו <span>\( q=e^{2\pi i\left(\varphi-\frac{j}{N}\right)} \)</span>. עכשיות למרות שמדגדג לי, לא אחזור על האופן שבו מוצאים את הסכום של טור הנדסי - <a href="https://gadial.net/2019/05/30/arithmetic_and_geometric_series/">יש לי פוסט</a> על זה. פשוט צריך לזכור ש-</p>
+
+<p><span>\( \sum_{k=0}^{N-1}q^{k}=\frac{q^{N}-1}{q-1}=\frac{1-q^{N}}{1-q} \)</span></p>
+
+<p>(עברתי לצורה השניה כי היא קצת יותר אינטואיטיבית במקרה כמו שלנו שבו <span>\( \left|q\right|&lt;1 \)</span>)</p>
+
+<p>ולכן במקרה שלנו נקבל</p>
+
+<p><span>\( \alpha_{j}=\frac{1}{N}\left(\frac{1-e^{2\pi i\left(\varphi-\frac{j}{N}\right)\cdot N}}{1-e^{2\pi i\left(\varphi-\frac{j}{N}\right)}}\right)=\frac{1}{N}\left(\frac{1-e^{2\pi i\left(N\varphi-j\right)}}{1-e^{2\pi i\left(\varphi-j/N\right)}}\right) \)</span></p>
+
+<p>זו האמפליטודה עבור מצב <span>\( j \)</span> כללי. בואו ניקח אחד ספציפי שטוב לנו במיוחד: ניקח מספר <span>\( b \)</span> שנותן לנו את הקירוב הטוב ביותר ל-<span>\( \varphi \)</span> מלמלטה שכולל <span>\( n \)</span> ספרות בינאריות. כלומר, ניקח <span>\( 0\le b&lt;N \)</span> שמקיים ש-<span>\( \frac{b}{N}=0.b_{1}b_{2}\ldots b_{n} \)</span>, <span>\( \frac{b}{N}\le\varphi \)</span> ו-<span>\( \delta=\left|\varphi-\frac{b}{N}\right|=\varphi-\frac{b}{N} \)</span> הוא מינימלי ביחס לדרישות הללו.</p>
+
+<p>אנחנו לא יודעים, כמובן, מהו <span>\( \delta \)</span> אבל ברור ש-<span>\( 0\le\delta\le\frac{1}{N} \)</span> (כי אם <span>\( \frac{1}{N}&lt;\delta \)</span> אפשר להגדיל את <span>\( b \)</span> ב-<span>\( \frac{1}{N}=\frac{1}{2^{n}} \)</span> על ידי חיבור 1 לספרה הכי פחות משמעותית בו ולקבל קירוב טוב יותר מ-<span>\( b \)</span>).</p>
+
+<p>לא כל כך קל לחסום מלמטה את ההסתברות לקבל את <span>\( b \)</span> או דברים שקרובים אליו, אז נעשה את ההפך - נחסום מלמעלה את ההסתברות לקבל דברים שרחוקים מ-<span>\( b \)</span>.</p>
+
+<p>לשם כך בואו נכניס לתמונה עוד סימון. נזכור ש-<span>\( 0\le b&lt;N \)</span>, ולכן אפשר לתאר אברים אחרים בתחום הזה בתור <span>\( b+d\text{ mod }N \)</span> כאשר <span>\( d\in\mathbb{Z} \)</span> הוא מספר שלם כלשהו. למשל, אם <span>\( N=8 \)</span> ו-<span>\( b=5 \)</span> אז <span>\( b+4=1 \)</span> ו-<span>\( b+\left(-7\right)=6 \)</span> וכדומה. אני אשתמש ב-<span>\( \beta_{d} \)</span> כדי לסמן את האמפליטודה של איבר שמיוצג כך, כלומר</p>
+
+<p><span>\( \beta_{d}=\alpha_{b+d\left(\text{mod }N\right)} \)</span></p>
+
+<p>עכשיו השאלה היא כזו: נניח ש-<span>\( e \)</span> הוא מספר חיובי כלשהו שבא לציין את “סף הרגישות לשגיאה” שלנו - ככל שהוא קטן יותר כך גודל השגיאות שאנחנו מוכנים לסבול הוא קטן יותר. פורמלית, אם <span>\( m \)</span> הוא התוצאה שהאלגוריתם החזיר לנו, אנחנו מתחילים לכעוס אם <span>\( \left|m-b\right|&gt;e \)</span> (שימו לב ש-<span>\( \left|m-b\right| \)</span> הוא <strong>לא</strong> כמה שאנחנו רחוקים מ-<span>\( \varphi \)</span>; לניתוח של זה נגיע בהמשך).</p>
+
+<p>אם כן, מה ההסתברות שלנו לקבל במדידה <span>\( m \)</span> בעייתי שכזה? בשביל זה אפשר להסתכל על כל ה-<span>\( \beta_{d} \)</span>-ים כך ש-<span>\( d\notin\left[-e,e\right] \)</span>, כל עוד אני לא לוקח <span>\( d \)</span> גדול או קטן מדי עד שהוא כבר עושה סיבוב מסביב ל-<span>\( N \)</span> וחוזר שוב לתחום <span>\( \left[-e,e\right] \)</span>. לצורך זה אני אקח את כל ה-<span>\( d \)</span>-ים שמקיימים או <span>\( e+1\le d\le\frac{N}{2} \)</span> או <span>\( -\frac{N}{2}&lt;d\le-\left(e+1\right) \)</span>. זה יבטיח שאני תופס את כל האיברים ה”בעייתיים” ולא לוקח איברים לא בעייתים, אלא אולי במקרי קיצון מוזרים וגם בהם הטעות הזו יכולה רק להיות לרעתנו (כי היא תנפח את ההסתברות לקבל משהו לא טוב) אבל הניתוח שלנו יצליח בכל מקרה.</p>
+
+<p>אם כן, פורמלית:</p>
+
+<p><span>\( p\left(\left|m-b\right|&gt;e\right)\le\sum_{-N/2&lt;d&lt;-e}\left|\beta_{d}\right|^{2}+\sum_{e&lt;d\le N/2}\left|\beta_{d}\right|^{2} \)</span></p>
+
+<p>כדי לעשות משהו מועיל עם הביטוי הזה אני צריך למצוא חסם מלמעלה על <span>\( \left|\beta_{d}\right|^{2} \)</span>, כלומר חסם מלמעלה על <span>\( \left|\beta_{d}\right| \)</span>, כלומר חסם מלמעלה על</p>
+
+<p><span>\( \left|\beta_{d}\right|=\frac{1}{N}\frac{\left|1-e^{2\pi i\left(N\varphi-\left(b+d\right)\right)}\right|}{\left|1-e^{2\pi i\left(\varphi-\left(b+d\right)/N\right)}\right|} \)</span></p>
+
+<p>ההחלפה של <span>\( j \)</span> ב-<span>\( b+d \)</span> כאן בלי להכניס איזה <span>\( \text{mod}N \)</span> היא לא טריוויאלית לגמרי; היא מוצדקת בכך שכפולה של <span>\( N \)</span> במעריך של האקספוננט פשוט מובילה לתוספת כמות שלמה של <span>\( 2\pi i \)</span>, שמתורגם ל-1; בשלב הזה כבר השתמשנו בזה כמה פעמים ואני מקווה שזה ברור.</p>
+
+<p>עכשיו, את המונה קל לחסום מלמעלה:</p>
+
+<p><span>\( \left|1-e^{2\pi i\left(N\varphi-b+d\right)}\right|\le2 \)</span></p>
+
+<p>למה? כי האקספוננט הזה, מפחיד ככל שיהיה, מתורגם בסו, למספר מרוכב מנורמה 1. אז אי שוויון המשולש נותן לנו <span>\( \left|1-z\right|\le\left|1\right|+\left|z\right|=1+1=2 \)</span>.</p>
+
+<p>אז המונה קל, אבל את המכנה:</p>
+
+<p><span>\( \left|1-e^{2\pi i\left(\varphi-\left(b+d\right)/N\right)}\right| \)</span></p>
+
+<p>צריך לחסום מלמטה. זה דורש קצת יותר. ראשית, בואו נחזיר לתמונה את</p>
+
+<p><span>\( \delta=\varphi-\frac{b}{N} \)</span></p>
+
+<p>והביטוי שצריך לחסום יהפוך אל</p>
+
+<p><span>\( \left|1-e^{2\pi i\left(\delta-d/N\right)}\right| \)</span></p>
+
+<p>עכשיו, <span>\( \varphi-\frac{b+d}{N}=\delta-\frac{d}{N} \)</span>.</p>
+
+<p>מכיוון ש-<span>\( -\frac{N}{2}&lt;d \)</span> אז <span>\( -\frac{N}{2}+1\le d \)</span>, כלומר <span>\( -\frac{1}{2}+\frac{1}{N}\le\frac{d}{N} \)</span>. בנוסף לכך <span>\( \delta\le\frac{1}{N} \)</span> ולכן נקבל</p>
+
+<p><span>\( \delta-\frac{d}{N}\le\frac{1}{N}+\frac{1}{2}-\frac{1}{N}=\frac{1}{2} \)</span></p>
+
+<p>ובאופן קצת יותר קל גם</p>
+
+<p><span>\( \delta+\frac{d}{N}\ge0-\frac{1}{2}=-\frac{1}{2} \)</span></p>
+
+<p>מה שנותן לנו</p>
+
+<p><span>\( -\pi\le2\pi\left(\delta-d/N\right)\le\pi \)</span></p>
+
+<p>בשביל מה זה טוב? כי בואו נסתכל שניה על הביטוי <span>\( 1-e^{i\theta}=1-\cos\theta-i\sin\theta \)</span> כאשר <span>\( -\pi\le\theta\le\pi \)</span>. אני אצטרך קצת נוסחאות טריגונומטריות כדי לפשט אותו:</p>
+
+<ul> <li><span>\( 1-\cos\theta=2\sin^{2}\frac{\theta}{2} \)</span></li>
+
+
+<li><span>\( \sin\theta=2\sin\frac{\theta}{2}\cos\frac{\theta}{2} \)</span></li>
+
+</ul>
+
+<p>לשמחתי אני סוף סוף יכול לומר <a href="https://gadial.net/2021/06/25/trigonometry_intro_3/">שיש לי פוסט</a> שמוכיח את הנוסחאות הללות ולכן לא אסביר אותן כאן שוב, אבל הן מפשטות יפה את הביטוי שלנו:</p>
+
+<p><span>\( 1-\cos\theta-i\sin\theta=2\sin^{2}\frac{\theta}{2}-2i\sin\frac{\theta}{2}\cos\frac{\theta}{2}=2\sin\frac{\theta}{2}\left(\sin\frac{\theta}{2}-i\cos\frac{\theta}{2}\right) \)</span></p>
+
+<p>לכאורה זה יותר מסובך, אבל ערך מוחלט יפשט לנו את העניינים. בכללי, <span>\( \left|a+bi\right|=\sqrt{a^{2}+b^{2}} \)</span>, ותוך ניצול העובדה ש-<span>\( \sin^{2}\alpha+\cos^{2}\alpha=1 \)</span>, נקבל</p>
+
+<p><span>\( \left|2\sin\frac{\theta}{2}\left(\sin\frac{\theta}{2}-i\cos\frac{\theta}{2}\right)\right|=2\left|\sin\frac{\theta}{2}\right|\left|\sin\frac{\theta}{2}-i\cos\frac{\theta}{2}\right|=2\left|\sin\frac{\theta}{2}\right| \)</span></p>
+
+<p>עכשיו, בתחום <span>\( 0\le x\le\frac{\pi}{2} \)</span> סינוס מקיימת תכונה נחמדה מאוד: היא <strong>קעורה</strong>, כלומר הערכים שלה בין שתי נקודות גדולים יותר מהקו הישר שמחבר את שתי הנקודות הללו. נקודות הקצה של התחום הן <span>\( \left(0,0\right) \)</span> (ראשית הצירים) ו-<span>\( \left(\frac{\pi}{2},1\right) \)</span> (הקצה הימני של תחום העלייה של סינוס, כשהיא מגיעה ל-1 ומתחילה ליפול) ולכן הקו הישר המחבר את שתי הנקודות הללו הוא <span>\( y=\frac{2}{\pi}x \)</span>, ואנו מקבלים ש-<span>\( \sin x\ge\frac{2}{\pi}x \)</span>, כלומר בתחום הזה שבו הכל חיובי, <span>\( \left|\sin x\right|\ge\frac{2}{\pi}\left|x\right| \)</span>.</p>
+
+<p>עבור <span>\( -\frac{\pi}{2}\le x\le0 \)</span> זה טיפה יותר מסובך כי <span>\( \left|x\right|=-x \)</span> במקרה הזה. עכשיו, <span>\( \sin x \)</span> היא פונקציה אנטי-סימטרית, כלומר <span>\( \sin\left(-x\right)=-\sin x \)</span>, ולכן עבור <span>\( -\frac{\pi}{2}\le x\le0 \)</span> נקבל</p>
+
+<p><span>\( \left|\sin x\right|=-\sin x=\sin\left(-x\right)\ge\frac{2}{\pi}\left(-x\right)=\frac{2}{\pi}\left|x\right| \)</span></p>
+
+<p>ולכן קיבלנו את אי-השוויון <span>\( \left|\sin x\right|\ge\frac{2}{\pi}\left|x\right| \)</span> עבור כל <span>\( -\frac{\pi}{2}\le x\le0 \)</span>.</p>
+
+<p>עכשיו, אם <span>\( -\pi\le\theta\le\pi \)</span> אז <span>\( -\frac{\pi}{2}\le\frac{\theta}{2}\le\frac{\pi}{2} \)</span> ולכן אנו מקבלים</p>
+
+<p><span>\( \left|1-e^{i\theta}\right|=2\left|\sin\frac{\theta}{2}\right|\ge2\cdot\frac{2}{\pi}\left|\frac{\theta}{2}\right|=\frac{2}{\pi}\left|\theta\right| \)</span></p>
+
+<p>ואפשר להתקדם הלאה. כזכור, אנחנו באמצע חסימה מלמטה של הביטוי</p>
+
+<p><span>\( \left|1-e^{2\pi i\left(\delta-d/N\right)}\right| \)</span></p>
+
+<p>תוך שאנחנו יודעים ש-</p>
+
+<p><span>\( -\pi\le2\pi\left(\delta-d/N\right)\le\pi \)</span></p>
+
+<p>כלומר, במקרה הזה <span>\( \theta=2\pi\left(\delta-d/N\right) \)</span>, ולכן נקבל</p>
+
+<p><span>\( \left|1-e^{2\pi i\left(\delta-d/N\right)}\right|\ge4\left|\left(\delta-d/N\right)\right| \)</span></p>
+
+<p>עכשיו נחזור אל הדבר שממנו התחלנו - אנחנו מנסים לחסום מלמטה את הערך המוחלט של <span>\( \beta_{d} \)</span>, שהיא האמפליטודה של תוצאה “לא טובה” בערכי ה-<span>\( d \)</span> שאנו מסתכלים עליהם. תוך שימוש באי השוויון שהוכחנו זה עתה, נקבל</p>
+
+<p><span>\( \left|\beta_{d}\right|\le\frac{1}{N}\frac{2}{\left|1-e^{2\pi i\left(\delta-d/N\right)}\right|}\le\frac{1}{N}\frac{2}{4\left|\left(\delta-d/N\right)\right|}=\frac{1}{4}\frac{1}{\left|\left(N\delta-d\right)\right|} \)</span></p>
+
+<p>וקיבלנו חסם על ההסתברות הכוללת לתוצאה “רעה”:</p>
+
+<p><span>\( p\left(\left|m-b\right|&gt;e\right)\le\sum_{-N/2\le d&lt;e}\left|\beta_{d}\right|^{2}+\sum_{e&lt;d\le N/2}\left|\beta_{d}\right|^{2} \)</span></p>
+
+<p><span>\( \le\frac{1}{4}\left[\sum_{-N/2&lt;d&lt;-e}\frac{1}{\left(N\delta-d\right)^{2}}+\sum_{e&lt;d\le N/2}\frac{1}{\left(N\delta-d\right)^{2}}\right] \)</span></p>
+
+<p>כן, כן, זה עדיין נראה מחריד ונצטרך לעבוד עוד כדי לפשט את זה. זו דרך החדו”א - כל הזמן מוצאים מה לפשט במחיר של <span>\( \le \)</span> נוסף בדרך. עכשיו אפשר להתעסק עם ה-<span>\( \delta \)</span> הזה שלמטה שהמהות שלו היא להיות קטן. כמה קטן? <span>\( 0\le\delta\le\frac{1}{N} \)</span>, כלומר <span>\( 0\le N\delta\le1 \)</span>. זה אומר שאפשר להעלים את <span>\( N\delta \)</span> מתוך <span>\( \left(N\delta-d\right)^{2} \)</span> בצורה יחסית פשוטה - אבל כרגיל, נצטרך להיזהר. קודם כל נפתח סוגריים</p>
+
+<p><span>\( \left(N\delta-d\right)^{2}=\left(N\delta\right)^{2}-2\left(N\delta\right)d+d^{2}=\left(N\delta\right)\left[N\delta-2d\right]+d^{2} \)</span></p>
+
+<p>אם <span>\( d&lt;0 \)</span> אז גם <span>\( N\delta+2d&gt;0 \)</span> ולכן <span>\( \left(N\delta-d\right)^{2}&gt;d^{2} \)</span>, כלומר <span>\( \frac{1}{\left(N\delta-d\right)^{2}}&lt;\frac{1}{d^{2}} \)</span>. זה מטפל באיברים של הסכום השמאלי.</p>
+
+<p>אם <span>\( d&gt;0 \)</span>, כלומר <span>\( d\ge1 \)</span> נעשה משהו אחר: נשתמש בכך ש-<span>\( N\delta\le1 \)</span> ולכן <span>\( N\delta-d\le1-d \)</span>. עכשיו, שני האגפים בביטוי הזה הם שליליים (כי <span>\( d\ge1 \)</span>) ולכן כשנעלה אותם בריבוע כיוון האי שוויון יתהפך ונקבל <span>\( \left(N\delta-d\right)^{2}\ge\left(1-d\right)^{2} \)</span>, ולכן <span>\( \frac{1}{\left(N\delta-d\right)^{2}}\le\frac{1}{\left(1-d\right)^{2}} \)</span>.</p>
+
+<p>לסיכום, קיבלנו את הצעד הבא בחסימה של הביטוי שלנו:</p>
+
+<p><span>\( p\left(\left|m-b\right|&gt;e\right)\le\frac{1}{4}\left[\sum_{-N/2&lt;d&lt;-e}\frac{1}{d^{2}}+\sum_{e&lt;d\le N/2}\frac{1}{\left(d-1\right)^{2}}\right] \)</span></p>
+
+<p>אנחנו כבר לקראת הסוף! התעלול הבא הוא לאחד את שני הסכומים לסכום אחד כי בעצם מופיעים בהם כמעט אותם איברים בדיוק: בשמאלי מופיע <span>\( \frac{1}{d^{2}} \)</span> לכל <span>\( -\frac{N}{2}&lt;d&lt;-e \)</span> ובשני מופיע <span>\( \frac{1}{\left(d-1\right)^{2}} \)</span> לכל <span>\( e&lt;d\le\frac{N}{2} \)</span>. כלומר, בשניהם מופיעים כל האיברים</p>
+
+<p><span>\( \frac{1}{\left(e+1\right)^{2}},\frac{1}{\left(e+2\right)^{2}},\ldots,\frac{1}{\left(N/2-1\right)^{2}} \)</span></p>
+
+<p>ובנוסף בימני מופיע גם <span>\( \frac{1}{e^{2}} \)</span>. אז בואו ניקח 2 כפול סכום כל האיברים הללו:</p>
+
+<p><span>\( p\left(\left|m-b\right|&gt;e\right)\le\frac{1}{2}\sum_{d=e}^{N/2-1}\frac{1}{d^{2}} \)</span></p>
+
+<p>זה כבר סכום ממש פשוט. טריק סטנדרטי כדי לחסום סכומים כאלו הוא לעבור מסכום לאינטגרל, ב”מחיר” של הגדלה קטנה של התחום התחתון:</p>
+
+<p><span>\( \sum_{d=e}^{N/2-1}\frac{1}{d^{2}}\le\int_{e-1}^{N/2-1}\frac{1}{x^{2}}dx \)</span></p>
+
+<p>זה עובד כי מאחר ו-<span>\( \frac{1}{x^{2}} \)</span> היא פונקציה יורדת, המינימום שלה מתקבל בסוף כל קטע, והאינטגרל של פונקציה על קטע כלשהו גדול או שווה למינימום שלה כפול אורך הקטע. במילים אחרות, <span>\( \int_{d-1}^{d}\frac{1}{x^{2}}dx\ge\frac{1}{d^{2}}\cdot1 \)</span>, ובצורה הזו אנחנו יכולים לחסום את כל אברי הסכום <span>\( \sum_{d=e}^{N/2-1}\frac{1}{d^{2}} \)</span> על ידי חתיכות אינטגרלים מתאימות.</p>
+
+<p>למה לעבור לאינטגרל עזר לנו? כי אינטגרלים יותר קל לנו לחשב במדויק:</p>
+
+<p><span>\( \int_{e-1}^{N/2-1}\frac{1}{x^{2}}dx=\left[-\frac{1}{x}\right]_{e-1}^{N/2-1}=\frac{1}{e-1}-\frac{1}{N/2-1}\le\frac{1}{e-1} \)</span></p>
+
+<p>ולכן קיבלנו סוף כל סוף</p>
+
+<p><span>\( p\left(\left|m-b\right|&gt;e\right)\le\frac{1}{2\left(e-1\right)} \)</span></p>
+
+<p>וזה… ביטוי די פשוט!</p>
+
+<h2>סיכום רגוע יותר של כל העניין</h2>
+
+<p>עשיתי הרבה חישובים טכניים בחלק הקודם, אבל אפשר לסכם אותם בצורה די פשוטה: הראינו שההסתברות לקבל באלגוריתם הערכת הפאזה תוצאה לא טובה חסומה על ידי <span>\( \frac{1}{2\left(e-1\right)} \)</span>, כש-<span>\( e \)</span> הוא פרמטר שמשמש אותנו להערכת רמת הדיוק שלנו. רמת הדיוק תלויה לא רק בערך המספרי של <span>\( e \)</span> אלא גם במספר הקיוביטים שאנחנו משתמשים בו ברגיסטר הראשון, <span>\( n \)</span>. בואו ניכנס עכשיו להסבר יותר מפורט של מה שזה אומר.</p>
+
+<p>המושג שאנחנו מדברים עליו הוא “רמת דיוק של <span>\( k \)</span> ספרות אחרי הנקודה”. בואו ניתן דוגמא פשוטה עם מספרים בייצוג עשרוני. אם <span>\( a=0.2513 \)</span> הוא מספר, ואנחנו מסתכלים על קירוב שלו ברמת דיוק של שתי ספרות אחרי הנקודה, הכוונה היא לכל מספר <span>\( b \)</span> כך ש-<span>\( \left|a-b\right|\le0.01 \)</span>. אז למשל, <span>\( a=0.25 \)</span> הוא מספר כזה, אבל גם <span>\( 0.2433 \)</span>, למרות שהוא לא מדויק בספרה השניה אחרי הנקודה, גם אם נעגל את המספר לשתי ספרות ונקבל <span>\( 0.24 \)</span>. באופן כללי, דיוק ב-<span>\( k \)</span> ספרות אחרי הנקודה פירושו <span>\( \left|a-b\right|\le\frac{1}{10^{k}} \)</span>, אבל בהקשר שלנו, שבו המספרים מיוצגים בבסיס בינארי, הכוונה היא ל-<span>\( \left|a-b\right|\le\frac{1}{2^{k}} \)</span>.</p>
+
+<p>נניח שאנחנו רוצים לקבל רמת דיוק של <span>\( k \)</span> ספרות אחרי הנקודה בהסתברות טובה יחסית. ברור שאנחנו חייבים להקצות לפחות <span>\( n \)</span> קיוביטים לרגיסטר הראשון, אחרת אין לנו מספיק ספרות בשביל דיוק של <span>\( k \)</span> ספרות. כל קיוביט נוסף מעבר לכך שנקצה לרגיסטר הראשון יעזור לנו לשפר את ההסתברות לקבלת תוצאה טובה, אז בואו נכתוב <span>\( n=k+p \)</span>, כאשר <span>\( p \)</span> הם “הקיוביטים הנוספים לצורך שיפור ההסתברות” ובסוף נראה מה יוצאת ההסתברות כתלות ב-<span>\( p \)</span>.</p>
+
+<p>מה שכבר ראינו הוא שיש מספר טבעי <span>\( b \)</span> כלשהו כך ש-<span>\( \frac{b}{2^{n}} \)</span> קירוב טוב של <span>\( \varphi \)</span>, במובן זה ש-<span>\( \left|\frac{b}{2^{n}}-\varphi\right|\le\frac{1}{2^{n}} \)</span>, והיתרון של ה-<span>\( b \)</span> הזה היה שיכלנו לחסום את המרחק של תוצת אלגוריתם הערכת הפאזה ממנו: האלגוריתם מחזיר מספר טבעי <span>\( m \)</span> (שאנחנו חושבים עליו בתור דרך אחרת לכתוב את המספר <span>\( \frac{m}{2^{n}} \)</span> שהוא הקירוב של <span>\( \varphi \)</span> שאנו מחפשים) שההסתברות שיקיים <span>\( \left|m-b\right|&gt;e \)</span> קטנה או שווה ל-<span>\( \frac{1}{2\left(e-1\right)} \)</span> שהזכרתי קודם. היופי הוא שה-<span>\( e \)</span> נתון לבחירתנו בהתאם למה שנוח לנו.</p>
+
+<p>אם אנחנו רוצים דיוק של <span>\( k \)</span> ספרות, מה שנעשה הוא להגדיר <span>\( e=2^{n-k}-1 \)</span>. אם <span>\( \left|m-b\right|\le e \)</span> אז</p>
+
+<p><span>\( \left|\frac{m}{2^{n}}-\varphi\right|\le\left|\frac{m}{2^{n}}-\frac{b}{2^{n}}\right|+\left|\frac{b}{2^{n}}-\varphi\right|=\frac{1}{2^{n}}\left|m-b\right|+\left|\frac{b}{2^{n}}-\varphi\right|\le \)</span></p>
+
+<p><span>\( \le\frac{1}{2^{n}}\left(2^{n-k}-1\right)+\frac{1}{2^{n}}=\frac{2^{n-k}}{2^{n}}=\frac{1}{2^{k}} \)</span></p>
+
+<p>וזה בדיוק מה שרצינו. כעת, מה הסתברות <strong>הכישלון</strong>, כלומר ההסתברות שלא ניפול על <span>\( m \)</span> טוב שכזה, בהינתן ה-<span>\( e \)</span> שבחרנו? ראשית, ההסתברות היא לכל היותר <span>\( \frac{1}{2\left(e-1\right)} \)</span>. כעת, נציב <span>\( e=2^{n-k}-1 \)</span> ונקבל את הסתברות הכישלון</p>
+
+<p><span>\( \frac{1}{2\left(2^{n-k}-2\right)}=\frac{1}{2\left(2^{p}-2\right)} \)</span></p>
+
+<p>עבור <span>\( p=0,1 \)</span> מקבלים תוצאה שהיא שלילית או אינסוף - זה מפני שהחישוב עבור <span>\( e \)</span> הניח במובלע שהוא לא מספר 0 או 1 בעצמו. אבל עבור <span>\( p=2 \)</span> מקבלים כבר תוצאה הגיונית - <span>\( \frac{1}{4} \)</span>. עבור <span>\( p=3 \)</span> מקבלים <span>\( \frac{1}{12} \)</span>, עבור <span>\( p=4 \)</span> מקבלים <span>\( \frac{1}{28} \)</span> וכן הלאה - ככל שמוסיפים יותר קיוביטים, ההסתברות לקבל הערכה לא טובה שואפת אקספוננציאלית לאפס. אנחנו כמובן רוצים לדעת <strong>עד כמה</strong> זה שואף לאפס - מה צריך להיות <span>\( p \)</span> אם אנחנו רוצים להקטין את הסתברות הכשלון כרצוננו? אז יהא <span>\( \varepsilon&gt;0 \)</span> מספר כלשהו. כדי שהסתברות הכישלון תהיה קטנה מ-<span>\( \varepsilon \)</span> צריך להתקיים</p>
+
+<p><span>\( \frac{1}{2\left(2^{p}-2\right)}\le\varepsilon \)</span></p>
+
+<p>נכפול את שני האגפים ב-<span>\( 2^{p}-2 \)</span> ונחלק ב-<span>\( \varepsilon \)</span> ונקבל</p>
+
+<p><span>\( 2^{p}-2\ge\frac{1}{2\varepsilon} \)</span></p>
+
+<p>נעביר את <span>\( 2 \)</span> אגף:</p>
+
+<p><span>\( 2^{p}\ge2+\frac{1}{2\varepsilon} \)</span></p>
+
+<p>ניקח <span>\( \lg \)</span> (לוגריתם על בסיס 2) לשני האגפים ונקבל</p>
+
+<p><span>\( p\ge\lg\left(2+\frac{1}{2\varepsilon}\right) \)</span></p>
+
+<p>וזו הנוסחה שרצינו: אם אנחנו רוצים להבטיח הסתברות כישלון קטנה מ-<span>\( \varepsilon \)</span>, נזדקק ל-<span>\( \left\lceil \lg\left(2+\frac{1}{2\varepsilon}\right)\right\rceil  \)</span> קיוביטים (זה הסימן לערך מוחלט <strong>עליון</strong>, לעגל כלפי מעלה) וזאת בנוסף ל-<span>\( k \)</span> הקיוביטים שאמרנו ש”חייבים”.</p>
+
+<p>אז לסיכום הכולל: כדי לקבל באלגוריתם הערכת הפאזה קירוב עם דיוק של <span>\( k \)</span> ספרות בינאריות אחרי הנקודה בהסתברות של לפחות <span>\( 1-\varepsilon \)</span> צריך להשתמש ב-</p>
+
+<p><span>\( n=k+\left\lceil \lg\left(2+\frac{1}{2\varepsilon}\right)\right\rceil  \)</span> קיוביטים.</p>
+
+<p>זה סוגר את האלגוריתם, אבל עדיין נותרה השאלה הפתוחה - בשביל מה זה טוב? והאלגוריתם של שור נותן לזה תשובה מוחצת וחד משמעית, ועוד מעז לעשות את זה עם שימוש יפהפה ולא טריוויאלי בכלל בהערכת פאזה, כך שנחכה עם זה לפוסט הבא.</p>
+
+  </div>
+
+  <hr />
+  <p>
+    נהניתם? התעניינתם? אם תרצו, אתם מוזמנים לתת טיפ:
+  </p>
+  <a href='https://ko-fi.com/H2H5XFBQ' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a><div class="PageNavigation">
+    
+      <a class="prev" href="/2022/09/01/quantum_fourier_transform/">&laquo; התמרת פורייה הקוונטית</a>
+    
+    
+  </div><div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'http://gadial.net/2022/09/06/phase_estimation_algorithm/';
+      this.page.identifier = 'http://gadial.net/2022/09/06/phase_estimation_algorithm/';
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+
+      s.src = 'https://not-precise.disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2022/09/06/phase_estimation_algorithm/" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">לא מדויק</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">לא מדויק</li><li><a class="u-email" href="mailto:gadial@gmail.com">gadial@gmail.com</a></li><li>&copy; כל הזכויות שמורות לגדי אלכסנדרוביץ'</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://www.facebook.com/%D7%9C%D7%90-%D7%9E%D7%93%D7%95%D7%99%D7%A7-163347110378474"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg> <span class="username">לא מדויק</span></a></li><li><a href="/feed.xml"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#rss"></use></svg> <span>RSS</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>בלוג על מתמטיקה ומדעי המחשב</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="assets/js/jquery-slim.min.js"><\/script>')</script><script src="/assets/js/bootstrap.bundle.js"></script><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="assets/js/jquery-slim.min.js"><\/script>')</script><script src="/assets/js/bootstrap.bundle.js"></script>
+
+<!-- Default Statcounter code for New blog
+http://www.gadial.net/ -->
+<script type="text/javascript">
+  var sc_project=5444342; 
+  var sc_invisible=1; 
+  var sc_security="4a89cbe4"; 
+  </script>
+  <script type="text/javascript"
+  src="https://www.statcounter.com/counter/counter.js"
+  async></script>
+  <noscript><div class="statcounter"><a title="Web Analytics"
+  href="https://statcounter.com/" target="_blank"><img
+  class="statcounter"
+  src="https://c.statcounter.com/5444342/0/4a89cbe4/1/"
+  alt="Web Analytics"></a></div></noscript>
+  <!-- End of Statcounter Code --></body>
+
+</html>

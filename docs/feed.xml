@@ -1,4 +1,333 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2022-09-03T05:12:51+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">התמרת פורייה הקוונטית</title><link href="http://gadial.net/2022/09/01/quantum_fourier_transform/" rel="alternate" type="text/html" title="התמרת פורייה הקוונטית" /><published>2022-09-01T00:00:00+00:00</published><updated>2022-09-01T00:00:00+00:00</updated><id>http://gadial.net/2022/09/01/quantum_fourier_transform</id><content type="html" xml:base="http://gadial.net/2022/09/01/quantum_fourier_transform/">&lt;h2&gt;מה זה בכלל ובשביל מה זה טוב?&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2022-09-06T14:05:28+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">חישוב קוונטי: אלגוריתם הערכת פאזה</title><link href="http://gadial.net/2022/09/06/phase_estimation_algorithm/" rel="alternate" type="text/html" title="חישוב קוונטי: אלגוריתם הערכת פאזה" /><published>2022-09-06T00:00:00+00:00</published><updated>2022-09-06T00:00:00+00:00</updated><id>http://gadial.net/2022/09/06/phase_estimation_algorithm</id><content type="html" xml:base="http://gadial.net/2022/09/06/phase_estimation_algorithm/">&lt;h2&gt;מה זה בכלל ובשביל מה זה טוב?&lt;/h2&gt;
+
+&lt;p&gt;האלגוריתם הקוונטי שאני רוצה להציג בפוסט הזה, &lt;strong&gt;אלגוריתם הערכת פאזה&lt;/strong&gt;, הוא פשוט קסם. מה שהוא עושה הוא קסם. האופן שבו הוא עושה את זה הוא קסם. האופן שבו זה משתלב עם התמרת פורייה הקוונטית שעליה &lt;a href=&quot;https://gadial.net/2022/09/01/quantum_fourier_transform/&quot;&gt;דיברתי בפוסט הקודם&lt;/a&gt; הוא קסם. הדבר היחיד שאינו קסם, חוץ מההוכחה הפורמלית שהכל עובד והיא טכנית למדי, הוא להבין בשביל מה זה טוב. אז אני אשתמש באותו תירוץ שהשתמשתי בו בפוסט על התמרת פורייה הקוונטית - זה הכלי המרכזי שבו משתמש האלגוריתם של שור לפירוק לגורמים. למעשה, אפשר לחשוב על כל החלק הקוונטי באלגוריתם של שור בתור מקרה פרטי של אלגוריתם הערכת פאזה. אבל בשביל זה באמת צריך להסביר מה זה האלגוריתם הזה ומה הוא עושה.&lt;/p&gt;
+
+&lt;p&gt;הרעיון בהערכת פאזה הוא זה: נניח שיש לנו מרחב על &lt;span&gt;\( m \)&lt;/span&gt; קיוביטים, כלומר &lt;span&gt;\( \mathbb{C}^{2^{m}} \)&lt;/span&gt;, ועל המרחב הזה מוגדר לנו אופרטור אוניטרי &lt;span&gt;\( U:\mathbb{C}^{2^{m}}\to\mathbb{C}^{2^{m}} \)&lt;/span&gt;, ואני מניח שלאופרטור הזה יש וקטור עצמי, &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt;. עכשיו, הערכים העצמיים של אופרטורים אוניטריים הם תמיד מנורמה 1, אז אפשר לכתוב את הערך העצמי שמתאים ל-&lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; בתור &lt;span&gt;\( e^{2i\pi\cdot\varphi} \)&lt;/span&gt;, כאשר המספר &lt;span&gt;\( \varphi \)&lt;/span&gt; נקרא &lt;strong&gt;הפאזה&lt;/strong&gt; של הערך העצמי. המטרה שלנו היא לחשב את &lt;span&gt;\( \varphi \)&lt;/span&gt;, עד רמת דיוק מסויימת שנוכל לשלוט עליה ולהגדיל אותה כרצוננו; אבל מכיוון שתמיד נקבל מספר רציונלי ו-&lt;span&gt;\( \varphi \)&lt;/span&gt; עשוי להיות אי רציונלי, גם ברמת דיוק גבוהה עדיין ייתכן שנקבל רק &lt;strong&gt;הערכה&lt;/strong&gt; של הערך של &lt;span&gt;\( \varphi \)&lt;/span&gt;, ומכאן שם האלגוריתם.&lt;/p&gt;
+
+&lt;p&gt;זה אלגוריתם מעניין למדי כבר בשלב הזה, כי הוא עושה משהו שלא ראינו עד כה - מחשב ערך מספרי כלשהו ומחזיר אותו לנו. לא לגמרי ברור איך עושים את זה, או למה זה חשוב; עד סוף הפוסט אני מקווה שחלק מהערפל הזה קצת יתבהר, אבל לשימושים לא נגיע הפעם.&lt;/p&gt;
+
+&lt;h2&gt;אלגוריתם הערכת פאזה, תיאור פורמלי וקסום&lt;/h2&gt;
+
+&lt;p&gt;אבני הבניין שמהן אנו בונים את אלגוריתם הערכת הפאזה הן שלוש: קודם כל, אנו נעזרים ב-&lt;span&gt;\( n \)&lt;/span&gt; קיוביטים שמאותחלים ל-&lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt;, כאשר &lt;span&gt;\( n \)&lt;/span&gt; מתאר את רמת הדיוק שלנו - אנחנו הולכים לקבל כפלט מספר בן &lt;span&gt;\( n \)&lt;/span&gt; ספרות בינאריות אחרי הנקודה שהוא קירוב של &lt;span&gt;\( \varphi \)&lt;/span&gt; (ואם &lt;span&gt;\( \varphi \)&lt;/span&gt; עצמו ניתן לתיאור מדויק באמצעות &lt;span&gt;\( n \)&lt;/span&gt; ספרות בינאריות אחרי הנקודה, נקבל אותו במדויק). שנית, אנו נעזרים ב-&lt;span&gt;\( t \)&lt;/span&gt; קיוביטים נוספים שהמצב שלהם בתחילת האלגוריתם הוא &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt;, הוקטור העצמי שאת הפאזה שלו מחפשים (בפוסט על האלגוריתם של שור נראה שלא באמת &lt;strong&gt;חייבים&lt;/strong&gt; לדעת את &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt;). לבסוף, אנחנו מניחים שיש לנו יכולת לבנות מעגל שמחשב את &lt;span&gt;\( U \)&lt;/span&gt;, אבל יותר מזה - גם את &lt;span&gt;\( U^{2},U^{4},U^{8},\ldots \)&lt;/span&gt; וכדומה, עבור חזקות &lt;span&gt;\( U^{2^{t}} \)&lt;/span&gt; עם &lt;span&gt;\( t\ge0 \)&lt;/span&gt;. למה רק חזקות של 2? כי נראה שהן יספיקו לנו כדי לחשב את כל החזקות של &lt;span&gt;\( U \)&lt;/span&gt; שנזדקק להן.&lt;/p&gt;
+
+&lt;p&gt;בהינתן שיש לנו את כל אלו (וזו לא הנחה טריוויאלית), אלגוריתם הערכת הפאזה די קל לתיאור קונספטואלי. אני אקרא לקיוביטים שאותחלו ל-&lt;span&gt;\( \left|0^{n}\right\rangle  \)&lt;/span&gt; בשם “הרגיסטר הראשון” ולקיוביטים שמהווים את &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; בשם “הרגיסטר השני”, וכעת מה שעושים הוא:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;מפעילים &lt;span&gt;\( H \)&lt;/span&gt; על כל אברי הרגיסטר הראשון.&lt;/li&gt;
+
+
+&lt;li&gt;מפעילים את הטרנספורמציה &lt;span&gt;\( \left|k\right\rangle \left|u\right\rangle \mapsto\left|k\right\rangle U^{k}\left|u\right\rangle  \)&lt;/span&gt; על שני הרגיסטרים.&lt;/li&gt;
+
+
+&lt;li&gt;מפעילים את &lt;span&gt;\( \text{QFT}_{N}^{\dagger} \)&lt;/span&gt; על הרגיסטר הראשון.&lt;/li&gt;
+
+
+&lt;li&gt;מודדים את הרגיסטר הראשון. תוצאת המדידה תהיה הקירוב המבוקש.&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;בתור מין מעגל סכמטי, זה נראה כך:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/phase_estimation_overview.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;אבל כרגע רב הנסתר על המרובה. להפעיל &lt;span&gt;\( H \)&lt;/span&gt; על אברי הרגיסטר הראשון - את זה אנחנו כבר מבינים, וגם יודעים שזה מייצר לנו את המצב &lt;span&gt;\( \left|+^{n}\right\rangle  \)&lt;/span&gt;. אבל איך מבצעים את הטרנספורמציה &lt;span&gt;\( \left|k\right\rangle \left|u\right\rangle \mapsto\left|k\right\rangle U^{k}\left|u\right\rangle  \)&lt;/span&gt; ומה זה &lt;span&gt;\( \text{QFT}_{N}^{\dagger} \)&lt;/span&gt;? נתחיל מהשני. בפוסט הקודם על התמרת פורייה תיארנו מעגל שמחשב את &lt;span&gt;\( \text{QFT}_{N} \)&lt;/span&gt;. הסימון &lt;span&gt;\( \text{QFT}_{N}^{\dagger} \)&lt;/span&gt; פשוט מייצג את הטרנספורמציה &lt;strong&gt;ההופכית&lt;/strong&gt;. קל לחשב אותה, כי חישוב קוונטי שלא מערב מדידות הוא &lt;strong&gt;הפיך&lt;/strong&gt; - פשוט לוקחים את המעגל של &lt;span&gt;\( \text{QFT}_{N} \)&lt;/span&gt; ושמים את כל השערים שלו בסדר הפוך. פורמלית, מה שמשתמשים בו בהערכת פאזה הוא לא “התמרת פורייה הקוונטית” אלא “התמרת פורייה הקוונטית ההפוכה”, ועוד מעט ייפול לנו גם האסימון למה.&lt;/p&gt;
+
+&lt;p&gt;השאלה השניה היא איך מחשבים את &lt;span&gt;\( \left|k\right\rangle \left|u\right\rangle \mapsto\left|k\right\rangle U^{k}\left|u\right\rangle  \)&lt;/span&gt;, וכאן זה הולך להיות דומה &lt;strong&gt;מאוד&lt;/strong&gt; למה שקרה בהתמרת פורייה הקוונטית. כל כך דומה, שאני ממליץ בחום לחזור ולקרוא את הפוסט ההוא למי שדילגו עליו (מצד שני, אולי זה פשוט יותר כאן, ויקל על מי שנתקעו בפוסט ההוא?)&lt;/p&gt;
+
+&lt;p&gt;כזכור, אנחנו אוהבים ייצוג &lt;strong&gt;בינארי&lt;/strong&gt; של מספרים. הייצוג הבינארי של מספר &lt;span&gt;\( k \)&lt;/span&gt; הוא ייצוג בתור &lt;span&gt;\( k=\sum_{t=1}^{n}2^{n-t}k_{t} \)&lt;/span&gt; כך ש-&lt;span&gt;\( k_{t}\in\left\{ 0,1\right\}  \)&lt;/span&gt;. עכשיו, אפשר לפרק העלאה כללית בחזקת &lt;span&gt;\( k \)&lt;/span&gt; למכפלה של העלאות בחזקות של 2:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( U^{k}=U^{\sum_{t=1}^{n}2^{n-t}k_{t}}=\prod_{t=1}^{n}U^{2^{n-t}k_{t}}=\prod_{k_{t}=1}U^{2^{n-t}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אז האפקט שאנחנו רוצים הוא בעצם:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle \left|u\right\rangle \mapsto\left|k_{1}k_{2}\ldots k_{n}\right\rangle \prod_{k_{t}=1}U^{2^{n-t}}\left|u\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ראינו משהו דומה לזה בפוסט על פורייה, ושם הטריק שלנו היה שאפשר לעבור מסכום של &lt;span&gt;\( 2^{n} \)&lt;/span&gt; איברים שכל אחד מהם הוא מכפלה של &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים (כלומר, הסכום הוא על כל המכפלות האפשריות) אל מכפלה טנזורית של &lt;span&gt;\( n \)&lt;/span&gt; הקיוביטים שכל אחד מהם הוא בסופרפוזיציה של בדיוק שני מצבים. אני ארצה לעשות את זה גם כאן, אבל בגלל שמעורבים פה שני רגיסטרים קוונטיים שונים, אחד עם &lt;span&gt;\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle  \)&lt;/span&gt; ואחד עם &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt;, זה יותר מסובך - אני צריך להוציא החוצה את &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; איכשהו, וקל לי לעשות את זה כי &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; הוא &lt;strong&gt;וקטור עצמי&lt;/strong&gt; של &lt;span&gt;\( U \)&lt;/span&gt; ולכן הפעולה של &lt;span&gt;\( U \)&lt;/span&gt; עליו מתורגמת לכפל בסקלר, ואת הסקלר אני יכול להעביר אל &lt;span&gt;\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle  \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle \prod_{k_{t}=1}U^{2^{n-t}}\left|u\right\rangle =\left|k_{1}k_{2}\ldots k_{n}\right\rangle \prod_{k_{t}=1}e^{2\pi i\varphi\cdot2^{n-t}}\left|u\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \prod_{k_{t}=1}e^{2\pi i\varphi\cdot2^{n-t}}\left|k_{1}k_{2}\ldots k_{n}\right\rangle \left|u\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו בואו נעשה טריק כמו בפורייה: ראשית ניקח סכום של כל &lt;span&gt;\( 2^{n} \)&lt;/span&gt; מצבי הבסיס &lt;span&gt;\( \left|k_{1}k_{2}\ldots k_{n}\right\rangle  \)&lt;/span&gt;. הוא יצטרך להיות משוקלל, כלומר נחלק אותו ב-&lt;span&gt;\( \frac{1}{2^{n/2}} \)&lt;/span&gt;. נקבל שצריך להגיע אל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{2^{n/2}}\sum_{k=0}^{2^{n}-1}\prod_{k_{t}=1}e^{2\pi i\varphi\cdot2^{n-t}}\left|k_{1}k_{2}\ldots k_{n}\right\rangle \left|u\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{2^{n/2}}\bigotimes_{t=1}^{n}\left(\left|0\right\rangle +e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle \right)\left|u\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\bigotimes_{t=1}^{n}\left(\frac{\left|0\right\rangle +e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle }{\sqrt{2}}\right)\left|u\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מה שאנחנו רואים פה הוא שאפשר לחשוב על היעד שלנו בתור משהו שבו &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; המקורי לא השתנה, אבל ברגיסטר הראשון הקיוביט ה-&lt;span&gt;\( t \)&lt;/span&gt; התחלף מ-&lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; תמים אל &lt;span&gt;\( \frac{\left|0\right\rangle +e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle }{\sqrt{2}} \)&lt;/span&gt;. איך משיגים אפקט כזה? ראשית, כמו שאמרתי כבר, מפעילים &lt;span&gt;\( H \)&lt;/span&gt; בהתחלה על כל הקיוביטים ברגיסטר הזה - זה מעביר כל אחד מהם אל &lt;span&gt;\( \frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}} \)&lt;/span&gt;. עכשיו רק צריך להכניס את הפאזה &lt;span&gt;\( e^{2\pi i\varphi\cdot2^{n-t}} \)&lt;/span&gt; לתוך המקדם של &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; מבלי לגעת ב-&lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt;. את זה אפשר לעשות עם שער &lt;strong&gt;מותנה&lt;/strong&gt;. מה שאני רוצה שיקרה הוא&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( \left|0\right\rangle \left|u\right\rangle \mapsto\left|0\right\rangle \left|u\right\rangle  \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( \left|1\right\rangle \left|u\right\rangle \mapsto\left|1\right\rangle U^{2^{n-t}}\left|u\right\rangle =e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle \left|u\right\rangle  \)&lt;/span&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;אז אני הולך להפעיל שער &lt;span&gt;\( U^{2^{n-t}} \)&lt;/span&gt; שמותנה בקיוביט ה-&lt;span&gt;\( t \)&lt;/span&gt;-י. ככה זה הולך להיראות:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/phase_estimation.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;אפשר כמובן לשאול איך בונים שערי &lt;span&gt;\( U^{2^{t}} \)&lt;/span&gt; מותנים בפועל - זו שאלה שאלגוריתם הערכת הפאזה עצמו לא מתעסק בה; הוא אומר “אם &lt;span&gt;\( U \)&lt;/span&gt; הוא נחמד ואתם יכולים לבנות את השערים הללו עבורו, אז אפשר להפעיל הערכת פאזה” אבל בשימוש ספציפי, כמו אלגוריתם שור, אכן נצטרך להסביר איך לעשות את זה.&lt;/p&gt;
+
+&lt;p&gt;שימו לב שעל פניו, קורה כאן משהו מוזר &lt;strong&gt;מאוד&lt;/strong&gt;: אחרי שערי ה-&lt;span&gt;\( H \)&lt;/span&gt; בהתחלה, לכאורה על שערי הרגיסטר הראשון לא מופעל שום דבר שמשנה אותם - רק שערים שמותנים בהם. והרגיסטר השני? מופעלים עליו &lt;span&gt;\( U^{j} \)&lt;/span&gt;-ים, אבל בגלל ש-&lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; הוא וקטור עצמי של &lt;span&gt;\( U \)&lt;/span&gt; זה לא משנה את &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; - רק מכפיל אותו בסקלר כלשהו, ואחר כך אנחנו בכל מקרה לא מודדים את &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; אז לכאורה הסקלר אמור “להיעלם”. מה הולך כאן? זה נראה כמו קסם - מעגל שלא עושה כלום ומחשב בדיוק את מה שהוא אמור.&lt;/p&gt;
+
+&lt;p&gt;כמובן שאין פה קסם - הסקלר של &lt;span&gt;\( \left|u\right\rangle  \)&lt;/span&gt; לא הולך להיעלם אלא להצטבר בצורה חכמה בתוך הסופרפוזיציה שמהווים אברי הרגיסטר הראשון. איך זה ייתכן, אם אנחנו לא פועלים עליהם? ובכן, אין דבר כזה בחישוב קוונטי, לומר בנחרצות כזו שאנחנו לא פועלים על משהו; שערים מותנים הם לא משהו שפועל על כל קיוביט בנפרד אלא על זוג קיוביטים ביחד, וצריך לחשוב על ההשפעה שלהם בתור משהו שמשפיע על שני הקיוביטים הללו יחד. כבר ראינו איך זה בא לידי ביטוי פורמלי.&lt;/p&gt;
+
+&lt;p&gt;עכשיו אנחנו קרובים בצורה מפתיעה לסיום ההבנה של “למה זה עובד”. נשאר רק דבר אחד, בעצם. בואו נסתכל על מצב הרגיסטר הראשון אחרי סיום ריצת המעגל:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i\varphi\cdot2^{n-t}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובוא נזכיר לעצמנו מה עשתה התמרת פורייה הקוונטית, בפוסט הקודם:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)=\bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.j_{n-t+1}\ldots j_{n}}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הדמיון בין שני הביטויים עצום, והוא יגדל עוד יותר אם נזכיר לעצמנו מה בעצם הולך בביטוי &lt;span&gt;\( \varphi\cdot2^{n-t} \)&lt;/span&gt;. הפאזה &lt;span&gt;\( \varphi \)&lt;/span&gt; עצמה היא מספר בין 0 ל-1, כלומר אפשר לכתוב &lt;span&gt;\( \varphi=0.\varphi_{1}\varphi_{2}\ldots \)&lt;/span&gt; בייצוג בינארי. עכשיו, לכפול את זה ב-&lt;span&gt;\( 2^{n-t} \)&lt;/span&gt; פירושו “להזיז שמאלה” את הספרות &lt;span&gt;\( n-t \)&lt;/span&gt; צעדים, ומכיוון שכל זה קורה במעריך של &lt;span&gt;\( e^{2\pi i} \)&lt;/span&gt;, הספרות שמשמאל לנקודה הבינארית פשוט ייעלמו (זה היה הטריק המרכזי שלנו בהתמרת פורייה הקוונטית). אז מה שבעצם הגענו אליו הוא&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.\varphi_{n-t+1}\ldots\varphi_{n}\ldots}\left|1\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, אם &lt;span&gt;\( \varphi=0.\varphi_{1}\varphi_{2}\ldots\varphi_{n} \)&lt;/span&gt; הוא ייצוג &lt;strong&gt;מדויק&lt;/strong&gt; של &lt;span&gt;\( \varphi \)&lt;/span&gt; באמצעות &lt;span&gt;\( n \)&lt;/span&gt; ספרות בינאריות, אז מה שקיבלנו הוא &lt;strong&gt;בדיוק&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \bigotimes_{t=1}^{n}\frac{1}{\sqrt{2}}\left(\left|0\right\rangle +e^{2\pi i0.\varphi_{n-t+1}\ldots\varphi_{n}}\left|1\right\rangle \right)=\text{QFT}_{N}\left(\left|\varphi_{1}\varphi_{2}\ldots\varphi_{n}\right\rangle \right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן, אם אחרי המעגל שכבר הראינו אנחנו מוסיפים &lt;span&gt;\( \text{QFT}_{N}^{\dagger} \)&lt;/span&gt;, נסיים במצב הקוונטי הבודד &lt;span&gt;\( \left|\varphi_{1}\varphi_{2}\ldots\varphi_{n}\right\rangle  \)&lt;/span&gt;, וכשנמדוד אותו נקבל את סדרת הספרות &lt;span&gt;\( \varphi_{1}\varphi_{2}\ldots\varphi_{n} \)&lt;/span&gt; בהסתברות 1.&lt;/p&gt;
+
+&lt;p&gt;זה ממש קסם.&lt;/p&gt;
+
+&lt;h2&gt;ועכשיו לחלק הפחות קסום&lt;/h2&gt;
+
+&lt;p&gt;אם אפשר לייצג את הפאזה &lt;span&gt;\( \varphi \)&lt;/span&gt; בעזרת &lt;span&gt;\( n \)&lt;/span&gt; ספרות בינאריות, האלגוריתם עובד מושלם. אבל אם אי אפשר לייצג כך את הפאזה, הכל הופך ליותר מסובך וטכני. במקרה הזה בודאות לא נוכל לקבל את &lt;span&gt;\( \varphi \)&lt;/span&gt; במדויק ולכן בכל מקרה נקבל &lt;strong&gt;קירוב&lt;/strong&gt; שלו; אנחנו רוצים להשתכנע שגם במקרה הזה, בהסתברות טובה נקבל קירוב &lt;strong&gt;טוב&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;אני הולך להיכנס לפרטים הטכניים של הניתוח עד הסוף, אבל מי שמתייאשים באמצע לא חייבים לסבול; אפשר לקפוץ לתחילת החלק הבא שבו אסכם את כל מה שצריך לדעת.&lt;/p&gt;
+
+&lt;p&gt;בשביל הניתוח במקרה הזה, יהיה לנו יותר נוח לחשוב על ייצוג המצב בתור סכום של &lt;span&gt;\( N=2^{n} \)&lt;/span&gt; מחוברים. אז בואו ניזכר מה קורה בשני השלבים הראשונים:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|0^{n}\right\rangle \left|u\right\rangle \mapsto\frac{1}{2^{n/2}}\sum_{k=0}^{2^{n}-1}\left|k\right\rangle \left|u\right\rangle \mapsto\frac{1}{2^{n/2}}\sum_{k=0}^{2^{n}-1}\left|k\right\rangle U^{k}\left|u\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{2\pi i\varphi\cdot k}\left|k\right\rangle \left|u\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, מה הפעלת &lt;span&gt;\( \text{QFT}_{N}^{\dagger} \)&lt;/span&gt; עושה? כזכור&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}\left(\left|j\right\rangle \right)\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}e^{\frac{2\pi i}{N}jk}\left|k\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כדי לקבל את &lt;span&gt;\( \text{QFT}_{N}^{\dagger} \)&lt;/span&gt; אפשר פשוט להפעיל צמוד מרוכב על אגף ימין; הדבר היחיד שהוא עושה הוא להחליף את &lt;span&gt;\( i \)&lt;/span&gt; (המספר המרוכב &lt;span&gt;\( i \)&lt;/span&gt;; זה לא אינדקס) ב-&lt;span&gt;\( -i \)&lt;/span&gt;. אז בואו נכתוב את זה - ואני גם אחליף את הסימונים של מצבי הקלט והפלט, כך שהקלט יהיה דווקא &lt;span&gt;\( k \)&lt;/span&gt; והפלט דווקא &lt;span&gt;\( j \)&lt;/span&gt;, כי עדיין קונספטואלית אני הופך את הסדר, וזה גם מתאים לשימוש שתכף אבצע בזה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}^{\dagger}\left(\left|k\right\rangle \right)\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}e^{-\frac{2\pi i}{N}jk}\left|j\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן הפעלת &lt;span&gt;\( \text{QFT}_{N}^{\dagger} \)&lt;/span&gt; על המצב שהגענו אליו ברגיסטר הראשון תניב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{QFT}_{N}^{\dagger}\left(\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{2\pi i\varphi\cdot k}\left|k\right\rangle \right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{2\pi i\varphi\cdot k}\text{QFT}_{N}^{\dagger}\left(\left|k\right\rangle \right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{N}\sum_{k=0}^{N-1}\sum_{j=0}^{N-1}e^{2\pi i\varphi\cdot k}e^{-2\pi i\cdot\frac{jk}{N}}\left|j\right\rangle = \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\frac{1}{N}\sum_{j=0}^{N-1}\sum_{k=0}^{N-1}e^{2\pi i\left(\varphi-\frac{j}{N}\right)k}\left|j\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;קיבלנו פה סופרפוזיציה של הרבה מצבים; כדי להבין מה ההסתברות שמדידה תעלה בגורל מצב &lt;span&gt;\( \left|j\right\rangle  \)&lt;/span&gt; נסתכל על המקדם שלו, מה שאני מכנה &lt;strong&gt;האמפליטודה&lt;/strong&gt; שלו ומסמן &lt;span&gt;\( \alpha_{j} \)&lt;/span&gt;; ההעלאה בריבוע של הערך המוחלט של האמפליטודה תיתן לנו את ההסתברות ש-&lt;span&gt;\( \left|j\right\rangle  \)&lt;/span&gt; יעלה בגורל. באופן כללי האמפליטודה הזו תהיה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \alpha_{j}=\frac{1}{N}\sum_{k=0}^{N-1}e^{2\pi i\left(\varphi-\frac{j}{N}\right)k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;האם אפשר לפשט את זה קצת? בהחלט, יש לנו פה טור הנדסי! אם נזכור את חוקי החזקות: &lt;span&gt;\( e^{ab}=\left(e^{a}\right)^{b} \)&lt;/span&gt; אפשר לראות שבעצם קיבלנו פה את הסכום&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \alpha_{j}=\frac{1}{N}\sum_{k=0}^{N-1}\left[e^{2\pi i\left(\varphi-\frac{j}{N}\right)}\right]^{k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזה טור הנדסי, כלומר ביטוי מהצורה &lt;span&gt;\( \sum_{k=0}^{N-1}q^{k} \)&lt;/span&gt; כאשר במקרה שלנו &lt;span&gt;\( q=e^{2\pi i\left(\varphi-\frac{j}{N}\right)} \)&lt;/span&gt;. עכשיות למרות שמדגדג לי, לא אחזור על האופן שבו מוצאים את הסכום של טור הנדסי - &lt;a href=&quot;https://gadial.net/2019/05/30/arithmetic_and_geometric_series/&quot;&gt;יש לי פוסט&lt;/a&gt; על זה. פשוט צריך לזכור ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{k=0}^{N-1}q^{k}=\frac{q^{N}-1}{q-1}=\frac{1-q^{N}}{1-q} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;(עברתי לצורה השניה כי היא קצת יותר אינטואיטיבית במקרה כמו שלנו שבו &lt;span&gt;\( \left|q\right|&amp;lt;1 \)&lt;/span&gt;)&lt;/p&gt;
+
+&lt;p&gt;ולכן במקרה שלנו נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \alpha_{j}=\frac{1}{N}\left(\frac{1-e^{2\pi i\left(\varphi-\frac{j}{N}\right)\cdot N}}{1-e^{2\pi i\left(\varphi-\frac{j}{N}\right)}}\right)=\frac{1}{N}\left(\frac{1-e^{2\pi i\left(N\varphi-j\right)}}{1-e^{2\pi i\left(\varphi-j/N\right)}}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זו האמפליטודה עבור מצב &lt;span&gt;\( j \)&lt;/span&gt; כללי. בואו ניקח אחד ספציפי שטוב לנו במיוחד: ניקח מספר &lt;span&gt;\( b \)&lt;/span&gt; שנותן לנו את הקירוב הטוב ביותר ל-&lt;span&gt;\( \varphi \)&lt;/span&gt; מלמלטה שכולל &lt;span&gt;\( n \)&lt;/span&gt; ספרות בינאריות. כלומר, ניקח &lt;span&gt;\( 0\le b&amp;lt;N \)&lt;/span&gt; שמקיים ש-&lt;span&gt;\( \frac{b}{N}=0.b_{1}b_{2}\ldots b_{n} \)&lt;/span&gt;, &lt;span&gt;\( \frac{b}{N}\le\varphi \)&lt;/span&gt; ו-&lt;span&gt;\( \delta=\left|\varphi-\frac{b}{N}\right|=\varphi-\frac{b}{N} \)&lt;/span&gt; הוא מינימלי ביחס לדרישות הללו.&lt;/p&gt;
+
+&lt;p&gt;אנחנו לא יודעים, כמובן, מהו &lt;span&gt;\( \delta \)&lt;/span&gt; אבל ברור ש-&lt;span&gt;\( 0\le\delta\le\frac{1}{N} \)&lt;/span&gt; (כי אם &lt;span&gt;\( \frac{1}{N}&amp;lt;\delta \)&lt;/span&gt; אפשר להגדיל את &lt;span&gt;\( b \)&lt;/span&gt; ב-&lt;span&gt;\( \frac{1}{N}=\frac{1}{2^{n}} \)&lt;/span&gt; על ידי חיבור 1 לספרה הכי פחות משמעותית בו ולקבל קירוב טוב יותר מ-&lt;span&gt;\( b \)&lt;/span&gt;).&lt;/p&gt;
+
+&lt;p&gt;לא כל כך קל לחסום מלמטה את ההסתברות לקבל את &lt;span&gt;\( b \)&lt;/span&gt; או דברים שקרובים אליו, אז נעשה את ההפך - נחסום מלמעלה את ההסתברות לקבל דברים שרחוקים מ-&lt;span&gt;\( b \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;לשם כך בואו נכניס לתמונה עוד סימון. נזכור ש-&lt;span&gt;\( 0\le b&amp;lt;N \)&lt;/span&gt;, ולכן אפשר לתאר אברים אחרים בתחום הזה בתור &lt;span&gt;\( b+d\text{ mod }N \)&lt;/span&gt; כאשר &lt;span&gt;\( d\in\mathbb{Z} \)&lt;/span&gt; הוא מספר שלם כלשהו. למשל, אם &lt;span&gt;\( N=8 \)&lt;/span&gt; ו-&lt;span&gt;\( b=5 \)&lt;/span&gt; אז &lt;span&gt;\( b+4=1 \)&lt;/span&gt; ו-&lt;span&gt;\( b+\left(-7\right)=6 \)&lt;/span&gt; וכדומה. אני אשתמש ב-&lt;span&gt;\( \beta_{d} \)&lt;/span&gt; כדי לסמן את האמפליטודה של איבר שמיוצג כך, כלומר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \beta_{d}=\alpha_{b+d\left(\text{mod }N\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו השאלה היא כזו: נניח ש-&lt;span&gt;\( e \)&lt;/span&gt; הוא מספר חיובי כלשהו שבא לציין את “סף הרגישות לשגיאה” שלנו - ככל שהוא קטן יותר כך גודל השגיאות שאנחנו מוכנים לסבול הוא קטן יותר. פורמלית, אם &lt;span&gt;\( m \)&lt;/span&gt; הוא התוצאה שהאלגוריתם החזיר לנו, אנחנו מתחילים לכעוס אם &lt;span&gt;\( \left|m-b\right|&amp;gt;e \)&lt;/span&gt; (שימו לב ש-&lt;span&gt;\( \left|m-b\right| \)&lt;/span&gt; הוא &lt;strong&gt;לא&lt;/strong&gt; כמה שאנחנו רחוקים מ-&lt;span&gt;\( \varphi \)&lt;/span&gt;; לניתוח של זה נגיע בהמשך).&lt;/p&gt;
+
+&lt;p&gt;אם כן, מה ההסתברות שלנו לקבל במדידה &lt;span&gt;\( m \)&lt;/span&gt; בעייתי שכזה? בשביל זה אפשר להסתכל על כל ה-&lt;span&gt;\( \beta_{d} \)&lt;/span&gt;-ים כך ש-&lt;span&gt;\( d\notin\left[-e,e\right] \)&lt;/span&gt;, כל עוד אני לא לוקח &lt;span&gt;\( d \)&lt;/span&gt; גדול או קטן מדי עד שהוא כבר עושה סיבוב מסביב ל-&lt;span&gt;\( N \)&lt;/span&gt; וחוזר שוב לתחום &lt;span&gt;\( \left[-e,e\right] \)&lt;/span&gt;. לצורך זה אני אקח את כל ה-&lt;span&gt;\( d \)&lt;/span&gt;-ים שמקיימים או &lt;span&gt;\( e+1\le d\le\frac{N}{2} \)&lt;/span&gt; או &lt;span&gt;\( -\frac{N}{2}&amp;lt;d\le-\left(e+1\right) \)&lt;/span&gt;. זה יבטיח שאני תופס את כל האיברים ה”בעייתיים” ולא לוקח איברים לא בעייתים, אלא אולי במקרי קיצון מוזרים וגם בהם הטעות הזו יכולה רק להיות לרעתנו (כי היא תנפח את ההסתברות לקבל משהו לא טוב) אבל הניתוח שלנו יצליח בכל מקרה.&lt;/p&gt;
+
+&lt;p&gt;אם כן, פורמלית:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(\left|m-b\right|&amp;gt;e\right)\le\sum_{-N/2&amp;lt;d&amp;lt;-e}\left|\beta_{d}\right|^{2}+\sum_{e&amp;lt;d\le N/2}\left|\beta_{d}\right|^{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כדי לעשות משהו מועיל עם הביטוי הזה אני צריך למצוא חסם מלמעלה על &lt;span&gt;\( \left|\beta_{d}\right|^{2} \)&lt;/span&gt;, כלומר חסם מלמעלה על &lt;span&gt;\( \left|\beta_{d}\right| \)&lt;/span&gt;, כלומר חסם מלמעלה על&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|\beta_{d}\right|=\frac{1}{N}\frac{\left|1-e^{2\pi i\left(N\varphi-\left(b+d\right)\right)}\right|}{\left|1-e^{2\pi i\left(\varphi-\left(b+d\right)/N\right)}\right|} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ההחלפה של &lt;span&gt;\( j \)&lt;/span&gt; ב-&lt;span&gt;\( b+d \)&lt;/span&gt; כאן בלי להכניס איזה &lt;span&gt;\( \text{mod}N \)&lt;/span&gt; היא לא טריוויאלית לגמרי; היא מוצדקת בכך שכפולה של &lt;span&gt;\( N \)&lt;/span&gt; במעריך של האקספוננט פשוט מובילה לתוספת כמות שלמה של &lt;span&gt;\( 2\pi i \)&lt;/span&gt;, שמתורגם ל-1; בשלב הזה כבר השתמשנו בזה כמה פעמים ואני מקווה שזה ברור.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, את המונה קל לחסום מלמעלה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|1-e^{2\pi i\left(N\varphi-b+d\right)}\right|\le2 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;למה? כי האקספוננט הזה, מפחיד ככל שיהיה, מתורגם בסו, למספר מרוכב מנורמה 1. אז אי שוויון המשולש נותן לנו &lt;span&gt;\( \left|1-z\right|\le\left|1\right|+\left|z\right|=1+1=2 \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;אז המונה קל, אבל את המכנה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|1-e^{2\pi i\left(\varphi-\left(b+d\right)/N\right)}\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;צריך לחסום מלמטה. זה דורש קצת יותר. ראשית, בואו נחזיר לתמונה את&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \delta=\varphi-\frac{b}{N} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;והביטוי שצריך לחסום יהפוך אל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|1-e^{2\pi i\left(\delta-d/N\right)}\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, &lt;span&gt;\( \varphi-\frac{b+d}{N}=\delta-\frac{d}{N} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;מכיוון ש-&lt;span&gt;\( -\frac{N}{2}&amp;lt;d \)&lt;/span&gt; אז &lt;span&gt;\( -\frac{N}{2}+1\le d \)&lt;/span&gt;, כלומר &lt;span&gt;\( -\frac{1}{2}+\frac{1}{N}\le\frac{d}{N} \)&lt;/span&gt;. בנוסף לכך &lt;span&gt;\( \delta\le\frac{1}{N} \)&lt;/span&gt; ולכן נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \delta-\frac{d}{N}\le\frac{1}{N}+\frac{1}{2}-\frac{1}{N}=\frac{1}{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובאופן קצת יותר קל גם&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \delta+\frac{d}{N}\ge0-\frac{1}{2}=-\frac{1}{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מה שנותן לנו&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( -\pi\le2\pi\left(\delta-d/N\right)\le\pi \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;בשביל מה זה טוב? כי בואו נסתכל שניה על הביטוי &lt;span&gt;\( 1-e^{i\theta}=1-\cos\theta-i\sin\theta \)&lt;/span&gt; כאשר &lt;span&gt;\( -\pi\le\theta\le\pi \)&lt;/span&gt;. אני אצטרך קצת נוסחאות טריגונומטריות כדי לפשט אותו:&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( 1-\cos\theta=2\sin^{2}\frac{\theta}{2} \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( \sin\theta=2\sin\frac{\theta}{2}\cos\frac{\theta}{2} \)&lt;/span&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;לשמחתי אני סוף סוף יכול לומר &lt;a href=&quot;https://gadial.net/2021/06/25/trigonometry_intro_3/&quot;&gt;שיש לי פוסט&lt;/a&gt; שמוכיח את הנוסחאות הללות ולכן לא אסביר אותן כאן שוב, אבל הן מפשטות יפה את הביטוי שלנו:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 1-\cos\theta-i\sin\theta=2\sin^{2}\frac{\theta}{2}-2i\sin\frac{\theta}{2}\cos\frac{\theta}{2}=2\sin\frac{\theta}{2}\left(\sin\frac{\theta}{2}-i\cos\frac{\theta}{2}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;לכאורה זה יותר מסובך, אבל ערך מוחלט יפשט לנו את העניינים. בכללי, &lt;span&gt;\( \left|a+bi\right|=\sqrt{a^{2}+b^{2}} \)&lt;/span&gt;, ותוך ניצול העובדה ש-&lt;span&gt;\( \sin^{2}\alpha+\cos^{2}\alpha=1 \)&lt;/span&gt;, נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|2\sin\frac{\theta}{2}\left(\sin\frac{\theta}{2}-i\cos\frac{\theta}{2}\right)\right|=2\left|\sin\frac{\theta}{2}\right|\left|\sin\frac{\theta}{2}-i\cos\frac{\theta}{2}\right|=2\left|\sin\frac{\theta}{2}\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, בתחום &lt;span&gt;\( 0\le x\le\frac{\pi}{2} \)&lt;/span&gt; סינוס מקיימת תכונה נחמדה מאוד: היא &lt;strong&gt;קעורה&lt;/strong&gt;, כלומר הערכים שלה בין שתי נקודות גדולים יותר מהקו הישר שמחבר את שתי הנקודות הללו. נקודות הקצה של התחום הן &lt;span&gt;\( \left(0,0\right) \)&lt;/span&gt; (ראשית הצירים) ו-&lt;span&gt;\( \left(\frac{\pi}{2},1\right) \)&lt;/span&gt; (הקצה הימני של תחום העלייה של סינוס, כשהיא מגיעה ל-1 ומתחילה ליפול) ולכן הקו הישר המחבר את שתי הנקודות הללו הוא &lt;span&gt;\( y=\frac{2}{\pi}x \)&lt;/span&gt;, ואנו מקבלים ש-&lt;span&gt;\( \sin x\ge\frac{2}{\pi}x \)&lt;/span&gt;, כלומר בתחום הזה שבו הכל חיובי, &lt;span&gt;\( \left|\sin x\right|\ge\frac{2}{\pi}\left|x\right| \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עבור &lt;span&gt;\( -\frac{\pi}{2}\le x\le0 \)&lt;/span&gt; זה טיפה יותר מסובך כי &lt;span&gt;\( \left|x\right|=-x \)&lt;/span&gt; במקרה הזה. עכשיו, &lt;span&gt;\( \sin x \)&lt;/span&gt; היא פונקציה אנטי-סימטרית, כלומר &lt;span&gt;\( \sin\left(-x\right)=-\sin x \)&lt;/span&gt;, ולכן עבור &lt;span&gt;\( -\frac{\pi}{2}\le x\le0 \)&lt;/span&gt; נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|\sin x\right|=-\sin x=\sin\left(-x\right)\ge\frac{2}{\pi}\left(-x\right)=\frac{2}{\pi}\left|x\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן קיבלנו את אי-השוויון &lt;span&gt;\( \left|\sin x\right|\ge\frac{2}{\pi}\left|x\right| \)&lt;/span&gt; עבור כל &lt;span&gt;\( -\frac{\pi}{2}\le x\le0 \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, אם &lt;span&gt;\( -\pi\le\theta\le\pi \)&lt;/span&gt; אז &lt;span&gt;\( -\frac{\pi}{2}\le\frac{\theta}{2}\le\frac{\pi}{2} \)&lt;/span&gt; ולכן אנו מקבלים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|1-e^{i\theta}\right|=2\left|\sin\frac{\theta}{2}\right|\ge2\cdot\frac{2}{\pi}\left|\frac{\theta}{2}\right|=\frac{2}{\pi}\left|\theta\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ואפשר להתקדם הלאה. כזכור, אנחנו באמצע חסימה מלמטה של הביטוי&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|1-e^{2\pi i\left(\delta-d/N\right)}\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;תוך שאנחנו יודעים ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( -\pi\le2\pi\left(\delta-d/N\right)\le\pi \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, במקרה הזה &lt;span&gt;\( \theta=2\pi\left(\delta-d/N\right) \)&lt;/span&gt;, ולכן נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|1-e^{2\pi i\left(\delta-d/N\right)}\right|\ge4\left|\left(\delta-d/N\right)\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו נחזור אל הדבר שממנו התחלנו - אנחנו מנסים לחסום מלמטה את הערך המוחלט של &lt;span&gt;\( \beta_{d} \)&lt;/span&gt;, שהיא האמפליטודה של תוצאה “לא טובה” בערכי ה-&lt;span&gt;\( d \)&lt;/span&gt; שאנו מסתכלים עליהם. תוך שימוש באי השוויון שהוכחנו זה עתה, נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|\beta_{d}\right|\le\frac{1}{N}\frac{2}{\left|1-e^{2\pi i\left(\delta-d/N\right)}\right|}\le\frac{1}{N}\frac{2}{4\left|\left(\delta-d/N\right)\right|}=\frac{1}{4}\frac{1}{\left|\left(N\delta-d\right)\right|} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וקיבלנו חסם על ההסתברות הכוללת לתוצאה “רעה”:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(\left|m-b\right|&amp;gt;e\right)\le\sum_{-N/2\le d&amp;lt;e}\left|\beta_{d}\right|^{2}+\sum_{e&amp;lt;d\le N/2}\left|\beta_{d}\right|^{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \le\frac{1}{4}\left[\sum_{-N/2&amp;lt;d&amp;lt;-e}\frac{1}{\left(N\delta-d\right)^{2}}+\sum_{e&amp;lt;d\le N/2}\frac{1}{\left(N\delta-d\right)^{2}}\right] \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כן, כן, זה עדיין נראה מחריד ונצטרך לעבוד עוד כדי לפשט את זה. זו דרך החדו”א - כל הזמן מוצאים מה לפשט במחיר של &lt;span&gt;\( \le \)&lt;/span&gt; נוסף בדרך. עכשיו אפשר להתעסק עם ה-&lt;span&gt;\( \delta \)&lt;/span&gt; הזה שלמטה שהמהות שלו היא להיות קטן. כמה קטן? &lt;span&gt;\( 0\le\delta\le\frac{1}{N} \)&lt;/span&gt;, כלומר &lt;span&gt;\( 0\le N\delta\le1 \)&lt;/span&gt;. זה אומר שאפשר להעלים את &lt;span&gt;\( N\delta \)&lt;/span&gt; מתוך &lt;span&gt;\( \left(N\delta-d\right)^{2} \)&lt;/span&gt; בצורה יחסית פשוטה - אבל כרגיל, נצטרך להיזהר. קודם כל נפתח סוגריים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(N\delta-d\right)^{2}=\left(N\delta\right)^{2}-2\left(N\delta\right)d+d^{2}=\left(N\delta\right)\left[N\delta-2d\right]+d^{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אם &lt;span&gt;\( d&amp;lt;0 \)&lt;/span&gt; אז גם &lt;span&gt;\( N\delta+2d&amp;gt;0 \)&lt;/span&gt; ולכן &lt;span&gt;\( \left(N\delta-d\right)^{2}&amp;gt;d^{2} \)&lt;/span&gt;, כלומר &lt;span&gt;\( \frac{1}{\left(N\delta-d\right)^{2}}&amp;lt;\frac{1}{d^{2}} \)&lt;/span&gt;. זה מטפל באיברים של הסכום השמאלי.&lt;/p&gt;
+
+&lt;p&gt;אם &lt;span&gt;\( d&amp;gt;0 \)&lt;/span&gt;, כלומר &lt;span&gt;\( d\ge1 \)&lt;/span&gt; נעשה משהו אחר: נשתמש בכך ש-&lt;span&gt;\( N\delta\le1 \)&lt;/span&gt; ולכן &lt;span&gt;\( N\delta-d\le1-d \)&lt;/span&gt;. עכשיו, שני האגפים בביטוי הזה הם שליליים (כי &lt;span&gt;\( d\ge1 \)&lt;/span&gt;) ולכן כשנעלה אותם בריבוע כיוון האי שוויון יתהפך ונקבל &lt;span&gt;\( \left(N\delta-d\right)^{2}\ge\left(1-d\right)^{2} \)&lt;/span&gt;, ולכן &lt;span&gt;\( \frac{1}{\left(N\delta-d\right)^{2}}\le\frac{1}{\left(1-d\right)^{2}} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;לסיכום, קיבלנו את הצעד הבא בחסימה של הביטוי שלנו:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(\left|m-b\right|&amp;gt;e\right)\le\frac{1}{4}\left[\sum_{-N/2&amp;lt;d&amp;lt;-e}\frac{1}{d^{2}}+\sum_{e&amp;lt;d\le N/2}\frac{1}{\left(d-1\right)^{2}}\right] \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אנחנו כבר לקראת הסוף! התעלול הבא הוא לאחד את שני הסכומים לסכום אחד כי בעצם מופיעים בהם כמעט אותם איברים בדיוק: בשמאלי מופיע &lt;span&gt;\( \frac{1}{d^{2}} \)&lt;/span&gt; לכל &lt;span&gt;\( -\frac{N}{2}&amp;lt;d&amp;lt;-e \)&lt;/span&gt; ובשני מופיע &lt;span&gt;\( \frac{1}{\left(d-1\right)^{2}} \)&lt;/span&gt; לכל &lt;span&gt;\( e&amp;lt;d\le\frac{N}{2} \)&lt;/span&gt;. כלומר, בשניהם מופיעים כל האיברים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{\left(e+1\right)^{2}},\frac{1}{\left(e+2\right)^{2}},\ldots,\frac{1}{\left(N/2-1\right)^{2}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובנוסף בימני מופיע גם &lt;span&gt;\( \frac{1}{e^{2}} \)&lt;/span&gt;. אז בואו ניקח 2 כפול סכום כל האיברים הללו:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(\left|m-b\right|&amp;gt;e\right)\le\frac{1}{2}\sum_{d=e}^{N/2-1}\frac{1}{d^{2}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה כבר סכום ממש פשוט. טריק סטנדרטי כדי לחסום סכומים כאלו הוא לעבור מסכום לאינטגרל, ב”מחיר” של הגדלה קטנה של התחום התחתון:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{d=e}^{N/2-1}\frac{1}{d^{2}}\le\int_{e-1}^{N/2-1}\frac{1}{x^{2}}dx \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה עובד כי מאחר ו-&lt;span&gt;\( \frac{1}{x^{2}} \)&lt;/span&gt; היא פונקציה יורדת, המינימום שלה מתקבל בסוף כל קטע, והאינטגרל של פונקציה על קטע כלשהו גדול או שווה למינימום שלה כפול אורך הקטע. במילים אחרות, &lt;span&gt;\( \int_{d-1}^{d}\frac{1}{x^{2}}dx\ge\frac{1}{d^{2}}\cdot1 \)&lt;/span&gt;, ובצורה הזו אנחנו יכולים לחסום את כל אברי הסכום &lt;span&gt;\( \sum_{d=e}^{N/2-1}\frac{1}{d^{2}} \)&lt;/span&gt; על ידי חתיכות אינטגרלים מתאימות.&lt;/p&gt;
+
+&lt;p&gt;למה לעבור לאינטגרל עזר לנו? כי אינטגרלים יותר קל לנו לחשב במדויק:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \int_{e-1}^{N/2-1}\frac{1}{x^{2}}dx=\left[-\frac{1}{x}\right]_{e-1}^{N/2-1}=\frac{1}{e-1}-\frac{1}{N/2-1}\le\frac{1}{e-1} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן קיבלנו סוף כל סוף&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(\left|m-b\right|&amp;gt;e\right)\le\frac{1}{2\left(e-1\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזה… ביטוי די פשוט!&lt;/p&gt;
+
+&lt;h2&gt;סיכום רגוע יותר של כל העניין&lt;/h2&gt;
+
+&lt;p&gt;עשיתי הרבה חישובים טכניים בחלק הקודם, אבל אפשר לסכם אותם בצורה די פשוטה: הראינו שההסתברות לקבל באלגוריתם הערכת הפאזה תוצאה לא טובה חסומה על ידי &lt;span&gt;\( \frac{1}{2\left(e-1\right)} \)&lt;/span&gt;, כש-&lt;span&gt;\( e \)&lt;/span&gt; הוא פרמטר שמשמש אותנו להערכת רמת הדיוק שלנו. רמת הדיוק תלויה לא רק בערך המספרי של &lt;span&gt;\( e \)&lt;/span&gt; אלא גם במספר הקיוביטים שאנחנו משתמשים בו ברגיסטר הראשון, &lt;span&gt;\( n \)&lt;/span&gt;. בואו ניכנס עכשיו להסבר יותר מפורט של מה שזה אומר.&lt;/p&gt;
+
+&lt;p&gt;המושג שאנחנו מדברים עליו הוא “רמת דיוק של &lt;span&gt;\( k \)&lt;/span&gt; ספרות אחרי הנקודה”. בואו ניתן דוגמא פשוטה עם מספרים בייצוג עשרוני. אם &lt;span&gt;\( a=0.2513 \)&lt;/span&gt; הוא מספר, ואנחנו מסתכלים על קירוב שלו ברמת דיוק של שתי ספרות אחרי הנקודה, הכוונה היא לכל מספר &lt;span&gt;\( b \)&lt;/span&gt; כך ש-&lt;span&gt;\( \left|a-b\right|\le0.01 \)&lt;/span&gt;. אז למשל, &lt;span&gt;\( a=0.25 \)&lt;/span&gt; הוא מספר כזה, אבל גם &lt;span&gt;\( 0.2433 \)&lt;/span&gt;, למרות שהוא לא מדויק בספרה השניה אחרי הנקודה, גם אם נעגל את המספר לשתי ספרות ונקבל &lt;span&gt;\( 0.24 \)&lt;/span&gt;. באופן כללי, דיוק ב-&lt;span&gt;\( k \)&lt;/span&gt; ספרות אחרי הנקודה פירושו &lt;span&gt;\( \left|a-b\right|\le\frac{1}{10^{k}} \)&lt;/span&gt;, אבל בהקשר שלנו, שבו המספרים מיוצגים בבסיס בינארי, הכוונה היא ל-&lt;span&gt;\( \left|a-b\right|\le\frac{1}{2^{k}} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;נניח שאנחנו רוצים לקבל רמת דיוק של &lt;span&gt;\( k \)&lt;/span&gt; ספרות אחרי הנקודה בהסתברות טובה יחסית. ברור שאנחנו חייבים להקצות לפחות &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים לרגיסטר הראשון, אחרת אין לנו מספיק ספרות בשביל דיוק של &lt;span&gt;\( k \)&lt;/span&gt; ספרות. כל קיוביט נוסף מעבר לכך שנקצה לרגיסטר הראשון יעזור לנו לשפר את ההסתברות לקבלת תוצאה טובה, אז בואו נכתוב &lt;span&gt;\( n=k+p \)&lt;/span&gt;, כאשר &lt;span&gt;\( p \)&lt;/span&gt; הם “הקיוביטים הנוספים לצורך שיפור ההסתברות” ובסוף נראה מה יוצאת ההסתברות כתלות ב-&lt;span&gt;\( p \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;מה שכבר ראינו הוא שיש מספר טבעי &lt;span&gt;\( b \)&lt;/span&gt; כלשהו כך ש-&lt;span&gt;\( \frac{b}{2^{n}} \)&lt;/span&gt; קירוב טוב של &lt;span&gt;\( \varphi \)&lt;/span&gt;, במובן זה ש-&lt;span&gt;\( \left|\frac{b}{2^{n}}-\varphi\right|\le\frac{1}{2^{n}} \)&lt;/span&gt;, והיתרון של ה-&lt;span&gt;\( b \)&lt;/span&gt; הזה היה שיכלנו לחסום את המרחק של תוצת אלגוריתם הערכת הפאזה ממנו: האלגוריתם מחזיר מספר טבעי &lt;span&gt;\( m \)&lt;/span&gt; (שאנחנו חושבים עליו בתור דרך אחרת לכתוב את המספר &lt;span&gt;\( \frac{m}{2^{n}} \)&lt;/span&gt; שהוא הקירוב של &lt;span&gt;\( \varphi \)&lt;/span&gt; שאנו מחפשים) שההסתברות שיקיים &lt;span&gt;\( \left|m-b\right|&amp;gt;e \)&lt;/span&gt; קטנה או שווה ל-&lt;span&gt;\( \frac{1}{2\left(e-1\right)} \)&lt;/span&gt; שהזכרתי קודם. היופי הוא שה-&lt;span&gt;\( e \)&lt;/span&gt; נתון לבחירתנו בהתאם למה שנוח לנו.&lt;/p&gt;
+
+&lt;p&gt;אם אנחנו רוצים דיוק של &lt;span&gt;\( k \)&lt;/span&gt; ספרות, מה שנעשה הוא להגדיר &lt;span&gt;\( e=2^{n-k}-1 \)&lt;/span&gt;. אם &lt;span&gt;\( \left|m-b\right|\le e \)&lt;/span&gt; אז&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|\frac{m}{2^{n}}-\varphi\right|\le\left|\frac{m}{2^{n}}-\frac{b}{2^{n}}\right|+\left|\frac{b}{2^{n}}-\varphi\right|=\frac{1}{2^{n}}\left|m-b\right|+\left|\frac{b}{2^{n}}-\varphi\right|\le \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \le\frac{1}{2^{n}}\left(2^{n-k}-1\right)+\frac{1}{2^{n}}=\frac{2^{n-k}}{2^{n}}=\frac{1}{2^{k}} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזה בדיוק מה שרצינו. כעת, מה הסתברות &lt;strong&gt;הכישלון&lt;/strong&gt;, כלומר ההסתברות שלא ניפול על &lt;span&gt;\( m \)&lt;/span&gt; טוב שכזה, בהינתן ה-&lt;span&gt;\( e \)&lt;/span&gt; שבחרנו? ראשית, ההסתברות היא לכל היותר &lt;span&gt;\( \frac{1}{2\left(e-1\right)} \)&lt;/span&gt;. כעת, נציב &lt;span&gt;\( e=2^{n-k}-1 \)&lt;/span&gt; ונקבל את הסתברות הכישלון&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{2\left(2^{n-k}-2\right)}=\frac{1}{2\left(2^{p}-2\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עבור &lt;span&gt;\( p=0,1 \)&lt;/span&gt; מקבלים תוצאה שהיא שלילית או אינסוף - זה מפני שהחישוב עבור &lt;span&gt;\( e \)&lt;/span&gt; הניח במובלע שהוא לא מספר 0 או 1 בעצמו. אבל עבור &lt;span&gt;\( p=2 \)&lt;/span&gt; מקבלים כבר תוצאה הגיונית - &lt;span&gt;\( \frac{1}{4} \)&lt;/span&gt;. עבור &lt;span&gt;\( p=3 \)&lt;/span&gt; מקבלים &lt;span&gt;\( \frac{1}{12} \)&lt;/span&gt;, עבור &lt;span&gt;\( p=4 \)&lt;/span&gt; מקבלים &lt;span&gt;\( \frac{1}{28} \)&lt;/span&gt; וכן הלאה - ככל שמוסיפים יותר קיוביטים, ההסתברות לקבל הערכה לא טובה שואפת אקספוננציאלית לאפס. אנחנו כמובן רוצים לדעת &lt;strong&gt;עד כמה&lt;/strong&gt; זה שואף לאפס - מה צריך להיות &lt;span&gt;\( p \)&lt;/span&gt; אם אנחנו רוצים להקטין את הסתברות הכשלון כרצוננו? אז יהא &lt;span&gt;\( \varepsilon&amp;gt;0 \)&lt;/span&gt; מספר כלשהו. כדי שהסתברות הכישלון תהיה קטנה מ-&lt;span&gt;\( \varepsilon \)&lt;/span&gt; צריך להתקיים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \frac{1}{2\left(2^{p}-2\right)}\le\varepsilon \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;נכפול את שני האגפים ב-&lt;span&gt;\( 2^{p}-2 \)&lt;/span&gt; ונחלק ב-&lt;span&gt;\( \varepsilon \)&lt;/span&gt; ונקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 2^{p}-2\ge\frac{1}{2\varepsilon} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;נעביר את &lt;span&gt;\( 2 \)&lt;/span&gt; אגף:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 2^{p}\ge2+\frac{1}{2\varepsilon} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ניקח &lt;span&gt;\( \lg \)&lt;/span&gt; (לוגריתם על בסיס 2) לשני האגפים ונקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\ge\lg\left(2+\frac{1}{2\varepsilon}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזו הנוסחה שרצינו: אם אנחנו רוצים להבטיח הסתברות כישלון קטנה מ-&lt;span&gt;\( \varepsilon \)&lt;/span&gt;, נזדקק ל-&lt;span&gt;\( \left\lceil \lg\left(2+\frac{1}{2\varepsilon}\right)\right\rceil  \)&lt;/span&gt; קיוביטים (זה הסימן לערך מוחלט &lt;strong&gt;עליון&lt;/strong&gt;, לעגל כלפי מעלה) וזאת בנוסף ל-&lt;span&gt;\( k \)&lt;/span&gt; הקיוביטים שאמרנו ש”חייבים”.&lt;/p&gt;
+
+&lt;p&gt;אז לסיכום הכולל: כדי לקבל באלגוריתם הערכת הפאזה קירוב עם דיוק של &lt;span&gt;\( k \)&lt;/span&gt; ספרות בינאריות אחרי הנקודה בהסתברות של לפחות &lt;span&gt;\( 1-\varepsilon \)&lt;/span&gt; צריך להשתמש ב-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( n=k+\left\lceil \lg\left(2+\frac{1}{2\varepsilon}\right)\right\rceil  \)&lt;/span&gt; קיוביטים.&lt;/p&gt;
+
+&lt;p&gt;זה סוגר את האלגוריתם, אבל עדיין נותרה השאלה הפתוחה - בשביל מה זה טוב? והאלגוריתם של שור נותן לזה תשובה מוחצת וחד משמעית, ועוד מעז לעשות את זה עם שימוש יפהפה ולא טריוויאלי בכלל בהערכת פאזה, כך שנחכה עם זה לפוסט הבא.&lt;/p&gt;</content><author><name></name></author><category term="חישוב קוונטי" /><summary type="html">מה זה בכלל ובשביל מה זה טוב?</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/phase_estimation.png" /></entry><entry><title type="html">התמרת פורייה הקוונטית</title><link href="http://gadial.net/2022/09/01/quantum_fourier_transform/" rel="alternate" type="text/html" title="התמרת פורייה הקוונטית" /><published>2022-09-01T00:00:00+00:00</published><updated>2022-09-01T00:00:00+00:00</updated><id>http://gadial.net/2022/09/01/quantum_fourier_transform</id><content type="html" xml:base="http://gadial.net/2022/09/01/quantum_fourier_transform/">&lt;h2&gt;מה זה בכלל ובשביל מה זה טוב?&lt;/h2&gt;
 
 &lt;p&gt;בסדרת הפוסטים הקודמת שלי על חישוב קוונטי, מטרת העל שלי הייתה הגעה אל &lt;strong&gt;האלגוריתם של שור&lt;/strong&gt;, לפירוק מהיר של מספרים לגורמים. בגלל ההשלכות המהותיות שיהיו לאלגוריתם הזה אם ימומש בפועל בצורה אמינה, הוא הפך להיות “הגביע הקדוש” של הצגה פופולרית של חישוב קוונטי - הפואנטה שמנסים להגיע אליה. וזה גרם לי קצת לרוץ על מה שקורה בדרך אליו, ובפרט דחסתי ב&lt;a href=&quot;https://gadial.net/2014/08/24/shor_algorithm/&quot;&gt;התחלה של הפוסט עליו&lt;/a&gt; את הכלי המרכזי שעליו הוא מסתמך - &lt;strong&gt;התמרת פורייה המהירה&lt;/strong&gt;. לכלי הזה מגיע פוסט משל עצמו, ועכשיו סוף סוף אתקן את המעוות.&lt;/p&gt;
 
@@ -2188,126 +2517,4 @@
 
 &lt;p&gt;אפשר להראות שאם &lt;span&gt;\( \left|q\right|&amp;lt;1 \)&lt;/span&gt; אז &lt;span&gt;\( q^{n+1} \)&lt;/span&gt; מתקרב לאפס כרצוננו, ולכן אפשר לקרב כרצוננו לאפס את כל &lt;span&gt;\( \frac{1}{q-1}q^{n+1} \)&lt;/span&gt;, מה שאומר שכאשר אנחנו בודקים מהו הגבול כאשר &lt;span&gt;\( n \)&lt;/span&gt; שואף לאינסוף, אפשר להשוות את כל האיבר הזה לאפס ולהישאר רק עם האיבר השני, &lt;span&gt;\( -\frac{1}{q-1} \)&lt;/span&gt; . אחרי שנכניס את סימן המינוס פנימה נקבל &lt;span&gt;\( \frac{1}{1-q} \)&lt;/span&gt; , וזה בדיוק מה שהבטחתי.&lt;/p&gt;
 
-&lt;p&gt;זה המקום לסיים בו את הפוסט הזה, רק נחזור אל &lt;span&gt;\( \sum_{n=1}^{\infty}\frac{1}{2^{n}}=1 \)&lt;/span&gt; שדיברתי עליו בתחילת הפוסט. כבר ראינו שוב ושוב למה זה נכון, אבל גם הנוסחה שמצאתי עכשיו מראה את זה: ניקח את &lt;span&gt;\( \frac{q}{1-q} \)&lt;/span&gt; ונציב &lt;span&gt;\( q=\frac{1}{2} \)&lt;/span&gt; ונקבל באופן פלא &lt;span&gt;\( \frac{1/2}{1-1/2}=\frac{1/2}{1/2}=1 \)&lt;/span&gt;. אני מקווה שהצלחתי לעמוד בהתחייבות שלי מתחילת הפוסט לגרום לנו להרגיש בנוח עם המפלצת הזו.&lt;/p&gt;</content><author><name></name></author><category term="סכום" /><summary type="html">אני רוצה לדבר על אחד המושגים הפשוטים במתמטיקה - חיבור. להתחיל מהפשוט והמוכר ולהגיע אל המחוזות הקצת פחות פשוטים ומוכרים. ספציפית, הייתי רוצה שעד סוף הפוסט כולנו נרגיש בנוח עם המפלצת הבאה:</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/dichotomy-paradox.png" /></entry><entry><title type="html">מה הקטע עם שורשים של מינוס 1?</title><link href="http://gadial.net/2021/10/31/roots_of_minus_one_product/" rel="alternate" type="text/html" title="מה הקטע עם שורשים של מינוס 1?" /><published>2021-10-31T00:00:00+00:00</published><updated>2021-10-31T00:00:00+00:00</updated><id>http://gadial.net/2021/10/31/roots_of_minus_one_product</id><content type="html" xml:base="http://gadial.net/2021/10/31/roots_of_minus_one_product/">&lt;p&gt;המטרה שלי בפוסט הזה היא להסביר את הסתירה השערורייתית הזו במתמטיקה שאפשר לראות פה ושם:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{eqnarray} 
--1 &amp; =i\cdot i\\  &amp; =\sqrt{-1}\cdot\sqrt{-1}\\  &amp; =\sqrt{\left(-1\right)\cdot\left(-1\right)}\\  &amp; =\sqrt{1}\\  &amp; =1 
-\end{eqnarray} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;זו סתירה, כי אנחנו מתחילים עם &lt;span&gt;\( -1 \)&lt;/span&gt; ובעזרת סדרה של שוויונות מגיעים אל 1, כלומר לכאורה &lt;span&gt;\( 1=-1 \)&lt;/span&gt; ואנחנו יודעים שזה לא המצב. אז מה הולך פה? איפה הרמאות?&lt;/p&gt;
-
-&lt;p&gt;ובכן, ייתכן שלחלק גדול מכם, הרמאות מופיעה כבר בשורה הראשונה, כשאני כותב &lt;span&gt;\( -1=i\cdot i \)&lt;/span&gt;. מה זה &lt;span&gt;\( i \)&lt;/span&gt; הזה? הוא אולי נראה כמו &lt;a href=&quot;https://gadial.net/2007/04/29/i_fail/&quot;&gt;יצור מוזר בתכלית, פרי דמיון מתמטי פרוע&lt;/a&gt; אבל האמת היא שהמספר הזהת שנקרא &lt;strong&gt;מספר מדומה&lt;/strong&gt; הוא חבר של כבוד במתמטיקה; הוא מושג נפוץ ושימושי מאוד. הבעיה בפירוש &lt;strong&gt;אינה&lt;/strong&gt; בכך שאנחנו משתמשים בו, אבל היא כן נובעת מכך שכאשר משתמשים בו, צריכים להיות זהירים יותר עם כללי החשבון המוכרים לנו. ספציפית, השוויון &lt;span&gt;\( \sqrt{-1}\cdot\sqrt{-1}=\sqrt{\left(-1\right)\cdot\left(-1\right)} \)&lt;/span&gt; אינו נכון אלא צריך להסתכל על גרסה כללית יותר שלו, שבה הסתירה נעלמת מעצמה. זה מה שארצה להראות בפוסט הזה.&lt;/p&gt;
-
-&lt;p&gt;מה שנחמד בסתירה לכאורה הזו הוא שהיא מכריחה אותנו להסתכל מחדש על מושגים שאולי חלקנו כבר התרגלנו אליהם בצורה אינטואיטיבית, ולהבין יותר טוב מה הם &lt;strong&gt;בדיוק&lt;/strong&gt; אומרים. אז נרצה להבין&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;מה זה &lt;span&gt;\( \sqrt{a} \)&lt;/span&gt;?&lt;/li&gt;
-
-
-&lt;li&gt;למה בעצם מתקיים &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; כמו שלמדנו בבית הספר?&lt;/li&gt;
-
-
-&lt;li&gt;מה זה &lt;span&gt;\( i \)&lt;/span&gt;?&lt;/li&gt;
-
-
-&lt;li&gt;מה הולך פה?!&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;בואו נתחיל עם &lt;span&gt;\( \sqrt{a} \)&lt;/span&gt;. הסימן הזה בא לתאר &lt;strong&gt;שורש ריבועי&lt;/strong&gt; של &lt;span&gt;\( a \)&lt;/span&gt;. מה זה שורש ריבועי? אנחנו אומרים ש-&lt;span&gt;\( x \)&lt;/span&gt; הוא שורש ריבועי של &lt;span&gt;\( a \)&lt;/span&gt; אם &lt;span&gt;\( x^{2}=a \)&lt;/span&gt;. למשל, עבור &lt;span&gt;\( a=9 \)&lt;/span&gt;, שורש ריבועי הוא &lt;span&gt;\( x=3 \)&lt;/span&gt; כי &lt;span&gt;\( x^{2}=9 \)&lt;/span&gt;. אבל תראו, הגענו כבר עכשיו לשלב שבו העסק מתחיל להסתבך! כי גם עבור &lt;span&gt;\( x=-3 \)&lt;/span&gt; מתקיים &lt;span&gt;\( x^{2}=9 \)&lt;/span&gt;, כלומר גם &lt;span&gt;\( -3 \)&lt;/span&gt; הוא שורש ריבועי של &lt;span&gt;\( 9 \)&lt;/span&gt;. ל-9 יש שני שורשים ריבועיים! אפשר היה אולי לומר שמתקיים &lt;span&gt;\( \sqrt{9}=\pm3 \)&lt;/span&gt; אבל זה &lt;strong&gt;לא נכון&lt;/strong&gt;. לא ככה משתמשים בסימן &lt;span&gt;\( \sqrt{a} \)&lt;/span&gt;. המטרה של הסימן הזה היא לתאר שורש אחד, ספציפי, של &lt;span&gt;\( a \)&lt;/span&gt;. עבור 9 זה השורש 3, ובאופן כללי עבור כל מספר ממשי &lt;span&gt;\( a \)&lt;/span&gt; שקיים לו שורש &lt;span&gt;\( x \)&lt;/span&gt;, יש לו בדיוק שני שורשים: &lt;span&gt;\( x,-x \)&lt;/span&gt;. העניין הוא שהמינוס של &lt;span&gt;\( -x \)&lt;/span&gt; מבטל את עצמו כשמכפילים את &lt;span&gt;\( -x \)&lt;/span&gt; בעצמו ולכן מקבלים את אותו הדבר כמו &lt;span&gt;\( x \)&lt;/span&gt;. במילים אחרות - שורשים ריבועיים באים בזוגות. אם אחד מהם חיובי, השני יהיה שלילי, ולכן החליטו להגדיר את &lt;span&gt;\( \sqrt{a} \)&lt;/span&gt; להיות השורש &lt;strong&gt;החיובי&lt;/strong&gt;. זה מה שהסימן מתאר. החריג היחיד הוא 0, שיש לו רק שורש ריבועי אחד - 0 עצמו, ואנחנו מגדירים &lt;span&gt;\( \sqrt{0}=0 \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;העניין הבא שצריך לתת עליו את הדעת הוא ש&lt;strong&gt;לא לכל מספר ממשי&lt;/strong&gt; קיים שורש שהוא מספר ממשי. &lt;span&gt;\( -1 \)&lt;/span&gt; הוא הדוגמא הקלאסית: לכל &lt;span&gt;\( x \)&lt;/span&gt; ממשי, &lt;span&gt;\( x\cdot x \)&lt;/span&gt; הולך להיות אי-שלילי; אין שום דרך לקבל את &lt;span&gt;\( -1 \)&lt;/span&gt; ככה. למה חוסר הצדק הזה? ובכן, מכפלה של שני מספרים חיוביים היא חיובית, ומכפלה של שני מספרים שליליים גם היא חיובית (כמו שראינו קודם - מינוס כפול מינוס זה פלוס) ולכן אין דרך לקבל את &lt;span&gt;\( -1 \)&lt;/span&gt;. מה שאומר שהסימון &lt;span&gt;\( \sqrt{-1} \)&lt;/span&gt; שהשתמשתי בו קודם הוא &lt;strong&gt;חשוד מאוד&lt;/strong&gt;. אחזור אליו בהמשך, כמובן.&lt;/p&gt;
-
-&lt;p&gt;נעבור עכשיו אל כלל כפל השורשים שלומדים בבית הספר: &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt;. מה השוויון הזה אומר? אתן פה שתי משמעויות, אחת אינטואיטיבית וקלילה יותר והשני פדנטית בהרבה. תנחשו איזו גרסה תהיה זו שמובילה לסתירות במתמטיקה ועצב גדול ואיזו גרסה תוביל להתרת הסבך הזה.&lt;/p&gt;
-
-&lt;p&gt;המשמעות האינטואיטיבית והקלילה של &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; היא זו: אם &lt;span&gt;\( x \)&lt;/span&gt; מקיים &lt;span&gt;\( x^{2}=a \)&lt;/span&gt; וגם &lt;span&gt;\( y \)&lt;/span&gt; מקיים ש-&lt;span&gt;\( y^{2}=b \)&lt;/span&gt; אז &lt;span&gt;\( xy \)&lt;/span&gt; מקיים ש-&lt;span&gt;\( \left(xy\right)^{2}=x^{2}y^{2}=ab \)&lt;/span&gt;. האמירה הזו היא בבירור נכונה לגמרי, מה ש”מוכיח” את השוויון &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt;. אם כן, איך אפשר להציל את המתמטיקה מהסתירה שאליה נקלענו?&lt;/p&gt;
-
-&lt;p&gt;המשמעות הפדנטית והמעצבנת של &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; נחלצת עכשיו לעזרתנו. היא אומרת: אם &lt;span&gt;\( a,b \)&lt;/span&gt; הם &lt;strong&gt;מספרים ממשיים&lt;/strong&gt; שיש להם &lt;strong&gt;שורש ממשי&lt;/strong&gt;, ואם &lt;span&gt;\( x \)&lt;/span&gt; מקיים &lt;span&gt;\( x^{2}=a \)&lt;/span&gt; &lt;strong&gt;וגם&lt;/strong&gt; &lt;span&gt;\( x \)&lt;/span&gt; הוא אי-שלילי, ואם &lt;span&gt;\( y \)&lt;/span&gt; מקיים &lt;span&gt;\( y^{2}=b \)&lt;/span&gt; &lt;strong&gt;וגם&lt;/strong&gt; &lt;span&gt;\( y \)&lt;/span&gt; הוא אי-שלילי, אז אפשר להסיק שגם למספר הממשי &lt;span&gt;\( ab \)&lt;/span&gt; יש שורשים ממשיים, והשורש האי-שלילי של &lt;span&gt;\( ab \)&lt;/span&gt; הוא &lt;span&gt;\( xy \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;המשמעות הפדנטית והמעצבנת הזו היא נכונה לגמרי - אפשר להוכיח אותה יחסית בקלות. העניין הוא שהמשמעות הזו באה עם סייגים גדולים: היא דורשת ש-&lt;span&gt;\( a,b \)&lt;/span&gt; יהיו מספרים ממשיים שיש להם שורש. אם הם לא כאלו, השוויון לא יהיה נכון &lt;strong&gt;במשמעות הפדנטית והמעצבנת&lt;/strong&gt;. הוא עדיין יהיה נכון במשמעות האינטואיטיבית והקלילה; אבל כפי שנראה בהמשך, במשמעות הזו אין פה שום סתירה.&lt;/p&gt;
-
-&lt;p&gt;נעבור אם כן לדבר על הכוכב של הפוסט - היצור המוזר בתכלית &lt;span&gt;\( \sqrt{-1} \)&lt;/span&gt;. מה זה? ראשית כל, זה &lt;strong&gt;שימוש חדש&lt;/strong&gt; בסימן &lt;span&gt;\( \sqrt{a} \)&lt;/span&gt; שעד כה השתמשתי בו רק במקרה שבו &lt;span&gt;\( a \)&lt;/span&gt; היה מספר ממשי שיש לו שורש ממשי. לא אמרתי עד כה מה זה אומר, “מספר ממשי”; הכוונה היא לכל מספר שנמצא על ציר המספרים &lt;span&gt;\( \mathbb{R} \)&lt;/span&gt;; כל מספר שאפשר לכתוב בייצוג עשרוני, למשל &lt;span&gt;\( \pi=3.14\ldots \)&lt;/span&gt;. במילים אחרות, &lt;strong&gt;אין לי פה שום הגדרה&lt;/strong&gt; של מה זה מספר ממשי; אני מתפלל שנתקלתם במושג הזה מתישהו (בבית הספר?) כי ההגדרות הפורמליות הן מסובכות. אולי ההגדרה הכי טובה היא “כל מספר ששמעתם עליו בבית הספר חוץ אולי ממספרים מרוכבים”.&lt;/p&gt;
-
-&lt;p&gt;מה שאמרתי כבר הוא של-&lt;span&gt;\( -1 \)&lt;/span&gt; אין שורש שהוא מספר ממשי. אבל במתמטיקה קיים מספר, שמסומן ב-&lt;span&gt;\( i \)&lt;/span&gt;, שמקיים &lt;span&gt;\( i^{2}=-1 \)&lt;/span&gt;, כלומר &lt;span&gt;\( i \)&lt;/span&gt; הוא שורש של &lt;span&gt;\( -1 \)&lt;/span&gt; על פי ההגדרה שנתתי למעלה; הוא פשוט אינו מספר ממשי. זה כמובן מעלה שאלות הרות גורל - אם &lt;span&gt;\( i \)&lt;/span&gt; איננו מספר ממשי, מה הוא &lt;strong&gt;כן&lt;/strong&gt;? האם סתם המצאתי אותו כרגע? ובכן, לא. יש מספר דרכים לבנות פורמלית את &lt;span&gt;\( i \)&lt;/span&gt; הזה גם אם כל המספרים שיש בארגז הכלים שלי הם מספרים ממשיים, באופן די דומה לאיך שאפשר לבנות שברים מתוך מספרים שלמים. &lt;a href=&quot;https://gadial.net/2007/06/21/imaginary_numbers/&quot;&gt;דיברתי על זה בראשית ימי הבלוג&lt;/a&gt; אבל הנה שיטה אחת, לא הטבעית או האלגנטית ביותר, אבל זו שעשתה את העבודה מבחינתי והרגיעה את החששות שלי בשעתו.&lt;/p&gt;
-
-&lt;p&gt;הרעיון הוא להגדיר מספרים חדשים בעזרת &lt;strong&gt;זוגות&lt;/strong&gt; של מספרים ממשיים. לפני שיתחילו לעוף צעקות שאסור לעשות דברים כאלו, בואו נסתכל על שברים: שבר הוא מספר מהצורה &lt;span&gt;\( \frac{a}{b} \)&lt;/span&gt; שבו &lt;span&gt;\( a,b \)&lt;/span&gt; שניהם מספרים &lt;strong&gt;שלמים&lt;/strong&gt;. במקום לסמן &lt;span&gt;\( \frac{a}{b} \)&lt;/span&gt; הייתי יכול לסמן &lt;span&gt;\( \left(a,b\right) \)&lt;/span&gt;, ואז שתי המשוואות הנחמדות שאנחנו מכירים מבית הספר&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( \frac{a}{b}+\frac{x}{y}=\frac{ay+bx}{by} \)&lt;/span&gt;&lt;/li&gt;
-
-
-&lt;li&gt;&lt;span&gt;\( \frac{a}{b}\cdot\frac{x}{y}=\frac{ax}{by} \)&lt;/span&gt;&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;היו ניתנות להצגה בצורה “המוזרה” הבאה:&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( \left(a,b\right)+\left(x,y\right)=\left(ay+bx,by\right) \)&lt;/span&gt;&lt;/li&gt;
-
-
-&lt;li&gt;&lt;span&gt;\( \left(a,b\right)\cdot\left(x,y\right)=\left(a\cdot x,b\cdot y\right) \)&lt;/span&gt;&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;המשוואה השניה, של הכפל, נראית די אינטואיטיבית; אנחנו כופלים את הזוגות “רכיב-רכיב” - האיבר השמאלי בתוצאה יהיה מכפלת האיברים השמאליים במוכפלים, ובדומה עבור האיבר הימני. לעומת זאת, החיבור הוא פחד אלוהים. הוא בוודאי לא “רכיב-רכיב”. קורה פה משהו מוזר, שיכול להיראות מאוד שרירותי אם לא ברור לנו מאיפה הוא הגיע ולאיזו מטרה, ואת זה אנחנו יודעים כי למדנו ביסודי חיבור שברים.&lt;/p&gt;
-
-&lt;p&gt;עכשיו, מה שאני הולך לעשות כדי ליצור את &lt;span&gt;\( i \)&lt;/span&gt; יהיה דומה מאוד. אני מגדיר קבוצה חדשה של מספרים, שאני קורא לה &lt;strong&gt;מספרים מרוכבים&lt;/strong&gt; ומסמן ב-&lt;span&gt;\( \mathbb{C} \)&lt;/span&gt;, ואיבריה הם זוגות &lt;span&gt;\( \left(a,b\right) \)&lt;/span&gt; כך ש-&lt;span&gt;\( a,b \)&lt;/span&gt; הם מספרים ממשיים. ומה שמייחד את הקבוצה הזו הוא חוקי החיבור והכפל שלה. חיבור יהיה “רכיב-רכיב” והכפל יהיה “משהו מוזר, שיכול להיראות מאוד שרירותי אם לא ברור לנו מאיפה הוא הגיע ולאיזו מטרה”:&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( \left(a,b\right)+\left(x,y\right)=\left(a+x,b+y\right) \)&lt;/span&gt;&lt;/li&gt;
-
-
-&lt;li&gt;&lt;span&gt;\( \left(a,b\right)\cdot\left(x,y\right)=\left(ax-by,ay+bx\right) \)&lt;/span&gt;&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;בואו נסתכל עכשיו על המספר המרוכב &lt;span&gt;\( \left(0,1\right) \)&lt;/span&gt; ונכפול אותו בעצמו. על פי כלל הכפל המוזר שלנו, נקבל:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left(0,1\right)\cdot\left(0,1\right)=\left(0\cdot0-1\cdot1,0\cdot1+1\cdot0\right)=\left(-1,0\right) \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;כל הסימונים הללו עם סוגריים הם מאוד מסורבלים, אז אני אציג סימון חדש: במקום לכתוב &lt;span&gt;\( \left(a,b\right) \)&lt;/span&gt; אני אכתוב &lt;span&gt;\( a+bi \)&lt;/span&gt;. במקרה של &lt;span&gt;\( \left(0,1\right) \)&lt;/span&gt;, שבו &lt;span&gt;\( a=0,b=1 \)&lt;/span&gt;, הסימון הזה נהיה עוד יותר פשוט - &lt;span&gt;\( i \)&lt;/span&gt; ותו לא. ובמקרה של &lt;span&gt;\( \left(-1,0\right) \)&lt;/span&gt; הסימון הזה הוא &lt;span&gt;\( -1+0\cdot i \)&lt;/span&gt;, שגם אותו אפשר לפשט אל &lt;span&gt;\( -1 \)&lt;/span&gt;. קיבלנו ש-&lt;span&gt;\( i\cdot i=-1 \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;אפשר להגיד, ובצדק גמור, שאני “מרמה”. שהשוויון &lt;span&gt;\( i\cdot i=-1 \)&lt;/span&gt; לא מראה שמצאתי שורש למספר הממשי &lt;span&gt;\( -1 \)&lt;/span&gt; אלא שמצאתי שורש &lt;strong&gt;למספר מרוכב&lt;/strong&gt; שאני בחוצפתי קורא לו &lt;span&gt;\( -1 \)&lt;/span&gt; למרות שהוא בעצם הזוג &lt;span&gt;\( \left(-1,0\right) \)&lt;/span&gt;. זה כמובן נכון; אני אגיד שמה שאני עושה הוא &lt;strong&gt;לשכן&lt;/strong&gt; את המספרים הממשיים שאני מכיר בתוך המספרים המרוכבים. זה נשמע חשוד מאוד, אבל זה בדיוק מה שעושים גם עבור שברים; כותבים 7 בתור סימון מקוצר של &lt;span&gt;\( \left(7,1\right) \)&lt;/span&gt; וחושבים עליו בתור מספר טבעי נחמד ולא בתור זוג מספרים שלמים.&lt;/p&gt;
-
-&lt;p&gt;למה אני מספר את כל זה? כי מצד אחד, חשוב לי להדגיש שהמספרים המרוכבים הם &lt;strong&gt;סבבה&lt;/strong&gt;. אין בהם משהו עקום באופן מהותי שמכריח את המתמטיקה להישבר, ההפך; המתמטיקה מסתדרת איתם יפה. מצד שני המתמטיקה &lt;strong&gt;באמת&lt;/strong&gt; נשברת בגלל עניין השורשים הזה, וצריך להבין איך.&lt;/p&gt;
-
-&lt;p&gt;בואו נחזור אל השוויון &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt;. דיברתי קודם על שתי משמעויות שלו - אינטואיטיבית ופדנטית. המשמעות האינטואיטיבית אומרת את הדבר הבא: אם במקום &lt;span&gt;\( \sqrt{a} \)&lt;/span&gt; נכתוב שורש &lt;strong&gt;כלשהו&lt;/strong&gt; של &lt;span&gt;\( a \)&lt;/span&gt; ובמקום &lt;span&gt;\( \sqrt{b} \)&lt;/span&gt; נכתוב שורש כלשהו של &lt;span&gt;\( b \)&lt;/span&gt;, ואם במקום &lt;span&gt;\( \sqrt{ab} \)&lt;/span&gt; נכתוב שורש &lt;strong&gt;כלשהו&lt;/strong&gt; של מה שמתחת לסימן השורש, כלומר של &lt;span&gt;\( ab \)&lt;/span&gt;, אז כשנעלה בריבוע את שני האגפים נקבל את אותו הדבר.&lt;/p&gt;
-
-&lt;p&gt;לדוגמא, אם &lt;span&gt;\( a=9 \)&lt;/span&gt; ו-&lt;span&gt;\( b=4 \)&lt;/span&gt; אז השוויון שלמעלה הוא &lt;span&gt;\( \sqrt{9}\cdot\sqrt{4}=\sqrt{36} \)&lt;/span&gt;. אם למשל אקח את השורש &lt;span&gt;\( -3 \)&lt;/span&gt; של &lt;span&gt;\( a \)&lt;/span&gt; והשורש &lt;span&gt;\( 2 \)&lt;/span&gt; של &lt;span&gt;\( b \)&lt;/span&gt; והשורש &lt;span&gt;\( 6 \)&lt;/span&gt; של 36, אז אקבל את הטענה:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left[\left(-3\right)\cdot2\right]^{2}=6^{2} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;זו טענה נכונה, אבל אני מקווה שברור שזה לא מה ש-&lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; &lt;strong&gt;באמת&lt;/strong&gt; אומר. הוא לא אומר “המספר &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b} \)&lt;/span&gt; (בדוגמה שלנו, &lt;span&gt;\( -6 \)&lt;/span&gt;) הוא שורש כלשהו של &lt;span&gt;\( ab \)&lt;/span&gt;”. הוא אומר “המספר &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b} \)&lt;/span&gt; &lt;strong&gt;שווה בדיוק&lt;/strong&gt; לשורש &lt;strong&gt;מסויים&lt;/strong&gt; של &lt;span&gt;\( ab \)&lt;/span&gt;, השורש האי-שלילי”. הדבר הזה פשוט לא עובד, כי השורש האי-שלילי של &lt;span&gt;\( 36 \)&lt;/span&gt; הוא &lt;span&gt;\( 6 \)&lt;/span&gt;, והוא שונה מ-&lt;span&gt;\( -6 \)&lt;/span&gt;. כדי שהשוויון הזה יעבוד, הכרחי שגם בבניית המספר &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b} \)&lt;/span&gt; ניקח רק את השורש האי-שלילי של &lt;span&gt;\( a,b \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;טוב ויפה, אז למה זה לא עובד עם &lt;span&gt;\( \sqrt{-1} \)&lt;/span&gt;? כי פה אין בכלל משמעות ל”שורש שלילי” ו”שורש חיובי” במובן הרגיל. השורשים של &lt;span&gt;\( \sqrt{-1} \)&lt;/span&gt; הם &lt;span&gt;\( i \)&lt;/span&gt; ו-&lt;span&gt;\( -i \)&lt;/span&gt;. מה חיובי ושלילי כאן?&lt;/p&gt;
-
-&lt;p&gt;“אה-הא!” אתם בוודאי אומרים: “ברור ש-&lt;span&gt;\( i \)&lt;/span&gt; חיובי ואילו &lt;span&gt;\( -i \)&lt;/span&gt; שלילי, הרי ליד &lt;span&gt;\( -i \)&lt;/span&gt; יש סימן מינוס!”. ובכן, זה לא באמת כל כך פשוט; למשל, במספר המרוכב &lt;span&gt;\( z=1-i \)&lt;/span&gt; מתקיים &lt;span&gt;\( -z=-1+i \)&lt;/span&gt; וקצת קשה לומר מי משני המספרים הללו הוא החיובי והשלילי על פי גישת ה”חפשו את סימן המינוס”. אבל זו אפילו לא הבעיה המרכזית. הבעיה המרכזית היא שכדי להוכיח את &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; אנחנו מניחים שמספרים חיוביים יתנהגו בצורה &lt;strong&gt;מאוד נחמדה&lt;/strong&gt;, ואם אני אנסה לומר בכוח ש-&lt;span&gt;\( i \)&lt;/span&gt; הוא “חיובי” אני אאבד את הצורה המאוד נחמדה הזו.&lt;/p&gt;
-
-&lt;p&gt;ספציפית, הדבר הנחמד שאני מתבסס עליו כאן הוא &lt;strong&gt;סגירות&lt;/strong&gt;: אם כופלים שני מספרים חיוביים, התוצאה תהיה בעצמה מספר חיובי. אם &lt;span&gt;\( a&amp;gt;0,b&amp;gt;0 \)&lt;/span&gt; אז גם &lt;span&gt;\( ab&amp;gt;0 \)&lt;/span&gt;. זה כמובן לא עובד עם &lt;span&gt;\( i \)&lt;/span&gt;, כי כשכופלים את &lt;span&gt;\( i \)&lt;/span&gt; בעצמו מקבלים מספר שלילי, &lt;span&gt;\( -1 \)&lt;/span&gt;. אם נקרא ל-&lt;span&gt;\( i \)&lt;/span&gt; חיובי נאבד את תכונת הסגירות של החיוביים ולכן נאבד את התכונה &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;למה הסגירות כל כך חשובה? בשביל זה בואו נראה הוכחה בנפנוף ידיים של הטענה. אם &lt;span&gt;\( x^{2}=a \)&lt;/span&gt; וגם &lt;span&gt;\( y^{2}=b \)&lt;/span&gt;, אז חשבון פשוט במיוחד נותן לנו ש-&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left(xy\right)^{2}=x^{2}y^{2}=ab \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;אנחנו מסתמכים כאן במובלע על מה שנקרא &lt;strong&gt;חוק החילוף&lt;/strong&gt;; על כך ש-&lt;span&gt;\( xy=yx \)&lt;/span&gt; ולכן &lt;span&gt;\( \left(xy\right)^{2}=xyxy=xxyy=x^{2}y^{2} \)&lt;/span&gt;. אבל חוק החילוף הוא תכונה בסיסית שמתקיימת גם במספרים הממשיים וגם במספרים המרוכבים, אז אין עם זה בעיה (הוא לא מתקיים, למשל, עבור &lt;strong&gt;כפל מטריצות&lt;/strong&gt;, או &lt;strong&gt;כפל קווטרניונים&lt;/strong&gt; אבל זה סיפור שונה). קיבלנו, אם כן, הוכחה לטענה הכללית “אם &lt;span&gt;\( x \)&lt;/span&gt; הוא שורש של &lt;span&gt;\( a \)&lt;/span&gt; ו-&lt;span&gt;\( y \)&lt;/span&gt; הוא שורש של &lt;span&gt;\( b \)&lt;/span&gt; אז &lt;span&gt;\( xy \)&lt;/span&gt; הוא שורש של &lt;span&gt;\( ab \)&lt;/span&gt;”. הטענה הזו &lt;strong&gt;נכונה&lt;/strong&gt; גם עבור מספרים מרוכבים וספציפית עבור השורשים של &lt;span&gt;\( -1 \)&lt;/span&gt; שהם כזכור &lt;span&gt;\( \pm i \)&lt;/span&gt;. בואו נראה את זה על ידי כך שנתבונן במפורש על כל ארבע המכפלות של שורשים של &lt;span&gt;\( -1 \)&lt;/span&gt;:&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( i\cdot i=-1 \)&lt;/span&gt;&lt;/li&gt;
-
-
-&lt;li&gt;&lt;span&gt;\( i\cdot\left(-i\right)=1 \)&lt;/span&gt;&lt;/li&gt;
-
-
-&lt;li&gt;&lt;span&gt;\( \left(-i\right)\cdot i=1 \)&lt;/span&gt;&lt;/li&gt;
-
-
-&lt;li&gt;&lt;span&gt;\( \left(-i\right)\cdot\left(-i\right)=-1 \)&lt;/span&gt;&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;כל ארבע המכפלות הללו הניבו לנו את 1 או את &lt;span&gt;\( -1 \)&lt;/span&gt;, שהם השורשים של &lt;span&gt;\( 1 \)&lt;/span&gt;. הדבר היחיד שנכשל הוא הציפיה שלנו לקבל את השורש &lt;strong&gt;החיובי&lt;/strong&gt; של 1. אנחנו אמנם מקבלים אותו, אבל רק במכפלה כמו &lt;span&gt;\( i\cdot\left(-i\right) \)&lt;/span&gt;, שמערבת את השורש “הלכאורה חיובי” &lt;span&gt;\( i \)&lt;/span&gt; והשורש “הלכאורה שלילי” &lt;span&gt;\( -i \)&lt;/span&gt; ביחד.&lt;/p&gt;
-
-&lt;p&gt;נניח עכשיו לרגע ש-&lt;span&gt;\( x,y \)&lt;/span&gt; הם מספרים ממשיים &lt;strong&gt;חיוביים&lt;/strong&gt; שמקיימים &lt;span&gt;\( x^{2}=a,y^{2}=b \)&lt;/span&gt;. אז אנחנו יודעים ש-&lt;span&gt;\( xy \)&lt;/span&gt; הוא שורש של &lt;span&gt;\( ab \)&lt;/span&gt;; ואנחנו יודעים, בגלל שהממשיים החיוביים &lt;strong&gt;סגורים לכפל&lt;/strong&gt;, שגם &lt;span&gt;\( ab \)&lt;/span&gt; הוא מספר ממשי חיובי. לכן, אם הסימון &lt;span&gt;\( \sqrt{\cdot} \)&lt;/span&gt; משמש אותנו כדי לתאר את השורש החיובי של מספר כלשהו, אנחנו יודעים שמתקיים &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt;, כי בגלל ש-&lt;span&gt;\( x,y \)&lt;/span&gt; חיוביים הם אלו שמופיעים באגף שמאל, ובגלל ש-&lt;span&gt;\( xy \)&lt;/span&gt; חיובי הוא מי שמופיע באגף ימין.&lt;/p&gt;
-
-&lt;p&gt;מה שהסימן &lt;span&gt;\( \sqrt{\cdot} \)&lt;/span&gt; עושה הוא לא רק להוציא שורש; הוא מוציא שורש ו&lt;strong&gt;בוחר&lt;/strong&gt; אחד מהשורשים האפשריים ומחזיר אותו. הוא עושה את זה באמצעות &lt;strong&gt;כלל בחירה&lt;/strong&gt; מסוים - במקרה שלנו, “קח את השורש החיובי”. השוויון &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; לא מתאר איזו תכונה כללית של פונקציית השורש; הוא מתאר תכונה כללית של &lt;strong&gt;כלל הבחירה&lt;/strong&gt; הזה, וכלל הבחירה הזו מלכתחילה קיים רק למספרים ממשיים. מה שראינו עכשיו הוא שאם ננסה להרחיב את כלל הבחירה הזה למספרים נוספים, התכונה היפה שתיארנו לא תשתמר.&lt;/p&gt;
-
-&lt;p&gt;כל הסיפור הזה מתקשר לבעיה כללית הרבה יותר בתורת הפונקציות המרוכבות. יש כמה וכמה סיטואציות שבהן יש לנו “פונקציות” כמו שורש שיכולות להחזיר יותר מתוצאה אחת; אפשר לחשוב עליהן כאילו הן מחזירות קבוצה של תוצאות אפשריות. לעתים קרובות מה שמועיל לעשות הוא לקחת פונקציה כזו וליצור ממנה פונקציה שכן מחזירה ערך מספרי יחיד לכל קלט - פונקציה כזו נקראת &lt;strong&gt;ענף&lt;/strong&gt; של הפונקציה המקורית. האתגר הוא לבחור את הענף הזה כך שיקיים תכונות נחמדות ככל האפשר - למשל, &lt;strong&gt;רציפות&lt;/strong&gt;, כלומר ששינויים קטנים בקלט לא יובילו לשינויים גדולים בפלט. מה שראינו פה הוא שהענף של פונקציית השורש &lt;strong&gt;על המספרים הממשיים&lt;/strong&gt; שמוגדר בתור “קחו תמיד את השורש החיובי” מקיים תכונת &lt;strong&gt;כפליות&lt;/strong&gt; (פונקציה &lt;span&gt;\( f \)&lt;/span&gt; היא כפלית אם &lt;span&gt;\( f\left(ab\right)=f\left(a\right)f\left(b\right) \)&lt;/span&gt;) אבל על המספרים המרוכבים אין לנו ענף שיקיים כפליות. זה אחד מהחסרונות של שימוש במרוכבים; היתרונות כל כך גדולים שאנחנו יכולים לקבל את זה בשמחה.&lt;/p&gt;
-
-&lt;p&gt;אם כן, לסיכום: אין סתירה במתמטיקה; אין בעיה עם השימוש ב-&lt;span&gt;\( i \)&lt;/span&gt;; ואין בעיה עם &lt;span&gt;\( \sqrt{a}\cdot\sqrt{b}=\sqrt{ab} \)&lt;/span&gt; כל עוד אנחנו יודעים באיזה הקשר אנחנו משתמשים בו. מה שכן יש פה הוא תירוץ נפלא לכתוב פוסטים על מרוכבים.&lt;/p&gt;</content><author><name></name></author><category term="מספרים מרוכבים" /><summary type="html">המטרה שלי בפוסט הזה היא להסביר את הסתירה השערורייתית הזו במתמטיקה שאפשר לראות פה ושם:</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2021/fake_complex_root.png" /></entry></feed>
+&lt;p&gt;זה המקום לסיים בו את הפוסט הזה, רק נחזור אל &lt;span&gt;\( \sum_{n=1}^{\infty}\frac{1}{2^{n}}=1 \)&lt;/span&gt; שדיברתי עליו בתחילת הפוסט. כבר ראינו שוב ושוב למה זה נכון, אבל גם הנוסחה שמצאתי עכשיו מראה את זה: ניקח את &lt;span&gt;\( \frac{q}{1-q} \)&lt;/span&gt; ונציב &lt;span&gt;\( q=\frac{1}{2} \)&lt;/span&gt; ונקבל באופן פלא &lt;span&gt;\( \frac{1/2}{1-1/2}=\frac{1/2}{1/2}=1 \)&lt;/span&gt;. אני מקווה שהצלחתי לעמוד בהתחייבות שלי מתחילת הפוסט לגרום לנו להרגיש בנוח עם המפלצת הזו.&lt;/p&gt;</content><author><name></name></author><category term="סכום" /><summary type="html">אני רוצה לדבר על אחד המושגים הפשוטים במתמטיקה - חיבור. להתחיל מהפשוט והמוכר ולהגיע אל המחוזות הקצת פחות פשוטים ומוכרים. ספציפית, הייתי רוצה שעד סוף הפוסט כולנו נרגיש בנוח עם המפלצת הבאה:</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/dichotomy-paradox.png" /></entry></feed>
