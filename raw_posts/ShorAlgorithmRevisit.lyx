@@ -1,0 +1,4924 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language hebrew
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "default" "David"
+\font_sans "default" "David"
+\font_typewriter "default" "David"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index אינדקס
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+חישוב קוונטי: האלגוריתם של שור
+\end_layout
+
+\begin_layout Description
+קטגוריות: תורת הסיבוכיות
+\end_layout
+
+\begin_layout Description
+תגים: חישוב קוונטי
+\end_layout
+
+\begin_layout Description
+מזהה:
+\family roman
+\series bold
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+shor_algorithm_revisit
+\end_layout
+
+\begin_layout Section
+מבוא
+\end_layout
+
+\begin_layout Standard
+סדרת הפוסטים הקודמת שלי על חישוב קוונטי הסתיימה 
+\begin_inset CommandInset href
+LatexCommand href
+name "בפוסט גדול על האלגוריתם של שור"
+target "https://gadial.net/2014/08/24/shor_algorithm/"
+literal "false"
+
+\end_inset
+
+.
+ אני חושב שהגיע הזמן לתת עוד סיבוב, עם פוסט שייתן מבט רחב יותר על מה הרעיון
+ הכללי של האלגוריתם ואיך הוא עובד, ויוותר על חלק מהפרטים הקטנים שכבר הוכחתי
+ בפוסט המקורי ההוא.
+ היתרון הגדול שלי עכשיו על פני הסיבוב הקודם הוא שכבר היו לי פוסטים נפרדים
+ על 
+\begin_inset CommandInset href
+LatexCommand href
+name "התמרת פורייה הקוונטית"
+target "https://gadial.net/2022/09/01/quantum_fourier_transform/"
+literal "false"
+
+\end_inset
+
+ ועל 
+\begin_inset CommandInset href
+LatexCommand href
+name "אלגוריתם הערכת פאזה"
+target "https://gadial.net/2022/09/06/phase_estimation_algorithm/"
+literal "false"
+
+\end_inset
+
+, שהם הרכיבים הקוונטיים המרכזיים של האלגוריתם, והיכרות איתם מאפשרת להסתכל
+ עליו 
+\begin_inset Quotes eld
+\end_inset
+
+ממעוף הציפור
+\begin_inset Quotes erd
+\end_inset
+
+, מה שבלתי אפשרי בלעדיהם.
+\end_layout
+
+\begin_layout Standard
+אז בואו נתחיל עם מעוף הציפור הזה.
+ ראשית, הבעיה שאלגוריתם שור בא לפתור היא בעיית 
+\series bold
+הפירוק לגורמים
+\series default
+: נתון לנו מספר טבעי 
+\begin_inset Formula $N$
+\end_inset
+
+, ואנחנו מחפשים מספר טבעי 
+\begin_inset Formula $1<d<N$
+\end_inset
+
+ כך ש-
+\begin_inset Formula $d$
+\end_inset
+
+ מחלק את 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ למשל עבור 
+\begin_inset Formula $N=15$
+\end_inset
+
+ אנחנו נשמח לקבל את 
+\begin_inset Formula $d=3$
+\end_inset
+
+ או 
+\begin_inset Formula $d=5$
+\end_inset
+
+.
+ זו נראית בעיה לא גדולה כל כך במספרים קטנים, אבל כש-
+\begin_inset Formula $N$
+\end_inset
+
+ הוא מספר בן מאות ספרות, אפילו האלגוריתמים המחוכמים ביותר שיש לנו כיום שאינם
+ משתמשים במחשב קוונטי )ואלו אלגוריתמים 
+\series bold
+מאוד
+\series default
+ מחוכמים, עם מתמטיקה 
+\series bold
+מאוד
+\series default
+ מתקדמת( לא מסוגלים להתמודד עם הבעיה, וזה למרות שקל לנו לעשות חשבונות עם
+ מספרים בני מאות ספרות; זו לא סתם בעיה של 
+\begin_inset Quotes eld
+\end_inset
+
+המספר גדול מכדי שנעשה איתו כל דבר שהוא
+\begin_inset Quotes erd
+\end_inset
+
+ - זו בעיה של 
+\series bold
+סיבוכיות זמן ריצה אקספוננציאלית
+\series default
+.
+ מה שהאלגוריתם של שור מציע הוא פתרון 
+\series bold
+מהיר
+\series default
+ של הבעיה, בזמן ריצה 
+\series bold
+פולינומי
+\series default
+ )לא חייבים באמת להבין מה המילים הללו אומרות, מעבר לזה שכאן 
+\begin_inset Quotes eld
+\end_inset
+
+אקספוננציאלי
+\begin_inset Quotes erd
+\end_inset
+
+ זו מילה נרדפת לא מדוייקת ל
+\begin_inset Quotes erd
+\end_inset
+
+איטי
+\begin_inset Quotes erd
+\end_inset
+
+ ו
+\begin_inset Quotes erd
+\end_inset
+
+פולינומי
+\begin_inset Quotes erd
+\end_inset
+
+ זו מילה נרדפת לא מדוייקת ל
+\begin_inset Quotes erd
+\end_inset
+
+מהיר
+\begin_inset Quotes erd
+\end_inset
+
+(.
+ בשביל המהירות הגדולה הזו, האלגוריתם של שור משתמש במחשב קוונטי )אם כי טרם
+ נבנה מחשב קוונטי שמסוגל להריץ את שור עבור מספרים בני מאות ספרות, וזו שאלה
+ טובה מתי יהיה כזה(.
+\end_layout
+
+\begin_layout Standard
+אחרי שאמרנו את זה, צריך להבהיר שהאלגוריתם של שור, למעשה, 
+\series bold
+איננו
+\series default
+ אלגוריתם לפירוק לגורמים! הוא אלגוריתם שבא לפתור בעיה אחרת, שנקראת 
+\begin_inset Quotes eld
+\end_inset
+
+בעיית מציאת הסדר
+\begin_inset Quotes erd
+\end_inset
+
+, כי היכולת שלנו לפתור את בעיית מציאת הסדר נותנת לנו גם שיטה לפירוק לגורמים,
+ אבל החלק שנעזר במציאת הסדר כדי לפרק לגורמים הוא חלק 
+\begin_inset Quotes eld
+\end_inset
+
+קלאסי
+\begin_inset Quotes erd
+\end_inset
+
+, שלא מעורב בו חישוב קוונטי.
+ 
+\end_layout
+
+\begin_layout Standard
+עוד נקודה שצריך להבהיר היא שהאלגוריתם של שור הוא 
+\series bold
+הסתברותי
+\series default
+ - ייתכן בהחלט שנריץ אותו, לא נקבל שום דבר שיעזור לנו לפרק את 
+\begin_inset Formula $N$
+\end_inset
+
+ לגורמים, ונאלץ להריץ אותו שוב.
+ ההסתברות שהוא יצליח היא טובה למדי, אבל הניתוח שנדרש כדי להראות את זה הוא
+ לא פשוט.
+\end_layout
+
+\begin_layout Standard
+ולבסוף, החלק הקוונטי של האלגוריתם של שור הוא פשוט מקרה ספציפי של אלגוריתם
+ הערכת הפאזה, עבור 
+\begin_inset Formula $U$
+\end_inset
+
+ קונקרטי כלשהו שאציג בהמשך.
+ זה מקרה מעניין יותר ממה שדיברנו עליו בפוסט הקודם, כי שם היה נתון לנו 
+\begin_inset Formula $\left|u\right\rangle $
+\end_inset
+
+ שהוא וקטור עצמי של 
+\begin_inset Formula $U$
+\end_inset
+
+, אבל באלגוריתם של שור אין לנו מושג מי הוקטורים העצמיים של 
+\begin_inset Formula $U$
+\end_inset
+
+; אבל באמצעות תעלול מחוכם ויפה, אנחנו הולכים להריץ את אלגוריתם הערכת הפאזה
+ על 
+\series bold
+סופרפוזיציה
+\series default
+ של הערכים העצמיים של 
+\begin_inset Formula $U$
+\end_inset
+
+ ואיכשהו זה יסתדר לנו.
+\end_layout
+
+\begin_layout Standard
+גם אחרי שאלגוריתם הערכת הפאזה הסתיים, הפלט שלו הוא לא התוצאה הסופית של שום
+ דבר - הוא בוודאי לא מספר שמחלק את 
+\begin_inset Formula $N$
+\end_inset
+
+, אבל הוא אפילו לא אותו 
+\begin_inset Quotes eld
+\end_inset
+
+סדר
+\begin_inset Quotes erd
+\end_inset
+
+ מסתורי שאנחנו צריכים למצוא; מה שאלגוריתם הערכת הפאזה נותן לנו הוא מספר
+ רציונלי בין
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ל-
+\numeric on
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שבפני עצמו אין בו כלום; מה שאנחנו עושים )וגם זה חישוב קלאסי לגמרי( הוא ליצור
+ בדרך מסויימת סדרה של 
+\series bold
+קירובים
+\series default
+ לתוצאה הזו של הערכת הפאזה שקיבלנו.
+ כל קירוב כזה יהיה מספר רציונלי 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+, כשהמכנה 
+\begin_inset Formula $r$
+\end_inset
+
+ 
+\series bold
+עשוי להיות
+\series default
+ ה
+\begin_inset Quotes erd
+\end_inset
+
+סדר
+\begin_inset Quotes erd
+\end_inset
+
+ שחיפשנו.
+ זה אומר שבהינתן התוצאה של שור, אנחנו מקבלים קבוצה של כמה וכמה מועמדים להיות
+ ה
+\begin_inset Quotes erd
+\end_inset
+
+סדר
+\begin_inset Quotes erd
+\end_inset
+
+, ועבור כל אחד מהם צריך לבדוק אם הוא איכשהו נותן לנו פירוק לגורמים של 
+\begin_inset Formula $N$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+זה נשמע ממש מסורבל - איפה זה ואיפה הגרסה האוטופית המדומיינת של האלגוריתם
+ של שור, שבה אנחנו עושים איזה מעגל קוונטי חמוד, מודדים ומקבלים גורם של 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ אבל ככה זה בחישוב קוונטי - זה אף פעם לא פשוט כמו שעושים מזה, אבל כשמבינים
+ את הפרטים המשוגעים זה נהיה עוד יותר יפה משזה נשמע במבט ראשון.
+\end_layout
+
+\begin_layout Section
+איך 
+\begin_inset Quotes eld
+\end_inset
+
+מציאת סדר
+\begin_inset Quotes erd
+\end_inset
+
+ עוזרת לפרק מספר לגורמים?
+\end_layout
+
+\begin_layout Standard
+בואו ניכנס קצת יותר לפרטים של מה עושים כשרוצים למצוא גורם של 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ המתמטיקה שצריך להכיר פה היא זו של 
+\series bold
+חשבון מודולרי
+\series default
+, כלומר של ביצוע פעולות חיבור וכפל כשבסוף מחלקים במשהו ולוקחים את השארית.
+ החישובים שלנו יהיו מודולו 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ למשל, אם 
+\begin_inset Formula $N=15$
+\end_inset
+
+ ו-
+\begin_inset Formula $a=7$
+\end_inset
+
+ אז 
+\begin_inset Formula $7^{2}$
+\end_inset
+
+ מודולו 
+\begin_inset Formula $N$
+\end_inset
+
+ הוא שארית החלוקה של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+49
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ב-
+\numeric on
+15
+\numeric off
+, כלומר
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\numeric off
+.
+ כותבים את זה 
+\begin_inset Formula $7^{2}\equiv_{N}4$
+\end_inset
+
+.
+ הדבר השני שצריך להכיר הוא את הקיום של אלגוריתם יעיל שבהינתן שני מספרים
+ 
+\begin_inset Formula $a,b$
+\end_inset
+
+ מחשב את ה-
+\begin_inset Formula $\text{gcd}\left(a,b\right)$
+\end_inset
+
+ - המספר הגדול ביותר שמחלק את 
+\begin_inset Formula $a$
+\end_inset
+
+ וגם את 
+\begin_inset Formula $b$
+\end_inset
+
+.
+ לא חשוב כרגע איך אלגוריתם עושה את זה )
+\begin_inset CommandInset href
+LatexCommand href
+name "יש לי פוסט"
+target "https://gadial.net/2011/09/12/euclidean_algorithm_and_rings/"
+literal "false"
+
+\end_inset
+
+( אלא רק שאפשר לבדוק את זה ביעילות.
+\end_layout
+
+\begin_layout Standard
+מה זה ה
+\begin_inset Quotes erd
+\end_inset
+
+סדר
+\begin_inset Quotes erd
+\end_inset
+
+ המסתורי שהאלגוריתם של שור מחשב? זה המושג הסטנדרטי מתורת החבורות: הסדר של
+ 
+\begin_inset Formula $a$
+\end_inset
+
+ מודולו 
+\begin_inset Formula $N$
+\end_inset
+
+ הוא המספר 
+\begin_inset Formula $r>0$
+\end_inset
+
+ המינימלי שעבורו 
+\begin_inset Formula $a^{r}\equiv_{N}1$
+\end_inset
+
+.
+ מספר כזה קיים בהכרח רק 
+\begin_inset Formula $\text{gcd}\left(a,N\right)=1$
+\end_inset
+
+; אבל אם 
+\begin_inset Formula $\text{gcd}\left(a,N\right)>1$
+\end_inset
+
+ אז המספר 
+\begin_inset Formula $\text{gcd}\left(a,N\right)$
+\end_inset
+
+ )שאפשר לחשב ביעילות, כאמור( הוא מחלק לא טריוויאלי של 
+\begin_inset Formula $N$
+\end_inset
+
+ וסיימנו.
+\end_layout
+
+\begin_layout Standard
+אז איך עובד כל התהליך? ראשית, בודקים ש-
+\begin_inset Formula $N$
+\end_inset
+
+ הוא לא זוגי, כלומר פשוט מנסים לחלק אותו ב-
+\numeric on
+2
+\numeric off
+.
+ אם כן - סיימנו.
+ אחרת, בודקים ש-
+\begin_inset Formula $N$
+\end_inset
+
+ הוא לא חזקה של ראשוני, כלומר 
+\begin_inset Formula $N=p^{n}$
+\end_inset
+
+ עבור 
+\begin_inset Formula $n$
+\end_inset
+
+ כלשהו.
+ זה כבר עניין טריקי יותר, אבל יש אלגוריתם יעיל שעושה את זה ואני לא מציג
+ אותו כי זה לא באמת קשור לאלגוריתם של שור.
+ 
+\end_layout
+
+\begin_layout Standard
+בהינתן ש-
+\begin_inset Formula $N$
+\end_inset
+
+ הוא לא מהצורה הזו, אנחנו עושים את הדבר הבא: מגרילים מספר 
+\begin_inset Formula $1<a<N$
+\end_inset
+
+.
+ בודקים ש-
+\begin_inset Formula $\text{gcd}\left(a,N\right)=1$
+\end_inset
+
+, כי אם הוא גדול יותר אז מצאנו מחלק של 
+\begin_inset Formula $N$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+אחר כך אנחנו מפעילים את החלק הקוונטי של האלגוריתם של שור ומקבלים כל מני
+ מספרים שכל אחד מהם הוא בעל פוטנציאל להיות הסדר של 
+\begin_inset Formula $a$
+\end_inset
+
+.
+ לכל מספר 
+\begin_inset Formula $r$
+\end_inset
+
+ כזה, אם 
+\begin_inset Formula $r$
+\end_inset
+
+ אי זוגי מתעלמים ממנו, ואם 
+\begin_inset Formula $r$
+\end_inset
+
+ זוגי, אנו בודקים האם 
+\begin_inset Formula $\text{gcd}\left(a^{\frac{r}{2}}-1,N\right)>1$
+\end_inset
+
+ או ש-
+\begin_inset Formula $\text{gcd}\left(a^{\frac{r}{2}}+1,N\right)>1$
+\end_inset
+
+.
+ אם קיבלנו מספר כזה, סיימנו; מצאנו מחלק לא טריוויאלי של 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ אם לכל ה-
+\begin_inset Formula $r$
+\end_inset
+
+-ים שעשינו הניסוי לא הצליח, אנחנו מגרילים 
+\begin_inset Formula $a$
+\end_inset
+
+ אחר ומנסים שוב.
+ זהו, זה כל האלגוריתם...
+ למעט החלק של מציאת הסדר, שהוא כאמור העיקר.
+\end_layout
+
+\begin_layout Standard
+למה כל זה עובד? כאן מגיעה הוכחה קצת מייגעת מתורת המספרים, שאני ארשה לעצמי
+ לדלג עליה לגמרי כי כבר יש לי אותה 
+\begin_inset CommandInset href
+LatexCommand href
+name "בפוסט הקודם"
+target "https://gadial.net/2014/08/24/shor_algorithm/"
+literal "false"
+
+\end_inset
+
+ על האלגוריתם של שור.
+ זה עובד, תסמכו עלי.
+ אנחנו פה בשביל החלק הקוונטי.
+\end_layout
+
+\begin_layout Section
+איך בגדול עובד אלגוריתם מציאת הסדר?
+\end_layout
+
+\begin_layout Standard
+בואו ניזכר מה עושה אלגוריתם הערכת הפאזה: הוא מניח שאנחנו יודעים לבנות מעגל
+ עבור אופרטור 
+\begin_inset Formula $U:\mathbb{C}^{2^{m}}\to\mathbb{C}^{2^{m}}$
+\end_inset
+
+, ובהינתן שני רגיסטרים קוונטיים )שזה שם יפה ל
+\begin_inset Quotes erd
+\end_inset
+
+הרבה קיוביטים שאנחנו מחלקים אותם קונספטואלית לשתי קבוצות
+\begin_inset Quotes erd
+\end_inset
+
+( 
+\begin_inset Formula $\left|0^{n}\right\rangle \left|u\right\rangle $
+\end_inset
+
+ כך ש-
+\begin_inset Formula $\left|u\right\rangle $
+\end_inset
+
+ הוא וקטור עצמי של 
+\begin_inset Formula $U$
+\end_inset
+
+, אנחנו מסוגלים לבצע חישוב שבסוף שלו מדידה של הרגיסטר הראשון תניב קירוב
+ ל-
+\begin_inset Formula $\varphi$
+\end_inset
+
+, שהוא מספר 
+\begin_inset Formula $0\le\varphi\le1$
+\end_inset
+
+ שמקיים 
+\begin_inset Formula $U\left|u\right\rangle =e^{2\pi i\varphi}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+לכן, כשאנחנו באים להשתמש באלגוריתם הזה בפועל, השאלה הראשונה שאנחנו צריכים
+ לענות עליה היא מהו 
+\begin_inset Formula $U$
+\end_inset
+
+ שלנו, והשניה היא מהו 
+\begin_inset Formula $\left|u\right\rangle $
+\end_inset
+
+.
+ בואו נראה איך זה יהיה אצלנו.
+\end_layout
+
+\begin_layout Standard
+ראשית, בואו ניזכר איך אני משתמש בכתיב 
+\begin_inset Formula $\left|a\right\rangle $
+\end_inset
+
+ כאשר 
+\begin_inset Formula $a$
+\end_inset
+
+ הוא מספר טבעי.
+ למשל, אם 
+\begin_inset Formula $a=5$
+\end_inset
+
+ אז הייצוג הבינארי של 
+\begin_inset Formula $a$
+\end_inset
+
+ הוא 
+\begin_inset Formula $101$
+\end_inset
+
+, ואז הסימון 
+\begin_inset Formula $\left|a\right\rangle $
+\end_inset
+
+ מסמן את 
+\begin_inset Formula $\left|101\right\rangle =\left|1\right\rangle \otimes\left|0\right\rangle \otimes\left|1\right\rangle $
+\end_inset
+
+.
+ צריך קצת להיזהר - אם מלכתחילה ברגיסטר שלנו משתתפים יותר קיוביטים מאשר צריך
+ ספרות כדי לייצג את המספר, אז כל הקיוביטים ה
+\begin_inset Quotes erd
+\end_inset
+
+מיותרים
+\begin_inset Quotes erd
+\end_inset
+
+ יהיו אפס.
+ למשל, אם יש חמישה קיוביטים ואני מתבונן על המספר 
+\begin_inset Formula $13$
+\end_inset
+
+, אז 
+\begin_inset Formula $\left|13\right\rangle =\left|01101\right\rangle $
+\end_inset
+
+.
+ מעכשיו בכל מה שהולך לקרות באלגוריתם של שור, אני אשתמש רק בסימון 
+\begin_inset Formula $\left|a\right\rangle $
+\end_inset
+
+ כש-
+\begin_inset Formula $a$
+\end_inset
+
+ הוא מספר טבעי; אני לא אכתוב דברים בינאריים שם.
+\end_layout
+
+\begin_layout Standard
+עכשיו אפשר לתאר את 
+\begin_inset Formula $U$
+\end_inset
+
+.
+ כזכור, אלגוריתם מציאת הסדר מקבל כקלט מספר 
+\begin_inset Formula $N$
+\end_inset
+
+ ומספר 
+\begin_inset Formula $a<N$
+\end_inset
+
+ והשאלה היא מהו הסדר של 
+\begin_inset Formula $a$
+\end_inset
+
+ מודולו 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ אז האופרטור 
+\begin_inset Formula $U$
+\end_inset
+
+ שבו משתמשים נבנה בהתבסס על שני המספרים הללו:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U\left|b\right\rangle =\left|ab\text{ mod }N\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כלומר, הוא בסך הכל כפל ב-
+\begin_inset Formula $a$
+\end_inset
+
+ מודולו 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ בגלל שמעצבן לכתוב כל הזמן 
+\begin_inset Formula $\text{mod }N$
+\end_inset
+
+ אני הולך להשמיט אותו מעכשיו והלאה, אבל בכל פעם שבה מופיע משהו כמו 
+\begin_inset Formula $\left|a^{2}\right\rangle $
+\end_inset
+
+, תזכרו שאני מתכוון אל הערך של 
+\begin_inset Formula $a^{2}$
+\end_inset
+
+ מודולו 
+\begin_inset Formula $N$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+עכשיו, אם אנחנו זוכרים, בהערכת פאזה צריך להיות מסוגלים לחשב לא רק את 
+\begin_inset Formula $U$
+\end_inset
+
+ אלא גם את 
+\begin_inset Formula $U^{2^{t}}$
+\end_inset
+
+ עבור ערכים הולכים וגדלים של 
+\begin_inset Formula $t$
+\end_inset
+
+, כלומר לחשב
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U^{2^{t}}\left|b\right\rangle =\left|a^{2^{t}}b\text{ mod }N\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אני 
+\series bold
+לא הולך להסביר
+\series default
+ בפוסט הזה איך עושים את זה, כדי להישאר ממוקד.
+ יש איזו פרדוקסליות בשאלה איך עושים את זה.
+ מצד אחד, באופן כללי אנחנו מסוגלים לבצע חישובים 
+\begin_inset Quotes eld
+\end_inset
+
+רגילים
+\begin_inset Quotes erd
+\end_inset
+
+ במחשב קוונטי, מה שמזמין פוסט שעומד בפני עצמו שמסביר איך בדיוק עושים את
+ זה.
+ מצד שני, השאלה איך מחשבים את 
+\begin_inset Formula $U^{2^{t}}$
+\end_inset
+
+ בצורה אופטימלית, עם מינימום שערים, היא לא שאלה סגורה גם כיום.
+ לכל זוג של 
+\begin_inset Formula $a,N$
+\end_inset
+
+ בעצם בונים מעגל אחר שמבצע את החישוב המתאים, וזו בעיה קלאסית בתחום של 
+\series bold
+סינתזה
+\series default
+ של מעגלים קוונטיים - הבניה של מעגל אופטימלי מתוך התיאור האבסטרקטי יותר
+ שלו.
+ אז אני לא נכנס לזה בפוסט הזה כי זה מזמין סדרת פוסטים בפני עצמה.
+ אבל אפשר לעשות את זה.
+\end_layout
+
+\begin_layout Standard
+יפה, אז יש לנו את האופרטור 
+\begin_inset Formula $U\left|b\right\rangle =\left|ab\text{ mod }N\right\rangle $
+\end_inset
+
+.
+ איך בדיוק הוא קשור לסדר 
+\begin_inset Formula $r$
+\end_inset
+
+ של 
+\begin_inset Formula $a$
+\end_inset
+
+ מודולו 
+\begin_inset Formula $N$
+\end_inset
+
+? איך כל זה קשור ל
+\begin_inset Quotes erd
+\end_inset
+
+פאזה
+\begin_inset Quotes erd
+\end_inset
+
+? מה הולך כאן? בואו נפיל את האסימון הזה - לטעמי זה הולך להיות הרגע היפה
+ ביותר מבין כל מה שראינו עד כה בסדרת הפוסטים הזו על חישוב קוונטי.
+ כל כך יפה, שאני ארשה לעצמי להיות לא מדויק בניסוחים שלי - בהמשך גם זה יגיע.
+\end_layout
+
+\begin_layout Standard
+בואו נסתכל לרגע על מה 
+\begin_inset Formula $U$
+\end_inset
+
+ עושה לכמה איברים קונקרטיים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U\left|1\right\rangle =\left|a\cdot1\text{ mod }N\right\rangle =\left|a\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U\left|a\right\rangle =\left|a\cdot a\text{ mod }N\right\rangle =\left|a^{2}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U\left|a^{2}\right\rangle =\left|a\cdot a^{2}\text{ mod }N\right\rangle =\left|a^{3}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אוקיי, אנחנו מבינים, על סדרת הערכים 
+\begin_inset Formula $1,a,a^{2},\ldots$
+\end_inset
+
+ מה ש-
+\begin_inset Formula $U$
+\end_inset
+
+ עושה הוא לקדם את האיבר הנוכחי אל האיבר הבא בסדרה.
+ אבל מתי זה נגמר? ובכן, זה נגמר בדיוק כשמגיעים לסדר של 
+\begin_inset Formula $a$
+\end_inset
+
+ - לאיבר 
+\begin_inset Formula $a^{2}\equiv_{N}1$
+\end_inset
+
+.
+ במילים אחרות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U\left|a^{r-1}\right\rangle =\left|a\cdot a^{r-1}\text{ mod }N\right\rangle =\left|1\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ואז אנחנו חוזרים אל 
+\series bold
+התחלת
+\series default
+ הסדרה )במתמטית אומרים על זה ש-
+\begin_inset Formula $U$
+\end_inset
+
+ מבצע לסדרה 
+\begin_inset Formula $1,a,a^{2},\ldots,a^{r-1}$
+\end_inset
+
+ 
+\series bold
+הזזה ציקלית
+\series default
+(.
+\end_layout
+
+\begin_layout Standard
+סבבה, איך זה נותן לנו וקטור עצמי של 
+\begin_inset Formula $U$
+\end_inset
+
+? פשוט מאוד: בואו ניקח 
+\series bold
+סופרפוזיציה אחידה
+\series default
+ של כל אברי הסדרה הזו, כלומר נסתכל על המצב
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|u_{0}\right\rangle =\frac{\left|1\right\rangle +\left|a\right\rangle +\left|a^{2}\right\rangle +\ldots+\left|a^{r-1}\right\rangle }{\sqrt{r}}=\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\left|a^{k}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+המצב הזה הוא בבירור מצב עצמי של 
+\begin_inset Formula $U$
+\end_inset
+
+, כלומר 
+\begin_inset Formula $U\left|u_{0}\right\rangle =\left|u_{0}\right\rangle $
+\end_inset
+
+; הוא מתאים לערך העצמי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+, וזה...
+ לא עוזר לנו...
+ בשום צורה? אלגוריתם הערכת הפאזה, אם יופעל על המצב הזה, יחזיר לנו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+.
+ זה לא נותן לנו את 
+\begin_inset Formula $r$
+\end_inset
+
+; זה לא נותן לנו שום כלום.
+ אז בשביל מה אני משגע אתכם?
+\end_layout
+
+\begin_layout Standard
+אה-הא! העניין הוא שיש 
+\series bold
+עוד
+\series default
+ וקטורים עצמיים! 
+\begin_inset Formula $\left|u_{0}\right\rangle $
+\end_inset
+
+ הוא רק האבטיפוס; הדוגמא הראשונה והפשוטה שנותנת לנו את האינטואיציה כדי להמשיך
+ הלאה.
+ בואו נחשוב לרגע על אותו וקטור, אבל עם 
+\series bold
+מקדמים
+\series default
+ עבור האיברים:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אם אנחנו רוצים שאחרי הפעלת 
+\begin_inset Formula $U$
+\end_inset
+
+ נחזור לאותו מצב בדיוק כפול סקלר כלשהו, צריך להתקיים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U\left(\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle \right)=\lambda\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U\left(\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle \right)=\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}U\left(\left|a^{k}\right\rangle \right)=\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k+1\text{ mod }r}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אם אנחנו משווים את זה אל 
+\begin_inset Formula $\lambda\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle $
+\end_inset
+
+ אנחנו מקבלים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle =\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k+1\text{ mod }r}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ואחרי חילוץ המקדמים, אנחנו מקבלים את המשוואות
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda\alpha_{0}=\alpha_{r-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda\alpha_{1}=\alpha_{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda\alpha_{2}=\alpha_{1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+וכן הלאה, עד שמגיעים לבסוף אל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda\alpha_{r-1}=\alpha_{r-2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אם נכפול את אגפי ימין ושמאל של כל המשוואות, נקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda^{r}\prod_{k=0}^{r-1}\alpha_{k}=\prod_{k=0}^{r-1}\alpha_{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כלומר, 
+\begin_inset Formula $\lambda^{r}=1$
+\end_inset
+
+.
+ או במילים אחרות, אנחנו מסוגלים לקבל וקטור עצמי עבור כל 
+\series bold
+שורש יחידה 
+\series default
+מסדר
+\series bold
+ 
+\series default
+
+\begin_inset Formula $r$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+הצורה הכללית של שורש יחידה מסדר 
+\begin_inset Formula $r$
+\end_inset
+
+ היא
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $e^{\frac{2\pi i}{r}\cdot s}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאשר 
+\begin_inset Formula $0\le s<r$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+עכשיו, עבור שורש יחידה 
+\begin_inset Formula $e^{\frac{2\pi i}{r}\cdot s}$
+\end_inset
+
+ קונקרטי, איך נקבל את הוקטורים העצמיים המתאימים? אפשר לקבוע שרירותית שתמיד
+ יתקיים 
+\begin_inset Formula $\alpha_{0}=1$
+\end_inset
+
+ כי ככה דברים ייצאו לנו נחמד, ואז נובע ש-
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\alpha_{1}=\lambda^{-1}\alpha_{0}=e^{-\frac{2\pi i}{r}\cdot s}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ובדומה נקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\alpha_{2}=e^{-2\cdot\frac{2\pi i}{r}\cdot s}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ובאופן כללי, נקבל את הוקטור העצמי
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|u_{s}\right\rangle =\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}e^{-k\cdot\frac{2\pi i}{r}s}\left|a^{k}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+והוקטור 
+\begin_inset Formula $\left|u_{0}\right\rangle $
+\end_inset
+
+ שראינו קודם אכן מתקבל כאן כמקרה פרטי, כאשר 
+\begin_inset Formula $s=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+האם אלו באמת וקטורים עצמיים? אפשר לעשות שוב את החישוב, אבל כבר עשינו אותו
+ קודם והוא יעבוד באותה צורה כל פעם.
+ עבור 
+\begin_inset Formula $\left|u_{s}\right\rangle $
+\end_inset
+
+, הערך העצמי הוא שורש היחידה ה-
+\begin_inset Formula $r$
+\end_inset
+
+-י שהתאים ל-
+\begin_inset Formula $s$
+\end_inset
+
+, כלומר
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $U\left|u_{s}\right\rangle =e^{\frac{2\pi i}{r}s}\left|u_{s}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ואם לחזור ללשון של אלגוריתם הערכת הפאזה, אז הפאזה 
+\begin_inset Formula $\varphi_{s}$
+\end_inset
+
+ של 
+\begin_inset Formula $\left|u_{s}\right\rangle $
+\end_inset
+
+ היא 
+\begin_inset Formula $\varphi_{s}=\frac{s}{r}$
+\end_inset
+
+.
+ בפרט, 
+\series bold
+אם
+\series default
+ הייתה לנו דרך להפעיל את אלגוריתם הערכת הפאזה על 
+\begin_inset Formula $\left|u_{1}\right\rangle $
+\end_inset
+
+ ולקבל תוצאה מדויקת, אז היינו מקבלים ליד את המספר הרציונלי 
+\begin_inset Formula $\frac{1}{r}$
+\end_inset
+
+.
+ היינו מקבלים אותו בייצוג בינארי, אבל מתוך הייצוג הזה קל לחשב את 
+\begin_inset Formula $r$
+\end_inset
+
+ עצמו, מה שמסיים לנו את כל העבודה!
+\end_layout
+
+\begin_layout Standard
+זהו, זו 
+\begin_inset Quotes eld
+\end_inset
+
+נפילת האסימון
+\begin_inset Quotes erd
+\end_inset
+
+ המדוברת.
+ זה האופן שבו הסדר 
+\begin_inset Formula $r$
+\end_inset
+
+ עשוי לצוץ מתוך אלגוריתם הערכת פאזה.
+ כשאני רוצה לסכם לעצמי את הפאנץ' של האלגוריתם, אני חושב על הסדרה 
+\begin_inset Formula $1,a,a^{2},\ldots,a^{r-1}$
+\end_inset
+
+ ואומר לעצמי 
+\begin_inset Quotes eld
+\end_inset
+
+הזזה ציקלית.
+ הזזה ציקלית
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+העניין הוא שזה לא מספיק.
+ מה שתיארתי עד כה הוא אמנם נכון מבחינה רעיונית, אבל אנחנו לא באמת מסוגלים
+ לממש את זה בפועל.
+ נזדקק לעוד תעלול אחד אחרון.
+ והתעלול הזה הוא כנראה הדבר הכי מגניב פה.
+\end_layout
+
+\begin_layout Standard
+מה בעצם הבעיה? אם הייתי מסוגל להפעיל את אלגוריתם הערכת הפאזה על 
+\begin_inset Formula $\left|u_{1}\right\rangle $
+\end_inset
+
+ אכן הייתי מקבל את 
+\begin_inset Formula $\frac{1}{r}$
+\end_inset
+
+ )או לפחות קירוב טוב של 
+\begin_inset Formula $\frac{1}{r}$
+\end_inset
+
+ ועוד נחזור לחישוב המדויק(.
+ אבל 
+\series bold
+אני לא יודע
+\series default
+ את 
+\begin_inset Formula $\left|u_{1}\right\rangle $
+\end_inset
+
+.
+ אין לי מושג איך לבנות אותו.
+ המקדמים שלו מקודדים איכשהו את 
+\begin_inset Formula $e^{\frac{2\pi i}{r}}$
+\end_inset
+
+; בשביל ליצור אותם אני כנראה אצטרך לדעת מה הוא 
+\begin_inset Formula $r$
+\end_inset
+
+, שהוא המספר שאותו אנחנו מחפשים! לכאורה אני במעגל ולא התקדמתי אף צעד; זה
+ הכי כיף כשנראה שאנחנו בסיטואציה כזו כשלמעשה אנחנו במרחק צעד אחד מהפתרון.
+\end_layout
+
+\begin_layout Standard
+הפתרון הוא לקחת את 
+\series bold
+כל
+\series default
+ הוקטורים העצמיים 
+\begin_inset Formula $\left|u_{s}\right\rangle $
+\end_inset
+
+, עבור 
+\series bold
+כל
+\series default
+ 
+\begin_inset Formula $0\le s<r$
+\end_inset
+
+, ולהסתכל על הסופרפוזיציה של כולם ביחד, כלומר על
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|u_{s}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+לכאורה לא התקדמנו בכלל - קודם היה מצב אחד שלא היה לנו מושג מהו, ועכשיו יש
+ לנו סופרפוזיציה של הרבה מצבים כאלו; איך אנחנו אמורים לבנות אותה? התשובה
+ היא שהיא מצב שאנחנו מכירים היטב וקל לנו מאוד לבנות - רק צריך לעשות את החישוב:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|u_{s}\right\rangle =\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left(\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}e^{-k\cdot\frac{2\pi i}{r}s}\left|a^{k}\right\rangle \right)=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\frac{1}{r}\sum_{k=1}^{r-1}\left(\sum_{s=0}^{r-1}e^{-k\cdot\frac{2\pi i}{r}s}\right)\left|a^{k}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו נחלץ לעזרתנו תעלול ידוע ומוכר - אם 
+\begin_inset Formula $\omega$
+\end_inset
+
+ הוא שורש יחידה 
+\series bold
+כלשהו
+\series default
+ מסדר 
+\begin_inset Formula $r$
+\end_inset
+
+, אז 
+\begin_inset Formula $1+\omega+\omega^{2}+\ldots+\omega^{r-1}=\begin{cases}
+0 & \omega\ne1\\
+r & \omega=1
+\end{cases}$
+\end_inset
+
+.
+ למה? כי אם 
+\begin_inset Formula $\omega\ne1$
+\end_inset
+
+ אז הסכום משמאל הוא טור הנדסי שיוצא 
+\begin_inset Formula $\frac{\omega^{r}-1}{\omega-1}=\frac{1-1}{\omega-1}=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+במקרה שלנו, 
+\begin_inset Formula $\omega=-k\frac{2\pi i}{r}$
+\end_inset
+
+ - זה בהחלט שורש יחידה מסדר 
+\begin_inset Formula $r$
+\end_inset
+
+, והוא שווה ל-
+\numeric on
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+רק כאשר 
+\begin_inset Formula $k=0$
+\end_inset
+
+.
+ כלומר מכל הסכום הגדול נשאר רק
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|u_{s}\right\rangle =\frac{1}{r}\cdot r\left|a^{0}\right\rangle =\left|1\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+שימו לב: 
+\begin_inset Formula $\left|1\right\rangle $
+\end_inset
+
+ במקרה הזה הוא לא קיוביט בודד שערכו 
+\begin_inset Formula $\left|1\right\rangle $
+\end_inset
+
+, אלא כזכור, הסימון המקוצר שלי ל-
+\begin_inset Formula $\left|000\ldots01\right\rangle $
+\end_inset
+
+.
+ אבל זה בוודאי ובוודאי מצב שאנחנו יודעים לבנות - כלומר, אנחנו בהחלט יודעים
+ לקבל את הסופרפוזיציה של כל ה-
+\begin_inset Formula $\left|u_{s}\right\rangle $
+\end_inset
+
+ גם אם אנחנו לא יודעים לקבל אף אחד מהם אישית; זו גם הסיבה שבגללה כל כך עניין
+ אותי להבין את כל ה-
+\begin_inset Formula $\left|u_{s}\right\rangle $
+\end_inset
+
+ כולל 
+\begin_inset Formula $\left|u_{0}\right\rangle $
+\end_inset
+
+ ולא סתם התמקדתי ב-
+\begin_inset Formula $\left|u_{1}\right\rangle $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+בסופו של דבר, מה עושה המעגל של אלגוריתם הערכת פאזה? נקרא לו 
+\begin_inset Formula $\text{PE}$
+\end_inset
+
+ )קיצור של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Phase Estimation
+\lang hebrew
+(.
+ אם מריצים אותו עד השלב שלפני המדידה שבסוף, הוא מחשב את האופרטור האוניטרי
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\text{PE}\left(\left|0^{n}\right\rangle \left|u_{s}\right\rangle \right)=\left|\tilde{\varphi}_{s}\right\rangle \left|u_{s}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאשר 
+\begin_inset Formula $\left|\tilde{\varphi}_{s}\right\rangle $
+\end_inset
+
+ הוא מצב קוונטי שהמדידה שלו נותנת בהסתברות טובה קירוב טוב של 
+\begin_inset Formula $\varphi_{s}$
+\end_inset
+
+ - הפאזה שמתאימה ל-
+\begin_inset Formula $u_{s}$
+\end_inset
+
+, כלומר 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+.
+ עכשיו, אם במקום לרוץ על מצב בודד, נרוץ על סופרפוזיציה שלהם, העובדה ש-
+\lang english
+
+\begin_inset Formula $\text{PE}$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הוא אופרטור 
+\series bold
+לינארי
+\series default
+ נותנת לנו
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\text{PE}\left(\left|0^{n}\right\rangle \left(\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|u_{s}\right\rangle \right)\right)=\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\text{PE}\left(\left|0^{n}\right\rangle \left|u_{s}\right\rangle \right)=\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|\tilde{\varphi}_{s}\right\rangle \left|u_{s}\right\rangle $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+במילים אחרות, אנחנו מקבלים ברגיסטר הראשון סופרפוזיציה אחידה של כל ה-
+\begin_inset Formula $\left|\tilde{\varphi}_{s}\right\rangle $
+\end_inset
+
+-ים, ולכן אפשר לחשוב על מדידה של הרגיסטר הראשון כאילו היא עושה שני דברים
+ בזה אחר זה:
+\end_layout
+
+\begin_layout Itemize
+מגרילה 
+\begin_inset Formula $0\le s<r$
+\end_inset
+
+ באקראי ובהתפלגות אחידה.
+\end_layout
+
+\begin_layout Itemize
+מודדת את 
+\begin_inset Formula $\left|\tilde{\varphi}_{s}\right\rangle $
+\end_inset
+
+, כלומר מקבלת ערך שבהסתברות טובה הוא קירוב טוב של 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+האם כל ה-
+\begin_inset Formula $s$
+\end_inset
+
+-ים טובים עבורנו? ובכן, לא.
+ ראינו כבר קודם שעבור 
+\begin_inset Formula $s=0$
+\end_inset
+
+ אין לנו כלום - לא נוכל לחלץ את 
+\begin_inset Formula $r$
+\end_inset
+
+ מהערך שנקבל.
+ ובמקרים אחרים, אם 
+\begin_inset Formula $\text{gcd}\left(s,r\right)>1$
+\end_inset
+
+ אז הסיכוי שנצליח לעשות משהו טוב נפגע מאוד - 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+ לא יהיה שבר מצומצם ולכן אם ננסה 
+\begin_inset Quotes eld
+\end_inset
+
+לשחזר
+\begin_inset Quotes erd
+\end_inset
+
+ את 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+ לא נקבל את 
+\begin_inset Formula $r$
+\end_inset
+
+.
+ הנה דוגמא פשוטה: נניח ש-
+\begin_inset Formula $r=15$
+\end_inset
+
+ ו-
+\begin_inset Formula $s=3$
+\end_inset
+
+.
+ אז 
+\begin_inset Formula $\frac{s}{r}=\frac{3}{15}=\frac{1}{5}=0.2$
+\end_inset
+
+; אז אפילו אם נקבל את התוצאה המדויקת 
+\begin_inset Formula $0.2$
+\end_inset
+
+ לא נוכל לשחזר מזה את 
+\begin_inset Formula $r=15$
+\end_inset
+
+; המכנה שנשחזר הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+5
+\numeric off
+.
+ בגלל הבעיה הזו, לפעמים באלגוריתם של שור כשמקבלים 
+\begin_inset Quotes eld
+\end_inset
+
+מועמד ל-
+\begin_inset Formula $r$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ משתלם לפעול לא רק מתוך הנחה שהמועמד הזה טוב, אלא גם לנסות כמה כפולות שלו
+ - להכפיל ב-
+\numeric on
+2,3,4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+וכו' ולנסות גם עבורן.
+ זה חישוב מהיר מאוד שלא מאט אותנו, ואם במקרה הוא מצליח ומצאנו גורם של 
+\begin_inset Formula $N$
+\end_inset
+
+ נדע בודאות שהצלחנו, כך שאין חיסרון של ממש להרחבה הזו.
+\end_layout
+
+\begin_layout Standard
+זה סוף אלגוריתם הערכת הפאזה, כלומר סוף החלק הקוונטי של האלגוריתם; הנה איך
+ הכל נראה בסופו של דבר.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/gadia/Dropbox/Websites/blog/assets/img/2022/shor_algorithm.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+איך משחזרים את הסדר מתוך הקירוב שהערכת הפאזה נותנת לנו?
+\end_layout
+
+\begin_layout Standard
+ברגע שבו אלגוריתם הערכת הפאזה מסתיים, נגמר החלק הקוונטי של האלגוריתם, אבל
+ עדיין נשאר חלק לא טריוויאלי בעליל שצריך לבצע - השלב שבו אנחנו עוברים מה
+\series bold
+קירוב
+\series default
+ שקיבלנו לפאזה, עד שיש לנו ביד מועמד פוטנציאלי להיות הסדר, 
+\begin_inset Formula $r$
+\end_inset
+
+.
+ כאן נכנס לתמונה מה שנקרא 
+\series bold
+אלגוריתם השברים המשולבים
+\series default
+, שזו פשוט דרך מפחידה להגיד 
+\begin_inset Quotes eld
+\end_inset
+
+שיטה למציאת קירובים רציונלים טובים למספר שקיבלנו
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+מה זה שבר משולב? 
+\begin_inset CommandInset href
+LatexCommand href
+name "יש לי פוסט על זה"
+target "https://gadial.net/2010/05/29/continued_fractions_1/"
+literal "false"
+
+\end_inset
+
+ אבל הוא נכנס לעומק שאני לא זקוק לו פה, ומצד שני תמיד נחמד להציג שוב נושא
+ כל כך מגניב, בטח כשיש לו שימוש פרקטי.
+ אז הנה מבוא על רגל אחת.
+ נתחיל עם דוגמא קונקרטית - המספר 
+\begin_inset Formula $\pi$
+\end_inset
+
+ - היחס בין היקף מעגל לקוטרו - הוא אחד מהקבועים המתמטיים המפורסמים ביותר.
+ אם ננסה לכתוב אותו בבסיס עשרוני הוא ייראה משהו כמו 
+\begin_inset Formula $\pi=3.14159\ldots$
+\end_inset
+
+, כשהנקודות אומרות שיש עוד ספרות בהמשך.
+ אם נוותר על הנקודות ונסתכל על המספר 
+\begin_inset Formula $3.14159$
+\end_inset
+
+, מה שיש לנו ביד הוא 
+\series bold
+קירוב רציונלי
+\series default
+ של 
+\begin_inset Formula $\pi$
+\end_inset
+
+ - קירוב שאפשר לכתוב אותו בתור מנה של שני מספרים שלמים, 
+\begin_inset Formula $\frac{314159}{10000}$
+\end_inset
+
+ )זאת להבדיל מ-
+\begin_inset Formula $\pi$
+\end_inset
+
+ עצמו שיש הוכחה שאי אפשר להציג בתור מנה של שני מספרים שלמים(.
+ אני יכול גם להסתכל על קירובים שמתקבלים מלקחת 
+\series bold
+פחות
+\series default
+ ספרות של 
+\begin_inset Formula $\pi$
+\end_inset
+
+: אני מקבל את סדרת הקירובים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $3,\frac{31}{10},\frac{314}{100},\frac{3141}{1000},\frac{31415}{10000}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+האם זו סדרת קירובים 
+\series bold
+טובה
+\series default
+? הקירוב 
+\begin_inset Formula $\frac{314}{100}=3.14$
+\end_inset
+
+, למשל, הוא מפורסם במיוחד: צורת הכתיב שלו, בשילוב עם שיטת כתיב התאריכים
+ האמריקאית ויום ההולדת של אלברט איינשטיין, הולידו את 
+\series bold
+יום פאי
+\series default
+.
+ אבל האמת היא, בינינו, שזה קירוב 
+\series bold
+די גרוע
+\series default
+ לעומת קירוב אחר, 
+\begin_inset Formula $\frac{22}{7}$
+\end_inset
+
+, שזכה ליום פחות מפורסם משל עצמו )
+\begin_inset Quotes erd
+\end_inset
+
+יום קירוב פאי
+\begin_inset Quotes erd
+\end_inset
+
+, למרות שכאמור הוא דווקא הקירוב הטוב יותר(.
+ אם נחשב את ההפרש של כל אחד מהקירובים מפאי נקבל
+\begin_inset Formula $\left|\pi-3.14\right|=0.001592\dots$
+\end_inset
+
+ ו-
+\begin_inset Formula $\left|\pi-\frac{22}{7}\right|=0.001264\ldots$
+\end_inset
+
+, כלומר יש יתרון ברור ל-
+\begin_inset Formula $\frac{22}{7}$
+\end_inset
+
+, למרות שלכאורה נקודת המוצא של 
+\begin_inset Formula $\frac{314}{100}$
+\end_inset
+
+ היא טובה 
+\series bold
+הרבה 
+\series default
+יותר, כי המכנה שלו הוא מספר גדול יותר, ולכן לכאורה מאפשר למצוא מספר שקרוב
+ לפאי ברזולוציה טובה יותר )תחשבו על סרגל שיש בו סימוני סנטימטרים לעומת סרגל
+ שיש בו רק שבעה סימנים ברווחים אחידים בין כל מטר - מה נראה לנו כמו כלי מדויק
+ יותר?(
+\end_layout
+
+\begin_layout Standard
+אם נסתכל על הקירוב ה
+\begin_inset Quotes erd
+\end_inset
+
+טוב
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Formula $\frac{22}{7}$
+\end_inset
+
+, מה מבדיל אותו מהסדרה שהראיתי קודם? בסדרה הזו, 
+\series bold
+המכנה
+\series default
+ של כל השברים היה חזקה של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+10
+\numeric off
+:
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+,
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+10
+\numeric off
+,
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+100
+\numeric off
+,
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1000
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+וכו'.
+ לעומת בקירוב 
+\begin_inset Formula $\frac{22}{7}$
+\end_inset
+
+ נדחף לנו ה-
+\numeric on
+7
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הלא קשור הזה.
+ העניין הוא שמבחינת המתמטיקה, האהבה שלנו למספר
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+10
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+היא 
+\series bold
+שרירותית
+\series default
+; זה בגלל שהביולוגיה חננה אותנו בעשר אצבעות, לא בגלל שעשר הוא מספר מופלא
+ לקירובים.
+ לכן, שיטת הקירובים שאנחנו רגילים אליה מהבסיס העשרוני שלנו היא לאו דווקא
+ אופטימלית; שברים משולבים הם אלו שנותנים לנו את הקירובים האופטימליים, במובן
+ מאוד מדויק שאתאר עוד מעט - ובגלל שמקבלים קירובים כל כך טובים, זה מתקשר
+ ישירות לאלגוריתם שלנו.
+ 
+\end_layout
+
+\begin_layout Standard
+איך זה קשור? ובכן, עוד מעט אראה איך בעזרת שברים משולבים אפשר לקבל סדרת קירובים
+ למספר כלשהו 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ הקסם המופלא בשיטה הזו הוא שאם למספר 
+\begin_inset Formula $x$
+\end_inset
+
+ כלשהו יש קירוב 
+\series bold
+טוב
+\series default
+ )עבור משמעות של 
+\begin_inset Quotes eld
+\end_inset
+
+טוב
+\begin_inset Quotes erd
+\end_inset
+
+ שאתן במדויק בהמשך(, אז 
+\series bold
+בודאות מוחלטת
+\series default
+ הקירוב הטוב הזה יופיע בסדרת הקירובים שמקבלים מהפיתוח של 
+\begin_inset Formula $x$
+\end_inset
+
+ לשבר משולב.
+\end_layout
+
+\begin_layout Standard
+איך זה קשור אלינו? כי בואו נחשוב רגע מה עושה שלב הערכת הפאזה: הוא מחזיר
+ מספר 
+\begin_inset Formula $x$
+\end_inset
+
+ שהוא 
+\series bold
+קירוב טוב
+\series default
+ של 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+ כאשר 
+\begin_inset Formula $r$
+\end_inset
+
+ הוא הסדר שאנחנו מחפשים - מטרת האלגוריתם - ו-
+\begin_inset Formula $0\le s<r$
+\end_inset
+
+ הוא מספר אקראי.
+ אבל אם 
+\begin_inset Formula $x$
+\end_inset
+
+ הוא 
+\series bold
+קירוב טוב
+\series default
+ של 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+ ההפך נכון באותה מידה: 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+ הוא 
+\series bold
+קירוב טוב 
+\series default
+של 
+\begin_inset Formula $x$
+\end_inset
+
+, ולכן הולך להופיע בפיתוח לשברים משולבים של 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ כזכור, בפוסט על אלגוריתם הערכת פאזה ראינו בדיוק כיצד ניתן להגדיל את ההסתברות
+ לקבלת קירוב טוב )עוד קיוביטים(, אז מה שנצטרך לעשות הוא להבין כמה טוב צריך
+ להיות 
+\series bold
+הקירוב הטוב
+\series default
+ הזה.
+\end_layout
+
+\begin_layout Standard
+עוד עניין שאין לנו דרך להתמודד איתו הוא ש-
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+ צריך להיות 
+\series bold
+שבר מצומצם
+\series default
+.
+ אם למשל 
+\begin_inset Formula $s=7$
+\end_inset
+
+ ו-
+\begin_inset Formula $r=63$
+\end_inset
+
+, אז 
+\begin_inset Formula $\frac{s}{r}=\frac{7}{63}=\frac{1}{9}$
+\end_inset
+
+, ואז מה שהפיתוח לשברים משולבים ייתן לנו הוא את 
+\begin_inset Formula $\frac{1}{9}$
+\end_inset
+
+.
+ זה כמובן אותו מספר בדיוק כמו 
+\begin_inset Formula $\frac{7}{63}$
+\end_inset
+
+, אבל אנחנו מעוניינים במספר
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+63
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שנמצא במכנה, לא ב-
+\numeric on
+9
+\numeric off
+.
+ אז כדי שהאלגוריתם יצליח, ה-
+\begin_inset Formula $0\le s<r$
+\end_inset
+
+ שנבחר באקראי צריך להיות זר ל-
+\begin_inset Formula $r$
+\end_inset
+
+.
+ למרבה המזל, רוב ה-
+\begin_inset Formula $s$
+\end_inset
+
+-ים הללו אכן כאלו, אז זו לא בעיה אמיתית - אבל מי שרוצים להיות ממש זהירים
+ יכולים, בהינתן המספר שהתקבל במכנה, לנסות גם כפולות שלו - אם היינו מנסים
+ לקחת את ה-
+\numeric on
+9
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שקיבלנו במכנה, לכפול אותו ב-
+\numeric on
+7
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ולנסות לפרק לגורמים את 
+\begin_inset Formula $N$
+\end_inset
+
+ עם ה-
+\begin_inset Formula $63$
+\end_inset
+
+ שקיבלנו, היינו מצליחים; הנסיונות הללו לא מפריעים לשום דבר ומגדילים עוד
+ קצת את הסיכוי שנצליח, אבל כנראה שאפשר גם בלעדיהם.
+\end_layout
+
+\begin_layout Standard
+אוקיי, בואו נעבור לשברים משולבים! ספציפית אל המספר 
+\begin_inset Formula $\frac{314159}{100000}$
+\end_inset
+
+ שהבטחתי למצוא לו סדרת קירובים טובה יותר מאשר 
+\begin_inset Formula $3,3.1,3.14$
+\end_inset
+
+ וכן הלאה.
+ הטכניקה שבה אשתמש תיראה מוזרה במבט ראשון, אבל סמכו עלי - היא עובדת.
+ כזכור, אי שם בבית הספר לימדו אותנו שיש משהו שנקרא 
+\begin_inset Quotes eld
+\end_inset
+
+שבר מדומה
+\begin_inset Quotes erd
+\end_inset
+
+ שהוא שבר שבו המונה גדול מהמכנה.
+ שבר כזה אפשר להפריד לסכום שנקרא 
+\begin_inset Quotes eld
+\end_inset
+
+מספר מעורב
+\begin_inset Quotes erd
+\end_inset
+
+ של החלק השלם ועוד החלק השברי שהוא בין
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ל-
+\numeric on
+1
+\numeric off
+.
+ במקרה שלנו:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{314159}{100000}=3+\frac{14159}{100000}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו אני עושה את הטריק המרכזי שלי: אני משתמש בכך שבאופן כללי, 
+\begin_inset Formula $\frac{a}{b}=\frac{1}{\frac{b}{a}}$
+\end_inset
+
+ כדי לכתוב
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{14159}{100000}=\frac{1}{\frac{100000}{14159}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מה הולך פה? קודם היה לנו שבר 
+\begin_inset Quotes eld
+\end_inset
+
+אמיתי
+\begin_inset Quotes erd
+\end_inset
+
+, שבו המונה 
+\series bold
+קטן
+\series default
+ מהמכנה; עכשיו המונה והמכנה התהפכו, אז שוב קיבלנו שבר מדומה שאנחנו יכולים
+ להפריד למספר שלם ועוד שבר.
+ בשביל לעשות את זה, צריך לחלק את
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+100,000
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ב-
+\numeric on
+14,159
+\numeric off
+; המנה שנקבל היא החלק השלם, והשארית שנקבל היא מה שנשאר על השבר: 
+\begin_inset Formula $\frac{100000}{14159}=7+\frac{887}{14159}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+אם שותלים את הביטוי הזה בחישוב שכבר עשינו, מקבלים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $3+\frac{14159}{100000}=3+\frac{1}{7+\frac{887}{14159}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אפשר להמשיך עם זה ולהתעלל גם ב–
+\begin_inset Formula $\frac{887}{14159}$
+\end_inset
+
+, אבל אפשר גם לקחת הפסקה לרגע ולהגיד 
+\begin_inset Quotes eld
+\end_inset
+
+אוקיי, בואו נתעלם לגמרי מה-
+\begin_inset Formula $\frac{887}{14159}$
+\end_inset
+
+, מה קיבלנו עכשיו?
+\begin_inset Quotes erd
+\end_inset
+
+ ואז יש לנו את השבר
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $3+\frac{1}{7}=\frac{22}{7}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+הופה! הנה צץ לנו הקירוב המצוין לפאי שדיברתי עליו קודם! כאילו במטה קסם.
+ ובכן, כן, זה 
+\series bold
+באמת
+\series default
+ קסם, עד כמה שדברים שקורים במתמטיקה הם קסם; זה הקסם שמאפשר לנו לסיים את
+ האלגוריתם של שור.
+ 
+\series bold
+למה
+\series default
+ זה קורה? סבלנות! עוד אוכיח את זה באופן מלא בפוסט הזה.
+\end_layout
+
+\begin_layout Standard
+נחזור אל ה-
+\begin_inset Formula $\frac{887}{14159}$
+\end_inset
+
+.
+ בשלב הזה אנחנו כבר יודעים מה לעשות - לחלק את
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+14159
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ב-
+\numeric on
+887
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ולראות מה המנה ומה השארית, ואז לכתוב
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{887}{14159}=\frac{1}{15+\frac{854}{887}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אם נשתול את זה בביטוי המקורי נקבל משהו שהוא כבר בלתי קריא בעליל:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $3+\frac{1}{7+\frac{1}{15+\frac{854}{887}}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+בגלל שזה בלתי קריא, משתמשים לפעמים בשיטת סימון אחרת, שבה לא צריך לרדת למטה
+ עוד ועוד:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $3+\frac{1}{7+}\frac{1}{15+}\frac{1}{887/854}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אבל אני אשתמש בשיטת סימון עוד יותר קומפקטית: הרי לא באמת צריך את כל הפלוסים
+ וה-
+\numeric on
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+חלקי הללו, אנחנו מתעניינים רק במספרים שליד הפלוסים.
+ אז אפשר לכתוב
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[3,7,15,\frac{887}{854}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זו צורת הכתיב הנפוצה והמקובלת.
+ הנה הגדרה פורמלית של מה היא אומרת:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[a_{0},a_{1},\ldots a_{n}\right]=a_{0}+\frac{1}{a_{1}+\frac{1}{a_{2}+\frac{1}{\cdots+\frac{1}{a_{n}}}}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ועכשיו אפשר להמשיך יותר בנוחות.
+ נחלק את
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+887
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ב-
+\numeric on
+854
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ונקבל מנה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ושארית
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+33
+\numeric off
+, כלומר השלב הבא הוא
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[3,7,15,1,\frac{854}{33}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+בשלב הבא נחלק
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+854
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ ב-
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+33
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ונקבל מנה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+25
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ושארית
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+29
+\numeric off
+, ובואו נמשיך גם לשלב הבא כי הבנו את הקטע:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[3,7,15,1,25,\frac{33}{29}\right]=\left[3,7,15,1,25,1,\frac{29}{4}\right]=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\left[3,7,15,1,25,1,7,\frac{4}{1}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+וזה השלב האחרון, כי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מתחלק ב-
+\numeric on
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ללא שארית! זו הצורה ה
+\begin_inset Quotes erd
+\end_inset
+
+סופית
+\begin_inset Quotes erd
+\end_inset
+
+ של השבר המשולב:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[3,7,15,1,25,1,7,4\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כלומר, אנחנו מרגישים רגועים לומר שסיימנו כשהאיבר האחרון, הימני ביותר, הוא
+ עצמו מספר שלם ולא שבר.
+\end_layout
+
+\begin_layout Standard
+ואיך כל זה עוזר לנו בכלל? כפי שראינו קודם, כבר כש
+\begin_inset Quotes erd
+\end_inset
+
+עצרנו
+\begin_inset Quotes erd
+\end_inset
+
+ את החישוב אחרי שקיבלנו את ה-
+\numeric on
+7
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הראשון והתעלמנו מהשארית, קיבלנו את הקירוב 
+\begin_inset Formula $\frac{22}{7}$
+\end_inset
+
+ המצוין.
+ באותו אופן אפשר לעצור את הקירוב גם בשלבים מתקדמים יותר ולקבל קירובים מצויינים
+ אחרים.
+ למשל:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[3,7,15\right]=3+\frac{1}{7+\frac{1}{15}}=3+\frac{1}{\frac{106}{15}}=\frac{333}{106}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+גם זה קירוב מפורסם של פאי, וכן הלאה - הבנו את הרעיון.
+ שימו לב, אגב, שלא עבדנו עם 
+\begin_inset Formula $\pi$
+\end_inset
+
+ בכלל; התחלנו עם המספר 
+\begin_inset Formula $3.14159$
+\end_inset
+
+ ומצאנו סדרת קירובים 
+\series bold
+אליו
+\series default
+; בגלל שהוא קירוב לא רע של פאי, קיבלנו שסדרת הקירובים החלקיים עד כה נותנת
+ גם את הקירובים המצויינים של 
+\begin_inset Formula $\pi$
+\end_inset
+
+.
+ אם היינו מלכתחילה רוצים לחשב שבר משולב עבור 
+\begin_inset Formula $\pi$
+\end_inset
+
+ היינו נתקלים בשתי בעיות - החישוב קצת יותר מסובך, והשבר המשולב המתקבל צריך
+ להיות 
+\series bold
+אינסופי
+\series default
+; כדי להתחמק מהסיבוך הזה שלא דרוש לי הסתפקתי בלתאר איך מחשבים שבר משולב
+ עבור מספר שהוא מלכתחילה שבר - ומה שראינו הוא שהשבר המשולב שאנחנו בונים
+ אכן נותן סדרה מצויינת של קירובים לאותו השבר.
+ זה המקרה הרלוונטי לנו כי כזכור, אנחנו מקבלים מאלגוריתם הערכת הפאזה מספר
+ 
+\series bold
+רציונלי 
+\series default
+
+\begin_inset Formula $x$
+\end_inset
+
+ שבתקווה 
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+ הוא קירוב מצויין אליו.
+ אם 
+\begin_inset Formula $x$
+\end_inset
+
+ הוא מספר רציונלי, אנחנו יודעים איך לחשב לו שבר משולב ואז לקבל ממנו את סדרת
+ הקירובים האופטימלית שהוא נותן - זה חישוב מאוד פשוט שכולל בסך הכל פעולות
+ של חילוק עם שארית וחישובים אריתמטיים פשוטים יותר.
+ קל לתכנת את זה והריצה של החלק הזה לוקחת שברירי שניה.
+\end_layout
+
+\begin_layout Section
+בונוס: איך מוכיחים את כל הקטע הזה של השברים המשולבים?
+\end_layout
+
+\begin_layout Standard
+יופי, סיימנו עם האלגוריתם של שור ואפשר לעבור לתורת המספרים נטו! בואו נעבור
+ לתיאור פורמלי של עניין ה
+\series bold
+קירוב טוב
+\series default
+ הזה.
+ נתחיל עם סימון: אם 
+\begin_inset Formula $x$
+\end_inset
+
+ הוא מספר רציונלי עם פיתוח לשבר משולב 
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n}\right]$
+\end_inset
+
+, אני אסמן את סדרת הקירובים שמתקבלת מהפיתוח הזה בתור 
+\begin_inset Formula $\frac{p_{0}}{q_{0}},\frac{p_{1}}{q_{1}},\frac{p_{2}}{q_{2}},\ldots,\frac{p_{n}}{q_{n}}$
+\end_inset
+
+.
+ כלומר, 
+\begin_inset Formula $\frac{p_{k}}{q_{k}}=\left[a_{0},a_{1},\ldots,a_{k}\right]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+הנה דברים שאפשר להראות אבל לא אראה הפעם: 
+\begin_inset Formula $q_{0}<q_{1}<q_{2}<\ldots<q_{n}$
+\end_inset
+
+, כלומר המכנה הולך וגדל ככל שמתקדמים בסדרה; 
+\begin_inset Formula $p_{k},q_{k}$
+\end_inset
+
+ זרים זה לזה לכל אינדקס 
+\begin_inset Formula $k$
+\end_inset
+
+; והקירוב 
+\begin_inset Formula $\frac{p_{k}}{q_{k}}$
+\end_inset
+
+ הוא טוב במובן הבא:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|x-\frac{p_{k}}{q_{k}}\right|<\frac{1}{q_{k}q_{k+1}}<\frac{1}{q_{k}^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כשהמעבר השני נובע מכך ש-
+\begin_inset Formula $q_{k}<q_{k+1}$
+\end_inset
+
+ )עבור 
+\begin_inset Formula $k=n$
+\end_inset
+
+ הנוסחה לא עובדת כי אין 
+\begin_inset Formula $q_{k+1}$
+\end_inset
+
+ אבל ממילא בשלב הזה ההפרש הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+(.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{p_{k}}{q_{k}}$
+\end_inset
+
+ הוא 
+\series bold
+הקירוב הטוב ביותר
+\series default
+ במובן זה שלכל 
+\begin_inset Formula $1\le d\le q_{k}$
+\end_inset
+
+ ולכל 
+\begin_inset Formula $c$
+\end_inset
+
+ מתקיים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|x-\frac{p_{k}}{q_{k}}\right|\le\left|x-\frac{c}{d}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כלומר, אם מסתכלים על כל המספרים הרציונליים עם מכנה שהוא לכל היותר 
+\begin_inset Formula $q_{k}$
+\end_inset
+
+, לא נמצא אף אחד שהוא קירוב יותר טוב ל-
+\begin_inset Formula $x$
+\end_inset
+
+ מאשר 
+\begin_inset Formula $\frac{p_{k}}{q_{k}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+יפה, כל אלו הם משפטים מעניינים, אבל המשפט שמעניין אותי באמת הוא זה שמבטיח
+ לנו שקירוב טוב בהכרח יופיע בפיתוח לשבר משולב, וסוף סוף אפשר לנסח אותו פורמלית:
+ אם 
+\begin_inset Formula $c,d$
+\end_inset
+
+ זרים זה לזה, עם 
+\begin_inset Formula $1\le d$
+\end_inset
+
+, ומתקיים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|x-\frac{c}{d}\right|<\frac{1}{2d^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אז 
+\series bold
+בודאות
+\series default
+ קיים 
+\begin_inset Formula $k$
+\end_inset
+
+ כך ש-
+\begin_inset Formula $\frac{c}{d}=\frac{a_{k}}{b_{k}}$
+\end_inset
+
+ עבור איבר 
+\begin_inset Formula $\frac{a_{k}}{b_{k}}$
+\end_inset
+
+ בסדרת הקירובים שמתקבלת מהפיתוח של 
+\begin_inset Formula $x$
+\end_inset
+
+ לשבר משולב.
+\end_layout
+
+\begin_layout Standard
+איך מוכיחים את זה?
+\end_layout
+
+\begin_layout Standard
+טוב, אני אצטרך שנכיר עוד כמה דברים על שברים משולבים כדי להתקדם.
+ הדבר הראשון הוא נוסחה די משוגעת שעבור שבר משולב 
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n},a_{n+1}\right]$
+\end_inset
+
+ נותנת לנו את 
+\begin_inset Formula $\frac{p_{n+1}}{q_{n+1}}$
+\end_inset
+
+ - האיבר הבא בסדרת הקירובים - אם נתונים לנו 
+\begin_inset Formula $\frac{p_{n}}{q_{n}},\frac{p_{n-1}}{q_{n-1}}$
+\end_inset
+
+ ו-
+\begin_inset Formula $a_{n+1}$
+\end_inset
+
+.
+ הנה הנוסחה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{p_{n+1}}{q_{n+1}}=\frac{a_{n+1}p_{n}+p_{n-1}}{a_{n+1}q_{n}+q_{n-1}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+בואו נראה את זה בפעולה עבור 
+\begin_inset Formula $\left[3,7,15,1,25,1,7,4\right]$
+\end_inset
+
+, השבר המשולב שכבר מצאנו עבור הקירוב לפאי.
+ כזכור, שני הקירובים הראשונים שקיבלנו היו 
+\begin_inset Formula $\frac{3}{1}$
+\end_inset
+
+ ו-
+\begin_inset Formula $\frac{22}{7}$
+\end_inset
+
+, והקירוב השלישי היה 
+\begin_inset Formula $\frac{333}{106}$
+\end_inset
+
+.
+ לכאורה כדי לקבל את הקירוב השלישי אנחנו לא יכולים להיעזר בשני הראשונים;
+ אנחנו חייבים לבצע את כל החישוב 
+\begin_inset Formula $3+\frac{1}{7+\frac{1}{15}}$
+\end_inset
+
+; אי אפשר לקחת את 
+\begin_inset Formula $\frac{22}{7}=3+\frac{1}{7}$
+\end_inset
+
+ ופשוט 
+\begin_inset Quotes eld
+\end_inset
+
+לשתול
+\begin_inset Quotes erd
+\end_inset
+
+ את 
+\begin_inset Formula $15$
+\end_inset
+
+ בתוכו בצורה פשוטה.
+ אבל בואו נראה מה קורה עם הנוסחה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{a_{2}p_{1}+p_{0}}{a_{2}q_{1}+q_{0}}=\frac{15\cdot22+3}{15\cdot7+1}=\frac{333}{106}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+קסם! תקשיבו לי, זה פשוט קסם! אין לי שמץ של מושג איך זה קורה למרות שלדעתי
+ כבר ראיתי כמה פעמים את ההוכחה.
+ בואו נראה אותה שוב ביחד.
+\end_layout
+
+\begin_layout Standard
+כפי שניתן לנחש, מוכיחים את הטענה באינדוקציה.
+ המקרה הפשוט ביותר שהוא היא רלוונטית הוא 
+\begin_inset Formula $n=1$
+\end_inset
+
+.
+ במקרה הזה, השבר המשולב שלנו הוא 
+\begin_inset Formula $\left[a_{0},a_{1},a_{2}\right]$
+\end_inset
+
+ והפיתוחים החלקיים שלו הם
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{p_{0}}{q_{0}}=\frac{a_{0}}{1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{p_{1}}{q_{1}}=a_{0}+\frac{1}{a_{1}}=\frac{a_{0}a_{1}+1}{a_{1}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מאלו אנחנו יכולים להסיק:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $p_{0}=a_{0},q_{0}=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $p_{1}=a_{0}a_{1}+1,q_{1}=a_{1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עבור האיבר הבא החישוב קצת יותר מסובך אבל נעשה אותו במפורש:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{p_{2}}{q_{2}}=a_{0}+\frac{1}{a_{1}+\frac{1}{a_{2}}}=a_{0}+\frac{a_{2}}{a_{2}a_{1}+1}=\frac{a_{2}a_{0}a_{1}+a_{0}+a_{2}}{a_{2}a_{1}+1}=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\frac{a_{2}\left(a_{0}a_{1}+1\right)+a_{0}}{a_{2}a_{1}+1}=\frac{a_{2}p_{1}+p_{0}}{a_{2}q_{1}+q_{0}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+קיבלנו את הנוסחה במקרה הזה, ועכשיו רק נשאר לסיים באינדוקציה את המקרה הכללי.
+ כאן פשוט 
+\series bold
+חייב
+\series default
+ לבוא איזה טיעון מתוחכם, כי הנוסחה הזו מפשטת לנו מאוד משהו שנראה מבעית בהתחלה.
+ הנה ההתחכמות: במקרה הכללי, השבר המשולב שמתקבל מהאיברים הראשונים עד 
+\begin_inset Formula $a_{n}$
+\end_inset
+
+ הוא
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ועבורו יש לנו את נוסחת הנסיגה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n}\right]=\frac{a_{n}p_{n-1}+p_{n-2}}{a_{n}q_{n-1}+q_{n-2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו הטיעון המתוחכם: 
+\begin_inset Formula $p_{n-1},q_{n-1},p_{n-2},q_{n-2}$
+\end_inset
+
+ מתקבלים מ-
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n-1}\right]$
+\end_inset
+
+ ומ-
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n-2}\right]$
+\end_inset
+
+; השברים המשולבים הללו לא תלויים באיבר האחרון, ולכן המספרים הללו יישארו
+ זהים גם אם נשתול בתור האיבר האחרון משהו אחר, למשל את 
+\begin_inset Formula $a_{n}+\frac{1}{a_{n+1}}$
+\end_inset
+
+.
+ אבל מה זה 
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n-1},a_{n}+\frac{1}{a_{n+1}}\right]$
+\end_inset
+
+? אם נפתח את ההגדרה, נראה שזה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a_{0}+\frac{1}{a_{1}+\frac{1}{a_{2}+\frac{1}{\cdots+\frac{1}{a_{n}+\frac{1}{a_{n+1}}}}}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כלומר, זה פשוט המספר 
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n-1},a_{n},a_{n+1}\right]=\frac{p_{n+1}}{q_{n+1}}$
+\end_inset
+
+, רק שעבור הצורה הקודמת אפשר להשתמש בנוסחת הנסיגה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n-1},a_{n}+\frac{1}{a_{n+1}}\right]=\frac{\left(a_{n}+\frac{1}{a_{n+1}}\right)p_{n-1}+p_{n-2}}{\left(a_{n}+\frac{1}{a_{n+1}}\right)q_{n-1}+q_{n-2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זה קצת מזוויע אבל נכפול מונה ומכנה ב-
+\begin_inset Formula $a_{n+1}$
+\end_inset
+
+ ונקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{\left(a_{n+1}a_{n}+1\right)p_{n-1}+a_{n+1}p_{n-2}}{\left(a_{n+1}a_{n}+1\right)q_{n-1}+a_{n+1}q_{n-2}}=\frac{a_{n+1}\left(a_{n}p_{n-1}+p_{n-2}\right)+p_{n-1}}{a_{n+1}\left(a_{n}q_{n-1}+q_{n-2}\right)+q_{n-1}}=\frac{a_{n+1}p_{n}+p_{n-1}}{a_{n+1}q_{n}+q_{n-1}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+וזה בדיוק הביטוי שקיווינו לקבל! זה מסיים את ההוכחה הזו.
+\end_layout
+
+\begin_layout Standard
+בעזרת הנוסחה הזו אפשר לקבל נוסחה מקסימה נוספת, שמקשרת בין 
+\begin_inset Formula $\frac{p_{n}}{q_{n}}$
+\end_inset
+
+ ובין האיבר הקודם לו, 
+\begin_inset Formula $\frac{p_{n-1}}{q_{n-1}}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $q_{n}p_{n-1}-p_{n}q_{n-1}=\left(-1\right)^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ההוכחה של זה היא באינדוקציה פשוטה למדי: במקרה הבסיס 
+\begin_inset Formula $n=1$
+\end_inset
+
+ אנו מתבססים על כך שבפיתוח של 
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{k}\right]$
+\end_inset
+
+ מקבלים, כמו שכבר ראינו, 
+\begin_inset Formula $\frac{p_{0}}{q_{0}}=\frac{a_{0}}{1}$
+\end_inset
+
+ ולכן 
+\begin_inset Formula $p_{0}=a_{0},q_{0}=1$
+\end_inset
+
+ וש-
+\begin_inset Formula $\frac{p_{1}}{q_{1}}=a_{0}+\frac{1}{a_{1}}=\frac{a_{0}a_{1}+1}{a_{1}}$
+\end_inset
+
+, כלומר 
+\begin_inset Formula $p_{1}=a_{0}a_{1}+1$
+\end_inset
+
+ ו-
+\begin_inset Formula $q_{1}=a_{1}$
+\end_inset
+
+.
+ אנו מציבים את זה בנוסחה ומקבלים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $q_{1}p_{0}-p_{1}q_{0}=a_{1}a_{0}-\left(a_{0}a_{1}+1\right)=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זה מסיים את המקרה הזה.
+ ובאופן כללי? אם נניח שהקשר מתקיים עבור 
+\begin_inset Formula $n,n-1$
+\end_inset
+
+, בואו נוכיח אותו עבור 
+\begin_inset Formula $n+1,n$
+\end_inset
+
+ תוך ניצול נוסחת הנסיגה שכבר מצאנו, שהיא כזכור
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $p_{n+1}=a_{n+1}p_{n}+p_{n-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $q_{n+1}=a_{n+1}q_{n}+q_{n-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נציב את אלו בנוסחה שאנחנו רוצים להוכיח עבורה את הטענה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $q_{n+1}p_{n}-p_{n+1}q_{n}=\left(a_{n+1}q_{n}+q_{n-1}\right)p_{n}-\left(a_{n+1}p_{n}+p_{n-1}\right)q_{n}=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=\left(a_{n+1}q_{n}p_{n}-a_{n+1}p_{n}q_{n}\right)+\left(q_{n-1}p_{n}-p_{n-1}q_{n}\right)=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $=-\left(p_{n-1}q_{n}-q_{n-1}p_{n}\right)=-\left(-1\right)^{n}=\left(-1\right)^{n+1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מה שמסיים גם את זה! עכשיו סוף סוף יש לנו את הכלים שאנחנו צריכים כדי להוכיח
+ את הטענה המקורית שלנו: שעבור 
+\begin_inset Formula $x$
+\end_inset
+
+ רציונלי, אם ניקח 
+\begin_inset Formula $\frac{c}{d}$
+\end_inset
+
+ חיובי שמקיים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|x-\frac{c}{d}\right|<\frac{1}{2d^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אז 
+\begin_inset Formula $\frac{c}{d}$
+\end_inset
+
+ יופיע בפיתוח לשבר משולב של 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ נקודה אחת שצריך לשים לב אליה ולא אוכיח פורמלית היא שהפיתוח לשבר משולב שבו
+ כל האיברים הם שלמים הוא 
+\series bold
+יחיד
+\series default
+ למעט אפשרות להתחכם קצת בשלב האחרון: אפשר להחליף את 
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n}\right]$
+\end_inset
+
+ ב-
+\begin_inset Formula $\left[a_{0},a_{1},\ldots,a_{n}-1,1\right]$
+\end_inset
+
+, כי 
+\begin_inset Formula $a_{n}-1+\frac{1}{1}=a_{n}$
+\end_inset
+
+.
+ אם כן, אם אני אראה שיש ל-
+\begin_inset Formula $x$
+\end_inset
+
+ פיתוח 
+\series bold
+כלשהו 
+\series default
+לשבר משולב שבו 
+\begin_inset Formula $\frac{c}{d}$
+\end_inset
+
+ מופיע לפני הסוף, סיימנו.
+ מצד שני, בזכות ההתחכמות שהראיתי, אפשר תמיד להניח שכשאנחנו לוקחים פיתוח
+ של משהו לשבר משולב, אנחנו יכולים לשלוט על האם הפיתוח הוא מאורך 
+\series bold
+זוגי
+\series default
+ או 
+\series bold
+אי זוגי
+\series default
+, כלומר האם 
+\begin_inset Formula $q_{n}p_{n-1}-p_{n}q_{n-1}$
+\end_inset
+
+ הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+או דווקא 
+\begin_inset Formula $-1$
+\end_inset
+
+; אני הולך להשתמש בזה בקרוב.
+\end_layout
+
+\begin_layout Standard
+עכשיו אפשר לגשת סוף סוף לעניינים.
+ מכיוון ש-
+\begin_inset Formula $\frac{c}{d}$
+\end_inset
+
+ הוא עצמו מספר רציונלי, קיים לו פיתוח לשבר משולב שהאיבר האחרון שלו יסומן
+ ב-
+\begin_inset Formula $\frac{p_{n}}{q_{n}}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\frac{c}{d}=\frac{p_{n}}{q_{n}}=\left[a_{0},a_{1},\ldots,a_{n}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאשר כאמור בהמשך אני אגיד אם 
+\begin_inset Formula $n$
+\end_inset
+
+ זוגי או לא, בהתאם למה שיתאים לי.
+ הרעיון עכשיו הוא למצוא 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ רציונלי כלשהו כך שמתקיים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x=\left[a_{0},a_{1},\ldots,a_{n},\lambda\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+שימו לב: זה לא הפיתוח המלא של 
+\begin_inset Formula $x$
+\end_inset
+
+ לשברים משולבים! אבל אם 
+\begin_inset Formula $\lambda\ge1$
+\end_inset
+
+ אפשר להמשיך את הפיתוח - לפתח גם את 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ לשבר משולב ולהוסיף את זה להמשך הפיתוח.
+ זה נשמע מבלבל, אבל זה בדיוק מה שעשינו בדוגמה של פאי שכל כך התעקשתי עליה
+ משום מה.
+ הגעתי לביטוי כמו
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[3,7,15,1,\frac{854}{33}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ואז פשוט המשכתי עם 
+\begin_inset Formula $\frac{854}{33}$
+\end_inset
+
+, בעזרת אותה טכניקה שבה מצאתי את האיברים הקודמים בסדרה.
+ אם כן, ה-
+\begin_inset Formula $\lambda$
+\end_inset
+
+ הוא ה-
+\begin_inset Formula $\frac{854}{33}$
+\end_inset
+
+ שלנו כאן - אבל קודם צריך להשתכנע בכך שהוא קיים ושהוא גדול או שווה ל-
+\numeric on
+1
+\numeric off
+.
+\end_layout
+
+\begin_layout Standard
+החלק היפה הוא שאם 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ קיים, אנחנו יודעים בדיוק איזו נוסחה שמערבת את 
+\begin_inset Formula $x$
+\end_inset
+
+ הוא אמור לקיים, כי זה מה שטרחתי להוכיח קודם:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x=\left[a_{0},a_{1},\ldots,a_{n},\lambda\right]=\frac{\lambda p_{n}+p_{n-1}}{\lambda q_{n}+q_{n-1}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אנחנו רוצים לחלץ את 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ מפה, אז נכפול את שני האגפים ב-
+\begin_inset Formula $\lambda q_{n}+q_{n-1}$
+\end_inset
+
+ ונקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda q_{n}x+q_{n-1}x=\lambda p_{n}+p_{n-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+נעביר אגפים ונוציא את 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ החוצה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda\left(q_{n}x-p_{n}\right)=p_{n-1}-q_{n-1}x$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ולסיום נחלק ב-
+\begin_inset Formula $q_{n}x-p_{n}$
+\end_inset
+
+ ונקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda=\frac{p_{n-1}-q_{n-1}x}{q_{n}x-p_{n}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+הביטוי הזה מוגדר תמיד, למעט במקרה שבו 
+\begin_inset Formula $x=\frac{p_{n}}{q_{n}}$
+\end_inset
+
+ ואז נקבל במכנה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+; אבל המקרה הזה הוא טריוויאלי, כי 
+\begin_inset Formula $\frac{p_{n}}{q_{n}}$
+\end_inset
+
+ הוא כזכור מה שרצינו לטעון שמופיע בפיתוח של 
+\begin_inset Formula $x$
+\end_inset
+
+, ולכן אם הוא עצמו 
+\begin_inset Formula $x$
+\end_inset
+
+ בוודאי שהוא מופיע!
+\end_layout
+
+\begin_layout Standard
+אז נניח ש-
+\begin_inset Formula $x\ne\frac{p_{n}}{q_{n}}$
+\end_inset
+
+.
+ אנחנו יודעים )זו הייתה ההנחה שלנו( ש-
+\begin_inset Formula $\left|x-\frac{p_{n}}{q_{n}}\right|<\frac{1}{2q_{n}^{2}}$
+\end_inset
+
+ ולכן אפשר לסמן את זה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x-\frac{p_{n}}{q_{n}}=\frac{\delta}{2q_{n}^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאשר 
+\begin_inset Formula $0<\left|\delta\right|<1$
+\end_inset
+
+.
+ נעביר אגף ונקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x=\frac{p_{n}}{q_{n}}+\frac{\delta}{2q_{n}^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו אני רוצה לקחת את זה ולהציב בתוך 
+\begin_inset Formula $\lambda=\frac{p_{n-1}-q_{n-1}x}{q_{n}x-p_{n}}$
+\end_inset
+
+.
+ מכיוון שנקבל ביטוי פשוט אבל עם שלב ביניים מסובך, בואו נטפל במונה ובמכנה
+ בנפרד.
+ קודם כל המכנה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $q_{n}x-p_{n}=q_{n}\left(\frac{p_{n}}{q_{n}}+\frac{\delta}{2q_{n}^{2}}\right)-p_{n}=p_{n}+\frac{\delta}{2q_{n}}-p_{n}=\frac{\delta}{2q_{n}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אוקיי, זה לא היה כל כך נורא! עכשיו המונה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $p_{n-1}-q_{n-1}x=p_{n-1}-\frac{p_{n}q_{n-1}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זה נראה מזוויע, אבל זוכרים את הנוסחה 
+\begin_inset Formula $q_{n}p_{n-1}-p_{n}q_{n-1}=1$
+\end_inset
+
+? היא מתחבאת כאן, רק צריך להעלות את ה-
+\begin_inset Formula $p_{n-1}$
+\end_inset
+
+ הזה למעלה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $p_{n-1}-\frac{p_{n}q_{n-1}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}=\frac{p_{n-1}q_{n}-p_{n}q_{n-1}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}=\frac{\left(-1\right)^{n}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו, לחלק את זה ב-
+\begin_inset Formula $\frac{\delta}{2q_{n}}$
+\end_inset
+
+ זה כמו לכפול את זה ב-
+\begin_inset Formula $\frac{2q_{n}}{\delta}$
+\end_inset
+
+ )מותר לנו כי 
+\begin_inset Formula $\delta\ne0$
+\end_inset
+
+ כי 
+\begin_inset Formula $x\ne\frac{p_{n}}{q_{n}}$
+\end_inset
+
+(.
+ נקבל:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda=\frac{2q_{n}}{\delta}\left(\frac{\left(-1\right)^{n}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}\right)=\left(-1\right)^{n}\frac{2}{\delta}-\frac{q_{n-1}}{q_{n}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+וזה יצא...
+ ממש פשוט! עכשיו, כזכור אנחנו רוצים לקבל 
+\begin_inset Formula $\lambda>1$
+\end_inset
+
+; בשביל זה אנחנו חייבים להבטיח שהביטוי 
+\begin_inset Formula $\left(-1\right)^{n}\frac{2}{\delta}$
+\end_inset
+
+ ייצא חיובי ולא שלילי, זה מחזיר אותנו לבחירה של 
+\begin_inset Formula $n$
+\end_inset
+
+ בהתחלה; אם 
+\begin_inset Formula $\delta>0$
+\end_inset
+
+ אז בוחרים את 
+\begin_inset Formula $n$
+\end_inset
+
+ להיות זוגי ומקבלים 
+\begin_inset Formula $\left(-1\right)^{n}=1$
+\end_inset
+
+, ואם 
+\begin_inset Formula $\delta<0$
+\end_inset
+
+ בוחרים 
+\begin_inset Formula $n$
+\end_inset
+
+ אי זוגי ומקבלים 
+\begin_inset Formula $\left(-1\right)^{n}=-1$
+\end_inset
+
+.
+ בכל מקרה אנחנו לבסוף מקבלים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda=\frac{2}{\left|\delta\right|}-\frac{q_{n-1}}{q_{n}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+יותר מזה, בגלל שסדרת המכנים בפיתוח לשבר משולב היא עולה, 
+\begin_inset Formula $q_{n-1}<q_{n}$
+\end_inset
+
+ ולכן 
+\begin_inset Formula $\frac{q_{n-1}}{q_{n}}<1$
+\end_inset
+
+ ומצד שני בגלל ש-
+\begin_inset Formula $\left|\delta\right|<1$
+\end_inset
+
+ אז 
+\begin_inset Formula $\frac{2}{\left|\delta\right|}>2$
+\end_inset
+
+, ואנחנו מקבלים 
+\begin_inset Formula $\lambda>1$
+\end_inset
+
+, כפי שרצינו.
+ אנחנו מפתחים אותו לשבר משולב, מקבלים 
+\begin_inset Formula $\lambda=\left[b_{1},\ldots,b_{m}\right]$
+\end_inset
+
+ ולבסוף מקבלים 
+\begin_inset Formula $x=\left[a_{1},\ldots,a_{n},b_{1},\ldots,b_{m}\right]$
+\end_inset
+
+ - פיתוח מלא של 
+\begin_inset Formula $x$
+\end_inset
+
+ לשבר משולב שבמהלכו מופיע 
+\begin_inset Formula $\frac{a}{b}=\frac{p_{n}}{q_{n}}$
+\end_inset
+
+, כפי שרצינו.
+ זה מסיים את ההוכחה!
+\end_layout
+
+\begin_layout Section
+דברי סיכום ופרידה
+\end_layout
+
+\begin_layout Standard
+ובכן, מה היה לנו הפעם? איך זה היה שונה מהפוסט הקודם שלי על האלגוריתם של
+ שור? האלגוריתם מחולק קונספטואלית לשלושה חלקים; החלק הראשון, של הרדוקציה
+ מבעיית הפירוק לגורמים אל בעיית הפרת הסדר, הוא חלק שהרחבתי עליו מאוד בפוסט
+ ההוא והפעם לא נגעתי בו כי אין לי משהו נוסף לומר, אבל בשני החלקים האחרים
+ הרחבתי לא מעט.
+ ראשית, הצגתי באופן מפורש את שור בתור מקרה פרטי של אלגוריתם הערכת פאזה,
+ שזה משהו שבכלל לא ניסיתי לעשות בפוסט הקודם )בואו לא נדבר על השאלה המביכה
+ עד כמה הבנתי את זה בעצמי(.
+ שנית, הפעם התעמקתי קצת יותר במשפט הספציפי שקשור לשברים משולבים שמבטיח לנו
+ שעם קצת מזל, ה-
+\begin_inset Formula $\frac{s}{r}$
+\end_inset
+
+ שאנחנו מחפשים יצוץ מתוך תוצאת אלגוריתם הערכת הפאזה.
+ זה דרש גלישה נוספת לתורת המספרים במקום לחישוב קוונטי, אבל הנושא של שברים
+ משולבים הוא כל כך כיפי שלא יכלתי להתאפק.
+\end_layout
+
+\begin_layout Standard
+לאן הולכים מכאן? בסדרת הפוסטים הקודמת שלי, שור היה המטרה הסופית; אבל בסדרה
+ הנוכחית, אני מקווה שעכשיו משהוצאנו את זה מהדרך, אפשר להראות כל מני דברים
+ לא קשורים בעליל אבל מגניבים לא פחות.
+\end_layout
+
+\end_body
+\end_document
