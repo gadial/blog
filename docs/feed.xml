@@ -1,4 +1,321 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2022-09-30T04:24:12+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">חישוב קוונטי: האלגוריתם של שור</title><link href="http://gadial.net/2022/09/30/shor_algorithm_revisit/" rel="alternate" type="text/html" title="חישוב קוונטי: האלגוריתם של שור" /><published>2022-09-30T00:00:00+00:00</published><updated>2022-09-30T00:00:00+00:00</updated><id>http://gadial.net/2022/09/30/shor_algorithm_revisit</id><content type="html" xml:base="http://gadial.net/2022/09/30/shor_algorithm_revisit/">&lt;h2&gt;מבוא&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2022-10-09T14:02:43+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">חישוב קוונטי: פורמליזם מטריצות הצפיפות</title><link href="http://gadial.net/2022/10/09/density_matrices/" rel="alternate" type="text/html" title="חישוב קוונטי: פורמליזם מטריצות הצפיפות" /><published>2022-10-09T00:00:00+00:00</published><updated>2022-10-09T00:00:00+00:00</updated><id>http://gadial.net/2022/10/09/density_matrices</id><content type="html" xml:base="http://gadial.net/2022/10/09/density_matrices/">&lt;h2&gt;מה זה מטריצות צפיפות ואיך מגיעים אליהן מוקטורי מצב?&lt;/h2&gt;
+
+&lt;p&gt;בואו נדבר על סיטואציה פשוטה מאוד בחישוב קוונטי שכבר ראינו כמה פעמים בסדרת הפוסטים הזו: יש לנו את המצב הקוונטי על קיוביט בודד &lt;span&gt;\( \left|+\right\rangle =\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}} \)&lt;/span&gt; ואנחנו מודדים אותו. מה קורה? קורים שני דברים: אנחנו, המודדים, מקבלים “החוצה” ביט של מידע - או 0 או 1 - והמצב הקוונטי עובר שינוי: אם ביט המידע שקיבלנו היה &lt;span&gt;\( 0 \)&lt;/span&gt; אז המצב הקוונטי הופך להיות &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt;, ואם ביט המידע שקיבלנו היה 1 אז המצב הקוונטי הופך להיות &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt;. כל אחת מהתוצאות הללו מתקבלת באותה הסתברות, כלומר &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;טוב ויפה, אבל עכשיו נניח שאנחנו &lt;strong&gt;לא&lt;/strong&gt; אלו שמודדים את המצב; אנחנו רואים מישהי אחרת באה ומודדת את המצב, ולא מגלה לנו מה התוצאה! מה אנחנו כן יכולים להגיד על המצב הנוכחי של הקיוביט? ובכן, בדיוק את מה שראינו לפני רגע: אנחנו יכולים לומר “בהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ובהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt;”.&lt;/p&gt;
+
+&lt;p&gt;אחד הדברים המבלבלים והקשים ביותר להבנה כשמתחילים לדבר על חישוב קוונטי (ואולי על תורת הקוונטים בפרט?) הוא להבין שלומר “הקיוביט במצב &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt;” זה &lt;strong&gt;ממש לא אותו דבר&lt;/strong&gt; כמו לומר “בהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ובהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt;”. הראשון הוא כמו לומר “החתול של שרדינגר בסופרפוזיציה של רגוע ועצבני” והשני הוא כמו לומר “החתול של שרדינגר רגוע או עצבני, אנחנו פשוט לא יודעים מי מהם כי עדיין לא פתחנו את הקופסה”. עד סוף הפוסט, אולי אפילו עד האמצע שלו, כבר נראה את ה”ממש לא אותו דבר” הזה במלוא הפורמליזם המתמטי שלו - פורמליזם שעד כה טרם הצגתי, כי לא נזקקתי לו אבל אני רוצה להתחיל לדבר על דברים שמערבים אותו: פורמליזם &lt;strong&gt;מטריצת הצפיפות&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;הרעיון במטריצת צפיפות הוא &lt;strong&gt;להכליל&lt;/strong&gt; את האופן שבו אנחנו מתארים מצב של מערכת קוונטית. עד כה השתמשנו בוקטור כדי לתאר אותה: כך למשל &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt; הוא הוקטור &lt;span&gt;\( \frac{1}{\sqrt{2}}\left(\begin{array}{c} 1\\ 1 \end{array}\right) \)&lt;/span&gt;. בפורמליזם של מטריצות צפיפות, מה שמתאר את המצב של המערכת הקוונטית יהיה &lt;strong&gt;מטריצה&lt;/strong&gt;: אם כדי לתאר מצב קוונטי על &lt;span&gt;\( n \)&lt;/span&gt; קיוביטים נזקקנו לוקטור מאורך &lt;span&gt;\( 2^{n} \)&lt;/span&gt;, הרי שבשביל מטריצת צפיפות נזדקק למטריצה מסדר &lt;span&gt;\( 2^{n}\times2^{n} \)&lt;/span&gt;. הגודל הנוסף הזה מאפשר לנו לכלול יותר מידע מאשר קודם; הוא מאפשר לנו בדיוק לתאר בצורה קומפקטית סיטואציה של “בהסתברות כך וכך המערכת נמצאת במצב כך וכך”, עבור קבוצה של מצבים ולא רק עבור מצב בודד שאנחנו יודעים בודאות באיזה מצב הוא.&lt;/p&gt;
+
+&lt;p&gt;לפני שנגיע לפורמליזם, אני רוצה לחדד את הנקודה שאיתה פתחתי המצב &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt; הוא מצב קוונטי ספציפי, קונקרטי. אין שום הסתברות שנלווית לתיאור הזה של המערכת. ההסתברות מתחילה לשחק תפקיד רק כאשר אנחנו מודדים את המצב, לא לפני כן. קל לראות את זה אם נזכרים שיש בעולם כמה דרכים שונות למדוד מצב קוונטי; מדידה “רגילה” היא מה שקראתי לו מדידה בבסיס &lt;span&gt;\( Z \)&lt;/span&gt;, מדידה שמתוארת על ידי האיברים &lt;span&gt;\( \left|0\right\rangle ,\left|1\right\rangle  \)&lt;/span&gt; שהם התוצאות האפשריות של המדידה. אבל יש עוד מדידות, למשל מדידה בבסיס &lt;span&gt;\( X \)&lt;/span&gt; שמתוארת על ידי האיברים &lt;span&gt;\( \left|+\right\rangle ,\left|-\right\rangle  \)&lt;/span&gt;. אם אני מבצע מדידה בבסיס &lt;span&gt;\( X \)&lt;/span&gt; של המצב &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt;, אני אקבל את התוצאה שמתאימה ל-&lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt; בהסתברות של 100 אחוז.&lt;/p&gt;
+
+&lt;p&gt;לעומת זאת, אם המצב הקוונטי שלי הוא “בהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ובהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt;”, מה יקרה אם אמדוד אותו בבסיס &lt;span&gt;\( X \)&lt;/span&gt;? אם הקיוביט במצב &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; אז בהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; נקבל &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt; ובהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; נקבל &lt;span&gt;\( \left|-\right\rangle  \)&lt;/span&gt;; ואם הקיוביט במצב &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt; אז… במקרה הספציפי הזה של בסיס &lt;span&gt;\( X \)&lt;/span&gt;, יקרה בדיוק אותו דבר - כל תוצאה בהסתברות חצי (יכולים גם לקרות דברים מסובכים יותר באופן כללי).&lt;/p&gt;
+
+&lt;p&gt;אז כדי לחדד, אם המצב הקוונטי שלנו הוא &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt; אז מדידה בבסיס &lt;span&gt;\( X \)&lt;/span&gt; תיתן בודאות מוחלטת &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt;, אבל אם הוא “בהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ובהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt;” אז מדידה בסיס &lt;span&gt;\( X \)&lt;/span&gt; תיתן &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt; רק בהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; ואחרת היא תיתן &lt;span&gt;\( \left|-\right\rangle  \)&lt;/span&gt;. זה מראה לנו ששני המצבים הללו שונים, בודאות מוחלטת. וכאמור, להבין שהם שונים זה לטעמי אחד המכשולים הגדולים בדרך להבנה של חישוב קוונטי.&lt;/p&gt;
+
+&lt;p&gt;לפני שנעבור לדבר על מצבים קוונטיים מסובכים שמערבים הסתברויות, בואו ניקח צעד אחורה: ניזכר בפורמליזם המתמטי הרגיל של חישוב קוונטי באמצעות וקטורים, ונראה איך אפשר לבטא את כולו גם בשפה של מטריצות. אני חושב שזה ייראה די פשוט ולא קשה להבנה; יהיה קצת קשה להבין &lt;strong&gt;למה&lt;/strong&gt; אנחנו עושים את זה אבל כבר הצהרתי מה המטרה שלנו פה.&lt;/p&gt;
+
+&lt;p&gt;אז הנה הפורמליזם:&lt;/p&gt;
+
+&lt;ol&gt; &lt;li&gt;מערכת קוונטית מתוארת על ידי מרחב הילברט &lt;span&gt;\( \mathcal{H} \)&lt;/span&gt; מעל &lt;span&gt;\( \mathbb{C} \)&lt;/span&gt;, ומצב ספציפי של המערכת הוא וקטור &lt;span&gt;\( \left|\psi\right\rangle \in\mathcal{H} \)&lt;/span&gt; מנורמה 1.&lt;/li&gt;
+
+
+&lt;li&gt;בהינתן אופרטור &lt;span&gt;\( U:\mathcal{H}\to\mathcal{H} \)&lt;/span&gt; שהוא &lt;strong&gt;אוניטרי&lt;/strong&gt;, ניתן להפעיל אותו על המערכת על ידי כפל המטריצה שמייצגת את &lt;span&gt;\( U \)&lt;/span&gt; בוקטור שמייצג את מצב המערכת ולהעביר אותה למצב חדש: &lt;span&gt;\( \left|\psi^{\prime}\right\rangle =U\left|\psi\right\rangle  \)&lt;/span&gt;.&lt;/li&gt;
+
+
+&lt;li&gt;בהינתן קבוצת אופרטורים &lt;span&gt;\( \left\{ M_{0},M_{1},\ldots,M_{t}\right\}  \)&lt;/span&gt; שמכונים בהקשר הזה &quot;אופרטורי מדידה&quot;, אפשר למדוד את המערכת ביחס לאופרטורים הללו ולקבל תוצאה &lt;span&gt;\( i\in\left\{ 0,1,\ldots,t\right\}  \)&lt;/span&gt; בהסתברות &lt;span&gt;\( p\left(i\right) \)&lt;/span&gt;, ואם התקבלה התוצאה הזו המערכת עוברת למצב &lt;span&gt;\( \left|\psi^{i}\right\rangle  \)&lt;/span&gt;, כך ש: 
+
+&lt;ol&gt;
+&lt;li&gt;&lt;span&gt;\( p\left(i\right)=\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle  \)&lt;/span&gt;.&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( \left|\psi^{i}\right\rangle =\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle }} \)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;זה לא משהו קל לעיכול במיוחד אבל אני מניח שכבר ראינו את זה קודם - ואם לא, &lt;a href=&quot;https://gadial.net/2022/07/28/quantum_computing_math/&quot;&gt;הנה ההתחלה&lt;/a&gt; של ה”קודם”. בואו נראה עכשיו איך אותו דבר בדיוק מתואר עם מטריצה במקום וקטור.&lt;/p&gt;
+
+&lt;p&gt;ראשית, בואו ניזכר מה הסימונים שלנו אומרים. על &lt;span&gt;\( \left|\psi\right\rangle  \)&lt;/span&gt; אני חושב בתור וקטור עמודה; במקרה הפשוט שבו &lt;span&gt;\( \left|\psi\right\rangle  \)&lt;/span&gt; מייצג מערכת של קיוביט בודד, זה יהיה וקטור עמודה מסדר 2, &lt;span&gt;\( \left|\psi\right\rangle =\left(\begin{array}{c} \alpha\\ \beta \end{array}\right) \)&lt;/span&gt;. בנוסף לכך, הצגתי סימון נוסף: &lt;span&gt;\( \left\langle \psi\right| \)&lt;/span&gt;. אפשר לחשוב על &lt;span&gt;\( \left\langle \psi\right| \)&lt;/span&gt; בתור &lt;span&gt;\( \left\langle \psi\right|\triangleq\left(\left|\psi\right\rangle \right)^{\dagger} \)&lt;/span&gt;, כלומר זה וקטור &lt;strong&gt;שורה &lt;/strong&gt;&lt;span&gt;\( \left\langle \psi\right|=\left(\begin{array}{cc} \overline{\alpha} &amp;amp; \overline{\beta}\end{array}\right) \)&lt;/span&gt;. יש עוד דרך לחשוב על &lt;span&gt;\( \left\langle \psi\right| \)&lt;/span&gt; בתור פונקציונל לינארי, אבל נעזוב את זה.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, בסימון הזה, מה בעצם &lt;span&gt;\( \left|\psi\right\rangle \left\langle \psi\right| \)&lt;/span&gt; אומר? זו &lt;strong&gt;מטריצה&lt;/strong&gt; מסדר &lt;span&gt;\( 2\times2 \)&lt;/span&gt; (ובאופן כללי, כש-&lt;span&gt;\( \left|\psi\right\rangle  \)&lt;/span&gt; הוא וקטור מסדר &lt;span&gt;\( n \)&lt;/span&gt;, זו מטריצה &lt;span&gt;\( n\times n \)&lt;/span&gt;). כדי לראות את זה אני פשוט אכפול את הוקטורים במפורש:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|\psi\right\rangle \left\langle \psi\right|=\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)\left(\begin{array}{cc} \overline{\alpha} &amp;amp; \overline{\beta}\end{array}\right)=\left(\begin{array}{cc} \left|\alpha\right|^{2} &amp;amp; \alpha\overline{\beta}\\ \overline{\alpha}\beta &amp;amp; \left|\beta\right|^{2} \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה פשוט על פי ההגדרה הרגילה של כפל מטריצות. שימו לב שאם אני כופל את שני הוקטורים הללו בסדר &lt;strong&gt;הפוך &lt;/strong&gt;אני מקבל מטריצה מסדר &lt;span&gt;\( 1\times1 \)&lt;/span&gt; שאני חושב עליה בתור סקלר:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left\langle \psi\right|\left|\psi\right\rangle =\left(\begin{array}{cc} \overline{\alpha} &amp;amp; \overline{\beta}\end{array}\right)\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)=\left|\alpha\right|^{2}+\left|\beta\right|^{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;בעצם, לכפול שני וקטורים בצורה הזו, &lt;span&gt;\( \left\langle \psi\right|\left|\varphi\right\rangle  \)&lt;/span&gt;, נותן לנו את &lt;strong&gt;המכפלה הפנימית&lt;/strong&gt; שלהם. על אותו משקל, לפעמים קוראים ל-&lt;span&gt;\( \left|\psi\right\rangle \left\langle \varphi\right| \)&lt;/span&gt; “מכפלה חיצונית” אבל נעזוב גם את זה. מה שמעניין, מבחינתי, זה רק איך שתרגממו את הוקטור &lt;span&gt;\( \left|\psi\right\rangle  \)&lt;/span&gt; למטריצה &lt;span&gt;\( \left|\psi\right\rangle \left\langle \psi\right| \)&lt;/span&gt;. בשביל לקצר עניינים, אני אשתמש ב-&lt;span&gt;\( \rho \)&lt;/span&gt; בדרך כלל כדי לתאר מטריצות כאלו (כמו גם את המטריצות היותר מורכבות שנקבל בהמשך).&lt;/p&gt;
+
+&lt;p&gt;לפני שנסביר איך זה מסתדר עם המתמטיקה של התפתחות המערכת בזמן ושל מדידות, בואו נראה דוגמאות! קודם כל דוגמא פשוטה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|0\right\rangle \left\langle 0\right|=\left(\begin{array}{c} 1\\ 0 \end{array}\right)\left(\begin{array}{cc} 1 &amp;amp; 0\end{array}\right)=\left(\begin{array}{cc} 1 &amp;amp; 0\\ 0 &amp;amp; 0 \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובאופן דומה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|1\right\rangle \left\langle 1\right|=\left(\begin{array}{c} 0\\ 1 \end{array}\right)\left(\begin{array}{cc} 0 &amp;amp; 1\end{array}\right)=\left(\begin{array}{cc} 0 &amp;amp; 0\\ 0 &amp;amp; 1 \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;והנה ידידנו מתחילת הפוסט:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|+\right\rangle \left\langle +\right|=\frac{1}{\sqrt{2}}\left(\begin{array}{c} 1\\ 1 \end{array}\right)\frac{1}{\sqrt{2}}\left(\begin{array}{cc} 1 &amp;amp; 1\end{array}\right)=\left(\begin{array}{cc} \frac{1}{2} &amp;amp; \frac{1}{2}\\ \frac{1}{2} &amp;amp; \frac{1}{2} \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;והנה דוגמא דומה עם שני קיוביטים, עם מי שנקרא “מצב בל” (אחד מהם, ליתר דיוק): &lt;span&gt;\( \left|\Phi^{+}\right\rangle =\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}} \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|\Phi^{+}\right\rangle \left\langle \Phi^{+}\right|=\frac{1}{\sqrt{2}}\left(\begin{array}{c} 1\\ 0\\ 0\\ 1 \end{array}\right)\frac{1}{\sqrt{2}}\left(\begin{array}{cccc} 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1\end{array}\right)=\left(\begin{array}{cccc} \frac{1}{2} &amp;amp; 0 &amp;amp; 0 &amp;amp; \frac{1}{2}\\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0\\ \frac{1}{2} &amp;amp; 0 &amp;amp; 0 &amp;amp; \frac{1}{2} \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הנה איור של מטריצת הצפיפות הזו; זה האופן שבו בדרך כלל מאיירים דברים כאלו (לפעמים עם איור נוסף, למקרה שהאיברים במטריצה הם מרוכבים):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2022/density_matrix.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;אני מקווה שאלו מספיק דוגמאות כדי לקבל תחושה ראשונית ואפשר לעבור לתיאוריה המתמטית.&lt;/p&gt;
+
+&lt;p&gt;אם כדי לתאר את ההתפתחות של המערכת בהתאם לאופרטור &lt;span&gt;\( U \)&lt;/span&gt; היינו צריכים קודם לחשב מכפלה של מטריצה בוקטור, &lt;span&gt;\( \left|\psi^{\prime}\right\rangle =U\left|\psi\right\rangle  \)&lt;/span&gt;, מה הנוסחה המתאימה כדי לחשב את &lt;span&gt;\( \rho^{\prime} \)&lt;/span&gt; מתוך &lt;span&gt;\( \rho \)&lt;/span&gt;? ובכן, אם נזכור ש-&lt;span&gt;\( \left\langle \psi\right|=\left(\left|\psi\right\rangle \right)^{\dagger} \)&lt;/span&gt;, אז נקבל ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left\langle \psi^{\prime}\right|=\left(\left|\psi^{\prime}\right\rangle \right)^{\dagger}=\left(U\left|\psi\right\rangle \right)^{\dagger}=\left\langle \psi\right|U^{\dagger} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;(כי ככה אלו חוקי המטריצות: &lt;span&gt;\( \left(AB\right)^{\dagger}=B^{\dagger}A^{\dagger} \)&lt;/span&gt;)&lt;/p&gt;
+
+&lt;p&gt;ומכאן:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho^{\prime}=\left|\psi^{\prime}\right\rangle \left\langle \psi^{\prime}\right|=U\left|\psi\right\rangle \left\langle \psi\right|U^{\dagger}=U\rho U^{\dagger} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הפעולה, הזו של לקחת משהו ולכפול אותו מצד אחד ב-&lt;span&gt;\( U \)&lt;/span&gt; ומצד שני ב-&lt;span&gt;\( U^{\dagger} \)&lt;/span&gt; נקראת &lt;strong&gt;הצמדה&lt;/strong&gt; והיא מאוד נפוצה במתמטיקה (בדרך כלל אמנם בגרסה שלה שבה ה-&lt;span&gt;\( U^{\dagger} \)&lt;/span&gt; הוא משמאל ולא מימין, אבל אין הבדל מהותי). אז בינתיים הכל נחמד - לקחנו פעולה טבעית בלשון וקטורים והחלפנו אותה בפעולה טבעית בלשון מטריצות.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, נניח שאנחנו מודדים מצב &lt;span&gt;\( \rho=\left|\psi\right\rangle \left\langle \psi\right| \)&lt;/span&gt;, מה ההסתברות &lt;span&gt;\( p\left(i\right) \)&lt;/span&gt; שאופרטור המדידה &lt;span&gt;\( M_{i} \)&lt;/span&gt; יעלה בגורל? אם נלך על פי הנוסחה &lt;span&gt;\( p\left(i\right)=\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle  \)&lt;/span&gt;, לא ברור מה יש לנו לעשות - איכשהו ה-&lt;span&gt;\( \left\langle \psi\right| \)&lt;/span&gt; וה-&lt;span&gt;\( \left|\psi\right\rangle  \)&lt;/span&gt; מרוחקים מאוד זה מזה ולא ברור מה אפשר לעשות איתם… אלא אם כן אני אשלוף מהשרוול פיסת קסם של אלגברה לינארית.&lt;/p&gt;
+
+&lt;p&gt;זוכרים איך קיבלנו &lt;span&gt;\( \left|\psi\right\rangle \left\langle \psi\right|=\left(\begin{array}{cc} \left|\alpha\right|^{2} &amp;amp; \alpha\overline{\beta}\\ \overline{\alpha}\beta &amp;amp; \left|\beta\right|^{2} \end{array}\right) \)&lt;/span&gt; ו-&lt;span&gt;\( \left\langle \psi\right|\left|\psi\right\rangle =\left|\alpha\right|^{2}+\left|\beta\right|^{2} \)&lt;/span&gt; וקראתי לראשון “מכפלה חיצונית” ולשני “מכפלה פנימית”? אם מסתכלים טיפה רואים שהמכפלה הפנימית מתחבאת בתוך &lt;span&gt;\( \left|\psi\right\rangle \left\langle \psi\right| \)&lt;/span&gt;: היא סכום אברי האלכסון הראשי של &lt;span&gt;\( \left|\psi\right\rangle \left\langle \psi\right| \)&lt;/span&gt;. “סכום אברי האלכסון הראשי” של מטריצה ריבועית &lt;span&gt;\( A \)&lt;/span&gt; הוא כזה דבר שימושי במתמטיקה שיש לו שם וסימן בפני עצמו; הוא נקרא &lt;strong&gt;העקבה&lt;/strong&gt; של &lt;span&gt;\( A \)&lt;/span&gt; ומסומן &lt;span&gt;\( \text{tr}\left(A\right)=\sum_{i=1}^{n}a_{ii} \)&lt;/span&gt;, ומה שראינו עם המכפלה הפנימית והחיצונית הוא מקרה פרטי של הטענה הכללית הבאה באלגברה לינארית: אם &lt;span&gt;\( A \)&lt;/span&gt; היא מטריצה מסדר &lt;span&gt;\( 1\times n \)&lt;/span&gt; (“וקטור שורה”) ו-&lt;span&gt;\( B \)&lt;/span&gt; היא מטריצה מסדר &lt;span&gt;\( n\times1 \)&lt;/span&gt; (“וקטור עמודה”) אז&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( AB=\text{tr}\left(BA\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ההוכחה של זה היא פשוט משחק באינדקסים:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{tr}\left(BA\right)=\sum_{i=1}^{n}\left[BA\right]_{ii}=\sum_{i=1}^{n}B_{i,1}A_{1,i}=AB \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;איך זה עוזר לנו? ובכן, &lt;span&gt;\( \left\langle \psi\right| \)&lt;/span&gt; הוא וקטור שורה ואילו &lt;span&gt;\( M_{i}^{\dagger}M_{i}\left|\psi\right\rangle  \)&lt;/span&gt; הוא וקטור עמודה, ולכן אפשר לבצע את החלפת המקומות הזו:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(i\right)=\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle =\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi\right\rangle \left\langle \psi\right|\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וקיבלנו גם כאן ניסוח נחמד של חישוב &lt;span&gt;\( p\left(i\right) \)&lt;/span&gt; מתוך &lt;span&gt;\( \rho \)&lt;/span&gt; שמתבסס על מושגים מוכרים באלגברה לינארית.&lt;/p&gt;
+
+&lt;p&gt;אם אנחנו יודעים שהאופרטור &lt;span&gt;\( M_{i} \)&lt;/span&gt; עלה בגורל, אנחנו יודעים שהמצב הקוונטי עבר אל &lt;span&gt;\( \left|\psi^{i}\right\rangle =\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle }} \)&lt;/span&gt;. עם מה שכבר ראינו, אפשר לנסח את זה מחדש גם בלשון מטריצות:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho^{i}=\left|\psi^{i}\right\rangle \left\langle \psi^{i}\right|=\frac{M_{i}\left|\psi\right\rangle \left\langle \psi\right|M^{\dagger}}{\left(\sqrt{\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle }\right)^{2}}=\frac{M_{i}\rho M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזה משלים את הניסוח מחדש של הסיטואציות שאנחנו כבר רגילים אליהן בלשון מטריצות במקום וקטורים, שזה נחמד אבל מן הסתם זו לא הפואנטה כי עם וקטורים זה נוח יותר. עכשיו אנחנו מגיעים אל הפואנטה - האופן שבו אפשר להשתמש בלשון מטריצות כדי לתאר סיטואציה הסתברותית “קלאסית” שמערבת מצבים קוונטיים. בזה אני מתכוון לכך שיש לנו מערכת קוונטית שיכולה להיות באחד מבין המצבים הקוונטיים &lt;span&gt;\( \left|\psi_{1}\right\rangle ,\left|\psi_{2}\right\rangle ,\ldots,\left|\psi_{m}\right\rangle  \)&lt;/span&gt; אבל &lt;strong&gt;אנחנו לא יודעים איזה&lt;/strong&gt;, אנחנו רק יודעים שהיא נמצאת במצב &lt;span&gt;\( \left|\psi_{k}\right\rangle  \)&lt;/span&gt; בהסתברות &lt;span&gt;\( p_{k} \)&lt;/span&gt; שהיא מספר בין 0 ל-1: &lt;span&gt;\( 0\le p_{k}\le1 \)&lt;/span&gt;, כך ש-&lt;span&gt;\( \sum_{k=1}^{m}p_{k}=1 \)&lt;/span&gt;. והאופן הפורמלי שבו אני הולך לתאר סיטואציה כזו הוא באמצעות המטריצה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובמילים אחרות, אני לוקח את מטריצות הצפיפות של כל המצבים ולוקח את הממוצע המשוקלל שלהן, כשהמשקולות הן ההסתברויות של המצבים. כדאי כבר עכשיו להעיר שממטריצת הצפיפות שאני מקבל אני לא אוכל “לשחזר” את המצבים וההסתברויות שלהם; בהחלט אפשר יהיה לקבל את אותה מטריצת צפיפות מכמה סיטואציות שונות, אבל כל הסיטואציות הללו יהיו זהות מבחינת המשך ההתפתחות שלהן בזמן והתוצאות של מדידות אפשריות שלהן - כלומר, מטריצת הצפיפות היא דרך קומפקטית לשמור את המידע מבלי לאבד משהו מהותי.&lt;/p&gt;
+
+&lt;p&gt;בואו נבין למה שיטת הייצוג הזו באמת עובדת. נתחיל ממה קורה כשמפעילים אופרטור &lt;span&gt;\( U \)&lt;/span&gt; על המערכת. אם, בהסתברות &lt;span&gt;\( p_{k} \)&lt;/span&gt;, המערכת שלנו הייתה במצב &lt;span&gt;\( \left|\psi_{k}\right\rangle  \)&lt;/span&gt;, אז אחרי הפעלת &lt;span&gt;\( U \)&lt;/span&gt; על המערכת אני מצפה להיות בהסתברות &lt;span&gt;\( p_{k} \)&lt;/span&gt; במצב &lt;span&gt;\( U\left|\psi_{k}\right\rangle  \)&lt;/span&gt;, כלומר אני מצפה להיות ב-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho^{\prime}=\sum_{k=1}^{m}p_{k}U\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|U^{\dagger}=U\left(\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)U^{\dagger}=U\rho U^{\dagger} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אז &lt;span&gt;\( \rho \)&lt;/span&gt;, גם כשהוא מייצג אוסף של מצבים קוונטיים, עדיין מתפתח כפי שציפינו על ידי הפעלת &lt;span&gt;\( U \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;כעת, מה אם מנסים למדוד את &lt;span&gt;\( \rho \)&lt;/span&gt; כשהוא מייצג אוסף? מה ההסתברות &lt;span&gt;\( p\left(i\right) \)&lt;/span&gt; לקבל את התוצאה שמתאימה ל-&lt;span&gt;\( M_{i} \)&lt;/span&gt;? כמובן, זה תלוי באיזה מצב המערכת נמצאת. כבר ראינו שאם היא במצב &lt;span&gt;\( \left|\psi_{k}\right\rangle  \)&lt;/span&gt;, ההסתברות לקבל את &lt;span&gt;\( M_{i} \)&lt;/span&gt; היא &lt;span&gt;\( \text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right) \)&lt;/span&gt;. לכן:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(i|k\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאן אני משתמש בנוסחה להסתברות &lt;strong&gt;מותנית&lt;/strong&gt;. בואו ניזכר שניה איך זה עובד באופן כללי: אם במרחב ההסתברות שלנו יש שני מאורעות, &lt;span&gt;\( A,B \)&lt;/span&gt;, אז&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(A|B\right)=\frac{p\left(A\cap B\right)}{p\left(B\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאן אפשר לחשוב על מרחב ההסתברות שלנו כאילו הוא מתאר סדרה של שתי הגרלות: בהגרלה הראשונה נבחר מצב &lt;span&gt;\( \left|\psi_{k}\right\rangle  \)&lt;/span&gt; באקראי, ובהגרלה השניה, שתלויה בראשונה, נבחר אופרטור מדידה &lt;span&gt;\( M_{i} \)&lt;/span&gt;. כלומר, מרחב ההסתברות שלנו כולל זוגות &lt;span&gt;\( \left(k,i\right) \)&lt;/span&gt; של תוצאות אפשריות, והמאורע “&lt;span&gt;\( \left|\psi_{k}\right\rangle  \)&lt;/span&gt; נבחר” הוא בעצם הקבוצה &lt;span&gt;\( \left\{ \left(k,i\right)\ |\ 1\le i\le t\right\}  \)&lt;/span&gt; (כאן &lt;span&gt;\( t \)&lt;/span&gt; הוא מספר תוצאות המדידה האפשריות).&lt;/p&gt;
+
+&lt;p&gt;הסתברות מותנית מאפשרת לנו, כשאנחנו מנסים לחשב את ההסתברות של מאורע מסובך &lt;span&gt;\( A \)&lt;/span&gt;, לחלק את המרחב לפיסות נוחות לעיכול, &lt;span&gt;\( B_{1},\ldots,B_{m} \)&lt;/span&gt; שקל לחשב את &lt;span&gt;\( p\left(A|B_{k}\right) \)&lt;/span&gt; לכל אחת מהן, ואז לחבר את כל הפיסות הללו כדי לקבל את &lt;span&gt;\( p\left(A\right) \)&lt;/span&gt; המקורית. זה עובד כאשר מרחב ההסתברות שלנו הוא &lt;strong&gt;איחוד זר&lt;/strong&gt; של כל ה-&lt;span&gt;\( B_{k} \)&lt;/span&gt;-ים הללו (כולם קבוצות זרות, והאיחוד שלהם נותן את כל מרחב ההסתברות). במקרה הזה מתקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(A\right)=\sum_{k=1}^{m}p\left(A|B_{k}\right)p\left(B_{k}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה נקרא &lt;strong&gt;נוסחת ההסתברות השלמה&lt;/strong&gt; וההוכחה פשוט מתבססת על כך ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{k=1}^{m}p\left(A|B_{k}\right)p\left(B_{k}\right)=\sum_{k=1}^{m}p\left(A\cap B_{k}\right)=p\left(A\cap\bigcup_{k=1}^{m}B_{k}\right)=p\left(A\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;תוך שאנחנו משתמשים כאן באופן שבו הסתברות של איחוד מאורעות זרים הופכת לסכום ההסתברויות שלהם.&lt;/p&gt;
+
+&lt;p&gt;אם נחזור לענייננו, קיבלתי&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(i|k\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;והמאורעות “&lt;span&gt;\( \left|\psi_{k}\right\rangle  \)&lt;/span&gt; נבחר” הם בוודאי זרים, ולכן&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(i\right)=\sum_{k=1}^{m}p\left(i|k\right)p\left(k\right)=\sum_{k=1}^{m}p_{k}\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\text{tr}\left(M_{i}^{\dagger}M_{i}\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כשהמעבר הלפני אחרון מתבסס על קסם אלגברה לינארית - שפונקציית העקבה &lt;span&gt;\( \text{tr} \)&lt;/span&gt; היא לינארית בעצמה (אפשר לראות את זה מחישוב ישיר).&lt;/p&gt;
+
+&lt;p&gt;גם פה -הגענו אל אותה נוסחה כמו קודם, רק שעכשיו היא תקפה גם למקרה של אוסף מצבים קוונטיים.&lt;/p&gt;
+
+&lt;p&gt;הדבר הבא שהראיתי היה לאן עוברים אחרי מדידה אם &lt;strong&gt;ידוע&lt;/strong&gt; ש-&lt;span&gt;\( M_{i} \)&lt;/span&gt; עלה בגורל: המצב &lt;span&gt;\( \left|\psi^{i}\right\rangle =\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle }} \)&lt;/span&gt;. אם יש לנו אוסף של מצבים קוונטיים, אני מסמן ב-&lt;span&gt;\( \left|\psi_{k}^{i}\right\rangle  \)&lt;/span&gt; את “המצב שאליו המערכת עוברת אם הייתה במצב &lt;span&gt;\( \left|\psi_{k}\right\rangle  \)&lt;/span&gt; ואז עלתה בגורל תוצאת המדידה &lt;span&gt;\( M_{i} \)&lt;/span&gt;” (שימו לב שהמצבים הללו לא בהכרח שונים זה מזה, אבל זו לא בעיה, לא הייתה לי דרישה כזו). במילים אחרות, ההסתברות להיות ב-&lt;span&gt;\( \left|\psi_{k}^{i}\right\rangle  \)&lt;/span&gt; היא &lt;span&gt;\( p\left(i,k\right) \)&lt;/span&gt;. אבל השאלה שאני שואל כרגע היא מה ההסתברות להיות ב-&lt;span&gt;\( \left|\psi_{k}^{i}\right\rangle  \)&lt;/span&gt; &lt;strong&gt;אם ידוע&lt;/strong&gt; ש-&lt;span&gt;\( M_{i} \)&lt;/span&gt; עלה בגורל, כלומר “אם ידוע ש-&lt;span&gt;\( M_{i} \)&lt;/span&gt; עלה בגורל, מה ההסתברות שמלכתחילה היינו במצב &lt;span&gt;\( \left|\psi_{k}\right\rangle  \)&lt;/span&gt;”, כלומר &lt;span&gt;\( p\left(k|i\right) \)&lt;/span&gt;, שהוא ההפך מ-&lt;span&gt;\( p\left(i|k\right) \)&lt;/span&gt; שכבר חישבתי.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, הנה טריק יעיל שנקרא “כלל בייס”: מכיוון ש-&lt;span&gt;\( p\left(A|B\right)=\frac{p\left(A\cap B\right)}{p\left(B\right)} \)&lt;/span&gt; אפשר לכתוב &lt;span&gt;\( p\left(A|B\right)p\left(B\right)=p\left(A\cap B\right) \)&lt;/span&gt;. אבל באותה צורה ממש מקבלים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(B|A\right)p\left(A\right)=p\left(A\cap B\right)=p\left(A|B\right)p\left(B\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(A|B\right)=\frac{p\left(B|A\right)p\left(A\right)}{p\left(B\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, זו שיטה להפוך את ההסתברות של א’ שמותנה בקיום ב’, להסתברות של ב’ שמותנה בקיום א’. בפרט, בסיטואציות כמו הנוכחית שבה אנחנו חושבים על המאורעות בתור “מה שבא קודם” ו”מה שבא אחר כך”, היא מאפשרת לעבור מהשאלה היותר אינטואיטיבית “בהינתן שקרה משהו, מה ההסתברות שינבע מכך משהו אחר בעתיד” אל השאלה הטריקית יותר “בהינתן שקרה משהו, מה ההסתברות שבעבר התרחש משהו שממנו זה נבע” (הסתברות א-פריורית אל מול הסתברות א-פוסטריורית).&lt;/p&gt;
+
+&lt;p&gt;עבורנו מה שמתקבל מכל זה כשאנחנו מתעסקים עם &lt;span&gt;\( \rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right| \)&lt;/span&gt; הוא&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(k|i\right)=\frac{p\left(i|k\right)p\left(k\right)}{p\left(i\right)}=p_{k}\frac{\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, המטרה שלי היא להבין לאן &lt;span&gt;\( \rho \)&lt;/span&gt; עברה אחרי המדידה בהינתן ש-&lt;span&gt;\( M_{i} \)&lt;/span&gt; עלה בגורל; מה התפלגות המצבים החדשה, כלומר מהו&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho^{i}=\sum_{k=1}^{m}p\left(k|i\right)\left|\psi_{k}^{i}\right\rangle \left\langle \psi_{k}^{i}\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;בואו נפשט את הנוסחה הזו. כזכור, &lt;span&gt;\( \left|\psi_{k}^{i}\right\rangle =\frac{M_{i}\left|\psi_{k}\right\rangle }{\sqrt{\left\langle \psi_{k}\right|M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle }} \)&lt;/span&gt; ולכן, כפי שכבר ראינו קודם,&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left|\psi_{k}^{i}\right\rangle \left\langle \psi_{k}^{i}\right|=\frac{M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;שימו לב שהמונה של &lt;span&gt;\( p\left(k|i\right) \)&lt;/span&gt; והמכנה של &lt;span&gt;\( \left|\psi_{k}^{i}\right\rangle \left\langle \psi_{k}^{i}\right| \)&lt;/span&gt; מבטלים זה את זה! בזכות זה, אם נציב את שניהם בנוסחה &lt;span&gt;\( \rho^{i}=\sum_{k=1}^{m}p\left(k|i\right)\left|\psi_{k}^{i}\right\rangle \left\langle \psi_{k}^{i}\right| \)&lt;/span&gt;, נקבל&lt;/p&gt;
+
+&lt;p&gt;ואם נציב את מה שכבר מצאנו בנוסחה הזו, נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho^{i}=\sum_{k=1}^{m}p_{k}\frac{M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}=\frac{M_{i}\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}=\frac{M_{i}\rho M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ושוב - קיבלנו את אותה נוסחה גם עבור מקבץ מצבים קוונטיים ולא מצב בודד. זה משלים את הכללת הפורמליזם של חישוב קוונטי מוקטורים שמייצגים מצב בודד, אל מטריצות צפיפות שמייצגות מקבץ של מצבים.&lt;/p&gt;
+
+&lt;p&gt;אבל לא סיימנו, עכשיו מגיע הקטע הכי נחמד! עד עכשיו תיארתי מה קורה עם מדידה שבה אנחנו מגרילים תוצאה ואז שואלים את עצמנו - בהינתן שקיבלנו את התוצאה &lt;span&gt;\( M_{i} \)&lt;/span&gt;, לאן עברנו? אבל עכשיו אפשר לדבר על השאלה - מה קורה אם אנחנו מבצעים מדידה ו&lt;strong&gt;לא יודעים&lt;/strong&gt; מה התוצאה? זה מה שאיתו פתחנו.&lt;/p&gt;
+
+&lt;p&gt;אינטואיטיבית, מה שקורה במקרה הזה הוא שאנחנו עוברים לסיטואציה הסתברותית קלאסית: אם בהסתברות &lt;span&gt;\( p\left(i\right) \)&lt;/span&gt; עברנו מהמקבץ &lt;span&gt;\( \rho \)&lt;/span&gt; אל המקבץ &lt;span&gt;\( \rho^{i} \)&lt;/span&gt;, אז עברנו אל מקבץ &lt;span&gt;\( \rho^{\prime} \)&lt;/span&gt; שמורכב מכל המקבצים &lt;span&gt;\( \rho^{i} \)&lt;/span&gt; הללו יחד, כשההסתברות של כל איבר במקבץ &lt;span&gt;\( \rho^{i} \)&lt;/span&gt; מוכפלת ב-&lt;span&gt;\( p\left(i\right) \)&lt;/span&gt; (כי עכשיו יש לנו תהליך דו-שלבי לקבלת איבר במקבץ &lt;span&gt;\( \rho^{\prime} \)&lt;/span&gt;: ראשית מגרילים &lt;span&gt;\( \rho^{i} \)&lt;/span&gt; ואז מגרילים איבר מתוכו). כלומר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho^{\prime}=\sum_{i=1}^{t}p\left(i\right)\rho^{i} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אבל כבר חישבנו את &lt;span&gt;\( p\left(i\right),\rho^{i} \)&lt;/span&gt;! נציב אותם בנוסחה ונקבל שוב ביטול הדדי נחמד:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho^{\prime}=\sum_{i=1}^{t}p\left(i\right)\rho^{i}=\sum_{i=1}^{t}\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)\frac{M_{i}\rho M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}=\sum_{i=1}^{t}M_{i}\rho M_{i}^{\dagger} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זו כנראה הנוסחה הפשוטה והיפה ביותר כאן, והיא הראשונה שבאמת מהווה משהו חדש - האופן שבו מערכת קוונטית מתפתחת בזמן תחת פעולת מדידה עם תוצאות לא ידועות. בואו נראה איך זה נותן לנו את הדוגמא מתחילת הפוסט.&lt;/p&gt;
+
+&lt;p&gt;את הפוסט התחלנו עם המצב &lt;span&gt;\( \left|+\right\rangle  \)&lt;/span&gt;, שמתורגם למטריצת הצפיפות&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho=\left|+\right\rangle \left\langle +\right|\frac{1}{\sqrt{2}}\left(\begin{array}{c} 1\\ 1 \end{array}\right)\frac{1}{\sqrt{2}}\left(\begin{array}{cc} 1 &amp;amp; 1\end{array}\right)=\left(\begin{array}{cc} \frac{1}{2} &amp;amp; \frac{1}{2}\\ \frac{1}{2} &amp;amp; \frac{1}{2} \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אנחנו מודדים את &lt;span&gt;\( \rho \)&lt;/span&gt; בבסיס &lt;span&gt;\( Z \)&lt;/span&gt;, כלומר עם אופרטורי המדידה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( M_{0}=\left(\begin{array}{cc} 1 &amp;amp; 0\\ 0 &amp;amp; 0 \end{array}\right),M_{1}=\left(\begin{array}{cc} 0 &amp;amp; 0\\ 0 &amp;amp; 1 \end{array}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;לאן &lt;span&gt;\( \rho \)&lt;/span&gt; יעבור אם אנחנו לא יודעים את תוצאת המדידה?&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho^{\prime}=M_{0}\rho M_{0}^{\dagger}+M_{1}\rho M_{1}^{\dagger}= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\left(\begin{array}{cc} 1 &amp;amp; 0\\ 0 &amp;amp; 0 \end{array}\right)\left(\begin{array}{cc} \frac{1}{2} &amp;amp; \frac{1}{2}\\ \frac{1}{2} &amp;amp; \frac{1}{2} \end{array}\right)\left(\begin{array}{cc} 1 &amp;amp; 0\\ 0 &amp;amp; 0 \end{array}\right)+\left(\begin{array}{cc} 0 &amp;amp; 0\\ 0 &amp;amp; 1 \end{array}\right)\left(\begin{array}{cc} \frac{1}{2} &amp;amp; \frac{1}{2}\\ \frac{1}{2} &amp;amp; \frac{1}{2} \end{array}\right)\left(\begin{array}{cc} 0 &amp;amp; 0\\ 0 &amp;amp; 1 \end{array}\right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\left(\begin{array}{cc} \frac{1}{2} &amp;amp; 0\\ 0 &amp;amp; \frac{1}{2} \end{array}\right)=\frac{1}{2}\left(\begin{array}{cc} 1 &amp;amp; 0\\ 0 &amp;amp; 0 \end{array}\right)+\frac{1}{2}\left(\begin{array}{cc} 0 &amp;amp; 0\\ 0 &amp;amp; 1 \end{array}\right)=\frac{1}{2}\left|0\right\rangle \left\langle 0\right|+\frac{1}{2}\left|1\right\rangle \left\langle 1\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;והנה, קיבלנו באופן פורמלי את “בהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|0\right\rangle  \)&lt;/span&gt; ובהסתברות &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; הקיוביט במצב &lt;span&gt;\( \left|1\right\rangle  \)&lt;/span&gt;” וסגרנו מעגל עם תחילת הפוסט.&lt;/p&gt;
+
+&lt;h2&gt;מה זה מטריצות צפיפות ואיך מגיעים אליהן בלי וקטורי מצב?&lt;/h2&gt;
+
+&lt;p&gt;עד עכשיו הצגתי מטריצות צפיפות בתור הכללה של וקטורי מצב, אבל האם היה אפשר גם אחרת? האם בתיאוריה הייתי יכול להתחיל את התיאור של הפורמליזם המתמטי של חישוב קוונטי בלי לדבר על וקטורים בכלל, רק על מטריצות? התשובה היא “כן”, אבל צריך להיות זהירים; כשם שלא כל וקטור הוא וקטור מצב, גם לא כל מטריצה היא מטריצת צפיפות.&lt;/p&gt;
+
+&lt;p&gt;ראשית, זוכרים איך וקטור &lt;span&gt;\( \left|\psi\right\rangle  \)&lt;/span&gt; שהוא וקטור מצב חייב להיות מנורמה 1, כלומר לקיים &lt;span&gt;\( \left\langle \psi\right|\left|\psi\right\rangle =1 \)&lt;/span&gt;? וזוכרים איך אפשר להחליף את הסדר בין המוכפלים אם משתמשים ב-tr? אז&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{tr}\left(\left|\psi\right\rangle \left\langle \psi\right|\right)=\left\langle \psi\right|\left|\psi\right\rangle =1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ועכשיו, עבור &lt;span&gt;\( \rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right| \)&lt;/span&gt; כללי:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \text{tr}\left(\rho\right)=\text{tr}\left(\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)=\sum_{k=1}^{m}p_{k}\text{tr}\left(\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)=\sum_{k=1}^{m}p_{k}=1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, אם מטריצה &lt;span&gt;\( \rho \)&lt;/span&gt; רוצה להיות מטריצת צפיפות, ברור שהיא &lt;strong&gt;חייבת&lt;/strong&gt; לקיים &lt;span&gt;\( \text{tr}\left(\rho\right)=1 \)&lt;/span&gt;. אבל זה לא מספיק. יש עוד תכונה מהותית ש-&lt;span&gt;\( \rho \)&lt;/span&gt; מקיימת, ונובעת מהסימטריה של &lt;span&gt;\( \left|\psi\right\rangle \left\langle \psi\right| \)&lt;/span&gt;. אבל בשביל להבין מאיפה התכונה הזו מגיעה אולי שווה לתת טיפה רקע.&lt;/p&gt;
+
+&lt;p&gt;באלגברה לינארית הפעולה הבסיסית שמעניינת אותנו היא &lt;strong&gt;טרנספורמציה לינארית&lt;/strong&gt;, פונקציה &lt;span&gt;\( T:V\to W \)&lt;/span&gt; שהיא לינארית, כלומר מקיימת &lt;span&gt;\( T\left(u+v\right)=T\left(u\right)+T\left(v\right) \)&lt;/span&gt;, ו-&lt;span&gt;\( T\left(\lambda v\right)=\lambda T\left(v\right) \)&lt;/span&gt;. זו תכונה כל כך יפה, שממנה נגזר שאפשר לתאר כל טרנספורמציה לינארית באמצעות הפעולה הפשוטה יחסית של כפל מטריצה בוקטור: קיימת מטריצה &lt;span&gt;\( A_{T} \)&lt;/span&gt; כך ש-&lt;span&gt;\( T\left(v\right)=A_{T}\cdot v \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;אפשר לקחת את זה לשלב הבא ולדבר על העתקה &lt;strong&gt;בילינארית&lt;/strong&gt;, שהיא פונקציה &lt;span&gt;\( B:V\times U\to W \)&lt;/span&gt; בשני משתנים שהיא לינארית בכל משתנה לחוד, כלומר&lt;/p&gt;
+
+&lt;ol&gt; &lt;li&gt;&lt;span&gt;\( B\left(v_{1}+v_{2},u\right)=B\left(v_{1},u\right)+B\left(v_{2},u\right) \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( B\left(v,u_{1}+u_{2}\right)=B\left(v,u_{1}\right)+B\left(v,u_{2}\right) \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( B\left(\lambda v,u\right)=\lambda B\left(v,u\right) \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( B\left(v,\lambda u\right)=\lambda B\left(v,u\right) \)&lt;/span&gt;&lt;/li&gt;
+
+&lt;/ol&gt;
+
+&lt;p&gt;במקרה שבו &lt;span&gt;\( V=U \)&lt;/span&gt; ו-&lt;span&gt;\( W=\mathbb{F} \)&lt;/span&gt;, כלומר &lt;span&gt;\( B \)&lt;/span&gt; מעתיקה זוגות של איברים מ-&lt;span&gt;\( V \)&lt;/span&gt; אל איבר כלשהו בשדה ש-&lt;span&gt;\( V \)&lt;/span&gt; חי מעליו, קוראים ל-&lt;span&gt;\( B \)&lt;/span&gt; &lt;strong&gt;תבנית בילינארית&lt;/strong&gt;, וכמו שאפשר לייצג פונקציה לינארית עם מטריצה, אפשר לייצג תבנית בילינארית עם מטריצה. ספציפית, קיימת מטריצה &lt;span&gt;\( A \)&lt;/span&gt; כך ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( B\left(v,u\right)=v^{T}Au \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;(אני מחפף פה ומניח שהוקטורים של &lt;span&gt;\( V \)&lt;/span&gt; הם מראש וקטורי עמודה; בפועל צריך לקחת בסיס ל-&lt;span&gt;\( V \)&lt;/span&gt; ואת וקטורי הקואורדינטות של &lt;span&gt;\( v,u \)&lt;/span&gt; אבל נעזוב את זה).&lt;/p&gt;
+
+&lt;p&gt;כשאנחנו מעל &lt;span&gt;\( \mathbb{F}=\mathbb{R} \)&lt;/span&gt;, אפשר לחשוב על &lt;strong&gt;מכפלה פנימית&lt;/strong&gt; בתור מקרה פרטי מעניין של תבנית בילינארית. מעל המרוכבים זה טיפה יותר מסובך - אנחנו צריכים לדבר על משהו שנקרא &lt;strong&gt;תבנית הרמיטית&lt;/strong&gt;, שמקיימת את תכונות 1-3 שהראיתי קודם, אבל 4 מוחלפת ב-&lt;span&gt;\( B\left(v,\lambda u\right)=\overline{\lambda}B\left(v,u\right) \)&lt;/span&gt;, ובנוסף יש דרישה של מעין אנטי-סימטריות: &lt;span&gt;\( B\left(u,v\right)=\overline{B\left(v,u\right)} \)&lt;/span&gt;. מטריצה &lt;span&gt;\( A \)&lt;/span&gt; מייצגת את &lt;span&gt;\( B \)&lt;/span&gt; על ידי המשוואה הטיפה שונה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( B\left(v,u\right)=v^{\dagger}A\overline{u} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אבל כדי שתבנית הרמיטית תהיה מכפלה פנימית, על כל הדברים הנחמדים שנובעים מכך, יש עוד תכונה אחת שהיא חייבת לקיים: &lt;strong&gt;חיוביות&lt;/strong&gt;. לכל &lt;span&gt;\( v\ne0 \)&lt;/span&gt; צריך להתקיים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( B\left(v,v\right)&amp;gt;0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, כשאנחנו חושבים על &lt;span&gt;\( B \)&lt;/span&gt; בתור משהו שמיוצג עם המטריצה &lt;span&gt;\( A \)&lt;/span&gt;, לאיזו דרישה על &lt;span&gt;\( A \)&lt;/span&gt; החיוביות מתורגמת? לכך שאם &lt;span&gt;\( v\ne0 \)&lt;/span&gt; אז יתקיים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( v^{T}A\overline{v}&amp;gt;0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;את הדרישה הזו אני יכול לנסח בצורה יותר נחמדה עבורנו אם אחליף את &lt;span&gt;\( v \)&lt;/span&gt; ב-&lt;span&gt;\( \overline{v} \)&lt;/span&gt; (זה לא משנה, כי אני עובר על כל ה-&lt;span&gt;\( v\ne0 \)&lt;/span&gt;) ואקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( v^{\dagger}Av&amp;gt;0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מטריצה &lt;span&gt;\( A \)&lt;/span&gt; שמקיימת את התכונה הזו נקראת &lt;strong&gt;מטריצה חיובית&lt;/strong&gt; (positive definite), וזו גם בדיוק התכונה שאני הולך לדרוש מ-&lt;span&gt;\( \rho \)&lt;/span&gt; שלנו שמתיימרת לייצג מצב קוונטי, בנוסף לדרישה שכבר ראינו ש-&lt;span&gt;\( \text{tr}\left(\rho\right)=1 \)&lt;/span&gt;. בואו נבין למה זה מתקיים אם &lt;span&gt;\( \rho \)&lt;/span&gt; הגיעה מוקטורים, כלומר היא מהצורה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right| \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אנחנו לוקחים וקטור שונה מאפס כלשהו, &lt;span&gt;\( v=\left|\varphi\right\rangle  \)&lt;/span&gt;, ומחשבים את &lt;span&gt;\( v^{\dagger}\rho v \)&lt;/span&gt;, כלומר את&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left\langle \varphi\right|\rho\left|\varphi\right\rangle  \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, עבור המקרה הפשוט שבו &lt;span&gt;\( \rho=\left|\psi\right\rangle \left\langle \psi\right| \)&lt;/span&gt; נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left\langle \varphi\right|\rho\left|\varphi\right\rangle =\left\langle \varphi\right|\left|\psi\right\rangle \left\langle \psi\right|\left|\varphi\right\rangle =\left|\left\langle \varphi,\psi\right\rangle \right|^{2}&amp;gt;0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;(כאשר כאן התוצאה התקבלה כי המכפלה הפנימית הרגילה מעל &lt;span&gt;\( \mathbb{C} \)&lt;/span&gt; היא חיובית)&lt;/p&gt;
+
+&lt;p&gt;ומכאן להכללה עבור סכום מהצורה &lt;span&gt;\( \rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right| \)&lt;/span&gt; הדרך טריוויאלית:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left\langle \varphi\right|\rho\left|\varphi\right\rangle =\sum_{k=1}^{m}p_{k}\left|\left\langle \varphi,\psi_{k}\right\rangle \right|^{2}&amp;gt;0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו אפשר לשכוח לחלוטין מוקטורי מצב ולנסח מחדש את עקרונות הבסיס של חישוב קוונטי בעזרת מטריצות צפיפות; אבל אני אעבור לדבר על &lt;strong&gt;אופרטור צפיפות&lt;/strong&gt;, כי לדבר על מטריצה מניח במובלע בסיס (אין כזו הבדלה בשפה כשמדברים על וקטורים - המילה “וקטור” מתארת גם אובייקט כללי של מרחב וקטורי וגם את וקטור השורה שאיבריו הם אברי השדה, ולכן לא צצה הבחנה כזו קודם). מי שרגילות לאלגברה לינארית כבר יודעות שאת רוב מה שאפשר לומר על מטריצות, אפשר לומר על אופרטורים - פשוט לוקחים בסיס כלשהו ומוודאים שהמטריצה המייצגת של האופרטור בבסיס הזה מקיימת את התכונה הזו (מן הסתם זה דורש שהתכונה לא תהיה תלויה בבחירת הבסיס, ולמרבה המזל זה מה שקורה עם התכונות המעניינות באלגברה לינארית).&lt;/p&gt;
+
+&lt;p&gt;אם כן, בחישוב קוונטי אנחנו מתארים מערכת קוונטית מסויימת בעזרת מרחב הילברט &lt;span&gt;\( \mathcal{H} \)&lt;/span&gt;, כך שמצב המערכת בכל רגע נתון הוא אופרטור &lt;span&gt;\( \rho:\mathcal{H}\to\mathcal{H} \)&lt;/span&gt; שמקיים&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( \text{tr}\left(\rho\right)=1 \)&lt;/span&gt;.&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( \rho \)&lt;/span&gt; הוא אופרטור חיובי.&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;ואם המערכת נמצאת בהסתברות &lt;span&gt;\( p_{k} \)&lt;/span&gt; במצב &lt;span&gt;\( \rho_{k} \)&lt;/span&gt; אז המצב שלה הוא &lt;span&gt;\( \rho=\sum_{k}p_{k}\rho_{k} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;בהינתן אופרטור אוניטרי &lt;span&gt;\( U:\mathcal{H}\to\mathcal{H} \)&lt;/span&gt;, ניתן להפעיל אותו על המערכת כדי לשנות את מצבה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho\mapsto U\rho U^{\dagger} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובהינתן אוסף של אופרטורי מדידה &lt;span&gt;\( \left\{ M_{0},\ldots,M_{t}\right\}  \)&lt;/span&gt; מעל &lt;span&gt;\( \mathcal{H} \)&lt;/span&gt; שהדרישה היחידה עליהם היא שיתקיים &lt;span&gt;\( \sum_{i=0}^{t}M_{i}^{\dagger}M_{i}=I \)&lt;/span&gt;, ניתן למדוד את המערכת במצב &lt;span&gt;\( \rho \)&lt;/span&gt; ולקבל את התוצאה &lt;span&gt;\( M_{i} \)&lt;/span&gt; בהסתברות&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( p\left(i\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ואם התקבלה תוצאה זו, המערכת עוברת למצב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho\mapsto\frac{M_{i}\rho M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה מסיים את ההגדרה, וכפי שראינו, תוצאה מיידית ממנה היא שאם מודדים את המערכת בעזרת &lt;span&gt;\( \left\{ M_{0},\ldots,M_{t}\right\}  \)&lt;/span&gt; אבל תוצאת המדידה אינה ידועה לנו, המערכת עוברת מבחינתנו למצב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho\mapsto\sum_{i=0}^{t}M_{i}\rho M_{i}^{\dagger} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ייתכן מאוד שכבר שמתם לב שאם “מודדים” את המערכת באמצעות אופרטור מדידה בודד, &lt;span&gt;\( \left\{ U\right\}  \)&lt;/span&gt;, שהוא אוניטרי, השינוי של המערכת עקב ה”מדידה” הזו הוא&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \rho\mapsto U\rho U^{\dagger} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, השינוי ה”רגיל”. של מצב המערכת. רק שעכשיו יש לנו קבוצה גדולה בהרבה של שינויים אפשריים, ואנחנו רוצים להבין אותה יותר טוב - למה? לא רק כי הם מייצגים מדידות, אלא גם כי הם מייצגים &lt;strong&gt;רעשים&lt;/strong&gt;, שאפשר לחשוב עליהם בדיוק בתור “מדידות שלא אומרים לנו את התוצאה שלהן” ו”מדידות שמבוצעות באופן אקראי”. בשביל לתאר את הדברים הללו אנחנו כבר חייבים את הפורמליזם של מטריצת הצפיפיות, מה שמצדיק את כל הפוסט הזה. אבל מה בדיוק מאפיין את קבוצת כל השינויים האפשריים הללו ואיך מייצגים איברים שלה? על זה נדבר בפוסט הבא.&lt;/p&gt;</content><author><name></name></author><category term="מטריצת צפיפות" /><summary type="html">מה זה מטריצות צפיפות ואיך מגיעים אליהן מוקטורי מצב?</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/density_matrix.png" /></entry><entry><title type="html">חישוב קוונטי: האלגוריתם של שור</title><link href="http://gadial.net/2022/09/30/shor_algorithm_revisit/" rel="alternate" type="text/html" title="חישוב קוונטי: האלגוריתם של שור" /><published>2022-09-30T00:00:00+00:00</published><updated>2022-09-30T00:00:00+00:00</updated><id>http://gadial.net/2022/09/30/shor_algorithm_revisit</id><content type="html" xml:base="http://gadial.net/2022/09/30/shor_algorithm_revisit/">&lt;h2&gt;מבוא&lt;/h2&gt;
 
 &lt;p&gt;סדרת הפוסטים הקודמת שלי על חישוב קוונטי הסתיימה &lt;a href=&quot;https://gadial.net/2014/08/24/shor_algorithm/&quot;&gt;בפוסט גדול על האלגוריתם של שור&lt;/a&gt;. אני חושב שהגיע הזמן לתת עוד סיבוב, עם פוסט שייתן מבט רחב יותר על מה הרעיון הכללי של האלגוריתם ואיך הוא עובד, ויוותר על חלק מהפרטים הקטנים שכבר הוכחתי בפוסט המקורי ההוא. היתרון הגדול שלי עכשיו על פני הסיבוב הקודם הוא שכבר היו לי פוסטים נפרדים על &lt;a href=&quot;https://gadial.net/2022/09/01/quantum_fourier_transform/&quot;&gt;התמרת פורייה הקוונטית&lt;/a&gt; ועל &lt;a href=&quot;https://gadial.net/2022/09/06/phase_estimation_algorithm/&quot;&gt;אלגוריתם הערכת פאזה&lt;/a&gt;, שהם הרכיבים הקוונטיים המרכזיים של האלגוריתם, והיכרות איתם מאפשרת להסתכל עליו “ממעוף הציפור”, מה שבלתי אפשרי בלעדיהם.&lt;/p&gt;
 
@@ -425,7 +742,7 @@
 
 &lt;p&gt;ובכן, מה היה לנו הפעם? איך זה היה שונה מהפוסט הקודם שלי על האלגוריתם של שור? האלגוריתם מחולק קונספטואלית לשלושה חלקים; החלק הראשון, של הרדוקציה מבעיית הפירוק לגורמים אל בעיית הפרת הסדר, הוא חלק שהרחבתי עליו מאוד בפוסט ההוא והפעם לא נגעתי בו כי אין לי משהו נוסף לומר, אבל בשני החלקים האחרים הרחבתי לא מעט. ראשית, הצגתי באופן מפורש את שור בתור מקרה פרטי של אלגוריתם הערכת פאזה, שזה משהו שבכלל לא ניסיתי לעשות בפוסט הקודם (בואו לא נדבר על השאלה המביכה עד כמה הבנתי את זה בעצמי). שנית, הפעם התעמקתי קצת יותר במשפט הספציפי שקשור לשברים משולבים שמבטיח לנו שעם קצת מזל, ה-&lt;span&gt;\( \frac{s}{r} \)&lt;/span&gt; שאנחנו מחפשים יצוץ מתוך תוצאת אלגוריתם הערכת הפאזה. זה דרש גלישה נוספת לתורת המספרים במקום לחישוב קוונטי, אבל הנושא של שברים משולבים הוא כל כך כיפי שלא יכלתי להתאפק.&lt;/p&gt;
 
-&lt;p&gt;לאן הולכים מכאן? בסדרת הפוסטים הקודמת שלי, שור היה המטרה הסופית; אבל בסדרה הנוכחית, אני מקווה שעכשיו משהוצאנו את זה מהדרך, אפשר להראות כל מני דברים לא קשורים בעליל אבל מגניבים לא פחות.&lt;/p&gt;</content><author><name></name></author><category term="חישוב קוונטי" /><category term="שברים משולבים" /><summary type="html">מבוא</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/shor_algorithm.png" /></entry><entry><title type="html">חישוב קוונטי: אלגוריתם הערכת פאזה</title><link href="http://gadial.net/2022/09/06/phase_estimation_algorithm/" rel="alternate" type="text/html" title="חישוב קוונטי: אלגוריתם הערכת פאזה" /><published>2022-09-06T00:00:00+00:00</published><updated>2022-09-06T00:00:00+00:00</updated><id>http://gadial.net/2022/09/06/phase_estimation_algorithm</id><content type="html" xml:base="http://gadial.net/2022/09/06/phase_estimation_algorithm/">&lt;h2&gt;מה זה בכלל ובשביל מה זה טוב?&lt;/h2&gt;
+&lt;p&gt;לאן הולכים מכאן? בסדרת הפוסטים הקודמת שלי, שור היה המטרה הסופית; אבל בסדרה הנוכחית, אני מקווה שעכשיו משהוצאנו את זה מהדרך, אפשר להראות כל מני דברים לא קשורים בעליל אבל מגניבים לא פחות.&lt;/p&gt;</content><author><name></name></author><category term="חישוב קוונטי" /><category term="האלגוריתם של שור" /><category term="שברים משולבים" /><summary type="html">מבוא</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/shor_algorithm.png" /></entry><entry><title type="html">חישוב קוונטי: אלגוריתם הערכת פאזה</title><link href="http://gadial.net/2022/09/06/phase_estimation_algorithm/" rel="alternate" type="text/html" title="חישוב קוונטי: אלגוריתם הערכת פאזה" /><published>2022-09-06T00:00:00+00:00</published><updated>2022-09-06T00:00:00+00:00</updated><id>http://gadial.net/2022/09/06/phase_estimation_algorithm</id><content type="html" xml:base="http://gadial.net/2022/09/06/phase_estimation_algorithm/">&lt;h2&gt;מה זה בכלל ובשביל מה זה טוב?&lt;/h2&gt;
 
 &lt;p&gt;האלגוריתם הקוונטי שאני רוצה להציג בפוסט הזה, &lt;strong&gt;אלגוריתם הערכת פאזה&lt;/strong&gt;, הוא פשוט קסם. מה שהוא עושה הוא קסם. האופן שבו הוא עושה את זה הוא קסם. האופן שבו זה משתלב עם התמרת פורייה הקוונטית שעליה &lt;a href=&quot;https://gadial.net/2022/09/01/quantum_fourier_transform/&quot;&gt;דיברתי בפוסט הקודם&lt;/a&gt; הוא קסם. הדבר היחיד שאינו קסם, חוץ מההוכחה הפורמלית שהכל עובד והיא טכנית למדי, הוא להבין בשביל מה זה טוב. אז אני אשתמש באותו תירוץ שהשתמשתי בו בפוסט על התמרת פורייה הקוונטית - זה הכלי המרכזי שבו משתמש האלגוריתם של שור לפירוק לגורמים. למעשה, אפשר לחשוב על כל החלק הקוונטי באלגוריתם של שור בתור מקרה פרטי של אלגוריתם הערכת פאזה. אבל בשביל זה באמת צריך להסביר מה זה האלגוריתם הזה ומה הוא עושה.&lt;/p&gt;
 
@@ -2398,250 +2715,4 @@
 
 &lt;p&gt;שנית, &lt;span&gt;\( f\left(x\right)-mx=\frac{2x^{2}+3x+1}{x}-2x=\frac{3x+1}{x} \)&lt;/span&gt; ולכן &lt;span&gt;\( \left|f\left(x\right)-mx\right|\to3 \)&lt;/span&gt;, וקיבלנו את האסימפטוטה &lt;span&gt;\( y=2x+3 \)&lt;/span&gt;.&lt;/p&gt;
 
-&lt;p&gt;כאן אני הולך לעצור - כיסינו את המושגים הבסיסיים וקצת את האופן שבו משתמשים בהם, אבל עם דוגמאות וטכניקות קונקרטיות לחישוב אסימפטוטות בסיטואציות שונות ומשונות - עם זה אפשר להמשיך עד אינסוף.&lt;/p&gt;</content><author><name></name></author><category term="אסימפטוטה" /><summary type="html">מבוא ותזכורת</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/sqrt_complicated.png" /></entry><entry><title type="html">אסימפטוטות, חלק א’: הדברים הקלים</title><link href="http://gadial.net/2022/04/27/asymptotes/" rel="alternate" type="text/html" title="אסימפטוטות, חלק א': הדברים הקלים" /><published>2022-04-27T00:00:00+00:00</published><updated>2022-04-27T00:00:00+00:00</updated><id>http://gadial.net/2022/04/27/asymptotes</id><content type="html" xml:base="http://gadial.net/2022/04/27/asymptotes/">&lt;p&gt;אחד מהנושאים המבלבלים ביותר עבורי כשלמדתי מתמטיקה בבית הספר היה &lt;strong&gt;אסימפטוטות&lt;/strong&gt; של פונקציות, פשוט כי זה נושא שבבית הספר לא מלמדים את המשמעות שלו עד הסוף אלא מסתמכים על אינטואיציות… ולי היו אינטואיציות מאוד גרועות. אז בפוסט הזה אני אנסה לעשות שני דברים: ראשית, להסביר את הנושא בצורה אינטואיטיבית, עבור מי שיש לה אינטואיציות טובות משלי, ובתקווה אולי אוכל לסייע קצת לאינטואיציות הללו; ושנית, בהמשך, איפה שלא חייבים לקרוא - להיכנס להסברים הפורמליים ביותר, כדי שאפשר יהיה להרגיש שכיסינו את הנושא לגמרי.&lt;/p&gt;
-
-&lt;p&gt;נתחיל מהאינטואיציה.&lt;/p&gt;
-
-&lt;h2&gt;מה זה אסימפטוטות - האינטואיציה&lt;/h2&gt;
-
-&lt;p&gt;בהקשר של אסימפטוטות, תמונה אחת שווה אלף מילים, ואני מתנצל מראש בפני מי שלא מסתדרים עם תמונות. הנה תמונה של גרף הפונקציה &lt;span&gt;\( f\left(x\right)=\frac{1}{x} \)&lt;/span&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2022/1_over_x_graph.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;מה אנחנו בעצם רואים פה? ה”עולם” המתמטי שבו גרפים של פונקציות חיים הוא משהו שנקרא &lt;strong&gt;המישור&lt;/strong&gt;, או אם רוצים להרחיב - &lt;strong&gt;המישור הקרטזי&lt;/strong&gt;. אנחנו חושבים על המישור הזה בתור אוסף של נקודות, כשכל נקודה מאופיינת על ידי שתי &lt;strong&gt;קואורדינטות&lt;/strong&gt;: &lt;span&gt;\( \left(x,y\right) \)&lt;/span&gt;. קואורדינטת ה-&lt;span&gt;\( x \)&lt;/span&gt; אומרת כמה ימינה/שמאלה הנקודה נמצאת מהמרכז של המישור, וקואורדינטת ה-&lt;span&gt;\( y \)&lt;/span&gt; אומרת כמה למעלה/למטה. הנקודה &lt;span&gt;\( \left(0,0\right) \)&lt;/span&gt; היא ה”מרכז” של המישור - מה שנקרא &lt;strong&gt;ראשית הצירים&lt;/strong&gt;. בציור ישנם שני קווים - אופקי ואנכי. הקו האופקי נקרא ציר &lt;span&gt;\( x \)&lt;/span&gt;, האנכי נקרא ציר &lt;span&gt;\( y \)&lt;/span&gt; ונקודת המפגש ביניהם היא ראשית הצירים. על כל אחד מהצירים כתובים מספרים - כשאני לוקח נקודה כלשהי במישור, אני מותח קווים ישרים ממנה אל הצירים, ובודק מה המספרים על כל ציר - אלו הקואורדינטות של הנקודה. אני מניח שכל זה כבר ידוע, אבל לא יזיק לחזור על זה.&lt;/p&gt;
-
-&lt;p&gt;בנוסף לצירים, באיור יש עוד שני קווים “עקומים”. הקווים הללו הם הגרף של הפונקציה &lt;span&gt;\( f\left(x\right)=\frac{1}{x} \)&lt;/span&gt;. מה זו בעצם פונקציה? בהקשר שלנו, זה &lt;strong&gt;משהו&lt;/strong&gt; שמקבל מספר ומחזיר מספר אחר. למשל, הפונקציה &lt;span&gt;\( f\left(x\right)=\frac{1}{x} \)&lt;/span&gt; כשהיא מקבלת את המספר &lt;span&gt;\( 2 \)&lt;/span&gt; מחזירה את המספר &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; וכן הלאה. הכתיב &lt;span&gt;\( f\left(x\right)=\frac{1}{x} \)&lt;/span&gt; הוא בעצם תיאור כללי - אם המספר שהתקבל היה &lt;span&gt;\( x \)&lt;/span&gt;, המספר שיוחזר יהיה &lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt;. ומה אם אני ארצה לתת ל-&lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; את הערך &lt;span&gt;\( x=0 \)&lt;/span&gt;? זה בלתי אפשרי, כי &lt;span&gt;\( \frac{1}{0} \)&lt;/span&gt; זה משהו לא מוגדר (ייתכן שבקהל רוצים לצעוק לי שזה &lt;strong&gt;אינסוף&lt;/strong&gt; או משהו כזה; אז חכו חכו להמשך, כי עוד נראה &lt;strong&gt;בדיוק&lt;/strong&gt; למה בעייתי להגיד משהו כזה, &lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt; היא הדוגמא הקלאסית לבעייתיות הזו).&lt;/p&gt;
-
-&lt;p&gt;ה&lt;strong&gt;גרף&lt;/strong&gt; של פונקציה הוא אוסף של נקודות: לכל &lt;span&gt;\( x \)&lt;/span&gt; שהפונקציה מוגדרת עליו, אנחנו מחשבים את &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; ואז מסתכלים על הנקודה &lt;span&gt;\( \left(x,f\left(x\right)\right) \)&lt;/span&gt;, כלומר נקודה שקואורדינטת ה-&lt;span&gt;\( x \)&lt;/span&gt; שלה היא פשוט &lt;span&gt;\( x \)&lt;/span&gt; וקואורדינטת ה-&lt;span&gt;\( y \)&lt;/span&gt; היא &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt;. זה נותן לנו דרך גרפית נוחה “להרגיש” איך הפונקציה מתנהגת. למשל, בגרף של &lt;span&gt;\( f\left(x\right)=\frac{1}{x} \)&lt;/span&gt; אנחנו רואים שאם &lt;span&gt;\( x&amp;gt;0 \)&lt;/span&gt; אז הפונקציה תמיד מחזירה ערכים גדולים מ-0, אבל שהערכים שהיא מחזירה הופכים לקטנים יותר ויותר ככל ש-&lt;span&gt;\( x \)&lt;/span&gt; עצמו נהיה גדול יותר ויותר.&lt;/p&gt;
-
-&lt;p&gt;מה שאפשר לראות באיור הוא שככל שאנחנו הולכים ימינה יותר, הגרף של הפונקציה הולך ומתקרב אל הקו של ציר &lt;span&gt;\( x \)&lt;/span&gt; עצמו. מה הולך לקרות בהמשך? ובכן, ככל שמציבים ערכים יותר גדולים של &lt;span&gt;\( x \)&lt;/span&gt; בתוך &lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt; מקבלים מספרים חיוביים קטנים יותר ויותר. אם נציב &lt;span&gt;\( x=10 \)&lt;/span&gt; נקבל &lt;span&gt;\( \frac{1}{10} \)&lt;/span&gt; ואם נציב &lt;span&gt;\( x=100 \)&lt;/span&gt; נקבל &lt;span&gt;\( \frac{1}{100} \)&lt;/span&gt; וכן הלאה. האם מתישהו ממש נגיע אל ציר &lt;span&gt;\( x \)&lt;/span&gt;? כלומר, האם הנקודה &lt;span&gt;\( \left(x,0\right) \)&lt;/span&gt; נמצאת על גרף הפונקציה? ובכן, לא; אין פתרון למשוואה &lt;span&gt;\( \frac{1}{x}=0 \)&lt;/span&gt;, כי אם נכפול ב-&lt;span&gt;\( x \)&lt;/span&gt; נקבל &lt;span&gt;\( 1=0 \)&lt;/span&gt;. גם לא נרד מתחת לציר &lt;span&gt;\( x \)&lt;/span&gt;, כי אם &lt;span&gt;\( x&amp;gt;0 \)&lt;/span&gt; אז &lt;span&gt;\( \frac{1}{x}&amp;gt;0 \)&lt;/span&gt; תמיד. אז אנחנו יודעים שלא משנה כמה ימינה נלך, לא נראה את הקו של הפונקציה &lt;strong&gt;חוצה&lt;/strong&gt; את ציר &lt;span&gt;\( x \)&lt;/span&gt;. מה שהוא כן הולך לעשות הוא &lt;strong&gt;להתקרב אליו עוד ועוד&lt;/strong&gt;. על התופעה הזו אנחנו אומרים שציר &lt;span&gt;\( x \)&lt;/span&gt; הוא &lt;strong&gt;אסימפטוטה&lt;/strong&gt; של &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; כאשר &lt;span&gt;\( x \)&lt;/span&gt; &lt;strong&gt;שואף לאינסוף&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;הנה לנו שני מושגים לא מוגדרים: גם “אסימפטוטה” וגם “שואף לאינסוף”. ההגדרה המדויקת שלהם מסתמכת על מושג מחשבון דיפרנציאלי ואינטגרלי שנקרא &lt;strong&gt;גבול&lt;/strong&gt;; אני מבטיח להציג אותו במלואו עד סוף הפוסט, אבל אנחנו עכשיו בחלק האינטואיטיבי, ואפשר כבר לגלות שבהקשר הזה “אינטואיטיבי” פירושו “אל תשתמש במושג הגבול!!!!! לא לומדים אותו בבית הספר!!!!!” אז אני זורם עם זה.&lt;/p&gt;
-
-&lt;p&gt;אז מה ההגדרה הלא מדויקת? אסימפטוטה של פונקציה היא קו ישר כלשהו שהפונקציה מתקרבת אליו עוד ועוד כאשר גם הקו וגם הפונקציה ממשיכים עד אינסוף. זו הגדרה טריקית כי היא מנסה לכסות יחד שני מקרים די שונים באופי שלהם, שלמרבה המזל &lt;span&gt;\( f\left(x\right)=\frac{1}{x} \)&lt;/span&gt; היא דוגמא מושלמת כדי להדגים אותם. המקרה הראשון נקרא &lt;strong&gt;אסימפטוטה אופקית&lt;/strong&gt; וזה מה שראינו עם ציר &lt;span&gt;\( x \)&lt;/span&gt; - יש לנו קו אופקי (ציר &lt;span&gt;\( x \)&lt;/span&gt; במקרה הנוכחי אבל אפשר גם אחרים) שהפונקציה הולכת ומתקרבת אליו ככל ש-&lt;span&gt;\( x \)&lt;/span&gt; הולך וגדל (“הולכים ימינה”) או ככל ש-&lt;span&gt;\( x \)&lt;/span&gt; הולך וקטן, בתור מספר שלילי (“הולכים שמאלה”).&lt;/p&gt;
-
-&lt;p&gt;המקרה השני נקרא &lt;strong&gt;אסימפטוטה אנכית &lt;/strong&gt;הוא מה שקורה במרכז התמונה עם ציר &lt;span&gt;\( y \)&lt;/span&gt;: אם נלך שמאלה עם החלק של גרף הפונקציה שעבורו &lt;span&gt;\( x&amp;gt;0 \)&lt;/span&gt;, כלומר נקטין את הערכים החיוביים של &lt;span&gt;\( x \)&lt;/span&gt; עוד ועוד, אפשר לראות שהערכים שהפונקציה מקבלת &lt;strong&gt;הולכים וגדלים&lt;/strong&gt;. אם נציב &lt;span&gt;\( x=1 \)&lt;/span&gt; נקבל &lt;span&gt;\( f\left(x\right)=\frac{1}{1}=1 \)&lt;/span&gt; אבל אם נציב &lt;span&gt;\( x=\frac{1}{2} \)&lt;/span&gt; נקבל &lt;span&gt;\( f\left(x\right)=\frac{1}{1/2}=2 \)&lt;/span&gt; ואם נציב &lt;span&gt;\( x=\frac{1}{100} \)&lt;/span&gt; נקבל &lt;span&gt;\( f\left(x\right)=\frac{1}{1/100}=100 \)&lt;/span&gt; וכן הלאה.&lt;/p&gt;
-
-&lt;p&gt;בואו נסתכל על זה לרגע מנקודת מבטו של ציר &lt;span&gt;\( y \)&lt;/span&gt;. נניח שאנחנו נכנסים לצפלין ענק ומתחילים לנוע מעלה על ציר &lt;span&gt;\( y \)&lt;/span&gt;, כלומר עוברים על הנקודות מהצורה &lt;span&gt;\( \left(0,y\right) \)&lt;/span&gt; עבור &lt;span&gt;\( y&amp;gt;0 \)&lt;/span&gt; (למה צפלין? למה לא?). תוך כדי הטיסה שלנו למעלה אנחנו מדי פעם שולחים מבט ימינה, ואנחנו רואים את &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; לצידנו. אנחנו ממשיכים לטפס למעלה, וממשיכים לשלוח מבטים, ובכל פעם שאנחנו שולחים מבט &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; עדיין שם, רק קרובה אפילו עוד יותר. אם הטיסה הזו &lt;strong&gt;נמשכת לנצח&lt;/strong&gt; בצורה הזו, אז אנחנו אסימפטוטה של &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt;; אם בשלב כלשהו נעיף מבט ימינה ולא נראה את &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt;, ונסתכל בבהלה שמאלה וגם לא נראה את &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt;, אז הכל התקלקל - מה שראינו עד עכשיו לא יכול ללמד אותנו שאנחנו אסימפטוטה של &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt;. למרות שאנחנו עדיין משאירים פתח לאפשרות שמתישהו במהלך המסע היא תחזור, והפעם אולי לתמיד.&lt;/p&gt;
-
-&lt;p&gt;בואו נראה עוד דוגמא שמחדדת את מה שקורה פה:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2022/asymptote_crossing.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;הקו המתפתל הירוק כאן הוא הפונקציה &lt;span&gt;\( f\left(x\right)=\frac{100x^{2}+15x}{100x^{2}+1} \)&lt;/span&gt;. את המספרים שבתוך הפונקציה בחרתי כדי שהיא תתנהג בצורה הנחמדה שאני רוצה; כדאי לשים לב בעיקר למכנה, שבו מופיע &lt;span&gt;\( 100x^{2}+1 \)&lt;/span&gt;, ביטוי שלא יכול להתאפס אף פעם (כי העלאה בריבוע של מספר שלילי מחזירה מספר חיובי) ולכן בניגוד אל &lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt; אין איזו קטסטרופה בראשית הצירים שמקפיצה את הפונקציה לשמיים. אז מה האסימפטוטות שלה? גם כשהולכים ימינה עד אינסוף וגם כשהולכים שמאלה, נראה שהפונקציה מתקרבת עוד ועוד אל הקו האופקי &lt;span&gt;\( y=1 \)&lt;/span&gt; שבאיור מסומן בכחול.&lt;/p&gt;
-
-&lt;p&gt;עכשיו, שימו לב מה עוד רואים באיור - שבשלב מסוים, די סמוך לצד הימני של ציר &lt;span&gt;\( y \)&lt;/span&gt;, הפונקציה &lt;strong&gt;נוגעת&lt;/strong&gt; בישר &lt;span&gt;\( y=1 \)&lt;/span&gt; הזה, עוברת דרכו לצד השני, ורק בהמשך חוזרת להתקרב אליו. זה בא בניגוד לתיאור פופולרי של אסימפטוטה בתור “קו שהפונקציה מתקרבת אליו עוד ועוד אבל לא נוגעת בו”. פונקציה בהחלט יכולה לגעת באסימפטוטה שלה. מה שמעניין אותנו הוא רק מה שקורה לאורך זמן, כשהולכים עוד ועוד לאורך האסימפטוטה. כאן מנקודת המבט של &lt;span&gt;\( y=1 \)&lt;/span&gt; היה איזה קטע בהתחלה שבו הפונקציה נגעה באסימפטוטה &lt;strong&gt;ואז התחילה להתרחק ממנה&lt;/strong&gt;, אבל כל זה קרה אי שם בעבר, בהתחלה, ובסופו של דבר ההתנהגות שהתקבעה של &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; היא זו שרואים בהמשך של הגרף - הפונקציה מתקרבת עוד ועוד אל האסימפטוטה.&lt;/p&gt;
-
-&lt;p&gt;לרוע המזל, גם זה לא סוף הסיפור. בואו נתבונן בגרף של הפונקציה הבאה:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2022/sine_asymptote.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;הפונקציה פה נעזרת במשהו שנקרא &lt;strong&gt;סינוס&lt;/strong&gt;, &lt;span&gt;\( \sin x \)&lt;/span&gt;, שהיא פונקציה &lt;strong&gt;מחזורית&lt;/strong&gt; שנעה בין 1 ל-&lt;span&gt;\( -1 \)&lt;/span&gt;. הפונקציה עצמה היא &lt;span&gt;\( f\left(x\right)=\frac{\sin\left(10x\right)}{x} \)&lt;/span&gt; כששוב, הקבועים מהונדסים כדי שהכל יעבוד נחמד. מה הולך כאן? ראשית, אם הולכים ימינה עד אינסוף, רואים שהפונקציה חוצה &lt;strong&gt;שוב ושוב&lt;/strong&gt; את ציר &lt;span&gt;\( x \)&lt;/span&gt;. זה יימשך כך לנצח, ונובע מהאופי המחזורי של סינוס. מצד שני, ה”גלים” של הפונקציה הולכים ומתמתנים עם הזמן - הפסגות והעמקים שלה יותר ויותר קרובים אל ציר &lt;span&gt;\( x \)&lt;/span&gt;, מה שנובע מ-&lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt; שמופיע בתוך הפונקציה. זה אומר שציר ה-&lt;span&gt;\( x \)&lt;/span&gt; היא אסימפטוטה של הפונקציה, וזה למרות שהיא חוצה אותו שוב ושוב. אז צריך להיזהר עם האינטואיציות.&lt;/p&gt;
-
-&lt;p&gt;מהיכן מגיעה האינטואיציה ש”פונקציה לא נוגעת באסימפטוטה שלה”? ובכן, מכך שהדבר הראשון שעושים עם אסימפטוטות הוא לחשב אותן במקרים שבהם &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; היא פונקציה &lt;strong&gt;פשוטה&lt;/strong&gt;, מה שנקרא “פונקציה רציונלית”. לפונקציות רציונליות אין התנהגויות מוזרות כמו שיש לסינוס או לפונקציות שהן מסובכות אפילו יותר, וזה מצוין; התרגילים שפותרים בפועל בבית הספר כנראה יערבו אותן, ולכן טוב לפתח אינטואיציה טובה לגביהן ספציפית. רק צריך לזכור שזה באמת משהו שתקף רק לגביהן (ככה זה כל המתמטיקה: בכל תחום מנסים למצוא פונקציות “נחמדות” יחסית ולפתח אינטואיציה לגבי ההתנהגות הספציפית שלהן, למשל הפונקציות הרציפות של הטופולוגיה והטרנספורמציות הלינאריות של האלגברה הלינארית.&lt;/p&gt;
-
-&lt;p&gt;בואו נחזור לרגע אל &lt;span&gt;\( f\left(x\right)=\frac{\sin\left(10x\right)}{x} \)&lt;/span&gt;. ראינו שציר &lt;span&gt;\( x \)&lt;/span&gt; הוא אסימפטוטה שלה, מה באשר לציר &lt;span&gt;\( y \)&lt;/span&gt;? בהחלט נראה שבסביבות &lt;span&gt;\( x=0 \)&lt;/span&gt; הפונקציה מזנקת לה לפתע לגבהים, אז האינטואיציה שלנו אומרת שיש פה אסימפטוטה; אלא שזה &lt;strong&gt;לא נכון&lt;/strong&gt;. אם היינו מסתכלים על הגרף ממרחק גדול יותר, היינו רואים שהפונקציה מגיעה עד הנקודה &lt;span&gt;\( \left(0,10\right) \)&lt;/span&gt; ואז עוברת דרכה, ובוודאי שאינה ממשיכה עד אינסוף:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2022/sine_asymptote2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;זה מוזר. זה ממש מוזר, כי זה מנוגד לכל מה שאנחנו לומדים בתור חוקים בסיסיים. הביטו ב-&lt;span&gt;\( f\left(x\right)=\frac{\sin\left(10x\right)}{x} \)&lt;/span&gt;. מה קורה אם מציבים &lt;span&gt;\( x=0 \)&lt;/span&gt;? למי שלא מכירים את סינוס אני אגלה ש-&lt;span&gt;\( \sin\left(0\right)=0 \)&lt;/span&gt;, כך שאנחנו מקבלים &lt;span&gt;\( f\left(0\right)=\frac{0}{0} \)&lt;/span&gt;. כידוע (או שלא?) &lt;span&gt;\( \frac{0}{0} \)&lt;/span&gt; הוא &lt;strong&gt;ביטוי חסר משמעות&lt;/strong&gt; ובוודאי לא משהו שיוצא 0, אז מה הולך כאן?&lt;/p&gt;
-
-&lt;p&gt;התשובה היא שבאופן שבו הגדרנו את &lt;span&gt;\( f\left(x\right)=\frac{\sin\left(10x\right)}{x} \)&lt;/span&gt;, זה נכון; הפונקציה &lt;strong&gt;לא&lt;/strong&gt; מוגדרת ב-&lt;span&gt;\( x=0 \)&lt;/span&gt;. זה לא אומר שיש לה אסימפטוטה כלשהי כשהיא מתקרבת ל-&lt;span&gt;\( x=0 \)&lt;/span&gt;, כי היא לא בורחת למעלה “עד אינסוף”. האינטואיציה צריכה להיות שאיכשהו, ככל שאנחנו מציבים ב-&lt;span&gt;\( x \)&lt;/span&gt; ערכים קרובים יותר ויותר ל-0 (אבל לא את 0 עצמו!) הערך של &lt;span&gt;\( \frac{\sin\left(10x\right)}{x} \)&lt;/span&gt; לא בורח לשום מקום, כי ה-&lt;span&gt;\( \sin10x \)&lt;/span&gt; שבמונה (שהוא מספר קטן מאוד כש-&lt;span&gt;\( x \)&lt;/span&gt; קרוב לאפס) מקזז איכשהו את ה-&lt;span&gt;\( x \)&lt;/span&gt; שבמכנה (שהחלוקה בו נותנת מספר גדול מאוד כש-&lt;span&gt;\( x \)&lt;/span&gt; קרוב לאפס).&lt;/p&gt;
-
-&lt;p&gt;מה שאוהבים לעשות במתמטיקה הוא להגדיר את &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; בהתאם להתנהגות הזו, כלומר להגדיר&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( f\left(x\right)=\begin{cases} \frac{\sin\left(10x\right)}{x} &amp;amp; x\ne0\\ 10 &amp;amp; x=0 \end{cases} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;זו הגדרה פורמלית לגמרי, והיא גם “נחמדה” במובן זה שהפונקציה &lt;span&gt;\( f \)&lt;/span&gt; שמתקבלת היא &lt;strong&gt;רציפה&lt;/strong&gt;, אבל המושג הזה לא חשוב לנו כרגע. מה שחשוב הוא רק שהמוזרויות הללו הן לא מנת חלקן של הפונקציות הרציונליות ה”נחמדות” (כמעט; יהיה משהו טיפה דומה בהמשך), אז בואו נדבר עליהן.&lt;/p&gt;
-
-&lt;h2&gt;פולינומים ואיך שהם מסתדרים עם שאיפה לאינסוף&lt;/h2&gt;
-
-&lt;p&gt;הנה פונקציה פשוטה: &lt;span&gt;\( f\left(x\right)=1 \)&lt;/span&gt;. הנה עוד פונקציה פשוטה: &lt;span&gt;\( f\left(x\right)=x \)&lt;/span&gt;. הנה פונקציה טיפה יותר מסובכת: &lt;span&gt;\( f\left(x\right)=x^{2} \)&lt;/span&gt;. בואו נסבך עכשיו עוד יותר: &lt;span&gt;\( f\left(x\right)=2x \)&lt;/span&gt;. ועוד יותר: &lt;span&gt;\( f\left(x\right)=2x+1 \)&lt;/span&gt;. מה משותף לכל הפונקציות הללו? כולן נקראות &lt;strong&gt;פולינומים&lt;/strong&gt;. פולינומים הם משפחה של פונקציות שהן פשוטות יחסית וקל לעבוד איתן ולכן אנחנו אוהבים אותן.&lt;/p&gt;
-
-&lt;p&gt;מה ההגדרה הפורמלית של פולינום? זו פונקציה שלוקחת מספרים ואת &lt;span&gt;\( x \)&lt;/span&gt; ויכולה לחבר אותם או לכפול אותם זה בזה, וזהו. אם אני לוקח את &lt;span&gt;\( x \)&lt;/span&gt; וכופל אותו בעצמו וב-&lt;span&gt;\( 3 \)&lt;/span&gt; אני אקבל &lt;span&gt;\( 3x^{2} \)&lt;/span&gt;. לזה אני יכול להוסיף למשל את &lt;span&gt;\( 5 \)&lt;/span&gt; ולקבל &lt;span&gt;\( 3x^{2}+5 \)&lt;/span&gt;, וכן הלאה. באופן הכי פורמלי שבו מתארים פולינום, הוא נכתב כך:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( f\left(x\right)=a_{n}x^{n}+a_{n-1}x^{n-1}+\ldots+a_{1}x+a_{0} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;כאשר ה-&lt;span&gt;\( a_{0},\ldots,a_{n} \)&lt;/span&gt; הם מספרים שנקראים &lt;strong&gt;המקדמים&lt;/strong&gt; של הפולינום. החזקה הכי גבוהה של &lt;span&gt;\( x \)&lt;/span&gt; שמופיעה בפולינום עם מקדם שהוא לא 0 נקראת &lt;strong&gt;המעלה&lt;/strong&gt; של הפולינום. למשל &lt;span&gt;\( x^{3}-5x^{2}+3 \)&lt;/span&gt; הוא פולינום ממעלה 3 עם סדרת המקדמים (מהקטן לגדול) &lt;span&gt;\( 3,-5,0,1 \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;פונקציות שנראות כמו קו ישר הן פולינומים; ספציפית, פולינומים ממעלה ראשונה. למשל &lt;span&gt;\( f\left(x\right)=1 \)&lt;/span&gt; מתארת את הקו האופקי &lt;span&gt;\( y=1 \)&lt;/span&gt;. ו-&lt;span&gt;\( f\left(x\right)=3x+2 \)&lt;/span&gt; מתארת את הקו &lt;span&gt;\( 3x+2 \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;הנה איור של כמה פולינומים בפעולה: הפולינום &lt;span&gt;\( 3x+2 \)&lt;/span&gt; שהוא הקו הישר (ירוק באיור), הפולינום &lt;span&gt;\( x^{2} \)&lt;/span&gt; שהוא הקערה הסימטרית (כחול באיור) והפולינום &lt;span&gt;\( x^{3}-5x^{2}+3 \)&lt;/span&gt; (אדום באיור) שנראה כמו מהומה שלמה:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2022/polynomials.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;מה שמשותף לכל הפולינומים הללו הוא שבאיור הם בורחים למעלה או למטה במהירות הבזק. זה לא מקרי; זו תכונה שמשותפת &lt;strong&gt;לכל&lt;/strong&gt; הפולינומים. כל פולינום שהוא, לא משנה איזה, תמיד מקבל ערכים שהולכים וגדלים עוד ועוד ככל שערכי ה-&lt;span&gt;\( x \)&lt;/span&gt; שהוא מקבל גדלים, באופן שהוא לא חסום - כלומר, לכל גובה אפשרי, מתישהו הפולינום יגיע אל הגובה הזה, ולכן &lt;strong&gt;אין&lt;/strong&gt; לו אסימפטוטה אופקית כשהולכים ימינה. לא משנה איזה קו אופקי נמתח, מתישהו הפולינום יעקוף אותו וימשיך הלאה אל האינסוף.&lt;/p&gt;
-
-&lt;p&gt;אלא שאני צריך לחדד את זה טיפה. אם המקדם המוביל של הפולינום (מה שמכפילים בו את החזקה הגבוהה ביותר של &lt;span&gt;\( x \)&lt;/span&gt; בו) יהיה &lt;strong&gt;שלילי&lt;/strong&gt;, יקרה ההפך. במקום שהפולינום יעלה עוד ועוד, הוא דווקא יירד עוד ועוד. הערך שהוא מקבל עדיין יילך ויגדל - &lt;strong&gt;בערכו המוחלט&lt;/strong&gt;, אבל המשמעות תהיה שהערך הזה יהיה מספר שלילי שנהיה יותר ויותר קטן (יש לי קושי של ממש לקרוא ל-&lt;span&gt;\( -1,000,000,000 \)&lt;/span&gt; “מספר קטן”, כי אמנם זה מספר די קטן, אבל בראש שלי “קטן” זו דך להגיד “קרוב לאפס”).&lt;/p&gt;
-
-&lt;p&gt;בכתיב חצי פורמלי אפשר לכתוב את זה כך: אם &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; הוא פולינום עם מקדם מוביל חיובי, אז&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( f\left(x\right)\underset{x\to\infty}{\to}\infty \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;את הדבר הזה אפשר לקרוא בתור “כאשר &lt;span&gt;\( x \)&lt;/span&gt; שואף לאינסוף, אז הפולינום &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; שואף לאינסוף”. אני יכול לתת פה את ההסבר הקצת יותר פורמלי: הכוונה היא שלכל גובה &lt;span&gt;\( M \)&lt;/span&gt; אפשרי, קיימת איזו שהיא נקודה, נקרא לה &lt;span&gt;\( x_{0} \)&lt;/span&gt; כך שאם &lt;span&gt;\( x&amp;gt;x_{0} \)&lt;/span&gt; נקבל &lt;span&gt;\( f\left(x\right)&amp;gt;M \)&lt;/span&gt;. כלומר, לכל הפחות החל מ-&lt;span&gt;\( x_{0} \)&lt;/span&gt; ומעלה, &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; כבר לא תיגע אף פעם ב-&lt;span&gt;\( y=M \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;שימו לב ש-&lt;span&gt;\( \infty \)&lt;/span&gt; הוא לא מספר. אי אפשר להציב בפולינום את “הערך” &lt;span&gt;\( \infty \)&lt;/span&gt; והוא לא יודע להחזיר &lt;span&gt;\( \infty \)&lt;/span&gt; כפלט. זה פשוט סימון שבא לתאר את ההתנהגות שנתתי לה כרגע תיאור פורמלי.&lt;/p&gt;
-
-&lt;p&gt;אם המקדם המוביל של &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; שלילי, מסמנים את זה כמעט אותו דבר:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( f\left(x\right)\underset{x\to\infty}{\to}-\infty \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;כאן המשמעות של “שואף למינוס אינסוף” היא שלכל גובה &lt;span&gt;\( M \)&lt;/span&gt; אפשרי, בפרט כזה שהוא מספר שלילי, קיימת נקודה &lt;span&gt;\( x_{0} \)&lt;/span&gt; כך שאם &lt;span&gt;\( x&amp;gt;x_{0} \)&lt;/span&gt; נקבל &lt;span&gt;\( f\left(x\right)&amp;lt;M \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;עכשיו, מה קורה כשאנחנו הולכים לא ימינה אלא &lt;strong&gt;שמאלה&lt;/strong&gt;, כלומר כאשר הערכים של &lt;span&gt;\( x \)&lt;/span&gt; &lt;strong&gt;הולכים וקטנים&lt;/strong&gt; בתור מספרים שליליים? אני מסמן את זה בתור &lt;span&gt;\( x\to-\infty \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;אם נסתכל באיור נראה שקורים שני דברים אפשריים: הפולינום &lt;span&gt;\( x^{2} \)&lt;/span&gt; בורח &lt;strong&gt;למעלה &lt;/strong&gt;גם במקרה הזה, אבל שני הפולינומים האחרים דווקא בורחים &lt;strong&gt;למטה&lt;/strong&gt;. שוב, זה לא מקרי אלא משהו שמשותף לכל הפולינומים: או שהפולינום שואף לאינסוף או שהוא שואף למינוס אינסוף. על השאלה מה יקרה בפועל משפיעים שני דברים:&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;האם המעלה של הפולינום (המספר &lt;span&gt;\( n \)&lt;/span&gt; הגבוה ביותר כך ש-&lt;span&gt;\( x^{n} \)&lt;/span&gt; מופיע בפולינום עם מקדם שונה מאפס) היא זוגית או אי זוגית.&lt;/li&gt;
-
-
-&lt;li&gt;האם המקדם המוביל של הפולינום (המקדם של &lt;span&gt;\( x^{n} \)&lt;/span&gt; כאשר &lt;span&gt;\( n \)&lt;/span&gt; היא המעלה של הפולינום) הוא חיובי או שלילי.&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;אם המקדם המוביל הוא חיובי, אז מעלה זוגית מתבטאת בשאיפה לאינסוף, ומעלה אי זוגית מתבטאת בשאיפה למינוס אינסוף - אלו הדוגמאות שאנחנו רואים באיור. למה זה קורה? כי מספר שלילי בחזקה &lt;strong&gt;זוגית&lt;/strong&gt; יוצא חיובי, אבל מספר שלילי בחזקה &lt;strong&gt;אי זוגית&lt;/strong&gt; יוצא מספר שלילי. האינטואיציה היא שהגורם &lt;span&gt;\( x^{n} \)&lt;/span&gt; כש-&lt;span&gt;\( n \)&lt;/span&gt; הוא המעלה של הפולינום הוא בטווח הארוך הדבר הכי גדול שיש בפולינום. אפילו בפולינום כמו &lt;span&gt;\( x^{3}+1000000000000x^{2} \)&lt;/span&gt;, מתישהו יהיו ערכים גדולים מספיק שכשנציב אותם ב-&lt;span&gt;\( x^{3} \)&lt;/span&gt; נקבל משהו גדול בהרבה מ-&lt;span&gt;\( 1000000000000x^{2} \)&lt;/span&gt;, ולכן זה מה שנותן את הטון.&lt;/p&gt;
-
-&lt;p&gt;אם המקדם המוביל של הפולינום הוא שלילי, המגמה מתהפכת: פולינום כזה עם מעלה זוגית ישאף למינוס אינסוף, ופולינום כזה עם מעלה אי זוגית ישאף לאינסוף, בדיוק כמו ההיפוך שקרה כאשר &lt;span&gt;\( x \)&lt;/span&gt; שאף לאינסוף.&lt;/p&gt;
-
-&lt;p&gt;אז לפולינומים אין אסימפטוטות אופקיות. מה עם אסימפטוטה אנכית? באיור רואים שאין שום דבר כזה לפולינומים שציירתי, אבל אולי יש לאחרים? ובכן, לא. &lt;strong&gt;לאף פולינום אין אסימפטוטה אנכית&lt;/strong&gt;. למה? כי אסימפטוטה אנכית פירושה שיש איזו נקודה קונקרטית שככל שערכי &lt;span&gt;\( x \)&lt;/span&gt; מתקרבים אליה, ערכי הפונקציה שואפים לאינסוף או למינוס אינסוף. אבל אצל הפולינומים, לכל &lt;span&gt;\( x \)&lt;/span&gt; אפשרי הפולינום &lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; מחזיר ערך מספרי קונקרטי, והנקודות שקרובות לאותו &lt;span&gt;\( x \)&lt;/span&gt; מחזירות ערכים שקרובים ל-&lt;span&gt;\( f\left(x\right) \)&lt;/span&gt; (לתכונה הזו קוראים &lt;strong&gt;רציפות&lt;/strong&gt;). אז זה מסיים גם את הסיפור הזה - לפולינום אין בכלל אסימפטוטות אופקיות או אנכיות.&lt;/p&gt;
-
-&lt;p&gt;אם זה המצב, למה בכלל דיברתי על פולינומים עד כה? אה, כי פולינומים הם השחקן המרכזי גם בסוג הבא של פונקציה שאני רוצה לדבר עליו - סוג שבהחלט יש לו אסימפטוטות. הסוג הזה נקרא &lt;strong&gt;פונקציות רציונליות&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h2&gt;האסימפטוטות של פונקציות רציונליות&lt;/h2&gt;
-
-&lt;p&gt;הנה כמה דוגמאות לפונקציות רציונליות:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{1}{x},2x^{3},\frac{x}{1+x^{2}},\frac{\left(x-2\right)\left(x-3\right)}{\left(x-2\right)\left(x-5\right)\left(x-7\right)} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;מה משותף לכל הדוגמאות? על כולן אפשר לחשוב בתור משהו מהצורה &lt;span&gt;\( f\left(x\right)=\frac{p\left(x\right)}{q\left(x\right)} \)&lt;/span&gt; כאשר &lt;span&gt;\( p\left(x\right),q\left(x\right) \)&lt;/span&gt; שניהם פולינומים.&lt;/p&gt;
-
-&lt;p&gt;למשל, עבור &lt;span&gt;\( f\left(x\right)=\frac{1}{x} \)&lt;/span&gt; הפולינומים הם &lt;span&gt;\( p\left(x\right)=1,q\left(x\right)=x \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;עבור &lt;span&gt;\( f\left(x\right)=2x^{3} \)&lt;/span&gt; הפולינומים הם &lt;span&gt;\( p\left(x\right)=2x^{3},q\left(x\right)=1 \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;עבור &lt;span&gt;\( f\left(x\right)=\frac{\left(x-2\right)\left(x-3\right)}{\left(x-2\right)\left(x-5\right)\left(x-7\right)} \)&lt;/span&gt; הפולינומים הם &lt;span&gt;\( p\left(x\right)=\left(x-2\right)\left(x-3\right),q\left(x\right)=\left(x-2\right)\left(x-5\right)\left(x-7\right) \)&lt;/span&gt;. בואו נתעכב עוד רגע על הדוגמא המאוד חשובה הזו.&lt;/p&gt;
-
-&lt;p&gt;ראשית, בואו נסתכל על &lt;span&gt;\( \left(x-2\right)\left(x-3\right) \)&lt;/span&gt;. אמרתי שזה פולינום, אבל זה לא נראה כמו פולינום על פי ההגדרה שנתתי… יותר כמו מכפלה של שני פולינומים. ובכן, מכפלה כזו היא פולינום בעצמה! אם נפתח את הסוגריים נקבל &lt;span&gt;\( x^{2}-5x+6 \)&lt;/span&gt;. בעצם &lt;span&gt;\( \left(x-2\right)\left(x-3\right) \)&lt;/span&gt; זו דרך אחרת לכתוב את אותו פולינום שהיא קצת יותר אינפורמטיבית, כי קל לראות מתוכה מה &lt;strong&gt;השורשים&lt;/strong&gt; של הפולינום - מה המספרים שכשמציבים אותם בפולינום מקבלים 0 (שימו לב! זה שונה לגמרי מפונקציית השורש &lt;span&gt;\( !\sqrt{x} \)&lt;/span&gt; השימוש באותה מילה עבור שני דברים שונים הוא מצער למדי). במקרה הזה אלו &lt;span&gt;\( 2,3 \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;האם תמיד אפשר לכתוב פולינום בצורה נחמדה כזו? ובכן… זה מסובך. למשל, מה עם הפולינום &lt;span&gt;\( x^{2}+1 \)&lt;/span&gt;? לא משנה איזה מספר ממשי נציב בו, הוא לא יתאפס. אז אין לו בכלל שורשים ואי אפשר לפרק אותו לכזו מכפלה. מצד שני, המספרים הממשיים הם לא סוף הסיפור; יש מערכת מספרים מגניבה שנקראת &lt;strong&gt;המספרים המרוכבים&lt;/strong&gt; ובה יש מספר שמסומן ב-&lt;span&gt;\( i \)&lt;/span&gt; וכן מאפס את הפולינום, ואפשר לכתוב &lt;span&gt;\( x^{2}+1=\left(x-i\right)\left(x+i\right) \)&lt;/span&gt;. אבל אני לא רוצה לדבר על מרוכבים כאן ולכן לא ניכנס לזה.&lt;/p&gt;
-
-&lt;p&gt;עוד עניין הוא שאם נתון לנו פולינום בצורה ה”רגילה”, זה לא אומר &lt;strong&gt;בכלל&lt;/strong&gt; שיהיה לנו קל לדעת מי השורשים שלו. עבור פולינום ממעלה שניה יש כלי שנקרא &lt;strong&gt;נוסחת השורשים&lt;/strong&gt; שעושה את העבודה, אבל במעלות שלישית ורביעית הנוסחאות הדומות הן מסובכות בצורה קיצונית, ואילו ממעלה חמישית ומעלה לא קיימת נוסחה בכלל באופן כללי, אז אין פתרון קסם - לפעמים אפשר, לפעמים אי אפשר.&lt;/p&gt;
-
-&lt;p&gt;בואו נעבור שניה אל המכנה שבדוגמא שהראיתי: &lt;span&gt;\( \left(x-2\right)\left(x-5\right)\left(x-7\right) \)&lt;/span&gt;. אם נפתח את הסוגריים ונבצע חישוב די מעיק, נקבל &lt;span&gt;\( x^{3}-14x^{2}+59x-70 \)&lt;/span&gt;. זה פולינום שנראה סתום לגמרי ממבט ראשון - אין לי דרך טובה להסביר איך למצוא את השורשים &lt;span&gt;\( 2,5,7 \)&lt;/span&gt; שלו (אפשר לעשות סוג של ניחוש חכם, אבל נעזוב את זה). עכשיו, בואו נניח שבמקום לקבל את הפונקציה הרציונלית &lt;span&gt;\( \frac{\left(x-2\right)\left(x-3\right)}{\left(x-2\right)\left(x-5\right)\left(x-7\right)} \)&lt;/span&gt; הייתי מקבל את הזוועה הזו:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{x^{2}-5x+6}{x^{3}-14x^{2}+59x-70} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;לא ממש היינו יודעים מה לעשות עם הביטוי הזה או איך לפשט אותו. לעומת זאת, אם נותנים לנו את&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{\left(x-2\right)\left(x-3\right)}{\left(x-2\right)\left(x-5\right)\left(x-7\right)} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;אפשר לראות שה-&lt;span&gt;\( x-2 \)&lt;/span&gt; הזה מופיע גם במונה וגם במכנה, ולכן אפשר &lt;strong&gt;לצמצם&lt;/strong&gt; אותו ולקבל את הפונקציה&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{x-3}{\left(x-5\right)\left(x-7\right)}=\frac{x-3}{x^{2}-12x+35} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;שהיא הרבה יותר פשוטה. אני מראה את הפישוט הזה כי כבר בשלב הזה חשוב להבין שאפשר לעשות את זה לפונקציות רציונליות.&lt;/p&gt;
-
-&lt;p&gt;אבל רגע רגע רגע… מה בעצם עשיתי? אין חוק כזה שאם מחלקים במשהו, אז הוא צריך להיות שונה מאפס? אבל &lt;span&gt;\( x-2 \)&lt;/span&gt; עשוי להיות אפס, אם אני מציב &lt;span&gt;\( x=2 \)&lt;/span&gt;. מה קורה פה? אם אני מציב &lt;span&gt;\( x=2 \)&lt;/span&gt; בפונקציה &lt;span&gt;\( \frac{x-3}{x^{2}-12x+35} \)&lt;/span&gt; אני אקבל &lt;span&gt;\( -\frac{1}{4-24+35}=-\frac{1}{15} \)&lt;/span&gt;. אם לעומת זאת אני אציב &lt;span&gt;\( x=2 \)&lt;/span&gt; בפונקציה &lt;span&gt;\( \frac{x^{2}-5x+6}{x^{3}-14x^{2}+59x-70} \)&lt;/span&gt;, אני אקבל &lt;span&gt;\( \frac{0}{0} \)&lt;/span&gt; וכבר אמרנו שזה ביטוי בעייתי.&lt;/p&gt;
-
-&lt;p&gt;כדי להבין מה הולך פה, בואו נסתכל על הגרף של הפונקציה:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2022/rational_function.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ציירתי את הפונקציה יחד עם הקווים האנכיים שעוברים דרך השורשים של המכנה: &lt;span&gt;\( 2,5,7 \)&lt;/span&gt;. אנחנו רואים שגם ב-5 וגם ב-7 יש לנו אסימפטוטות אנכיות; לעומת זאת ב-2 הפונקציה עוברת בשמחה דרך הקו האנכי כאילו כלום, ואין שום אסימפטוטה. זה מראה לנו על הבדל מהותי בין המקרים הללו: ה”בעיה” שיש בהגדרה של &lt;span&gt;\( \frac{x^{2}-5x+6}{x^{3}-14x^{2}+59x-70} \)&lt;/span&gt; ב-&lt;span&gt;\( x=2 \)&lt;/span&gt; נובעת מהדרך הלא טובה שבה אנחנו מייצגים את הפונקציה הזו: זה גורם לנו להגיד שהיא לא מוגדרת ב-&lt;span&gt;\( x=2 \)&lt;/span&gt; למרות שיש דרך נחמדה להגדיר אותה שם. אם נגדיר&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( f\left(x\right)=\begin{cases} \frac{x^{2}-5x+6}{x^{3}-14x^{2}+59x-70} &amp;amp; x\ne2\\ -\frac{1}{15} &amp;amp; x=2 \end{cases} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;נקבל פונקציה “נחמדה” מאוד (רציפה) שבמקרה או שלא במקרה מתוארת &lt;strong&gt;בדיוק&lt;/strong&gt; על ידי &lt;span&gt;\( \frac{x-3}{x^{2}-12x+35} \)&lt;/span&gt;, שהיא הפונקציה שהתקבלה מצמצום ה-&lt;span&gt;\( x-2 \)&lt;/span&gt; הסורר מהמונה והמכנה. זה המובן שבו אני מרשה לעצמי לבצע את הצמצום הזה - לעבור מפונקציה אחת לפונקציה אחרת שזהה לה כמעט לגמרי, פרט למה שנקרא &lt;strong&gt;נקודת אי-רציפות סליקה&lt;/strong&gt;, שאותה אני… אה… מסלק.&lt;/p&gt;
-
-&lt;p&gt;כל הדיון זה היה חשוב כי זו בדיוק הדרך לזהות איפה יש לפונקציה רציונלית אסימפטוטה אנכית: כל אסימפטוטה אנכית חייבת להיות בנקודה שבה &lt;strong&gt;המכנה מתאפס&lt;/strong&gt;. בנקודה כזו, יש שתי אפשרויות: או שהמונה &lt;strong&gt;לא יתאפס&lt;/strong&gt;, ואז בודאות מוחלטת יש שם אסימפטוטה אנכית; או שהמונה כן מתאפס שם, ואז… זה מסובך.&lt;/p&gt;
-
-&lt;p&gt;ראשית, הטענה הראשונה: אם המכנה מתאפס בנקודה כלשהי, זה אומר שככל שמתקרבים לנקודה הזו, החלוקה במכנה הופכת להיות &lt;strong&gt;כפל&lt;/strong&gt; במספרים הולכים וגדלים (כזכור, אם &lt;span&gt;\( x=1/100 \)&lt;/span&gt; אז &lt;span&gt;\( \frac{1}{x}=100 \)&lt;/span&gt;). אם בזמן הזה המונה הולך ומתקרב לאיזה ערך מספרי קבוע ששונה מאפס, שום דבר לא “ירסן” את המכנה, והתוצאה תהיה שהערכים של הפונקציה יגדלו לאינסוף או יקטנו למינוס אינסוף.&lt;/p&gt;
-
-&lt;p&gt;שנית, מה קורה אם גם המונה וגם המכנה מתאפסים? בואו נסתכל לרגע על הפונקציה &lt;span&gt;\( \frac{x^{2}}{x^{2}} \)&lt;/span&gt;. זו פונקציה שבה ב-&lt;span&gt;\( x=0 \)&lt;/span&gt; המונה והמכנה מתאפסים, אבל זו בעצם הפונקציה &lt;span&gt;\( f\left(x\right)=1 \)&lt;/span&gt; בתחפושת; בוודאי שאין לה אסימפטוטה אנכית. לעומת זאת, הפונקציה &lt;span&gt;\( \frac{x}{x^{2}} \)&lt;/span&gt; ניתנת לצמצום דומה שיוביל אותנו אל &lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt;, שהיא &lt;strong&gt;כן&lt;/strong&gt; פונקציה עם אסימפטוטה אנכית. אז איך אפשר לדעת?&lt;/p&gt;
-
-&lt;p&gt;הנה עקרון כללי: אם פולינום &lt;span&gt;\( p\left(x\right) \)&lt;/span&gt; מתאפס ב-&lt;span&gt;\( x=a \)&lt;/span&gt;, אז אפשר, בודאות מוחלטת, לכתוב את &lt;span&gt;\( p\left(x\right) \)&lt;/span&gt; בתור &lt;span&gt;\( p\left(x\right)=\left(x-a\right)q\left(x\right) \)&lt;/span&gt; כאשר &lt;span&gt;\( q\left(x\right) \)&lt;/span&gt; הוא פולינום אחר. אז אם גם המונה וגם המכנה מתאפסים ב-&lt;span&gt;\( x=a \)&lt;/span&gt; אפשר לחלק את המונה והמכנה ב-&lt;span&gt;\( x-a \)&lt;/span&gt; (כמו בדוגמאות שכבר ראינו) ואז לקבל שני פולינומים חדשים, שגם עבורם אפשר לבדוק אם הם מתאפסים ב-&lt;span&gt;\( x=a \)&lt;/span&gt; או לא.&lt;/p&gt;
-
-&lt;p&gt;בפועל, כמובן, אפשר לנקוט גם בדרך שונה - פשוט להציב ערכים ש&lt;strong&gt;קרובים&lt;/strong&gt; ל-&lt;span&gt;\( x=a \)&lt;/span&gt; ולבדוק אם הפונקציה “מתפוצצת” או לא. אבל זו לא דרך פורמלית במיוחד להשתכנע.&lt;/p&gt;
-
-&lt;p&gt;עכשיו, לכל אסימפטוטה אנכית יש שני צדדים. בואו נסתכל שוב על &lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt; לרגע:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2022/1_over_x_graph.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;אנחנו רואים שככל ש-&lt;span&gt;\( x \)&lt;/span&gt; מתקרב ל-0 &lt;strong&gt;מצד ימין&lt;/strong&gt;, כלומר כשהערכים שלו חיוביים, אז הערכים של הפונקציה שואפים לאינסוף: מסמנים את זה לפעמים &lt;span&gt;\( f\left(x\right)\underset{x\to0^{+}}{\to}\infty \)&lt;/span&gt;. מן העבר השני, כש-&lt;span&gt;\( x \)&lt;/span&gt; מתקרב ל-0 &lt;strong&gt;מצד שמאל&lt;/strong&gt; ערכי הפונקציה שואפים למינוס אינסוף: &lt;span&gt;\( f\left(x\right)\underset{x\to0^{-}}{\to}-\infty \)&lt;/span&gt;. איך אפשר לדעת אם השאיפה תהיה לאינסוף או למינוס אינסוף? בגישה האינטואיטיבית, פשוט מציבים ערכים שקרובים לנקודת ההתפוצצות ובודקים אם התוצאה חיובית או שלילית. כן, זו היוריסטיקה בעייתית, אבל בלי להיכנס לפורמליזם רציני יותר, זה מה יש.&lt;/p&gt;
-
-&lt;p&gt;מה עם אסימפטוטות אופקיות? בניגוד לאסימפטוטות אנכיות, שהמספר שלהן תלוי בכמה נקודות המכנה מתאפס, לפונקציה רציונלית יכולות להיות רק שתי אסימפטוטות אופקיות: זו שמתקבלת כאשר &lt;span&gt;\( x\to\infty \)&lt;/span&gt; וזו שמתקבלת כאשר &lt;span&gt;\( x\to-\infty \)&lt;/span&gt;. אבל איך מוצאים אותן? אפשר, כרגיל, להציב ערכים ולראות מה קורה, אבל זה לא פורמלי וגם לא נותן לנו את האסימפטוטה המדויקת ליד (כלומר, את קואורדינטת ה-&lt;span&gt;\( y \)&lt;/span&gt; של הישר).&lt;/p&gt;
-
-&lt;p&gt;למרבה המזל, מה שאנחנו יודעים על פולינומים בא לעזרתנו בקלות כאן. נכון שאמרתי קודם שכאשר &lt;span&gt;\( x \)&lt;/span&gt; שואף לאינסוף, אז חזקה גדול “מנצחת” חזקה קטנה? זה אומר שאפשר &lt;strong&gt;להתעלם לחלוטין&lt;/strong&gt; מכל החזקות של הפולינומים במונה ובמכנה מלבד החזקות שהן המעלה של הפולינומים.&lt;/p&gt;
-
-&lt;p&gt;נחזור לשניה אל הפונקציה הרציונלית &lt;span&gt;\( \frac{x^{2}-5x+6}{x^{3}-14x^{2}+59x-70} \)&lt;/span&gt;. מה שאני אומר הוא שכאשר &lt;span&gt;\( x \)&lt;/span&gt; שואף לאינסוף, כל החלק של ה-&lt;span&gt;\( -5x+6 \)&lt;/span&gt; הוא &lt;strong&gt;זניח&lt;/strong&gt; ביחס אל &lt;span&gt;\( x^{2} \)&lt;/span&gt;. בדומה, כל החלק של &lt;span&gt;\( -14x^{2}+59x-70 \)&lt;/span&gt; הוא &lt;strong&gt;זניח&lt;/strong&gt; ביחס אל &lt;span&gt;\( x^{3} \)&lt;/span&gt;. לכן אפשר לומר שההתנהגות של הפונקציה הזו כש-&lt;span&gt;\( x \)&lt;/span&gt; שואף לאינסוף &lt;strong&gt;זהה&lt;/strong&gt; להתנהגות של הפונקציה &lt;span&gt;\( \frac{x^{2}}{x^{3}} \)&lt;/span&gt; כאשר &lt;span&gt;\( x \)&lt;/span&gt; שואף לאינסוף. כלומר, זהה להתנהגות של הפונקציה &lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt; כש-&lt;span&gt;\( x \)&lt;/span&gt; שואף לאינסוף, ואנחנו כבר יודעים שזה 0, שאליו הפונקציה שואפת “מלמעלה”. בדומה, כש-&lt;span&gt;\( x \)&lt;/span&gt; שואף למינוס אינסוף, הפונקציה תשאף אל 0 “מלמטה”, בדיוק כמו עם &lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;בואו נראה עוד דוגמא, עם הפונקציה &lt;span&gt;\( f\left(x\right)=\frac{100x^{2}+15x}{100x^{2}+1} \)&lt;/span&gt; שהראיתי קודם:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/2022/asymptote_crossing.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;כל הדיבורים באוויר על “ההתנהגות של בלה בלה זה כמו ההתנהגות של בלו בלו” נותנים הרגשה שיש פה איזה מעשה קסמים לא ברור, אז הנה גישה קצת יותר פרקטית. בואו ניקח את הפונקציה הרציונלית הזו&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{100x^{2}+15x}{100x^{2}+1} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;ונחלק גם את המונה וגם את המכנה ב-&lt;span&gt;\( x^{2} \)&lt;/span&gt;, שהוא המעלה של הפולינומים שנמצאים בהם. ליתר דיוק אני לא בדיוק אחלק אותם אלא אוציא אותם החוצה, ככה:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{100x^{2}+15x}{100x^{2}+1}=\frac{x^{2}\left(100+15\frac{x}{x^{2}}\right)}{x^{2}\left(100+\frac{1}{x^{2}}\right)}=\frac{x^{2}\left(100+15\frac{1}{x}\right)}{x^{2}\left(100+\frac{1}{x^{2}}\right)} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;אחרי שהוצאתי אותם החוצה אני מצמצם את ה-&lt;span&gt;\( x^{2} \)&lt;/span&gt; מהמונה והמכנה. בשביל לעשות את זה אני צריך להניח ש-&lt;span&gt;\( x\ne0 \)&lt;/span&gt;, וזה בסדר; אני עושה את השינוי הזה רק כדי לבדוק את ההתנהגות של הפונקציה כשאיקס שואף ל-&lt;span&gt;\( \pm\infty \)&lt;/span&gt;. התוצאה תהיה הפונקציה &lt;span&gt;\( \frac{100+15\frac{1}{x}}{100+\frac{1}{x^{2}}} \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;עכשיו, כבר ראינו ש-&lt;span&gt;\( \frac{1}{x}\underset{x\to\infty}{\to}0 \)&lt;/span&gt;, ובאופן דומה &lt;span&gt;\( \frac{1}{x^{2}}\underset{x\to\infty}{\to}0 \)&lt;/span&gt;, ולכן אני מקבל בסך הכל:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{100+15\frac{1}{x}}{100+\frac{1}{x^{2}}}\underset{x\to\infty}{\to}=\frac{100}{100}=1 \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;זו לא הייתה הוכחה פורמלית לגמרי, אבל אני חושב שהרעיון די ברור ממנה. זו הצורה הכללית שבה “מנטרלים” את החזקות הנמוכות יותר מהמונה והמכנה; מה שנשארנו איתו בסוף היו רק המקדמים של החזקות הגבוהות ביותר.&lt;/p&gt;
-
-&lt;p&gt;עכשיו, העסק הזה עבד יפה בגלל שהמעלה של המונה ושל המכנה היו זהות - &lt;span&gt;\( x^{2} \)&lt;/span&gt;. מה קורה בסיטואציות אחרות? הנה שתי דוגמאות פשוטות:&lt;/p&gt;
-
-&lt;p&gt;ראשית ניקח את &lt;span&gt;\( \frac{x^{2}+3x}{2x+7} \)&lt;/span&gt;. נעשה את הטריק שכבר השתמשתי בו, נוציא החוצה &lt;span&gt;\( x^{2} \)&lt;/span&gt; מהמונה ו-&lt;span&gt;\( x \)&lt;/span&gt; מהמכנה, ונקבל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{x^{2}+3x}{2x+7}=\frac{x^{2}\left(1+3\frac{1}{x}\right)}{x\left(2+\frac{7}{x}\right)} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;כאן אחרי צמצום אני אקבל:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( x\cdot\frac{1+3\frac{1}{x}}{2+\frac{7}{x}} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;כאשר אני משאיף את &lt;span&gt;\( x \)&lt;/span&gt; לאינסוף, הביטוי &lt;span&gt;\( \frac{1+3\frac{1}{x}}{2+\frac{7}{x}} \)&lt;/span&gt; לבדו ישאף ל-&lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt;. לעומת זאת, ה-&lt;span&gt;\( x \)&lt;/span&gt; שבו הביטוי הזה מוכפל שואף לאינסוף. הנה תכונה שאשתמש בה בלי להוכיח כרגע אבל אני מקווה שהיא אינטואיטיבית מספיק: אם יש לנו מכפלה של שתי פונקציות שאחת שואפת לאינסוף והשניה שואפת למספר קבוע גדול מאפס, אז המכפלה שלהן שואפת לאינסוף (ואם המספר קטן מאפס אז שואפת למינוס אינסוף; ואם המספר שווה לאפס אז הרבה דברים שונים ומשונים עשויים לקרות). זה מראה לנו ש-&lt;span&gt;\( \frac{x^{2}+3x}{2x+7}\to\infty \)&lt;/span&gt;; המונה “מנצח” כי החזקה שלו גדולה יותר.&lt;/p&gt;
-
-&lt;p&gt;עכשיו בואו ניקח את אותה פונקציה ונחליף את המונה והמכנה. נקבל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{2x+7}{x^{2}+3x} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;ואחרי הוצאת גורמים וצמצום נקבל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \frac{1}{x}\cdot\frac{2+\frac{7}{x}}{1+3\frac{1}{x}} \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;ועכשיו יש לנו פונקציה אחת ששואפת ל-2 ומוכפלת בפונקציה אחרת (&lt;span&gt;\( \frac{1}{x} \)&lt;/span&gt;) ששואפת לאפס והתוצאה של זה, כצפוי, שואפת לאפס (כדי שמשהו יתקלקל, צריך שמה ששואף לאפס יוכפל במשהו ששואף לאינסוף או מינוס אינסוף).&lt;/p&gt;
-
-&lt;p&gt;אפשר לסכם את מה שראינו פה כך - עבור כל פונקציה רציונלית &lt;span&gt;\( \frac{p\left(x\right)}{q\left(x\right)} \)&lt;/span&gt;, כשמשאיפים את &lt;span&gt;\( x \)&lt;/span&gt; לאינסוף או למינוס אינסוף:&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;אם המעלה של &lt;span&gt;\( q\left(x\right) \)&lt;/span&gt; גדולה משל &lt;span&gt;\( p\left(x\right) \)&lt;/span&gt;, אז &lt;span&gt;\( \frac{p\left(x\right)}{q\left(x\right)}\to0 \)&lt;/span&gt;.&lt;/li&gt;
-
-
-&lt;li&gt;אם המעלות של &lt;span&gt;\( q\left(x\right),p\left(x\right) \)&lt;/span&gt; שוות שתיהן ל-&lt;span&gt;\( n \)&lt;/span&gt; ו-&lt;span&gt;\( \frac{p\left(x\right)}{q\left(x\right)}=\frac{a_{n}x^{n}+\ldots}{b_{n}x^{n}+\ldots} \)&lt;/span&gt; אז &lt;span&gt;\( \frac{p\left(x\right)}{q\left(x\right)}\to\frac{a_{n}}{b_{n}} \)&lt;/span&gt;.&lt;/li&gt;
-
-
-&lt;li&gt;אם המעלה של &lt;span&gt;\( p\left(x\right) \)&lt;/span&gt; גדולה מ-&lt;span&gt;\( q\left(x\right) \)&lt;/span&gt;, אז &lt;span&gt;\( \frac{p\left(x\right)}{q\left(x\right)}\to\pm\infty \)&lt;/span&gt;.&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;מה שמעניין אותנו, בתור ציידי אסימפטוטות, הם המקרים הראשון והשני. במקרה הראשון האסימפטוטה היא תמיד &lt;span&gt;\( y=0 \)&lt;/span&gt; ובמקרה השני אנחנו רואים בדיוק איך לחשב את הערך של האסימפטוטה - מחלקים את המקדמים המובילים של המונה והמכנה. זה בעצם מסיים את הטיפול בפונקציות רציונליות.&lt;/p&gt;
-
-&lt;h2&gt;סיכום ביניים קצרצר, למי שרוצים רק את השורה התחתונה&lt;/h2&gt;
-
-&lt;p&gt;הנה מה שראינו, עבור פונקציה רציונלית כללית &lt;span&gt;\( \frac{p\left(x\right)}{q\left(x\right)} \)&lt;/span&gt;:&lt;/p&gt;
-
-&lt;ol&gt; &lt;li&gt;האסימפטוטות האנכיות עשויות להתקבל רק בנקודות מהצורה &lt;span&gt;\( x=a \)&lt;/span&gt; כאשר &lt;span&gt;\( a \)&lt;/span&gt; הוא שורש של &lt;span&gt;\( q\left(x\right) \)&lt;/span&gt;, כלומר &lt;span&gt;\( q\left(a\right)=0 \)&lt;/span&gt;. אם &lt;span&gt;\( q\left(a\right)=0 \)&lt;/span&gt; זה עדיין לא מבטיח שיש שם אסימפטוטה אנכית; אם &lt;span&gt;\( p\left(a\right)\ne0 \)&lt;/span&gt; אז קיום האסימפטוטה האנכית מובטח, ואחרת צריך לחלק גם את &lt;span&gt;\( p\left(x\right) \)&lt;/span&gt; וגם את &lt;span&gt;\( q\left(x\right) \)&lt;/span&gt; ב-&lt;span&gt;\( \left(x-a\right) \)&lt;/span&gt; ולנסות שוב.&lt;/li&gt;
-
-
-&lt;li&gt;אסימפטוטות אופקיות מתקבלות אם מעלת &lt;span&gt;\( q\left(x\right) \)&lt;/span&gt; גדולה ממעלת &lt;span&gt;\( p\left(x\right) \)&lt;/span&gt; ואז האסימפטוטה היא &lt;span&gt;\( y=0 \)&lt;/span&gt;, או אם &lt;span&gt;\( p\left(x\right),q\left(x\right) \)&lt;/span&gt; שניהם מאותה מעלה, ובמקרה זה האסימפטוטה תהיה &lt;span&gt;\( y=\frac{a_{n}}{b_{n}} \)&lt;/span&gt; כאשר &lt;span&gt;\( a_{n} \)&lt;/span&gt; המקדם המוביל של &lt;span&gt;\( p\left(x\right) \)&lt;/span&gt; ו-&lt;span&gt;\( b_{n} \)&lt;/span&gt; המקדם המוביל של &lt;span&gt;\( q\left(x\right) \)&lt;/span&gt;. בכל המקרים האסימפטוטה שמוצאים תקפה גם עבור &lt;span&gt;\( x\to\infty \)&lt;/span&gt; וגם עבור &lt;span&gt;\( x\to-\infty \)&lt;/span&gt;.&lt;/li&gt;
-
-&lt;/ol&gt;
-
-&lt;p&gt;בסופו של דבר כל הדיון הארוך הזה הצטמצם לשני כללים פשוטים ממש! האם לא יכלתי לתת את הכללים הללו מראש וחסל? יכלתי, אבל איפה הכיף כאן? המטרה שלי היא שנבין מאיפה הכללים הללו באים ואולי נוכל לשחזר אותם בעצמנו, במקרה הצורך.&lt;/p&gt;
-
-&lt;p&gt;בפוסט הבא יתחילו הצרות האמיתיות - ננסה להבין איך נראות האסימפטוטות של פונקציות מסובכות יותר (ספוילר: אי אפשר להגיד יותר מדי דברים שאינם בסיסיים ממש), ואנסה להסביר קצת יותר את הפורמליזם של מה שעשינו פה.&lt;/p&gt;</content><author><name></name></author><category term="אסימפטוטה" /><summary type="html">אחד מהנושאים המבלבלים ביותר עבורי כשלמדתי מתמטיקה בבית הספר היה אסימפטוטות של פונקציות, פשוט כי זה נושא שבבית הספר לא מלמדים את המשמעות שלו עד הסוף אלא מסתמכים על אינטואיציות… ולי היו אינטואיציות מאוד גרועות. אז בפוסט הזה אני אנסה לעשות שני דברים: ראשית, להסביר את הנושא בצורה אינטואיטיבית, עבור מי שיש לה אינטואיציות טובות משלי, ובתקווה אולי אוכל לסייע קצת לאינטואיציות הללו; ושנית, בהמשך, איפה שלא חייבים לקרוא - להיכנס להסברים הפורמליים ביותר, כדי שאפשר יהיה להרגיש שכיסינו את הנושא לגמרי.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/1_over_x_graph.png" /></entry></feed>
+&lt;p&gt;כאן אני הולך לעצור - כיסינו את המושגים הבסיסיים וקצת את האופן שבו משתמשים בהם, אבל עם דוגמאות וטכניקות קונקרטיות לחישוב אסימפטוטות בסיטואציות שונות ומשונות - עם זה אפשר להמשיך עד אינסוף.&lt;/p&gt;</content><author><name></name></author><category term="אסימפטוטה" /><summary type="html">מבוא ותזכורת</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/2022/sqrt_complicated.png" /></entry></feed>
