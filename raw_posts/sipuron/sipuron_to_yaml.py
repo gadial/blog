@@ -1,10 +1,14 @@
+import os, sys
 from typing_extensions import runtime
 import yaml,csv
+
+csv_filename = sys.argv[1]
+yaml_filename = os.path.splitext(csv_filename)[0] + ".yaml"
 
 stories = []
 keywords = []
 authors = []
-with open("sipuron.csv", encoding="utf8") as csvfile:
+with open(csv_filename, encoding="utf8") as csvfile:
     datareader = csv.reader(csvfile, delimiter=",", quotechar='"')
     for row_index, row in enumerate(datareader):
         if row_index == 0:
@@ -26,11 +30,11 @@ with open("sipuron.csv", encoding="utf8") as csvfile:
             keywords.append(keyword)
 
 result = {
-    'year_2022': {
+    'year_2023': {
         'stories': stories,
         'keywords': keywords,
         'authors': authors
     }
 }
-with open("sipuron2022.yml", 'w', encoding="utf8") as yamlfile:
+with open(yaml_filename, 'w', encoding="utf8") as yamlfile:
     yaml.dump(result, yamlfile, allow_unicode=True)
