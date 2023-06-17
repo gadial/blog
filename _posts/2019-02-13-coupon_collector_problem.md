@@ -33,7 +33,7 @@ def experiment(n):
     visited = [False] * n
     visited_count = 0
     rounds = 0
-    while visited_count &lt; n:
+    while visited_count < n:
         rounds += 1
         i = random.randrange(n)
         if not visited[i]:
