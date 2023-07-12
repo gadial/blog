@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+textarea {
+    width: 500px;
+    height: 100px;
+    max-width: 100%;
+}
+
+.overlimit {
+    color: red;
+}
+
+.tweetContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.tweetContainer > * {
+    margin-top: 5px;
+}
+</style>
+<script>
+function addTweet() {
+    var tweetsContainer = document.getElementById("tweetsContainer");
+    var div = document.createElement("div");
+    div.classList.add("tweetContainer");
+    div.innerHTML = 
+    '<textarea oninput="updateCharacterCount(this)"></textarea><span class="count">0/280</span><br/>'+
+    '<label for="imageURL">Image URL:</label><input type="text" id="imageURL"><br/>';
+    tweetsContainer.appendChild(div);
+    updateTweetNumbering();
+}
+
+function updateCharacterCount(textarea) {
+    var countElement = textarea.parentNode.getElementsByClassName("count")[0];
+    var count = textarea.value.length;
+    countElement.textContent = count + "/280";
+    if(count > 280) {
+        countElement.classList.add("overlimit");
+    } else {
+        countElement.classList.remove("overlimit");
+    }
+}
+
+function updateTweetNumbering() {
+    var textareas = document.getElementsByTagName("textarea");
+    for(var i = 0; i < textareas.length; i++) {
+        var numbering = (i+1) + "/" + textareas.length;
+        var existingNumbering = textareas[i].value.match(/^\d+\/\d+/);
+        if(existingNumbering) {
+            textareas[i].value = textareas[i].value.replace(existingNumbering, numbering);
+        } else {
+            textareas[i].value = numbering + " " + textareas[i].value;
+        }
+        // update character count
+        var countElement = textareas[i].parentNode.getElementsByClassName("count")[0];
+        var count = textareas[i].value.length;
+        countElement.textContent = count + "/280";
+        if(count > 280) {
+            countElement.classList.add("overlimit");
+        } else {
+            countElement.classList.remove("overlimit");
+        }
+    }
+}
+
+function exportTweets() {
+    var tweetsContainer = document.getElementById("tweetsContainer");
+    var tweetDivs = tweetsContainer.getElementsByTagName("div");
+    var tweets = [];
+    for(var i = 0; i < tweetDivs.length; i++) {
+        var textarea = tweetDivs[i].getElementsByTagName("textarea")[0];
+        var imageURL = tweetDivs[i].getElementsByTagName("input")[0].value;
+        tweets.push({text: textarea.value, imageURL: imageURL});
+    }
+    var tweetsJSON = JSON.stringify(tweets);
+    var output = document.getElementById("output");
+    output.textContent = tweetsJSON;
+}
+
+function toggleRTL() {
+    var body = document.body;
+    var direction = body.getAttribute("dir");
+    body.setAttribute("dir", direction === "ltr" ? "rtl" : "ltr");
+}
+</script>
+</head>
+<body dir="ltr">
+<button onclick="addTweet()">Add Tweet</button><br/>
+<button onclick="exportTweets()">Export Tweets</button>
+<pre id="output"></pre>
+<button onclick="toggleRTL()">Toggle RTL</button>
+<div id="tweetsContainer"></div>
+<button onclick="addTweet()">Add Tweet</button><br/>
+</body>
+</html>
