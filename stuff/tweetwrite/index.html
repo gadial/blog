@@ -38,10 +38,11 @@ function addTweet() {
     div.classList.add("tweetContainer");
     div.innerHTML = 
     '<textarea oninput="updateCharacterCount(this)"></textarea><span class="count">0/280</span><br/>'+
-    '<label for="imageURL">Image URL:</label><input type="text" id="imageURL"><br/>';
+    '<button onclick="pasteImage(event, this)">Paste Image</button><img class="imagePreview" data-filename="" width="100" onclick="downloadImage(this)"><input type="text" class="imageName" placeholder="Image name"><br/>';
     tweetsContainer.appendChild(div);
     updateTweetNumbering();
 }
+
 
 function updateCharacterCount(textarea) {
     var countElement = textarea.parentNode.getElementsByClassName("count")[0];
@@ -78,23 +79,81 @@ function updateTweetNumbering() {
 
 function exportTweets() {
     var tweetsContainer = document.getElementById("tweetsContainer");
-    var tweetDivs = tweetsContainer.getElementsByTagName("div");
+    var tweetDivs = tweetsContainer.getElementsByClassName("tweetContainer");
     var tweets = [];
     for(var i = 0; i < tweetDivs.length; i++) {
         var textarea = tweetDivs[i].getElementsByTagName("textarea")[0];
-        var imageURL = tweetDivs[i].getElementsByTagName("input")[0].value;
-        tweets.push({text: textarea.value, imageURL: imageURL});
+        var imagePreview = tweetDivs[i].getElementsByClassName("imagePreview")[0];
+        var imageName = tweetDivs[i].getElementsByClassName("imageName")[0];
+        var filename = imageName.value;
+        tweets.push({text: textarea.value, imageName: filename});
     }
     var tweetsJSON = JSON.stringify(tweets);
     var output = document.getElementById("output");
     output.textContent = tweetsJSON;
 }
 
+function downloadImage(img) {
+    var link = document.createElement('a');
+    link.href = img.src;
+    var imageName = img.parentNode.getElementsByClassName("imageName")[0];
+    link.download = imageName.value;
+    link.click();
+}
+
+
+
 function toggleRTL() {
     var body = document.body;
     var direction = body.getAttribute("dir");
     body.setAttribute("dir", direction === "ltr" ? "rtl" : "ltr");
 }
+
+function pasteImage(e, button) {
+    e.preventDefault();
+    var imagePreview = button.nextElementSibling;
+    var imageName = imagePreview.nextElementSibling;
+    navigator.clipboard.read().then(function(items) {
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].types.indexOf('image/png') > -1 || items[i].types.indexOf('image/jpeg') > -1) {
+                var blob = items[i].getType('image/png');
+                blob.then(function(b){
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imageName.value = Date.now();
+                    };
+                    reader.readAsDataURL(b);
+                });
+                break;
+            }
+        }
+    });
+}
+
+
+document.addEventListener('paste', function(e) {
+    var activeElement = document.activeElement;
+    if (activeElement.tagName.toLowerCase() === 'textarea' && activeElement.parentNode.classList.contains('tweetContainer')) {
+        var items = (e.clipboardData || window.clipboardData).items;
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf("image") !== -1) {
+                var blob = items[i].getAsFile();
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var imagePreview = activeElement.parentNode.getElementsByClassName("imagePreview")[0];
+                    var imageName = activeElement.parentNode.getElementsByClassName("imageName")[0];
+                    imagePreview.src = event.target.result;
+                    imageName.value = Date.now();
+                };
+                reader.readAsDataURL(blob);
+            }
+        }
+    }
+});
+
+
+
 </script>
 </head>
 <body dir="ltr">
