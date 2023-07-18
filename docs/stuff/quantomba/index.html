@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+
+    <main class="page-content" aria-label="Content" role="main">
+      <div class="wrapper text-right">
+        <h1 id="חישוב-קוונטי-בפועל">חישוב קוונטי בפועל</h1>
+
+<p>ידע תיאורטי על חישוב קוונטי הוא טוב ויפה, אבל האם קיימת דרך לבצע חישוב קוונטי כיום בפועל, בסיוע המחשב הביתי שלנו? התשובה חיובית, אם כי התחום עדיין בראשית דרכו. ננסה להבין כאן מה ניתן לעשות וכיצד.</p>
+
+<p>ראשית, מחשבים קוונטיים כיום הם מוצרים מורכבים ביותר שדורשים תנאי אחזקה מיוחדים ואנשי תחזוקה ייעודיים; בעתיד הנראה לעין לא נראה שמחשבים קוונטיים יהפכו למוצרים ביתיים. לכן האופן הנפוץ בימינו לגישה למחשב קוונטי הוא באמצעות <strong>שירות ענן</strong> כלשהו: המחשב הקוונטי הפיזי נמצא
+בידי חברה כל שהיא, והיא מאפשרת למשתמשים לשלוח לו פקודות דרך האינטרנט ושולחת בחזרה את התשובה. זה תהליך שלא מאפשר שליטה מלאה על המחשב, אבל בהחלט מאפשר ביצוע של חישוב ברמה שאותה ראינו, של הפעלת מעגלים קוונטיים.</p>
+
+<p>שנית, גישה למחשבים קוונטיים היא על פי רוב משאב מוגבל, כי מספרם של המחשבים הפעילים אינו גדול.
+לכן, בשלב שבו מפתחים מעגל קוונטי כלשהו ורוצים לבדוק אותו, הדבר הנוח לעשות הוא להריץ אותו תחילה על <strong>סימולטור</strong>:
+תוכנית מחשב שרצה על מחשב רגיל ומדמה את החישוב שאותו מבצע המחשב הקוונטי
+(לפעמים עד לרמה שבה ניתן להוסיף “רעשים” כדי לדמות חישוב ריאליסטי.</p>
+
+<p>אנחנו נציג כאן ספריית Qiskit של חברת IBM, שעונה על הצרכים הללו. בעזרת Qiskit ניתן:</p>
+<ol>
+  <li>ליצור מעגלים קוונטיים בעזרת שפת Python.</li>
+  <li>להריץ את המעגלים הקוונטיים על מחשבים קוונטיים אמיתיים (בכפוף לרישום לאתר של IBM, מה שניתן לביצוע ללא תשלום).</li>
+  <li>להריץ את המעגלים הקוונטיים על ידי סימולטור (הן על המחשב של המשתמש גם ללא רישום, והן על המחשבים של IBM בכפוף לרישום).</li>
+  <li>שלל יכולות נוספות.</li>
+</ol>
+
+<p>בהמשך ההסבר נניח ידע בשפת Python; גם ללא ידע כזה ניתן להבין את רוב ההמשך כי לא נתבסס על תכונות מורכבות במיוחד של השפה.</p>
+
+<p>הדרך הנוחה ביותר להתרגל לעבודה עם חבילת תוכנה היא לעשות איתה משימה קונקרטית; אנחנו נפתור תרגיל שבו מממשים את אלגוריתם דויטש-ג’וזה.</p>
+<h1 id="כיצד-משתמשים-ב-qiskit">כיצד משתמשים ב-Qiskit?</h1>
+
+<p>יש שתי דרכים עיקריות שניתן להשתמש בהן על מנת ליצור מעגלים קוונטיים ולהריץ אותם דרך המערכת של IBM:</p>
+
+<ol>
+  <li>שימוש בכלי ה-<a href="https://quantum-computing.ibm.com/composer">Composer</a> של IBM אשר מאפשר בניית מעגלים באמצעות ממשק גרפי.</li>
+  <li>שימוש בשפת התכנות Python בשילוב עם חבילת התוכנה qiskit.</li>
+</ol>
+
+<p>בעוד שהגישה הראשונה מועילה להתנסויות ובדיקות מהירות, הגישה השניה, לאחר שמתרגלים אליה, מאפשרת עבודה מורכבת ונוחה יותר.</p>
+
+<p>לא נציג כאן לעומק את העבודה עם Python ו-qiskit אלא נסתפק במעט הנדרש על מנת לפתור את התרגיל.</p>
+
+<p>לאחר התקנת Python, כדי להתקין את החבילות להן נזדקק ניתן להשתמש בפקודה</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pip</span> <span class="n">install</span> <span class="n">qiskit</span> <span class="n">qiskit</span><span class="o">-</span><span class="n">aer</span>
+</code></pre></div></div>
+
+<p>זה יתקין את החבילה הראשית (qiskit) ואת החבילה שכוללת את הסימולטור הקוונטי שבו נשתמש (qiskit-aer).</p>
+
+<p>במקום תוכנית “Hello World” סטנדרטית נכתוב תוכנית שבונה מעגל לייצור מצב שזור ומדידה שלו, ואז מריצה עליו סימולטור, ומדפיסה את המעגל ואת תוצאות הרצת הסימולטור:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">qiskit_aer</span> <span class="kn">import</span> <span class="n">Aer</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">cx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">measure_all</span><span class="p">()</span>
+
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">Aer</span><span class="p">.</span><span class="n">get_backend</span><span class="p">(</span><span class="s">'aer_simulator'</span><span class="p">)</span>
+
+<span class="n">counts</span> <span class="o">=</span> <span class="n">simulator</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">circuit</span><span class="p">).</span><span class="n">result</span><span class="p">().</span><span class="n">get_counts</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>הרצת התוכנית תניב פלט הדומה לזה:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="err">┌───┐</span>      <span class="err">░</span> <span class="err">┌─┐</span>   
+   <span class="n">q_0</span><span class="p">:</span> <span class="err">┤</span> <span class="n">H</span> <span class="err">├──■───░─┤</span><span class="n">M</span><span class="err">├───</span>
+        <span class="err">└───┘┌─┴─┐</span> <span class="err">░</span> <span class="err">└╥┘┌─┐</span>
+   <span class="n">q_1</span><span class="p">:</span> <span class="err">─────┤</span> <span class="n">X</span> <span class="err">├─░──╫─┤</span><span class="n">M</span><span class="err">├</span>
+             <span class="err">└───┘</span> <span class="err">░</span>  <span class="err">║</span> <span class="err">└╥┘</span>
+<span class="n">meas</span><span class="p">:</span> <span class="mi">2</span><span class="o">/</span><span class="err">══════════════╩══╩═</span>
+                      <span class="mi">0</span>  <span class="mi">1</span>
+<span class="p">{</span><span class="s">'11'</span><span class="p">:</span> <span class="mi">515</span><span class="p">,</span> <span class="s">'00'</span><span class="p">:</span> <span class="mi">509</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>המספרים שבפלט הם 515 ו-509 המסתכמים ל-1024 מכיוון שהפונקציה <code class="language-plaintext highlighter-rouge">run</code> שבה הסימולטור משתמש מריצה את המעגל 1024 פעמים כברירת מחדל וסופרת תוצאות (ניתן לשלוט על מספר הפעמים עם הפרמטר <code class="language-plaintext highlighter-rouge">shots</code> שמועבר לפקודה <code class="language-plaintext highlighter-rouge">run</code> אך לא יהיה בכך צורך בתרגיל).</p>
+
+<p>נראה דוגמא נוספת, שבה משתמשים בלולאה כדי להוסיף חלק מהשערים. כאן אנו בונים מעגל שמחשב את הפונקציה שהופכת את הקיוביטים השני, הרביעי והחמישי (שימו לב שהאינדקסים של הקיוביטים מתחילים ב-0) ומחברת (מודולו 2) לקיוביט השביעי את ששת הקיוביטים הראשונים.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">qiskit_aer</span> <span class="kn">import</span> <span class="n">Aer</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">x</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">x</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+    <span class="n">circuit</span><span class="p">.</span><span class="n">cx</span><span class="p">(</span><span class="n">qubit</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">measure_all</span><span class="p">()</span>
+
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">Aer</span><span class="p">.</span><span class="n">get_backend</span><span class="p">(</span><span class="s">'aer_simulator'</span><span class="p">)</span>
+
+<span class="n">counts</span> <span class="o">=</span> <span class="n">simulator</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">circuit</span><span class="p">).</span><span class="n">result</span><span class="p">().</span><span class="n">get_counts</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>הפלט של המעגל הזה הוא דטרמיניסטי:</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                                            <span class="err">░</span> <span class="err">┌─┐</span>
+   <span class="nx">q_0</span><span class="p">:</span> <span class="err">───────■────────────────────────────░─┤</span><span class="nx">M</span><span class="err">├──────────────────</span>
+        <span class="err">┌───┐</span>  <span class="err">│</span>                            <span class="err">░</span> <span class="err">└╥┘┌─┐</span>
+   <span class="nx">q_1</span><span class="p">:</span> <span class="err">┤</span> <span class="nx">X</span> <span class="err">├──┼────■───────────────────────░──╫─┤</span><span class="nx">M</span><span class="err">├───────────────</span>
+        <span class="err">└───┘</span>  <span class="err">│</span>    <span class="err">│</span>                       <span class="err">░</span>  <span class="err">║</span> <span class="err">└╥┘┌─┐</span>
+   <span class="nx">q_2</span><span class="p">:</span> <span class="err">───────┼────┼────■──────────────────░──╫──╫─┤</span><span class="nx">M</span><span class="err">├────────────</span>
+        <span class="err">┌───┐</span>  <span class="err">│</span>    <span class="err">│</span>    <span class="err">│</span>                  <span class="err">░</span>  <span class="err">║</span>  <span class="err">║</span> <span class="err">└╥┘┌─┐</span>
+   <span class="nx">q_3</span><span class="p">:</span> <span class="err">┤</span> <span class="nx">X</span> <span class="err">├──┼────┼────┼────■─────────────░──╫──╫──╫─┤</span><span class="nx">M</span><span class="err">├─────────</span>
+        <span class="err">├───┤</span>  <span class="err">│</span>    <span class="err">│</span>    <span class="err">│</span>    <span class="err">│</span>             <span class="err">░</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span> <span class="err">└╥┘┌─┐</span>
+   <span class="nx">q_4</span><span class="p">:</span> <span class="err">┤</span> <span class="nx">X</span> <span class="err">├──┼────┼────┼────┼────■────────░──╫──╫──╫──╫─┤</span><span class="nx">M</span><span class="err">├──────</span>
+        <span class="err">└───┘</span>  <span class="err">│</span>    <span class="err">│</span>    <span class="err">│</span>    <span class="err">│</span>    <span class="err">│</span>        <span class="err">░</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span> <span class="err">└╥┘┌─┐</span>
+   <span class="nx">q_5</span><span class="p">:</span> <span class="err">───────┼────┼────┼────┼────┼────■───░──╫──╫──╫──╫──╫─┤</span><span class="nx">M</span><span class="err">├───</span>
+             <span class="err">┌─┴─┐┌─┴─┐┌─┴─┐┌─┴─┐┌─┴─┐┌─┴─┐</span> <span class="err">░</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span> <span class="err">└╥┘┌─┐</span>
+   <span class="nx">q_6</span><span class="p">:</span> <span class="err">─────┤</span> <span class="nx">X</span> <span class="err">├┤</span> <span class="nx">X</span> <span class="err">├┤</span> <span class="nx">X</span> <span class="err">├┤</span> <span class="nx">X</span> <span class="err">├┤</span> <span class="nx">X</span> <span class="err">├┤</span> <span class="nx">X</span> <span class="err">├─░──╫──╫──╫──╫──╫──╫─┤</span><span class="nx">M</span><span class="err">├</span>
+             <span class="err">└───┘└───┘└───┘└───┘└───┘└───┘</span> <span class="err">░</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span>  <span class="err">║</span> <span class="err">└╥┘</span>
+<span class="nx">meas</span><span class="p">:</span> <span class="mi">7</span><span class="o">/</span><span class="err">═══════════════════════════════════════╩══╩══╩══╩══╩══╩══╩═</span>
+                                               <span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mi">3</span>  <span class="mi">4</span>  <span class="mi">5</span>  <span class="mi">6</span>
+<span class="p">{</span><span class="dl">'</span><span class="s1">1011010</span><span class="dl">'</span><span class="p">:</span> <span class="mi">1024</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>שימו לב בפרט לכך שמחרוזת הפלט <code class="language-plaintext highlighter-rouge">1011010</code> היא בסדר <strong>הפוך</strong> ממה שאולי היה ניתן לצפות: ערכו של קיוביט 0 הוא הימני ביותר, וערכו של קיוביט 6 הוא השמאלי ביותר. זה האופן שבו מתקבל הפלט ב-Qiskit.</p>
+
+<h1 id="מה-המשימה-שיש-לבצע">מה המשימה שיש לבצע?</h1>
+
+<p>מטרת התרגיל היא לממש את הפונקציות החסרות בקובץ <code class="language-plaintext highlighter-rouge">[dj.py](dj.py)</code> שקיבלתם:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="k">def</span> <span class="nf">generate_const_oracle</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="s">"""
+    Returns a circuit computing a constant function
+
+    Parameters
+    ----------
+    n: The number of of input qubits for the oracle
+
+    Returns
+    -------
+    A `QuantumCircuit` on `n+1` qubits, 
+    computing the function f(x_1,...,x_n, y) = (x_1,...,x_n, y+b)
+    where b is a random bit
+    """</span>
+
+<span class="k">def</span> <span class="nf">generate_balanced_oracle</span><span class="p">(</span><span class="n">b_str</span><span class="p">):</span>
+    <span class="s">"""
+    Returns a circuit computing a balanced function
+
+    Parameters
+    ----------
+    b_str : A string describing the balanced oracle
+
+    Returns
+    -------
+    A `QuantumCircuit` on `n+1` qubits, where the length of b_str is `n`, 
+    computing the function f(x_1,...,x_n, y) = (x_1,...,x_n, y+(-1)^a_1*x_1+...+(-1)^a_n*x_n)
+    where a_1,...,a_n are the bits given in b_str
+
+    Note: This function assums b_str is correct 
+    (i.e. a string of the characters '0' and '1', not all '0')
+    """</span>
+
+<span class="k">def</span> <span class="nf">generate_dj_circuit</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">oracle</span><span class="p">):</span>
+    <span class="s">"""
+    Returns a circuit for the Deutsch–Jozsa algorithm for n qubits
+    for the given oracle
+
+    Parameters
+    ----------
+    n: The number of of input qubits for the oracle
+    oracle: An oracle computing a function f(x_1,...,x_n, y) which can be
+    either constant or balanced.
+
+    Note: f is represented using a quantum circuit on `n+1` qubits; the last qubit is
+    used for the output.
+
+    Returns
+    -------
+    A `QuantumCircuit` on `n+1` qubits, implementing the Deutsch–Jozsa algorithm.
+    When running the circuit on a quantum computer, the expected results are either
+    '00...0' if the oracle is constant, or different if it is balanced
+    """</span>
+    
+<span class="k">def</span> <span class="nf">dj_algorithm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">oracle</span><span class="p">,</span> <span class="n">backend</span><span class="p">):</span>
+    <span class="s">"""
+    Runs the Deutsch–Jozsa algorithm on the given oracle
+    for the given oracle
+
+    Parameters
+    ----------
+    n: The number of of input qubits for the oracle
+    oracle: An oracle computing a function f(x_1,...,x_n, y) which is guaranteed
+    to be either constant or balanced
+    backend: The quantum backend (simulator/quantum computer) to run the algorithm on
+
+    Returns
+    -------
+    The string "CONSTANT" if the oracle represents a constant function,
+    and "BALANCED" if it represents a balanced function
+    """</span>
+
+<span class="k">def</span> <span class="nf">bv_algorithm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">oracle</span><span class="p">,</span> <span class="n">backend</span><span class="p">):</span>
+    <span class="s">"""
+    Runs the Bernstein–Vazirani algorithm on the given oracle
+
+    Parameters
+    ----------
+    n: The number of of input qubits for the oracle
+    oracle: An oracle computing a function f which is guaranteed to be
+    of the form f(x_1,...,x_n, y) = (x_1,...,x_n,  y+a_1x_1+...+a_nx_n)
+    backend: The quantum backend (simulator/quantum computer) to run the algorithm on
+
+    
+    Returns
+    -------
+    A list on integers [a_1, a_2,...,a_n] corresponding to the function f
+    computer by the oracle
+    """</span>
+</code></pre></div></div>
+
+<p>הסבר לגבי מה שהפונקציות אמורות לעשות:</p>
+
+<p>הפונקציה <code class="language-plaintext highlighter-rouge">generate_const_oracle</code> אמורה להחזיר <strong>מעגל קוונטי</strong> שמייצג פונקציה קבועה כפי שתוארה בקובץ המבוא המתמטי: דהיינו, פלטי המעגל זהים לקלטים למעט עבור הקלט האחרון, שלערכו מתווסף ערך קבוע כלשהו שאינו תלוי בערכי הקלט (הערך הקבוע נתון לבחירתכם ויכול להיבחר באקראי).</p>
+
+<p>הפונקציה <code class="language-plaintext highlighter-rouge">generate_balanced_oracle</code> אמורה להחזיר <strong>מעגל קוונטי</strong> שמייצג פונקציה מאוזנת שמתוארת על ידי המחרוזת <code class="language-plaintext highlighter-rouge">b_str</code>. אם אברי <code class="language-plaintext highlighter-rouge">b_str</code> הם סדרת הערכים הבינאריים <code class="language-plaintext highlighter-rouge">a_1, a_2, ..., a_n</code> אז הפונקציה אמורה להיות <code class="language-plaintext highlighter-rouge">f(x_1,...,x_n, y) = (x_1,...,x_n, y+(a_1+x_1)+...+(a_n+x_n))</code> (כדאי לבדוק מדוע היא פונקציה מאוזנת).</p>
+
+<p>הפונקציה <code class="language-plaintext highlighter-rouge">generate_dj_circuit</code> אמורה לקבל מעגל קוונטי שמייצג אורקל, ואת מספר הקיוביטים שלו <strong>לא כולל</strong> קיוביט העזר, ולהוציא כפלט מעגל אשר מממש את אלגוריתם דויטש-ג’וזה בהתאם למבנה</p>
+
+<p><img src="dj_circuit.png" alt="DJ circuit" /></p>
+
+<p>הפונקציה <code class="language-plaintext highlighter-rouge">dj_algorithm</code> אמורה להריץ את אלגוריתם דויטש-ג’וזה. היא מקבלת אורקל, את מספר הקיוביטים שלו <strong>לא כולל</strong> קיוביט העזר, ואת ה-<code class="language-plaintext highlighter-rouge">backend</code> שמטרתו להריץ את המעגל בפועל, ומטרתה להחזיר את המחרוזת <code class="language-plaintext highlighter-rouge">"CONSTANT"</code> במקרה שהאורקל מייצג פונקציה קבועה, או את המחרוזת <code class="language-plaintext highlighter-rouge">"BALANCED"</code> אם האורקל מייצג פונקציה מאוזנת.</p>
+
+<p>שימו לב לכך ש-<code class="language-plaintext highlighter-rouge">backend</code> עשוי להיות גם סימולטור וגם מחשב קוונטי אמיתי; אם תרצו להריץ על מחשב קוונטי אמיתי עיינו בהסברים שבסוף מסמך זה; אם האלגוריתם שלכם יעבוד עבור סימולטור זה טוב דיו.</p>
+
+<p>הפונקציה <code class="language-plaintext highlighter-rouge">bv_algorithm</code> אמורה להריץ את אלגוריתם ברנשטיין-וזירני. . היא מקבלת אורקל, את מספר הקיוביטים שלו <strong>לא כולל</strong> קיוביט העזר, ואת ה-<code class="language-plaintext highlighter-rouge">backend</code> שמטרתו להריץ את המעגל בפועל, ומטרתה להחזיר רשימה <code class="language-plaintext highlighter-rouge">[a_1, a_2, ... , a_n]</code> של ביטים כך שהאורקל מממש את הפונקציה</p>
+
+<p><code class="language-plaintext highlighter-rouge">f(x_1,...,x_n, y) = (x_1,...,x_n, y+a_1*x_1+...+a_n*x_n)</code></p>
+
+<h1 id="כיצד-בודקים-את-נכונות-הקוד-שלכם">כיצד בודקים את נכונות הקוד שלכם?</h1>
+
+<p>לנוחותכם, צירפנו תוכנית שמבצעת בדיקה אוטומטית לנכונות הקוד שלכם. נסביר כאן כיצד היא פועלת.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">qiskit_aer</span> <span class="kn">import</span> <span class="n">Aer</span>
+<span class="kn">from</span> <span class="nn">qiskit.quantum_info</span> <span class="kn">import</span> <span class="n">CNOTDihedral</span>
+<span class="kn">from</span> <span class="nn">qiskit.circuit.library.generalized_gates</span> <span class="kn">import</span> <span class="n">LinearFunction</span>
+<span class="kn">import</span> <span class="nn">dj</span>
+
+<span class="k">class</span> <span class="nc">TestOracles</span><span class="p">(</span><span class="n">unittest</span><span class="p">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_const_oracle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+            <span class="n">circ</span> <span class="o">=</span> <span class="n">dj</span><span class="p">.</span><span class="n">generate_const_oracle</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="n">CNOTDihedral</span><span class="p">(</span><span class="n">circ</span><span class="p">).</span><span class="n">linear</span><span class="p">[</span><span class="n">n</span><span class="p">][:</span><span class="n">n</span><span class="p">]</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">func</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_balanced_oracle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+            <span class="n">bitstring</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">choices</span><span class="p">([</span><span class="s">'0'</span><span class="p">,</span> <span class="s">'1'</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+            <span class="n">circ</span> <span class="o">=</span> <span class="n">dj</span><span class="p">.</span><span class="n">generate_balanced_oracle</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="n">CNOTDihedral</span><span class="p">(</span><span class="n">circ</span><span class="p">).</span><span class="n">linear</span><span class="p">[</span><span class="n">n</span><span class="p">][:</span><span class="n">n</span><span class="p">]</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">func</span><span class="p">),</span> <span class="n">msg</span><span class="o">=</span><span class="s">f"Failure on bitstring </span><span class="si">{</span><span class="n">bitstring</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">TestAlgorithm</span><span class="p">(</span><span class="n">unittest</span><span class="p">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_dj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">simulator</span> <span class="o">=</span> <span class="n">Aer</span><span class="p">.</span><span class="n">get_backend</span><span class="p">(</span><span class="s">'aer_simulator'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+            <span class="c1"># Constant oracle
+</span>            <span class="n">oracle</span> <span class="o">=</span> <span class="n">dj</span><span class="p">.</span><span class="n">generate_const_oracle</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">dj</span><span class="p">.</span><span class="n">dj_algorithm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">oracle</span><span class="p">,</span> <span class="n">simulator</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s">"CONSTANT"</span><span class="p">)</span>
+
+            <span class="c1"># Balanced oracle
+</span>            <span class="n">bitstring</span> <span class="o">=</span> <span class="s">""</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="p">.</span><span class="n">choices</span><span class="p">([</span><span class="s">'0'</span><span class="p">,</span> <span class="s">'1'</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+            <span class="n">oracle</span> <span class="o">=</span> <span class="n">dj</span><span class="p">.</span><span class="n">generate_balanced_oracle</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">dj</span><span class="p">.</span><span class="n">dj_algorithm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">oracle</span><span class="p">,</span> <span class="n">simulator</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s">"BALANCED"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_bv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">simulator</span> <span class="o">=</span> <span class="n">Aer</span><span class="p">.</span><span class="n">get_backend</span><span class="p">(</span><span class="s">'aer_simulator'</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="n">row</span> <span class="o">==</span> <span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">circ</span> <span class="o">=</span> <span class="n">LinearFunction</span><span class="p">(</span><span class="n">matrix</span><span class="p">).</span><span class="n">synthesize</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">dj</span><span class="p">.</span><span class="n">bv_algorithm</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">circ</span><span class="p">,</span> <span class="n">simulator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="p">.</span><span class="n">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>התוכנית מתבססת על ספריית <code class="language-plaintext highlighter-rouge">unittest</code> הסטנדרטית של פייתון. השורות</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nx">__name__</span> <span class="o">==</span> <span class="dl">'</span><span class="s1">__main__</span><span class="dl">'</span><span class="p">:</span>
+    <span class="nx">unittest</span><span class="p">.</span><span class="nx">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>בסוף הקוד משמעותן שאם הקובץ מורץ כמות שהוא, הבדיקות של <code class="language-plaintext highlighter-rouge">unittest</code> מופעלות. הפלט הצפוי מהרצה שכזו, בהנחה שמימשתם את כל הקוד שלכם בצורה תקינה, הוא</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">....</span>
+<span class="o">----------------------------------------------------------------------</span>
+<span class="nx">Ran</span> <span class="mi">4</span> <span class="nx">tests</span> <span class="k">in</span> <span class="mf">0.058</span><span class="nx">s</span>
+
+<span class="nx">OK</span>
+</code></pre></div></div>
+
+<p>כאן ארבע הנקודות שבשורה הראשונה מייצגות את ארבעת המבחנים שהספרייה <code class="language-plaintext highlighter-rouge">unittest</code> הריצה. מבחן שנכשל מופיע לא בתור נקודה אלא בתור E (אם התקבלה שגיאה) או F (אם אחת מהבדיקות שבמסגרת המבחן נכשלה).</p>
+
+<p>הקוד עצמו מחולק ל<strong>מחלקות</strong>. כל מחלקה מייצגת אוסף של מבחנים סביב נושא מסויים (בשימושים מתקדמים יותר מחלקה עשויה לכלול גם פונקציות עזר, פונקציות לאתחול וסיום שמופעלות בתחילת וסוף כל מבחן, וכדומה). בכל מחלקה הפונקציות ששמן מתחיל ב-test הן מבחנים שיופעלו אוטומטית על ידי <code class="language-plaintext highlighter-rouge">unittest</code>.</p>
+
+<p>כך מופיע בתחילת הקוד:</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">TestOracles</span><span class="p">(</span><span class="nx">unittest</span><span class="p">.</span><span class="nx">TestCase</span><span class="p">):</span>
+    <span class="nx">def</span> <span class="nx">test_const_oracle</span><span class="p">(</span><span class="nb">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="nx">n</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+            <span class="nx">circ</span> <span class="o">=</span> <span class="nx">dj</span><span class="p">.</span><span class="nx">generate_const_oracle</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+            <span class="nx">func</span> <span class="o">=</span> <span class="nx">CNOTDihedral</span><span class="p">(</span><span class="nx">circ</span><span class="p">).</span><span class="nx">linear</span><span class="p">[</span><span class="nx">n</span><span class="p">][:</span><span class="nx">n</span><span class="p">]</span>
+            <span class="nb">self</span><span class="p">.</span><span class="nx">assertTrue</span><span class="p">(</span><span class="nx">all</span><span class="p">(</span><span class="nx">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="nx">x</span> <span class="k">in</span> <span class="nx">func</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>קוד זה מגדיר את המחלקה <code class="language-plaintext highlighter-rouge">TestOracles</code> שמיועדת לבדיקת המימוש של פונקציות ייצור האורקלים. הפונקציה <code class="language-plaintext highlighter-rouge">test_const_oracle</code> בודקת שהאורקל עבור פונקציה קבועה יוצר בצורה תקינה.</p>
+
+<p>הקוד עצמו עובר על מספרי הקיוביטים מ-1 עד 10 (הפונקציה <code class="language-plaintext highlighter-rouge">range(a,b)</code> של פייתון מחזירה את כל המספרים מ-a עד b לא כולל b עצמו). לאחר מכן הקוד קורא לפונקציה שאותה עליכם לממש שמייצרת מעגל עבור האורקל, ולאחר מכן נעשה שימוש באחד מהכלים המתקדמים של Qiskit שממיר את המעגל לייצוג של הפונקציה שהוא מתאר (זה עובד רק עבור מעגלים עם מבנה מסויים מאוד; המעגל שאותו תבנו עלול להפיל את המבחן בשלב הזה, אבל פירוש הדבר הוא שקיים מימוש פשוט בהרבה מזה שבחרתם בו). לבסוף מתבצעת בדיקה שהפונקציה המחושבת היא אכן קבועה.</p>
+
+<p>אין צורך להבין את הבדיקה המתבצעת בסיום, אבל הנה הסבר למקרה הצורך: הפונקציה שאותה האורקל אמור לחשב היא</p>
+
+<p><code class="language-plaintext highlighter-rouge">f(x_1,…,x_n, y) = (x_1,…, x_n, y+b)</code></p>
+
+<p>כך ש-b קבוע. בכתיב וקטורי, אפשר לחשוב על הפונקציה בתור f(x)=x+B כך ש-B וקטור (שכולו אפסים למעט הכניסה האחרונה שהיא 0). פונקציה כזו מכונה <strong>פונקציה אפינית</strong>. היא מורכבת מפונקציה לינארית, f(x)=x, ועוד קבוע B.</p>
+
+<p>בעזרת המחלקה <code class="language-plaintext highlighter-rouge">CNOTDihedral</code> המעגל של האורקל מומר לייצוג בתור פונקציה אפינית, והחלק של <code class="language-plaintext highlighter-rouge">linear[n][:n]</code> בקוד אומר “תנו לי את החלק הלינארי של הפונקציה האפינית, כשהוא מיוצג בתור מטריצה; תנו לי את השורה האחרונה במטריצה; תנו לי את כל העמודות פרט לאחרונה בשורה הזו”. מכיוון שהפונקציה הלינארית אמורה להיות הזהות, המטריצה אמורה להיות מטריצת היחידה, ולכן כל הכניסות פרט לאחרונה אמורות להיות 0; זו הבדיקה שמתבצעת בפועל בשורה הבאה.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">def</span> <span class="nx">test_balanced_oracle</span><span class="p">(</span><span class="nb">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="nx">n</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+            <span class="nx">bitstring</span> <span class="o">=</span> <span class="dl">""</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">random</span><span class="p">.</span><span class="nx">choices</span><span class="p">([</span><span class="dl">'</span><span class="s1">0</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">],</span> <span class="nx">k</span><span class="o">=</span><span class="nx">n</span><span class="p">))</span>
+            <span class="nx">circ</span> <span class="o">=</span> <span class="nx">dj</span><span class="p">.</span><span class="nx">generate_balanced_oracle</span><span class="p">(</span><span class="nx">bitstring</span><span class="p">)</span>
+            <span class="nx">func</span> <span class="o">=</span> <span class="nx">CNOTDihedral</span><span class="p">(</span><span class="nx">circ</span><span class="p">).</span><span class="nx">linear</span><span class="p">[</span><span class="nx">n</span><span class="p">][:</span><span class="nx">n</span><span class="p">]</span>
+            <span class="nb">self</span><span class="p">.</span><span class="nx">assertFalse</span><span class="p">(</span><span class="nx">all</span><span class="p">(</span><span class="nx">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="nx">x</span> <span class="k">in</span> <span class="nx">func</span><span class="p">),</span> <span class="nx">msg</span><span class="o">=</span><span class="nx">f</span><span class="dl">"</span><span class="s2">Failure on bitstring {bitstring}</span><span class="dl">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>קטע הקוד הזה שבודק את יצירת האורקל לפונקציה מאוזנת עובד באותו האופן. הבדיקה בשורה האחרונה מוודאת שהפונקציה הנוצרת היא לינארית שאינה קבועה; פונקציה כזו בהכרח תהיה מאוזנת (פונקציות לא מאוזנות לא יהיו לינאריות ולכן כבר שלב יצירת ה-<code class="language-plaintext highlighter-rouge">CNOTDihedral</code> בשורה הקודמת ייכשל).</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">TestAlgorithm</span><span class="p">(</span><span class="nx">unittest</span><span class="p">.</span><span class="nx">TestCase</span><span class="p">):</span>
+    <span class="nx">def</span> <span class="nx">test_dj</span><span class="p">(</span><span class="nb">self</span><span class="p">):</span>
+        <span class="nx">simulator</span> <span class="o">=</span> <span class="nx">Aer</span><span class="p">.</span><span class="nx">get_backend</span><span class="p">(</span><span class="dl">'</span><span class="s1">aer_simulator</span><span class="dl">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nx">n</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+            <span class="err">#</span> <span class="nx">Constant</span> <span class="nx">oracle</span>
+            <span class="nx">oracle</span> <span class="o">=</span> <span class="nx">dj</span><span class="p">.</span><span class="nx">generate_const_oracle</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+            <span class="nx">result</span> <span class="o">=</span> <span class="nx">dj</span><span class="p">.</span><span class="nx">dj_algorithm</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">oracle</span><span class="p">,</span> <span class="nx">simulator</span><span class="p">)</span>
+            <span class="nb">self</span><span class="p">.</span><span class="nx">assertEqual</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="dl">"</span><span class="s2">CONSTANT</span><span class="dl">"</span><span class="p">)</span>
+
+            <span class="err">#</span> <span class="nx">Balanced</span> <span class="nx">oracle</span>
+            <span class="nx">bitstring</span> <span class="o">=</span> <span class="dl">""</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">random</span><span class="p">.</span><span class="nx">choices</span><span class="p">([</span><span class="dl">'</span><span class="s1">0</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">],</span> <span class="nx">k</span><span class="o">=</span><span class="nx">n</span><span class="p">))</span>
+            <span class="nx">oracle</span> <span class="o">=</span> <span class="nx">dj</span><span class="p">.</span><span class="nx">generate_balanced_oracle</span><span class="p">(</span><span class="nx">bitstring</span><span class="p">)</span>
+            <span class="nx">result</span> <span class="o">=</span> <span class="nx">dj</span><span class="p">.</span><span class="nx">dj_algorithm</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">oracle</span><span class="p">,</span> <span class="nx">simulator</span><span class="p">)</span>
+            <span class="nb">self</span><span class="p">.</span><span class="nx">assertEqual</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="dl">"</span><span class="s2">BALANCED</span><span class="dl">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>קטע הקוד הזה מתחיל את בדיקת האלגוריתמים (דויטש-ג’וזה וברנשטיין-וזירני). הבדיקה הראשונה מייצרת אורקלים קבועים/מאוזנים, מעבירה אותם לפונקציה שמממשת את דויטש-ג’וזה ובודקת שהתקבל הפלט הצפוי.</p>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">def</span> <span class="nx">test_bv</span><span class="p">(</span><span class="nb">self</span><span class="p">):</span>
+        <span class="nx">simulator</span> <span class="o">=</span> <span class="nx">Aer</span><span class="p">.</span><span class="nx">get_backend</span><span class="p">(</span><span class="dl">'</span><span class="s1">aer_simulator</span><span class="dl">'</span><span class="p">)</span>
+        <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nx">n</span> <span class="o">=</span> <span class="nx">len</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+        <span class="nx">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">row</span> <span class="o">==</span> <span class="nx">col</span> <span class="k">for</span> <span class="nx">col</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="nx">row</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="nx">col</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="nx">n</span><span class="p">):</span>
+            <span class="nx">matrix</span><span class="p">[</span><span class="nx">n</span><span class="p">][</span><span class="nx">col</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="nx">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="nx">circ</span> <span class="o">=</span> <span class="nx">LinearFunction</span><span class="p">(</span><span class="nx">matrix</span><span class="p">).</span><span class="nx">synthesize</span><span class="p">()</span>
+        <span class="nx">result</span> <span class="o">=</span> <span class="nx">dj</span><span class="p">.</span><span class="nx">bv_algorithm</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">circ</span><span class="p">,</span> <span class="nx">simulator</span><span class="p">)</span>
+        <span class="nb">self</span><span class="p">.</span><span class="nx">assertEqual</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>הבדיקה עבור ברנשטיין-וזירני מסובכת מעט יותר. ראשית הפונקציה בונה מטריצה ספציפית שמתארת את הפונקציה הלינארית f(x)=a*x (כאשר כאן * מתאר מכפלה סקלרית מעל Z_2) עבור הוקטור a הספציפי שמוגדר בקוד; אחר כך נעשה שימוש במחלקה <code class="language-plaintext highlighter-rouge">LinearFunction</code> של Qiskit כדי לבנות מעגל אשר מממש אותה, ולבסוף מורץ האלגוריתם של ברנשטיין-וזירני על המעגל הזה מתוך ציפייה לקבל חזרה את הוקטור a.</p>
+
+<h1 id="כיצד-מריצים-מעגלים-על-מחשב-קוונטי-אמיתי">כיצד מריצים מעגלים על מחשב קוונטי אמיתי?</h1>
+
+<p>ניתן להירשם בחינם לשירות <a href="https://quantum-computing.ibm.com/">IBM Quantum</a> שמאפשר גישה למחשבים קוונטיים וממשק גרפי עבור בניית מעגלים (שלא נשתמש בו כאן).</p>
+
+<p>לאחר הרשמה וכניסה ללוח הבקרה, ניתן להעתיק את ה-API Token שלכם:</p>
+
+<p><img src="api_token.png" alt="API token" /></p>
+
+<p>ניתן לעשות עם ה-Token אחד משניים: להעביר אותו במפורש בכל הרצה שבה ניגשים למחשבים הקוונטיים של IBM, או לשמור אותו על המחשב ולאפשר לקוד לגשת אליו אוטומטית. כדי לשמור את ה-Token על המחשב הריצו את קטע הקוד הבא:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">IBMQ</span>
+<span class="n">IBMQ</span><span class="p">.</span><span class="n">save_account</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s">"&lt;MY TOKEN&gt;"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>כמובן, תוך החלפת <code class="language-plaintext highlighter-rouge">&lt;MY TOKEN&gt;</code> בערכו האמיתי של ה-Token שקיבלתם.</p>
+
+<p>כעת, על מנת לגשת למחשב קוונטי של IBM ניתן לבצע את הדבר הבא:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">IBMQ</span><span class="p">,</span> <span class="n">transpile</span>
+<span class="kn">from</span> <span class="nn">qiskit.providers.ibmq</span> <span class="kn">import</span> <span class="n">least_busy</span>
+
+<span class="n">IBMQ</span><span class="p">.</span><span class="n">load_account</span><span class="p">()</span>
+<span class="n">provider</span> <span class="o">=</span> <span class="n">IBMQ</span><span class="p">.</span><span class="n">get_provider</span><span class="p">(</span><span class="n">hub</span><span class="o">=</span><span class="s">'ibm-q'</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s">'open'</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s">'main'</span><span class="p">)</span>
+<span class="n">backend</span> <span class="o">=</span> <span class="n">least_busy</span><span class="p">(</span><span class="n">provider</span><span class="p">.</span><span class="n">backends</span><span class="p">(</span><span class="n">simulator</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">min_num_qubits</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>קוד זה מתחבר לשרת, משיג <code class="language-plaintext highlighter-rouge">provider</code> שהוא רכיב התוכנה שנותן גישה לאחד מהמחשבים הקוונטיים, ובקוד הנוכחי משמש לקבלת גישה למחשב קוונטי <code class="language-plaintext highlighter-rouge">backend</code> שהוא הפנוי ביותר כרגע (קיימות דרכים אחרות לגשת למחשבים, למשל ישירות על פי שם המחשב המבוקש).</p>
+
+<p>אם ה-Token לא נשמר על המחשב, ההבדל היחיד הוא בשורות</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">IBMQ</span><span class="p">.</span><span class="n">load_account</span><span class="p">()</span>
+<span class="n">provider</span> <span class="o">=</span> <span class="n">IBMQ</span><span class="p">.</span><span class="n">get_provider</span><span class="p">(</span><span class="n">hub</span><span class="o">=</span><span class="s">'ibm-q'</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s">'open'</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s">'main'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>שמוחלפת ב-</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">provider</span> <span class="o">=</span> <span class="n">IBMQ</span><span class="p">.</span><span class="n">enable_account</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s">"&lt;MY TOKEN&gt;"</span><span class="p">,</span> <span class="n">hub</span><span class="o">=</span><span class="s">'ibm-q'</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s">'open'</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s">'main'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>לאחר מכן ניתן להשתמש ב-<code class="language-plaintext highlighter-rouge">backend</code> על מנת להריץ מעגלים בדיוק כפי שזה בוצע עם הסימולטור, למעט הבדל אחד אבל קריטי: בניגוד לסימולטור, המחשבים הקוונטיים מסוגלים להתמודד רק עם מעגלים שבנויים מסט ספציפי של שערים ועם מגבלות על זוגות הקיוביטים שניתן לבצע עליהם פעולת CX. על מנת להפוך את האספקט הזה לשקוף למשתמש, ניתן לבצע פעולה שנקראת <strong>טרנספילציה</strong> שממירה את המעגל הקוונטי של המשתמש במעגל קוונטי שקול שניתן להריץ על מחשב ספציפי (בדומה לפעולת קומפליציה).</p>
+
+<p>מכיוון שלמחשבים שונים דרישות שונות, פקודת הטרנספילציה מקבלת כקלט גם את המעגלים שרוצים להריץ, וגם את ה-<code class="language-plaintext highlighter-rouge">backend</code> שעליו מתכוונים להריץ.</p>
+
+<p>נמחיש זאת עם קובץ הדוגמא שאיתו התחלנו, בגרסה שניתן להריץ על מחשב קוונטי:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">IBMQ</span><span class="p">,</span> <span class="n">transpile</span>
+<span class="kn">from</span> <span class="nn">qiskit.providers.ibmq</span> <span class="kn">import</span> <span class="n">least_busy</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">cx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit</span><span class="p">.</span><span class="n">measure_all</span><span class="p">()</span>
+
+<span class="n">IBMQ</span><span class="p">.</span><span class="n">load_account</span><span class="p">()</span>
+<span class="n">provider</span> <span class="o">=</span> <span class="n">IBMQ</span><span class="p">.</span><span class="n">get_provider</span><span class="p">(</span><span class="n">hub</span><span class="o">=</span><span class="s">'ibm-q'</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s">'open'</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s">'main'</span><span class="p">)</span>
+<span class="n">backend</span> <span class="o">=</span> <span class="n">least_busy</span><span class="p">(</span><span class="n">provider</span><span class="p">.</span><span class="n">backends</span><span class="p">(</span><span class="n">simulator</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">min_num_qubits</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">transpile</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">backend</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">circuit</span><span class="p">).</span><span class="n">result</span><span class="p">().</span><span class="n">get_counts</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>תוצאת הרצה זו היא</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">global</span> <span class="n">phase</span><span class="p">:</span> <span class="n">π</span><span class="o">/</span><span class="mi">4</span>
+               <span class="err">┌─────────┐┌────┐┌─────────┐</span>      <span class="err">░</span> <span class="err">┌─┐</span>
+      <span class="n">q_0</span> <span class="o">-&gt;</span> <span class="mi">0</span> <span class="err">┤</span> <span class="n">Rz</span><span class="p">(</span><span class="n">π</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="err">├┤</span> <span class="err">√</span><span class="n">X</span> <span class="err">├┤</span> <span class="n">Rz</span><span class="p">(</span><span class="n">π</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="err">├──■───░─┤</span><span class="n">M</span><span class="err">├───</span>
+               <span class="err">└─────────┘└────┘└─────────┘┌─┴─┐</span> <span class="err">░</span> <span class="err">└╥┘┌─┐</span>
+      <span class="n">q_1</span> <span class="o">-&gt;</span> <span class="mi">1</span> <span class="err">────────────────────────────┤</span> <span class="n">X</span> <span class="err">├─░──╫─┤</span><span class="n">M</span><span class="err">├</span>
+                                           <span class="err">└───┘</span> <span class="err">░</span>  <span class="err">║</span> <span class="err">└╥┘</span>
+<span class="n">ancilla_0</span> <span class="o">-&gt;</span> <span class="mi">2</span> <span class="err">─────────────────────────────────────╫──╫─</span>
+                                                    <span class="err">║</span>  <span class="err">║</span>
+<span class="n">ancilla_1</span> <span class="o">-&gt;</span> <span class="mi">3</span> <span class="err">─────────────────────────────────────╫──╫─</span>
+                                                    <span class="err">║</span>  <span class="err">║</span>
+<span class="n">ancilla_2</span> <span class="o">-&gt;</span> <span class="mi">4</span> <span class="err">─────────────────────────────────────╫──╫─</span>
+                                                    <span class="err">║</span>  <span class="err">║</span>
+       <span class="n">meas</span><span class="p">:</span> <span class="mi">2</span><span class="o">/</span><span class="err">═════════════════════════════════════╩══╩═</span>
+                                                    <span class="mi">0</span>  <span class="mi">1</span>
+<span class="p">{</span><span class="s">'00'</span><span class="p">:</span> <span class="mi">1895</span><span class="p">,</span> <span class="s">'01'</span><span class="p">:</span> <span class="mi">83</span><span class="p">,</span> <span class="s">'10'</span><span class="p">:</span> <span class="mi">94</span><span class="p">,</span> <span class="s">'11'</span><span class="p">:</span> <span class="mi">1928</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>כפי שניתן לראות, המעגל השתנה בצורה מוזרה, ובנוסף לכך תוצאות המדידה הן שונות, גם במספרן וגם בכך שהופיעו התוצאות “01” ו”10” שלא היו אמורות להתקבל כלל. הסיבה שבגללה הן מופיעות היא קיום <strong>רעשים קוונטיים</strong> שמקלקלים את תהליך החישוב; עבור המעגלים שלנו האפקט זניח למדי אבל עבור מעגלים גדולים הוא לעתים קרובות הרסני - זה המכשול המרכזי שעומד בימינו בפני חישוב קוונטי.</p>
+
+<p><strong>תרגיל אתגר:</strong> בדקו כי האלגוריתמים שמימשתם ממשיכים לעבוד גם כאשר הם מורצים על מחשב קוונטי אמיתי, למרות הרעשים; הדבר עשוי להצריך עיבוד נוסף של התוצאות שקיבלתם.</p>
+
+      </div>
+    </main>
+  </body>
+
+</html>
