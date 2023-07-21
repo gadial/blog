@@ -4,12 +4,15 @@ const wordInput = document.querySelector('#wordInput');
 const wordList = document.querySelector('#wordList');
 const infoMessage = document.querySelector('#infoMessage');
 let dictionary;
+let pangrams;
+let acceptedWords;
 
 const MESSAGES = {
     "key_not_in_hexagons": "ניתן להשתמש רק באותיות שמופיעות במשושים",
     "missing_middle_word": "האות שבמשושה האמצעי חייבת להיות חלק מהמילה",
     "word_not_in_dict": "המילה לא מופיעה במילון שאיתו עובד המשחק",
     "word_added": "יפה מאוד! המילה התווספה לרשימה",
+    "word_already_accepted": "כבר מצאת את המילה הזו"
 }
 
 function convertLetter(letter) {
@@ -106,38 +109,50 @@ function msg(m = ""){
 }
 function initGame(seed) {
     // Seeded random number generator
-    function seededRandom() {
-        let x = Math.sin(seed++) * 10000;
-        return x - Math.floor(x);
+    function seedRandom(seed) {
+        const a = 16807; // multiplier
+        const m = 2147483647; // 2**31 - 1
+        seed = seed * a % m;
+        return seed / m;
     }
-
-    // Hebrew letters
-    let letters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
-
+ 
+    // Shuffle the pangrams array
+    let randomIndex = Math.floor(seedRandom(seed) * pangrams.length);
+    let randomElement = pangrams[randomIndex];
+    let uniqueLetters = new Set(randomElement);
+    let letters = Array.from(uniqueLetters).join('');    
     // Shuffle the letters array
     for (let i = letters.length - 1; i > 0; i--) {
-        const j = Math.floor(seededRandom() * (i + 1));
+        const j = Math.floor(seedRandom(seed) * (i + 1));
         [letters[i], letters[j]] = [letters[j], letters[i]];
     }
-
     // Set the letters to the hexagons
     let hexagons = document.getElementsByClassName("hexagon");
     for(let i=0; i<hexagons.length; i++) {
-        hexagons[i].innerText = letters[i];
+        letter = letters[i];
+        if (regularForm[letter]) {
+            letter = regularForm[letter];
+        }
+        hexagons[i].innerText = letter;
     }
+    acceptedWords = [];
 }
 
-// Get today's date and generate a seed
-let today = new Date();
-let seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
-
-// Initialize the game with the seed
-initGame(seed);
-
-// Load the dictionary from the file you will supply
 fetch('dictionary.json')
   .then(response => response.json())
   .then(data => dictionary = data);
+
+// Get today's date and generate a seed
+let today = new Date();
+seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+// Initialize the game with the seed
+fetch('pangrams.json')
+  .then(response => response.json())
+  .then(data => {
+    pangrams = data;
+    initGame(seed);
+});
+
 
 // Add click event listeners to the hexagons
 hexagons.forEach(hexagon => {
@@ -150,7 +165,6 @@ hexagons.forEach(hexagon => {
 document.addEventListener('keydown', event => {
     const hexagonLetters = [...hexagons].map(h => h.textContent);
     const key = convertLetter(event.key);
-    console.log(key);
     // If the key is a letter in the hexagons, add it to the word input
     if (hexagonLetters.includes(key)) {
       wordInput.value = convertToFinalForm(wordInput.value + key);
@@ -178,6 +192,10 @@ document.querySelector('#submit').addEventListener('click', checkWord);
 
 function checkWord() {
   let word = wordInput.value;
+  if (acceptedWords.includes(word)) {
+    msg('word_already_accepted');
+    return;
+  }
   let letters = Array.from(new Set(word)); // Ensure no repeated letters
   
   // Check that each letter is in the hexagons
@@ -207,7 +225,7 @@ function checkWord() {
   let listItem = document.createElement('li');
   listItem.textContent = word;
   wordList.appendChild(listItem);
-
+  acceptedWords.push(word);
   wordInput.value = '';
   msg('word_added');
 }
