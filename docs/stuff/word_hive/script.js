@@ -170,6 +170,9 @@ document.addEventListener('keydown', event => {
     }
   });
 
+document.getElementById("clear").addEventListener("click", function() {
+    wordInput.value = '';
+});
 
 document.querySelector('#submit').addEventListener('click', checkWord);
 
