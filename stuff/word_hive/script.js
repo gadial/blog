@@ -143,7 +143,7 @@ fetch('dictionary.json')
 hexagons.forEach(hexagon => {
     hexagon.addEventListener('click', event => {
         // Add the clicked hexagon's letter to the word input
-        wordInput.value += event.target.textContent;
+        wordInput.value = convertToFinalForm(wordInput.value + event.target.textContent);
     });
 });
 
