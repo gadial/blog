@@ -1,11 +1,33 @@
 const hexagons = document.querySelectorAll('.hexagon');
 const centerHexagon = document.querySelector('#center');
 const wordInput = document.querySelector('#wordInput');
+const seedInput = document.querySelector('#seedInput');
 const wordList = document.querySelector('#wordList');
 const infoMessage = document.querySelector('#infoMessage');
+const submitButton = document.querySelector('#submit');
 let dictionary;
 let pangrams;
 let acceptedWords;
+
+class SeededRNG {
+    constructor(seed = 1) {
+      this.m = 0x80000000; // 2**31;
+      this.a = 1103515245;
+      this.c = 12345;
+  
+      this.state = seed;
+    }
+  
+    nextInt() {
+      this.state = (this.a * this.state + this.c) % this.m;
+      return this.state;
+    }
+  
+    nextFloat() {
+      // returns in range [0,1]
+      return this.nextInt() / (this.m - 1);
+    }
+  }
 
 const MESSAGES = {
     "key_not_in_hexagons": "ניתן להשתמש רק באותיות שמופיעות במשושים",
@@ -109,21 +131,16 @@ function msg(m = ""){
 }
 function initGame(seed) {
     // Seeded random number generator
-    function seedRandom(seed) {
-        const a = 16807; // multiplier
-        const m = 2147483647; // 2**31 - 1
-        seed = seed * a % m;
-        return seed / m;
-    }
+    let rng = new SeededRNG(seed);
  
     // Shuffle the pangrams array
-    let randomIndex = Math.floor(seedRandom(seed) * pangrams.length);
+    let randomIndex = Math.floor(rng.nextFloat() * pangrams.length);
     let randomElement = pangrams[randomIndex];
     let uniqueLetters = new Set(randomElement);
     let letters = Array.from(uniqueLetters).join('');    
     // Shuffle the letters array
     for (let i = letters.length - 1; i > 0; i--) {
-        const j = Math.floor(seedRandom(seed) * (i + 1));
+        const j = Math.floor(rng.nextFloat() * (i + 1));
         [letters[i], letters[j]] = [letters[j], letters[i]];
     }
     // Set the letters to the hexagons
@@ -136,20 +153,23 @@ function initGame(seed) {
         hexagons[i].innerText = letter;
     }
     acceptedWords = [];
+    seedInput.value = seed;
+    wordList.innerHTML = "";
 }
 
 fetch('dictionary.json')
   .then(response => response.json())
   .then(data => dictionary = data);
 
-// Get today's date and generate a seed
-let today = new Date();
-seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
-// Initialize the game with the seed
 fetch('pangrams.json')
   .then(response => response.json())
   .then(data => {
     pangrams = data;
+    // Get today's date and generate a seed
+    let today = new Date();
+    seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+    console.log(seed);
+    // Initialize the game with the seed
     initGame(seed);
 });
 
@@ -163,6 +183,9 @@ hexagons.forEach(hexagon => {
 });
 
 document.addEventListener('keydown', event => {
+    if (document.activeElement === seedInput){
+        return;
+    }
     const hexagonLetters = [...hexagons].map(h => h.textContent);
     const key = convertLetter(event.key);
     // If the key is a letter in the hexagons, add it to the word input
@@ -188,7 +211,7 @@ document.getElementById("clear").addEventListener("click", function() {
     wordInput.value = '';
 });
 
-document.querySelector('#submit').addEventListener('click', checkWord);
+submitButton.addEventListener('click', checkWord);
 
 function checkWord() {
   let word = wordInput.value;
@@ -224,8 +247,18 @@ function checkWord() {
   // If the word passes all checks, add it to the list and clear the input
   let listItem = document.createElement('li');
   listItem.textContent = word;
+
   wordList.appendChild(listItem);
+  // scroll to bottom of list
+  wordList.scrollTop = wordList.scrollHeight;
+
   acceptedWords.push(word);
   wordInput.value = '';
   msg('word_added');
 }
+
+document.querySelector('#newGame').addEventListener('click', () => {
+    submitButton.focus();
+    let seed = seedInput.value;
+    initGame(seed);
+});
