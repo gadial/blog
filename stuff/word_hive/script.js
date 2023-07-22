@@ -224,7 +224,11 @@ function checkWord() {
   // If the word passes all checks, add it to the list and clear the input
   let listItem = document.createElement('li');
   listItem.textContent = word;
+  
   wordList.appendChild(listItem);
+  // scroll to bottom of list
+  wordList.scrollTop = wordList.scrollHeight;
+
   acceptedWords.push(word);
   wordInput.value = '';
   msg('word_added');
