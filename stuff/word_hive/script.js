@@ -36,7 +36,8 @@ const MESSAGES = {
     "missing_middle_word": "האות שבמשושה האמצעי חייבת להיות חלק מהמילה",
     "word_not_in_dict": "המילה לא מופיעה במילון שאיתו עובד המשחק",
     "word_added": "יפה מאוד! המילה התווספה לרשימה",
-    "word_already_accepted": "כבר מצאת את המילה הזו"
+    "word_already_accepted": "כבר מצאת את המילה הזו",
+    "pangram_added": "כל הכבוד! מצאת פנגרמה!"
 }
 
 function convertLetter(letter) {
@@ -268,8 +269,22 @@ function checkWord() {
   acceptedWords.push(word);
   wordInput.value = '';
   updateWordsFound(wordsFound + 1);
-  updateScore(score + word.length - 1);
-  msg('word_added');
+   // Get unique letters from hexagons
+   const gameLetters = Array.from(new Set([...hexagons].map(h => h.textContent)));
+
+   // Ensure no repeated letters in the word
+   let wordLetters = Array.from(new Set(word.split(''))).map(letter => regularForm[letter] || letter);
+ 
+   // Check if the word contains all game letters
+  const containsAllLetters = gameLetters.every(letter => wordLetters.includes(letter));
+ 
+  if (containsAllLetters) {
+    updateScore(5 + score + word.length - 1);
+    msg('pangram_added');
+  } else {
+    updateScore(score + word.length - 1);
+    msg('word_added');
+  }
 }
 
 document.querySelector('#newGame').addEventListener('click', () => {
