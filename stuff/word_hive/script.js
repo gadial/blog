@@ -8,6 +8,8 @@ const submitButton = document.querySelector('#submit');
 let dictionary;
 let pangrams;
 let acceptedWords;
+let score;
+let wordsFound;
 
 class SeededRNG {
     constructor(seed = 1) {
@@ -119,6 +121,15 @@ function convertToFinalForm(word) {
     return newWord;
 }
 
+function updateScore(newScore) {
+    score = newScore;
+    document.getElementById('scoreCounter').innerText = "ניקוד: " + score;
+}
+
+function updateWordsFound(newWordsFound) {
+    wordsFound = newWordsFound;
+    document.getElementById('wordCounter').innerText = "מספר מילים שנמצאו: " + wordsFound;
+}
 
 function msg(m = ""){
     if (m === ""){
@@ -155,6 +166,8 @@ function initGame(seed) {
     acceptedWords = [];
     seedInput.value = seed;
     wordList.innerHTML = "";
+    updateScore(0);
+    updateWordsFound(0);
 }
 
 fetch('dictionary.json')
@@ -254,6 +267,8 @@ function checkWord() {
 
   acceptedWords.push(word);
   wordInput.value = '';
+  updateWordsFound(wordsFound + 1);
+  updateScore(score + word.length - 1);
   msg('word_added');
 }
 
