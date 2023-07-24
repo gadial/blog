@@ -247,7 +247,8 @@ function checkWord() {
   }
 
   // Check that the center letter is in the word
-  if (!word.includes(centerHexagon.textContent)) {
+  let centerLetter = centerHexagon.textContent
+  if (!word.includes(centerLetter) && (!finalForm[centerLetter] || !word.includes(finalForm[centerLetter]))) {
     msg('missing_middle_word');
     return;
   }
