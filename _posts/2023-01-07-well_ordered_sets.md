@@ -5,7 +5,7 @@ categories:
   - תורת הקבוצות
 tags:
   - קבוצות סדורות היטב
-image: "main/set_theory.png"
+image: "/assets/img/main/set_theory.png"
 ---
 
 

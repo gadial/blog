@@ -5,7 +5,7 @@ categories:
   - תורת הקבוצות
 tags:
   - השערת הרצף
-image: "main/forcing.png"
+image: "/assets/img/main/forcing.png"
 ---
 
 
