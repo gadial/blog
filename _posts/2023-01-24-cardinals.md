@@ -5,6 +5,7 @@ categories:
   - תורת הקבוצות
 tags:
   - עוצמות
+image: "main/set_theory.png"
 ---
 
 

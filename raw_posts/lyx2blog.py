@@ -29,8 +29,10 @@ TAGS = {
     "paragraph\*{}": r'<h4>\1</h4>',
     "L{}": r'\1',
     'textquotedblright ': '"',
+    'textquotedblright{}': '"',
     'textquotedblright': '"',
     'textquotedblleft ': '"',
+    'textquotedblleft': '"',
     'textquotedblleft{}': '"',
     'textquotedbl ' : '"',
     'textquotedbl{}': '"'
