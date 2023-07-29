@@ -38,7 +38,7 @@ TAGS = {
     'textquotedbl{}': '"'
 }
 
-front_matter_regex = r'\\title{(.*)}\n\\maketitle\n\\begin{description}\n\\item \[{קטגוריות:}\] (.*)\n\\item \[{תגים:}\] (.*)\n\\item \[{מזהה:}\] \\L{(.*)}\n\\end{description}'
+front_matter_regex = r'\\title{(.*\n?.*)}\n\\maketitle\n\\begin{description}\n\\item \[{קטגוריות:}\] (.*)\n\\item \[{תגים:}\] (.*)\n\\item \[{מזהה:}\] \\L{(.*)}\n\\end{description}'
 
 def re_search(regex, s, *params):
     """Assumes re has one capture group; returns it or None"""
