@@ -35,8 +35,8 @@ title: סיפורונובמבר - הסיפורים
   {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
   {%- for sipuron in site.data.sipuron.year_2023.stories -%}
     <li>
-    <h3 class="author">{{ sipuron.author }}</h3>
-    <h4 class="keyword">{{ sipuron.keyword }}</h4>
+    <h2 class="author">{{ sipuron.author }}</h2>
+    <h2 class="keyword">{{ sipuron.keyword }}</h2>
     <p class="story" style="white-space: pre-line;">{{ sipuron.story }}</p>
     <div hidden class="length">{{ sipuron.length }}</div>
     </li>
