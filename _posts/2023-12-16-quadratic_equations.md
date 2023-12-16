@@ -207,7 +207,7 @@ tags:
 
 ואפשר לפצל את השורש לפעולה על המונה ועל המכנה ולקבל
 
-{% equation %}\sqrt{\frac{b^{2}-4c}{4}}=\frac{\sqrt{b^{2}-4c}}{4}=\frac{\sqrt{b^{2}-4c}}{2}{% endequation %}
+{% equation %}\sqrt{\frac{b^{2}-4c}{4}}=\frac{\sqrt{b^{2}-4c}}{\sqrt{4}}=\frac{\sqrt{b^{2}-4c}}{2}{% endequation %}
 
 ועכשיו נותרנו עם
 
