@@ -205,7 +205,7 @@ tags:
 
 <h2>מתי העניינים לא כל כך נחמדים?</h2>
 
-מה שעשיתי עד עכשיו כלל תיאור של שלל טורי טיילור עם מעט מאוד הצדקה למה שעשיתי. זה חשוב בשביל שיהיה לנו כיף, אבל מאוד מסוכן באופן כללי, ולכן בפוסט הבא אני הולך לתת את המשפטים הפורמליים שמצדיקים את הדברים שעשיתי עד כה. לפני שנגיע לזה, אני רוצה בפוסט הזה לראות איך דברים יכולים להישבר: הדוגמא הקלאסית היא פונקציה {% equation %}f\left(x\right)=x{% endequation %} שגזירה אינסוף פעמים ב-{% equation %}x=0{% endequation %} ולכן אפשר להגדיר את הטור {% equation %}\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}{% endequation %}; ויותר מזה, הטור הזה גם יתכנס לכל {% equation %}x\in\mathbb{R}{% endequation %}, אבל <strong>לא יתקיים</strong> ש-{% equation %}f\left(x\right)=\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}{% endequation %} עבור {% equation %}x\ne0{% endequation %}.
+מה שעשיתי עד עכשיו כלל תיאור של שלל טורי טיילור עם מעט מאוד הצדקה למה שעשיתי. זה חשוב בשביל שיהיה לנו כיף, אבל מאוד מסוכן באופן כללי, ולכן בפוסט הבא אני הולך לתת את המשפטים הפורמליים שמצדיקים את הדברים שעשיתי עד כה. לפני שנגיע לזה, אני רוצה בפוסט הזה לראות איך דברים יכולים להישבר: הדוגמא הקלאסית היא פונקציה {% equation %}f\left(x\right){% endequation %} שגזירה אינסוף פעמים ב-{% equation %}x=0{% endequation %} ולכן אפשר להגדיר את הטור {% equation %}\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}{% endequation %}; ויותר מזה, הטור הזה גם יתכנס לכל {% equation %}x\in\mathbb{R}{% endequation %}, אבל <strong>לא יתקיים</strong> ש-{% equation %}f\left(x\right)=\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}{% endequation %} עבור {% equation %}x\ne0{% endequation %}.
 
 הפונקציה הרלוונטית היא
 
