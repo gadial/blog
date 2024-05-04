@@ -72,7 +72,7 @@ social_media_share: true
 
 כאן את {% equation %}2^{k}-1{% endequation %} השארתי בתור סכום כי יש בו בסך הכל שני איברים, ועכשיו אנחנו יכולים <strong>להרגיש</strong> מה הולך פה: כשאנו מציבים בנוסחה, שני הרכיבים של {% equation %}n=\left(2^{k}-1\right)2^{k-1}{% endequation %} "מחליפים תפקיד" - הרכיב הראשוני, ה-{% equation %}2^{k}-1{% endequation %}, הופך להיות פשוט חזקה של 2, בזמן שהרכיב השני, ה-{% equation %}2^{k-1}{% endequation %} מגדיל את המעריך שלו ב-1 ואז מפחיתים ממנו 1 כך שמקבלים חזרה את {% equation %}2^{k}-1{% endequation %}. מאוד אלגנטי לטעמי.
 
-נעבור עכשיו לכיוון השני, של אוקלידס: אני אקח מספר {% equation %}n{% endequation %} זוגי כלשהו שמקיים {% equation %}\sigma\left(n\right)=2n{% endequation %} וארצה להוכיח שהוא מהצורה {% equation %}n=\left(2^{k}-1\right)2^{k-1}{% endequation %}. איך נעשה את זה?
+נעבור עכשיו לכיוון השני, של אוילר: אני אקח מספר {% equation %}n{% endequation %} זוגי כלשהו שמקיים {% equation %}\sigma\left(n\right)=2n{% endequation %} וארצה להוכיח שהוא מהצורה {% equation %}n=\left(2^{k}-1\right)2^{k-1}{% endequation %}. איך נעשה את זה?
 
 ראשית כל, אמרנו ש-{% equation %}n{% endequation %} הוא זוגי. אז אפשר לכתוב אותו בתור חזקה גדולה מ-0 של 2 כפול מספר אי זוגי. הבה ונעשה זאת: {% equation %}n=2^{k-1}m{% endequation %}, כאשר {% equation %}k\ge2{% endequation %}. בעצם כל מה שנשאר לנו להראות הוא ש-{% equation %}m=2^{k}-1{% endequation %} ושהוא ראשוני.
 
