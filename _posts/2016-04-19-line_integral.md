@@ -48,25 +48,15 @@ tags:
 
 כאשר ערך מוחלט כאן מייצג את הערך המוחלט הרגיל בדו-ממד: {% equation %}\left|\left(x,y\right)\right|=\sqrt{x^{2}+y^{2}}{% endequation %}.
 
-האינטואיציה היא שהקו הישר בין שתי נקודות הוא בעל האורך הקטן ביותר מבין כל העקומות שמחברות אותם, ולכן הסכום הזה תמיד קטן מאורך העקומה האמיתי, והוא שואף אליו ככל שהחלוקה קטנה יותר. לכן אפשר לקחת את החסם העליון של כל הסכום מהצורה שלעיל ולהגדיר את אורך העקומה להיות שווה לה.
+האינטואיציה היא שהקו הישר בין שתי נקודות הוא בעל האורך הקטן ביותר מבין כל העקומות שמחברות אותם, ולכן הסכום הזה תמיד קטן מאורך העקומה האמיתי, והוא שואף אליו ככל שהחלוקה קטנה יותר. לכן אפשר לקחת את החסם העליון של כל הסכום מהצורה שלעיל ולהגדיר את אורך העקומה להיות שווה לו.
 
-אצלנו, כזכור, העקומה היא <strong>חלקה</strong>. זה מאפשר לנו לעשות משהו יותר נחמד. בואו נזכור את משפט הערך הממוצע של לגראנז': אם {% equation %}f{% endequation %} רציפה על {% equation %}\left[a,b\right]{% endequation %} וגזירה על {% equation %}\left(a,b\right){% endequation %} אז קיימת {% equation %}c\in\left(a,b\right){% endequation %} כך ש-{% equation %}f\left(b\right)-f\left(a\right)=f^{\prime}\left(c\right)\left(b-a\right){% endequation %}. אם נפעיל את זה על קירוב העקומה שלנו, נקבל
-
-{% equation %}\sum_{i=1}^{N-1}\left|\gamma^{\prime}\left(c_{i}\right)\right|\Delta t_{i}{% endequation %}
-
-כאשר {% equation %}\Delta t_{i}=t_{i+1}-t_{i}{% endequation %} ו-{% equation %}t_{i}&lt;c_{i}&lt;t_{i+1}{% endequation %}.
-
-הדבר הזה הוא <strong>סכום רימן</strong> של האינטגרל של {% equation %}\gamma^{\prime}{% endequation %} על הקטע {% equation %}\left[a,b\right]{% endequation %}, אינטגרל שקיים בזכות ההנחה שלנו ש-{% equation %}\gamma^{\prime}{% endequation %} רציפה (זהו המשפט היסודי של החדו"א). לכן אם משאיפים את גודל החלוקות ל-0, מה שנותן לנו את אורך העקומה, מקבלים גם בדיוק את האינטגרל {% equation %}\int_{a}^{b}\left|\gamma^{\prime}\left(t\right)\right|dt{% endequation %}. אם כן, מצאנו דרך נוחה <strong>לחשב</strong> את האורך של עקומה חלוקה באמצעות אינטגרל רימן רגיל, ואני מקווה שנחה דעתנו שהדרך הזו מסתדרת עם ההגדרה המתבקשת ביותר לאורך של עקומה.
+זו האינטואיציה; הפורמליזם מסובך יותר ובפוסט הזה תיארתי אותו במקור בצורה כמעט שגויה - רק שנים אחר כך תיקנתי את העניין <a href="https://gadial.net/2024/06/15/curves_and_line_integrals/">בפוסט ייעודי</a>. השורה התחתונה היא שמקבלים בדיוק את האינטגרל {% equation %}\int_{a}^{b}\left|\gamma^{\prime}\left(t\right)\right|dt{% endequation %}. אם כן, מצאנו דרך נוחה <strong>לחשב</strong> את האורך של עקומה חלוקה באמצעות אינטגרל רימן רגיל, ואני מקווה שנחה דעתנו שהדרך הזו מסתדרת עם ההגדרה המתבקשת ביותר לאורך של עקומה.
 
 כעת נחזור לאינטגרל קווי. שם הניתוח המדויק מסובך קצת יותר, כי הסכום הטיפוסי שלנו נראה כך:
 
-{% equation %}\sum_{i=1}^{N-1}f\left(\gamma\left(c_{i}\right)\right)\left|\gamma\left(t_{i+1}\right)-\gamma\left(t_{i}\right)\right|{% endequation %}
+{% equation %}\sum_{i=1}^{N-1}f\left(\gamma\left(c_{i}\right)\right)\Delta\gamma_{i}{% endequation %}
 
-וזאת אחרי שכבר ביצענו את הפישוט שעכשיו נראה מתבקש - במקום לכפול באורך העקומה בין {% equation %}\gamma\left(t_{i}\right){% endequation %} ו-{% equation %}\gamma\left(t_{i+1}\right){% endequation %}, אנחנו כופלים באורך הקטע שמחבר את שתי הנקודות הללו. הבעיה היא שאם ננסה להשתמש במשפט ערך הביניים כמו קודם נקבל
-
-{% equation %}\sum_{i=1}^{N-1}f\left(\gamma\left(c_{i}\right)\right)\left|\gamma^{\prime}\left(d_{i}\right)\right|{% endequation %}
-
-כך ש-{% equation %}c_{i},d_{i}{% endequation %} הן נקודות ביניים, אבל לא בהכרח <strong>אותן</strong> נקודות ביניים. לכן זה לא סכום רימן. זה דורש הערכה קצת יותר זהירה של {% equation %}\left|\gamma\left(t_{i+1}\right)-\gamma\left(t_{i}\right)\right|{% endequation %} שכן תשתמש ב-{% equation %}c_{i}{% endequation %}, ולא אכנס לכך כאן. השורה התחתונה היא שזה עובד ומקבלים את האינטגרל המתבקש:
+כאשר כאן {% equation %}\Delta\gamma_{i}{% endequation %} מייצג את אורך העקומה בין {% equation %}\gamma\left(t_{i}\right){% endequation %} ו-{% equation %}\gamma\left(t_{i+1}\right){% endequation %}. גם פה נדרש ניתוח לא טריוויאלי שהבאתי במלואו בפוסט החדש יותר, שהשורה התחתונה שלו היא שמקבלים את האינטגרל המתבקש:
 
 {% equation %}\int_{C}fds=\int_{a}^{b}f\left(\gamma\left(t\right)\right)\left|\gamma^{\prime}\left(t\right)\right|dt{% endequation %}
 
