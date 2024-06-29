@@ -1,5 +1,5 @@
 ---
-title: אז מה הקטע עם אחוזים?
+title: "אז מה הקטע עם אחוזים?"
 layout: post
 categories:
   - כללי
