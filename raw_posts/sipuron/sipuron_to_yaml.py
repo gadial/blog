@@ -30,7 +30,7 @@ with open(csv_filename, encoding="utf8") as csvfile:
             keywords.append(keyword)
 
 result = {
-    'year_2023': {
+    'year_2024': {
         'stories': stories,
         'keywords': keywords,
         'authors': authors
