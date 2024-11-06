@@ -6,7 +6,8 @@ title: סיפורונובמבר - הסיפורים
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<h1>רשימת הסיפורונים של סיפורונובמבר 2024</h1>
+ [חזרה לעמוד הראשי](/sipuron/)
+
 <div id="sipuron-list">
 <label>חיפוש בטקסט הסיפורים</label>
 <input class="search" id="story-search"/>
