@@ -60,7 +60,7 @@ tags:
 
 לבסוף, <strong>אקסיומת השלמות</strong> הייתה האקסיומה הבאה:
 
-<ul> <li>אם {% equation %}A\subseteq\mathbb{F}{% endequation %} היא קבוצה לא ריקה וחסומה מלעיל, אז {% equation %}\sup F{% endequation %} קיים.</li>
+<ul> <li>אם {% equation %}A\subseteq\mathbb{F}{% endequation %} היא קבוצה לא ריקה וחסומה מלעיל, אז {% equation %}\sup A{% endequation %} קיים.</li>
 
 </ul>
 
