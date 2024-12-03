@@ -148,7 +148,7 @@ tags:
 
 אין כאן יותר מאשר שימוש בהגדרה:
 
-{% equation %}x_{2n\pm i}=x_{n}x_{n\pm i}+dy_{n}y_{n\pm i}\equiv_{x_{n}}dy_{n}\left(y_{n}x_{i}\pm x_{n}y_{i}\right)\equiv_{x_{n}}dy_{n}^{2}x_{i}=\left(x_{n}^{2}-1\right)x_{i}\equiv_{x_{n}}-1{% endequation %}
+{% equation %}x_{2n\pm i}=x_{n}x_{n\pm i}+dy_{n}y_{n\pm i}\equiv_{x_{n}}dy_{n}\left(y_{n}x_{i}\pm x_{n}y_{i}\right)\equiv_{x_{n}}dy_{n}^{2}x_{i}=\left(x_{n}^{2}-1\right)x_{i}\equiv_{x_{n}}-x_{i}{% endequation %}
 
 כאן השתמשנו בכך ש-{% equation %}x_{n}^{2}-dy_{n}^{2}=1{% endequation %}, ולכן {% equation %}dy_{n}^{2}=x_{n}^{2}-1{% endequation %}.
 

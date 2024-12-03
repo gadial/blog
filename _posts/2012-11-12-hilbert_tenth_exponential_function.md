@@ -103,9 +103,13 @@ tags:
 
 ראשית, שימו לב שמשוואה מס' 3 (החדשה; אם אתייחס למשוואות הישנות במספר שלהן אומר זאת במפורש מעתה) גוררת ש-{% equation %}w&gt;1{% endequation %} (כי הוא סכום של שני מספרים חיוביים), ולכן {% equation %}\left(w^{2}-1\right)\left(w-1\right)^{2}z^{2}&gt;0{% endequation %} ומכאן על פי משוואה 4 ש-{% equation %}a&gt;1{% endequation %}. אם {% equation %}a&gt;1{% endequation %} אז כל המשוואות הישנות (1 עד 8) מראות ש-{% equation %}x=x_{k}\left(a\right){% endequation %} ו-{% equation %}y=y_{k}\left(a\right){% endequation %} - זה מה שעשינו קודם.
 
-עכשיו, כולנו כבר הדחקנו את זה, אבל בפוסט הקודם ראינו ש-{% equation %}x_{k}\left(a\right)-y_{k}\left(a\right)\left(a-n\right)\equiv_{2an-n^{2}-1}n^{k}{% endequation %} (בחיי! אני לא ממציא את זה!). סוף סוף זה יועיל לנו קצת. כפי שאתם רואים, משוואה 1 מהונדסת פחות או יותר כדי להתאים לביטוי הזה; אם ניקח אותה מודולו {% equation %}2an-n^{2}-1{% endequation %}, נקבל:
+עכשיו, כולנו כבר הדחקנו את זה, אבל בפוסט הקודם ראינו ש-{% equation %}x_{k}\left(a\right)-y_{k}\left(a\right)\left(a-n\right)\equiv_{2an-n^{2}-1}n^{k}{% endequation %} (בחיי! אני לא ממציא את זה!). סוף סוף זה יועיל לנו קצת. כפי שאתם רואים, משוואה 1 מהונדסת פחות או יותר כדי להתאים לביטוי הזה; אם ניקח אותה מודולו {% equation %}\left(2an-n^{2}-1\right)^2{% endequation %}, נקבל:
 
-{% equation %}\left(x-y\left(a-n\right)-m\right)^{2}\equiv_{2an-n^{2}-1}0{% endequation %}
+{% equation %}\left(x-y\left(a-n\right)-m\right)^{2}\equiv_{\left(2an-n^{2}-1\right)^2}0{% endequation %}
+
+ובגלל שבאופן כללי אם {% equation %}A^2|B^2{% endequation %} אז {% equation %}A|B{% endequation %} נקבל:
+
+{% equation %}x-y\left(a-n\right)-m\equiv_{2an-n^{2}-1}0{% endequation %}
 
 או במילים אחרות:
 
@@ -121,7 +125,7 @@ tags:
 
 כעת, אם {% equation %}w&gt;n{% endequation %} ו-{% equation %}w&gt;k{% endequation %} אז {% equation %}a=x_{w-1}\left(w\right)\ge w^{w-1}&gt;n^{k}{% endequation %} ולכן נקבל (בדיוק כמו קודם) ש-{% equation %}m=n^{k}&lt;2an-n^{2}-1{% endequation %}, מה שנותן לנו פתרון למשוואה 2. נותרה רק משוואה 1!
 
-ובכן, הבה ונגדיר {% equation %}x=x_{k}\left(a\right),y=y_{k}\left(a\right){% endequation %}. אנחנו יודעים ש-{% equation %}x_{k}\left(a\right)-y_{k}\left(a\right)\left(a-n\right)\equiv_{2an-n^{2}-1}n^{k}{% endequation %}, ובמילים אחרות: {% equation %}2an-n^{2}-1{% endequation %} מחלק את {% equation %}x-y\left(a-n\right)-m{% endequation %}, כלומר יש {% equation %}f{% endequation %} כך ש-{% equation %}x-y\left(a-n\right)-m=\left(f-1\right)\left(x-y\left(a-n\right)-m\right){% endequation %}. רק שיש לנו בעיה קטנה - לא ברור אם {% equation %}f{% endequation %} הזה חיובי או שלילי בכלל. הפתרון הוא להעלות את שני אגפי המשוואה בריבוע, ואז לקבל {% equation %}\left(x-y\left(a-n\right)-m\right)^{2}=\left(f-1\right)^{2}\left(x-y\left(a-n\right)-m\right)^{2}{% endequation %} וכעת אם {% equation %}f{% endequation %} היה שלילי אפשר להחליף אותו ב-{% equation %}\left|f\right|{% endequation %} מבלי לשים לב להבדל. זה מסיים עם משוואה 1, ומכיוון שכל המשוואות הישנות מסופקות על ידי הפתרון למשוואת פל {% equation %}x_{k}\left(a\right){% endequation %}, <strong>סיימנו את ההוכחה!</strong>
+ובכן, הבה ונגדיר {% equation %}x=x_{k}\left(a\right),y=y_{k}\left(a\right){% endequation %}. אנחנו יודעים ש-{% equation %}x_{k}\left(a\right)-y_{k}\left(a\right)\left(a-n\right)\equiv_{2an-n^{2}-1}n^{k}{% endequation %}, ובמילים אחרות: {% equation %}2an-n^{2}-1{% endequation %} מחלק את {% equation %}x-y\left(a-n\right)-m{% endequation %}, כלומר יש {% equation %}f{% endequation %} כך ש-{% equation %}x-y\left(a-n\right)-m=\left(f-1\right)\left({2an-n^{2}-1}\right){% endequation %}. רק שיש לנו בעיה קטנה - לא ברור אם {% equation %}f{% endequation %} הזה חיובי או שלילי בכלל. הפתרון הוא להעלות את שני אגפי המשוואה בריבוע, ואז לקבל {% equation %}\left(x-y\left(a-n\right)-m\right)^{2}=\left(f-1\right)^{2}\left({2an-n^{2}-1}\right)^{2}{% endequation %} וכעת אם {% equation %}f{% endequation %} היה שלילי אפשר להחליף אותו ב-{% equation %}\left|f\right|{% endequation %} מבלי לשים לב להבדל. זה מסיים עם משוואה 1, ומכיוון שכל המשוואות הישנות מסופקות על ידי הפתרון למשוואת פל {% equation %}x_{k}\left(a\right){% endequation %}, <strong>סיימנו את ההוכחה!</strong>
 
 זה עדיין לא מוכיח שהבעיה העשירית של הילברט היא לא כריעה, אבל זה מוכיח שהפונקציה האקספוננציאלית היא דיופנטית - וזה המכשול שעמד בפני המתמטיקאים שעבדו על הבעיה במשך עשרות שנים. מכאן ואילך העניינים יפסיקו להיראות כמו "חשבון מכולת" ונחזור לדבר על התמונה הגדולה ולהבין איך פונקציה אקספוננציאלית עוזרת לנו.
 
