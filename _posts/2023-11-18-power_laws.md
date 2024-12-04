@@ -2,7 +2,7 @@
 title: "חוקי החזקות"
 layout: post
 categories:
-  - אלגברה
+  - כללי
 tags:
   - מתמטיקה תיכונית
   - חזקות

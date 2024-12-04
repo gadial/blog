@@ -166,7 +166,7 @@ def det(A):
                     A[k], A[i] = A[i], A[k]
                     result *= -1
                     break
-            else:
+            if A[k][k] == 0:
                 return 0
         # go over all rows i=k+1,k+2,...,n-1
         result *= A[k][k]
