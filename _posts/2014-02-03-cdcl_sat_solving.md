@@ -21,7 +21,7 @@ tags:
 
 {% equation %}C_{1}=\left(x_{1}\vee x_{31}\vee\neg x_{2}\right){% endequation %}
 
-{% equation %}C_{2}=\left(x_{1}\wedge\neg x_{3}\right){% endequation %}
+{% equation %}C_{2}=\left(x_{1}\vee\neg x_{3}\right){% endequation %}
 
 {% equation %}C_{3}=\left(x_{2}\vee x_{3}\vee x_{4}\right){% endequation %}
 
