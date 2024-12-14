@@ -1,0 +1,2384 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language hebrew
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "default" "David"
+\font_sans "default" "David"
+\font_typewriter "default" "David"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index אינדקס
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+איך מחשבים דטרמיננטה עם אלגוריתם בריס?
+\end_layout
+
+\begin_layout Description
+קטגוריות: אלגברה לינארית
+\end_layout
+
+\begin_layout Description
+תגים: דטרמיננטה
+\end_layout
+
+\begin_layout Description
+מזהה:
+\family roman
+\series bold
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+computing_determinants_bareiss_algorithm
+\end_layout
+
+\begin_layout Section
+חלק ראשון, שבו אנחנו לומדים שמינוס
+\family roman
+\series bold
+\shape up
+\size larger
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+32
+\family roman
+\series bold
+\shape up
+\size larger
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הוא כמעט
+\family roman
+\series bold
+\shape up
+\size larger
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+256
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "בפוסט הקודם שלי"
+target "https://gadial.net/2024/12/03/computing_determinants/"
+literal "false"
+
+\end_inset
+
+ על דטרמיננטות הסברתי איך מחשבים אותן.
+ הצגתי שתי דרכים: אחת שהולכת דרך ההגדרה הרקורסיבית והיא מאוד לא יעילה לחישוב,
+ ואחת שמבצעת פישוט למטריצה שרוצים לחשב את הדטרמיננטה שלה והיא משמעותית יותר
+ יעילה.
+ יש שיטות שהן אפילו יעילות יותר, אבל בפוסט הזה אני רוצה לקחת צעד אחד אחורה
+ דווקא ולהציג שיטה יעילה פחות, אבל עם יתרון נחמד אחד: אם האיברים של המטריצה
+ הם כולם מספרים שלמים, אנחנו לא נזדקק לשברים במהלך כל החישוב.
+ למה זה טוב? תכף אתן דוגמא פשוטה.
+\end_layout
+
+\begin_layout Standard
+ראשית, בואו נבין מה באלגוריתם ה
+\begin_inset Quotes erd
+\end_inset
+
+יעיל
+\begin_inset Quotes erd
+\end_inset
+
+ מכריח את השברים להיכנס למשחק.
+ בואו נסתכל במטריצה הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[\begin{array}{ccc}
+2 & 1 & 3\\
+3 & 1 & 6\\
+4 & 1 & 8
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+האלגוריתם מבוסס על כך שאנחנו עוברים עמודה-עמודה, ובכל פעם אנחנו משתמשים
+ באיבר כלשהו מהעמודה כדי לאפס את כל האיברים שאחריו בעמודה - זה הופך את חישוב
+ הדטרמיננטה לפשוט כי כאשר מפתחים את הדטרמיננטה לפי עמודות, יוצא שבכל פעם
+ יש רק איבר אחד בכל עמודה שצריך לפתח לפיו, ולכן מה שהוא בדרך כלל חישוב רקורסיבי
+ מסובך שמתפצל להרבה מקרים לא מתפצל בכלל.
+ כדי לאפס איברים בעמודה משתמשים בתוצאה המרהיבה לפיה אם לוקחים שורה במטריצה,
+ ומחברים אותה עם שורה אחרת כשהיא מוכפלת בסקלר כלשהו, התוצאה היא בעלת אותה
+ דטרמיננטה כמו המטריצה המקורית.
+ למשל, אם במטריצה לעיל אני אקח את השורה הראשונה, אכפול אותה ב-
+\begin_inset Formula $-2$
+\end_inset
+
+ ואחבר לשורה האחרונה, אני אקבל את המטריצה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[\begin{array}{ccc}
+2 & 1 & 3\\
+3 & 1 & 6\\
+0 & -1 & 2
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+והמטריצה הזו היא בעלת אותה דטרמיננטה בדיוק כמו המטריצה שהתחלתי ממנה, והנה
+ - קיבלתי אפס בעמודה הראשונה.
+ הבעיה היא שכדי להיפטר מה-
+\numeric on
+3
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שבשורה האמצעית אני צריך לכפול את השורה הראשונה במשהו שאינו מספר שלם - ב-
+\begin_inset Formula $-\frac{3}{2}$
+\end_inset
+
+, מה שמוביל אותי למטריצה הבאה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left[\begin{array}{ccc}
+2 & 1 & 3\\
+0 & -\frac{1}{2} & \frac{3}{2}\\
+0 & -1 & 2
+\end{array}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+וזהו, עכשיו יש לי שברים בתוך המטריצה, למרות שהתחלתי עם מטריצה שכולה מספרים
+ שלמים ולמרות 
+\series bold
+שגם התוצאה תהיה מספר שלם
+\series default
+.
+ כדי לראות שהתוצאה תהיה מספר שלם מספיק להיזכר באופן שבו דטרמיננטה מוגדרת
+ רקורסיבית: אנחנו מקבלים סכום של איברים שכל אחד מהם שייך למטריצה )כלומר
+ הוא מספר שלם( שמוכפל ב-
+\begin_inset Formula $\pm1$
+\end_inset
+
+ )מספר שלם( וזה מוכפל בדטרמיננטה של תת-מטריצות שמתקבלות מהמטריצה המקורית
+ על ידי מחיקת שורות ועמודות )ולכן גם בהן יש מספרים שלמים(.
+ לי הסיטואציה הזו טיפה מזכירה את המקרה של ה-
+\lang english
+Casus irreducibilis
+\lang hebrew
+ בפתרון משוואות ממעלה שלישית )
+\begin_inset CommandInset href
+LatexCommand href
+name "יש לי פוסט על זה"
+target "https://gadial.net/2018/07/26/casus_irreducibilis/"
+literal "false"
+
+\end_inset
+
+(: שם העניין הוא שיש לנו משוואה פולינומית עם מקדמים שהם מספרים ממשיים, והפתרונות
+ שלה כולם מספרים ממשיים, אבל בלי לעבור 
+\begin_inset Quotes eld
+\end_inset
+
+דרך
+\begin_inset Quotes erd
+\end_inset
+
+ המספרים המרוכבים )כלומר, להוציא שורש ריבועי למספר שלילי( לא נוכל לכתוב
+ את הפתרונות הללו באמצעות נוסחה.
+ אלא שיש הבדל מהותי - במקרה ההוא 
+\series bold
+חייבים
+\series default
+ לעבור דרך המרוכבים )יש לזה הוכחה די מרהיבה באמצעות תורת גלואה שאני מראה
+ בפוסט ההוא( אבל במקרה שלנו זה לא הכרחי.
+ יש דרכים אחרות לחשב את הדטרמיננטה גם בלי להכניס שברים למשחק.
+ כבר ראינו אחת: לחשב את הדטרמיננטה באמצעות האלגוריתם הרקורסיבי, אלא שזה
+ כאמור פשוט לא יעיל ולכן בפוסט הזה אני אציג את מה שנקרא 
+\begin_inset Quotes eld
+\end_inset
+
+האלגוריתם של ברייס
+\begin_inset Quotes erd
+\end_inset
+
+ )
+\lang english
+Bareiss
+\lang hebrew
+( ששומר על הכל שלם והנזק שהוא גורם לזמן הריצה הוא לא כזה משמעותי )אבל יש
+ נזק; זה בהחלט אלגוריתם שבעייתי בשלל סיטואציות ולכן טוב שמכירים אותו 
+\series bold
+וגם
+\series default
+ שיטות אחרות(.
+\end_layout
+
+\begin_layout Standard
+בואו נדבר שניה על המוטיבציה האישית שלי לכתוב את הפוסט כדי להבין למה לא כדאי
+ לסמוך בעיניים עצומות על השיטות הקיימות ולמה לפעמים חשוב לדבוק במספרים שלמים
+ במקום בשברים.
+ נסיבות אלו ואחרות הובילו אותי לחשב דטרמיננטה של מטריצה 
+\begin_inset Formula $5\times5$
+\end_inset
+
+, שנותנת לנו את הנפח של טטרהדרון )פירמידה עם בסיס משולש( שאורכי הצלעות שלו
+ נתונים על ידי 
+\begin_inset Formula $d_{ij}$
+\end_inset
+
+ עבור 
+\begin_inset Formula $1\le i,j\le4$
+\end_inset
+
+.
+ הנפח 
+\begin_inset Formula $V$
+\end_inset
+
+ נתון באמצעות
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $288V^{2}=\left|\begin{array}{ccccc}
+0 & 1 & 1 & 1 & 1\\
+1 & 0 & d_{12}^{2} & d_{13}^{2} & d_{14}^{2}\\
+1 & d_{21}^{2} & 0 & d_{23}^{2} & d_{24}^{2}\\
+1 & d_{31}^{2} & d_{32}^{2} & 0 & d_{34}^{2}\\
+1 & d_{41}^{2} & d_{42}^{2} & d_{43}^{2} & 0
+\end{array}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+הדטרמיננטה הזו נקראת 
+\series bold
+דטרמיננטת קיילי-מנגר
+\series default
+ והיא ראויה לפוסט בפני עצמה )היא עושה יותר מאשר לחשב נפח של טטרהדרון( והאמת
+ העצובה היא שהדרך הכי פשוטה לחשב אותה היא פשוט להשתמש בנוסחה הרקורסיבית
+ - זו בסך הכל מטריצת 
+\begin_inset Formula $5\times5$
+\end_inset
+
+, הרקורסיה תסתיים כמעט מייד, ואין צורך באלגוריתם שאני הולך להציג - אבל את
+ זה נזכרתי לנסות רק אחרי שכבר מימשתי את האלגוריתם )כי על מי אני עובד, כל
+ כך התלהבתי מהאלגוריתם שהייתי חייב לממש אותו בכל מקרה(.
+ אבל למה היא גרמה לי להגיע אל אלגוריתם בריס מלכתחילה? ובכן, כי עשיתי את
+ הטעות של לחשב אותה באמצעות
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+numpy
+\lang hebrew
+.
+ מבלי להיכנס לפרטים, המטרה שלי הייתה למצוא אורכי צלעות שעבורם הדטרמיננטה
+ תהיה שווה בדיוק ל-
+\numeric on
+256
+\numeric off
+.
+ עכשיו, בואו נניח שיש לנו מספר שלם 
+\begin_inset Formula $n$
+\end_inset
+
+ כלשהו ואנחנו מסתכלים על הדטרמיננטה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|\begin{array}{ccccc}
+0 & 1 & 1 & 1 & 1\\
+1 & 0 & 1 & n^{2} & n^{2}\\
+1 & 1 & 0 & \left(n-1\right)^{2} & \left(n-1\right)^{2}\\
+1 & n^{2} & \left(n-1\right)^{2} & 0 & 4\\
+1 & n^{2} & \left(n-1\right)^{2} & 4 & 0
+\end{array}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+שהיא מקרה פרטי של הדטרמיננטה לעיל עבור סדרת האורכים 
+\begin_inset Formula $1,n,n,n-1,n-1,2$
+\end_inset
+
+.
+ אם מחשבים את הדטרמיננטה בצורה סימבולית )כלומר, פשוט פותחים את הביטוי, מקבלים
+ פולינום ב-
+\begin_inset Formula $n$
+\end_inset
+
+ ומפשטים אותו( מקבלים 
+\begin_inset Formula $-32$
+\end_inset
+
+, כלומר הערך של הדטרמיננטה הזו לא תלוי ב-
+\begin_inset Formula $n$
+\end_inset
+
+.
+ למי שתוהים איך עושים את זה במחשב בלי לעבור את התהליך המהנה של לחשב ידנית
+ דטרמיננטה 
+\begin_inset Formula $5\times5$
+\end_inset
+
+, אפשר לעשות את זה עם ספריית הפייתון
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+sympy
+\lang hebrew
+:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+קוד
+\end_layout
+
+\begin_layout Standard
+טוב ויפה, אלא שאני לא השתמשתי ב-
+\lang english
+sympy
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+כי בדקתי שלל דטרמיננטות משלל סוגים ולא רק מהמבנה הספציפי הזה שאותו מצאתי
+ אחר כך.
+ ספציפית, אני בדקתי את הדטרמיננטה שמתקבלת עבור הערך 
+\begin_inset Formula $n=524,283$
+\end_inset
+
+ וחישבתי אותו בעזרת הספריה הסטנדרטית לחישובים נומריים בפייתון -
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+numpy
+\lang hebrew
+.
+ ומה ש-
+\lang english
+numpy
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+נתנה הוא את התוצאה 
+\begin_inset Formula $255.99999991524982$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+במבט ראשון, התוצאה הזו היא 
+\begin_inset Quotes eld
+\end_inset
+
+זה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+256
+\numeric off
+, פשוט
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+numpy
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+משתמשת בייצוג שברים עם נקודה צפה ולכן יש אי דיוקים קטנים
+\begin_inset Quotes erd
+\end_inset
+
+.
+ אבל לא! זו דרך טובה לעבוד על עצמנו! כי אם אני מכניס 
+\begin_inset Formula $n=524,283$
+\end_inset
+
+ ואז עוד מעלה דברים בריבוע, אני עובד עם מספרי ענק ולכן יש לי שגיאות דיוק
+ גדולות, וחישובים שקשורים במטריצות יכולים להיות מאוד רגישים לשגיאות דיוק,
+ וזה מתנפח ומתנפח.
+ התוצאה, כאמור, הייתה אמורה להיות 
+\begin_inset Formula $-32$
+\end_inset
+
+; זה שהגענו אל כמעט
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+256
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+זה סתם מקרה )על ידי ערכים שונים של 
+\begin_inset Formula $n$
+\end_inset
+
+ אפשר להגיע קרוב לשלל מספרים שלמים לא קשורים, פשוט
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+256
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+היה מה שחיפשנו(.
+ הנה קוד פייתון שמשתמש ב-
+\lang english
+numpy
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ ומאפשר לראות מה הולך פה.
+ עבור 
+\begin_inset Formula $n=1$
+\end_inset
+
+ החישוב מדויק כמעט לחלוטין, וכך גם עבור 
+\begin_inset Formula $n=10,000$
+\end_inset
+
+; אבל כשהוא נשבר, הוא נשבר 
+\family default
+\series bold
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+חזק
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+קוד
+\end_layout
+
+\begin_layout Standard
+הבעיה פה היא כאמור ש-
+\lang english
+numpy
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מייצג שברים בשיטת הנקודה הצפה, ולכן יש לו רמת דיוק מוגבלת, בעוד שבפייתון
+ יש רמת דיוק בלתי מוגבלת לעבודה עם מספרים שלמים.
+ אז מכיוון שחשדתי ש-
+\lang english
+numpy
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מרמה אותי החלטתי שאני לא צריך להתעצל ולהסתמך עליו או אפילו לחפש ספריה אחרת
+ שמבצעת את החישוב )כי אולי גם היא תרמה אותי?( אלא פשוט לממש את זה בעצמי.
+ עכשיו, 
+\series bold
+הייתי יכול
+\series default
+ להשתמש באלגוריתם הרקורסיבי הנאיבי; וגם 
+\series bold
+הייתי יכול
+\series default
+ להשתמש בשיטה מבוססת השברים שראינו, ופשוט להשתמש בספריה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+frac
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בפייתון שמאפשרת ייצוג של שברים עם דיוק לא מוגבל.
+ אבל באותו הרגע הדבר הראשון שעלה לי לראש היה לחפש 
+\begin_inset Quotes eld
+\end_inset
+
+אלגוריתם לחישוב דטרמיננטה שלא משתמש בשברים
+\begin_inset Quotes erd
+\end_inset
+
+ ואני שמח שזה קרה כי אלגוריתם בריס הוא די מגניב גם אם הייתי יכול להסתדר
+ בלעדיו.
+\end_layout
+
+\begin_layout Standard
+אז בואו נדבר עליו סוף סוף.
+\end_layout
+
+\begin_layout Section
+חלק שני שבו אנו רואים את מה שלשמו התכנסנו פה
+\end_layout
+
+\begin_layout Standard
+קודם כל, מה אלגוריתם בריס 
+\series bold
+לא
+\series default
+ עושה: הוא לא מעביר את המטריצה 
+\begin_inset Formula $A$
+\end_inset
+
+ שלנו למטריצה אחרת 
+\begin_inset Formula $B$
+\end_inset
+
+ כך ש-
+\begin_inset Formula $\left|A\right|=\left|B\right|$
+\end_inset
+
+, כמו האלגוריתם היעיל שהצגתי.
+ זה לא הולך לקרות.
+ אני כן הולך להפוך את 
+\begin_inset Formula $A$
+\end_inset
+
+ למטריצה אחרת 
+\begin_inset Formula $B$
+\end_inset
+
+, אבל יהיו להן דטרמיננטות שונות לגמרי והרעיון הוא שבסיום האלגוריתם, 
+\begin_inset Formula $\left[B\right]_{nn}$
+\end_inset
+
+ )הכניסה הימנית-תחתונה של 
+\begin_inset Formula $B$
+\end_inset
+
+( תהיה שווה ל-
+\begin_inset Formula $\left|A\right|$
+\end_inset
+
+.
+ יותר מכך - אין בעצם סיבה להציג את האלגוריתם בתור אוסף של שינויים של המטריצה
+ 
+\begin_inset Formula $A$
+\end_inset
+
+ )ובמאמר שלו עליו אני מתבסס כאן, 
+\lang english
+Sylvester's Identity and Multistep Integer Preserving Gaussian Elimination
+\lang hebrew
+, בריס באמת לא מציג אותו ככה(.
+ אפשר לחשוב על האלגוריתם גם ככה: אם בהתחלה האיבר הכללי של 
+\begin_inset Formula $A$
+\end_inset
+
+ הוא 
+\begin_inset Formula $a_{ij}$
+\end_inset
+
+ )עבור 
+\begin_inset Formula $1\le i,j\le n$
+\end_inset
+
+( אז האלגוריתם מייצר סדרה של איברים 
+\begin_inset Formula $a_{ij}^{\left(0\right)},a_{ij}^{\left(1\right)},\ldots a_{ij}^{\left(n-1\right)}$
+\end_inset
+
+ כך שבסופו של דבר יוצא ש-
+\begin_inset Formula $a_{nn}^{\left(n-1\right)}=\left|A\right|$
+\end_inset
+
+.
+ ה
+\begin_inset Quotes erd
+\end_inset
+
+חזקה
+\begin_inset Quotes erd
+\end_inset
+
+ של האיברים היא לא חזקה אלא אינדקס של השלב באלגוריתם שבו אנחנו נמצאים כרגע,
+ והאתחול הוא 
+\begin_inset Formula $a_{ij}^{\left(0\right)}=a_{ij}$
+\end_inset
+
+.
+ בפועל, כשמממשים את האלגוריתם, הכי נוח באמת לבצע שינויים מקומיים ב-
+\begin_inset Formula $A$
+\end_inset
+
+ כדי לשמור את המספרים של השלב הבא - זה חוסך זיכרון.
+\end_layout
+
+\begin_layout Standard
+אז איך עובד האלגוריתם? אין שום טעם להציג אותו כרגע כי לא נבין כלום ממה שהולך
+ שם.
+ זה לא הולך למנוע ממני להציג אותו בכל מקרה כי זה לפחות יוצר עניין - אני
+ קודם כל מימשתי את האלגוריתם ורק אז תהיתי למה בעצם זה עובד.
+ הרעיון, כאמור, הוא לעבוד בשלבים, כשבשלב מספר 
+\begin_inset Formula $k$
+\end_inset
+
+ אנחנו מעדכנים את המספרים 
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ שעדיין רלוונטיים לנו )כמו בחישוב דטרמיננטה רגיל, ככל שמתקדמים בשלבים כך
+ פחות ופחות איברים הופכים לרלוונטיים לנו.
+ 
+\end_layout
+
+\begin_layout Standard
+הנה האלגוריתם:
+\end_layout
+
+\begin_layout Itemize
+אתחל את המשתנים 
+\begin_inset Formula $a_{ij}^{\left(0\right)}=a_{ij}$
+\end_inset
+
+ לכל 
+\begin_inset Formula $1\le i,j\le n$
+\end_inset
+
+ ואת המשתנה המיוחד 
+\begin_inset Formula $a_{00}^{\left(-1\right)}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+לכל 
+\begin_inset Formula $k=1,2,\ldots,n-1$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+לכל 
+\begin_inset Formula $k+1\le i,j\le n$
+\end_inset
+
+, קבעו 
+\begin_inset Formula $a_{ij}^{\left(k\right)}\leftarrow\frac{a_{ij}^{\left(k-1\right)}a_{kk}^{\left(k-1\right)}-a_{ik}^{\left(k-1\right)}a_{kj}^{\left(k-1\right)}}{a_{k-1,k-1}^{\left(k-2\right)}}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+החזירו את 
+\begin_inset Formula $a_{nn}^{\left(n-1\right)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+בקיצור, האלגוריתם די דומה למה שקורה באלגוריתם הרגיל - גם פה פשוט מעדכנים
+ באופן סדרתי כניסות עם כל מני מכפלות וחיסורים ו...
+ רגע...
+ האם זה רק אני או שיש סימן 
+\series bold
+חילוק
+\series default
+ ענקי באמצע האלגוריתם? איך בדיוק פתרנו את הבעיה? ובכן, הרעיון הוא שבסימן
+ החילוק שמופיע שם, המכנה מחלק את המונה 
+\series bold
+בלי שארית
+\series default
+.
+ במילים אחרות - אנחנו צריכים לבצע פעולת חילוק, אבל פעולת 
+\series bold
+חילוק שלמים
+\series default
+ שיכולה להיות מדויקת, ובשום שלב אנחנו לא צריכים לעבוד עם מספר שהוא שבר
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+)אם תקראו את הפוסט עד כה תראו שנמנעתי בזהירות מלטעון דברים מופרכים כמו 
+\begin_inset Quotes eld
+\end_inset
+
+האלגוריתם לא מבצע חילוק
+\begin_inset Quotes erd
+\end_inset
+
+(.
+\end_layout
+
+\begin_layout Standard
+אוקיי, אבל למה זה עובד? במאמר שלו שעליו אני מתבסס כאן, בריס מביא טיעון לא
+ טריוויאלי, שאולי היה אפשר להחליף בטיעונים אלמנטריים יותר )יש לבריס מאמר
+ מוקדם יותר שבו יש טיעונים כאלו( אבל אני דווקא מאוד אוהב את הטכניקה שלו,
+ אז בואו נראה אותה במלואה.
+\end_layout
+
+\begin_layout Section
+חלק שלישי שבו קורים קסמים עם מטריצות בלוקים
+\end_layout
+
+\begin_layout Standard
+באלגוריתם שהצגתי, 
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ חושב באמצעות תרגיל מפוקפק כלשהו )שבמסגרתו הבטחתי שתתבצע חלוקה ללא שארית(.
+ זה לא ממש עוזר לנו להבין מה הולך פה, אז מה שנרצה לעשות הוא למצוא דרך טובה
+ יותר 
+\series bold
+להגדיר
+\series default
+ את הערכים של אותם 
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ מלכתחילה.
+ ההגדרה תיראה די משונה אם פשוט אציג אותה, אז בואו נוכיח תוצאה כללית כלשהי
+ קודם.
+\end_layout
+
+\begin_layout Standard
+משהו שלא דיברתי עליו בכלל עד כה בפוסטים הללו הוא שדרך נוחה להתמודד עם מטריצות
+ היא לפעמים לחלק אותן ל
+\series bold
+בלוקים
+\series default
+.
+ כל מטריצה ריבועית 
+\begin_inset Formula $A$
+\end_inset
+
+ מסדר 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ אפשר להציג בתור 
+\begin_inset Formula $A=\left(\begin{array}{cc}
+A_{11} & A_{12}\\
+A_{21} & A_{22}
+\end{array}\right)$
+\end_inset
+
+ כך ש-
+\begin_inset Formula $A_{11}$
+\end_inset
+
+ היא מטריצה מסדר 
+\begin_inset Formula $k\times k$
+\end_inset
+
+ שכוללת את מה שמקבלים אם מעתיקים מ-
+\begin_inset Formula $A$
+\end_inset
+
+ את כל הכניסות מהצורה 
+\begin_inset Formula $a_{ij}$
+\end_inset
+
+ עבור 
+\begin_inset Formula $1\le i,j\le k$
+\end_inset
+
+.
+ גם שאר המטריצות נקבעות בצורה דומה: 
+\begin_inset Formula $A_{12}$
+\end_inset
+
+ תהיה מסדר 
+\begin_inset Formula $k\times\left(n-k\right)$
+\end_inset
+
+, 
+\begin_inset Formula $A_{21}$
+\end_inset
+
+ תהיה מסדר 
+\begin_inset Formula $\left(n-k\right)\times k$
+\end_inset
+
+ ו-
+\begin_inset Formula $A_{22}$
+\end_inset
+
+ תהיה מסדר 
+\begin_inset Formula $\left(n-k\right)\times\left(n-k\right)$
+\end_inset
+
+, אבל בואו נתמקד לרגע ב-
+\begin_inset Formula $A_{11}$
+\end_inset
+
+.
+ זו המטריצה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A_{11}=\left(\begin{array}{cccc}
+a_{11} & a_{12} & \cdots & a_{1k}\\
+a_{21} & a_{22} &  & a_{2k}\\
+\vdots &  & \ddots & \vdots\\
+a_{k1} & a_{k2} & \cdots & a_{kk}
+\end{array}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מטריצה כזו, שמתקבלת מ-
+\begin_inset Formula $A$
+\end_inset
+
+ על ידי לקיחת 
+\begin_inset Formula $k$
+\end_inset
+
+ השורות והעמודות הראשונות ומחיקת כל היתר, נקראת לפעמים 
+\series bold
+המינור העיקרי
+\series default
+ )
+\lang english
+principle
+\lang hebrew
+( מסדר 
+\begin_inset Formula $k$
+\end_inset
+
+ של המטריצה.
+ אני הולך להניח שהוא הפיך, כלומר 
+\begin_inset Formula $\left|A_{11}\right|\ne0$
+\end_inset
+
+; בהמשך נראה מה קורה כשזה לא המצב )רמז: האלגוריתם שהצגתי קודם עדיין לא שלם(.
+ אם הוא לא הפיך, זה נותן לנו פירוק פשוט יחסית של 
+\begin_inset Formula $A$
+\end_inset
+
+ למכפלה של שתי מטריצות בלוקים אלכסוניות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A=\left(\begin{array}{cc}
+A_{11} & A_{12}\\
+A_{21} & A_{22}
+\end{array}\right)=\left(\begin{array}{cc}
+A_{11} & 0\\
+A_{21} & I
+\end{array}\right)\left(\begin{array}{cc}
+I & A_{11}^{-1}A_{12}\\
+0 & A_{22}-A_{21}A_{11}^{-1}A_{12}
+\end{array}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מה הולך כאן? במבט ראשון זה נראה מבעית, אבל בעצם יש כאן שתי שאלות פשוטות
+ יחסית:
+\end_layout
+
+\begin_layout Itemize
+כשכופלים מטריצות בלוקים, האם חוקי כפל המטריצות הרגילים עדיין תקפים כמו קודם?
+\end_layout
+
+\begin_layout Itemize
+אם מניחים שכן, האם החישוב של המכפלה למעלה באמת מחזיר את 
+\begin_inset Formula $A$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+בואו נענה קודם לשאלה השניה - כמובן.
+ כדי לוודא שאין בעיה עם זה, אני אחשב את כל ארבע הכניסות
+\end_layout
+
+\begin_layout Itemize
+הכניסה של 
+\begin_inset Formula $A_{11}$
+\end_inset
+
+: מתקבלת מכפל השורה הראשונה בעמודה הראשונה, כלומר 
+\begin_inset Formula $A_{11}\cdot I+0\cdot0=A_{11}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+הכניסה של 
+\begin_inset Formula $A_{12}$
+\end_inset
+
+: מתקבלת מכפל השורה הראשונה בעמודה השניה, כלומר 
+\begin_inset Formula $A_{11}\cdot\left(A_{11}^{-1}A_{12}\right)+0\cdot\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)=A_{12}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+הכניסה של 
+\begin_inset Formula $A_{21}$
+\end_inset
+
+: מתקבלת מכפל השורה השניה בעמודה הראשונה, כלומר 
+\begin_inset Formula $A_{21}\cdot I+I\cdot0=A_{21}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+הכניסה של 
+\begin_inset Formula $A_{22}$
+\end_inset
+
+: מתקבלת מכפלה השורה השניה בעמודה השניה, כלומר 
+\begin_inset Formula $A_{21}\cdot A_{11}^{-1}A_{12}+I\cdot A_{22}-A_{21}A_{11}^{-1}A_{12}=A_{22}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כל זה אולי נראה קצת מהונדס מדי כדי שהכל יעבוד, אבל זה כמובן עובד.
+ השאלה היותר מהותית היא למה בכלל מותר לכפול מטריצות בלוקים - וכמו הרבה דברים
+ באלגברה לינארית בסיסית זו תוצאה שאני גם מניח שכולנו מכירים והיא גם די טכנית
+ להוכחה, אז אני לא אוכיח אותה כאן אבל אין כאן חוכמה מיוחדת - אם אתם סקפטיים,
+ נסו להוכיח אותה על שתי מטריצות קטנות קונקרטיות ותראו מה קורה.
+\end_layout
+
+\begin_layout Standard
+עכשיו, מה שנחמד בפירוק המוזר הזה של 
+\begin_inset Formula $A$
+\end_inset
+
+ למכפלה של שתי מטריצות בלוקים הוא שזה ממשיך לעבוד כשלוקחים 
+\series bold
+דטרמיננטה
+\series default
+.
+ כזכור, דטרמיננטה של מכפלה היא מכפלת הדטרמיננטות; וכשיש לנו מטריצת בלוקים
+ 
+\begin_inset Formula $\left(\begin{array}{cc}
+A & 0\\
+C & D
+\end{array}\right)$
+\end_inset
+
+ הדטרמיננטה שלה היא 
+\begin_inset Formula $\left|A\right|\left|D\right|$
+\end_inset
+
+ )ובאופן דומה כשה-
+\numeric on
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הוא במקום 
+\begin_inset Formula $C$
+\end_inset
+
+(, כך שנקבל:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|A\right|=\left|\left(\begin{array}{cc}
+A_{11} & 0\\
+A_{21} & I
+\end{array}\right)\right|\left|\left(\begin{array}{cc}
+I & A_{11}^{-1}A_{12}\\
+0 & A_{22}-A_{21}A_{11}^{-1}A_{12}
+\end{array}\right)\right|=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|A_{11}\right|\left|A_{22}-A_{21}A_{11}^{-1}A_{12}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו משתמשים בטריק: כופלים את שני האגפים בסקלר 
+\begin_inset Formula $\left|A_{11}\right|^{n-k-1}$
+\end_inset
+
+ ומקבלים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|A_{11}\right|^{n-k-1}\left|A\right|=\left|\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זה יכול להיות די מבלבל, הנה מה שקרה פה: באופן כללי, אם יש לי מטריצה 
+\begin_inset Formula $B$
+\end_inset
+
+ ואני כופל שורה כלשהי שלה בסקלר, זה מכפיל את כל הדטרמיננטה באותו סקלר.
+ כדי להוכיח את זה אפשר להשתמש באותה טכניקה שראינו בפוסט הקודם: כפל שורה
+ בסקלר זה כמו כפל במטריצת יחידה 
+\begin_inset Formula $I$
+\end_inset
+
+ שאחד מה-
+\numeric on
+1
+\numeric off
+-ים על האלכסון שלה הוחלף בסקלר הבודד 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, והדטרמיננטה של מטריצה כזו היא 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ כי היא הרי מכפלת הערכים על האלכסון.
+\end_layout
+
+\begin_layout Standard
+עכשיו, מה קורה אם כופלים את 
+\series bold
+כל
+\series default
+ השורות של 
+\begin_inset Formula $B$
+\end_inset
+
+ באותו סקלר, כלומר אם פשוט כפלנו את כל המטריצה 
+\begin_inset Formula $B$
+\end_inset
+
+ בסקלר הזה? אם 
+\begin_inset Formula $B$
+\end_inset
+
+ היא מטריצה מסדר 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ זה אומר שכפלנו את הדטרמיננטה 
+\begin_inset Formula $n$
+\end_inset
+
+ פעמים בסקלר 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, אז יש לנו את המשוואה 
+\begin_inset Formula $\left|\lambda B\right|=\lambda^{n}\left|B\right|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+אם נחזור עכשיו למה שעשינו למעלה - יש לנו את המטריצה 
+\begin_inset Formula $B=A_{22}-A_{21}A_{11}^{-1}A_{12}$
+\end_inset
+
+.
+ הסדר של המטריצה הזו הוא 
+\begin_inset Formula $\left(n-k\right)\times\left(n-k\right)$
+\end_inset
+
+ ולכן 
+\begin_inset Formula $\lambda^{n-k}\left|B\right|=\left|\lambda B\right|$
+\end_inset
+
+.
+ אצלנו 
+\begin_inset Formula $\lambda=\left|A_{11}\right|$
+\end_inset
+
+, ואנחנו מקבלים אותו בחזקת 
+\begin_inset Formula $n-k$
+\end_inset
+
+ כי בהתחלה הוא הופיע פעם אחת באגף ימין ואז כפלנו ב-
+\begin_inset Formula $\lambda^{n-k-1}$
+\end_inset
+
+.
+ זה מסביר את המעבר הזה.
+\end_layout
+
+\begin_layout Section
+חלק רביעי, שבו אנו חוזים בשובם של המספרים מהאלגוריתם
+\end_layout
+
+\begin_layout Standard
+עכשיו הגענו לקאץ': אני אראה שהאיברים של המטריצה 
+\begin_inset Formula $\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)$
+\end_inset
+
+ שאליה הגענו הם בעצם ה-
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ שמופיעים בשלבי הביניים של האלגוריתם.
+ ראשית, בואו נגדיר את ה-
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ הללו במפורש, מה שעד כה נמנעתי מלעשות:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a_{ij}^{\left(k\right)}=\left|\begin{array}{ccccc}
+a_{11} & a_{12} & \cdots & a_{1k} & a_{1j}\\
+a_{21} & a_{22} & \cdots & a_{2k} & a_{2j}\\
+\cdots & \cdots & \cdots & \cdots & \cdots\\
+a_{k1} & a_{k2} & \cdots & a_{kk} & a_{kj}\\
+a_{i1} & a_{i1} & \cdots & a_{ik} & a_{ij}
+\end{array}\right|$
+\end_inset
+
+ עבור 
+\begin_inset Formula $k<i,j\le n$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מה קורה פה? ראשית לוקחים את המטריצה 
+\begin_inset Formula $A_{11}$
+\end_inset
+
+ שמתקבלת מ-
+\begin_inset Formula $A$
+\end_inset
+
+ המקורית על ידי לקיחת 
+\begin_inset Formula $k$
+\end_inset
+
+ השורות והעמודות הראשונות.
+ עכשיו, מוסיפים שורה חדשה - את שורה מס' 
+\begin_inset Formula $i$
+\end_inset
+
+, כאשר 
+\begin_inset Formula $k<i$
+\end_inset
+
+ כלומר זו אחת מהשורות שלא הופיעו במטריצה קודם.
+ אנחנו לא מוסיפים את כל השורה אלא רק את 
+\begin_inset Formula $k$
+\end_inset
+
+ העמודות הראשונות שלה.
+ אחר כך אנחנו מוסיפים עמודה 
+\begin_inset Formula $j$
+\end_inset
+
+ כך ש-
+\begin_inset Formula $k<j$
+\end_inset
+
+ וגם כאן - לא את כל העמודה, רק את 
+\begin_inset Formula $k$
+\end_inset
+
+ השורות הראשונות שלה.
+ לסיום, אחרי שהוספנו את השורה והעמודה עוד נותר מקום ריק אחד בקצה הימני-תחתון
+ של המטריצה, ושם אנחנו שמים את 
+\begin_inset Formula $ij$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+למה
+\series default
+ שנגדיר ככה? במאמר המקורי שלו בריס מגיע אל המטריצה הזו בדרך שונה וטכנית
+ יותר - אני דווקא מעדיף את הדרך שבה נוקטים כאן, למרות שהיא נראית כמו קסם
+ )במתמטיקה אין קסמים; כל הגדרה קסומה מגיעה אחרי שמישהו שבר את הראש על הבעיה
+ הרבה זמן וניסה הרבה דברים(.
+\end_layout
+
+\begin_layout Standard
+עכשיו, הדטרמיננטה הזו נראית קצת מפחידה אבל כבר ראינו דרך להתמודד איתה -
+ אם שמים לב שיש לנו כאן דטרמיננטה של 
+\series bold
+מטריצת בלוקים
+\series default
+.
+ הבלוקים הם בדיוק ארבעת הדברים שתיארתי: המטריצה 
+\begin_inset Formula $A_{11}$
+\end_inset
+
+ שממנה מתחילים, השורה שהוספתי למטה, העמודה שהוספתי משמאל, וה-
+\begin_inset Formula $a_{ij}$
+\end_inset
+
+ שהוספתי למטה.
+ כלומר יש לנו כאן את מטריצת הבלוקים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $B=\left(\begin{array}{cc}
+B_{11} & B_{12}\\
+B_{21} & B_{22}
+\end{array}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כך ש-
+\begin_inset Formula $B_{11}=A_{11}$
+\end_inset
+
+, 
+\begin_inset Formula $B_{12}=\left(a_{1j},\ldots,a_{kj}\right)^{t},B_{21}=\left(a_{i1},\ldots,a_{ik}\right)$
+\end_inset
+
+ ו-
+\begin_inset Formula $B_{22}=\left(a_{ij}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+ראינו את הנוסחה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|B\right|=\left|B_{11}\right|\left|B_{22}-B_{21}B_{11}^{-1}B_{12}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כאן 
+\begin_inset Formula $\left|B\right|=a_{ij}^{\left(k\right)}$
+\end_inset
+
+ כי 
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ הוגדר בתור הדטרמיננטה של המטריצה הזו.
+ קצת יותר מעניין מה זה 
+\begin_inset Formula $B_{21}B_{11}^{-1}B_{12}$
+\end_inset
+
+ - זה כפל של מטריצה )
+\begin_inset Formula $A_{11}^{-1}$
+\end_inset
+
+( במטריצת עמודה מימין ומטריצת שורה משמאל - התוצאה היא סקלר, וחישוב ישיר
+ על פי ההגדרה של כפל מטריצות נותן ש-
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $B_{21}B_{11}^{-1}B_{12}=\sum_{r=1}^{k}\sum_{s=1}^{k}a_{ir}\left[A_{11}^{-1}\right]_{rs}a_{sj}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ולכן משילוב כל הדברים הללו אנחנו מקבלים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a_{ij}^{\left(k\right)}=\left|A_{11}\right|\left(a_{ij}-\sum_{r=1}^{k}\sum_{s=1}^{k}a_{ir}\left[A_{11}^{-1}\right]_{rs}a_{sj}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מה שיש לנו באגף שמאל הוא בדיוק את האיבר ה-
+\begin_inset Formula $ij$
+\end_inset
+
+ של המטריצה 
+\begin_inset Formula $\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)$
+\end_inset
+
+, אם כי צריך קצת להיזהר עם האינדקסים כדי לראות את זה כי המטריצה הזו 
+\series bold
+מתחילה
+\series default
+ לא מהאינדקס 
+\begin_inset Formula $1,1$
+\end_inset
+
+ אלא מהאינדקס 
+\begin_inset Formula $k+1,k+1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+איך זה עוזר לנו? ובכן, קודם כל שימו לב שכמו שאמרתי קודם - המינורים העיקריים
+ של 
+\begin_inset Formula $A$
+\end_inset
+
+ מתקבלים ככה.
+ ממש על פי ההגדרה, מתקיים 
+\begin_inset Formula $\left|A_{11}\right|=a_{kk}^{\left(k-1\right)}$
+\end_inset
+
+, כי 
+\begin_inset Formula $A_{11}$
+\end_inset
+
+ מתקבלת מלקיחת 
+\begin_inset Formula $k$
+\end_inset
+
+ השורות והעמודות הראשונות ואילו המטריצה שבה משתמשים לחישוב 
+\begin_inset Formula $a_{kk}^{\left(k-1\right)}$
+\end_inset
+
+ מתקבלת מלקיחת 
+\begin_inset Formula $k-1$
+\end_inset
+
+ השורות והעמודות הראשונות ואז הוספה אליהן של השורה והעמודה הבאות בתור.
+\end_layout
+
+\begin_layout Standard
+לכן אני יכול ללכת אל הנוסחה שהוכחתי קודם:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|A_{11}\right|^{n-k-1}\left|A\right|=\left|\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ולהציב בתוכה את 
+\begin_inset Formula $\left|A_{11}\right|=a_{kk}^{\left(k-1\right)}$
+\end_inset
+
+ מצד אחד, ואילו בצד השני יש לנו כאמור את המטריצה 
+\begin_inset Formula $\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)$
+\end_inset
+
+ שהאיברים שלה הם בדיוק ה-
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ עבור 
+\begin_inset Formula $k<i,j\le n$
+\end_inset
+
+, ולכן קיבלנו את הנוסחה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left|A\right|\left[a_{kk}^{\left(k-1\right)}\right]^{n-k-1}=\left|\begin{array}{ccc}
+a_{k+1,k+1}^{\left(k\right)} & \cdots & a_{k+1,n}^{\left(k\right)}\\
+\cdots & \cdots & \cdots\\
+a_{n,k+1}^{\left(k\right)} & \cdots & a_{n,n}^{\left(k\right)}
+\end{array}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+את הנוסחה הזו הוכחנו לכל מטריצה 
+\begin_inset Formula $A$
+\end_inset
+
+ )עם ההנחה שהמינור העיקרי שלה, מה שסימנתי ב-
+\begin_inset Formula $A_{11}$
+\end_inset
+
+, הוא מדטרמיננטה שונה מאפס(, אז אפשר להשתמש בה גם עבור המטריצה שאיתה הגדרנו
+ את 
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+, כלומר המטריצה שמורכבת מהמינור העיקרי 
+\begin_inset Formula $A_{11}$
+\end_inset
+
+ ואז עוד שורה ועמודה.
+ צריך קצת להיזהר עם האינדקסים: עד עכשיו השתמשתי ב-
+\begin_inset Formula $k$
+\end_inset
+
+ כדי לציין אינדקס כלשהו, 
+\begin_inset Formula $1\le k\le n$
+\end_inset
+
+ שמתאים למינור העיקרי שבו מטפלים באותו הרגע, אבל עכשיו כשאני רוצה להשתמש
+ בנוסחה הזו כדי לטפל ב-
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ ולכן יש לי חופש בחירה של המינור העיקרי 
+\series bold
+שלו
+\series default
+ שאנחנו בוחרים, צריך להשתמש באינדקס אחר - במאמר שלו ברייס משתמש ב-
+\begin_inset Formula $l$
+\end_inset
+
+, ואז מקבלים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a_{ij}^{\left(k\right)}\left[a_{ll}^{\left(l-1\right)}\right]^{\left(k+1\right)-l-1}=\left|\begin{array}{cccc}
+a_{l+1,l+1}^{\left(l\right)} & \cdots & a_{l+1,k}^{\left(l\right)} & a_{l+1,j}^{\left(l\right)}\\
+\cdots & \cdots & \cdots & \cdots\\
+a_{k,l+1}^{\left(l\right)} & \cdots & a_{k,k}^{\left(l\right)} & a_{k,j}^{\left(l\right)}\\
+a_{i,l+1}^{\left(l\right)} & \cdots & a_{i,k}^{\left(l\right)} & a_{i,j}^{\left(l\right)}
+\end{array}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+הסיבה לכך שיש 
+\begin_inset Formula $k+1$
+\end_inset
+
+ בחזקה באגף שמאל הוא שזה הסדר של המטריצה שמגדירה את 
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ )כי לקחנו מטריצה 
+\begin_inset Formula $k\times k$
+\end_inset
+
+ והוספנו לה שורה ועמודה(.
+ השינוי באיך שאני מציג את האיברים בתוך הדטרמיננטה באגף ימין )עוד שורה ועמודה(
+ הוא רק כדי שיהיה יותר קל להבין מה קורה, בגלל שהמבנה של השורה והעמודה האחרונות
+ במטריצה הוא שונה מאשר עבור יתר הכניסות.
+\end_layout
+
+\begin_layout Standard
+עכשיו, תחת ההנחה שלנו על כך שהדטרמיננטה של המינורים העיקריים היא לא אפס
+ אנחנו מקבלים ש-
+\begin_inset Formula $a_{ll}^{\left(l-1\right)}$
+\end_inset
+
+ הוא לא אפס )כי הוא שווה למינור עיקרי שכזה( ולכן אפשר לחלק בו ולקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a_{ij}^{\left(k\right)}=\frac{1}{\left[a_{ll}^{\left(l-1\right)}\right]^{k-l}}\left|\begin{array}{cccc}
+a_{l+1,l+1}^{\left(l\right)} & \cdots & a_{l+1,k}^{\left(l\right)} & a_{l+1,j}^{\left(l\right)}\\
+\cdots & \cdots & \cdots & \cdots\\
+a_{k,l+1}^{\left(l\right)} & \cdots & a_{k,k}^{\left(l\right)} & a_{k,j}^{\left(l\right)}\\
+a_{i,l+1}^{\left(l\right)} & \cdots & a_{i,k}^{\left(l\right)} & a_{i,j}^{\left(l\right)}
+\end{array}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+וזה נותן לנו דרך לחשב רקורסיבית את ה-
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+-ים! נזכיר את תנאי ההתחלה שלנו:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a_{00}^{\left(-1\right)}=1,a_{ij}^{\left(0\right)}=a_{ij}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ובנוסחה למעלה, כדי לצמצם כמה שרק ניתן את הגודל של הדטרמיננטה אפשר לבחור
+ 
+\begin_inset Formula $l=k-1$
+\end_inset
+
+ ולקבל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $a_{ij}^{\left(k\right)}=\frac{1}{a_{k-1,k-1}^{\left(k-2\right)}}\left|\begin{array}{cc}
+a_{kk}^{\left(k-1\right)} & a_{kj}^{\left(k-1\right)}\\
+a_{ik}^{\left(k-1\right)} & a_{ij}^{\left(k-1\right)}
+\end{array}\right|=\frac{a_{ij}^{\left(k-1\right)}a_{kk}^{\left(k-1\right)}-a_{ik}^{\left(k-1\right)}a_{kj}^{\left(k-1\right)}}{a_{k-1,k-1}^{\left(k-2\right)}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כשהשוויון האחרון נובע פשוט מחישוב ישיר של הדטרמיננטה.
+ זה משלים את ההוכחה, כי קיבלנו בדיוק את הנוסחה שהופיעה באלגוריתם, ועכשיו
+ אנחנו גם מבינים למה החלוקה ב-
+\begin_inset Formula $a_{k-1,k-1}^{\left(k-2\right)}$
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+מצליחה
+\begin_inset Quotes erd
+\end_inset
+
+ ואנחנו מקבלים מספר שלם - כי 
+\begin_inset Formula $a_{ij}^{\left(k\right)}$
+\end_inset
+
+ מלכתחילה הוגדר בתור דטרמיננטה של מטריצה שמכילה רק מספרים שלמים )זאת בהנחה
+ שהמטריצה המקורית הכילה רק שלמים( ולכן אם יש שבר ששווה לו, המכנה חייב לחלק
+ את המונה.
+\end_layout
+
+\begin_layout Section
+חלק חמישי ואחרון, שבו אנו מגיעים לגרסה המלאה של האלגוריתם
+\end_layout
+
+\begin_layout Standard
+יפה, אז ראינו את ההוכחה לכך שהאלגוריתם הבא עובד:
+\end_layout
+
+\begin_layout Itemize
+אתחל את המשתנים 
+\begin_inset Formula $a_{ij}^{\left(0\right)}=a_{ij}$
+\end_inset
+
+ לכל 
+\begin_inset Formula $1\le i,j\le n$
+\end_inset
+
+ ואת המשתנה המיוחד 
+\begin_inset Formula $a_{00}^{\left(-1\right)}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+לכל 
+\begin_inset Formula $k=1,2,\ldots,n-1$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+לכל 
+\begin_inset Formula $k+1\le i,j\le n$
+\end_inset
+
+, קבעו 
+\begin_inset Formula $a_{ij}^{\left(k\right)}\leftarrow\frac{a_{ij}^{\left(k-1\right)}a_{kk}^{\left(k-1\right)}-a_{ik}^{\left(k-1\right)}a_{kj}^{\left(k-1\right)}}{a_{k-1,k-1}^{\left(k-2\right)}}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+החזירו את 
+\begin_inset Formula $a_{nn}^{\left(n-1\right)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עכשיו, מהנוסחה הזו ברור שאם אנחנו בשלב 
+\begin_inset Formula $k$
+\end_inset
+
+, אז כל הערכים במטריצה שהשורה או העמודה שלהם היא לכל היותר 
+\begin_inset Formula $k$
+\end_inset
+
+ כבר לא מעניינים אותנו, למעט האיבר במקום 
+\begin_inset Formula $k-1,k-1$
+\end_inset
+
+ - אבל גם עבורו, אנחנו נצטרך רק 
+\series bold
+לקרוא
+\series default
+ את הערך שלו ולא נשנה אותו יותר.
+ זה אומר שאם אנחנו מקבלים את המטריצה כקלט, אז בשביל לחסוך מקום אפשר לשמור
+ את ערכי הביניים 
+\series bold
+בתוכה
+\series default
+ )אם לא מפריע לנו שהיא תשתנה; אם לא נרצה שהפונקציה תשפיע על המטריצה המקורית
+ יהיה צורך ליצור עותק שלה, אבל גם אז עדיף עותק אחד על סביבות 
+\begin_inset Formula $n$
+\end_inset
+
+ עותקים כאלו(.
+\end_layout
+
+\begin_layout Standard
+אם נוקטים בגישה הזו, זה מה שהאלגוריתם הופך להיות:
+\end_layout
+
+\begin_layout Itemize
+אתחלו את המשתנה 
+\begin_inset Formula $A_{00}=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+לכל 
+\begin_inset Formula $k=1,2,\ldots,n-1$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+לכל 
+\begin_inset Formula $k+1\le i,j\le n$
+\end_inset
+
+, קבעו 
+\begin_inset Formula $A_{ij}\leftarrow\frac{A_{ij}A_{kk}-A_{ik}A_{kj}}{A_{k-1,k-1}}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+החזירו את 
+\begin_inset Formula $A_{n-1,n-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+בפועל כשכותבים קוד לא כזה כיף להוסיף משתנה 
+\begin_inset Formula $A_{00}$
+\end_inset
+
+ כי צריך קוד מיוחד לטפל בו ולא במטריצה 
+\begin_inset Formula $A$
+\end_inset
+
+, ולכן הרבה יותר פשוט לבדוק אם 
+\begin_inset Formula $k=1$
+\end_inset
+
+ ואם כן - פשוט לוותר על פעולת החילוק באיטרציה הזו של האלגוריתם.
+ בקוד שאצרף עוד רגע אפשר יהיה לראות את זה.
+\end_layout
+
+\begin_layout Standard
+יש רק דבר אחד שטרם התייחסתי אליו - מה קורה אם אחד מהמינורים העיקריים הוא
+ עם דטרמיננטה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+? במקרה הזה, החישוב יניב בשלב כלשהו 
+\begin_inset Formula $A_{kk}=0$
+\end_inset
+
+ ואי אפשר יהיה לחלק בו.
+ בסיטואציה הזו עושים דבר דומה למה שהיה באלגוריתם ה
+\begin_inset Quotes erd
+\end_inset
+
+רגיל
+\begin_inset Quotes erd
+\end_inset
+
+ לדטרמיננטה - מחפשים בעמודה ה-
+\begin_inset Formula $k$
+\end_inset
+
+-ית החל מהשורה ה-
+\begin_inset Formula $k+1$
+\end_inset
+
+ כניסה ששונה מאפס, ואם נמצאה כזו - מחליפים את השורות ומכפילים את הסימן של
+ הדטרמיננטה ב-
+\begin_inset Formula $-1$
+\end_inset
+
+.
+ זה האלגוריתם המלא )שימו לב שבפייתון // מייצג חילוק בשלמים - כלומר, חילוק
+ שמתעלם מהשארית, אם יש כזו, ומחזיר רק את המנה השלמה(:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+קוד
+\end_layout
+
+\end_body
+\end_document
