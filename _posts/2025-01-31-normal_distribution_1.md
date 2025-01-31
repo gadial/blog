@@ -6,6 +6,8 @@ categories:
   - הסתברות
 tags:
   - התפלגות נורמלית
+image: "/assets/img/2025/histogram_8.png"
+description: "על עקומה מסתורית שמתעקשת לצוץ שוב ושוב כשאנחנו סוכמים תוצאות בניסויים הסתברותיים שרירותיים לגמרי"
 ---
 
 סדרת הפוסטים הזו נולדה משאלה קונקרטית ששאלו אותי: למה בנוסחה של <strong>התפלגות נורמלית</strong> מופיעים {% equation %}e{% endequation %} ו-{% equation %}\pi{% endequation %}?
