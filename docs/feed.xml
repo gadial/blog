@@ -1,4 +1,531 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2025-05-31T17:55:20+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">מספרי קטלן</title><link href="http://gadial.net/2025/05/31/catalan_numbers/" rel="alternate" type="text/html" title="מספרי קטלן" /><published>2025-05-31T00:00:00+00:00</published><updated>2025-05-31T00:00:00+00:00</updated><id>http://gadial.net/2025/05/31/catalan_numbers</id><content type="html" xml:base="http://gadial.net/2025/05/31/catalan_numbers/">&lt;h2&gt;מבוא&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://gadial.net/feed.xml" rel="self" type="application/atom+xml" /><link href="http://gadial.net/" rel="alternate" type="text/html" /><updated>2025-06-11T17:05:27+00:00</updated><id>http://gadial.net/feed.xml</id><title type="html">לא מדויק</title><subtitle>בלוג על מתמטיקה ומדעי המחשב</subtitle><entry><title type="html">פונקציות יוצרות ומספרי קטלן</title><link href="http://gadial.net/2025/06/11/catalan_numbers_and_generating_functions/" rel="alternate" type="text/html" title="פונקציות יוצרות ומספרי קטלן" /><published>2025-06-11T00:00:00+00:00</published><updated>2025-06-11T00:00:00+00:00</updated><id>http://gadial.net/2025/06/11/catalan_numbers_and_generating_functions</id><content type="html" xml:base="http://gadial.net/2025/06/11/catalan_numbers_and_generating_functions/">&lt;h2&gt;מבוא&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://gadial.net/2025/05/31/catalan_numbers/&quot;&gt;בפוסט הקודם&lt;/a&gt; שלי כתבתי על מספרי קטלן, סדרת המספרים &lt;span&gt;\( 1,1,2,5,14,42,\ldots \)&lt;/span&gt;. הראיתי נוסחת נסיגה עבורה, &lt;span&gt;\( C_{n+1}=\sum_{k=0}^{n}C_{k}C_{n-k} \)&lt;/span&gt;; הראיתי נוסחה סגורה עבורה, &lt;span&gt;\( C_{n}=\frac{1}{n+1}{2n \choose n} \)&lt;/span&gt;; והראיתי שלל בעיות ספירה שמספרי קטלן פותרים, משילושים של מצולעים, עבור בעצים בינאריים וכלה במגדלי קפלר. רק דבר אחד לא הראיתי, למרות שהוא מושג מרכזי וחשוב בקומבינטוריקה באופן כללי: את &lt;strong&gt;הפונקציה היוצרת&lt;/strong&gt; של מספרי קטלן. לא עשיתי את זה כי זה היה מעלה פי כמה את רמת הטכניות של הפוסט ומרחיק אותי מהנושא המעניין בו, שהוא מספרי קטלן עצמם; אבל עכשיו אחרי שהתרגלנו אליהם (או דילגנו לגמרי על הפוסט הקודם כי אנחנו רוצים את האקשן שיהיה כאן) אפשר להפנות זרקור אל פונקציות יוצרות בכלל, וזו של מספרי קטלן בפרט.&lt;/p&gt;
+
+&lt;p&gt;כמיטב מסורת הבלוג, &lt;a href=&quot;https://gadial.net/2011/08/07/generating_functions_hardcore_1/&quot;&gt;כבר יש לי פוסט על הנושא הזה&lt;/a&gt;, כולל אזכור של מספרי קטלן, אבל הפעם אני רוצה &lt;strong&gt;לחפור&lt;/strong&gt; ולהציג נושאים שרק נגעתי בהם בעבר ברמת פורמליות הרבה יותר גדולה. זה אומר שהפוסט יהיה טכני יחסית, ויילך ויסתבך ככל שאתקדם, אבל נגיע לפונקציה היוצרת של קטלן יחסית מהר; האתגר יהיה להבין למה הפונקציה היוצרת הזו “חוקית” וכמה אפשר להכליל את זה. אני אגלה מראש כבר עכשיו שהפונקציה היוצרת היא &lt;span&gt;\( C\left(x\right)=\frac{1-\sqrt{1-4x}}{2x} \)&lt;/span&gt;, אבל - מה זה בעצם אומר? ואיך מגיעים לזה? בשביל זה אני אצטרך לדבר קצת על דברים.&lt;/p&gt;
+
+&lt;h2&gt;למה פונקציות יוצרות זה כמו פולינומים, רק פשוט יותר&lt;/h2&gt;
+
+&lt;p&gt;הרעיון בפונקציות יוצרות הוא לקודד סדרות מספרים כמו מספרי קטלן בתור &lt;strong&gt;טורי חזקות פורמליים&lt;/strong&gt;. זה דורש הגדרה של מה זה בכלל טור חזקות פורמלי, ואם לא מכירים אותם המושג הזה קצת מוזר בהתחלה אז אפשר להתחיל עם אובייקטים יותר ידידותיים: &lt;strong&gt;פולינומים&lt;/strong&gt;. התיאור הכללי שלנו של פולינום הוא&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)=\sum_{n=0}^{d}a_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאשר &lt;span&gt;\( d \)&lt;/span&gt; הוא &lt;strong&gt;דרגת&lt;/strong&gt; הפולינום - החזקה הגבוהה ביותר שלו שהמקדם שלה שונה מאפס. עכשיו, על פולינומים אפשר להגדיר פעולות חיבור וכפל, אז בשביל להדגים את זה בואו נציג שני פולינומים מדרגות &lt;span&gt;\( d_{1},d_{2} \)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)=\sum_{n=0}^{d_{1}}a_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b\left(x\right)=\sum_{n=0}^{d_{2}}b_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו החיבור מוגדר “איבר-איבר”:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)+b\left(x\right)=\sum_{n=0}^{\max\left\{ d_{1},d_{2}\right\} }\left(a_{n}+b_{n}\right)x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזה בסך הכל יפה מאוד חוץ מהאיכסה של ה-&lt;span&gt;\( \max\left\{ d_{1},d_{2}\right\}  \)&lt;/span&gt; למעלה שגם מצריך אותנו לענות על שאלות קשות כמו מה המקדמים של פולינום מעבר לדרגה המקסימלית שלו (אפס. הם אפס).&lt;/p&gt;
+
+&lt;p&gt;מה עם כפל? כאן זה טיפה יותר מסובך אבל לא בצורה חריגה. בואו נתחיל עם דוגמא:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(a_{1}x+a_{0}\right)\left(b_{1}x+b_{0}\right)=a_{1}b_{1}x^{2}+\left(a_{0}b_{1}+a_{1}b_{0}\right)x^{1}+a_{0}b_{0}x^{0} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כדאי לחשב את הדוגמא הזו ידנית, או אפילו משהו עם איבר אחד נוסף לאחד הפולינומים, כדי לקבל תחושה טובה של “מה הולך פה”. מה שמקבלים הוא שהמקדם של כל חזקה של &lt;span&gt;\( x^{n} \)&lt;/span&gt; הוא &lt;strong&gt;סכום&lt;/strong&gt; של איברים, כשכל איבר הוא &lt;strong&gt;מכפלה&lt;/strong&gt; של מקדם של &lt;span&gt;\( a\left(x\right) \)&lt;/span&gt; ומקדם של &lt;span&gt;\( b\left(x\right) \)&lt;/span&gt;, כשהמקדמים נבחרים כך שסכום האינדקסים של שניהם יוצא &lt;span&gt;\( n \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;כדי לכתוב נוסחה כללית עבור זה, קודם כל אני אכתוב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)\cdot b\left(x\right)=\sum_{n=0}^{d_{1}+d_{2}}c_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ועכשיו אפשר להגיד מהו כל מקדם &lt;span&gt;\( c_{n} \)&lt;/span&gt; שכזה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עד כאן - חומר לא הכי קל טכנית אבל מאוד בסיסי, הרי משתמשים בפולינומים כמעט בכל מקום במתמטיקה אוניברסיטאית. אבל אפשר להצמיד לו שתי נקודות מבט שהן טיפונת פחות נפוצות:&lt;/p&gt;
+
+&lt;p&gt;ראשית, אפשר לחשוב על הפולינומים כאילו הם מקודדים &lt;strong&gt;סדרת מספרים&lt;/strong&gt; - סדרת המקדמים שלהם. בצורה הזו, חיבור פולינומים מתורגם לחיבור נקודתי של שתי סדרות, וכפל פולינומים מתורגם לפעולת &lt;strong&gt;קונבולוציה&lt;/strong&gt; של הסדרות. חיבור נקודתי אנחנו מכירים, אבל קונבולוציה היא פעולה שיכול לקחת זמן עד שפוגשים אותה בשם הזה לראשונה (אני נתקלתי בה בלימודים רק בסמסטר מתקדם יחסית - וכמובן, באותו סמסטר היא הופיעה שוב ושוב בשלל קורסים שונים ובלתי תלויים; עבורי במקום לומר “אפקט באדר-מיינהוף” אפשר לומר “אפקט הקונבולוציה”) אבל הנה, אנחנו רואים שבעצם הכרנו אותה מאז ומעולם, או לפחות מאז שהכרנו כפל פולינומים.&lt;/p&gt;
+
+&lt;p&gt;שנית, שתי הפעולות הללו של חיבור וכפל הופכות את הפולינומים &lt;strong&gt;לחוג&lt;/strong&gt;. אני לא אניח שהמושג הזה מוכר כאן; לסטודנטים יכול לקחת טיפה זמן עד שהם נתקלים בו לראשונה, למרות החשיבות העצומה שלו למתמטיקה, אבל אני מניח שאנחנו כן מכירים &lt;strong&gt;שדות&lt;/strong&gt;, כי כבר באלגברה לינארית מתעסקים איתם. שדות הן קבוצות עם פעולת חיבור וכפל שמתנהגות ממש נחמד - אפילו נחמד &lt;strong&gt;מדי&lt;/strong&gt;. למשל, אפשר לחלק בכל איבר. כשעוברים לדבר על &lt;strong&gt;חוג&lt;/strong&gt; אנחנו משאירים את הדרישות של ההתנהגות הנחמדה מפעולת החיבור, וממשיכים לדרוש את חוק הפילוג (“דיסטריביוטיביות”) אבל מכפל אנחנו דורשים הרבה פחות; שיהיה אסוציאטיבי וזהו בערך. עכשיו, פולינומים דווקא מתנהגים לא רע בכלל - הכפל הוא קומוטטיבי, יש לו יחידה ואי אפשר בטעות לקבל אפס על ידי הכפלה של שני איברים שאינם אפס: זה הופך פולינומים למה שנקרא &lt;strong&gt;תחום שלמות&lt;/strong&gt;, שזה משהו שהאבטיפוס שלו הוא המספרים השלמים. כשהמקדמים של הפולינומים הם מעל שדה &lt;span&gt;\( F \)&lt;/span&gt; אנחנו מסמנים את חוג הפולינומים המתאים ב-&lt;span&gt;\( F\left[x\right] \)&lt;/span&gt;, משתמשים בו לשלל מטרות יפות (למשל, בנייה של שדות שמרחיבים את &lt;span&gt;\( F \)&lt;/span&gt;) וכולם מרוצים.&lt;/p&gt;
+
+&lt;p&gt;אבל אני לא רוצה לדבר על פולינומים. אני רוצה לדבר על טורי חזקות פורמליים.&lt;/p&gt;
+
+&lt;p&gt;מה ההבדל בין פולינומים לטורי חזקות פורמליים? פשוט מאוד. הנה פולינום:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)=\sum_{n=0}^{d}a_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הנה טור חזקות פורמלי:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, במקום סכום של &lt;span&gt;\( d+1 \)&lt;/span&gt; איברים, יש לנו סכום של אינסוף איברים. לראות סכום כזה מייד מעלה את השאלה הקשה - &lt;strong&gt;למה זה מתכנס&lt;/strong&gt;? אבל כשמדברים על “טור חזקות פורמלי” ה”פורמלי” אומר בדיוק שהטור קיים גם בלי לעמוד בדרישות התכנסות כלשהן. זו הנקודה שנשמעת הכי חשודה בסיפור אז בואו נעשה את זה לאט.&lt;/p&gt;
+
+&lt;p&gt;בהחלט &lt;strong&gt;יש&lt;/strong&gt; משמעות לשאלות התכנסות כשאני לוקח טור כמו &lt;span&gt;\( \sum_{n=0}^{\infty}\frac{1}{2^{n}} \)&lt;/span&gt; ושואל מה הסכום שלו. כאן יש לנו סדרה &lt;span&gt;\( \left\{ a_{n}\right\} _{n=0}^{\infty} \)&lt;/span&gt;של מספרים ממשיים, &lt;span&gt;\( a_{n}=\frac{1}{2^{n}} \)&lt;/span&gt;. אנחנו יודעים לחבר שני מספרים ממשיים, ובאינדוקציה גם שלושה, ארבעה וכן הלאה - כל מספר &lt;strong&gt;סופי&lt;/strong&gt; שלהם. אבל להתאים מספר קונקרטי לסכום של &lt;strong&gt;אינסוף&lt;/strong&gt; מביניהם - זה כבר דורש טכניקות נוספות, ולא בהכרח תמיד יעבוד. אפשר לכתוב &lt;span&gt;\( \sum_{n=0}^{\infty}\frac{1}{2^{n}}=2 \)&lt;/span&gt; בעזרת השיטה המקובלת לסכימה של טור אינסופי, אבל היא גם תאלץ אותנו לכתוב &lt;span&gt;\( \sum_{n=0}^{\infty}2^{n}=\infty \)&lt;/span&gt;. העניין הוא שבשני המקרים הללו, בין אם הטור מתכנס ובין אם לא, אף אחד לא חושב שיש בעיה עם קיום &lt;strong&gt;הסדרה&lt;/strong&gt;: גם הסדרה &lt;span&gt;\( \left\{ \frac{1}{2^{n}}\right\} _{n=0}^{\infty} \)&lt;/span&gt; וגם הסדרה &lt;span&gt;\( \left\{ 2^{n}\right\} _{n=0}^{\infty} \)&lt;/span&gt; הן אובייקטים שאנחנו לא מערערים על הקיום שלהם, אלא רק תוהים לגבי השאלה האם לאותם אובייקטים אפשר להתאים מספר שיתאר במובן מסויים את הסכום שלהם.&lt;/p&gt;
+
+&lt;p&gt;עם טורי חזקות פורמליים זה אותו דבר. אם הסימון &lt;span&gt;\( \sum_{n=0}^{\infty}a_{n}x^{n} \)&lt;/span&gt; מעורר בנו אי נוחות כי אנחנו מצפים, כשאנחנו רואים סכום, שהוא יתכנס למשהו, הרי שלראות את &lt;span&gt;\( \left(a_{0},a_{1},a_{2},\ldots\right) \)&lt;/span&gt; לא יעורר בנו את אותו סוג של אי נוחות, אבל שני אלו הם פשוט סימונים שונים לאותו דבר. כמו שהרברט וילף כותב ב-generatingfunctionology שלו: פונקציות יוצרות הן חבל כביסה שעליו אנחנו תולים מספרים לתצוגה.&lt;/p&gt;
+
+&lt;p&gt;אחרי שאנחנו מוכנים לקבל את &lt;strong&gt;הקיום&lt;/strong&gt; של אובייקט כמו &lt;span&gt;\( a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n} \)&lt;/span&gt;, אפשר לעבור לדבר על מה שעושים איתו - ומה שעושים איתו הוא &lt;strong&gt;אלגברה&lt;/strong&gt;, כלומר פעולות כמו חיבור וכפל. ראינו את ההגדרה עבור פולינומים; איך היא תשתנה עבור טורי חזקות? ובכן, עבור חיבור היא תהפוך מ-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)+b\left(x\right)=\sum_{n=0}^{\max\left\{ d_{1},d_{2}\right\} }\left(a_{n}+b_{n}\right)x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)+b\left(x\right)=\sum_{n=0}^{\infty}\left(a_{n}+b_{n}\right)x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עבור כפל היא תהפוך מ-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)\cdot b\left(x\right)=\sum_{n=0}^{d_{1}+d_{2}}c_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)\cdot b\left(x\right)=\sum_{n=0}^{\infty}c_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאשר בשני המקרים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;במילים אחרות, ההגדרה הפכה להיות &lt;strong&gt;אלגנטית יותר&lt;/strong&gt; כי לא צריך להסתבך עם הדרגות המעצבנות של הפולינומים. למה זה עובד, למרות שבטור חזקות יש אינסוף איברים? כי גם בהגדרת החיבור וגם בהגדרת הכפל, הערך של כל מקדם הוא סכום &lt;strong&gt;סופי&lt;/strong&gt; של איברים. המקדמים הם לא איברים פורמליים בעצמם; הם מספרים ממשיים (או מרוכבים, או איברים בשדה אחר). אז ביטוי כמו &lt;span&gt;\( a_{n}+b_{n} \)&lt;/span&gt; הוא סכום של שני מספרים ממשיים, וסכום כזה בוודאי קיים; וביטוי כמו &lt;span&gt;\( \sum_{k=0}^{n}a_{k}b_{n-k} \)&lt;/span&gt; הוא סכום יותר מורכב אבל עדיין כזה שכולל רק מספר &lt;strong&gt;סופי&lt;/strong&gt; של מחוברים. אם היו אינסוף מחוברים, אז היינו בצרות. אבל אנחנו לא בצרות, ובדיוק כמו שעבור הפולינומים קיבלנו חוג שמסומן ב-&lt;span&gt;\( F\left[x\right] \)&lt;/span&gt;, גם עבור טורי חזקות קיבלנו חוג, ואפילו תחום שלמות (ואפילו תחום שלמות עם כל מני תכונות אלגבריות נחמדות שלא אכנס אליהן) שמסומן ב-&lt;span&gt;\( F\left[\left[x\right]\right] \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;h2&gt;קצת חימום טכני - הטור ההנדסי האינסופי ומספרי פיבונאצ&apos;י&lt;/h2&gt;
+
+&lt;p&gt;בואו נראה שתי דוגמאות פשוטות לעבודה עם פונקציות יוצרות. ראשית, ניקח את הסדרה הממש פשוטה &lt;span&gt;\( a_{n}=1 \)&lt;/span&gt;, כלומר את הפונקציה היוצרת &lt;span&gt;\( 1+x+x^{2}+x^{3}+\ldots \)&lt;/span&gt;. אם נכפול אותה ב-&lt;span&gt;\( \left(1-x\right) \)&lt;/span&gt;, שהוא הפונקציה היוצרת &lt;span&gt;\( \sum_{n=0}^{\infty}b_{n}x^{n} \)&lt;/span&gt; עם&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b_{n}=\begin{cases} 1 &amp;amp; n=0\\ -1 &amp;amp; n=1\\ 0 &amp;amp; n&amp;gt;1 \end{cases} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+x+x^{2}+x^{3}+\ldots\right)\left(1-x\right)=\sum_{n=0}^{\infty}c_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאשר &lt;span&gt;\( c_{0}=a_{0}b_{0}=1 \)&lt;/span&gt; ו-&lt;span&gt;\( c_{1}=a_{0}b_{1}+a_{1}b_{0}=b_{1}+b_{0}=0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ובאופן כללי, בגלל שכל ה-&lt;span&gt;\( a_{n} \)&lt;/span&gt;-ים הם 1 אז בעצם &lt;span&gt;\( \sum_{k=0}^{n}a_{k}b_{n-k}=\sum_{k=0}^{n}b_{n-k} \)&lt;/span&gt;, ומכיוון שסכום כל ה-&lt;span&gt;\( b \)&lt;/span&gt;-ים החל מ-&lt;span&gt;\( b_{0} \)&lt;/span&gt; ועד למקום כלשהו הוא סכום של 1, מינוס 1 ועוד אפסים, נקבל &lt;span&gt;\( c_{n}=0 \)&lt;/span&gt; לכל &lt;span&gt;\( n&amp;gt;0 \)&lt;/span&gt;. המסקנה היא ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+x+x^{2}+x^{3}+\ldots\right)\left(1-x\right)=1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;במילים אחרות, בחוג &lt;span&gt;\( F\left[\left[x\right]\right] \)&lt;/span&gt; האיבר &lt;span&gt;\( 1+x+x^{2}+\ldots \)&lt;/span&gt; הוא &lt;strong&gt;הפיך&lt;/strong&gt; וההופכי שלו הוא &lt;span&gt;\( \left(1-x\right) \)&lt;/span&gt;. כדי לתאר את זה בצורה שקל לנו לעכל, אוהבים לסמן את זה כך:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 1+x+x^{2}+\ldots=\frac{1}{1-x} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;קרוב לודאי שאתם מכירים את השוויון הזה בתור נוסחת הסכום של סדרה הנדסית מתכנסת - אבל כאן הוכחנו את הנכונות שלו בלי שיקולי התכנסות! ה”מחיר” הוא שאי אפשר להציב ערכים ב-&lt;span&gt;\( x \)&lt;/span&gt; ולצפות שהשויון יתקיים עבורם; למשל אם נציב &lt;span&gt;\( x=2 \)&lt;/span&gt; נקבל את הסכום הידוע לשמצה &lt;span&gt;\( 1+2+4+8+\ldots=-1 \)&lt;/span&gt; (שנראה מופרך אבל הוא בעצם לא מופרך בכלל, אם אנחנו לא במספרים הממשיים אלא &lt;a href=&quot;https://gadial.net/2014/01/18/sum_of_naturals/&quot;&gt;במקום קסום אחר&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;בואו נעבור לדוגמא קצת יותר מחוכמת: סדרת פיבונאצ’י. הסדרה הזו מוגדרת על ידי הגדרה רקורסיבית: &lt;span&gt;\( F_{0}=1,F_{1}=1 \)&lt;/span&gt; ו-&lt;span&gt;\( F_{n}=F_{n-1}+F_{n-2} \)&lt;/span&gt;. הגדרה רקורסיבית שכזו נותנת לנו דרך פשוטה לגלות מה הפונקציה היוצרת של הסדרה &lt;span&gt;\( F_{0},F_{1},F_{2},\ldots \)&lt;/span&gt;. ראשית כל, נכתוב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( F\left(x\right)=\sum_{n=0}^{\infty}F_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, היינו רוצים להציב במקום &lt;span&gt;\( F_{n} \)&lt;/span&gt; את &lt;span&gt;\( F_{n}=F_{n-1}+F_{n-2} \)&lt;/span&gt;, אבל אי אפשר לעשות את זה מיידית, כי עבור &lt;span&gt;\( n=0,1 \)&lt;/span&gt; הנוסחה הזו לא מתקיימת. אז נפריד את הסכום לשני האיברים הראשונים וכל היתר:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( F\left(x\right)=\left(1\cdot x^{0}+1\cdot x^{1}\right)+\sum_{n=2}^{\infty}F_{n}x^{n}=\left(1+x\right)+\sum_{n=2}^{\infty}\left(F_{n-1}+F_{n-2}\right)x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\left(1+x\right)+\sum_{n=2}^{\infty}F_{n-1}x^{n}+\sum_{n=2}^{\infty}F_{n-2}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;המטרה שלי היא לנסות לגרום לשני הסכומים הללו להיראות כמו הסכום המקורי שהגדיר את הפונקציה היוצרת של פיבונאצ’י. בואו נסתכל על &lt;span&gt;\( \sum_{n=2}^{\infty}F_{n-2}x^{n} \)&lt;/span&gt; קודם - אני יכול לשנות את אינדקס הסכימה. כלל אצבע שקל לזכור הוא - אני יכול &lt;strong&gt;להגדיל&lt;/strong&gt; את האינדקס באיזה ערך שאני רוצה (במקרה הנוכחי, 2) בתנאי שאני &lt;strong&gt;מקטין&lt;/strong&gt; את הערך ההתחלתי באותה כמות. כלומר:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{n=2}^{\infty}F_{n-2}x^{n}=\sum_{n=0}^{\infty}F_{n}x^{n+2}=x^{2}\sum_{n=0}^{\infty}F_{n}x^{n}=x^{2}F\left(x\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עבור &lt;span&gt;\( \sum_{n=2}^{\infty}F_{n-1}x^{n} \)&lt;/span&gt; זה יהיה טיפה טריקי יותר כי אם אני אגדיל את אינדקס הסכימה ב-1, אני עדיין לא אקבל את &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; בסכום, כי:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{n=2}^{\infty}F_{n-1}x^{n}=\sum_{n=1}^{\infty}F_{n}x^{n+1}=x\sum_{n=1}^{\infty}F_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הסכום פה מתחיל מ-1, לא מ-0. כדי לטפל בזה אני יכול &lt;strong&gt;לחבר ולחסר&lt;/strong&gt; את אותו איבר, שבמקרה הנוכחי הוא &lt;span&gt;\( F_{0}x^{0}=1 \)&lt;/span&gt; (למעשה, בחרתי להתחיל את פיבונאצ’י מ-1 ולא מ-0 כדי להדגים את ההתמודדות עם הקושי הזה). כלומר, אני אכתוב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( x\sum_{n=1}^{\infty}F_{n}x^{n}=x\left(\sum_{n=0}^{\infty}F_{n}x^{n}-1\right)=xF\left(x\right)-x \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן מכל זה קיבלנו&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( F\left(x\right)=\left(1+x\right)+x^{2}F\left(x\right)+xF\left(x\right)-x=\left(x^{2}+x\right)F\left(x\right)+1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו אפשר להעביר את &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; אגף ולהוציא גורם משותף - אלו פעולות תקינות בכל חוג. נקבל:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( F\left(x\right)\left(1-x^{2}-x\right)=1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מה שהייתי רוצה לעשות עכשיו הוא &lt;strong&gt;לחלק&lt;/strong&gt; ב-&lt;span&gt;\( 1-x^{2}-x \)&lt;/span&gt;. האם מותר לי? כבר ראיתי שאפשר לחלק ב-&lt;span&gt;\( \left(1-x\right) \)&lt;/span&gt;, אבל מה עם דברים מורכבים יותר? תכף אני אוכיח שכל עוד המקדם החופשי הפיך, תמיד אפשר לחלק, אז התוצאה היא שאני יכול לכתוב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( F\left(x\right)=\frac{1}{1-x^{2}-x} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזו הפונקציה היוצרת של מספרי פיבונאצ’י (כשהם מתחילים מ-1 ולא מ-0). בשביל מה זה היה טוב? מה אפשר לעשות איתה שלא יכלנו לעשות בלעדיה? זה סיפור אחר - אפשר למשל לקבל ממנה את הנוסחה הסגורה למספרי פיבונאצ’י, או הערכות אסימפטוטיות על קצב הגידול שלה; כל זה מצריך לקחת את הפונקציה היוצרת ולזרוק עליה כלים סטנדרטיים שיודעים לטפל באנליזה של פונקציות רציונליות. הדגש פה הוא על &lt;strong&gt;סטנדרטיים&lt;/strong&gt; - זו הסיבה שמתמטיקאים אוהבים פונקציות יוצרות, זו דרך קומפקטית לייצר סדרות, שאחר כך אפשר להשתמש עליה בכל המתמטיקה שאנחנו מכירים.&lt;/p&gt;
+
+&lt;p&gt;כדי לסיים את החלק הזה אני צריך להוכיח את מה שטענתי קודם: ש-&lt;span&gt;\( a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n} \)&lt;/span&gt; הוא הפיך אם ורק אם &lt;span&gt;\( a_{0} \)&lt;/span&gt; הפיך. הרעיון בבסיסו הוא אותו רעיון כמו ההיפוך של &lt;span&gt;\( 1+x+x^{2}+\ldots \)&lt;/span&gt; רק שהפעם במקום לזרוק מהשמיים את ההופכי אני אסביר איך מוצאים אותו.&lt;/p&gt;
+
+&lt;p&gt;אם קיים הופכי, &lt;span&gt;\( b\left(x\right)=\sum_{n=0}^{\infty}b_{n}x^{n} \)&lt;/span&gt;, מה המקדמים שלו &lt;strong&gt;חייבים&lt;/strong&gt; להיות? אנחנו יודעים ש-&lt;span&gt;\( a\left(x\right)b\left(x\right)=1 \)&lt;/span&gt; (כי זו ההגדרה של הופכי), כלומר אם נכתוב &lt;span&gt;\( a\left(x\right)\cdot b\left(x\right)=\sum_{n=0}^{\infty}c_{n}x^{n} \)&lt;/span&gt; אז &lt;span&gt;\( c_{0}=1 \)&lt;/span&gt; ו-&lt;span&gt;\( c_{n}=0 \)&lt;/span&gt; לכל &lt;span&gt;\( n&amp;gt;0 \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;מהשוויון הראשון אנחנו מקבלים &lt;span&gt;\( a_{0}b_{0}=1 \)&lt;/span&gt;. כלומר, אם &lt;span&gt;\( a\left(x\right) \)&lt;/span&gt; היה הפיך אז השוויון הזה מראה לנו ש-&lt;span&gt;\( a_{0} \)&lt;/span&gt; הפיך ו-&lt;span&gt;\( b_{0} \)&lt;/span&gt; הוא ההופכי שלו; זה כיוון אחד של ההוכחה. הכיוון המורכב יותר הוא להניח ש-&lt;span&gt;\( a_{0} \)&lt;/span&gt; הפיך ולכן באמת קיים לו הופכי &lt;span&gt;\( b_{0} \)&lt;/span&gt;, וזה נותן לנו את &lt;strong&gt;ההתחלה&lt;/strong&gt; של הבניה של &lt;span&gt;\( b\left(x\right) \)&lt;/span&gt;, אבל צריך להראות שאפשר לבנות גם את יתר המקדמים.&lt;/p&gt;
+
+&lt;p&gt;למרבה המזל, יתר המקדמים מתקבלים מאליהם, בדרך אינדוקטיבית. נניח שכבר ידועים לנו המקדמים &lt;span&gt;\( b_{0},\ldots,b_{n-1} \)&lt;/span&gt; ונבנה את &lt;span&gt;\( b_{n} \)&lt;/span&gt;. מכיוון ש-&lt;span&gt;\( n&amp;gt;0 \)&lt;/span&gt; אז &lt;span&gt;\( c_{n}=0 \)&lt;/span&gt; ולכן השוויון &lt;span&gt;\( c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k} \)&lt;/span&gt; שמגדיר את המקדם במכפלה נותן לנו:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 0=\sum_{k=0}^{n}a_{k}b_{n-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a_{0}b_{n}=-\sum_{k=1}^{n}a_{k}b_{n-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו, אמרנו כבר ש-&lt;span&gt;\( a_{0} \)&lt;/span&gt; הפיך, אז אפשר לחלק בו - כלומר, לכפול ב-&lt;span&gt;\( b_{0} \)&lt;/span&gt;, ולקבל:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b_{n}=-b_{0}\sum_{k=1}^{n}a_{k}b_{n-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אגף ימין מורכב כולו מפעולת &lt;strong&gt;חוקיות&lt;/strong&gt; בחוג &lt;span&gt;\( F \)&lt;/span&gt; שמעליו אנחנו מגדירים את &lt;span&gt;\( F\left[\left[x\right]\right] \)&lt;/span&gt;, כך שהבניה עובדת וזה מסיים את ההוכחה! לא רק שהוכחנו ש-&lt;span&gt;\( a\left(x\right) \)&lt;/span&gt; הפיך, גם עשינו את זה בדרך קונסטרוקטיבית שמוצאת את ההופכי שלו.&lt;/p&gt;
+
+&lt;h2&gt;הפונקציה היוצרת של מספרי קטלן&lt;/h2&gt;
+
+&lt;p&gt;עד כאן, הכל טוב, אז בואו נתמודד עם האתגר המרכזי שלנו - מציאת הפונקציה היוצרת של מספרי קטלן.&lt;/p&gt;
+
+&lt;p&gt;יש כמה דרכים להגיע אל הפונקציה היוצרת של מספרי קטלן, ואחת הפשוטות שבהן היא להניח שכבר מצאנו את נוסחת הנסיגה שלהם, שראינו בפוסט הקודם: &lt;span&gt;\( C_{n+1}=\sum_{k=0}^{n}C_{k}C_{n-k} \)&lt;/span&gt;, עם תנאי ההתחלה &lt;span&gt;\( C_{0}=1 \)&lt;/span&gt;. הנוסחה הזו גם מזכירה קצת את זו של פיבונאצ’י ולכן הטכניקה שבה השתמשנו עבור פיבונאצ’י נראית מבטיחה כאן - אבל אפילו עוד יותר מכך, הנוסחה הזו מזכירה את איך שמכפלת פולינומים עובדת: &lt;span&gt;\( c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k} \)&lt;/span&gt;. רק הקטע הזה עם ה-&lt;span&gt;\( n+1 \)&lt;/span&gt; טיפה שונה. בואו נראה איך זה יסתדר לנו.&lt;/p&gt;
+
+&lt;p&gt;נתחיל עם להגדיר את הפונקציה היוצרת: &lt;span&gt;\( C\left(x\right)=\sum_{n=0}^{\infty}C_{n}x^{n} \)&lt;/span&gt;. עכשיו, בואו נכפיל את &lt;span&gt;\( C\left(x\right) \)&lt;/span&gt; &lt;strong&gt;בעצמה&lt;/strong&gt; כדי לנסות לקבל משהו שנראה כמו הנוסחה למכפלת פולינומים. אני אסמן את ההכפלה של &lt;span&gt;\( C\left(x\right) \)&lt;/span&gt; בעצמה ב-&lt;span&gt;\( C\left(x\right)^{2} \)&lt;/span&gt; - גם זה סימון סטנדרטי לגמרי בחוגים באופן כללי, ואני מקפיד על הפדנטיות הזו רק כי עוד רגע יגיעו דברים לא לגמרי סטנדרטיים.&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( C\left(x\right)^{2}=\sum_{n=0}^{\infty}A_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאשר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( A_{n}=\sum_{k=0}^{n}C_{k}C_{n-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה מה שנובע מהנוסחה למכפלת פולינומים. אבל בנוסף לכך אנחנו מכירים את נוסחת הנסיגה של קטלן, &lt;span&gt;\( C_{n+1}=\sum_{k=0}^{n}C_{k}C_{n-k} \)&lt;/span&gt;, ולכן משילוב של שתיהן אנחנו מקבלים ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( A_{n}=C_{n+1} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( C\left(x\right)^{2}=\sum_{n=0}^{\infty}C_{n+1}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הייתי רוצה להשתמש באותו טריק כמו פיבונאצ’י כדי להמיר את אגף ימין ל-&lt;span&gt;\( C\left(x\right) \)&lt;/span&gt;, אבל יש לי כאן בעיה. קודם, בפיבונאצ’י, הסכימה התחילה ממשהו גדול מ-0, והמקדם בפנים היה בעל אינדקס קטן מ-&lt;span&gt;\( n \)&lt;/span&gt;, ולכן היה קל לתקן את זה - הגדלנו את האינדקס, הקטנו את הערך ההתחלתי. כאן, לעומת זאת, הסכימה מתחילה מ-0, כלומר מהערך הנכון, והאינדקס הוא גדול מ-&lt;span&gt;\( n \)&lt;/span&gt;. אז נעשה משהו טיפה שונה: קודם כל נכפול את שני האגפים ב-&lt;span&gt;\( x \)&lt;/span&gt; (פעולה מותרת בחוג), ונקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( xC\left(x\right)^{2}=\sum_{n=0}^{\infty}C_{n+1}x^{n+1}=\sum_{n=1}^{\infty}C_{n}x^{n}=\sum_{n=0}^{\infty}C_{n}x^{n}-C_{0}=C\left(x\right)-1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אחרי העברת אגפים נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( xC\left(x\right)^{2}-C\left(x\right)+1=0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וזו… משוואה ריבועית? עכשיו אפשר לנפנף ממש מהר בידיים כמו שחלק מהספרים עושים: להגיד שנוסחת השורשים מלמדת אותנו ש-&lt;span&gt;\( C\left(x\right)=\frac{1\pm\sqrt{1-4x}}{2x} \)&lt;/span&gt; ושהפתרון ה”נכון” מבין השניים הוא זה עם המינוס, כי אם נסתכל על &lt;span&gt;\( \frac{1+\sqrt{1-4x}}{2x} \)&lt;/span&gt; נראה שכש-&lt;span&gt;\( x \)&lt;/span&gt; שואף ל-0 המונה שואף ל-2 ולכן הביטוי שואף לאינסוף למרות שהוא אמור לשאוף ל-&lt;span&gt;\( C_{0}=1 \)&lt;/span&gt; ולעומת זאת עבור &lt;span&gt;\( \frac{1-\sqrt{1-4x}}{2x} \)&lt;/span&gt; קל לראות שזה עובד עם כלל לופיטל, וסיימנו! גילינו את הנוסחה לפונקציה היוצרת של מספרי קטלן, &lt;span&gt;\( C\left(x\right)=\frac{1-\sqrt{1-4x}}{2x} \)&lt;/span&gt;. זהו, אפשר לסגור את הפוסט.&lt;/p&gt;
+
+&lt;h2&gt;אפשר לסגור את הפוסט, או שלא&lt;/h2&gt;
+
+&lt;p&gt;אוקיי, בואו לא נסגור עדיין את הפוסט.&lt;/p&gt;
+
+&lt;p&gt;חשוב לי להדגיש שכל מה שראינו פה הוא &lt;strong&gt;נכון&lt;/strong&gt;. זה למעשה מה שאוילר עשה במכתב הראשון שבו הוא סיפר לגולדבך על מספרי קטלן. אבל בבירור לא עשיתי את זה ברמת הפורמליות שבה התייחסתי לטורי חזקות פורמליים בכל יתר הפוסט, ומה שעוד יותר גרוע - פתאום ברגע האחרון עירבתי מושגים מאנליזה ודיברתי על להשאיף את &lt;span&gt;\( x \)&lt;/span&gt; לאפס ועל כלל לופיטל… זה בלאגן שלם. לכן אני רוצה להקדיש את החלק הזה של הפוסט, שיהיה יותר מורכב מתמטית ממה שעשינו עד עכשיו, כדי להסביר למה הכל בסדר.&lt;/p&gt;
+
+&lt;p&gt;הרגע האחרון שבו הכל היה באמת בסדר פורמלית היה כשקיבלתי את המשוואה &lt;span&gt;\( xC\left(x\right)^{2}-C\left(x\right)+1=0 \)&lt;/span&gt;. הדבר הבא שעשיתי היה להזכיר את &lt;strong&gt;נוסחת השורשים&lt;/strong&gt;. נוסחת השורשים היא הכלי הסטנדרטי שלנו לפתרון משוואה ריבועית, והיא נכונה בהרבה סיטואציות, לא רק במספרים הממשיים והמרוכבים. בואו נראה את זה: אני נמצא בחוג &lt;span&gt;\( R \)&lt;/span&gt; כלשהו, עם איברים &lt;span&gt;\( a,b,c\in R \)&lt;/span&gt;, ואני מחפש ערך של &lt;span&gt;\( x\in R \)&lt;/span&gt; שמקיים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( ax^{2}+bx+c=0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://gadial.net/2023/12/16/quadratic_equations/&quot;&gt;יש לי פוסט&lt;/a&gt; שמסביר מה עושים עכשיו, אבל אני אתן פה תיאור טיפה שונה. ראשית, נכפול את שני אגפי המשוואה ב-&lt;span&gt;\( 4a \)&lt;/span&gt; ונקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 4a^{2}x^{2}+4abx+4ac=0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה עדיין מתקיים בכל חוג &lt;span&gt;\( R \)&lt;/span&gt;. עכשיו, נסתכל על הביטוי &lt;span&gt;\( \Delta=b^{2}-4ac \)&lt;/span&gt; (“הדיסקרימיננטה”). גם הביטוי הזה - קיים בכל חוג &lt;span&gt;\( R \)&lt;/span&gt;. נחבר אותו לשני האגפים ונקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 4a^{2}x^{2}+4abx+b^{2}=\Delta \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו אגף שמאל נראה בדיוק כמו משהו בריבוע: &lt;span&gt;\( 4a^{2}x^{2}+4abx+b^{2}=\left(2ax+b\right)^{2} \)&lt;/span&gt;. &lt;strong&gt;גם זה עדיין נכון בכל חוג&lt;/strong&gt;. כלומר, קיבלנו&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(2ax+b\right)^{2}=\Delta \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;עכשיו מגיע המעבר ה”בעייתי”:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 2ax+b=\pm\sqrt{\Delta} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;המעבר הזה בעייתי לא רק בגלל שאנחנו בחוג כללי - אפילו אם היינו עובדים מעל הממשיים, &lt;span&gt;\( \mathbb{R} \)&lt;/span&gt;, הוא עדיין היה בעייתי אם &lt;span&gt;\( \Delta \)&lt;/span&gt; היה שלילי. אז במקום לראות אותו כ”בעייתי” אפשר לחשוב על זה כאילו אנחנו מוסיפים הנחה: אנחנו אומרים - &lt;strong&gt;נניח&lt;/strong&gt; שקיים &lt;span&gt;\( \alpha\in R \)&lt;/span&gt; כך ש-&lt;span&gt;\( \alpha^{2}=\Delta \)&lt;/span&gt;, אז במקרה הזה אפשר לכתוב &lt;span&gt;\( \left(2ax+b\right)^{2}=\alpha^{2} \)&lt;/span&gt;. אבל האם עכשיו אפשר להסיק ש-&lt;span&gt;\( 2ax+b=\pm\alpha \)&lt;/span&gt;? ובכן, לא.&lt;/p&gt;
+
+&lt;p&gt;בואו נראה דוגמא: החוג &lt;span&gt;\( R=\mathbb{Z}_{8}=\left\{ 0,1,\ldots,7\right\}  \)&lt;/span&gt; עם חיבור וכפל מודולו 8. בחוג הזה מתקיים ש-&lt;span&gt;\( 1^{2}=3^{2}=5^{2}=7^{2}=1 \)&lt;/span&gt;, ולכן אם &lt;span&gt;\( x^{2}=y^{2} \)&lt;/span&gt; זה לא אומר ש-&lt;span&gt;\( x=\pm y \)&lt;/span&gt; כי למשל מה אם &lt;span&gt;\( y=1 \)&lt;/span&gt; ואילו &lt;span&gt;\( x=3 \)&lt;/span&gt;?&lt;/p&gt;
+
+&lt;p&gt;אז אילו תנאים צריך לדרוש מהחוג שלנו כדי ש-&lt;span&gt;\( x^{2}=y^{2} \)&lt;/span&gt; יגרור &lt;span&gt;\( x=\pm y \)&lt;/span&gt;? בואו ננסה להוכיח את זה ונראה את התנאים צצים בדרך.&lt;/p&gt;
+
+&lt;p&gt;נתחיל עם &lt;span&gt;\( x^{2}=y^{2} \)&lt;/span&gt;. נעביר את &lt;span&gt;\( y \)&lt;/span&gt; אגף (לא דורש כלום) ונקבל &lt;span&gt;\( x^{2}-y^{2}=0 \)&lt;/span&gt;, שאפשר לכתוב גם בתור &lt;span&gt;\( \left(x-y\right)\left(x+y\right)=0 \)&lt;/span&gt;. הופס, הוספנו דרישה! רואים מה היא? השתמשתי בדיסטריביוטיביות, אבל זה לא העניין כאן אלא זה שאם נפתח את הסוגריים, נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(x-y\right)\left(x+y\right)=x^{2}-yx+xy-y^{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, אני הנחתי ש-&lt;span&gt;\( xy=yx \)&lt;/span&gt; וזה קורה באופן כללי רק אם החוג &lt;strong&gt;קומוטטיבי&lt;/strong&gt;. אבל אוקיי, &lt;span&gt;\( R\left[\left[x\right]\right] \)&lt;/span&gt; שלנו הוא קומוטטיבי אם &lt;span&gt;\( R \)&lt;/span&gt; עצמו הוא קומוטטיבי (ואצלנו &lt;span&gt;\( R \)&lt;/span&gt; הוא הממשיים/המרוכבים). אז בינתיים זו דרישה קלילה יחסית (אבל שמראה יפה כמה חוגים לא קומוטטיביים - למשל חוגי מטריצות - הם עולמות משוגעים בפני עצמם).&lt;/p&gt;
+
+&lt;p&gt;עכשיו, קיבלתי &lt;span&gt;\( \left(x-y\right)\left(x+y\right)=0 \)&lt;/span&gt;, כלומר יש לי מכפלה של שני איברים ששווה אפס. האם בכלל ייתכן שמכפלה של שני איברים תיתן אפס למרות ששניהם שונים מאפס? זה לא משהו שיש באינטואיציה המתמטית היומימית שלנו כי זה לא קורה בשלמים והרחבותיהם, אבל זה &lt;strong&gt;כן&lt;/strong&gt; קורה ב-&lt;span&gt;\( \mathbb{Z}_{8} \)&lt;/span&gt; שהבאתי כאן בתור דוגמה, למשל &lt;span&gt;\( 2\cdot4=0 \)&lt;/span&gt;. לכן בתורת החוגים יש מונחים סטנדרטיים לסיפור הזה: אנחנו אומרים ש-&lt;span&gt;\( a,b \)&lt;/span&gt; הם &lt;strong&gt;מחלקי אפס&lt;/strong&gt; אם &lt;span&gt;\( ab=0 \)&lt;/span&gt; למרות ש-&lt;span&gt;\( a,b\ne0 \)&lt;/span&gt;, וקוראים לחוג (קומוטטיבי בד”כ) בלי מחלקי אפס &lt;strong&gt;תחום שלמות&lt;/strong&gt;. בתחומי שלמות, ש-&lt;span&gt;\( \mathbb{Z} \)&lt;/span&gt; הוא מעין אבטיפוס שלהם, אפשר לבצע “צמצום”: אם &lt;span&gt;\( ax=ay \)&lt;/span&gt; אז &lt;span&gt;\( x=y \)&lt;/span&gt; זו הדוגמא הפשוטה, אבל גם &lt;span&gt;\( x^{2}=y^{2} \)&lt;/span&gt; גורר &lt;span&gt;\( x=\pm y \)&lt;/span&gt; הוא דוגמא לצמצום, ואנחנו מקבלים אותו כי אם יש לנו &lt;span&gt;\( \left(x-y\right)\left(x+y\right)=0 \)&lt;/span&gt; בתחום שלמות, או ש-&lt;span&gt;\( x-y=0 \)&lt;/span&gt; או ש-&lt;span&gt;\( x+y=0 \)&lt;/span&gt;, אין אפשרות אחרת.&lt;/p&gt;
+
+&lt;p&gt;למרבה השמחה, &lt;span&gt;\( R\left[\left[x\right]\right] \)&lt;/span&gt; הוא תחום שלמות אם &lt;span&gt;\( R \)&lt;/span&gt; הוא תחום שלמות, כי אם &lt;span&gt;\( a\left(x\right)b\left(x\right)=0 \)&lt;/span&gt; אז בפרט &lt;span&gt;\( a_{0}b_{0}=0 \)&lt;/span&gt; ואם אנחנו מעל תחום שלמות אז בלי הגבלת הכלליות, &lt;span&gt;\( b_{0}=0 \)&lt;/span&gt;. עכשיו, &lt;span&gt;\( a_{0}b_{1}+a_{1}b_{0}=0 \)&lt;/span&gt;, כלומר &lt;span&gt;\( a_{0}b_{1}=0 \)&lt;/span&gt; ונקבל שגם &lt;span&gt;\( b_{1}=0 \)&lt;/span&gt; וכן הלאה באינדוקציה.&lt;/p&gt;
+
+&lt;p&gt;אם כן, חזרה למשוואות ריבועיות: מה שראינו הוא שמעל תחום שלמות, &lt;strong&gt;אם&lt;/strong&gt; קיים &lt;span&gt;\( \alpha \)&lt;/span&gt; כך ש-&lt;span&gt;\( \alpha^{2}=\Delta \)&lt;/span&gt; אז אפשר לומר &lt;span&gt;\( 2ax+b=\pm\alpha \)&lt;/span&gt;. עכשיו אפשר להעביר אגף ולקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 2ax=-b\pm\alpha \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כדי להתקדם מכאן, אנחנו צריכים שאפשר יהיה לחלק ב-&lt;span&gt;\( 2a \)&lt;/span&gt; וזה כמובן לא נכון בכל חוג, אפילו לא בתחום שלמות, זה הרי לא נכון אפילו ב-&lt;span&gt;\( \mathbb{Z} \)&lt;/span&gt;. אבל אם אפשר לחלק ב-&lt;span&gt;\( 2a \)&lt;/span&gt; - כלומר, אם &lt;span&gt;\( 2a \)&lt;/span&gt; הוא &lt;strong&gt;הפיך&lt;/strong&gt; בחוג שלנו - אז נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( x=\frac{-b\pm\alpha}{2a} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וכדי לא לכתוב &lt;span&gt;\( \alpha \)&lt;/span&gt; מעדיפים לכתוב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( x=\frac{-b\pm\sqrt{b^{2}-4ac}}{2a} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מתוך הבנה ש-&lt;span&gt;\( \sqrt{b^{2}-4ac} \)&lt;/span&gt; הוא &lt;strong&gt;סימון&lt;/strong&gt; שאומר “איבר בחוג שכשמעלים אותו בריבוע מקבלים &lt;span&gt;\( b^{2}-4ac \)&lt;/span&gt;, בהנחה שקיים כזה”.&lt;/p&gt;
+
+&lt;p&gt;זה האופן שבו צריך לקרוא את המשוואה &lt;span&gt;\( C\left(x\right)=\frac{1\pm\sqrt{1-4x}}{2x} \)&lt;/span&gt; שקיבלנו עבור מספרי קטלן. מה שהיא אומרת, ברמה הפורמלית ביותר, הוא “אם קיים טור חזקות פורמלי &lt;span&gt;\( a\left(x\right) \)&lt;/span&gt; כך ש-&lt;span&gt;\( a\left(x\right)^{2}=1-4x \)&lt;/span&gt;, אז &lt;span&gt;\( C\left(x\right) \)&lt;/span&gt; הוא או &lt;span&gt;\( \frac{1+a\left(x\right)}{2x} \)&lt;/span&gt; או &lt;span&gt;\( \frac{1-a\left(x\right)}{2x} \)&lt;/span&gt;, אנחנו לא סגורים על איזה משניהם נכון”.&lt;/p&gt;
+
+&lt;p&gt;אבל רגע, לא סיימנו! צריך להצדיק גם את החלוקה ב-&lt;span&gt;\( 2x \)&lt;/span&gt;. להצדיק חלוקה ב-&lt;span&gt;\( 2 \)&lt;/span&gt; זה קל, הרי &lt;span&gt;\( 2 \)&lt;/span&gt; הוא הפיך. אבל לחלק ב-&lt;span&gt;\( 2x \)&lt;/span&gt;? הרי לפני רגע אמרתי שטור חזקות הוא הפיך אם ורק אם האיבר החופשי שלו הוא הפיך, וב-&lt;span&gt;\( 2x \)&lt;/span&gt;, כשאני חושב עליו בתור טור חזקות, האיבר החופשי הוא 0, כלומר לא הפיך. &lt;strong&gt;אופס&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;העניין הוא שכן אפשר סוג של “לחלק” ב-&lt;span&gt;\( x \)&lt;/span&gt;. לפעמים. הנה דוגמא לאיך זה עובד. נניח ש-&lt;span&gt;\( a\left(x\right)=a_{1}x+a_{2}x^{2}+\ldots \)&lt;/span&gt;, כלומר יש לנו טור חזקות שהמקדם החופשי שלו הוא 0. אז אפשר &lt;strong&gt;להוציא החוצה&lt;/strong&gt; את &lt;span&gt;\( x \)&lt;/span&gt; ולקבל &lt;span&gt;\( a\left(x\right)=x\left(a_{1}+a_{2}x+\ldots\right) \)&lt;/span&gt; ואז אפשר לכתוב &lt;span&gt;\( a_{1}+a_{2}x+\ldots=\frac{a\left(x\right)}{x} \)&lt;/span&gt;. כלומר, את הפעולה “חלוקה ב-&lt;span&gt;\( x \)&lt;/span&gt;” אפשר לראות בתור “הזזה שמאלה של כל האיברים בסדרה שמתחילה ב-0” - אם היה לנו את הסדרה &lt;span&gt;\( \left(0,a_{1},a_{2},\ldots\right) \)&lt;/span&gt; אחרי ביצוע הפעולה הזו קיבלנו את הסדרה &lt;span&gt;\( \left(a_{1},a_{2},\ldots\right) \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עוד יותר פורמלית, מה שאנחנו רואים במשוואה &lt;span&gt;\( C\left(x\right)=\frac{1\pm a\left(x\right)}{2x} \)&lt;/span&gt; הוא בעצם את &lt;span&gt;\( 2xC\left(x\right)=1\pm a\left(x\right)^{2} \)&lt;/span&gt;. אם נגלה שיש &lt;span&gt;\( a\left(x\right) \)&lt;/span&gt; כך ש-&lt;span&gt;\( 1-a\left(x\right)=x\cdot b\left(x\right) \)&lt;/span&gt; כלשהו, אז נוכל לכתוב &lt;span&gt;\( 2xC\left(x\right)=xb\left(x\right) \)&lt;/span&gt; ואז נוכל &lt;strong&gt;לצמצם&lt;/strong&gt; ב-&lt;span&gt;\( x \)&lt;/span&gt;, כי אנחנו בתחום שלמות, ולקבל &lt;span&gt;\( 2C\left(x\right)=b\left(x\right) \)&lt;/span&gt;, כלומר &lt;span&gt;\( C\left(x\right)=\frac{b\left(x\right)}{2} \)&lt;/span&gt;. זה התוכן הפורמלי של הכתיב &lt;span&gt;\( C\left(x\right)=\frac{1-\sqrt{1-4x}}{2x} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;העניין הזה גם מסביר לנו למה אנחנו בוחרים מינוס ולא פלוס, גם בלי שנזדקק ישירות להסברים אנליטיים: אם קיים &lt;span&gt;\( a\left(x\right) \)&lt;/span&gt; כך ש-&lt;span&gt;\( a\left(x\right)^{2}=1-4x \)&lt;/span&gt;, אז המקדם החופשי שלו מקיים &lt;span&gt;\( a_{0}^{2}=1 \)&lt;/span&gt; (כי &lt;span&gt;\( 1 \)&lt;/span&gt; הוא המקדם החופשי של המכפלה, &lt;span&gt;\( 1-4x \)&lt;/span&gt;) ובגלל שאנחנו בתחום שלמות, &lt;span&gt;\( a_{0}=\pm1 \)&lt;/span&gt;. כשמשתמשים בסימן &lt;span&gt;\( \sqrt{\cdot} \)&lt;/span&gt; עבור מספרים ממשיים הכוונה היא תמיד ללקיחת השורש החיובי, אז גם כאן נוכל להשתמש במוסכמה שלוקחים את ה-&lt;span&gt;\( a\left(x\right) \)&lt;/span&gt; עם המקדם החופשי &lt;span&gt;\( a_{0}=1 \)&lt;/span&gt;. עכשיו, אם אנחנו רוצים שהביטוי &lt;span&gt;\( \frac{1\pm a\left(x\right)}{2x} \)&lt;/span&gt; יהיה מוגדר היטב, צריך שהמקדם החופשי של &lt;span&gt;\( 1\pm a\left(x\right) \)&lt;/span&gt; יהיה 0, וזה יעבוד עבור חיסור ולא יעבוד עבור חיבור.&lt;/p&gt;
+
+&lt;p&gt;כמובן, עדיין נותרה לנו שאלה אחת: &lt;strong&gt;למה&lt;/strong&gt; אנחנו יודעים ש-&lt;span&gt;\( \sqrt{1-4x} \)&lt;/span&gt; קיים בכלל? אני יכול לכתוב &lt;span&gt;\( a\left(x\right)^{2}=1-4x \)&lt;/span&gt; ולנסות לפתור את המשוואה ולחלץ את המקדמים של &lt;span&gt;\( a\left(x\right) \)&lt;/span&gt;, כמו שעשיתי עבור הופכי. אבל אני יכול גם לחפור יותר עמוק…&lt;/p&gt;
+
+&lt;h2&gt;חופרים יותר עמוק&lt;/h2&gt;
+
+&lt;p&gt;אני מניח שאנחנו מכירים את הבינום של ניוטון, ואם לא - &lt;a href=&quot;https://gadial.net/2010/06/22/newton_binom/&quot;&gt;יש לי על זה פוסט&lt;/a&gt;. זו הנוסחה החביבה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(a+b\right)^{n}=\sum_{k=0}^{n}{n \choose k}a^{k}b^{n-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;שנכונה לכל &lt;span&gt;\( n \)&lt;/span&gt; טבעי ו-&lt;span&gt;\( a,b \)&lt;/span&gt; כלשהם, אפילו איברים בחוג &lt;strong&gt;קומוטטיבי&lt;/strong&gt; כללי.&lt;/p&gt;
+
+&lt;p&gt;זו נוסחה שימושית ונהדרת עם הוכחה קומבינטורית מקסימה וכל זה מתואר בפוסט שלי. אני רוצה לדבר הפעם על &lt;strong&gt;ההכללה&lt;/strong&gt; שלה: מה קורה אם אנחנו רוצים ש-&lt;span&gt;\( n \)&lt;/span&gt; לא יהיה מספר טבעי דווקא, אלא מספר ממשי כללי? ובכן, ניוטון דאג גם לזה, ובאמצעות חדו”א אפשר להוכיח את הנוסחה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(a+b\right)^{r}=\sum_{k=0}^{\infty}{r \choose k}a^{k}b^{r-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאשר &lt;span&gt;\( r\in\mathbb{R} \)&lt;/span&gt; הוא מספר ממשי כללי, והסימון &lt;span&gt;\( {r \choose k} \)&lt;/span&gt; מוגדר בתור&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( {r \choose k}=\frac{r\left(r-1\right)\left(r-2\right)\cdots\left(r-k+1\right)}{k!} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זו ממש הכללה ישירה של הבינום הרגיל של ניוטון, שבו &lt;span&gt;\( {n \choose k}=\frac{n!}{k!\left(n-k!\right)}=\frac{n\left(n-1\right)\left(n-2\right)\cdots\left(n-k+1\right)}{k!} \)&lt;/span&gt;. העניין הוא שאם &lt;span&gt;\( n \)&lt;/span&gt; הוא מספר טבעי, ואם &lt;span&gt;\( k&amp;gt;n \)&lt;/span&gt;, אז נקבל &lt;span&gt;\( {n \choose k}=0 \)&lt;/span&gt; כי במכפלה &lt;span&gt;\( \left(n-1\right)\ldots\left(n-k+1\right) \)&lt;/span&gt; יופיע מתישהו &lt;span&gt;\( \left(n-n\right) \)&lt;/span&gt;, כלומר כל המכפלה הזו מוכפלת ב-0 ושווה ל-0 ולכן אנחנו מקבלים ש-&lt;span&gt;\( \left(a+b\right)^{n} \)&lt;/span&gt; הוא לא סכום אינסופי אלא סופי (ליתר דיוק - הוא סכום אינסופי שכל אבריו הם 0 החל ממקום מסויים).&lt;/p&gt;
+
+&lt;p&gt;אם לעומת זאת &lt;span&gt;\( r \)&lt;/span&gt; הוא לא מספר טבעי, אז &lt;span&gt;\( \left(r-r\right) \)&lt;/span&gt; לא יופיע במכפלה ולכן היא אף פעם לא תתאפס. לכן צריך לעבור לסכום אינסופי ולקוות ממש חזק שהוא יתכנס.&lt;/p&gt;
+
+&lt;p&gt;בואו נראה דוגמא. נניח ש- &lt;span&gt;\( a=-4x \)&lt;/span&gt; ו-&lt;span&gt;\( b=1 \)&lt;/span&gt; ו-&lt;span&gt;\( r=\frac{1}{2} \)&lt;/span&gt;, אז נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sqrt{1-4x}=\left(-4x+1\right)^{\frac{1}{2}}=\sum_{k=0}^{\infty}{1/2 \choose k}\left(-4x\right)^{k}=\sum_{k=0}^{\infty}\left(-4\right)^{k}{1/2 \choose k}x^{k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הנוסחה הזו מאפשר חישוב פשוט של המקדמים של &lt;span&gt;\( x^{k} \)&lt;/span&gt; עבור הערכים הראשונים של &lt;span&gt;\( k \)&lt;/span&gt; (אני מציע לכם לנסות לחשב בעצמכם, גם אני “מרגיש” את הביטוי רק כשאני עושה את זה):&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( \left(-4\right)^{0}{1/2 \choose 0}=1\cdot1=1 \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( \left(-4\right)^{1}{1/2 \choose 1}=-4\cdot\frac{1}{2}=-2 \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( \left(-4\right)^{2}{1/2 \choose 2}=16\cdot\frac{1}{2}\cdot\frac{1}{2}\cdot\left(-\frac{1}{2}\right)=-2 \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( \left(-4\right)^{3}{1/2 \choose 3}=-64\cdot\frac{1}{2\cdot3}\cdot\frac{1}{2}\cdot\left(-\frac{1}{2}\right)\cdot\left(-\frac{3}{2}\right)=-4 \)&lt;/span&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;מכאן כבר יש לי מספיק אומץ לנסות לכתוב את הביטוי הכללי:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(-4\right)^{n}{1/2 \choose n}=\left(-1\right)^{n}2^{n}\cdot2^{n}\cdot\frac{1}{2\cdot3\cdots n}\cdot\frac{1}{2}\cdot\left(-\frac{1}{2}\right)\cdot\left(-\frac{3}{2}\right)\cdots\left(-\frac{2n-3}{2}\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =2^{n}\cdot\frac{3\cdot5\cdots\left(2n-3\right)}{2\cdot3\cdots n}=\frac{6\cdot10\cdots\left(4n-6\right)}{2\cdot3\cdots n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מה שנותן לנו, אם נציב ערכים קונקרטיים:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sqrt{1-4x}=1-2x-2x^{2}-4x^{3}-10x^{4}-28x^{5}-84x^{6}-\ldots \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה כמובן מזכיר את סדרת מספרי קטלן, &lt;span&gt;\( 1,1,2,5,14,42,\ldots \)&lt;/span&gt;, ולא במקרה: הנוסחה שקיבלנו הייתה &lt;span&gt;\( C\left(x\right)=\frac{1-\sqrt{1-4x}}{2x} \)&lt;/span&gt;, כך שמספרי קטלן מתקבלים מ-&lt;span&gt;\( \sqrt{1-4x} \)&lt;/span&gt; באופן הבא:&lt;/p&gt;
+
+&lt;ol&gt; &lt;li&gt;החליפו את ה-1 שבהתחלה ב-0, והסירו את סימני המינוס (זה החלק של &lt;span&gt;\( 1- \)&lt;/span&gt; השורש)&lt;/li&gt;
+
+
+&lt;li&gt;הזיזו את הסדרה צעד אחד שמאלה כך שה-0 בהתחלה נעלם (זה החלק של החלוקה ב-&lt;span&gt;\( x \)&lt;/span&gt;)&lt;/li&gt;
+
+
+&lt;li&gt;חלקו את אברי כל הסדרה ב-2 (זו החלוקה ב-2).&lt;/li&gt;
+
+&lt;/ol&gt;
+
+&lt;p&gt;במילים אחרות - כן! הבינום המוכלל של ניוטון עובד ונותן לנו את מספרי קטלן! ככה &lt;strong&gt;בדיוק&lt;/strong&gt; אוילר גילה את הנוסחה הסגורה למספרי קטלן. לא על ידי תעלול קומבינטורי מרהיב כמו שהראיתי בפוסט הקודם, אלא על ידי “הא, מצאתי את הפונקציה היוצרת, עכשיו בוא ניקח את המתמטיקה הסטנדרטית שלנו ונפעיל אותה על הפונקציה כדי לקבל את סדרת המקדמים”.&lt;/p&gt;
+
+&lt;p&gt;זה השלב שבו כולם מרוצים… חוץ ממני. כל הקטע הזה של הבינום המוכלל של ניוטון? זו התעסקות בטורי חזקות של חדו”א, לא בטורי חזקות פורמליים. זה לא אומר שזה לא תקין - אפשר בהחלט לומר שזו תוצאה שתקפה רק בתחום ההתכנסות של הטור, אבל זה מספיק כדי לקבל את סדרת המקדמים - אבל אני רוצה לראות כמה רחוק אפשר ללכת כשדבקים &lt;strong&gt;רק&lt;/strong&gt; בפורמליות, בלי חדו”א בכלל. עכשיו יש לנו מטרה הרבה יותר ברורה: אנחנו לא רוצים להבין “סתם” איך להתעסק במספרי קטלן פורמלית, אלא איך אפשר להוכיח את &lt;strong&gt;הבינום המוכלל של ניוטון&lt;/strong&gt; פורמלית.&lt;/p&gt;
+
+&lt;h2&gt;הבינום הפורמלי המוכלל של ניוטון&lt;/h2&gt;
+
+&lt;p&gt;נשמור על העניין פשוט ונסתכל על הבינום של ניוטון כשאחד המחוברים הוא 1. כלומר, על הנוסחה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+x\right)^{r}=\sum_{n=0}^{\infty}{r \choose n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מה שיש לנו באגף ימין כאן הוא פונקציה יוצרת - הפונקציה היוצרת של הסדרה &lt;span&gt;\( a_{n}={r \choose n} \)&lt;/span&gt;. באגף שמאל יש לנו ביטוי שאין לו משמעות פורמלית - לא הגדרנו בשום שלב העלאה בחזקה כללית של פולינומים, או של טורי חזקות. אז אני יכול &lt;strong&gt;להגדיר&lt;/strong&gt; את המשמעות של אגף שמאל להיות מה שכתוב באגף ימין; השאלה המעניינת היא האם ההגדרה הזו תסכים עם מה שאנחנו מצפים שיהיה, כלומר אם עבור &lt;span&gt;\( r \)&lt;/span&gt; שהוא &lt;strong&gt;מספר טבעי&lt;/strong&gt; ההגדרה תתלכד עם ההגדרה הרגילה, ואם יישמרו חוקי החשבון הרגילים של חזקות, שהם מה שעומד מאחורי הרחבת הגדרת החזקה מטבעיים למספרים ממשיים באופן כללי. כלומר, האם יתקיים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+x\right)^{r}\cdot\left(1+x\right)^{s}=\left(1+x\right)^{r+s} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ו-&lt;span&gt;\( \left(\left(1+x\right)^{r}\right)^{s}=\left(1+x\right)^{rs} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אבל כבר כאן צצה בעיה: הביטוי &lt;span&gt;\( \left(\left(1+x\right)^{r}\right)^{s} \)&lt;/span&gt; הוא לא מוגדר היטב, כי הרי &lt;span&gt;\( \left(1+x\right)^{r} \)&lt;/span&gt; הוא כבר פונקציה יוצרת עם אינסוף מחוברים, ולא הגדרתי העלאה בחזקה &lt;strong&gt;שלה&lt;/strong&gt;, רק של הביטוי הפשוט &lt;span&gt;\( 1+x \)&lt;/span&gt;. אז אני צריך מראש ללכת על הגדרה כללית יותר. מה בדבר…&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+F\left(x\right)\right)^{r}=\sum_{n=0}^{\infty}{r \choose n}F\left(x\right)^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאשר &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; היא פונקציה יוצרת כלשהי? ובכן, זה &lt;strong&gt;כמעט&lt;/strong&gt; עובד, אבל בואו ננצל את ההזדמנות כדי להציג גם את הדבר הזה בהקשר טיפה יותר כללי: &lt;strong&gt;הרכבה&lt;/strong&gt; של פונקציות יוצרות.&lt;/p&gt;
+
+&lt;p&gt;אז נניח שיש לנו שתי פונקציות יוצרות&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b\left(x\right)=\sum_{n=0}^{\infty}b_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ואנחנו רוצים להגדיר את ההרכבה, &lt;span&gt;\( a\left(b\left(x\right)\right) \)&lt;/span&gt;. אם הפונקציות היוצרות היו פונקציות אמיתיות ולא סתם חבלי כביסה, מה שהיה מתקיים (כשרדיוס ההתכנסות היה מתיר את זה) הוא&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(b\left(x\right)\right)=\sum_{n=0}^{\infty}a_{n}b\left(x\right)^{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;הדבר הזה הוא לא ביטוי מפורש. כלומר, זה לא שבהרכבה, המקדם של &lt;span&gt;\( x^{n} \)&lt;/span&gt; יהיה &lt;span&gt;\( a_{n}b\left(x\right)^{n} \)&lt;/span&gt;. מה שקורה הוא שצריך לקחת את הטור האינסופי &lt;span&gt;\( b\left(x\right) \)&lt;/span&gt;, לכפול אותו בעצמו &lt;span&gt;\( n \)&lt;/span&gt; פעמים (את זה אנחנו יודעים לעשות), לכפול את התוצאה במקדם המספרי &lt;span&gt;\( a_{n} \)&lt;/span&gt; ואז להוסיף את זה לטור הכולל שאנחנו בונים. בצורה הזו לאותו &lt;span&gt;\( x^{n} \)&lt;/span&gt; יכולות לתרום חזקות רבות ושונות מהצורה &lt;span&gt;\( b\left(x\right)^{k} \)&lt;/span&gt;. למעשה, קיימת הסכנה שלאותו &lt;span&gt;\( x^{n} \)&lt;/span&gt; יהיו &lt;strong&gt;אינסוף&lt;/strong&gt; חזקות שתורמות מחוברים. זה קורה אם ורק אם &lt;span&gt;\( b_{n}\ne0 \)&lt;/span&gt;. כי למשל, בואו נסתכל על המקרה הפשוט שבו &lt;span&gt;\( b\left(x\right)=1+x \)&lt;/span&gt;, אז מהן החזקות?&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+x\right)^{0}=1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+x\right)^{1}=1+x \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+x\right)^{2}=1+2x+x^{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+x\right)^{3}=1+3x+3x^{2}+x^{3} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וכן הלאה - אנחנו רואים שכל חזקה החל מ-2 תתרום ל-&lt;span&gt;\( x^{1} \)&lt;/span&gt;, למשל. למה? כי מה זה בעצם &lt;span&gt;\( \left(1+x\right)^{3} \)&lt;/span&gt;? זו המכפלה &lt;span&gt;\( \left(1+x\right)\left(1+x\right)\left(1+x\right) \)&lt;/span&gt;. בכל פעם אנחנו בוחרים אחד משני האיברים שבתוך זוג סוגריים ספציפי ומוסיפים אותו למכפלה שלנו. אם בכל פעם היינו חייבים לבחור איבר שהוא לפחות &lt;span&gt;\( x \)&lt;/span&gt;, אז כל זוג סוגריים שמשתתף במכפלה היה מגדיל ב-1 לפחות את החזקה של &lt;span&gt;\( x \)&lt;/span&gt; בתוצאה הסופית. אבל אם 1 נמצא בסוגריים, אז אפשר לבחור אותו ולא להגדיל את החזקה של &lt;span&gt;\( x \)&lt;/span&gt; בתוצאה הסופית. זה היה מבטיח שעבור חזקות מסוימות של &lt;span&gt;\( x \)&lt;/span&gt;, אפשר יהיה תמיד לייצר אותן החל ממקום מסוים - לכן המקדם שלהם יהיה אינסופי, וזה לא מוגדר היטב.&lt;/p&gt;
+
+&lt;p&gt;אפשר לחזור עכשיו אל ההעלאה בחזקה. במקרה הזה, יש לנו את הפונקציה היוצרת&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)=\left(1+x\right)^{r}=\sum_{n=0}^{\infty}{r \choose n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, &lt;span&gt;\( a_{n}={r \choose n} \)&lt;/span&gt;, אז אני יכול להציב בה את &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; לכל &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; שמקיים &lt;span&gt;\( F_{0}=0 \)&lt;/span&gt;. למשל, עבור &lt;span&gt;\( \sqrt{1-4x} \)&lt;/span&gt; הצבתי את &lt;span&gt;\( F\left(x\right)=-4x \)&lt;/span&gt;, שבהחלט מקיימת את זה. ומה עם תכונות החזקה שאנחנו רוצים להוכיח?&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+F\left(x\right)\right)^{r}\cdot\left(1+F\left(x\right)\right)^{s}=\left(1+F\left(x\right)\right)^{r+s} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ו-&lt;span&gt;\( \left(\left(1+F\left(x\right)\right)^{r}\right)^{s}=\left(1+F\left(x\right)\right)^{rs} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כדי שזה יהיה מוגדר היטב, &lt;span&gt;\( \left(1+F\left(x\right)\right)^{r} \)&lt;/span&gt; צריך להיות מהצורה &lt;span&gt;\( 1+G\left(x\right) \)&lt;/span&gt; כך ש-&lt;span&gt;\( G_{0}=0 \)&lt;/span&gt;. את זה אפשר לראות ממש מההגדרה:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+F\left(x\right)\right)^{r}=\sum_{n=0}^{\infty}{r \choose n}F\left(x\right)^{n}=1+\sum_{n=1}^{\infty}{r \choose n}F\left(x\right)^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ועכשיו נגדיר &lt;span&gt;\( G\left(x\right)=\sum_{n=1}^{\infty}{r \choose n}F\left(x\right)^{n} \)&lt;/span&gt; ונשתמש בכך ש-&lt;span&gt;\( F_{0}=0 \)&lt;/span&gt; בעצמו ולכן כל העלאה בחזקה של &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; כוללת רק חזקות של &lt;span&gt;\( x \)&lt;/span&gt; החל מ-&lt;span&gt;\( x^{1} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עכשיו אפשר לעבור לעבודה הטכנית עצמה של להוכיח ש-&lt;span&gt;\( \left(1+x\right)^{r}\cdot\left(1+x\right)^{s}=\left(1+x\right)^{r+s}=\sum_{n=0}^{\infty}{r+s \choose n}x^{n} \)&lt;/span&gt;. יש לנו כאן כפל של שני טורי חזקות, ואנחנו יודעים בדיוק איך זה עובד. נגדיר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)=\sum_{n=0}^{\infty}{r \choose n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b\left(x\right)=\sum_{n=0}^{\infty}{s \choose n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a_{n}={r \choose n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( b_{n}={s \choose n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;וכעת&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( a\left(x\right)b\left(x\right)=\sum_{n=0}^{\infty}c_{n}x^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאשר&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k}=\sum_{k=0}^{n}{r \choose k}{s \choose n-k} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מה שאנחנו &lt;strong&gt;מצפים&lt;/strong&gt; לקבל הוא&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{k=0}^{n}{r \choose k}{s \choose n-k}={r+s \choose n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;אם יש לנו את זה - סיימנו את ההוכחה. למרבה המזל, זה שוויון מפורסם מאוד, שאפילו יש לו שם משלו: שוויון צ’ו-ונדרמונדה. עוד יותר למרבה המזל, זה שוויון שקל מאוד להוכיח &lt;strong&gt;קומבינטורית&lt;/strong&gt;, כלומר יש לנו אחלה אינטואיציה למה הוא נכון… אבל רק אם &lt;span&gt;\( s,r \)&lt;/span&gt; הם מספרים טבעיים. במקרה הזה, אפשר לחשוב על כך שיש לנו קבוצה של &lt;span&gt;\( r \)&lt;/span&gt; חתולים ו-&lt;span&gt;\( s \)&lt;/span&gt; כלבים ואנחנו רוצים להרכיב צוות מרגלים שכולל בדיוק &lt;span&gt;\( n \)&lt;/span&gt; חברים - זו בעיה של &lt;strong&gt;בחירה בלי חשיבות לסדר ובלי חזרות&lt;/strong&gt;, ומכיוון שקבוצת המרגלים הפוטנציאליים הכוללת היא מגודל &lt;span&gt;\( r+s \)&lt;/span&gt; יש לנו בסך הכל &lt;span&gt;\( {r+s \choose n} \)&lt;/span&gt; אפשרויות. אבל היה אפשר גם לסרבל את זה טיפה: אם היינו מחליטים לקחת לקבוצה שלנו &lt;strong&gt;בדיוק&lt;/strong&gt; &lt;span&gt;\( k \)&lt;/span&gt; חתולים, אז היו לנו &lt;span&gt;\( {r \choose k} \)&lt;/span&gt; אפשרויות לבחור את החתולים, ואחר כך היינו צריכים לבחור עוד &lt;span&gt;\( n-k \)&lt;/span&gt; כלבים, ולזה יש &lt;span&gt;\( {s \choose n-k} \)&lt;/span&gt; אפשרויות, ולכן מעקרון הכפל יש לנו &lt;span&gt;\( {r \choose k}{s \choose n-k} \)&lt;/span&gt; אפשרויות להרכיב צוות שכולל בדיוק &lt;span&gt;\( k \)&lt;/span&gt; חתולים. את הסיפור הזה יכלנו לעשות לכל &lt;span&gt;\( k \)&lt;/span&gt; בין 0 ל-&lt;span&gt;\( n \)&lt;/span&gt;, ועקרון החיבור אומר שמספר האפשרויות הכולל, אם כך, הוא &lt;span&gt;\( \sum_{k=0}^{n}{r \choose k}{s \choose n-k} \)&lt;/span&gt;. זה מסיים את ההוכחה הקומבינטורית.&lt;/p&gt;
+
+&lt;p&gt;השאלה היא מה עושים עכשיו, כשרוצים להוכיח את השוויון ל-&lt;span&gt;\( r,s \)&lt;/span&gt; שהם מספרים ממשיים כלליים. לא ברור איך הגיון קומבינטורי יעזור לנו כאן, אבל למרבה המזל גם לא צריך אותו - אפשר להסתמך על מה שכבר הוכחנו. בשביל זה בואו נדבר לרגע על &lt;strong&gt;פולינומים&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;נניח ש-&lt;span&gt;\( p\left(x\right),q\left(x\right) \)&lt;/span&gt; הם שני פולינומים. אנחנו יודעים שפולינום ממעלה &lt;span&gt;\( d \)&lt;/span&gt; נקבע בצורה יחידה על ידי הערכים שלו ב-&lt;span&gt;\( d+1 \)&lt;/span&gt; נקודות, ולכן פולינום ממעלה &lt;span&gt;\( d \)&lt;/span&gt; שמתאפס ב-&lt;span&gt;\( d+1 \)&lt;/span&gt; נקודות הוא זהותית פולינום האפס. עכשיו, אם אנחנו יודעים ש-&lt;span&gt;\( p\left(n\right)=q\left(n\right) \)&lt;/span&gt; &lt;strong&gt;לכל&lt;/strong&gt; &lt;span&gt;\( n\in\mathbb{N} \)&lt;/span&gt;, אז אנחנו יודעים שהפולינום &lt;span&gt;\( p-q \)&lt;/span&gt; מתאפס על &lt;strong&gt;אינסוף&lt;/strong&gt; נקודות, ובפרט על מספר נקודות שגדול מהדרגה שלו, ולכן הוא זהותית אפס: &lt;span&gt;\( p-q=0 \)&lt;/span&gt;, כלומר &lt;span&gt;\( p=q \)&lt;/span&gt; - &lt;strong&gt;פולינומים שמזדהים על אינסוף נקודות הם זהים&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;עכשיו בואו נסבך את זה ונהפוך את הפולינומים לבעלי שני משתנים: &lt;span&gt;\( p\left(x,y\right),q\left(x,y\right) \)&lt;/span&gt;. כאן צריך להיזהר: אם למשל &lt;span&gt;\( p\left(x,y\right)=x \)&lt;/span&gt; ו-&lt;span&gt;\( q\left(x,y\right)=y \)&lt;/span&gt; אז נקבל ש-&lt;span&gt;\( p\left(n,n\right)=q\left(n,n\right) \)&lt;/span&gt; עבור אינסוף ערכי &lt;span&gt;\( n\in\mathbb{N} \)&lt;/span&gt; אבל זה כמובן לא אומר שהפולינומים הללו זהים. הטיעון צריך להיות קצת יותר עדין. באופן כללי, אם יש שתי קבוצות אינסופיות &lt;span&gt;\( A,B \)&lt;/span&gt; כך ש-&lt;span&gt;\( p\left(a,b\right)=0 \)&lt;/span&gt; לכל &lt;span&gt;\( a\in A,b\in B \)&lt;/span&gt;, אז &lt;span&gt;\( p \)&lt;/span&gt; הוא פולינום האפס (כלומר, הפואנטה היא ש-&lt;span&gt;\( p \)&lt;/span&gt; מתאפס על כל &lt;span&gt;\( A\times B \)&lt;/span&gt;, לא רק על איזו תת-קבוצה נחמדה של &lt;span&gt;\( A\times B \)&lt;/span&gt;). בואו נוכיח את זה: באופן כללי, &lt;span&gt;\( p\left(x,y\right)=\sum_{i,j}a_{ij}x^{i}y^{j} \)&lt;/span&gt;. אפשר לסדר את הסכום הזה לפי חזקות של &lt;span&gt;\( y \)&lt;/span&gt;, כלומר לכתוב &lt;span&gt;\( p\left(x,y\right)=\sum_{j}\left(\sum_{i}a_{ij}x^{i}\right)y^{j} \)&lt;/span&gt;, ולסמן &lt;span&gt;\( p_{j}\left(x\right)=\sum_{i}a_{ij}x^{i} \)&lt;/span&gt;. עכשיו, אם כל ה-&lt;span&gt;\( p_{j}\left(x\right) \)&lt;/span&gt; הללו הם פולינומי האפס, סיימנו; מקבלים ש-&lt;span&gt;\( p\left(x,y\right)=\sum_{j}p_{j}\left(x\right)y^{j}=\sum_{j}0\cdot y=0 \)&lt;/span&gt;. אז בואו נניח בשלילה שעבור &lt;span&gt;\( j \)&lt;/span&gt; כלשהו, &lt;span&gt;\( p_{j}\left(x\right) \)&lt;/span&gt; הוא &lt;strong&gt;לא&lt;/strong&gt; פולינום האפס. בפרט, קיים ערך קונקרטי, &lt;span&gt;\( a\in A \)&lt;/span&gt;, כך ש-&lt;span&gt;\( p_{j}\left(a\right)\ne0 \)&lt;/span&gt; - כי אם לכל &lt;span&gt;\( a\in A \)&lt;/span&gt; היינו מקבלים &lt;span&gt;\( p_{j}\left(x\right)=0 \)&lt;/span&gt; אז היינו מקבלים פולינום שמתאפס על אינסוף ערכים ולכן הוא זהותית 0. אם כן, &lt;span&gt;\( p_{j}\left(a\right)\ne0 \)&lt;/span&gt; ולכן אם נסתכל על הפולינום &lt;span&gt;\( q\left(y\right)=p\left(a,y\right) \)&lt;/span&gt; אנחנו רואים שמצד אחד, &lt;span&gt;\( q\left(y\right)=\sum_{j}p_{j}\left(a\right)y^{j} \)&lt;/span&gt; הוא לא פולינום האפס כי &lt;strong&gt;לכל הפחות&lt;/strong&gt; המקדם של &lt;span&gt;\( y^{j} \)&lt;/span&gt; הוא לא אפס. מצד שני - אנחנו יודעים שלכל אינסוף הערכים &lt;span&gt;\( b\in B \)&lt;/span&gt; מתקיים &lt;span&gt;\( q\left(b\right)=p\left(a,b\right)=0 \)&lt;/span&gt; ולכן זה כן פולינום האפס - סתירה. לב העניין הוא בדיוק בשלב האחרון: ש&lt;strong&gt;לכל&lt;/strong&gt; &lt;span&gt;\( b\in B \)&lt;/span&gt; מקבלים &lt;span&gt;\( p\left(a,b\right)=0 \)&lt;/span&gt;, באופן שלא תלוי בזהות של &lt;span&gt;\( a \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;המסקנה מכל זה היא שאם יש לנו זוג פולינומים בשני משתנים &lt;span&gt;\( p\left(x,y\right),q\left(x,y\right) \)&lt;/span&gt; כך ש&lt;strong&gt;לכל זוג מספרים טבעיים&lt;/strong&gt; &lt;span&gt;\( r,s \)&lt;/span&gt; מתקיים &lt;span&gt;\( p\left(r,s\right)=q\left(r,s\right) \)&lt;/span&gt; אז הפולינום הם זהים, לכל זוג ערכים, כולל ערכים ממשיים (או אפילו מרוכבים). עכשיו נסתכל על הביטוי&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{k=0}^{n}{r \choose k}{s \choose n-k}={r+s \choose n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;לב העניין הוא שבאופן כללי, &lt;span&gt;\( {x \choose n}=\frac{x\left(x-1\right)\left(x-2\right)\ldots\left(x-n+1\right)}{n!} \)&lt;/span&gt; הוא פולינום ב-&lt;span&gt;\( x \)&lt;/span&gt;: המונה הוא הרי מכפלה של &lt;span&gt;\( n \)&lt;/span&gt; פולינומים ב-&lt;span&gt;\( x \)&lt;/span&gt;, אז גם הוא פולינום. לכן גם &lt;span&gt;\( \sum_{k=0}^{n}{x \choose k}{y \choose n-k}={x+y \choose n} \)&lt;/span&gt; הוא שוויון של פולינומים - ושוויון שמתקיים לכל הצבה של &lt;span&gt;\( r,s \)&lt;/span&gt; טבעיים ב-&lt;span&gt;\( x,y \)&lt;/span&gt;. זה מוכיח את השוויון לכל &lt;span&gt;\( r,s \)&lt;/span&gt; ממשיים, ולכן מסיים את ההוכחה &lt;strong&gt;הפורמלית&lt;/strong&gt; לכך ש-&lt;span&gt;\( \left(1+x\right)^{r}\cdot\left(1+x\right)^{s}=\left(1+x\right)^{r+s} \)&lt;/span&gt;, וכמסקנה אנחנו מקבלים ש-&lt;span&gt;\( \left(1+F\left(x\right)\right)^{r}\cdot\left(1+F\left(x\right)\right)^{s}=\left(1+F\left(x\right)\right)^{r+s} \)&lt;/span&gt; לכל &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; עם &lt;span&gt;\( F_{0}=0 \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;זה מקדם אותנו בצורה משמעותית לתפיסה האינטואיטיבית של &lt;span&gt;\( \left(1+x\right)^{r} \)&lt;/span&gt; בתור פעולת החזקה. כדי לראות את זה, בואו נוותר לרגע על שיטת הסימון שבה אנחנו משתמשים ובמקום זה נכתוב&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \Phi\left(1+F\left(x\right),r\right)=\sum_{n=0}^{\infty}{r \choose n}F\left(x\right)^{n} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, בינתיים פשוט הגדרנו דרך לבנות פונקציה יוצרת חדשה מתוך &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt;. מה לזה ולפעולת ההעלאה בחזקה? ובכן, ראשית נשים לב לכך שעל פי הגדרה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \Phi\left(1+F\left(x\right),1\right)=\sum_{n=0}^{\infty}{1 \choose n}F\left(x\right)^{n}=F\left(x\right)^{0}+F\left(x\right)^{1}=1+F\left(x\right)=\left(1+F\left(x\right)\right)^{1} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר, &lt;span&gt;\( \Phi\left(1+F\left(x\right),1\right) \)&lt;/span&gt; מתלכד עם מה שאנחנו מכירים בתור &lt;span&gt;\( \left(1+F\left(x\right)\right)^{1} \)&lt;/span&gt;. שימו לב שאת הביטוי &lt;span&gt;\( \left(1+F\left(x\right)\right)^{1} \)&lt;/span&gt; אנחנו מכירים לא בתור “פונקציה יוצרת שהוגדרה מוזר” אלא זו חזקה במשמעות הרגילה שלה בחוגים - כפל של האיבר בעצמו שוב ושוב (פעם אחת, במקרה הזה).&lt;/p&gt;
+
+&lt;p&gt;טוב ויפה, אבל כזכור עבדנו קשה כדי להוכיח את התכונה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \Phi\left(1+F\left(x\right),r+s\right)=\Phi\left(1+F\left(x\right),r\right)\Phi\left(1+F\left(x\right),s\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ולכן עכשיו אפשר להראות באינדוקציה שלכל &lt;span&gt;\( n \)&lt;/span&gt; טבעי,&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \Phi\left(1+F\left(x\right),n+1\right)=\Phi\left(1+F\left(x\right),n\right)\Phi\left(1+F\left(x\right),1\right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\left(1+F\left(x\right)\right)^{n}\left(1+F\left(x\right)\right)^{1}=\left(1+F\left(x\right)\right)^{n+1} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כאשר גם כאן - החזקה היא במשמעות המקורית והרגילה שלה בחוג, אז הפונקציה &lt;span&gt;\( \Phi \)&lt;/span&gt; &lt;strong&gt;מתלכדת&lt;/strong&gt; עם המשמעות הרגילה בחוג. כדי להשתכנע שהיא מרחיבה אותה בצורה נכונה, בואו נסתכל למשל על&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \Phi\left(1+F\left(x\right),1\right)=\Phi\left(1+F\left(x\right),\frac{1}{2}+\frac{1}{2}\right)=\Phi\left(1+F\left(x\right),\frac{1}{2}\right)^{2} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;במילים אחרות, &lt;span&gt;\( G\left(x\right)=\Phi\left(1+F\left(x\right),\frac{1}{2}\right) \)&lt;/span&gt; הוא מצד אחד טור חזקות פורמלי מוגדר היטב, שלא נזקקנו לחשבון דיפרנציאלי כדי להגדיר; ומצד שני הוא מקיים &lt;span&gt;\( G\left(x\right)^{2}=1+F\left(x\right) \)&lt;/span&gt; וכמו כן קל לראות ש-&lt;span&gt;\( G_{0}=1 \)&lt;/span&gt; ולכן, בסימון שלנו בתחילת הפוסט, &lt;span&gt;\( G\left(x\right)=\sqrt{1+F\left(x\right)} \)&lt;/span&gt;, וזה תואם את המשמעות האינטואיטיבית שיש לנו למה העלאה בחזקת &lt;span&gt;\( \frac{1}{2} \)&lt;/span&gt; אמורה להיות.&lt;/p&gt;
+
+&lt;p&gt;זה עובד גם עבור אפס ועבור מספרים שליליים. אפשר לבדוק ישירות על פי ההגדרה ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \Phi\left(1+F\left(x\right),0\right)=\sum_{n=0}^{\infty}{0 \choose n}F\left(x\right)^{n}=1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;מה שמתאים להעלאה “רגילה” בחזקת 0, ועכשיו עבור שליליים:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 1=\Phi\left(1+F\left(x\right),0\right)=\Phi\left(1+F\left(x\right),n-n\right)= \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( =\Phi\left(1+F\left(x\right),n\right)\Phi\left(1+F\left(x\right),-n\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;כלומר קיבלנו ש-&lt;span&gt;\( \Phi\left(1+F\left(x\right),-n\right)=\frac{1}{\Phi\left(1+F\left(x\right),n\right)} \)&lt;/span&gt;. הצעד האחרון דורש כזכור שהאיבר החופשי של &lt;span&gt;\( \Phi\left(1+F\left(x\right),n\right) \)&lt;/span&gt; לא יהיה 0, ואנחנו כבר יודעים שהוא 1, אז הכל בסדר.&lt;/p&gt;
+
+&lt;p&gt;זה נחמד כי זה מחזיר אותנו לתחילת הפוסט, שבו הוכחנו בדרך די ישירה ש-&lt;span&gt;\( 1+x+x^{2}+\ldots=\frac{1}{1-x} \)&lt;/span&gt;. עכשיו זה אמור לנבוע מההגדרה הכללית יותר שלנו. נסמן &lt;span&gt;\( F\left(x\right)=x+x^{2}+\ldots \)&lt;/span&gt; ונקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \Phi\left(1+F\left(x\right),-1\right)=\sum_{n=0}^{\infty}{-1 \choose n}F\left(x\right)^{n}=\frac{1}{0!}F\left(x\right)^{0}+\frac{\left(-1\right)}{1!}F\left(x\right)^{1}+\frac{\left(-1\right)\left(-2\right)}{2!}F\left(x\right)^{2}+\ldots \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;באופן כללי, האיבר ה-&lt;span&gt;\( n \)&lt;/span&gt;-י בסכום יהיה &lt;span&gt;\( \frac{\left(-1\right)\left(-2\right)\cdots\left(-n\right)}{n!}=\frac{\left(-1\right)^{n}n!}{n!}=\left(-1\right)^{n} \)&lt;/span&gt;, כלומר אנחנו מקבלים&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 1-F\left(x\right)+F\left(x\right)^{2}-F\left(x\right)^{3}+\ldots \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;בכמה דרכים &lt;span&gt;\( x^{n} \)&lt;/span&gt;, עבור &lt;span&gt;\( n\ge2 \)&lt;/span&gt;, יכול להתקבל כאן? אם נסתכל על &lt;span&gt;\( F\left(x\right)^{k} \)&lt;/span&gt;, הוא כולל &lt;span&gt;\( k \)&lt;/span&gt; זוגות סוגריים שמכל אחד מהם בוחרים חזקה של &lt;span&gt;\( x \)&lt;/span&gt; כך שהחזקות מסתכמות אל &lt;span&gt;\( n \)&lt;/span&gt; - זה כמו לספור כמה פתרונות יש למשוואה &lt;span&gt;\( a_{1}+\ldots+a_{k}=n \)&lt;/span&gt;. מה שכן, שימו לב שהסוגריים לא כוללים את &lt;span&gt;\( x^{0} \)&lt;/span&gt; אז הפתרונות הם &lt;strong&gt;בטבעיים חיוביים&lt;/strong&gt;. זו בעיה קלה, קומבינטורית: זה כמו לשאול כמה פתרונות בשלמים אי-שליליים יש ל-&lt;span&gt;\( a_{1}+\ldots+a_{k}=n-k \)&lt;/span&gt; וזו בדיוק בחירה בלי חשיבות לסדר ועם חזרות של &lt;span&gt;\( n-k \)&lt;/span&gt; פעמים מתוך &lt;span&gt;\( k \)&lt;/span&gt; איברים - הפתרון הוא &lt;span&gt;\( {\left(n-k\right)+k-1 \choose k-1}={n-1 \choose k-1} \)&lt;/span&gt;. עכשיו, זה נתן לנו את המקדם של &lt;span&gt;\( x^{n} \)&lt;/span&gt; באיבר &lt;span&gt;\( F\left(x\right)^{k} \)&lt;/span&gt;, אבל כדי לקבל את המקדם הכולל של &lt;span&gt;\( x^{n} \)&lt;/span&gt; צריך לחבר את המקדמים שמקבלים לכל &lt;span&gt;\( k \)&lt;/span&gt; וגם לקחת בחשבון את סימן המינוס שיש על איברים שבהם &lt;span&gt;\( k \)&lt;/span&gt; אי זוגי. כלומר נקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{k=1}^{n}\left(-1\right)^{k}{n-1 \choose k-1} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;במקרה הזה קל לטפל בעזרת &lt;strong&gt;הבינום של ניוטון&lt;/strong&gt;. נשנה את משתנה הסכימה באותה דרך שבה עשינו את זה קודם עבור פיבונאצ’י:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \sum_{k=1}^{n}\left(-1\right)^{k}{n-1 \choose k-1}=-\sum_{k=0}^{n-1}\left(-1\right)^{k}{n-1 \choose k}=-\left(1-1\right)^{n-1}=0 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;המקרים החריגים היחידים הם &lt;span&gt;\( n=0,1 \)&lt;/span&gt;. עבור &lt;span&gt;\( n=0 \)&lt;/span&gt; בכלל אי אפשר להשתמש בנוסחה הזו, אבל אם חושבים רגע רואים שהיא אמורה לתת 0 כאן - וזה נכון, כי &lt;span&gt;\( x^{0} \)&lt;/span&gt; בכלל לא מופיע ב-&lt;span&gt;\( -F\left(x\right)+F\left(x\right)^{2}-F\left(x\right)^{3}+\ldots \)&lt;/span&gt;, הוא מופיע רק ב-1 בהתחלה. כמו כן עבור &lt;span&gt;\( n=1 \)&lt;/span&gt; יש לנו סיטואציה חריגה של &lt;span&gt;\( 0^{0} \)&lt;/span&gt; וזו מהסיטואציות שבהן הדבר הנכון לעשות הוא להגדיר &lt;span&gt;\( 0^{0}=1 \)&lt;/span&gt; (&lt;a href=&quot;https://gadial.net/2018/01/01/zero_power_equals_one/&quot;&gt;יש לי פוסט על זה&lt;/a&gt;), ובואו לא נשכח את המינוס הזה שהשתרבב החוצה, כלומר מקבלים &lt;span&gt;\( -1 \)&lt;/span&gt; במקרה הזה, ולכן &lt;span&gt;\( 1-F\left(x\right)+F\left(x\right)^{2}-F\left(x\right)^{3}+\ldots=1-x \)&lt;/span&gt; וזה - הפלא ופלא, זה בדיוק מה שציפינו לקבל, כי אנחנו כבר יודעים ש-&lt;span&gt;\( 1+x+x^{2}+\ldots=\frac{1}{1-x} \)&lt;/span&gt; אז כמובן ש-&lt;span&gt;\( \left(1+x+x^{2}+\ldots\right)^{-1}=1-x \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;אוקיי, אז אני מקווה שהשתכנענו שהצלחנו להגדיר את &lt;span&gt;\( \left(1+F\left(x\right)\right)^{r} \)&lt;/span&gt; לכל &lt;span&gt;\( r \)&lt;/span&gt; &lt;strong&gt;רציונלי&lt;/strong&gt;. איך נגדיר אותו לכל ממשי? ובכן, כאן אנחנו בבעיה וחייבים לדבר על מושגים מחדו”א פשוט כי &lt;strong&gt;מספר ממשי&lt;/strong&gt; הוא מושג מחדו”א. הייתה לי &lt;a href=&quot;https://gadial.net/2024/08/11/real_numbers_decimal_notation/&quot;&gt;סדרת פוסטים&lt;/a&gt; על זה לא מזמן. בגדול, דרך נוחה לחשוב על מספרים ממשיים הם בתור אובייקטים שלכל אחד מהם, אנחנו יכולים לקחת סדרת רציונליים ששואפת אליו. זה מוביל להגדרה “הרגילה” של חזקה שהיא מספר ממשי כללי: בהינתן &lt;span&gt;\( r \)&lt;/span&gt;, לוקחים סדרה &lt;span&gt;\( q_{n} \)&lt;/span&gt; של רציונליים כך ש-&lt;span&gt;\( q_{n}\to r \)&lt;/span&gt;, ואז מגדירים &lt;span&gt;\( x^{r}=\lim_{n\to\infty}x^{q_{n}} \)&lt;/span&gt; וצריך לשבור את הראש כדי להוכיח שזה מוגדר היטב. אבל איך אפשר לעשות משהו דומה עם טורי חזקות פורמליים? אין לנו מושג של התכנסות על טורי חזקות, נכון? נכון…?&lt;/p&gt;
+
+&lt;h2&gt;החפירה העמוקה ביותר (שנגיע אליה כאן)&lt;/h2&gt;
+
+&lt;p&gt;אז כן, יש לנו מושג של התכנסות על טורי חזקות, הוא לא מסובך במיוחד, והוא כנראה יאפשר את הראייה הצלולה ביותר של מה שעשינו כאן ולאן אפשר להתקדם מפה.&lt;/p&gt;
+
+&lt;p&gt;בגדול, הרעיון הוא שאם יש לנו סדרה &lt;span&gt;\( F^{1}\left(x\right),F^{2}\left(x\right),F^{3}\left(x\right),\ldots \)&lt;/span&gt; ואנחנו רוצים לדעת אם היא מתכנסת לאנשהו, נסתכל על המקדם של &lt;span&gt;\( x^{n} \)&lt;/span&gt; עבור כל הסדרות הללו. אם &lt;strong&gt;החל ממקום מסוים&lt;/strong&gt; המקדם הזה קבוע, ואם זה קורה &lt;strong&gt;לכל&lt;/strong&gt; &lt;span&gt;\( n \)&lt;/span&gt;, אז לסדרה יש גבול שהוא הפונקציה היוצרת שבנויה מהמקדמים הללו. קצת יותר פורמלית: אם לכל &lt;span&gt;\( n \)&lt;/span&gt; קיימים &lt;span&gt;\( a_{n}\in\mathbb{R} \)&lt;/span&gt; ו-&lt;span&gt;\( k_{n} \)&lt;/span&gt; כך שלכל &lt;span&gt;\( i\ge k_{N} \)&lt;/span&gt; מתקיים ש-&lt;span&gt;\( F_{n}^{i}=a_{n} \)&lt;/span&gt; (כאן &lt;span&gt;\( F_{n}^{i} \)&lt;/span&gt; פירושו המקדם של &lt;span&gt;\( x^{n} \)&lt;/span&gt; בטור החזקות &lt;span&gt;\( F^{i}\left(x\right) \)&lt;/span&gt;) אז &lt;span&gt;\( \lim_{i\to\infty}F^{i}\left(x\right)=F\left(x\right) \)&lt;/span&gt; כך ש-&lt;span&gt;\( F\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n} \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;אבל אפשר לעשות את זה עוד יותר מסודר. מי שמכירות את הבניה האנליטית של המספרים ה-&lt;span&gt;\( p \)&lt;/span&gt;-אדיים (&lt;a href=&quot;https://gadial.net/2010/01/12/padic_numbers_analytic_constructions/&quot;&gt;הצגתי אותה כאן&lt;/a&gt;) כנראה ירגישו בבית.&lt;/p&gt;
+
+&lt;p&gt;ראשית, לכל טור חזקות פורמלי &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; ששונה מאפס, נגדיר &lt;span&gt;\( \nu\left(F\left(x\right)\right)=\min_{F_{n}\ne0}n \)&lt;/span&gt;, כלומר האינדקס של המקדם הראשון בטור ששונה מאפס. בנוסף נגדיר &lt;span&gt;\( \nu\left(0\right)=\infty \)&lt;/span&gt; כדי שהכל יסתדר יפה. עכשיו אפשר להגדיר &lt;strong&gt;מטריקה&lt;/strong&gt; על חוג טורי החזקות הפורמליים:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( d\left(F,G\right)=2^{-\nu\left(F-G\right)} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;במילים אחרות, ככל שהאינדקס הראשון שבו &lt;span&gt;\( F,G \)&lt;/span&gt; נבדלים זה מזה הוא גבוה יותר, כך ה”מרחק” שלהם יהיה קטן יותר. אם הם נבדלים כבר באינדקס ה-0 המרחק שלהם יהיה 1, ואם הם נבדלים לראשונה באינדקס ה-3 אז המרחק שלהם יהיה &lt;span&gt;\( \frac{1}{8} \)&lt;/span&gt; וכן הלאה.&lt;/p&gt;
+
+&lt;p&gt;מה שקורה כאן הוא שראשית כל, אם &lt;span&gt;\( F=G \)&lt;/span&gt; אז &lt;span&gt;\( F-G=0 \)&lt;/span&gt; ולכן &lt;span&gt;\( d\left(F,G\right)=2^{-\nu\left(F-G\right)}=2^{-\nu\left(0\right)}=2^{-\infty}=0 \)&lt;/span&gt; (מי שמפריע לו השימוש הזה באינסוף - אוקיי, בסדר, פשוט נגדיר &lt;span&gt;\( d\left(F,G\right)=0 \)&lt;/span&gt; כאשר &lt;span&gt;\( F=G \)&lt;/span&gt; וחסל, מרוצים?).&lt;/p&gt;
+
+&lt;p&gt;שנית, &lt;span&gt;\( d\left(F,G\right)=2^{-\nu\left(F-G\right)}=2^{-\nu\left(G-F\right)}=d\left(G,F\right) \)&lt;/span&gt;; זה עובד כי המקדם הראשון ששונה מאפס ב-&lt;span&gt;\( F-G \)&lt;/span&gt; הוא אותו מקדם כמו ב-&lt;span&gt;\( G-F \)&lt;/span&gt;, פשוט עם סימן הפוך.&lt;/p&gt;
+
+&lt;p&gt;לבסוף, אם &lt;span&gt;\( F,G,H \)&lt;/span&gt; הם שלושה טורים, אז ראשית בואו נסמן ב-&lt;span&gt;\( n \)&lt;/span&gt; את האינדקס הראשון שבו &lt;span&gt;\( F,H \)&lt;/span&gt; נבדלים (אם הם זהים התוצאה שאגיע אליה עוד מעט נובעת עוד יותר בקלות), כלומר &lt;span&gt;\( d\left(F,H\right)=2^{-n} \)&lt;/span&gt;. בואו נסמן ב-&lt;span&gt;\( m_{1} \)&lt;/span&gt; את האינדקס הראשון שבו &lt;span&gt;\( F,G \)&lt;/span&gt; נבדלים וב-&lt;span&gt;\( m_{2} \)&lt;/span&gt; את האינדקס הראשון שבו &lt;span&gt;\( G,H \)&lt;/span&gt; נבדלים (ייתכן ש-&lt;span&gt;\( m_{1},m_{2}=\infty \)&lt;/span&gt;). אני טוען ש-&lt;span&gt;\( n\ge\min\left\{ m_{1},m_{2}\right\}  \)&lt;/span&gt;. למה? ובכן, אם &lt;span&gt;\( G \)&lt;/span&gt; נבדל מ-&lt;span&gt;\( F,H \)&lt;/span&gt; בשלב שבו הם עדיין זהים, זה אומר ש-&lt;span&gt;\( m_{1}=m_{2} \)&lt;/span&gt; (כי הוא ייבדל משניהם בו זמנית שהרי הם זהים עדיין בשלב הזה) ומכיוון שזה לפני שהם נבדלים, האינדקס הזה בא לפני &lt;span&gt;\( n \)&lt;/span&gt;, כלומר במקרה הזה &lt;span&gt;\( m_{1},m_{2}&amp;lt;n \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עכשיו, באינדקס ה-&lt;span&gt;\( n \)&lt;/span&gt; מתקיים &lt;span&gt;\( F_{n}\ne H_{n} \)&lt;/span&gt; ולכן &lt;strong&gt;פשוט לא ייתכן&lt;/strong&gt; ש-&lt;span&gt;\( G_{n}=F_{n} \)&lt;/span&gt; וגם &lt;span&gt;\( G_{n}=H_{n} \)&lt;/span&gt;, כי שוויון כזה היה מכריח את &lt;span&gt;\( F_{n}=H_{n} \)&lt;/span&gt;. לכן זה השלב שבו &lt;strong&gt;בודאות&lt;/strong&gt; &lt;span&gt;\( G \)&lt;/span&gt; הולך להיבדל מ-&lt;span&gt;\( F \)&lt;/span&gt; או מ-&lt;span&gt;\( H \)&lt;/span&gt;. אנחנו לא יודעים מי מהם, לכן אנחנו לוקחים את המינימום על &lt;span&gt;\( \left\{ m_{1},m_{2}\right\}  \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;מה המסקנה? &lt;span&gt;\( n\ge\min\left\{ m_{1},m_{2}\right\}  \)&lt;/span&gt; גורר ש-&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( d\left(F,H\right)=2^{-n}\le2^{-\min\left\{ m_{1},m_{2}\right\} }=\max\left\{ 2^{-m_{1}},2^{-m_{2}}\right\} =\max\left(d\left(F,G\right),d\left(G,H\right)\right) \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זה נותן לנו את &lt;strong&gt;אי שוויון המשולש&lt;/strong&gt;, בגרסה יותר חזקה מהרגיל אפילו: אם אני קטן מהמקסימום של שני מספרים אי שליליים, אני בוודאי קטן יותר מהסכום שלהם (שכולל את המקסימום ועוד איזה מספר)&lt;/p&gt;
+
+&lt;p&gt;אז קיבלנו פונקציה &lt;span&gt;\( d \)&lt;/span&gt; כך ש-&lt;/p&gt;
+
+&lt;ul&gt; &lt;li&gt;&lt;span&gt;\( d\left(F,G\right)\ge0 \)&lt;/span&gt; ויש שוויון אם ורק אם &lt;span&gt;\( F=G \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( d\left(F,G\right)=d\left(G,F\right) \)&lt;/span&gt;&lt;/li&gt;
+
+
+&lt;li&gt;&lt;span&gt;\( d\left(F,H\right)\le d\left(F,G\right)+d\left(G,H\right) \)&lt;/span&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+
+&lt;p&gt;שלוש התכונות הללו הופכות את &lt;span&gt;\( d \)&lt;/span&gt; למה שנקרא &lt;strong&gt;מטריקה&lt;/strong&gt;, שהיא פונקציה שמאפשרת לדבר באופן כללי על גבולות והתכנסות (למעשה, התכונה החזקה יותר של אי-שוויון המשולש נותנת משהו שנקרא &lt;strong&gt;אולטרמטריקה&lt;/strong&gt; אבל נעזוב את זה). עכשיו אפשר לומר משהו כזה: &lt;span&gt;\( \lim_{n\to\infty}F^{n}\left(x\right)=F\left(x\right) \)&lt;/span&gt; אם לכל &lt;span&gt;\( \varepsilon&amp;gt;0 \)&lt;/span&gt; קיים &lt;span&gt;\( N \)&lt;/span&gt; כך שאם &lt;span&gt;\( n&amp;gt;N \)&lt;/span&gt; אז &lt;span&gt;\( d\left(F^{n}\left(x\right),F\left(x\right)\right)&amp;lt;\varepsilon \)&lt;/span&gt;. זו ההגדרה הסטנדרטית לגבול, ואם חושבים עליה קצת בהקשר של ה-&lt;span&gt;\( d \)&lt;/span&gt; הספציפית שלנו רואים שהמשמעות של &lt;span&gt;\( \lim_{n\to\infty}F^{n}\left(x\right)=F\left(x\right) \)&lt;/span&gt; היא בדיוק מה שהזכרתי קודם: כדי שהסדרה &lt;span&gt;\( F^{n}\left(x\right) \)&lt;/span&gt; תתכנס לגבול, צריך שהמקדם של &lt;span&gt;\( x^{k} \)&lt;/span&gt; יתקבע החל ממקום מסוים בסדרה, ואז הוא יהיה המקדם של אותו איבר ב-&lt;span&gt;\( F\left(x\right) \)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;עכשיו אפשר להסתכל על ביטוי כמו &lt;span&gt;\( \sum_{n=0}^{\infty}F\left(x\right)^{n} \)&lt;/span&gt;. כבר היינו בסיטואציה דומה קודם, וראינו שכדי שחזקה של &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; תתנהג יפה, היה צריך שיתקיים &lt;span&gt;\( F_{0}=0 \)&lt;/span&gt;, אז נניח שזה קורה. עכשיו אפשר לחשוב על &lt;span&gt;\( \sum_{n=0}^{\infty}F\left(x\right)^{n} \)&lt;/span&gt; פשוט כמו טור במובן הרגיל, כזה שמוגדר עם סכומים חלקיים &lt;span&gt;\( \sum_{n=0}^{\infty}F\left(x\right)^{n}=\lim_{n\to\infty}S_{n} \)&lt;/span&gt; כאשר &lt;span&gt;\( S_{n}=\sum_{k=0}^{n}F\left(x\right)^{k} \)&lt;/span&gt;. בכל פעם שבה מוסיפים חזקה חדשה &lt;span&gt;\( F\left(x\right)^{n} \)&lt;/span&gt; לסכום שיש לנו, היא משנה רק את המקדמים של &lt;span&gt;\( x^{n} \)&lt;/span&gt; וחזקות גבוהות יותר - כלומר, החזקות הנמוכות יותר &lt;strong&gt;התקבעו&lt;/strong&gt; ולכן הטור מתכנס.\textbackslash אפשר לעשות משהו אפילו עוד יותר משעשע כדי לחשב את הסכום שלו: הרי כדי לחשב את הסכום של &lt;span&gt;\( \sum_{n=0}^{\infty}q^{n} \)&lt;/span&gt; במספרים ממשיים אנחנו מסתכלים על הסכום החלקי ה-&lt;span&gt;\( n \)&lt;/span&gt;-י שיוצא &lt;span&gt;\( \frac{q^{n+1}-1}{q-1} \)&lt;/span&gt;, נוכל להסתכל על סכום דומה גם עבור &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt;. הרי איך מוכיחים את הנוסחה לסכום החלקי? מסתכלים על המכפלה&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( \left(1+F\left(x\right)+\ldots+F\left(x\right)^{n}\right)\left(F\left(x\right)-1\right)=F\left(x\right)^{n+1}-1 \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;זו זהות שאפשר להוכיח בכל חוג קומוטטיבי. עכשיו, אם &lt;span&gt;\( F_{0}=0 \)&lt;/span&gt; אז המקדם החופשי של &lt;span&gt;\( F\left(x\right)-1 \)&lt;/span&gt; שונה מאפס ולכן הוא הפיך, ולכן אפשר לכפול בהופכי ולקבל&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\( 1+F\left(x\right)+\ldots+F\left(x\right)^{n}=\frac{F\left(x\right)^{n+1}-1}{F\left(x\right)-1} \)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;ועכשיו, מהו &lt;span&gt;\( \lim_{n\to\infty}\frac{F\left(x\right)^{n+1}-1}{F\left(x\right)-1} \)&lt;/span&gt;? המכנה נשאר קבוע, ובמונה יש לנו חזקה הולכת וגדלה &lt;span&gt;\( F\left(x\right)^{n+1} \)&lt;/span&gt;. בחזקה הזו, המקדם של &lt;span&gt;\( x^{n} \)&lt;/span&gt; וכל הקודמים לו הוא 0, ולכן… &lt;span&gt;\( \lim_{n\to\infty}F\left(x\right)^{n+1}=0 \)&lt;/span&gt; ומכאן נקבל &lt;span&gt;\( \lim_{n\to\infty}\frac{F\left(x\right)^{n+1}-1}{F\left(x\right)-1}=\frac{0-1}{F\left(x\right)-1}=\frac{1}{1-F\left(x\right)} \)&lt;/span&gt; והנה קיבלנו את התוצאה שממנה התחיל הפוסט - רק שעכשיו הוכחנו אותה &lt;strong&gt;באותה צורה בדיוק&lt;/strong&gt; שבה מוכיחים את הסכום ה”קלאסי”. אותה טרמינולוגיה, אותו עולם מושגים של התכנסות, אותה טכניקה - &lt;strong&gt;ובלי לערב רדיוסי התכנסות בכלל&lt;/strong&gt;. אין זכר למגבלה &lt;span&gt;\( \left|q\right|&amp;lt;1 \)&lt;/span&gt;, פשוט כי בחוג שלנו, עם המטריקה שלנו, העניינים הם למעשה &lt;strong&gt;פשוטים יותר&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;עכשיו גם קצת יותר ברורה העניין הזה של להציב את &lt;span&gt;\( F\left(x\right) \)&lt;/span&gt; בתוך &lt;span&gt;\( G\left(x\right) \)&lt;/span&gt;. אנחנו מקבלים בסוף טור מהצורה &lt;span&gt;\( \sum_{n=0}^{\infty}a_{n}F^{n}\left(x\right) \)&lt;/span&gt;, וזה מתכנס אם &lt;span&gt;\( F_{0}=0 \)&lt;/span&gt;. עכשיו אפשר לקחת את זה ולהשתמש בזה עבור טורים מוכרים. למשל, אם ניזכר איך נראה הפיתוח של פונקציית האקספוננט לטור חזקות: &lt;span&gt;\( e^{x}=\sum_{n=0}^{\infty}\frac{1}{n!}x^{n} \)&lt;/span&gt;, אז אפשר להגדיר &lt;span&gt;\( e^{F\left(x\right)}=\sum_{n=0}^{\infty}\frac{1}{n!}F^{n}\left(x\right) \)&lt;/span&gt;, ואפשר להגדיר &lt;span&gt;\( \ln\left(1+F\left(x\right)\right)=\sum_{n=0}^{\infty}\frac{\left(-1\right)^{n+1}}{n}F^{n}\left(x\right) \)&lt;/span&gt; ועוד ועוד. אז ביטוי כמו &lt;span&gt;\( \sqrt{1-4x} \)&lt;/span&gt; שמופיע בתוך פונקציה יוצרת? נראה לי שאנחנו כבר יודעים איך להסתדר איתו.&lt;/p&gt;</content><author><name></name></author><category term="מספרי קטלן" /><category term="פונקציות יוצרות" /><summary type="html">מבוא</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/assets/img/main/default-card.png" /><media:content medium="image" url="http://gadial.net/assets/img/main/default-card.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">מספרי קטלן</title><link href="http://gadial.net/2025/05/31/catalan_numbers/" rel="alternate" type="text/html" title="מספרי קטלן" /><published>2025-05-31T00:00:00+00:00</published><updated>2025-05-31T00:00:00+00:00</updated><id>http://gadial.net/2025/05/31/catalan_numbers</id><content type="html" xml:base="http://gadial.net/2025/05/31/catalan_numbers/">&lt;h2&gt;מבוא&lt;/h2&gt;
 
 &lt;p&gt;אם אני אלך ברחוב ואשאל באקראי אנשים איזו סדרה מתמטית הם מכירים, אחרי שנקלף את שכבות האלו שיבהלו ויברחו או יתחכמו ויגידו ש-Numb3rs (אף אחד לא יגיד, העולם כבר שכח שהייתה סדרה כזו וגם לי לא יצא לראות אותה) כנראה אקבל שלל תשובות: “סדרת פיבונאצ’י”, “סדרת פיבונאצ’י!”, “פיבונאצ’י”, “הטבעיים” (חכמולוג, לסנן) ו”פיבונאצ’י”. ובכן, סדרת פיבונאצ’י כבודה במקומו מונח, יש עוד סדרות מעניינות בעולם ואני רוצה לדבר בפוסט הזה על אחת אהובה במיוחד - סדרת מספרי קטלן (Catalan, על שם המתמטיקאי הבלגי אז’ן שרל קטלן). זו הסדרה הבאה:&lt;/p&gt;
 
@@ -2058,171 +2585,4 @@
 
 &lt;h2&gt;חלק חמישי וקצר במיוחד שבו אני שואל ולא באמת מבין מה למדנו מכל זה&lt;/h2&gt;
 
-&lt;p&gt;לסיכום, מה בעצם למדנו? האם למדנו שרוב הראשוניים הם קטנים? לא. האם למדנו שרוב הראשוניים הם גדולים? לא. אני עדיין לא בטוח מה המשמעות שאנחנו רוצים לתת למילים הללו. אבל כן למדנו כל מני דברים נחמדים בפני עצמם - מה זה ראשוניים, שיש אינסוף מהם, מה זה “כמעט כל” המספרים, מה משפט המספרים הראשוניים מספר לנו על הכמות של הראשוניים עד גודל כלשהו, על האופן שבו אפשר להגדיר יחסי סדר שונים על הטבעיים ובפרט יחס של חילוק במקום “קטן מ-“ הרגיל, ואיך אפשר להשתמש בטורים אינסופיים כדי להעריך עד כמה מהר סדרת מספרים כלשהי נהיית גדולה. כל אלו הם דברים &lt;strong&gt;מעניינים&lt;/strong&gt; במתמטיקה, ושאלה היא מוצדקת אם היא נותנת לנו תירוץ לדבר על דברים מעניינים, אז אני בסך הכל סבבה עם השאלה “האם רוב הראשוניים הם קטנים?” כל עוד אנחנו זוכרים שהמטרה פה היא לא לענות עליה ובטח שלא לחשוב שיש לה תשובה חד משמעית, אלא להשתמש בה בתור תירוץ לראות דברים מעניינים באמת.&lt;/p&gt;</content><author><name></name></author><category term="מספרים ראשוניים" /><summary type="html">חלק ראשון, ובו כמעט הכל ממש ממש ממש גדול</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/assets/img/main/default-card.png" /><media:content medium="image" url="http://gadial.net/assets/img/main/default-card.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">איך מחשבים דטרמיננטה?</title><link href="http://gadial.net/2024/12/03/computing_determinants/" rel="alternate" type="text/html" title="איך מחשבים דטרמיננטה?" /><published>2024-12-03T00:00:00+00:00</published><updated>2024-12-03T00:00:00+00:00</updated><id>http://gadial.net/2024/12/03/computing_determinants</id><content type="html" xml:base="http://gadial.net/2024/12/03/computing_determinants/">&lt;p&gt;כאשר לומדים אלגברה לינארית, מושג &lt;strong&gt;הדטרמיננטה&lt;/strong&gt; צץ בשלב זה או אחר. לפעמים מלמדים אותו מהר יחסית ולפעמים מחכים איתו עד שממש חייבים, כדי לא להפחיד אנשים תמימים, אבל הוא תמיד שם - וזה כי דטרמיננטות זה יופי של דבר כשמפסיקים לפחד מהן. &lt;a href=&quot;https://gadial.net/2011/11/10/determinants/&quot;&gt;יש לי כבר פוסט&lt;/a&gt; שמסביר מהי דטרמיננטה, אבל דבר אחד אין שם: &lt;strong&gt;איך מחשבים אותה&lt;/strong&gt;. בפוסט הזה אני רוצה להשלים את החור הזה ולתאר את הדרך הסטנדרטית, שהיא בסך הכל די פשוטה; המוטיבציה שלי מגיעה מכך שלא מזמן נזקקתי לדרך אחרת, שבמובנים מסוימים היא טובה יותר ובמובנים אחרים היא טובה פחות, אבל איתה אחכה לפוסט הבא.&lt;/p&gt;
-
-&lt;p&gt;ראשית, בואו ניזכר מה זו דטרמיננטה בעצם. ההיכרות הראשונה שלי עם הנושא הייתה בשיעור מחשבים אי שם בכיתה י’ או משהו, שבו מסיבה לא ברורה המורה החליט בתור שאלת שיעורי בית לתת לנו לכתוב קוד שמחשב דטרמיננטות, ולכן בילה כמעט חמש דקות בלהכתיב את השאלה שרובה כללה הסבר של איך בכלל מוגדרת דטרמיננטה. לא רק שלא הבנתי כלום, גם נכנסתי להלם גדול וחרדה מפני הנושא הזה. למה שהמורה יתעלל בנו בצורה כזו? ובכן, כי הוא רצה להציג את המושג של &lt;strong&gt;רקורסיה&lt;/strong&gt;, פונקציה שמחשבת משהו על קלט מסוים ידי קריאה לעצמה על קלטים קטנים יותר, וזו בהחלט &lt;strong&gt;אחת הדרכים&lt;/strong&gt; שבהן ניתן לחשב דטרמיננטה. האם זו הדרך הנכונה להציג את הנושא? ובכן, לא וכן; לא, כי זה לא נותן לנו מבט בתמונה הגדולה - אבל בשביל זה יש את הפוסט שקישרתי אליו קודם - וכן, כי זה מכניס אותנו ישר למים של ההיבט החישובי.&lt;/p&gt;
-
-&lt;p&gt;דטרמיננטה מוגדרת על &lt;strong&gt;מטריצה ריבועית&lt;/strong&gt;, כלומר על אוסף של מספרים שמסודר בטבלה עם אותו מספר שורות ועמודות. אם המספר הוא &lt;span&gt;\( n \)&lt;/span&gt;, אומרים שזו מטריצה מסדר &lt;span&gt;\( n\times n \)&lt;/span&gt;. בדרך כלל מסמנים את זה ב-&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{cccc} a_{11} &amp;amp; a_{12} &amp;amp; \cdots &amp;amp; a_{1n}\\ a_{21} &amp;amp; a_{22} &amp;amp;  &amp;amp; a_{2n}\\ \vdots &amp;amp;  &amp;amp; \ddots &amp;amp; \vdots\\ a_{n1} &amp;amp; a_{n2} &amp;amp; \cdots &amp;amp; a_{nn} \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;הדטרמיננטה של &lt;span&gt;\( A \)&lt;/span&gt; מסומנת &lt;span&gt;\( \left|A\right| \)&lt;/span&gt; (אבל זה לא ערך מוחלט; זה סימן שנבחר בגלל דמיון שטחי כלשהו בין התכונות של הדטרמיננטה והתכונות של הערך המוחלט) או &lt;span&gt;\( \text{det}A \)&lt;/span&gt;. הנה דרך אחת לחשב את &lt;span&gt;\( \left|A\right| \)&lt;/span&gt;: אנחנו עוברים על כל האיברים בשורה העליונה של &lt;span&gt;\( A \)&lt;/span&gt;. ראשית אנחנו לוקחים את &lt;span&gt;\( a_{11} \)&lt;/span&gt; ואז אנחנו שומרים את &lt;span&gt;\( A \)&lt;/span&gt; בצד, לוקחים עותק שלה, &lt;strong&gt;מוחקים&lt;/strong&gt; מהעותק את השורה והעמודה הראשונה, מחשבים את הדטרמיננטה של המטריצה הקטנה יותר הזו, כופלים את זה ב-&lt;span&gt;\( a_{11} \)&lt;/span&gt; ואת התוצאה שומרים בצד.&lt;/p&gt;
-
-&lt;p&gt;עכשיו עושים משהו דומה עם &lt;span&gt;\( a_{12} \)&lt;/span&gt;: מוחקים את השורה הראשונה והעמודה &lt;strong&gt;השניה&lt;/strong&gt;, מקבלים מטריצה קטנה יותר, מחשבים את הדטרמיננטה שלה, כופלים ב-&lt;span&gt;\( a_{12} \)&lt;/span&gt; ואז &lt;strong&gt;מחסרים&lt;/strong&gt; את התוצאה ממה שקיבלנו קודם. ואז לוקחים את &lt;span&gt;\( a_{13} \)&lt;/span&gt; ועושים את אותו הטריק איתו אבל &lt;strong&gt;מחברים&lt;/strong&gt; - בקיצור, אנחנו רואים שזו מהומה, ושצריך להכניס קצת סימנים כדי לתאר את זה בצורה פשוטה.&lt;/p&gt;
-
-&lt;p&gt;הסימן הראשון שאנחנו רוצים הוא “המטריצה שמקבלים מ-&lt;span&gt;\( A \)&lt;/span&gt; כשמוחקים שורה ועמודה ספציפיות”. למטריצה כזו קוראים &lt;strong&gt;מטריצת המינור&lt;/strong&gt; של השורה והעמודה, ואם השורה היא &lt;span&gt;\( i \)&lt;/span&gt; והעמודה היא &lt;span&gt;\( j \)&lt;/span&gt; אני אסמן אותה ב-&lt;span&gt;\( A^{ij} \)&lt;/span&gt;. אצלנו תמיד מחקתי את השורה הראשונה, אבל זה היה רק לצורך הדוגמא - אפשר להראות שלא משנה איזו שורה אני בוחר, אני אקבל את אותו דבר. אז אני מקבל את הנוסחה הבאה:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left|A\right|=\sum_{j=1}^{n}\left(-1\right)^{i+j}a_{ij}\left|A^{ij}\right| \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;כאן &lt;span&gt;\( \left|A^{ij}\right| \)&lt;/span&gt; הוא הדטרמיננטה של מטריצת המינור, &lt;span&gt;\( a_{ij} \)&lt;/span&gt; האיבר שאת השורה והעמודה שלו מוחקים, ו-&lt;span&gt;\( \left(-1\right)^{i+j} \)&lt;/span&gt; זו הדרך להשיג את אפקט ה”לחבר ולחסר לסירוגין”. הנוסחה הזו שלעיל מתאימה למה שנקרא “פיתוח הדטרמיננטה לפי השורה ה-&lt;span&gt;\( i \)&lt;/span&gt;”. אפשר לעשות את זה גם לפי עמודות - לבחור עמודה &lt;span&gt;\( j \)&lt;/span&gt; ספציפית ולעבור על האיברים שלה אחד-אחד. זה מוביל לנוסחה&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left|A\right|=\sum_{i=1}^{n}\left(-1\right)^{i+j}a_{ij}\left|A^{ij}\right| \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;זו נוסחה רקורסיבית, אז היא צריכה תנאי התחלה - מקרה בסיסי כל כך שבו לא צריך לחשב דטרמיננטה של משהו קטן יותר. די מתבקש להסתכל על המקרה של מטריצה בת איבר בודד ואז הדטרמיננטה שלה היא האיבר הבודד הזה. ומה קורה עם מטריצה מסדר &lt;span&gt;\( 2\times2 \)&lt;/span&gt;?&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{cc} a_{11} &amp;amp; a_{12}\\ a_{21} &amp;amp; a_{22} \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;נפתח את הדטרמיננטה על פי השורה הראשונה: ראשית ניקח את &lt;span&gt;\( a_{11} \)&lt;/span&gt;, נמחק את השורה והעמודה הראשונות ונקבל את המטריצה &lt;span&gt;\( \left[a_{22}\right] \)&lt;/span&gt; שהדטרמיננטה שלה היא &lt;span&gt;\( a_{22} \)&lt;/span&gt;, אז האיבר הראשון בסכום הוא &lt;span&gt;\( a_{11}a_{22} \)&lt;/span&gt;. עכשיו נעבור אל &lt;span&gt;\( a_{12} \)&lt;/span&gt;, נמחק שורה ראשונה ועמודה שניה, נקבל דטרמיננטה &lt;span&gt;\( a_{21} \)&lt;/span&gt;, נכפיל ונשים סימן חיסור על הכל, ונקבל בסך הכל ש-&lt;span&gt;\( \left|A\right|=a_{11}a_{22}-a_{12}a_{21} \)&lt;/span&gt;. עכשיו תנסו לעשות את אותו הדבר עם פיתוח של שורה אחרת או עמודה אחרת (למשל, עמודה 2) ותראו איך יוצא אותו דבר (אם סימני הפלוס/מינוס לא מסתדרים תזכרו את הגורם &lt;span&gt;\( \left(-1\right)^{i+j} \)&lt;/span&gt;; לא &lt;strong&gt;תמיד&lt;/strong&gt; כשמפתחים לפי שורה או עמודה כלשהי, האיבר הראשון שבו מטפלים יהיה עם סימן חיובי).&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;det&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;minor_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;det&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minor_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;האם זה עובד טוב? לא, זה עובד איום ונורא. זה ירוץ ויחזיר את התוצאה הנכונה, אבל &lt;strong&gt;באיזה מחיר&lt;/strong&gt;? המחיר יהיה זמן ריצה גדול (וגם צריכת זכרון מיותרת, אבל בהיקף פחות משמעותי כאן). חשבו על זה כך: אם אני מפעיל את האלגוריתם על מטריצה מסדר &lt;span&gt;\( n\times n \)&lt;/span&gt;, אני צריך לחשב את הדטרמיננטה של &lt;span&gt;\( n \)&lt;/span&gt; מטריצות מסדר &lt;span&gt;\( \left(n-1\right)\times\left(n-1\right) \)&lt;/span&gt;, וכל חישוב כזה דורש חישוב של &lt;span&gt;\( n-1 \)&lt;/span&gt; דטרמיננטות של מטריצות מסדר &lt;span&gt;\( \left(n-2\right)\times\left(n-2\right) \)&lt;/span&gt; וכן הלאה - יוצא שאני מחשב &lt;span&gt;\( n\left(n-1\right)\left(n-2\right)\cdots1=n! \)&lt;/span&gt; דטרמיננטות. קצב הגידול של &lt;span&gt;\( n! \)&lt;/span&gt; הוא אקספוננציאלי - תמיד חדשות רעות שמדובר על זמן חישוב. על מטריצת &lt;span&gt;\( 4\times4 \)&lt;/span&gt; האלגוריתם הזה יעבוד מעולה ויסתיים חיש קל. על מטריצה מסדר &lt;span&gt;\( 1000\times1000 \)&lt;/span&gt;? אני לא מעז להפעיל אותו.&lt;/p&gt;
-
-&lt;p&gt;האם ניתן לייעל את זה? למרבה השמחה כן, אפשר לייעל את החישוב בצורה קיצונית ממש, וכל זה בזכות תכונה קסומה אחת של הדטרמיננטה: היא &lt;strong&gt;כפלית&lt;/strong&gt;. אם &lt;span&gt;\( A,B \)&lt;/span&gt; הן מטריצות ריבועיות, אז &lt;span&gt;\( \left|AB\right|=\left|A\right|\cdot\left|B\right| \)&lt;/span&gt;. ההוכחה היא אפילו לא כל כך מסובכת &lt;a href=&quot;https://gadial.net/2011/11/21/matrix_revolutions/&quot;&gt;ואני מציג אותה בפוסט שלי&lt;/a&gt;, אבל היא דורשת את נקודת המבט התיאורטית יותר על דטרמיננטה שאני לא נכנס אליה כאן. גם לשאלה מה זה בדיוק כפל המטריצות &lt;span&gt;\( AB \)&lt;/span&gt; אני לא נכנס; זה לא כפל “איבר-איבר” אלא משהו מתוחכם יותר, אבל יש לי &lt;a href=&quot;https://gadial.net/2011/10/06/matrix_product/&quot;&gt;פוסט גם על זה&lt;/a&gt; ומי שלא מכירים את המושג פשוט יוכלו לסמוך עלי בכמה טענות פשוטות שאני עוד מעט אטען.&lt;/p&gt;
-
-&lt;p&gt;לפני שנגיע לשימוש בכפליות של הדטרמיננטה, בואו נחשוב מתי ההגדרה הרקורסיבית כן שמישה בצורה נוחה. המקרה הקלאסי הוא זה: אם יש לי מטריצה שיש בה שורה שכל האיברים בה הם אפס חוץ אולי מאיבר אחד, &lt;strong&gt;מאוד&lt;/strong&gt; כדאי לי לפתח את הדטרמיננטה על פי השורה הזו, כי בנוסחה &lt;span&gt;\( \left|A\right|=\sum_{j=1}^{n}\left(-1\right)^{i+j}a_{ij}\left|A^{ij}\right| \)&lt;/span&gt; כל האיברים &lt;span&gt;\( a_{ij} \)&lt;/span&gt; הולכים לצאת אפס חוץ אולי מאיבר אחד ספציפי, נניח &lt;span&gt;\( a_{ik} \)&lt;/span&gt;, ואז נקבל &lt;span&gt;\( \left|A\right|=\left(-1\right)^{i+k}a_{ik}\left|A^{ik}\right| \)&lt;/span&gt;. אני עדיין צריך לחשב רקורסיבית את הדטרמיננטה של &lt;span&gt;\( A^{ik} \)&lt;/span&gt;, אבל זו רק מטריצה אחת, בניגוד ל-&lt;span&gt;\( n \)&lt;/span&gt; מטריצות שהייתי צריך לחשב להן את הדטרמיננטה במקרה הכללי. יותר מזה - אנחנו רואים פה שאם יש במטריצה שורת אפסים, אז הדטרמיננטה שלה יוצאת אפס ואפשר לסיים את החישוב (ואותו דבר עבור טור של אפסים).&lt;/p&gt;
-
-&lt;p&gt;זה מאפשר לי לחשב ביעילות את הדטרמיננטה של מטריצות נחמדות, שבהן בכל שורה יש רק איבר אחד שונה מאפס. הדוגמא הקלאסית למטריצה כזו היא &lt;strong&gt;מטריצה אלכסונית&lt;/strong&gt;, מטריצה שבה רק האיברים מהצורה &lt;span&gt;\( a_{ii} \)&lt;/span&gt; (שנקראים “אברי האלכסון הראשי”) יכולים להיות שונים מאפס וכל היתר הם אפס. למשל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{ccc} 13 &amp;amp; 0 &amp;amp; 0\\ 0 &amp;amp; -2 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 8 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;אם נתחיל לפתח את הדטרמיננטה של &lt;span&gt;\( A \)&lt;/span&gt; על פי השורה הראשונה, נקבל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left|A\right|=13\cdot\left|\begin{array}{cc} -2 &amp;amp; 0\\ 0 &amp;amp; 8 \end{array}\right| \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;עכשיו את הדטרמיננטה של המטריצה החדשה אני יכול לחשב באותו אופן - פיתוח על פי השורה הראשונה, שהוא פשוט כפל במספר שכתוב בשורה הראשונה כפול הדטרמיננטה של מה שנשאר מהמטריצה כש”מגלחים” ממנה את השורה והעמודה הראשונה, וכן הלאה. אני אקבל &lt;span&gt;\( \left|A\right|=13\cdot\left(-2\right)\cdot8 \)&lt;/span&gt;: הדטרמיננטה של מטריצה אלכסונית היא מכפלת האיברים על האלכסון.&lt;/p&gt;
-
-&lt;p&gt;אם זה ברור, בואו נשים לב שבעצם ראיתי כאן יותר מזה. כשאני מפתח את הדטרמיננטה על פי השורה הראשונה, האיבר היחיד שרלוונטי הוא ה-13 שבמקום הראשון. עבורו, אני “מגלח” גם את העמודה הראשונה מהמטריצה. זו הסיבה שאברי העמודה הזו לא משתתפים בהמשך החישוב - שהסירו אותם בצורה הזו. לא שהם אפסים. החישוב היה ממשיך באותו אופן בדיוק גם אם הם לא היו אפסים. כלומר, אם המטריצה הייתה&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{ccc} 13 &amp;amp; 0 &amp;amp; 0\\ 42 &amp;amp; -2 &amp;amp; 0\\ 555 &amp;amp; 0 &amp;amp; 8 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;הדטרמיננטה שלה בכלל לא הייתה משתנה - הפיתוח לפי השורה הראשונה היה מניב &lt;span&gt;\( \left|A\right|=13\cdot\left|\begin{array}{cc} -2 &amp;amp; 0\\ 0 &amp;amp; 8 \end{array}\right| \)&lt;/span&gt; באותה צורה כמו קודם. זה נכון שהפיתוח לפי &lt;strong&gt;העמודה&lt;/strong&gt; הראשונה היה עכשיו מתנהל שונה לגמרי, אבל הוא היה מגיע לאותה תוצאה סופית (נסו!)&lt;/p&gt;
-
-&lt;p&gt;באופן דומה גם בעמודה השניה יכולים להופיע איברים שונים מאפס - אבל רק &lt;strong&gt;מתחת&lt;/strong&gt; ל-&lt;span&gt;\( -2 \)&lt;/span&gt; שבאמצע, כי איברים מעליו ישפיעו על שורות שמופיעות בחישוב של הדטרמיננטה לפני שהעמודה של &lt;span&gt;\( -2 \)&lt;/span&gt; נמחקת. כלומר, גם הדטרמיננטה של המטריצה הזו היא מכפלת אברי האלכסון:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{ccc} 13 &amp;amp; 0 &amp;amp; 0\\ 42 &amp;amp; -2 &amp;amp; 0\\ 555 &amp;amp; 9999 &amp;amp; 8 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;התוצאה הזו מראה שמטריצות שבהן “החצי העליון” של המטריצה, מעל האלכסון הראשי, הוא אפסים הן מטריצות מעניינות. למטריצות כאלו קוראים “מטריצה משולשית תחתונה” (תחתונה, כי האיזור שבו כן יכולים להיות דברים שונים מאפס הוא זה שמתחת לאלכסון הראשי). פורמלית, זו מטריצה שבה אם &lt;span&gt;\( j&amp;gt;i \)&lt;/span&gt; אז &lt;span&gt;\( a_{ij}=0 \)&lt;/span&gt; (אם מספר העמודה גדול ממספר השורה, הכניסה היא אפס). מה שראינו עכשיו הוא שבמטריצות כאלו, הדטרמיננטה היא מכפלת אברי האלכסון הראשי. באופן דומה מגדירים גם “מטריצה משולשית עליונה” שבה אם &lt;span&gt;\( i&amp;gt;j \)&lt;/span&gt; אז &lt;span&gt;\( a_{ij}=0 \)&lt;/span&gt; ופיתוח הדטרמיננטה לפי עמודות ולא לפי שורות מראה שגם במקרה הזה הדטרמיננטה של מטריצה כזו היא מכפלת אברי האלכסון הראשי.&lt;/p&gt;
-
-&lt;p&gt;זה יפה מאוד, אבל איך זה עוזר לנו לחשב דטרמיננטה במקרה הכללי? כאן מגיע הפאנץ’ הנחמד: יש כמה פעולות פשוטות שאפשר לבצע על מטריצה שהופכות אותה למטריצה משולשית, והשינויים שהפעולות הללו עושים לדטרמיננטה הם זניחים עד לא קיימים. זה מתקשר לנושא של &lt;a href=&quot;https://gadial.net/2011/10/05/matrix_row_reducing/&quot;&gt;דירוג מטריצות&lt;/a&gt; אבל אני לא אצטרך לדבר על הנושא הזה בצורה הכללית שלו, אז נתמקד במה שעוזר לנו כאן.&lt;/p&gt;
-
-&lt;p&gt;בשביל חישוב דטרמיננטה, מספיקים לנו שתי פעולות שאפשר לבצע על מטריצה:&lt;/p&gt;
-
-&lt;ul&gt; &lt;li&gt;להחליף שתי שורות במטריצה&lt;/li&gt;
-
-
-&lt;li&gt;לקחת שורה אחת, לכפול אותה במספר כלשהו, ולחבר לשורה אחרת&lt;/li&gt;
-
-&lt;/ul&gt;
-
-&lt;p&gt;בואו נדגים את זה. הנה מטריצה:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{ccc} 2 &amp;amp; 8 &amp;amp; 3\\ 4 &amp;amp; 9 &amp;amp; 1\\ 3 &amp;amp; 3 &amp;amp; 3 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;אם אני אחליף את השורה השניה והשלישית, אני אקבל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{ccc} 2 &amp;amp; 8 &amp;amp; 3\\ 3 &amp;amp; 3 &amp;amp; 3\\ 4 &amp;amp; 9 &amp;amp; 1 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;האם הפעולה הזו תשנה את הדטרמיננטה של המטריצה? כן! אבל בצורה פשוטה: הדטרמיננטה תוכפל ב-&lt;span&gt;\( -1 \)&lt;/span&gt;, וזה יקרה תמיד, לא משנה אילו שתי שורות נחליף. אולי יהיה יותר קל לראות את זה קורה אם נתחיל עם מטריצה אלכסונית פשוטה:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( B=\left[\begin{array}{ccc} 1 &amp;amp; 0 &amp;amp; 0\\ 0 &amp;amp; 1 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 1 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;בבירור &lt;span&gt;\( \left|B\right|=1 \)&lt;/span&gt; כי זו מכפלת אברי האלכסון. עכשיו, בואו נחליף את השורה השניה בשלישית ונקבל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( B=\left[\begin{array}{ccc} 1 &amp;amp; 0 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 1\\ 0 &amp;amp; 1 &amp;amp; 0 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;עכשיו זו כבר לא מטריצה משולשית אז מכפלת אברי האלכסון לא תיתן לנו את הדטרמיננטה, אבל עדיין אפשר לפתח אותה על פי הכללים הרגילים, שורה-שורה, ונקבל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left|B\right|=1\cdot\left|\begin{array}{cc} 0 &amp;amp; 1\\ 1 &amp;amp; 0 \end{array}\right|=1\cdot\left(-1\right)=-1 \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;זה גם מה שיקרה במקרה הכללי אם ניקח מטריצה שכולה 1-ים על האלכסון הראשי ונחליף שתי שורות: אם נפתח את הדטרמיננטה וראשית כל נפתח אותה לפי השורות שלא השתנו, נקבל מכל שורה כזו 1, וכולם יוכפלו בסוף ב-&lt;span&gt;\( \left|\begin{array}{cc} 0 &amp;amp; 1\\ 1 &amp;amp; 0 \end{array}\right| \)&lt;/span&gt;, שזו הדטרמיננטה של מה שיישאר משתי השורות שכן הוחלפו, אחרי שכל יתר העמודות נקצצו מהמטריצה. כלומר (בנפנוף ידיים) לכל החלפת שורות, נקבל שהדטרמיננטה של המטריצה היא &lt;span&gt;\( -1 \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;עכשיו מגיע הקסם, ואיך שאני אוהב את הקסם הזה! אם ניקח את &lt;span&gt;\( B \)&lt;/span&gt; שלאחר ההחלפה ונכפול אותה ב-&lt;span&gt;\( A \)&lt;/span&gt; המקורית, נקבל:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left[\begin{array}{ccc} 1 &amp;amp; 0 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 1\\ 0 &amp;amp; 1 &amp;amp; 0 \end{array}\right]\left[\begin{array}{ccc} 2 &amp;amp; 8 &amp;amp; 3\\ 4 &amp;amp; 9 &amp;amp; 1\\ 3 &amp;amp; 3 &amp;amp; 3 \end{array}\right]=\left[\begin{array}{ccc} 2 &amp;amp; 8 &amp;amp; 3\\ 3 &amp;amp; 3 &amp;amp; 3\\ 4 &amp;amp; 9 &amp;amp; 1 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;מה קרה פה? הכפל במטריצה &lt;span&gt;\( B \)&lt;/span&gt; אחרי החלפת השורה היה בעל אפקט של ביצוע החלפת שורה על &lt;span&gt;\( A \)&lt;/span&gt;! כלומר, הצלחנו לתאר את הפעולה “החלפת שורה” בתור “כפל במטריצה כלשהי”. עכשיו, בגלל שאני יודע ש-&lt;span&gt;\( \left|BA\right|=\left|B\right|\left|A\right| \)&lt;/span&gt; ובגלל ש-&lt;span&gt;\( \left|B\right|=-1 \)&lt;/span&gt; כפי שזה עתה ראינו, אני מקבל שהדטרמיננטה של &lt;span&gt;\( A \)&lt;/span&gt; אחרי החלפת שורות - וזה יעבוד &lt;strong&gt;לכל&lt;/strong&gt; פעולה בודדת של החלפת שורות - הוא כפל ב-&lt;span&gt;\( -1 \)&lt;/span&gt;, כמו שהבטחתי.&lt;/p&gt;
-
-&lt;p&gt;האם אפשר לעשות את אותו תעלול גם עבור הפעולה המסובכת יותר, “לקחת שורה אחת, לכפול אותה במספר כלשהו, ולחבר לשורה אחרת”? ובכן, בואו ננסה דוגמא. נלך אל &lt;span&gt;\( B \)&lt;/span&gt; המקורית, נכפול את השורה הראשונה ב-&lt;span&gt;\( -2 \)&lt;/span&gt; ונחבר אותה אל השורה השניה. שימו לב שאני &lt;strong&gt;לא&lt;/strong&gt; משנה את השורה הראשונה; ההכפלה שלה במשהו היא רק לצורך חיבור עם השורה האחרת (יש גם פעולה של הכפלה של שורה, אבל אני לא צריך אותה פה; אותו הטריק עם &lt;span&gt;\( B \)&lt;/span&gt; יעבוד גם עבור הפעולה הזו ויראה שכפל שורה ב-&lt;span&gt;\( \lambda \)&lt;/span&gt; מכפיל את הדטרמיננטה ב-&lt;span&gt;\( \lambda \)&lt;/span&gt;). נקבל:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( B=\left[\begin{array}{ccc} 1 &amp;amp; 0 &amp;amp; 0\\ -2 &amp;amp; 1 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 1 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;מה הדטרמיננטה של &lt;span&gt;\( B \)&lt;/span&gt; החדשה? ובכן… אה… זה קצת מוזר. השינוי השפיע רק מתחת לאלכסון, לא מעליו, אז עדיין יש לי מטריצה משולשית, ולכן הדטרמיננטה היא עדיין רק מכפלת אברי האלכסון ולכן היא 1, כלומר היא… לא השתנתה בכלל? משהו פה לא מסתדר לי. אולי אם ניקח את השורה השניה ונוסיף אותה לשלישית? לא, גם אז זה יוצא מטריצה משולשית… ואם נוסיף את השלישית לשניה? אז מתקבלת מטריצה משולשית עליונה ולא תחתונה, אבל הדטרמיננטה היא עדיין 1… ובכן… ממש מוזר אבל נראה שלא משנה איך נבצע אותה, הפעולה “לקחת שורה אחת, לכפול אותה במספר כלשהו, ולחבר לשורה אחרת” פשוט &lt;strong&gt;לא משנה &lt;/strong&gt;את הדטרמיננטה של &lt;span&gt;\( B \)&lt;/span&gt;.&lt;/p&gt;
-
-&lt;p&gt;בואו ניקח את &lt;span&gt;\( B \)&lt;/span&gt; שחישבתי קודם, זו שבה חיסרתי את פעמיים השורה הראשונה מהשניה, ונכפול אותה ב-&lt;span&gt;\( A \)&lt;/span&gt; המקורית. נקבל:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left[\begin{array}{ccc} 1 &amp;amp; 0 &amp;amp; 0\\ -2 &amp;amp; 1 &amp;amp; 0\\ 0 &amp;amp; 0 &amp;amp; 1 \end{array}\right]\left[\begin{array}{ccc} 2 &amp;amp; 8 &amp;amp; 3\\ 4 &amp;amp; 9 &amp;amp; 1\\ 3 &amp;amp; 3 &amp;amp; 3 \end{array}\right]=\left[\begin{array}{ccc} 2 &amp;amp; 8 &amp;amp; 3\\ 0 &amp;amp; -7 &amp;amp; -5\\ 3 &amp;amp; 3 &amp;amp; 3 \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;כלומר הטריק עבד שוב: ההכפלה ב-&lt;span&gt;\( B \)&lt;/span&gt; הייתה בדיוק בעלת האפקט של “קח את השורה הראשונה של &lt;span&gt;\( A \)&lt;/span&gt;, כפול במינוס 2, חבר לשורה השניה” ולכן הטריק של הדטרמיננטה של המכפלה מספר לנו שבמקרה הזה, גם הדטרמיננטה של &lt;span&gt;\( A \)&lt;/span&gt; לא תשתנה. זה נכון באופן כללי: הפעולה “קח שורה כלשהי, והוסף אותה כשהיא מוכפלת בסקלר לאחת השורות האחרות” &lt;strong&gt;לא משנה את הדטרמיננטה&lt;/strong&gt;. אף פעם.&lt;/p&gt;
-
-&lt;p&gt;אבל עכשיו בואו ותראו מה קרה. מהמטריצה &lt;span&gt;\( A \)&lt;/span&gt; המסובכת קיבלתי גרסה חדשה של &lt;span&gt;\( A \)&lt;/span&gt;, עם אותה דטרמיננטה, אבל שנראית יותר פשוטה: יש בה 0 באחד המקומות. זה לא קרה בטעות: אני הסתכלתי על &lt;span&gt;\( A \)&lt;/span&gt;, ראיתי שבעמודה הראשונה, יש בשורה הראשונה 2 ובשורה השניה 4 ושאלתי את עצמי “במה אני צריך לכפול את 2 כדי שאחרי שאחבר אותו אל 4 אקבל 0?” וזה היה בדיוק &lt;span&gt;\( -2 \)&lt;/span&gt; אז זה מה שעשיתי. עכשיו נעשה את זה במקרה המלוכלך יותר, של השורה השלישית: בשורה השניה יש 2, בשלישית יש &lt;span&gt;\( 3 \)&lt;/span&gt;, אז אני צריך לכפול ב-&lt;span&gt;\( -\frac{3}{2} \)&lt;/span&gt;. זה אולי יגרום לכל המספרים שמופיעים בשורה השלישית במטריצה להיות שברים מעיקים, אבל לא אכפת לי! אני אעשה את זה! הנה!&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left[\begin{array}{ccc} 2 &amp;amp; 8 &amp;amp; 3\\ 0 &amp;amp; -7 &amp;amp; -5\\ 0 &amp;amp; -9 &amp;amp; -\frac{3}{2} \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;עכשיו אנחנו מאוד קרובים למטריצה משולשית - רק ה-&lt;span&gt;\( -9 \)&lt;/span&gt; בשורה השלישית מפריע לנו. אני יכול להעלים אותו על ידי כפל השורה השניה ב-&lt;span&gt;\( -\frac{9}{7} \)&lt;/span&gt; וחיבור שלה לשלישית, ואני אקבל&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( \left[\begin{array}{ccc} 2 &amp;amp; 8 &amp;amp; 3\\ 0 &amp;amp; -7 &amp;amp; -5\\ 0 &amp;amp; 0 &amp;amp; \frac{69}{14} \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;קיבלתי על האלכסון את המספר &lt;span&gt;\( \frac{69}{14} \)&lt;/span&gt;. זה לא נראה טוב. זה נראה כמו שבר משובר. זה בעצם העונש שלי על שתי פעולות של איפוס איברים שעשיתי “בכוח”, על ידי זה שהיה לי &lt;span&gt;\( a \)&lt;/span&gt; בכניסה אחת ו-&lt;span&gt;\( b \)&lt;/span&gt; בכניסה אחרת וכפלתי ב-&lt;span&gt;\( -\frac{b}{a} \)&lt;/span&gt; וחיברתי, בלי שיהיה איזה צמצום נחמד שמערב את &lt;span&gt;\( a,b \)&lt;/span&gt;. זו גם בדיוק הנקודה שלי: לא צריך שדברים יסתדרו “יפה”. אפשר פשוט לעשות את זה בכוח - או טוב יותר, לתת למחשב לעשות את זה. למחשב לא אכפת אם החישובים הם מכוערים, הוא פשוט יעשה את זה.&lt;/p&gt;
-
-&lt;p&gt;וכעת, כדי לקבל את הדטרמיננטה של המטריצה המקורית, כל מה שנשאר לעשות הוא לכפול את האיברים שעל האלכסון ולקבל ש…&lt;span&gt;\( 2\cdot\left(-7\right)\cdot\frac{69}{14}=-69 \)&lt;/span&gt;. הא. קיבלנו בסופו של דבר דטרמיננטה שהיא לא שבר אלא מספר שלם נחמד. זה לא באמת מפתיע, אם חושבים על זה - בהגדרה שנתתי לדטרמיננטה (וגם בהגדרות התיאורטיות יותר) לא מעורב חילוק - יש לנו סכומים של מכפלות של האיברים שבתוך המטריצה, כך שאם כולם היו מספרים שלמים, גם הדטרמיננטה תצא מספר שלם.&lt;/p&gt;
-
-&lt;p&gt;מכאן מגיעה בעצם המוטביציה העכשווית שלי לפוסט הזה ופוסט ההמשך; מבלי להיכנס לפרטים (שיגיעו בפוסט הבא), הגעתי לסיטואציה שבה אני באמת נזקק לחישוב דטרמיננטה של מטריצה; מטריצה &lt;span&gt;\( 6\times6 \)&lt;/span&gt; עם ערכים שהם מספרים שלמים, אבל גדולים למדי (נאמר, בני 15 ספרות). הדבר הראשון שעשיתי היה להשתמש בספריה של פייתון לחישובים מתמטיים שנקראת numpy והיא כשלה באופן מחפיר כי רמת הדיוק שלה הייתה מוגבלת והמספרים היו גדולים מדי עבורה; התוצאה שקיבלתי לא הייתה קירוב טוב של הדטרמיננטה שציפיתי לקבל אלא מספר לא קשור בעליל. מה שמייד אמרתי לעצמי הוא “אה-הא! הבעיה היא שהכנסתי שברים לתמונה! אני אחפש אלגוריתם שבמקרה של מטריצה עם איברים שלמים לא מתדרדר לסיטואציה שבה כתובים בה שברים” וחיפשתי ואפילו מצאתי אלגוריתם כזה שהוא די מרהיב לטעמי, ומימשתי אותו והכל עבד מצוין. רק מה? גם האלגוריתם הנאיבי שתיארתי בהתחלה עובד מצוין על אותה מטריצת &lt;span&gt;\( 6\times6 \)&lt;/span&gt; כי עבור מטריצות &lt;span&gt;\( 6\times6 \)&lt;/span&gt; זמן הריצה שלו הוא עדיין די סבבה. הלקח הוא תמיד לנסות קודם את הפתרון הנאיבי אלא אם רוצים להיתקל בנושאים מגניבים לפוסט (כמו כן גם גישת ה”לחלק” הייתה עובדת טוב אם הייתי משתמש בספריית פייתון שיודעת לייצר שברים ברמת דיוק אינסופית - ויש כזו ואני באמת משתמש בה מדי פעם).&lt;/p&gt;
-
-&lt;p&gt;בואו נחזור עכשיו לחישוב דטרמיננטה בשיטה שהצגתי. כל מה שראינו עד עכשיו היה דוגמא; בואו נבין מה עושים באופן כללי. אז נניח שיש לנו מטריצה כללית, היא נראית ככה:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{cccc} a_{11} &amp;amp; a_{12} &amp;amp; \cdots &amp;amp; a_{1n}\\ a_{21} &amp;amp; a_{22} &amp;amp; \cdots &amp;amp; a_{2n}\\ \vdots &amp;amp; \vdots &amp;amp; \ddots &amp;amp; \vdots\\ a_{n1} &amp;amp; a_{n2} &amp;amp; \cdots &amp;amp; a_{nn} \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;אותי מה שמעניין כאן הוא העמודה הראשונה. היעד שלי הוא ליצור מטריצה משולשית עליונה, אז בשביל זה אני רוצה לאפס את כל הכניסות בעמודה הראשונה. את זה אני אעשה בכוח, כפי שתיארתי כבר. כדי לאפס את &lt;span&gt;\( a_{21} \)&lt;/span&gt; אני מחבר לשורה השניה את הראשונה כשהיא מוכפלת ב-&lt;span&gt;\( -\frac{a_{21}}{a_{11}} \)&lt;/span&gt;, בשביל השלישית אני מכפיל ב-&lt;span&gt;\( -\frac{a_{31}}{a_{11}} \)&lt;/span&gt; וכן הלאה. אני אקבל:&lt;/p&gt;
-
-&lt;p&gt;&lt;span&gt;\( A=\left[\begin{array}{cccc} a_{11} &amp;amp; a_{12} &amp;amp; \cdots &amp;amp; a_{1n}\\ 0 &amp;amp; \frac{a_{22}a_{11}-a_{21}a_{12}}{a_{11}} &amp;amp; \cdots &amp;amp; \frac{a_{2n}a_{11}-a_{21}a_{1n}}{a_{11}}\\ \vdots &amp;amp; \vdots &amp;amp; \ddots &amp;amp; \vdots\\ 0 &amp;amp; \frac{a_{n2}a_{11}-a_{n1}a_{12}}{a_{11}} &amp;amp; \cdots &amp;amp; \frac{a_{nn}a_{11}-a_{n1}a_{1n}}{a_{11}} \end{array}\right] \)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;החל מהנקודה הזו, העמודה והשורה הראשונות לא מעניינות אותי יותר. הרי אם אני אתחיל לפתח את הדטרמיננטה על פי העמודה הראשונה, אני אקבל שהיא שווה ל-&lt;span&gt;\( a_{11} \)&lt;/span&gt; כפול הדטרמיננטה של מה שמתקבל ממחיקת השורה והעמודה הראשונה. אז נמחק אותן ונטפל ביתר המטריצה על פי אותו עיקרון, עד שנסיים לטפל בכל העמודות. אם כן, האם סיימנו? לא, בגלל שהתעלמתי מבעיה אחת שיכולה לצוץ: מה אם &lt;span&gt;\( a_{11}=0 \)&lt;/span&gt;?&lt;/p&gt;
-
-&lt;p&gt;במקרה הזה, יש שתי אפשרויות: או ש&lt;strong&gt;כל&lt;/strong&gt; האיברים בעמודה הראשונה הם אפס, ובמקרה הזה הדטרמיננטה של המטריצה היא אפס; או שיש איבר כלשהו ששונה מאפס. במקרה השני, &lt;strong&gt;נחליף&lt;/strong&gt; את השורה של האיבר הזה עם השורה הראשונה הנוכחית, ונזכור שזה “עלה לנו” בהכפלת הדטרמיננטה הכוללת ב-&lt;span&gt;\( -1 \)&lt;/span&gt; (ואם נחליף עוד שורות בהמשך זה עשוי לבטל את זה).&lt;/p&gt;
-
-&lt;p&gt;האם האלגוריתם הזה יעיל? בהחלט. כדי לחשב דטרמיננטה של מטריצה מסדר &lt;span&gt;\( n\times n \)&lt;/span&gt; אנחנו צריכים לבצע בערך &lt;span&gt;\( n^{2} \)&lt;/span&gt; פעולות חשבוניות, ואחריהן לחשב דטרמיננטה של מטריצה &lt;strong&gt;אחת&lt;/strong&gt; מסדר &lt;span&gt;\( \left(n-1\right)\times\left(n-1\right) \)&lt;/span&gt;, כלומר אם אנחנו מחפשים הערכה גסה לזמן הריצה היא תהיה &lt;span&gt;\( n^{2}+\left(n-1\right)^{2}+\ldots+1^{2} \)&lt;/span&gt; וזה בערך מסדר גודל של &lt;span&gt;\( n^{3} \)&lt;/span&gt; - משמעותית יותר טוב מזמן ריצה אקספוננציאלי (אבל זה &lt;strong&gt;עדיין&lt;/strong&gt; זמן ריצה בעייתי עבור מטריצות ענק, ולכן יש כאן פתח לעולם שלם של אופטימיזציות שאני לא אדבר עליו).&lt;/p&gt;
-
-&lt;p&gt;כשאני בא לממש את הדבר הזה בפועל, אני לא אטרח לממש רקורסיה כי זה סתם בזבזני (קריאה לפונקציה תמיד דורשת אקסטרה זמן ומשאבים), את כל השינויים אפשר לבצע כבר ברמת המטריצה המקורית. הנה קוד שעושה את העבודה:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;det&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# go over all columns k=0,1,...,n-1
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;# go over all rows i=k+1,k+2,...,n-1
-&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;factor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;# go over all the nonzero elements in row i
-&lt;/span&gt;            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;factor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;אז זו הדרך הרגילה לחישוב דטרמיננטות; בפוסט הבא נראה משהו קצת שונה.&lt;/p&gt;</content><author><name></name></author><category term="דטרמיננטה" /><summary type="html">כאשר לומדים אלגברה לינארית, מושג הדטרמיננטה צץ בשלב זה או אחר. לפעמים מלמדים אותו מהר יחסית ולפעמים מחכים איתו עד שממש חייבים, כדי לא להפחיד אנשים תמימים, אבל הוא תמיד שם - וזה כי דטרמיננטות זה יופי של דבר כשמפסיקים לפחד מהן. יש לי כבר פוסט שמסביר מהי דטרמיננטה, אבל דבר אחד אין שם: איך מחשבים אותה. בפוסט הזה אני רוצה להשלים את החור הזה ולתאר את הדרך הסטנדרטית, שהיא בסך הכל די פשוטה; המוטיבציה שלי מגיעה מכך שלא מזמן נזקקתי לדרך אחרת, שבמובנים מסוימים היא טובה יותר ובמובנים אחרים היא טובה פחות, אבל איתה אחכה לפוסט הבא.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/assets/img/main/default-card.png" /><media:content medium="image" url="http://gadial.net/assets/img/main/default-card.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
+&lt;p&gt;לסיכום, מה בעצם למדנו? האם למדנו שרוב הראשוניים הם קטנים? לא. האם למדנו שרוב הראשוניים הם גדולים? לא. אני עדיין לא בטוח מה המשמעות שאנחנו רוצים לתת למילים הללו. אבל כן למדנו כל מני דברים נחמדים בפני עצמם - מה זה ראשוניים, שיש אינסוף מהם, מה זה “כמעט כל” המספרים, מה משפט המספרים הראשוניים מספר לנו על הכמות של הראשוניים עד גודל כלשהו, על האופן שבו אפשר להגדיר יחסי סדר שונים על הטבעיים ובפרט יחס של חילוק במקום “קטן מ-“ הרגיל, ואיך אפשר להשתמש בטורים אינסופיים כדי להעריך עד כמה מהר סדרת מספרים כלשהי נהיית גדולה. כל אלו הם דברים &lt;strong&gt;מעניינים&lt;/strong&gt; במתמטיקה, ושאלה היא מוצדקת אם היא נותנת לנו תירוץ לדבר על דברים מעניינים, אז אני בסך הכל סבבה עם השאלה “האם רוב הראשוניים הם קטנים?” כל עוד אנחנו זוכרים שהמטרה פה היא לא לענות עליה ובטח שלא לחשוב שיש לה תשובה חד משמעית, אלא להשתמש בה בתור תירוץ לראות דברים מעניינים באמת.&lt;/p&gt;</content><author><name></name></author><category term="מספרים ראשוניים" /><summary type="html">חלק ראשון, ובו כמעט הכל ממש ממש ממש גדול</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gadial.net/assets/img/main/default-card.png" /><media:content medium="image" url="http://gadial.net/assets/img/main/default-card.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
