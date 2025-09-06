@@ -20,6 +20,7 @@ TAGS = {
     (r'\{\\beginL', r'\\endL\}'): r'\1',
     (r'\\item', r'(?=(?=\n\\item)|(?=\n\\end\{))'): r'\n<li>\1</li>\n',
     (r'\\begin{itemize}', r'\\end{itemize}'): r'\n<ul>\1</ul>\n',
+    (r'\\begin{verbatim\*}', r'\\end{verbatim\*}'): r'\n{% highlight python %}\n\1{% endhighlight %}\n',
     (r'\\begin{enumerate}', r'\\end{enumerate}'): r'\n<ol>\1</ol>\n',
     (r'\\begin{quote}', r'\\end{quote}'): r'<blockquote>\1</blockquote>',
     "section{}": r'<h2>\1</h2>',
@@ -27,6 +28,8 @@ TAGS = {
     "subsection{}": r'<h3>\1</h3>',
     "subsection\*{}": r'<h3>\1</h3>',
     "paragraph\*{}": r'<h4>\1</h4>',
+    "<blockquote>":  "\n> ",
+    "</blockquote>": "\n\n",
     "L{}": r'\1',
     'textquotedblright ': '"',
     'textquotedblright{}': '"',
@@ -148,18 +151,27 @@ def remove_front_matter(text):
     text = re.sub(front_matter_regex, "", text)
     return text
 
+
 def perform_all_changes(text):
+    code_placeholders = []
+    def _stash_code(match):
+        code_placeholders.append(match.group(0))
+        return f"@@CODE{len(code_placeholders)-1}@@"
+
     text = remove_front_matter(text)
     text = get_content(text)
     text = find_problems(text)
-    text = parentheses_fix(text)
     text = remove_comments(text)
     text = math_tag_replacements(text)
     text = remove_L_tag(text)
     text = replace_tags(text)
+    text = re.sub(r'{% highlight python %}.*?{% endhighlight %}', _stash_code, text, flags=re.DOTALL)    
+    text = parentheses_fix(text)
     text = remove_linebreaks(text)
     text = replace_images(text)
 #    text = add_paragraph_tags(text)
+    for i, block in enumerate(code_placeholders):
+        text = text.replace(f"@@CODE{i}@@", block)
     return text
 
 if __name__ == '__main__':
