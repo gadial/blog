@@ -30,11 +30,12 @@ with open(csv_filename, encoding="utf8") as csvfile:
             keywords.append(keyword)
 
 result = {
-    'year_2024': {
+    'year_2025': {
         'stories': stories,
         'keywords': keywords,
         'authors': authors
     }
 }
+print(yaml_filename)
 with open(yaml_filename, 'w', encoding="utf8") as yamlfile:
     yaml.dump(result, yamlfile, allow_unicode=True)
