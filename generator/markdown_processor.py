@@ -41,8 +41,8 @@ class MathPreprocessor(Preprocessor):
         # Process display math first ($$...$$)
         text = re.sub(r'\$\$([^\$]+?)\$\$', replace_display_math, text, flags=re.DOTALL)
         
-        # Process inline math ($...$) - avoid matching $ at word boundaries
-        text = re.sub(r'\$([^\$\n]+?)\$', replace_inline_math, text)
+        # Process inline math ($...$) - allow newlines for multiline expressions like cases
+        text = re.sub(r'\$([^\$]+?)\$', replace_inline_math, text, flags=re.DOTALL)
         
         return text.split('\n')
 
@@ -97,12 +97,18 @@ class MarkdownProcessor:
             
             for i, (math_type, math_content) in enumerate(math_blocks):
                 placeholder = f'~~~MATHBLOCK{i}~~~'
+                # Escape HTML entities in math content to prevent browser parsing issues
+                # Replace & with &amp;, < with &lt;, > with &gt;
+                escaped_content = (math_content
+                                   .replace('&', '&amp;')
+                                   .replace('<', '&lt;')
+                                   .replace('>', '&gt;'))
                 if math_type == 'display':
                     # Wrap display math for rendering
-                    replacement = f'<div class="math">\\[{math_content}\\]</div>'
+                    replacement = f'<div class="math">\\[{escaped_content}\\]</div>'
                 else:  # inline
                     # Wrap inline math for rendering
-                    replacement = f'<span class="math">\\({math_content}\\)</span>'
+                    replacement = f'<span class="math">\\({escaped_content}\\)</span>'
                 html = html.replace(placeholder, replacement)
             # Clear for next use
             math_blocks.clear()
