@@ -49,8 +49,14 @@ class SiteGenerator:
     def clean_output(self):
         """Remove all files from output directory."""
         if self.output_dir.exists():
-            shutil.rmtree(self.output_dir)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+            # Remove only HTML files to avoid issues with locked files
+            for html_file in self.output_dir.rglob('*.html'):
+                try:
+                    html_file.unlink()
+                except PermissionError:
+                    print(f"Warning: Could not remove {html_file} (file may be open)")
+        else:
+            self.output_dir.mkdir(parents=True, exist_ok=True)
     
     def copy_static_files(self):
         """Copy static files (images, CSS, JS) to output directory."""
@@ -159,6 +165,40 @@ class SiteGenerator:
         html = self.render_post(post)
         self.save_post(post, html)
     
+    def generate_index(self, posts: list):
+        """Generate index page with list of posts.
+        
+        Args:
+            posts: List of Post objects to display
+        """
+        print("Generating index page...")
+        
+        # Sort posts by date (newest first)
+        sorted_posts = sorted(posts, key=lambda p: p.date, reverse=True)
+        
+        # Prepare post data for template
+        posts_data = []
+        for post in sorted_posts:
+            url = f"/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+            posts_data.append({
+                'title': post.title,
+                'date': post.date.strftime('%Y-%m-%d'),
+                'categories': post.categories,
+                'url': url,
+                'summary': post.metadata.get('description', '')  # Use description from frontmatter
+            })
+        
+        # Render index template
+        template = self.jinja_env.get_template('index.html')
+        html = template.render(posts=posts_data)
+        
+        # Save index.html to root of output directory
+        index_file = self.output_dir / 'index.html'
+        with open(index_file, 'w', encoding='utf-8') as f:
+            f.write(html)
+        
+        print(f"Generated: index.html")
+    
     def generate_all(self):
         """Generate HTML for all posts in content directory."""
         print("Starting site generation...")
@@ -183,12 +223,22 @@ class SiteGenerator:
         print(f"Found {len(post_files)} post(s)")
         print()
         
-        # Process each post
+        # Process each post and collect them
+        processed_posts = []
         for post_file in post_files:
             try:
-                self.generate_post(post_file)
+                post = self.process_post(post_file)
+                html = self.render_post(post)
+                self.save_post(post, html)
+                processed_posts.append(post)
             except Exception as e:
                 print(f"Error processing {post_file.name}: {e}")
+        
+        print()
+        
+        # Generate index page
+        if processed_posts:
+            self.generate_index(processed_posts)
         
         print()
         print(f"Site generation complete! {len(post_files)} post(s) generated.")

@@ -17,7 +17,7 @@ SITE_CONFIG = {
     
     # URL structure
     'use_date_folders': True,  # Creates /YYYY/MM/DD/slug/ structure
-    'post_images': '/images/posts',  # Path for {{site.post_images}}
+    'post_images': '/img',  # Path for {{site.post_images}}
     
     # Features
     'math_renderer': 'katex',  # or 'mathjax'
