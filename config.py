@@ -12,7 +12,12 @@ SITE_CONFIG = {
     # Paths
     'content_dir': 'content',
     'template_dir': 'templates',
-    'output_dir': 'output',
+    'output_dir': 'docs',
+    'static_dir': 'static',
+    
+    # URL structure
+    'use_date_folders': True,  # Creates /YYYY/MM/DD/slug/ structure
+    'post_images': '/images/posts',  # Path for {{site.post_images}}
     
     # Features
     'math_renderer': 'katex',  # or 'mathjax'

@@ -70,8 +70,15 @@ class Post:
     
     @property
     def slug(self) -> str:
-        """Generate URL slug from filename or title."""
-        return self.filepath.stem
+        """Generate URL slug from filename or title.
+        
+        Removes YYYY-MM-DD- prefix from Jekyll-style filenames.
+        """
+        stem = self.filepath.stem
+        # Remove date prefix if present (YYYY-MM-DD-)
+        import re
+        slug = re.sub(r'^\d{4}-\d{2}-\d{2}-', '', stem)
+        return slug if slug else stem
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert post to dictionary for template rendering."""

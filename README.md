@@ -19,14 +19,18 @@ new_blog/
 │   ├── __init__.py
 │   ├── post.py            # Post parser and frontmatter handler
 │   ├── markdown_processor.py  # Markdown to HTML with math support
+│   ├── jekyll_compat.py   # Jekyll compatibility layer
 │   └── site_generator.py  # Main generator logic
 ├── templates/             # Jinja2 templates
 │   └── post.html         # Post template with RTL styling
 ├── content/              # Your markdown posts
 │   └── posts/
 │       └── *.md          # Markdown files with frontmatter
-├── output/               # Generated static HTML files
+├── static/               # Static assets (images, CSS, JS)
+│   └── images/posts/     # Post images
+├── docs/                 # Generated static HTML files (GitHub Pages)
 ├── build.py              # Build script
+├── config.py             # Site configuration
 └── requirements.txt      # Python dependencies
 ```
 
