@@ -199,6 +199,67 @@ class SiteGenerator:
         
         print(f"Generated: index.html")
     
+    def generate_post_list(self, posts: list):
+        """Generate post list page with search.
+        
+        Args:
+            posts: List of Post objects
+        """
+        print("Generating post list page...")
+        
+        # Sort posts by date (newest first)
+        sorted_posts = sorted(posts, key=lambda p: p.date, reverse=True)
+        
+        # Prepare post data
+        posts_data = []
+        for post in sorted_posts:
+            url = f"/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+            posts_data.append({
+                'title': post.title,
+                'date': post.date.strftime('%Y-%m-%d'),
+                'categories': post.categories,
+                'url': url
+            })
+        
+        # Render template
+        template = self.jinja_env.get_template('post_list.html')
+        html = template.render(posts=posts_data)
+        
+        # Save
+        output_file = self.output_dir / 'post_list.html'
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(html)
+        
+        print(f"Generated: post_list.html")
+    
+    def generate_random(self, posts: list):
+        """Generate random post redirect page.
+        
+        Args:
+            posts: List of Post objects
+        """
+        print("Generating random post page...")
+        
+        # Prepare post URLs as JSON
+        import json
+        posts_data = []
+        for post in posts:
+            url = f"/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+            posts_data.append({'url': url})
+        
+        posts_json = json.dumps(posts_data)
+        
+        # Render template
+        template = self.jinja_env.get_template('random.html')
+        html = template.render(posts_json=posts_json)
+        
+        # Save
+        output_file = self.output_dir / 'random.html'
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(html)
+        
+        print(f"Generated: random.html")
+    
     def generate_all(self):
         """Generate HTML for all posts in content directory."""
         print("Starting site generation...")
@@ -236,9 +297,11 @@ class SiteGenerator:
         
         print()
         
-        # Generate index page
+        # Generate special pages
         if processed_posts:
             self.generate_index(processed_posts)
+            self.generate_post_list(processed_posts)
+            self.generate_random(processed_posts)
         
         print()
         print(f"Site generation complete! {len(post_files)} post(s) generated.")

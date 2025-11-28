@@ -34,7 +34,7 @@ class Post:
     
     @property
     def date(self) -> datetime:
-        """Get post date from metadata."""
+        """Get post date from metadata or filename."""
         date_val = self.metadata.get('date')
         if isinstance(date_val, datetime):
             return date_val
@@ -45,6 +45,15 @@ class Post:
                     return datetime.strptime(date_val, fmt)
                 except ValueError:
                     continue
+        
+        # Try to extract date from filename (Jekyll format: YYYY-MM-DD-title.md)
+        import re
+        filename = self.filepath.stem
+        date_match = re.match(r'^(\d{4})-(\d{2})-(\d{2})-', filename)
+        if date_match:
+            year, month, day = date_match.groups()
+            return datetime(int(year), int(month), int(day))
+        
         return datetime.now()
     
     @property
