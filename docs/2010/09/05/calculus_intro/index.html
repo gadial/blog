@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה זה חשבון דיפרנציאלי ואינטגרלי? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז מה זה חשבון דיפרנציאלי ואינטגרלי?</h1>
+            <div class="post-meta">
+                <span class="date">2010-09-05</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                    <a href="/categories/ההיסטוריה של המתמטיקה.html">ההיסטוריה של המתמטיקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אינטגרל.html">אינטגרל</a>
+                    
+                    <a href="/tags/גבול.html">גבול</a>
+                    
+                    <a href="/tags/חשבון אינפיניטסימלי.html">חשבון אינפיניטסימלי</a>
+                    
+                    <a href="/tags/מבוא למתמטיקה.html">מבוא למתמטיקה</a>
+                    
+                    <a href="/tags/מתמטיקה תיכונית.html">מתמטיקה תיכונית</a>
+                    
+                    <a href="/tags/נגזרת.html">נגזרת</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אני ממשיך את הפוסטים שלי שבהם אני מנסה להציג נושאים בסיסיים במתמטיקה ברמה שתתאים גם לתלמידי תיכון, והפעם אני רוצה לעסוק באחד מעמודי התווך המרכזיים של המתמטיקה - <a href="http://he.wikipedia.org/wiki/%D7%97%D7%A9%D7%91%D7%95%D7%9F_%D7%90%D7%99%D7%A0%D7%A4%D7%99%D7%A0%D7%99%D7%98%D7%A1%D7%99%D7%9E%D7%9C%D7%99">החשבון הדיפרנציאלי והאינטגרלי</a>, או בקיצור החדו"א (ובשם אחר - החשבון האינפיניטסימלי, האינפי). על החדו"א נבנה הענף המתמטי הרחב שמכונה "אנליזה מתמטית", והחדו"א מופיעה בתחומים רבים נוספים במתמטיקה. זהו נושא כה חשוב ומרכזי עד כי כל מתמטיקאי לומד אותו כבר בשנתו הראשונה באקדמיה, ולרוב נדרשים לכך שניים או שלושה קורסים. חדו"א היא כלי עבודה מתמטי מרכזי עבור הפיזיקיאים. בקיצור - זה תחום <strong>חשוב</strong>. אבל במה הוא עוסק, בכלל?</p>
+<p>תיאור פשטני אבל יחסית מדויק הוא שהחדו"א עוסקת בגדלים שהם "קטנים עד אינסוף" ו"גדולים עד אינסוף" ומנסה לתת להם משמעות מדוייקת ולעבוד איתם בצורה מסודרת. תיאור קצת יותר כללי הוא שהחדו"א עוסקת בשני מושגים מתמטיים מרכזיים - ה<a href="http://he.wikipedia.org/wiki/%D7%A0%D7%92%D7%96%D7%A8%D7%AA">נגזרת</a> וה<a href="http://he.wikipedia.org/wiki/%D7%90%D7%99%D7%A0%D7%98%D7%92%D7%A8%D7%9C">אינטגרל</a> - ששניהם קשורים לאותם רעיונות של "קטן/גדול עד אינסוף", ובין שניהם יש קשרים לא טריוויאליים. יש כמה דרכים שונות להציג את שני המושגים הללו ואני לא מתחייב לבחור את הנכונה ביותר - רק את זו שנראית לי הכי ברורה ומעניינת.</p>
+<p>הנגזרת מנסה לתאר את <strong>קצב השינוי</strong> של דברים. נניח שאנחנו משגרים טיל לחלל. המיקום שלו משתנה ככל שהזמן עובר - הוא עף גבוה יותר ויותר. לקצב השינוי של המיקום של הטיל אנחנו קוראים <strong>מהירות</strong>. גם המהירות של הטיל משתנה, כי הדלק שנשרף בכל רגע מפעיל עליו כוח ובכך נותן לו "דחיפה" שמגדילה את המהירות - לקצב השינוי של מהירות הטיל אנחנו קוראים <strong>תאוצה</strong>. המהירות והתאוצה שתיהן דוגמאות לנגזרת: המהירות היא נגזרת המיקום, והתאוצה היא נגזרת המהירות. במובן מסויים הנגזרת מנסה להכליל את מושג הממוצע החשבוני - הנגזרת היא מה שמתקבל כשאנחנו מנסים לחשב את המהירות הממוצעת של הטיל עבור פרקי זמן קטנים מאוד - "קטנים עד אינסוף".</p>
+<p>מרגע שידועה לנו הנגזרת של דבר מה שכזה (דבר מה שנקרא פשוט "<a href="http://he.wikipedia.org/wiki/%D7%A4%D7%95%D7%A0%D7%A7%D7%A6%D7%99%D7%94">פונקציה</a>" - במקרה שלנו, משהו שקושר בין הזמן שחלף ובין המיקום של הטיל), ניתן להפיק עליו מידע. כך למשל מציאת הזמן המדוייק שבו מהירות הטיל היא 0 (כלומר, <strong>הנגזרת של המקום</strong> היא 0) מראה לנו את הזמן שבו גובה הטיל היה מקסימלי. זהו שימוש אלמנטרי וחשוב של הנגזרת - מציאת נקודות מקסימום ומינימום. שימוש אחר של הנגזרת הוא בבניית מודלים מתמטיים של סיטואציות מורכבות. למשל, כזו שבה המיקום של גוף נע משפיע על המהירות שלו, ולא רק ההפך (למשל, בדוגמת הטיל - ככל שהטיל גבוה יותר, כך כוח המשיכה שכדור הארץ מפעיל עליו חלש יותר, ולכן קל יותר להגדיל את מהירות הטיל - למעשה, אפשר לתאר זאת במשוואה כקשר בין המיקום ובין התאוצה). תיאורים מורכבים שכאלו מכונים <strong>משוואות דיפרנציאליות</strong>, ומודלים רבים בפיזיקה מתבססים עליהן. עוד שימוש לנגזרת הוא בבניית <strong>קירובים</strong> לפונקציות - ידע על הנגזרות של פונקציות מסויימות מאפשר לנו לחשב אותן ביעילות באמצעות מחשב (זה האופן שבו מחשבונים "יודעים" לחשב פונקציות מסובכות).</p>
+<p>המושג השני, האינטגרל, מנסה לתאר <strong>סכום</strong> של מספר אינסופי "גדול" של דברים ("גדול", כי יש מובן גם ל"סכום של מספר אינסופי קטן של דברים" וגם בזה עוסקים במסגרת החדו"א אך אני מעדיף לא לדבר על כך כעת). הדוגמה הקלאסית היא זו של חישוב שטח של צורה - אפשר לחשוב על שטח הצורה כמורכב מסכום גדול של יחידות שטח קטנות (קחו את הצורה, חלקו אותה למשבצות, וסכמו את השטח של כל משבצת...). מכיוון שצורות יכולות להיות בעלות מבנה מאוד מסובך ומפותל, לא תמיד פשוט לחלק אותן למשבצות - הרעיון שבאינטגרל הוא לחלק את הצורה לכמות "גדולה עד אינסוף" של יחידות שטח "קטנות עד אינסוף", ואז לסכום את כולן באופן שיתן לנו את השטח ה<strong>מדויק</strong> של הצורה. דוגמה אחרת לשימוש באינטגרל באה מפיזיקה: נניח שרכב כלשהו נע במסלול מפותל ואנו רוצים לדעת כמה אנרגיה הוא מוציא בתנועתו. אז אנחנו מתארים (באמצעות פונקציה) את הכמות הקטנה עד אינסוף של אנרגיה שהוא מוציא בכל תנועה קטנה עד אינסוף שהוא מבצע; ואז אנחנו סוכמים את הכל ומקבלים את האנרגיה הכוללת שהוא הוציא במהלך תנועתו. זה שאפשר לעשות משהו כזה נשמע מוזר, אפילו קסום - ובמידה מסויימת זו גם התחושה שלי עד היום.</p>
+<p>מבחינה היסטורית החדו"א התחיל להתפתח באופן רציני במאה ה-17 (אף שהדים קלושים שלו נמצאים כבר בעבודתם של היוונים הקדמונים - בפרט אצל <a href="http://he.wikipedia.org/wiki/%D7%90%D7%A8%D7%9B%D7%99%D7%9E%D7%93%D7%A1">ארכימדס</a>). תרומה נכבדה להתפתחות החדו"א נזקפת לזכות <a href="http://he.wikipedia.org/wiki/%D7%A4%D7%99%D7%99%D7%A8_%D7%93%D7%94_%D7%A4%D7%A8%D7%9E%D7%94">פייר דה פרמה</a> (שאולי שמעתם את שמו בהקשר של "<a href="http://he.wikipedia.org/wiki/%D7%94%D7%9E%D7%A9%D7%A4%D7%98_%D7%94%D7%90%D7%97%D7%A8%D7%95%D7%9F_%D7%A9%D7%9C_%D7%A4%D7%A8%D7%9E%D7%94">המשפט האחרון של פרמה</a>"), אך פריצת הדרך האמיתית הגיעה בעבודותיהם של <a href="http://he.wikipedia.org/wiki/%D7%90%D7%99%D7%99%D7%96%D7%A7_%D7%A0%D7%99%D7%95%D7%98%D7%95%D7%9F">אייזק ניוטון</a> ו<a href="http://he.wikipedia.org/wiki/%D7%92%D7%95%D7%98%D7%A4%D7%A8%D7%99%D7%93_%D7%95%D7%99%D7%9C%D7%94%D7%9C%D7%9D_%D7%9C%D7%99%D7%99%D7%91%D7%A0%D7%99%D7%A5">גוטפריד לייבניץ</a> שפיתחו (בנפרד, מאוד בנפרד) מאוד את התיאוריה ובפרט מצאו את הקשר שבין הנגזרת והאינטגרל. מכיוון שכל אחד מהם טען לזכות הראשונים על ההמצאה התפתחה מעין "מלחמה" בין שתי אסכולות מתמטיות - תומכי ניוטון ותומכי לייבניץ - שהדים לה קיימים אף כיום, בשיטות סימון שונות שבהם משתמשים כדי לתאר נגזרות.</p>
+<p>לאחר ניוטון ולייבניץ החדו"א הפסיק להיות אוסף של כמה טכניקות מבודדות והפך להיות תורה מתמטית סדורה - וכזו שעליה הסתמך ניוטון במודל הפיזיקלי שהציע לעולם (מודל כה חשוב ומוצלח עד כי גם כיום הוא הראשון שאותו לומדים בלימודי הפיזיקה; ואכן, אף שהמציאות מורכבת יותר ממנו, הוא מהווה תיאור טוב של הפיזיקה בה אנו נתקלים בחיי היום יום). אלא שהחדו"א אז עדיין היה שונה במהותו מהחדו"א שנלמד היום, שכן חסר לו ביסוס פורמלי. את הרעיון של "קטן עד אינסוף" שהוא לב לבה של החדו"א תיארו באמצעות יצור מתמטי שכונה "אינפיניטסימל" שהיה בדיוק זה - מספר "קטן עד אינסוף", אף שלא היה ברור עד הסוף מה זה אומר. חשוב להבין שהמתמטיקה של אותן שנים הייתה שונה מאוד מהמתמטיקה של ימינו ברמת הפורמליות והדיוק שלה ציפו המתמטיקאים; הגישה הכללית הייתה שאם התוצאה יוצאת נכונה, אז סוף טוב הכל טוב. גם מתמטיקאי מאוחר יותר, אחד מגדולי המתמטיקאים בכל הזמנים - לאונרד אוילר - נקט בגישה זו. רבות מההוכחות שלו כיום לא היו עומדות במבחן הפורמליות שאנו דורשים מהוכחה מתמטית; התוצאות היו נכונות לחלוטין, וניתן לשער שאוילר היה מצליח להוכיח לפחות את חלקן גם תחת דרישות הפורמליות של ימינו, אך בזמנו (המאה ה-18) זה כלל לא נראה רלוונטי. כמובן שכבר באותם ימים נמתחה ביקורת על החדו"א במתכונתו זו, כשהביקורת המפורסמת ביותר הייתה של הבישוף ג'ורג' ברקלי, אך את המתמטיקאים זה לא עניין כל כך.</p>
+<p>שינוי בגישה זו חל במאה ה-19, כאשר מספר מתמטיקאים החלו לשים דגש נרחב יותר על דיוק ועל ניסוח מחודש של ההגדרות באופן שיהיה פחות סתירתי. המפורסמים מבין העוסקים בכך היו אוגוסטין קושי, ברנרד רימן וקרל ויירשטראס. האחרון נודע במיוחד בהקפדה שלו על ניסוח מדוייק והחיבה שלו למציאת דוגמאות נגדיות מחוכמות שמראות כיצד ניסוחים לא מדוייקים מובילים לסתירות. ויירשטראס נודע גם כמרצה מצויין, ובין תלמידיו היו מתמטיקאים משפיעים רבים; הניסוח שלו של החדו"א (שהתבסס במידת מה על מה שעשו מתמטיקאים קודמים ובמיוחד קושי) הפך לסטנדרט שאותו לומדים גם כיום באוניברסיטאות. ההבדל המרכזי בין החדו"א החדש והחדו"א הישן הוא סילוקו של מושג האינפיניטסימל הסתירתי, ובמקומו שימוש במושג חדש, מדויק לגמרי, שכלל לא הצריך שימוש באינסוף כדי לתארו - מושג <strong>הגבול</strong>.</p>
+<p>הגבול הוא הבסיס לחדו"א כפי שאנו מכירים אותו כיום. הוא משמש בהגדרת הנגזרת והאינטגרל, אך גם באלף ואחד שימושים אחרים. ניתן אף להגדיל ולומר שהחדו"א ניתנת לתיאור בתור הענף שעוסק בגבולות, לא בתור הענף שעוסק בנגזרות ואינטגרלים (למעשה זה יהיה שקר גס, היות ומושג הגבול מופיע בהקשרים רבים נוספים, כשהוא מוכלל באופן מתאים). בבסיסו, מושג הגבול בא לתאר באופן מדוייק את התנהגותה של סדרה או של פונקציה כאשר היא "שואפת" לאינסוף או לנקודה כלשהי. תיארתי בבלוג בעבר את ההגדרה המדוייקת של הגבול, אך אעשה זאת שוב במסגרת סדרת הפוסטים הנוכחית.</p>
+<p>לשימוש הזה בגבולות יש מחיר כלשהו - מדובר במושג שאינו קל להבנה במבט ראשון, ועוד יותר קשה "לעבוד" איתו בצורה מסודרת עד שמתרגלים. זו ככל הנראה הסיבה שבגללה בלימודי החדו"א התיכוניים נמנעים לרוב מניסוח מדוייק של הגבול והסתפקות בתיאור אינטואיטיבי שלו ומתן מספר כללי אצבע לחישובו במקרים מסויימים. בכך לטעמי מתפספס אחד מהדברים החשובים ביותר בלימודי החדו"א - ההבנה של האופן המחוכם (ואגדיל ואומר - גאוני ממש) שבו ניתן לתאר תהליכים "קטנים עד אינסוף" ו"גדולים עד אינסוף" מבלי להזדקק לאינסוף.</p>
+<p>עוד מושג שלא הזכרתי עד כאן באופן מפורש הוא ה"עולם" שבו עוסק החדו"א. מיהם היצורים שאותם החדו"א חוקר, וכיצד? ובכן, החדו"א עוסק ב<strong>פונקציות</strong>, שאפשר לחשוב עליהן כעל התאמות בין קלטים לפלטים (למשל, "העלאה בריבוע" היא פונקציה שמקבלת כקלט מספר ומוציאה כפלט את הריבוע שלו). הפונקציות שבהן עוסקים מקבלות כקלט <strong>מספרים ממשיים</strong> ומוציאות כפלט מספרים ממשיים; בשלב מתקדם יותר עוברים לדבר על חדו"א שעוסק בפונקציות מתוחכמות יותר, אך רעיונות הבסיס המרכזיים מצויים כבר במקרה הפשוט הזה (אם כי - חשוב מאוד להדגיש זאת - לא <strong>כל</strong> רעיונות הבסיס מופיעים בו). מהם המספרים הממשיים? ובכן, אולי למרבה הפלא, זו השאלה שהכי קשה לענות עליה בשלב זה, ובלימודי המתמטיקה התיכוניים בוחרים להתעלם ממנה לחלוטין (בלימודי חדו"א באוניברסיטה, לעומת זאת, לרוב טורחים להקדיש לה שיעור).</p>
+<p>אם כן, אלו המושגים שעליהם יש לדבר: מספרים ממשיים ופונקציות שלהם; מושג הגבול; ומושגי הנגזרת והאינטגרל. כמובן שלא אוכל להסביר את המושגים הללו ברמת הדיוק של ספר לימוד בנושא, אך אנסה שלא להסתיר את הרעיונות המרכזיים ואת ההגדרות המדוייקות. נקווה שלא אאבד יותר מדי קוראים בדרך.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/09/07/real_numbers_overview/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מהם המספרים הממשיים?</span>
+            </a>
+            
+            
+            
+            <a href="/2010/08/31/oracles_and_p_vs_np/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">כיצד אורקלים מנבאים שקשה להוכיח ש-P שונה מ-NP</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

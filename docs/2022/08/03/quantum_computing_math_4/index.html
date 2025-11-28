@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי בגישה מתמטית, חלק ד&#39;: שערים קוונטיים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי בגישה מתמטית, חלק ד&#39;: שערים קוונטיים</h1>
+            <div class="post-meta">
+                <span class="date">2022-08-03</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מעגלים קוונטיים</h2>
+
+<p><a href="https://gadial.net/2022/08/01/quantum_computing_math_3/">בפוסט הקודם שלי</a> על חישוב קוונטי ראינו איך בהינתן מערכת של <span class="math">\(n\)</span> קיוביטים אנחנו יכולים "לתרגם" אופרטור שפועל על קיוביט אחד לאופרטור שפועל על כל המערכת: אם האופרטור הוא למשל <span class="math">\(X\)</span> שמופעל על הקיוביט הראשון, אנחנו בונים את האופרטור <span class="math">\(X\otimes I\otimes I\otimes\cdots\otimes I\)</span> שפירושו "תפעיל את <span class="math">\(X\)</span> על הקיוביט הראשון ועל היתר אל תעשה כלום". אפשר כמובן גם לעשות דברים כמו <span class="math">\(X\otimes Z\)</span> שפירושים "תפעיל את <span class="math">\(X\)</span> על הקיוביט הראשון ואת <span class="math">\(Z\)</span> על הקיוביט השני", ודבר כזה יכול להתרחש במחשב קוונטי אמיתי על ידי כך שקודם מפעילים את <span class="math">\(X\)</span> על הקיוביט הראשון (כלומר עושים <span class="math">\(X\otimes I\)</span>) ואז את <span class="math">\(Z\)</span> על הקיוביט השני (כלומר עושים <span class="math">\(I\otimes Z\)</span>).</p>
+<p>הסיטואציה מזכירה מאוד חישוב רגיל באמצעות <strong>מעגלים לוגיים</strong>, שבהם יש לנו כמה ביטים, ואנחנו מפעילים כל פעם פעולות כלשהן עליהם - פעולת NOT, פעולת AND וכדומה. לפעולות הללו יש שם - <strong>שערים לוגיים</strong>. לכן, בהתאם, לפעולות על קיוביטים קוראים <strong>שערים קוונטיים</strong>. בפרט כשמדברים על שער קוונטי מתכוונים לפעולה על מספר קטן של קיוביטים - אחד או שניים, בדרך כלל, אבל אין לזה הגדרה פורמלית של ממש.</p>
+<p>עד כה כל מה שראינו היו שערים של קיוביט אחד. לא נזקקנו ליותר מזה - כאמור, גם <span class="math">\(X\otimes Z\)</span> זה בעצם הפעלה של שני שערים של קיוביט בודד, בזה אחר זה. אבל ברור לחלוטין שאנחנו <strong>חייבים</strong> גם שער של שני קיוביטים. למה? כי בלי זה אין לנו איך לייצר מצב שזור, כמו <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> שראינו קודם. אופרטור כמו <span class="math">\(X\otimes Z\)</span> פועל על כל קיוביט בנפרד, ולכן אם לפני ההפעלה שלו היו לנו שני קיוביטים מבודדים שלא קשורים זה לזה, אחרי ההפעלה שלו כל אחד מהקיוביטים הללו יתפתח באופן עצמאי ועדיין לא יווצר ביניהם קשר. כשם שהמצב השזור שאנחנו רוצים להגיע אליו לא ניתן לביטוי בתור <span class="math">\(u\otimes w\)</span>, כך גם האופרטור שאני צריך יהיה כזה שלא ניתן לביטוי בתור <span class="math">\(A\otimes B\)</span>.</p>
+<p>מי שאשתמש בו הוא אופרטור על שני קיוביטים שנקרא CNOT, או CX. את ה-C צריך לקרוא בתור Controlled; הרעיון הוא שזה שער שעל קיוביט מסוים פועל או כמו הזהות (לא עושה כלום) או כמו <span class="math">\(X\)</span> (והרי ראינו ש-<span class="math">\(X\)</span> זה כמו פעולת NOT), כשהשאלה האם הוא יעשה משהו או לא תלויה בקיוביט אחר - קיוביט הבקרה.</p>
+<p>הדרך להגדיר פורמלית אופרטור היא על ידי פעולתו על אברי בסיס - כאן אני עוסק באופרטור שפועל על שני קיוביטים, אז אני אגדיר אותו על ארבעת אברי הבסיס הסטנדרטי המתאימים:</p>
+<p><span class="math">\(\text{CX}\left|00\right\rangle =\left|00\right\rangle \)</span></p>
+<p><span class="math">\(\text{CX}\left|01\right\rangle =\left|01\right\rangle \)</span></p>
+<p><span class="math">\(\text{CX}\left|10\right\rangle =\left|11\right\rangle \)</span></p>
+<p><span class="math">\(\text{CX}\left|11\right\rangle =\left|10\right\rangle \)</span></p>
+<p>כאן הבקרה היא הקיוביט הראשון (השמאלי). אם היא 0, כמו בשתי השורות הראשונות, <span class="math">\(\text{CX}\)</span> לא משנה כלום; אם היא 1, <span class="math">\(\text{CX}\)</span> הופך את הקיוביט השני. בכתיב מטריציוני זה נראה כך:</p>
+<p><span class="math">\(\text{CX}=\left(\begin{array}{cccc} 1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 0 & 1\\ 0 & 0 & 1 & 0 \end{array}\right)\)</span></p>
+<p>כלומר, אפשר לחשוב על האופרטור הזה בתור מטריצת בלוקים:</p>
+<p><span class="math">\(\text{CX}=\left(\begin{array}{cc} I & 0\\ 0 & X \end{array}\right)\)</span></p>
+<p>אין משהו קסום ב-<span class="math">\(\text{X}\)</span> כאן, אפשר להגדיר אופרטור "נשלט" שכזה עבור כל אופרטור של קיוביט בודד, למשל אפשר להגדיר</p>
+<p><span class="math">\(\text{CZ}=\left(\begin{array}{cc} I & 0\\ 0 & Z \end{array}\right)\)</span></p>
+<p>אבל בדרך כלל נזדקק רק ל-<span class="math">\(\text{CX}\)</span>.</p>
+<p>שימו לב שבבירור <span class="math">\(\text{CX}\)</span> לא יכול להיכתב בתור <span class="math">\(A\otimes B\)</span>. בשביל שזה יקרה, <span class="math">\(B\)</span> צריכה להיות מטריצה שכפל בסקלר אחר יהפוך אותה ל-<span class="math">\(I\)</span> וכפל בסקלר אחר יהפוך אותה ל-<span class="math">\(X\)</span>; אין דבר כזה.</p>
+<p>איך <span class="math">\(\text{CX}\)</span> עוזר לנו לייצר מצב שזור? קלי קלות. בואו נבצע חישוב קוונטי שכולל שני שלבים, על קלט שמאותחל ל-<span class="math">\(\left|00\right\rangle \)</span>:</p>
+<ol> <li>מפעילים שער <span class="math">\(H\)</span> על הקיוביט הראשון.</li>
+
+
+<li>מפעילים שער <span class="math">\(\text{CX}\)</span> על הקיוביט השני כשהוא נשלט על ידי הקיוביט הראשון.</li>
+
+</ol>
+
+<p>את החישוב הזה מתארים באמצעות מעגל קוונטי שנראה כך:</p>
+<p><img src="/img/2022/bell_pair_circuit.png" alt=""/></p>
+<p>הרעיון בתיאור מעגל כזה הוא שהקיוביטים מסודרים בשורות. השורה הראשונה מתאימה לקיוביט הראשון והשניה לשני. ה-<span class="math">\(\left|0\right\rangle \)</span> שמופיעים בצד שמאל הם הערכים שאליהם מאתחלים את הקיוביטים במעגל. אחר כך כיוון הקריאה הוא משמאל לימין. בהתחלה הקיוביט הראשון נכנס לשער <span class="math">\(H\)</span>, בזמן שהשני פשוט "זורם" בלי שיופעל עליו אף שער. אחר כך מגיע שער ה-<span class="math">\(\text{CX}\)</span> שמתואר באמצעות נקודה שחורה על קיוביט הבקרה, וסימן <span class="math">\(\oplus\)</span> על הקיוביט שיתהפך (כי אפשר לחשוב על הפעולה ששער CX מבצע כמו על פעולת XOR, <span class="math">\(\oplus\)</span>, בין שני ביטים רגילים, כשהפלט נכנס לביט השני).</p>
+<p>בואו נבצע את החישוב הפורמלי שהמעגל מבצע:</p>
+<p><span class="math">\(H_{1}\left(\left|00\right\rangle \right)=H\left(\left|0\right\rangle \right)\left|0\right\rangle =\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)\left|0\right\rangle =\frac{\left|00\right\rangle +\left|10\right\rangle }{\sqrt{2}}\)</span></p>
+<p>אני מקווה שבשלב הזה כבר ברור בדיוק מה הולך בחישוב (ולהבא אני כנראה אדלג על שלבי הביניים). מי שעדיין מוטרד יכול כמובן לחשב את המטריצה של <span class="math">\(H_{1}=H\otimes I\)</span>, להפעיל אותה ולראות מה קורה.</p>
+<p>הפעלת ה-<span class="math">\(\text{CX}\)</span> תתבצע על פי התיאור על אברי הבסיס שנתתי למעלה:</p>
+<p><span class="math">\(\text{CX}\left(\frac{\left|00\right\rangle +\left|10\right\rangle }{\sqrt{2}}\right)=\frac{\text{CX}\left|00\right\rangle +\text{CX}\left|10\right\rangle }{\sqrt{2}}=\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span></p>
+<p>והנה, באופן בלתי מפתיע ביותר, קיבלנו את <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> שהבטחתי, ועל הדרך למדנו איך מתאים שערים קוונטיים וראינו אותם בפעולה.</p>
+<p>עכשיו, כשאולי לרגע אחד אנחנו מרגישים שהכל טוב ואפשר לנשום, בואו נסבך את הכל הרבה יותר - נתחיל לדבר על איך עובדות <strong>מדידות</strong> כשיש לנו יותר מקיוביט אחד.</p>
+<h2>מדידות, באופן כללי</h2>
+
+<p>בואו נזכיר איך עובדת מדידה של קיוביט יחיד: יש לנו מצב <span class="math">\(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span>. כשאנחנו מודדים אותו, אנחנו מגרילים בהסתברות <span class="math">\(\left|\alpha\right|^{2}\)</span> את התוצאה 0, ומעבירים את המצב למצב <span class="math">\(\left|0\right\rangle \)</span>; ובהסתברות <span class="math">\(\left|\beta\right|^{2}\)</span> את התוצאה 1 ומעבירים את המצב למצב <span class="math">\(\left|1\right\rangle \)</span>. זה היה המושג הפשטני שהצגתי עד כה - פשטני <strong>טיפה</strong> יותר מדי, כפי שנראה בהמשך.</p>
+<p>עכשיו, אם יש לנו מצב קוונטי כללי של שני קיוביטים, <span class="math">\(\alpha\left|00\right\rangle +\beta\left|01\right\rangle +\gamma\left|10\right\rangle +\delta\left|11\right\rangle \)</span>, אפשר לעשות תעלול דומה. האילוץ שהמצב הוא מנורמה 1 גורר ש-<span class="math">\(\left|\alpha\right|^{2}+\left|\beta\right|^{2}+\left|\gamma\right|^{2}+\left|\delta\right|^{2}=1\)</span>, כך שאפשר לחשוב על כל המספרים הללו כמגדירים הסתברות, ואז מה שיקרה במדידה הוא שנבחר את <span class="math">\(\left|00\right\rangle \)</span> בהסתברות <span class="math">\(\left|\alpha\right|^{2}\)</span>, נחזיר 00 ונעבור למצב <span class="math">\(\left|00\right\rangle \)</span>, וכן הלאה. זו מדידה "של שני הקיוביטים בבת אחת".</p>
+<p>אבל אני רוצה לעשות משהו שונה. אני כבר יודע למדוד קיוביט בודד; מה יקרה אם יש לי מערכת של שני קיוביטים, במצב שזור אפילו, אבל אני מודד רק אחד מהקיוביטים? איך המערכת תשתנה כתוצאה מכך? התיאור המתמטי שהשתמשתי בו עד כה לא מכסה את זה.</p>
+<p>אני <strong>יכול</strong> לנפנף בידיים. נניח שאני רוצה למדוד את <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> לפי הקיוביט הראשון. אז אני יכול לומר את הדבר הבא: המצב הזה סימטרי בין <span class="math">\(\left|00\right\rangle \)</span> ובין <span class="math">\(\left|11\right\rangle \)</span> ולכן ההסתברות שהמדידה של הקיוביט הראשון תיתן <span class="math">\(0\)</span> היא <span class="math">\(\frac{1}{2}\)</span> וההסתברות שהיא תיתן <span class="math">\(1\)</span> היא <span class="math">\(\frac{1}{2}\)</span>. במקרה הראשון, המערכת תעבור למצב <span class="math">\(\left|00\right\rangle \)</span> שהוא היחיד שבו הקיוביט הראשון הוא 0, ובמקרה השני היא תעבור למצב <span class="math">\(\left|11\right\rangle \)</span>. נפנוף הידיים הזה נכון אבל ממש קשה להבין ממנו מה בעצם אמור לקרות באופן כללי. זה כן מלמד אותנו כבר עכשיו על התופעה המגניבה שיש למצב <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span>: המדידה של הקיוביט <strong>הראשון</strong> משפיעה גם על הקיוביט <strong>השני</strong>. אם טרם מדדנו את הקיוביט הראשון, מדידה של הקיוביט השני יכולה להניב 0 או 1 בהסתברות חצי-חצי. אבל אם כבר מדדנו את הקיוביט הראשון, אז מדידה של הקיוביט השני תניב <strong>בודאות מוחלטת</strong> את אותה תוצאה כמו זו שהתקבלה במדידת הקיוביט הראשון. והמופלא ביותר הוא שזה קורה גם אם הקיוביט הללו מיוצגים על ידי יישויות פיזיקליות שבכלל לא סמוכות אחת לשניה; זה מה שפרדוקס EPR, <a href="https://gadial.net/2014/08/03/heisenberg_epr_and_bell/">שכתבתי עליו פעם פוסט</a>, עוסק בו.</p>
+<p>הנה עוד דרך לנפנף בידיים שאולי תיתן קצת יותר אינטואיציה: אפשר לכתוב</p>
+<p><span class="math">\(\alpha\left|00\right\rangle +\beta\left|01\right\rangle +\gamma\left|10\right\rangle +\delta\left|11\right\rangle =\left|0\right\rangle \left(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \right)+\left|1\right\rangle \left(\gamma\left|0\right\rangle +\delta\left|1\right\rangle \right)\)</span></p>
+<p>ואז ה"מקדם" של <span class="math">\(\left|0\right\rangle \)</span> הוא <span class="math">\(\left(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \right)\)</span>. זה לא מספר אלא וקטור, אבל אפשר לקחת לו נורמה ולקבל <span class="math">\(\left|\alpha\right|^{2}+\left|\beta\right|^{2}\)</span>, וזו ההסתברות לקבל 0 בקיוביט הראשון. אם זו תהיה התוצאה, אז המערכת תעבור למצב <span class="math">\(\left|0\right\rangle \left(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \right)\)</span> הזה, רק שהוא לא מנורמל; כדי לנרמל אותו, נחלק ב-<span class="math">\(\sqrt{\left|\alpha\right|^{2}+\left|\beta\right|^{2}}\)</span> ונקבל שעברנו למצב <span class="math">\(\frac{\left|0\right\rangle \left(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \right)}{\sqrt{\left|\alpha\right|^{2}+\left|\beta\right|^{2}}}\)</span>. אפשר, אפשר לנפנף ככה בידיים, זה באמת עובד. אבל זה מרגיש גם מסובך יחסית לנפנוף ידיים, וגם (לפחות עבורי) לא נותן תחושה שאנחנו על קרקע יציבה וממש מבינים מה אנחנו עושים.</p>
+<p>כל זה נועד לרכך קצת את ההגדרה שאציג עכשיו - ההגדרה <strong>הכללית ביותר</strong> של מדידה שאזדקק לה, שהיא קצת כבדה מתמטית אבל פותרת אחת ולתמיד את כל חוסר הנוחות שענייני המדידה גורמים לנו. ראינו כבר שיש כל מני סוגים של מדידות - של שני הקיוביטים ביחד, של כל קיוביט בנפרד, על פי הבסיס <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span>, על פי הבסיס <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span>... ההגדרה שלנו תקיף את כל המקרים הללו. שימו לב שההגדרה של מדידה בכלל לא נכנסת לשאלה איך מבצעים מדידה <strong>בפועל</strong>; זה תלוי במערכת הפיזיקלית שאיתה מממשים את הקיוביטים, וזה בדרך כלל תהליך מסובך משמעותית ממה שאני מתאר פה. כל היופי בחישוב קוונטי מבחינתי הוא ביכולת שלי לבצע אבסטרקציה לפרטים הפיזיקליים המסובכים. אז למרות שהמושג שאציג יהיה מאוד כללי, זה לא אומר שמחשב קוונטי יוכל לבצע את כל המדידות הללו - אבל את המדידה ה"פשוטה" של קיוביט יחיד על פי הבסיס <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> הוא יוכל לבצע.</p>
+<p>אם כן, נניח שיש לנו <span class="math">\(n\)</span> קיוביטים, כלומר המצב הקוונטי שלנו הוא איבר של <span class="math">\(\mathbb{C}^{2^{n}}\)</span>. אז <strong>מדידה</strong> עם <span class="math">\(k\)</span> תוצאות אפשריות מוגדרת על ידי סדרה של <strong>אופרטורי מדידה </strong><span class="math">\(M_{0},M_{1},\ldots,M_{k-1}\)</span>, כך שכל <span class="math">\(M_{i}\)</span> כזה הוא אופרטור <span class="math">\(M_{i}:\mathbb{C}^{2^{n}}\to\mathbb{C}^{2^{n}}\)</span>, והדרישה היחידה שלנו מהאופרטורים היא שיתקיים</p>
+<p><span class="math">\(\sum_{i=0}^{k-1}M_{i}^{\dagger}M_{i}=I\)</span></p>
+<p>אין דרישות אחרות! האופרטורים <strong>לא</strong> חייבים להיות אוניטריים! המספר <span class="math">\(k\)</span> <strong>לא</strong> חייב להיות 2, או <span class="math">\(2^{n}\)</span> או שום דבר אחר! יש לנו חופש מלא כאן!</p>
+<p>בהינתן מצב <span class="math">\(\left|\psi\right\rangle \in\mathbb{C}^{2^{n}}\)</span>, ההסתברות לקבל את התוצאה ה-<span class="math">\(i\)</span>-ית במדידה שלו היא</p>
+<p><span class="math">\(p\left(i\right)=\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle \)</span> (לא להיבהל! תכף אזכיר מה זה <span class="math">\(\left\langle \psi\right|\)</span>)</p>
+<p>ואם התוצאה ה-<span class="math">\(i\)</span> עלתה בגורל, המצב הקוונטי <span class="math">\(\left|\psi\right\rangle \)</span> עובר למצב החדש</p>
+<p><span class="math">\(\frac{M\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M^{\dagger}M\left|\psi\right\rangle }}\)</span></p>
+<p>זהו, זו כל ההגדרה. עכשיו צריך</p>
+<ol> <li>להסביר מה בשם שרדינגר הולך כאן.</li>
+
+
+<li>להסביר למה זה תקין מבחינה מתמטית.</li>
+
+
+<li>להסביר איך זה בעצם מכליל את כל המדידות שעליהן כבר דיברנו.</li>
+
+</ol>
+
+<p>עדיף לי להתחיל מ-3: תמיד יותר קל להבין דברים כשיש לנו דוגמאות מול העיניים. נניח שאנחנו במרחב של קיוביט בודד, אז אופרטורי המדידה שלי יהיו <span class="math">\(M:\mathbb{C}^{2}\to\mathbb{C}^{2}\)</span>; כאלו דברים קל לייצג עם מטריצות <span class="math">\(2\times2\)</span>. המדידה "הרגילה" מוגדרת על ידי זוג המטריצות</p>
+<p><span class="math">\(M_{0}=\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right)\)</span></p>
+<p><span class="math">\(M_{1}=\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)\)</span></p>
+<p>המטריצות הללו מקיימות <span class="math">\(M_{i}^{\dagger}M_{i}=M_{i}\)</span> ולכן באופן מיידי מקבלים <span class="math">\(\sum_{i=0}^{k-1}M_{i}^{\dagger}M_{i}=I\)</span>, כלומר המטריצות הללו אכן מגדירות לי מדידה חוקית על פי ההגדרה שנתתי.</p>
+<p>עכשיו, מה קורה כאשר מודדים את המצב <span class="math">\(\left|\psi\right\rangle =\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span>? ההסתברות לקבל 0 היא <span class="math">\(p\left(0\right)=\left\langle \psi\right|M_{0}^{\dagger}M_{0}\left|\psi\right\rangle \)</span>. איך מחשבים את זה? ראשית, אני יכול לכתוב את <span class="math">\(\left|\psi\right\rangle \)</span> בצורה פשוטה בתור וקטור: <span class="math">\(\left|\psi\right\rangle =\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)\)</span>. עכשיו, את <span class="math">\(\left\langle \psi\right|\)</span> הגדרתי אי שם בפוסט הראשון שלי בנושא: זה פשוט הצמוד ההרמיטי של <span class="math">\(\left|\psi\right\rangle \)</span>, כלומר זה וקטור השורה <span class="math">\(\left(\begin{array}{cc} \overline{\alpha} & \overline{\beta}\end{array}\right)\)</span>. כמו כן כבר ראינו ש-<span class="math">\(M_{0}^{\dagger}M_{0}=M_{0}\)</span>, אז הביטוי <span class="math">\(\left\langle \psi\right|M_{0}^{\dagger}M_{0}\left|\psi\right\rangle \)</span> הוא בסך הכל החישוב הפשוט למדי</p>
+<p><span class="math">\(\left(\begin{array}{cc} \overline{\alpha} & \overline{\beta}\end{array}\right)\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right)\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)=\left(\begin{array}{cc} \overline{\alpha} & \overline{\beta}\end{array}\right)\left(\begin{array}{c} \alpha\\ 0 \end{array}\right)=\left|\alpha\right|^{2}\)</span></p>
+<p>בדיוק המספר שציפינו לקבל, וגם <span class="math">\(\left|\beta\right|^{2}\)</span> מתקבל בצורה דומה.</p>
+<p>אם 0 עלה בגורל, אנחנו הולכים לעבור למצב <span class="math">\(M_{0}\left|\psi\right\rangle \)</span> אחרי נירמול. המצב הזה לפני נירמול הוא <span class="math">\(\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right)\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)=\left(\begin{array}{c} \alpha\\ 0 \end{array}\right)\)</span>. בשביל לנרמל, צריך לחשב את הנורמה של המצב. אני רוצה לטעון שהנורמה הזו היא בדיוק <span class="math">\(\sqrt{\left\langle \psi\right|M_{0}^{\dagger}M_{0}\left|\psi\right\rangle }\)</span>. למה? ובכן, זכרו איך נורמה של וקטור כלשהו <span class="math">\(v\)</span> מוגדרת:</p>
+<p><span class="math">\(\|v\|=\sqrt{\left\langle v|v\right\rangle }\)</span></p>
+<p>זכרו גם שאצלנו, אם <span class="math">\(\left|\psi\right\rangle ,\left|\phi\right\rangle \)</span> הם שני וקטורים, המכפלה הפנימית שלהם שווה ל-<span class="math">\(\left\langle \phi\right|\left|\psi\right\rangle \)</span>. לבסוף, שימו לב שאם <span class="math">\(\left|\phi\right\rangle =M_{0}\left|\psi\right\rangle \)</span> אז <span class="math">\(\left\langle \phi\right|=\left\langle \psi\right|M_{0}^{\dagger}\)</span>. למה? ובכן, זה מצריך לזכור משהו קטן מאלגברה לינארית: שאם <span class="math">\(A,B\)</span> הן שתי מטריצות כלשהן, אז</p>
+<p><span class="math">\(\left(AB\right)^{\dagger}=B^{\dagger}A^{\dagger}\)</span></p>
+<p>במקרה שלנו, שתי המטריצות הן <span class="math">\(M_{0}\left|\psi\right\rangle \)</span>. אם כן, בביטוי <span class="math">\(p\left(0\right)=\left\langle \psi\right|M_{0}^{\dagger}M_{0}\left|\psi\right\rangle \)</span>, ההסתברות היא בדיוק הנורמה של המצב <span class="math">\(M_{0}\left|\psi\right\rangle \)</span> שאליו (אחרי נרמול) אנחנו רוצים להעביר את <span class="math">\(\left|\psi\right\rangle \)</span>, והאופרטור <span class="math">\(M_{0}\)</span> בעצם אומר לנו <strong>לאן</strong> מצבים אמורים לעבור כשמודדים אותם.</p>
+<p>השאלה שעדיין תלויה בחלל האוויר היא "למה זה עובד?". לא לגמרי ברור מה אמור <strong>לא לעבוד</strong> כאן, אבל הרי לא דרשתי את התנאי <span class="math">\(\sum_{i=0}^{k-1}M_{i}^{\dagger}M_{i}=I\)</span> סתם, הוא בא להשיג מטרה כלשהי. המטרה פשוטה: להראות שה-<span class="math">\(p\left(i\right)\)</span>-ים שלי אכן מהווים הסתברות.</p>
+<p>מה הדרישות המתמטיות מפונקציית הסתברות?</p>
+<ol> <li>שלכל תוצאה אפשרית <span class="math">\(i\)</span> יתקיים <span class="math">\(0\le p\left(i\right)\le1\)</span></li>
+
+
+<li>שסכום כל ההסתברויות יהיה 1: <span class="math">\(\sum_{i=0}^{k-1}p\left(i\right)=1\)</span>.</li>
+
+</ol>
+
+<p>כמובן, מספיק להראות ש-<span class="math">\(0\le p\left(i\right)\)</span> ושסכום ההסתברויות יוצא 1 כדי להבטיח שיתקיים <span class="math">\(p\left(i\right)\le1\)</span> (כי אם סכום של מספרים אי-שליליים הוא 1, לא ייתכן שאחד מהאיברים בסכום גדול מ-1).</p>
+<p>מכיוון שראינו ש-<span class="math">\(p\left(i\right)=\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle \)</span> הוא מכפלה פנימית, ברור ש-<span class="math">\(p\left(i\right)\ge0\)</span> - זה שמכפלה פנימית של איבר בעצמו היא אי-שלילית זו אחת מהדרישות הבסיסיות ביותר ממכפלה פנימית. נשאר רק עניין הסכום, וכאן נלחצת לעזרתנו העובדה שבאלגברה לינארית הכל לינארי, ושהביטוי <span class="math">\(\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle \)</span> אולי נראה מפחיד אבל הוא בסך הכל מכפלה של ארבע מטריצות ולכן כפוף לחוקי הלינאריות, ומתקיים</p>
+<p><span class="math">\(\sum_{i=0}^{k-1}p\left(i\right)=\sum_{i=0}^{k-1}\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle =\)</span></p>
+<p><span class="math">\(=\left\langle \psi\right|\left(\sum_{i=0}^{k-1}M_{i}^{\dagger}M_{i}\right)\left|\psi\right\rangle =\left\langle \psi\right|I\left|\psi\right\rangle =\left\langle \psi|\psi\right\rangle =1\)</span></p>
+<p>כשהמעבר האחרון נובע מכך ש-<span class="math">\(\left|\psi\right\rangle \)</span> הוא מנורמה 1. בסך הכל פשוט מאוד!</p>
+<h2>מדידות, באופן קצת פחות כללי</h2>
+
+<p>ההגדרה של מדידות שנתתי עשויה להרגיש <strong>יותר מדי</strong> כללית, ולא לגמרי ברור מאיפה סדרת ה-<span class="math">\(M\)</span>-ים מגיעה. אז אני הולך לדבר עכשיו על משפחה קצת יותר מצומצמת של מדידות - כאלו שמתקבלות מ<strong>אופרטור הרמיטי</strong>.</p>
+<p>באלגברה לינארית, אופרטור <span class="math">\(\mathcal{H}\)</span> הוא <strong>הרמיטי</strong> (או <strong>צמוד לעצמו</strong>)<strong> </strong>אם <span class="math">\(\mathcal{H}^{\dagger}=\mathcal{H}\)</span>. בהגדרה שקולה: אם <span class="math">\(\left\langle \mathcal{H}v,u\right\rangle =\left\langle v,\mathcal{H}u\right\rangle \)</span> לכל <span class="math">\(v,u\)</span>. אופרטורים הרמיטיים הם יצורים נחמדים במיוחד. אפשר לחשוב עליהם בתוך קבוצת כל האופרטורים בערך כמו שאפשר לחשוב על הממשיים כחלק מקבוצת כל המרוכבים (למשל כל אופרטור מעל המרוכבים אפשר לכתוב כסכום <span class="math">\(H_{1}+iH_{2}\)</span> של אופרטורים הרמיטיים <span class="math">\(H_{1},H_{2}\)</span>, קצת בדומה לכתיב <span class="math">\(a+bi\)</span> של מרוכבים), אבל לא ניכנס לזה יותר מדי כאן. אבל לאופרטורים הרמיטיים יש כמה תכונות נחמדות שכן כדאי לציין:</p>
+<ul> <li>כל הערכים העצמיים של אופרטור הרמיטים הם <strong>ממשיים</strong>. קל לראות את זה, כי אם <span class="math">\(\mathcal{H}v=\lambda v\)</span> אז <span class="math">\(\left\langle \mathcal{H}v|v\right\rangle =\left\langle \lambda v|v\right\rangle =\|v\|^{2}\overline{\lambda}\)</span> מחד, אבל <span class="math">\(\left\langle \mathcal{H}v|v\right\rangle =\left\langle v|\mathcal{H}v\right\rangle =\left\langle v,\lambda v\right\rangle =\|v\|^{2}\lambda\)</span>, ולכן <span class="math">\(\lambda=\overline{\lambda}\)</span>.</li>
+
+
+<li>וקטורים עצמיים ששייכים לערכים עצמיים שונים הם <strong>אורתוגונליים</strong>, כלומר המכפלה הפנימית שלהם היא 0. הטריק שמראה את זה דומה למה שראינו קודם: אם <span class="math">\(v,u\)</span> מתאימים לערכים העצמיים השונים <span class="math">\(\lambda,\rho\)</span> אז <span class="math">\(\lambda\left\langle v|u\right\rangle =\left\langle \mathcal{H}v|u\right\rangle =\left\langle v|\mathcal{H}u\right\rangle =\rho\left\langle v|u\right\rangle \)</span> ולכן <span class="math">\(\left(\lambda-\rho\right)\left\langle v|u\right\rangle =0\)</span> ומכיוון ש-<span class="math">\(\lambda\ne\rho\)</span> זה מכריח את <span class="math">\(\left\langle v|u\right\rangle =0\)</span>.</li>
+
+</ul>
+
+<p>מאלו מקבלים, עם עוד קצת עבודה טכנית, שאפשר לקבל בסיס אורתונורמלי למרחב ש-<span class="math">\(\mathcal{H}\)</span> פועלת עליו שכולו מורכב מוקטורים עצמיים של <span class="math">\(\mathcal{H}\)</span>. זה יותר מ"סתם" לכסון, בזכות העובדה שהוקטורים העצמיים הם אורתוגונליים. השורה התחתונה של זה, שהיא מה שיעניין אותנו כאן, היא שיש ל-<span class="math">\(\mathcal{H}\)</span> מה שנקרא <strong>פירוק ספקטרלי</strong> - דרך להציג אותה בתור סכום</p>
+<p><span class="math">\(\mathcal{H}=\lambda_{1}P_{1}+\ldots+\lambda_{k}P_{k}\)</span></p>
+<p>כאשר <span class="math">\(\lambda_{1},\ldots,\lambda_{k}\)</span> הם הערכים העצמיים השונים של <span class="math">\(\mathcal{H}\)</span>, ו-<span class="math">\(P_{i}\)</span> היא <strong>הטלה אורתוגונלית</strong> למרחב העצמי של <span class="math">\(\lambda_{i}\)</span>, כלומר למרחב שנפרש על ידי כל הוקטורים העצמיים של <span class="math">\(\mathcal{H}\)</span> שמתאימים לערך העצמי <span class="math">\(\lambda_{i}\)</span>.</p>
+<p>איך כל זה קשור למדידות? ובכן, תחשבו על <span class="math">\(\mathcal{H}\)</span> בתור אופרטור שמקודד בתוכו את המידע השלם של מדידה מסוימת. הערכים <span class="math">\(\lambda_{1},\ldots,\lambda_{k}\)</span> הם התוצאות האפשריות של המדידה הזו (תוצאות מספריות שמתבטאות במספרים ממשיים; תחשבו על מדידות של מהירות, מיקום וכדומה). האופרטורים <span class="math">\(P_{1},\ldots,P_{k}\)</span> שמטילים למרחב העצמי המתאים הם אופרטורי המדידה שלנו, מה שקראתי לו <span class="math">\(M\)</span> קודם.</p>
+<p>אני לא ארחיב כאן יותר מדי על מה זו הטלה אורתוגונלית, אבל מה שרלוונטי לענייננו הוא שאם <span class="math">\(P\)</span> היא הטלה כזו אז היא הרמיטית, כלומר <span class="math">\(P^{\dagger}=P\)</span>, וכמו כן <span class="math">\(P^{2}=P\)</span>, כך שיוצא ש-<span class="math">\(P^{\dagger}P=P\)</span>. לכן, כדי לראות שה-<span class="math">\(P\)</span>-ים ש-<span class="math">\(\mathcal{H}\)</span> נתן לנו מגדירים מדידה חוקית, מספיק להראות שמתקיים</p>
+<p><span class="math">\(\sum_{i=0}^{k-1}P_{i}=I\)</span></p>
+<p>זה נובע בקלות מהמשוואה <span class="math">\(\mathcal{H}=\lambda_{1}P_{1}+\ldots+\lambda_{k}P_{k}\)</span>. אם מפעילים פולינום <span class="math">\(p\)</span> כלשהו על המשוואה הזו, אז בזכות העובדה שוקטורים עצמיים שונים הם אורתוגונליים, שמובילה לכך ש-<span class="math">\(P_{i}P_{j}=0\)</span> לכל <span class="math">\(i\ne j\)</span>, מקבלים</p>
+<p><span class="math">\(p\left(\mathcal{H}\right)=p\left(\lambda_{1}\right)P_{1}+\ldots+p\left(\lambda_{k}\right)P_{k}\)</span></p>
+<p>ובפרט עבור <span class="math">\(p=1\)</span> מקבלים <span class="math">\(P_{1}+\ldots+P_{k}=I\)</span>, שזה מה שרצינו.</p>
+<p>כרגיל, כדאי לראות דוגמאות. אילו אופרטורים הרמיטיים אנחנו מכירים? ראינו שניים פשוטים למדי שפועלים על מרחב של קיוביט בודד:</p>
+<p><span class="math">\(Z=\left(\begin{array}{cc} 1 & 0\\ 0 & -1 \end{array}\right)\)</span></p>
+<p><span class="math">\(X=\left(\begin{array}{cc} 0 & 1\\ 1 & 0 \end{array}\right)\)</span></p>
+<p>בשביל <span class="math">\(Z\)</span> מאוד קל למצוא פירוק ספקטרלי - הוא כבר כך לכסין. והוקטורים העצמיים שלו הם פשוט <span class="math">\(\left(\begin{array}{c} 1\\ 0 \end{array}\right)\)</span> ו-<span class="math">\(\left(\begin{array}{c} 0\\ 1 \end{array}\right)\)</span> או בסימונים הקוונטיים שלנו, <span class="math">\(\left|0\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \)</span>. שימו לב ש-<span class="math">\(Z\)</span> עצמו <strong>לא</strong> מהווה מדידה! זה אופרטור אוניטרי נחמד שאפשר להשתמש בו במהלך חישוב רגיל. המדידה נכנסת לתמונה כשאנחנו לוקחים את <strong>הפירוק הספקטרלי</strong> של <span class="math">\(Z\)</span>, שהוא פשוט:</p>
+<p><span class="math">\(Z=\left(+1\right)\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right)+\left(-1\right)\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)\)</span></p>
+<p>כבר ראינו את שתי המטריצות הללו קודם, בדוגמא שנתתי לאיך מדידה "רגילה" תואמת את ההגדרה באמצעות אופרטורים. עכשיו קיבלנו דרך יותר טבעית לקבל את שתיהן, וגם ראינו שבמקום להצמיד להן תגיות שהן המחרוזת "0" והמחרוזת "1" אפשר להצמיד להן את התגיות המספריות <span class="math">\(\pm1\)</span>. לרוב אני אדבוק בתגיות של "0" ו-\textquotedblleft1" בכל זאת, אבל כדאי להכיר גם את הגישה השניה. לפעמים כשמדברים על "מדידה רגילה" אומרים "מדידה בבסיס <span class="math">\(Z\)</span>"; עכשיו אפשר להבין מאיפה ה-<span class="math">\(Z\)</span> הזה מגיע.</p>
+<p>אם זו הייתה מדידה בבסיס <span class="math">\(Z\)</span>, מה זו מדידה בבסיס <span class="math">\(X\)</span>? כבר ראינו בפוסט קודם שמתקיים</p>
+<p><span class="math">\(X\left|+\right\rangle =\left|+\right\rangle \)</span></p>
+<p><span class="math">\(X\left|-\right\rangle =-\left|-\right\rangle \)</span></p>
+<p>כלומר, עבור <span class="math">\(X\)</span> הוקטורים העצמיים הם <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span>, עם הערכים העצמיים <span class="math">\(\pm1\)</span> (כמו עבור <span class="math">\(Z\)</span>), ועם קצת עבודה אפשר לראות שהפירוק הספקטרלי הוא</p>
+<p><span class="math">\(X=\left(+1\right)\left(\begin{array}{cc} \frac{1}{2} & \frac{1}{2}\\ \frac{1}{2} & \frac{1}{2} \end{array}\right)+\left(-1\right)\left(\begin{array}{cc} \frac{1}{2} & -\frac{1}{2}\\ -\frac{1}{2} & \frac{1}{2} \end{array}\right)\)</span></p>
+<p>המטריצות הללו הן <span class="math">\(\left|+\right\rangle \left\langle +\right|\)</span> ו-<span class="math">\(\left|-\right\rangle \left\langle -\right|\)</span> אם תהיתם מהיכן הן צצו.</p>
+<p>זוכרים את השוויון <span class="math">\(HZH=X\)</span> שראינו פעם? בגלל שבפירוק הספקטרלי הכל לינארי, במקום למדוד בבסיס <span class="math">\(X\)</span> אפשר לעשות את התעלול הבא: להפעיל <span class="math">\(H\)</span>, למדוד בבסיס <span class="math">\(Z\)</span>, להפעיל <span class="math">\(H\)</span> שוב על המצב שהגענו אליו, וכך "לסמלץ" את המדידה בבסיס <span class="math">\(X\)</span> - המצב שנגיע אליו בסוף הוא זה שהיינו מגיעים אליו אם היינו מודדים בבסיס <span class="math">\(X\)</span>, וגם הערך שהמדידה החזירה (<span class="math">\(\pm1\)</span>) מתאים למה שהיינו רואים אם היינו מודדים בבסיס <span class="math">\(X\)</span>.</p>
+<h2>מדידות, במובן המאוד פרטני שאנחנו ממש ממש צריכים כדי להמשיך</h2>
+
+<p>קשקשתי כל כך הרבה בפוסט הזה. האם עניתי על השאלה הבסיסית? השאלה "מה קורה אם יש לי שני קיוביטים ואני מודד רק אחד מהם?" ובכן, בתיאוריה כן, כי נתתי תשובה מאוד כללית, אבל מה קורה בפועל?</p>
+<p>אמרתי שמדידה רגילה מתוארת על ידי הפירוק הספקטרלי של <span class="math">\(Z\)</span>, וסימנתי את המטריצות המתאימות ב-<span class="math">\(M_{0}=\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right),M_{1}=\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)\)</span> (שימו לב שהשתמשתי כאן בסימון המקורי ולא בזה של ההטלות). אז מדידה של הקיוביט הראשון, בלי שינוי של השני, מתוארת על ידי הפירוק הספקטרלי של <span class="math">\(Z\otimes I\)</span>. כלומר, המטריצות שמגדירות את המדידה הן</p>
+<p><span class="math">\(M_{0}\otimes I\)</span></p>
+<p><span class="math">\(M_{1}\otimes I\)</span></p>
+<p>מה ש-<span class="math">\(M_{0}\)</span> עושה הוא פשוט:</p>
+<p><span class="math">\(M_{0}\left|0\right\rangle =\left|0\right\rangle \)</span></p>
+<p><span class="math">\(M_{0}\left|1\right\rangle =0\)</span></p>
+<p>שימו לב: בשורה השניה זה לא הקיוביט <span class="math">\(\left|0\right\rangle \)</span> מצד ימין. זה 0. המספר 0. וקטור האפס. כלום. נאדה, גורנישט. דבר כזה יכול להתקבל כי <span class="math">\(M_{0}\)</span> הוא הטלה; הוא לא אופרטור אוניטרי ולא צריך להיות הפיך.</p>
+<p>באופן דומה, <span class="math">\(\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)\)</span> מאפס את <span class="math">\(\left|0\right\rangle \)</span> ומשאיר ללא שינוי את <span class="math">\(\left|1\right\rangle \)</span>. זה מאפשר לנו להבין מה האופרטורים הללו עושים כשמטנזרים אותם עם <span class="math">\(I\)</span>: <span class="math">\(M_{0}\otimes I\)</span> הולך להשאיר ללא שינוי את <span class="math">\(\left|00\right\rangle ,\left|01\right\rangle \)</span> ולאפס את שני האחרים, ו-<span class="math">\(M_{1}\)</span> יעשה ההפך. כלומר נקבל את האפקט הבא על מצב כללי, <span class="math">\(\alpha\left|00\right\rangle +\beta\left|01\right\rangle +\gamma\left|10\right\rangle +\delta\left|11\right\rangle \)</span>:</p>
+<p><span class="math">\(M_{0}\left(\alpha\left|00\right\rangle +\beta\left|01\right\rangle +\gamma\left|10\right\rangle +\delta\left|11\right\rangle \right)=\alpha\left|00\right\rangle +\beta\left|01\right\rangle \)</span></p>
+<p><span class="math">\(M_{1}\left(\alpha\left|00\right\rangle +\beta\left|01\right\rangle +\gamma\left|10\right\rangle +\delta\left|11\right\rangle \right)=\gamma\left|10\right\rangle +\delta\left|11\right\rangle \)</span></p>
+<p>אם נחזור לתחילת הפוסט, נראה שזה מה שעשיתי כבר אז, אבל קראתי לזה נפנופי ידיים. האם עכשיו זה מרגיש יותר פורמלי? ובכן... אני מקווה.</p>
+<p>יש נקודה נוספת שעדיין לא התייחסתי אליה והיא די מעצבנת - כדי לדעת מה ההסתברות ש-0 ייבחר, לא מספיק להפעיל את <span class="math">\(M_{0}\)</span> על המצב הכללי ולקבל את <span class="math">\(\alpha\left|00\right\rangle +\beta\left|01\right\rangle \)</span>, צריך גם לחשב את המכפלה הפנימית של הוקטור הזה בעצמו. איך עושים את זה בקלות? ובכן, הרעיון הוא לקחת את הוקטור וקודם כל לחשב את הצמוד ההרמיטי שלו. היתרון בשיטת הסימון שלנו הוא שזה כרוך בשני דברים בלבד: להצמיד את הסקלרים, ולהפוך את הכיוון של הסוגריים:</p>
+<p><span class="math">\(\overline{\alpha}\left\langle 00\right|+\overline{\beta}\left\langle 01\right|\)</span></p>
+<p>עכשיו אפשר לכפול בצורה שבה מתבצע כפל רגיל:</p>
+<p><span class="math">\(\left(\overline{\alpha}\left\langle 00\right|+\overline{\beta}\left\langle 01\right|\right)\left(\alpha\left|00\right\rangle +\beta\left|01\right\rangle \right)=\)</span></p>
+<p><span class="math">\(=\left|\alpha\right|^{2}\left\langle 00\right|\left|00\right\rangle +\overline{\alpha}\beta\left\langle 00\right|\left|01\right\rangle +\alpha\overline{\beta}\left\langle 01\right|\left|00\right\rangle +\left|\beta\right|^{2}\left\langle 01\right|\left|01\right\rangle \)</span></p>
+<p>בבירור <span class="math">\(\left\langle 00\right|\left|00\right\rangle =\left\langle 01\right|\left|01\right\rangle =1\)</span> כי זו מכפלה פנימית של וקטור מנורמה 1 בעצמו. אבל מה זה <span class="math">\(\left\langle 00\right|\left|01\right\rangle \)</span> למשל? ובכן, עד עכשיו לא ממש הסברתי איך אנחנו מגדירים מכפלה פנימית על מרחב שהוא מכפלה טנזורית, אבל אני לא חושב שמפתיע במיוחד שההגדרה המקובלת היא</p>
+<p><span class="math">\(\left\langle u_{1}\otimes w_{1}|u_{2}\otimes w_{2}\right\rangle =\left\langle u_{1}|u_{2}\right\rangle \cdot\left\langle w_{1}|w_{2}\right\rangle \)</span></p>
+<p>ולכן, בסימונים שלנו:</p>
+<p><span class="math">\(\left\langle 00\right|\left|01\right\rangle =\left\langle 0\right|\left|0\right\rangle \cdot\left\langle 0\right|\left|1\right\rangle \)</span></p>
+<p>ומכיוון ש-<span class="math">\(\left\langle 0\right|\left|1\right\rangle =0\)</span> כי אלו וקטורים אורתוגונליים, נקבל <span class="math">\(\left\langle 00\right|\left|01\right\rangle =0\)</span>. וכך גם באופן כללי: אם <span class="math">\(x\ne y\)</span> הם שניהם מחרוזות ב-<span class="math">\(\left\{ 0,1\right\} ^{n}\)</span> אז <span class="math">\(\left\langle x\right|\left|y\right\rangle =0\)</span>. לכן קיבלנו שהמכפלה הפנימית של <span class="math">\(\alpha\left|00\right\rangle +\beta\left|01\right\rangle \)</span> בעצמו היא <span class="math">\(\left|\alpha\right|^{2}+\left|\beta\right|^{2}\)</span>, כפי שנפנפתי בידיים בתחילת הפוסט.</p>
+<p>האם סיימנו? אני מקווה שכן! כלומר, יש לנו את כל הכלים המתמטיים שצריך כדי להתחיל להראות חישובים קוונטיים אמתיים ולהבין מה קורה בהם; את זה נתחיל בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2022/08/07/quantum_computing_math_5/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חישוב קוונטי בגישה מתמטית, חלק ה&#39;: אלגוריתם דויטש-ג&#39;וזה</span>
+            </a>
+            
+            
+            
+            <a href="/2022/08/01/quantum_computing_math_3/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי בגישה מתמטית, חלק ג&#39;</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

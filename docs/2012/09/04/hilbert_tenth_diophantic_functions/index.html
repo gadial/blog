@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הבעיה העשירית של הילברט - פונקציות דיופנטיות וחיות אחרות (רקורסיביות) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הבעיה העשירית של הילברט - פונקציות דיופנטיות וחיות אחרות (רקורסיביות)</h1>
+            <div class="post-meta">
+                <span class="date">2012-09-04</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוביות.html">חישוביות</a>
+                    
+                    <a href="/categories/לוגיקה.html">לוגיקה</a>
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הבעיה העשירית של הילברט.html">הבעיה העשירית של הילברט</a>
+                    
+                    <a href="/tags/פונקצהי פרימיטיבית רקורסיבית.html">פונקצהי פרימיטיבית רקורסיבית</a>
+                    
+                    <a href="/tags/פונקציה דיופנטית.html">פונקציה דיופנטית</a>
+                    
+                    <a href="/tags/פונקציה רקורסיבית.html">פונקציה רקורסיבית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אנו ממשיכים בדרך שלנו אל ההוכחה שלא קיים אלגוריתם שפותר את הבעיה העשירית של הילברט. אני מניח שקראתם את <a href="http://www.gadial.net/2012/08/27/hilbert_tenth_intro/">פוסט המבוא</a> ולכן קופץ ישר לעניינים הפעם. המושג המרכזי בפוסט הקודם היה <strong>קבוצה דיופנטית</strong>. זוהי קבוצה <span class="math">\(S=\left\{ \left(a_{1},\dots,a_{n}\right)\right\} \)</span> של <span class="math">\(n\)</span>-יות של מספרים טבעיים חיוביים, כך שקיים פולינום <span class="math">\(p\left(x_{1},\dots,x_{n},y_{1},\dots,y_{m}\right)\)</span> בעל התכונה הבאה: למשוואה הדיופנטית <span class="math">\(q\left(y_{1},\dots,y_{m}\right)=0\)</span>, עבור <span class="math">\(q\left(y_{1},\dots,y_{m}\right)=p\left(a_{1},\dots,a_{n},y_{1},\dots,y_{m}\right)\)</span> יש פתרון בשלמים חיוביים אם ורק אם <span class="math">\(\left(a_{1},\dots,a_{n}\right)\in S\)</span>. אפשר גם לעשות ההפך - להתחיל מפולינום <span class="math">\(p\left(x_{1},\dots,x_{n},y_{1},\dots,y_{m}\right)\)</span> ולסמן קבוצה <span class="math">\(S_{p}\)</span> שכוללת את כל ה-<span class="math">\(n\)</span>-יות שכאשר מציבים אותם במקום ה-<span class="math">\(x\)</span>-ים, מקבלים משוואה דיופנטית עם פתרון בשלמים חיוביים.</p>
+<p>אם לא הבנתם כלום ממה שכתבתי כרגע, נסו לקרוא שוב את המבוא.</p>
+<p>בפוסט הקודם ראינו שאפשר להגדיר יחסים מוכרים באופן הזה, למשל את יחס החלוקה (שהוא קבוצת הזוגות <span class="math">\(\left(a,b\right)\)</span> כך ש-<span class="math">\(a|b\)</span>, כלומר <span class="math">\(a\)</span> מחלק את <span class="math">\(b\)</span>, כלומר קיים <span class="math">\(c\)</span> שלם כך ש-<span class="math">\(b=ac\)</span>). בואו נראה לצורך החימום עוד דוגמה - היחס "קטן-שווה", הידוע גם כ-<span class="math">\(a\le b\)</span>. נגדיר אותו באופן הבא:</p>
+<p><span class="math">\(x\le y\iff\exists z\left(x+z-1=y\right)\)</span></p>
+<p>רגע, מה? מה הולך כאן? מה אלו הסימונים הללו? אני עובר לשיטה שבה מרטין דיוויס משתמש במאמר שלו כי היא אלגנטית וקצרה יותר. כאן הפולינום שלי הוא <span class="math">\(p\left(x,y,z\right)=x+z-1-y\)</span>, והמשתנים שבהם צריך להציב ערכים הם <span class="math">\(x,y\)</span> ואז לראות אם למשוואה הדיופנטית שנותרה לנו, שיש בה רק את המשתנה <span class="math">\(z\)</span>, יש פתרון. די ברור בסימון של דיוויס מי המשתנים ששייכים לקבוצה הראשונה (אלו שבאגף שמאל של החצים) ומי המשתנים שבקבוצה השניה (אלו שיש סימן <span class="math">\(\exists\)</span> - "קיים" לפניהם) והיכן הפולינום עצמו (מה שבסוגריים, עד כדי העברת אגפים אם יש צורך). אז אני מקווה שאנחנו מיודדים עם הסימון הזה כעת וגם מבינים למה הפולינום שלעיל אכן מגדיר את <span class="math">\(x\le y\)</span>.</p>
+<p>עכשיו, תרגיל - מה השתנה כאן?</p>
+<p><span class="math">\(x&lt;y\iff\exists z\left(x+z=y\right)\)</span></p>
+<p>ולמה?</p>
+<p>עכשיו בואו נעבור למשהו קצת יותר מתוחכם. ראינו כבר שיש פולינום <span class="math">\(p_{1}\)</span> שמגדיר את הקבוצה <span class="math">\(S_{p_{1}}=\left\{ \left(a,b\right)\ |\ a|b\right\} \)</span>. ראינו גם שיש פולינום <span class="math">\(p_{2}\)</span> שמגדיר את הקבוצה <span class="math">\(S_{p_{2}}=\left\{ \left(a,b\right)\ |\ a\le b\right\} \)</span>. האם יש פולינום שמגדיר את הקבוצה <span class="math">\(S=\left\{ \left(a,b\right)\ |\ a\le b\wedge a|b\right\} \)</span> (<span class="math">\(\wedge\)</span> הוא הסימן של "וגם"; ו-<span class="math">\(\vee\)</span> הוא הסימן של "או"), כלומר הקבוצה <span class="math">\(S_{p_{1}}\cap S_{p_{2}}\)</span>? התשובה חיובית: הפולינום <span class="math">\(p_{1}^{2}+p_{2}^{2}\)</span>. למה? כי אחרי הצבת ערכים בו, נשאר עם משוואה דיופנטית שהדרך היחידה שלה להתאפס היא שגם <span class="math">\(p_{1}^{2}\)</span> יתאפס וגם <span class="math">\(p_{2}^{2}\)</span> יתאפס (כי אם אחד מהם לא מתאפס, אז אחרי העלאה בריבוע הוא חיובי ולכן הסכום יהיה גדול מאפס). את העניין הזה אפשר כמובן להכליל לחיתוך על מספר סופי כלשהו של נחתכים. המסקנה: מחלקת הקבוצות הדיופנטיות סגורה לחיתוכים סופיים. ומה עם איחודים סופיים? גם אותם אפשר לקבל. הקבוצה <span class="math">\(S_{p_{1}}\cup S_{p_{2}}\)</span> מוגדרת על ידי הפולינום <span class="math">\(p_{1}p_{2}\)</span> - הוכיחו זאת לעצמכם.</p>
+<p>אם אנחנו כבר עוסקים במשפטים "כלליים" על קבוצות דיופנטיות, הנה משפט מעניין במיוחד: קבוצה <span class="math">\(S\)</span> של טבעיים חיוביים היא דיופנטית אם ורק אם קיים פולינום <span class="math">\(p\)</span> כך ש-<span class="math">\(S\)</span> היא בדיוק קבוצת הערכים <strong>החיוביים</strong> ש-<span class="math">\(p\)</span> מחזיר (לכל קלט שהוא).</p>
+<p>זה משפט מעניין למדי כי הוא מוציא מהתמונה לגמרי את עניין ה"בדוק אם משוואה דיופנטית כלשהי היא פתירה". כמובן שזה לא עושה את החיים קלים במיוחד - קודם, כדי לברר אם איבר כלשהו שייך לקבוצה, היה צריך להציב אותו בפולינום שהגדיר את הקבוצה ולקוות שאפשר יהיה להבין אם המשוואה הדיופנטית שנקבל היא פתירה או לא; עכשיו בכלל לא ברור מה אפשר לעשות חוץ מלהציב ערכים ב-<span class="math">\(p\)</span> ולהתפלל שהאיבר שלנו יצוץ מתישהו או שנבין למה הוא לא יכול לצוץ אף פעם.</p>
+<p>איך מוכיחים את המשפט? זה תרגיל נחמד. קחו רגע לחשוב עליו לפני שאתם קוראים את ההוכחה.</p>
+<p>נתחיל מהכיוון הקל. נניח שיש לנו קבוצה <span class="math">\(S\)</span> שמוגדרת על ידי <span class="math">\(p\left(y_{1},\dots,y_{n}\right)\)</span> בדרך ה"חדשה" שתיארתי - <span class="math">\(S\)</span> היא קבוצת הערכים החיוביים ש-<span class="math">\(p\)</span> יכול להחזיר. אנחנו רוצים למצוא פולינום <span class="math">\(q\)</span> כך ש-<span class="math">\(S=S_{q}\)</span>, כאשר <span class="math">\(S_{q}\)</span> מוגדרת בשיטה הישנה (ערכים שאחרי שמציבים אותם ב-<span class="math">\(q\)</span> מקבלים משוואה דיופנטית פתירה). מה נגדיר? פשוט מאוד: <span class="math">\(q\left(x,y_{1},\dots,y_{n}\right)=x-p\left(y_{1},\dots,y_{n}\right)\)</span>. ברור שכאשר <span class="math">\(a\in S\)</span> אז <span class="math">\(q\left(a,y_{1},\dots,y_{m}\right)\)</span>, שמגדיר את המשוואה <span class="math">\(a=p\left(y_{1},\dots,y_{n}\right)\)</span> יהיה פתיר; וכמובן שאם <span class="math">\(a=p\left(y_{1},\dots,y_{n}\right)\)</span> פתירה אז <span class="math">\(a\in S\)</span>, ממש על פי הגדרה.</p>
+<p>האתגר הוא הכיוון השני. נניח ש-<span class="math">\(S_{q}\)</span> מוגדרת על ידי <span class="math">\(q\)</span> בצורה ה"ישנה"; איך נמצא פולינום <span class="math">\(p\)</span> שמגדיר אותה בצורה ה"חדשה"? ובכן, נניח ש-<span class="math">\(a\in S\)</span>. אז <span class="math">\(q\left(a,y_{1},\dots,y_{m}\right)\)</span> פתיר - אפשר לקבל ממנו אפס. לכן <span class="math">\(p\left(y_{1},\dots,y_{m}\right)=a-q\left(a,y_{1},\dots,y_{m}\right)\)</span> הולך להחזיר <span class="math">\(a\)</span> כאשר מציבים בו בדיוק את הערכים של ה-<span class="math">\(y\)</span>-ים שמאפסים את <span class="math">\(q\left(a,y_{1},\dots,y_{m}\right)\)</span>. אבל זה לא מספיק טוב, כי עבור ערכים שונים של ה-<span class="math">\(y\)</span>-ים <span class="math">\(q\)</span> לא בהכרח יתאפס ואז <span class="math">\(a-q\left(a,y_{1},\dots,y_{m}\right)\)</span> יהיה מספר לא קשור. רק מה, צריך לזכור שמותר ל-<span class="math">\(p\)</span> להחזיר מספרים לא קשורים, בתנאי שהם <strong>שליליים</strong> (או אפס) אז בואו נוודא שנחזיר מספר שלילי, פשוט על ידי כוח גס: <span class="math">\(p\left(y_{1},\dots,y_{m}\right)=a\left(1-q^{2}\left(a,y_{1},\dots,y_{m}\right)\right)\)</span>. הבהירו לעצמכם למה הפולינום הזה עושה את העבודה.</p>
+<p>אבל רגע, עוד לא סיימנו! הפולינום שלנו עושה את העבודה עבור ערך ספציפי של <span class="math">\(a\)</span>, ואנחנו רוצים שהוא יעבוד לכל <span class="math">\(a\)</span>. זו לא בעיה, כמובן: הפולינום ה"נכון" הוא <span class="math">\(p\left(x,y_{1},\dots,y_{m}\right)=x\left(1-q^{2}\left(x,y_{1},\dots,y_{m}\right)\right)\)</span>, ועכשיו באמת סיימנו את הוכחת המשפט.</p>
+<p>בואו נקפוץ לרגע לתוצאה שנובעת מהמשפט הזה, ומהטענה הכללית בהרבה (שהיא היעד הסופי שלנו בסדרת הפוסטים הזו) לפיה כל קבוצה הניתנת למניה רקורסיבית היא דיופנטית; בפרט הדבר נכון לקבוצת הראשוניים (כי יש אלגוריתם שבודק אם מספר הוא ראשוני או לא). לכן קיים פולינום <span class="math">\(p\)</span>, כך שכאשר מציבים בו מספרים שלמים, הערכים החיוביים שמתקבלים הם <strong>בדיוק</strong> כל המספרים הראשוניים! התוצאה הזו היא הדבר הכי קרוב שאני מכיר ל"נוסחה עבור הראשוניים". יש אפילו בניות קונסטרוקטיביות של פולינום <span class="math">\(p\)</span> כזה (שנראות די מפלצתיות ולא אציג כאן). עדיין, קשה להגיד שזו תוצאה שימושית במיוחד בגלל האופן האקראי משהו שבו מקבלים ראשוניים מתוך הנוסחה הזו - מציבים ערכים ב-<span class="math">\(p\)</span> ומתפללים שיצא משהו חיובי. אף אחד לא ערב לכך שזה יקרה רוב הזמן, ושהראשוני שנמצא יהיה מעניין (כלומר, מתאים לאי-אלו קריטריונים שיש לנו). כמובן, "ראשוניים" כאן זה סתם בגלל שהראשוניים הם אחת מהקבוצות הפופולריות ביותר של מספרים טבעיים, אם לא הפופולרית מכולן.</p>
+<p>הבנו קבוצות דיופנטיות? יפה. אז בואו נעבור לסוג מיוחד של קבוצה - פונקציה. פונקציה היא יחס - קבוצה של איברים מהצורה <span class="math">\(\left(x_{1},\dots,x_{n},y\right)\)</span> - עם התכונה המיוחדת שלכל <span class="math">\(x_{1},\dots,x_{n}\)</span> <strong>קיים</strong> <span class="math">\(y\)</span> כך ש-<span class="math">\(\left(x_{1},\dots,x_{n},y\right)\)</span> שייך לקבוצה, ואותו <span class="math">\(y\)</span> הוא יחיד. חשבו על <span class="math">\(\left(x_{1},\dots,x_{n}\right)\)</span> בתור "קלט" ועל <span class="math">\(y\)</span> בתור "פלט" של הפונקציה. לרוב מסמנים פונקציה ב-<span class="math">\(f\)</span>, ואז במקום לומר ש-<span class="math">\(\left(x_{1},\dots,x_{n},y\right)\)</span> שייך לפונקציה, כותבים <span class="math">\(f\left(x_{1},\dots,x_{n}\right)=y\)</span>. רובכם בוודאי יודעים את זה (אבל זכרו שלא כל מי שמכיר פונקציות גם מכיר את הגדרתן הפורמלית, התורת-קבוצתית).</p>
+<p>ובכן, פונקציה היא דיופנטית אם כשהיא שמה עליה את הכובע של "קבוצה", היא קבוצה דיופנטית. <strong>שימו לב מה זה לא אומר</strong>! זה לא אומר שפונקציה דיופנטית היא בהכרח פולינום! לא, לא לא! למעשה, הדבר החשוב ביותר שנעשה בכל סדרת הפוסטים הזו יהיה להוכיח שהפונקציה האקספוננציאלית היא דיופנטית.</p>
+<p>עכשיו אפשר לעצור לרגע ולראות את היעד הסופי שלנו. המטרה שלנו היא להוכיח שקבוצות דיופנטיות וקבוצות הניתנות למניה רקורסיבית הן אותו דבר. כדי לעשות את זה, אני צריך לתת הגדרה פורמלית ל"קבוצות הניתנות למניה רקורסיבית". ההגדרה הסטנדרטית היא באמצעות מכונות טיורינג, אבל לצורך שלנו הרבה יותר נוח יהיה להשתמש במודל חישובי אחר, כזה שהוא הרבה יותר דומה באופיו לפונקציות הדיופנטיות מלכתחילה - <strong>פונקציות רקורסיביות</strong>. התוצאה שאני חותר אליה היא שפונקציה היא רקורסיבית אם ורק אם היא דיופנטית; ראשית כל עלינו להבין, אם כן, מהי פונקציה רקורסיבית. נתחיל עם מה שלא: זו <strong>לא</strong> פונקציה ש"קוראת לעצמה"! המילה "רקורסיה" כאן קיימת מסיבות היסטוריות (ובקרוב נבין את המוטיבציה לה), אבל שם הרבה יותר מתאים לפונקציות רקורסיביות הוא פשוט "פונקציות ניתנות לחישוב".</p>
+<p>מאיפה צצו הפונקציות הרקורסיביות? שאלה טובה. הן מופיעות במאמר המפורסם של קורט גדל שבו הוא הוכיח את משפטי אי השלמות שלו, וכבר הזכרתי אותן <a href="http://www.gadial.net/2009/05/10/godel_incompleteness_proof_sketch/">בפוסט שעסק בהוכחה</a> ולמיטב הבנתי גדל הוא זה שהמציא את הניסוח הזה שלהן, אבל אולי אני טועה. עם זאת, מה שהופיע במאמר של גדל לא היה שלם - היה חסר כלל אחד שהופיע רק מאוחר יותר, ואפרט על כך עוד מעט.</p>
+<p>הפונקציות הרקורסיביות מוגדרות על ידי אוסף של פונקציות <strong>בסיס</strong> פשוטות ביותר, ש"ברור" לנו שאפשר לחשב אותן, ועוד כמה <strong>פעולות יצירה</strong> שמאפשרות ליצור פונקציות חדשות על בסיס פונקציות קיימות, וגם אותן "ברור" לנו שניתן לחשב. מה פשר ה"ברור" הזה? בימינו, זה אומר שאפשר לכתוב תוכנית מחשב שמבצעת את החישובים הללו. זה מראה שמחשבים מודרניים חזקים <strong>לפחות</strong> כמו פונקציות רקורסיביות - כל פונקציה רקורסיבית היא ניתנת לחישוב בידי מחשב מודרני. מצד שני, וזה הרבה יותר מפתיע, גם כל פונקציה שמחשב מודרני יכול לחשב היא רקורסיבית. כדי להוכיח את זה צריך לעבוד לא מעט ואני לא הולך לעשות זאת כאן (אבל יום אחד אני מקווה לעשות את זה).</p>
+<p>כל הפונקציות הרקורסיביות הן פונקציות מהטבעיים החיוביים לטבעיים החיוביים; לכאורה זה קצת מגביל אותנו כי הרי מחשב יכול להתעסק גם במספרים שליליים ובדברים שהם בכלל לא מספרים, אבל מכיוון שהכל ניתן לקידוד בתור מספר טבעי חיובי (כל מידע שמיוצג במחשב, לא <strong>כל </strong>דבר בעולם!) זה לא באמת מפריע לנו.</p>
+<p>הפונקציות הרקורסיביות הבסיסיות הן:</p>
+<ol>
+    <li>הפונקציה הקבועה <span class="math">\(c\left(x\right)=1\)</span>.</li>
+    <li>פונקציית העוקב <span class="math">\(s\left(x\right)=x+1\)</span></li>
+    <li>פונקצית ההטלה, <span class="math">\(U_{i}^{n}\left(x_{1},\dots,x_{n}\right)=x_{i}\)</span> (המוגדרת לכל <span class="math">\(n,i\)</span>).</li>
+</ol>
+<p>טוב, עבור פונקציות הבסיס הללו לא קשה לראות שהן דיופנטיות. הפונקציה הראשונה מוגדרת על ידי:</p>
+<p><span class="math">\(y=c\left(x\right)\iff\left(y=1\right)\)</span></p>
+<p>השניה מוגדרת על ידי:</p>
+<p><span class="math">\(y=s\left(x\right)\iff\left(y=x+1\right)\)</span></p>
+<p>והשלישית מוגדרת על ידי:</p>
+<p><span class="math">\(y=U_{i}^{n}\left(x_{1},\dots,x_{n}\right)\iff\left(y=x_{i}\right)\)</span></p>
+<p>טוב, זה היה מטופש למדי. איפה האתגר? בהמשך.</p>
+<p>הפעולה הראשונה שממנה בונים פונקציות רקורסיביות חדשות מתוך הקיימות היא <strong>הרכבה</strong>. היא מוגדרת כך: אם <span class="math">\(g_{1},\dots,g_{m}\)</span> הן פונקציות רקורסיביות על המשתנים <span class="math">\(x_{1},\dots,x_{n}\)</span> ואילו <span class="math">\(f\)</span> היא פונקציה רקורסיבית על <span class="math">\(m\)</span> משתנים, אז הפונקציה <span class="math">\(h\left(x_{1},\dots,x_{n}\right)=f\left(g_{1}\left(x_{1},\dots,x_{n}\right),\dots,g_{m}\left(x_{1},\dots,x_{n}\right)\right)\)</span> גם היא רקורסיבית. מה שאנחנו רוצים להראות הוא שאותו הדבר קורה עם פונקציות דיופנטיות, כלומר שאם <span class="math">\(g_{1},\dots,g_{m},f\)</span> כולן דיופנטיות, כך גם <span class="math">\(h\)</span>.</p>
+<p>למרבה המזל, את זה קל להראות כבר עם מעט התכונות שראינו של פונקציות דיופנטיות:</p>
+<p><span class="math">\(y=h\left(x_{1},\dots,x_{n}\right)\iff\exists t_{1},\dots,t_{m}\left(y=f\left(t_{1},\dots,t_{m}\right)\wedge t_{1}=g_{1}\left(x_{1},\dots,x_{n}\right)\wedge\dots\wedge t_{m}=g_{m}\left(x_{1},\dots,x_{n}\right)\right)\)</span></p>
+<p>מה בעצם עשינו כאן? אגף ימין מגדיר פולינום גדול, שמקבל בתור משתנים את <span class="math">\(x_{1},\dots,x_{n}\)</span> וגם את המשתנים <span class="math">\(t_{1},\dots,t_{m}\)</span>. עכשיו הוא לוקח את הפולינום שמגדיר את <span class="math">\(f\)</span> (כשהמשתנים בו מתאימים ל-<span class="math">\(t_{1},\dots,t_{m}\)</span> ו-<span class="math">\(y\)</span>), את הפולינום שמגדיר את <span class="math">\(g_{1}\)</span> (כשהמשתנים בו מתאימים ל-<span class="math">\(x_{1},\dots,x_{n}\)</span> ו-<span class="math">\(t_{1}\)</span>), את הפולינום שמגדיר את <span class="math">\(g_{2}\)</span> (כבר הבנתם...?) וכן הלאה עד <span class="math">\(g_{m}\)</span>, ואז מחבר את הריבועים של כולם (זו מהות ה-<span class="math">\(\wedge\)</span> שעושים על כולם).</p>
+<p>כן, זה כבר לא מובן מאליו, וזה יסתבך בהמשך. לכן כדאי לנקוט גישה קצת יותר כללית לעניין הזה. אפשר לגייס כאן את הלוגיקה המתמטית לעזרתנו; הרי מה שעשינו לעיל הוא פשוט לכתוב פסוק מסויים ב<a href="http://www.gadial.net/2012/06/17/first_order_logic/">לוגיקה מסדר ראשון</a> שאיכשהו מובטח לנו שהוא מגדיר פונקציה דיופנטית. הפסוק הזה הכיל סימנים לפונקציות דיופנטיות, את סימן השוויון, את סימן ה"וגם" ואת סימן ה"קיים". האם אפשר להשתמש בעוד דברים? כן, וחיזוק ה"שפה" שלנו הוא היעד הטכני המרכזי שלנו. ארחיב על כל זה בצורה מסודרת כשהזמן יגיע.</p>
+<p>לבינתיים, הבה ונראה את הפעולה השניה שמשמשת לבנית פונקציות רקורסיביות: <strong>רקורסיה פרימיטיבית</strong>. מכאן הגיע השם "רקורסיבי" לפונקציות הללו (כי אצל גדל זו הייתה פעולת הבניה החשובה באמת, שנתנה למחלקת הפונקציות הזו את המורכבות שלה). זו לא פעולה קלה לעיכול מבחינה פורמלית, אבל הרעיון הבסיסי פשוט: אנחנו מגדירים פונקציה באמצעות ערכים קטנים יותר שלה. זה הכל.</p>
+<p>רקורסיה פרימיטיבית מוגדרת כך: בהינתן פונקציה רקורסיבית <span class="math">\(f\)</span> על <span class="math">\(n\)</span> משתנים ("תנאי ההתחלה"), ופונקציה רקורסיבית <span class="math">\(g\)</span> על <span class="math">\(n+2\)</span> משתנים ("צעד הרקורסיה"), אנחנו מגדירים פונקציה חדשה, <span class="math">\(h\)</span>, על <span class="math">\(n+1\)</span> משתנים (שעליהם כדאי לחשוב כך: <span class="math">\(n\)</span> המשתנים הראשונים הם "פרמטרים" קבועים ואילו המשתנה האחרון הוא מה שעליו מוגדרת הרקורסיה), באופן הבא:</p>
+<p><span class="math">\(h\left(x_{1},\dots,x_{n},1\right)=f\left(x_{1},\dots,x_{n}\right)\)</span></p>
+<p><span class="math">\(h\left(x_{1},\dots,x_{n},t+1\right)=g\left(t,h\left(x_{1},\dots,x_{n},t\right),x_{1},\dots,x_{n}\right)\)</span></p>
+<p>מה קורה כאן? הערך של <span class="math">\(h\)</span> ב"התחלה", כשהמשתנה האחרון הוא 1, נקבע על ידי הפרמטרים ופונקצית תנאי ההתחלה. בהמשך, הערך של <span class="math">\(h\)</span> עבור ערך כלשהו של המשתנה האחרון נקבע על ידי <span class="math">\(g\)</span>, כשהיא מביאה בחשבון את הערך הקודם של המשתנה האחרון, הערך ש-<span class="math">\(h\)</span> החזירה על הערך הקודם הזה, והפרמטרים. זה נראה קצת מפחיד אבל זה לא באמת נורא.</p>
+<p>איך מראים שהפעולה הזו משמרת דיופנטיות? או, זה כבר קצת מסובך. למרבה המזל, אפשר לשאוב השראה מקורט גדל עצמו; במאמר שלו הוא הוכיח שאפשר להגדיר את הפעולה הזו בשפה מסדר ראשון מסויימת; למרות שהשפה שלנו היא קצת שונה, אפשר יהיה לשאוב השראה ורעיונות מהטכניקות שלו. את זה נעשה בפוסט המשך; לעת עתה בואו נחשוב על נסיון נאיבי ואיך הוא נכשל:</p>
+<p><span class="math">\(y=h\left(x_{1},\dots,x_{n},z\right)\iff\exists t_{1},t_{2},\dots,t_{z}(t_{1}=f\left(x_{1},\dots,x_{n}\right)\wedge\)</span></p>
+<p><span class="math">\(\wedge t_{2}=g\left(1,t_{1},x_{1},\dots,x_{n}\right)\wedge t_{3}=g\left(2,t_{2},x_{1},\dots,x_{n}\right)\wedge\dots\)</span></p>
+<p><span class="math">\(\wedge t_{z}=g\left(z-1,t_{z-1},x_{1},\dots,x_{n}\right)\wedge y=t_{z})\)</span></p>
+<p>מה הולך כאן? אנחנו אומרים ש-<span class="math">\(y=h\left(x_{1},\dots,x_{n},z\right)\)</span> רק אם קיימת <strong>סדרה</strong> <span class="math">\(t_{1},\dots,t_{z}\)</span> שהאיבר הראשון בה הוא <span class="math">\(f\left(x_{1},\dots,x_{n}\right)\)</span> - הערך ההתחלתי הנכון, בהינתן הפרמטרים - וכל איבר בה נובע מקודמו על ידי <span class="math">\(g\)</span>, וכמו כן האיבר האחרון הוא <span class="math">\(y\)</span>. מבחינה רעיונית הכל נכון; הבעיה היא סינטקטית - הפסוק שכתבתי כאן לא מתאים ל"שפה" שהצגתי עד כה, מה שאומר שעל פניו לא ברור אם אפשר איכשהו לתרגם אותו חזרה לפולינום שמגדיר פונקציה דיופנטית. בעיה מהותית אחת היא שאורך הפסוק <strong>אינו קבוע</strong>! הוא תלוי ב-<span class="math">\(z\)</span>, כי ככל ש-<span class="math">\(z\)</span> יותר גדול, יש יותר משתנים <span class="math">\(t_{1},\dots,t_{z}\)</span>. אם עבור ערכים שונים של <span class="math">\(z\)</span> יש פסוקים שונים, זה אומר שגם יהיו פולינומים שונים, אבל אנחנו צריכים פולינום יחיד שמטפל <strong>בכל</strong> <span class="math">\(z\)</span>. לכן הבניה הזו לא מוצלחת ונזדקק לפיתוח של כלי טכני חדש - פונקציה דיופנטית שמסוגלת לקודד סדרות שרירותיות - על מנת להציע בניה טובה יותר, וגם זה לא יספיק לנו. אבל על כך נדבר בהמשך.</p>
+<p>בואו נסיים את הצגת הפונקציות הרקורסיביות עם פעולת היצירה האחרונה. הפעולה הזו לא הופיעה במאמר של גדל; גדל לא נזקק לה לצורך משפטי אי השלמות. הצורך בה צץ רק כאשר החלו לחשוב על הפונקציות הרקורסיביות כמתארות את "כל מה שניתן לחשב", שכן קיימות פונקציות שבבירור ניתן לחשב אותן (כלומר, קיים אלגוריתם שעושה זאת) אבל הן אינן ניתנות לייצור באמצעות כללי היצירה שהראיתי עד כה. בעתיד אני מקווה להראות את הדוגמה הקלאסית ביותר - <strong>פונקציית אקרמן</strong>, שגדלה "מהר מדי" מכדי שתהיה ניתנת לתיאור באמצעות כללי היצירה הנוכחיים.</p>
+<p>אם כן, פונקציות שניתנות ליצירה באמצעות כללי היצירה הנוכחיים מתוך פונקציות הבסיס נקראות <strong>פונקציות פרימיטיביות רקורסיביות</strong>, וקיימות פונקציות ניתנות לחישוב שאינן פרימיטיביות רקורסיביות. הכלל שפותר את הבעיה הזו הוא כלל שמאפשר לבצע "חיפוש בלתי חסום": אם נתונות פונקציות רקורסיביות <span class="math">\(f,g\)</span> על <span class="math">\(n+1\)</span> משתנים, אז מוגדרת באמצעותן פונקציה רקורסיבית <span class="math">\(h\)</span> על <span class="math">\(n\)</span> משתנים באופן הבא:</p>
+<p><span class="math">\(h\left(x_{1},\dots,x_{n}\right)=\min_{y}\left(f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right)\right)\)</span></p>
+<p>כמקודם, חשבו על <span class="math">\(x_{1},\dots,x_{n}\)</span> בתור "פרמטרים". אחרי שקבענו אותם, אנחנו יכולים לחפש את ה-<span class="math">\(y\)</span> המינימלי שעבורו <span class="math">\(f\)</span> תהיה שווה ל-<span class="math">\(g\)</span>, וזה הערך ש-<span class="math">\(h\)</span> תחזיר על אותם פרמטרים. אלא שכאן מייד צצה השאלה הפשוטה - מה קורה אם בכלל לא קיים <span class="math">\(y\)</span> כזה? התשובה היא שבמקרה זה <span class="math">\(h\)</span> תהיה <strong>לא מוגדרת</strong> על הקלט. מרגע שהכנסו את הכלל החדש הזה, שנקרא <strong>כלל המינימיזציה</strong> לתמונה, גרמנו לכך שקבוצת הפונקציות הרקורסיביות תכלול גם פונקציות <strong>חלקיות</strong>, כאלו שלא מוגדרות לכל הקלטים (ולמעשה, אפילו הפונקציה שאינה מוגדרת לאף קלט היא רקורסיבית; פשוט קחו את <span class="math">\(f\)</span> להיות הפונקציה שמחזירה תמיד 1 ואת <span class="math">\(g\)</span> להיות הפונקציה שמחזירה תמיד 2). מה שמעניין כאן הוא שפונקציית אקרמן שהזכרתי לעיל כן מוגדרת לכל קלט, כלומר כלל המינימיזציה הכרחי כדי שנוכל "לתפוס" את כל הפונקציות הניתנות לחישוב שמוגדרות לכל קלט; זה לא שהוספנו אותו רק כדי להיות מסוגלים לטפל בפונקציות חלקיות.</p>
+<p>טוב, אז הבנו בערך מה זה הכלל הזה; איך אפשר להראות שאם <span class="math">\(f,g\)</span> דיופנטיות, כך גם <span class="math">\(h\)</span>?</p>
+<p>שוב, מבחינה רעיונית הפסוק שמגדיר את התכונה הזו אינו מסובך:</p>
+<p><span class="math">\(y=h\left(x_{1},\dots,x_{n}\right)\iff f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right)\wedge\)</span></p>
+<p><span class="math">\(\wedge\forall t\left(t&lt;y\to f\left(x_{1},\dots,x_{n},y\right)\ne g\left(x_{1},\dots,x_{n},y\right)\right)\)</span></p>
+<p>אבל שימו לב לשימוש ב-<span class="math">\(\forall\)</span> ("לכל") כאן. אני כבר יכול לומר ש<strong>אין שום סיכוי</strong> שבשפה שלנו נוכל להשתמש ב-<span class="math">\(\forall\)</span> בצורה חופשית ועדיין לקוות שאפשר יהיה לתרגם את הסיפור חזרה לפונקציה דיופנטית. מה שכן נוכל לעשות - וזה לב ליבה של המטרה הטכנית שלנו - הוא להשתמש ב-<span class="math">\(\forall\)</span> <strong>חסום</strong>, כלומר במקום לומר "לכל <span class="math">\(t\)</span>", לומר "לכל <span class="math">\(t\)</span> שקטן מ-<span class="math">\(y\)</span>", שזה בדיוק מה שאנחנו צריכים כאן, בעצם.</p>
+<p>אם כן, עכשיו היעדים הטכניים שלנו קצת יותר ברורים. יש לנו שתי פעולות יצירה שאנחנו רוצים להוכיח שמשמרות דיופנטיות של פונקציות. האופן הטכני שבו נעשה זאת הוא להגדיר שפה מסדר ראשון מסויימת, שבה מותר להשתמש בקבוצה מאוד מוגדרת ומדויקת של סימנים, כך שכל פונקציה שמוגדרת באמצעות השפה הזו היא אוטומטית דיופנטית. כדי שהשפה הזו תהיה חזקה אנחנו מוסיפים לה שני כלי עבודה מרכזיים - האחד הוא פונקציה לקידוד סדרות סופיות, והשני הוא כמת "לכל" חסום. בשביל לטפל בפונקציה לקידוד סדרות סופיות יש להשתמש במשפט מתמטי נפוץ שחביב עלי מאוד - <strong>משפט השאריות הסיני</strong>, ולכן אקדיש לו את הפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2012/09/12/chinese_remainder_theorem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט השאריות הסיני</span>
+            </a>
+            
+            
+            
+            <a href="/2012/08/31/pell_equation/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">משוואת פל</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

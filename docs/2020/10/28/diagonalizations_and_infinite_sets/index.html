@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תורת הקבוצות - לכסונים, או למה יש אינסוף אינסופים? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תורת הקבוצות - לכסונים, או למה יש אינסוף אינסופים?</h1>
+            <div class="post-meta">
+                <span class="date">2020-10-28</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/קבוצה סופית.html">קבוצה סופית</a>
+                    
+                    <a href="/tags/קבוצה אינסופית.html">קבוצה אינסופית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>אז איך משווים קבוצות אינסופיות?</h2>
+
+<p><a href="https://gadial.net/2020/10/09/what_are_infinite_sets/">בפוסט הקודם</a> בסדרת הפוסטים שלי על תורת הקבוצות הצגתי את הכלי הבסיסי שלנו להשוואת גדלים של קבוצות: אמרתי שאם קיימת פונקציה <span class="math">\(f:A\to B\)</span> שהיא חד-חד-ערכית ועל אז אנחנו אומרים ש-<span class="math">\(A,B\)</span> הן <strong>שוות עוצמה</strong> ומסמנים את זה ב-<span class="math">\(A\sim B\)</span> או ב-<span class="math">\(\left|A\right|=\left|B\right|\)</span>. הגדרתי "קבוצה סופית" בתור קבוצה שמקיימת <span class="math">\(A\sim n\)</span> עבור מספר טבעי <span class="math">\(n\)</span> כלשהו (זכרו: <span class="math">\(n\)</span>, פורמלית, הוא קבוצת הטבעיים הקטנים מ-<span class="math">\(n\)</span>) והגדרתי "קבוצה אינסופית" בתור קבוצה לא סופית. סיימנו בלראות שלכל קבוצה אינסופית <span class="math">\(A\)</span>, קיימת פונקציה <span class="math">\(f:\mathbb{N}\to A\)</span> שהיא חד-חד-ערכית אבל לא בהכרח על ואמרתי שאינטואיטיבית, זה אומר ש-<span class="math">\(A\)</span> גדולה לפחות כמו <span class="math">\(\mathbb{N}\)</span>. בואו נתחיל מלפרמל את האינטואיציה הזו.</p>
+<p>כרגיל, שווה להתחיל מהמקרה הקונקרטי של קבוצות סופיות. אם <span class="math">\(A,B\)</span> סופיות ויש <span class="math">\(f:A\to B\)</span> שהיא חח"ע אבל <strong>לא על</strong> אז אפשר להוכיח ש-<span class="math">\(\left|A\right|<\left|B\right|\)</span>. עבור קבוצות אינסופיות זה פחות פשוט. למשל, הפונקציה <span class="math">\(f:\mathbb{N}^{+}\to\mathbb{N}\)</span> שמוגדרת בתור <span class="math">\(f\left(n\right)=n\)</span> היא חח"ע אבל <strong>לא על</strong> כי <span class="math">\(0\)</span> לא שייך ל-<span class="math">\(\mathbb{N}^{+}\)</span> אבל כן שייך ל-<span class="math">\(\mathbb{N}\)</span>. מצד שני, זה שהפונקציה הספציפית הזו היא לא על לא אומר שאי אפשר למצוא פונקציה <strong>אחרת</strong> שהיא כן: במקרה שלנו, <span class="math">\(g\left(n\right)=n-1\)</span> היא חח"ע ועל ולכן מוכיחה ש-<span class="math">\(\left|\mathbb{N}^{+}\right|=\left|\mathbb{N}\right|\)</span>. בקבוצות סופיות זה פשוט לא היה יכול לקרות, שיש לנו פונקציה חח"ע ולא על אבל אפשר למצוא אחת שהיא כן חח"ע ועל.</p>
+<p>לכן אנחנו נוקטים בהגדרה הבאה: אם <span class="math">\(A,B\)</span> קבוצות כך ש-<span class="math">\(f:A\to B\)</span> היא פונקציה חח"ע (ולאו דווקא על; לא אוסרים עליה להיות על) אז מסמנים זאת <span class="math">\(\left|A\right|\le\left|B\right|\)</span>. שימוש בסימון כזה בחופשיות הוא מסוכן, כי האינטואיציה שלנו מאי-שוויונים "רגילים" היא שצריך להתקיים הדבר הבא: אם <span class="math">\(\left|A\right|\le\left|B\right|\)</span> וגם <span class="math">\(\left|B\right|\le\left|A\right|\)</span> אז צריך להתקיים <span class="math">\(\left|A\right|=\left|B\right|\)</span>. למרבה המזל, הטענה הזו <strong>נכונה</strong>: היא נקראת "משפט קנטור-שרדר-ברנשטיין". הנה עוד ניסוח שלה, קצת יותר מפורש:</p>
+<p>משפט קנטור-שרדר-ברנשטיין: אם קיימת פונקציה <span class="math">\(f:A\to B\)</span> חח"ע ופונקציה <span class="math">\(g:B\to A\)</span> חח"ע אז קיימת פונקציה <span class="math">\(h:A\to B\)</span> חח"ע ועל.</p>
+<p>אנחנו יכולים להוכיח את המשפט כאן, עם הידע שכבר יש לנו; הוא לא דורש משהו עמוק אלא בעיקר הגדרה מחוכמת למדי של <span class="math">\(h\)</span>. אני לא אעשה את זה כי כבר הוכחתי את המשפט <strong>פעמיים</strong> בבלוג, בצורה <a href="https://gadial.net/2012/01/21/cantor_schroeder-_bernstein_theorem/">יבשה יותר</a> ובצורה <a href="https://gadial.net/2016/11/30/csb_theorem_hilbert_hotel_style/">יבשה פחות</a>. אפשר לדלג על ההוכחה כרגע בכל מקרה - המשפט עצמו שימושי לנו אבל לא קריטי להבין כרגע למה הוא עובד.</p>
+<p>עכשיו, משיש לנו מושג של "קטן-שווה" עבור קבוצות אינסופיות, זמן לשאול האם יש לנו גם מושג של "קטן ממש". כלומר, האם קיימות <span class="math">\(A,B\)</span> כך שיש פונקציה <span class="math">\(f:A\to B\)</span> שהיא חח"ע אבל לא על, ופשוט <strong>לא קיימת</strong> פונקציה חח"ע ועל מ-<span class="math">\(A\)</span> אל <span class="math">\(B\)</span>. כלומר, שמתקיים <span class="math">\(\left|A\right|\le\left|B\right|\)</span> אבל <span class="math">\(\left|A\right|\ne\left|B\right|\)</span>. דבר כזה יסומן בתור <span class="math">\(\left|A\right|<\left|B\right|\)</span>. כאן האינטואיציה הראשונית יכולה להיות שברור שזה קיים כי למשל <span class="math">\(\mathbb{N}^{+}\)</span> היא כמו <span class="math">\(\mathbb{N}\)</span> רק בלי המספר 0 ולכן <span class="math">\(\mathbb{N}^{+}\)</span> היא "קטנה יותר", אבל כאמור - יש לנו פונקציה חח"ע ועל ביניהן, אז הן מאותו גודל. הבלבול שהדבר הזה גורם התבטא בפרדוקס של גלילאו, עם קבוצת הטבעיים וקבוצת הריבועים של טבעיים, שגם הן באותו גודל למרות שהתחושה היא שבקבוצת הריבועים יש "הרבה פחות" - הבלבול הזה גרם לגלילאו למשוך את ידיו מכל העיסוק בקבוצות אינסופיות.</p>
+<p>אם כן, אולי האינטואיציה צריכה להיות ש<strong>לא</strong> קיים דבר כזה, שתי קבוצות אינסופיות שאינן מאותו גודל? אולי בעצם כל הקבוצות האינסופיות הן מאותו "גודל", לא? <span class="math">\(\infty\)</span> או משהו כזה? וכאן באה תורת הקבוצות של גאורג קנטור, שהוא זה שהחליט להשוות קבוצות באמצעות פונקציות חח"ע ועל, ומספרת לנו שלא - העולם הרבה יותר גדול ומורכב מהפשטנות הזו של "אינסוף זה אינסוף וזהו".</p>
+<h2>האלכסון של קנטור</h2>
+
+<p>הדוגמא הראשונה לשתי קבוצות אינסופיות שהאחת גדולה מהשניה ניתנת באמצעות טיעון שנקרא "האלכסון של קנטור" וכבר <a href="https://gadial.net/2007/08/29/cantor_diagonal/">כתבתי עליו פוסט</a> בראשית ימי הבלוג, אבל הנה הזדמנות טובה להציג אותו שוב. הרעיון הוא להראות שעוצמת המספרים הטבעיים קטנה מעוצמת המספרים הממשיים: <span class="math">\(\left|\mathbb{N}\right|<\left|\mathbb{R}\right|\)</span>. ברור ש-<span class="math">\(\left|\mathbb{N}\right|\le\left|\mathbb{R}\right|\)</span> כי הפונקציה <span class="math">\(f\left(n\right)\)</span> מ-<span class="math">\(\mathbb{N}\)</span> אל <span class="math">\(\mathbb{R}\)</span> היא חח"ע; רק נשאר להוכיח שפשוט <strong>לא קיימת</strong> פונקציה חח"ע ועל מ-<span class="math">\(\mathbb{N}\)</span> אל <span class="math">\(\mathbb{R}\)</span>.</p>
+<p>כדי לפשט את הנימוק מספיק להראות שלא קיימת פונקציה חח"ע ועל מ-<span class="math">\(\mathbb{N}\)</span> אל הקטע הפתוח <span class="math">\(\left(0,1\right)\)</span> של כל המספרים הממשיים בין 0 ו-1, כי לא כזה קשה להראות (לא הפעם!) ש-<span class="math">\(\left(0,1\right)\sim\mathbb{R}\)</span>, אז אם היה מתקיים <span class="math">\(\mathbb{N}\sim\mathbb{R}\)</span> היה נובע מכך ש-<span class="math">\(\mathbb{N}\sim\left(0,1\right)\)</span>. כרגע עדיין לא ברור איך לדבר על <span class="math">\(\left(0,1\right)\)</span> מפשט משהו, אבל זה יגיע בקרוב - בינתיים השאלה הדוחקת יותר היא איך בכלל מרים משהו בסגנון "לא קיימת פונקציה חח"ע ועל מ-<span class="math">\(\mathbb{N}\)</span> לאנשהו". זה בעצם האתגר הגדול של המתמטיקה באופן כללי: אם משהו <strong>קיים</strong>, אז לעתים קרובות אפשר פשוט להציג אותו וזהו (זה לא תמיד המצב, כפי שמלמדת אותנו <strong>אקסיומת הבחירה</strong>, אבל זה לפעם אחרת). אבל אם משהו <strong>לא קיים</strong>, איך נראה את זה? לכאורה אנחנו צריכים לעבור על <strong>כל</strong> הפונקציות האפשריות ביקום בין <span class="math">\(\mathbb{N}\)</span> ו-<span class="math">\(\left(0,1\right)\)</span> ולהראות שאף אחת מהן היא לא חח"ע ועל. איך נעשה את זה? מאיפה נתחיל? זו נראית כמו משימה מפלצתית! וזה גם <strong>בדיוק</strong> מה שנעשה, וזה לא ייקח לנו יותר מכמה שורות ספורות (אם ממש רוצים, אפשר לקצר את ההוכחה לשורה אחת).</p>
+<p>הרעיון הוא לקחת פונקציה <span class="math">\(f:\mathbb{N}\to\left(0,1\right)\)</span> <strong>כלשהי</strong>, בלי להניח עליה שום הנחות, ולהוכיח שהיא לא יכולה להיות <strong>על</strong>. אמרתי לפני רגע שאם משהו <strong>קיים</strong> אז אפשר להציג אותו וזהו? זה מה שנעשה! אנחנו הולכים להציג מספר ב-<span class="math">\(\left(0,1\right)\)</span> שלא שייך לתמונה של <span class="math">\(f\)</span> - כלומר, שאין <span class="math">\(n\in\mathbb{N}\)</span> כך ש-<span class="math">\(f\left(n\right)\)</span> שווה אליו, ונעשה זאת על ידי כך שנבנה אותו בצורה מפורשת, כמובן בעזרת <span class="math">\(f\)</span> עצמה.</p>
+<p>כדי להבין את הרעיון של הבניה, בואו נדגים אותה עבור <span class="math">\(f\)</span> ספציפית אחת - אבל לא כזו שנראית "נחמדה" אלא כזו שנראית כמו בוקה ומבולקה. אכתוב אותה חצי במפורש כך: </p>
+<p><span class="math">\(\begin{array}{ccccccccc} f\left(0\right) & = & 0 & . & 3 & 5 & 8 & 1 & \ldots\\ f\left(1\right) & = & 0 & . & 4 & 4 & 4 & 4 & \ldots\\ f\left(2\right) & = & 0 & . & 5 & 8 & 7 & 6 & \ldots\\ f\left(3\right) & = & 0 & . & 4 & 3 & 4 & 3 & \ldots\\  & \vdots \end{array}\)</span></p>
+<p>הרעיון בצורת הכתיבה הוא זה: לכל מספר טבעי <span class="math">\(n\)</span>, הפלט <span class="math">\(f\left(n\right)\)</span> של הפונקציה <span class="math">\(f:\mathbb{N}\to\left(0,1\right)\)</span> הוא איבר של <span class="math">\(\left(0,1\right)\)</span>. מספר כזה הוא מספר ממשי בין 0 ל-1, וככזה אפשר להציג אותו בעזרת <strong>ייצוג עשרוני</strong> שהוא מהצורה "משהו <strong>נקודה</strong> משהו משהו משהו". מכיוון שהמספר הוא בין 0 ל-1, לא כולל 1, מה שיש משמאל לנקודה הוא תמיד 0; נשאר לנו האקשן שמתרחש מימין לנקודה, שאני כותב כמו מין מערך של ספרות. <span class="math">\(f\left(0\right)=0.3581\ldots\)</span>, כאשר שלוש הנקודות אומרות "ומכאן והלאה זה נמשך עד אינסוף בדרך כלשהי". שימו לב שגם במספר כמו <span class="math">\(0.5\)</span> שלכאורה יש לו רק מספר סופי של ספרות אחרי הנקודה העשרונית, בעצם יש אינסוף כי גם 0 היא ספרה: <span class="math">\(0.5=0.5000\ldots\)</span>. אחרי ארבעת האיברים שכתבתי במפורש הוספתי שלוש נקודות אנכיות שרומזות שמה שהולך פה נמשך בצורה דומה עם הפעלה של <span class="math">\(f\)</span> על כל הטבעיים.</p>
+<p>עכשיו אני רוצה לבנות מספר <span class="math">\(d\)</span> שיהיה בעל שתי תכונות:</p>
+<ol> <li><span class="math">\(d\in\left(0,1\right)\)</span>, כלומר <span class="math">\(d\)</span> שייך לקטע ש-<span class="math">\(f\)</span> <strong>אמורה לתפוס במלואו</strong>.</li>
+
+
+<li><span class="math">\(f\)</span> <strong>לא תופסת</strong> את <span class="math">\(d\)</span>. כלומר, לכל <span class="math">\(n\in\mathbb{N}\)</span>, מתקיים <span class="math">\(f\left(n\right)\ne d\)</span>.</li>
+
+</ol>
+
+<p>האופן שבו אעשה את זה יהיה לבנות את <span class="math">\(d\)</span> <strong>ספרה-ספרה</strong>. יש לי אינסוף ספרות לבחור, ואני "אנצל" כל ספרה שאבחר עבור <span class="math">\(d\)</span> כדי "לנטרל" את האפשרות של אחד מהמספרים הטבעיים לתפוס את <span class="math">\(d\)</span>. הספרה הראשונה של <span class="math">\(d\)</span> תיבחר בצורה כזו שמבטיחה ש-<span class="math">\(f\left(0\right)\ne d\)</span>, הספרה השניה של <span class="math">\(d\)</span> תיבחר בצורה כזו שמבטיח ש-<span class="math">\(f\left(1\right)\ne d\)</span> וכן הלאה.</p>
+<p>מכיוון ש-<span class="math">\(d\in\left(0,1\right)\)</span> הוא מתחיל תמיד ב-<span class="math">\(0.\)</span> ואז הספרות שמימין לנקודה העשרונית, שהן מה שאני בוחר. עכשיו, <span class="math">\(f\left(0\right)\)</span> מתחיל עם הספרה 3, אז אני אתחיל לבנות את <span class="math">\(d\)</span> עם הספרה <span class="math">\(4\)</span>. כלומר, כרגע המצב הוא זה: <span class="math">\(d=0.4\ldots\)</span>, כששלוש הנקודות אומרות "עדיין לא החלטתי מה יהיה שם". כבר במצב הזה אנחנו <strong>יודעים בודאות</strong> ש-<span class="math">\(f\left(0\right)\ne d\)</span>, פשוט כי הם נבדלים בספרה הראשונה, ושני מספרים ממשיים הם זהים רק אם יש להם את אותו פיתוח עשרוני (עד כדי מקרה קצה אחד שאתייחס אליו בפירוט בהמשך).</p>
+<p>נעבור ל-<span class="math">\(f\left(1\right)\)</span>. הוא מתחיל גם ב-<span class="math">\(0.4\)</span>, אז עדיין <strong>ייתכן בתיאוריה</strong> ש-<span class="math">\(d=0.4\ldots\)</span> יהיה שווה אליו. אבל יש לנו חופש בחירה - עוד לא בחרנו את הספרה <strong>השניה</strong> של <span class="math">\(d\)</span>. אז פשוט נבחר אותה להיות משהו שונה מ-4, נאמר 3. קיבלנו את <span class="math">\(d=0.43\ldots\)</span> שבבירור שונה מ-<span class="math">\(f\left(1\right)=0.44\ldots\)</span>.</p>
+<p>עבור <span class="math">\(f\left(2\right)\)</span> נראה שאין מה לעשות - הוא מתחיל ב-<span class="math">\(0.58\ldots\)</span> ששונה מאוד מ-<span class="math">\(d=0.43\ldots\)</span>, אבל למה לסבך את שיטת העבודה שלי? שיטת העבודה כרגע אומרת - תבחר את הספרה הבאה שלך (במקרה שלנו, הספרה השלישית ב-<span class="math">\(d\)</span>) כך שהיא שונה מהספרה באותו מקום במספר הנוכחי שאתה "תוקף". במקרה הזה הספרה היא 7, אז נבחר... אה... 4? ונקבל <span class="math">\(d=0.434\ldots\)</span>. אחר כך נעבור לספרה <strong>הרביעית</strong> ב-<span class="math">\(f\left(3\right)\)</span> שהיא 3 ושוב נבחר 4, ונקבל <span class="math">\(d=0.4344\ldots\)</span> וכך זה יימשך עוד ועוד.</p>
+<p>יש לנו אינסוף צעדים, ובכל צעד נפסל אחד מהמספרים הטבעיים <span class="math">\(n\)</span> מלקיים <span class="math">\(f\left(n\right)=d\)</span>. מכיוון שזה קורה <strong>לכל</strong> הטבעיים, תכונה 2 שרצינו עבור <span class="math">\(d\)</span> מתקיימת. זה מוכיח שה-<span class="math">\(f\)</span> שהצגתי לא תופסת את כל הקטע <span class="math">\(\left(0,1\right)\)</span> ומסיים את הסיפור מבחינה. אבל מה עם פונקציות אחרות?</p>
+<p>ובכן, לא הצגתי את <span class="math">\(f\)</span> יותר מדי לעומק, נכון? הצגתי רק כמה איברים ראשונים וזהו. אחרי ש"הבנו את הקטע" היה אפשר להמשיך בצורה דומה גם לאיבר שלא ראינו. אז את אותו טיעון אפשר להחיל על כל <span class="math">\(f\)</span> שהיא. בואו ננסח עכשיו את הטיעון הפורמלי, שרק ידרוש מאיתנו עוד כמה סימונים קונקרטיים. אני אקח <span class="math">\(f:\mathbb{N}\to\left(0,1\right)\)</span> כללית ואסמן את איבריה באופן הבא:</p>
+<p><span class="math">\(\begin{array}{ccccccccc} f\left(0\right) & =a_{0}= & 0 & . & a_{0}^{0} & a_{0}^{1} & a_{0}^{2} & a_{0}^{3} & \ldots\\ f\left(1\right) & =a_{1}= & 0 & . & a_{1}^{0} & a_{1}^{1} & a_{1}^{2} & a_{1}^{3} & \ldots\\ f\left(2\right) & =a_{2}= & 0 & . & a_{2}^{0} & a_{2}^{1} & a_{2}^{2} & a_{2}^{3} & \ldots\\ f\left(3\right) & =a_{3}= & 0 & . & a_{3}^{0} & a_{3}^{1} & a_{3}^{2} & a_{3}^{3} & \ldots\\  & \vdots \end{array}\)</span></p>
+<p>באופן כללי: אני קורא ל-<span class="math">\(f\left(n\right)\)</span> בשם <span class="math">\(a_{n}=f\left(n\right)\)</span>, ואז כותב את <span class="math">\(a_{n}\)</span> בתור סדרה של ספרות אחרי הנקודה העשרונית: <span class="math">\(a_{n}=0.a_{n}^{0}a_{n}^{1}\dots\)</span>. לספרה הראשונה אחרי הנקודה העשרונית אני קורא <span class="math">\(a_{n}^{0}\)</span>, לספרה השניה אני קורא <span class="math">\(a_{n}^{1}\)</span> וכן הלאה. זה מאפשר לי להתייחס לכל תא ב"טבלה" שלעיל בצורה מפורשת.</p>
+<p>ועכשיו אני בונה את <span class="math">\(d=0.d^{0}d^{1}d^{2}\ldots\)</span> שלי בצורה הפשוטה הבאה:</p>
+<p><span class="math">\(d^{n}=\begin{cases} 4 & a_{n}^{n}\ne4\\ 3 & a_{n}^{n}=4 \end{cases}\)</span></p>
+<p>במילים אחרות, אני אומר - כדי להחליט מה תהיה הספרה ה-<span class="math">\(n\)</span>-ית בתוך <span class="math">\(d\)</span>, אני מסתכל מה הספרה ה-<span class="math">\(n\)</span>-ית במספר <span class="math">\(a_{n}\)</span>. אם הספרה הזו ב-<span class="math">\(a_{n}\)</span> <strong>שונה</strong> מ-4, אז אני אבחר אותה ב-<span class="math">\(d\)</span> להיות 4. אם היא דווקא הייתה שווה ל-4, אני אבחר אותה להיות 3, כדי שתהיה שונה מ-4. סוף הסיפור: לכל <span class="math">\(n\in\mathbb{N}\)</span>, <span class="math">\(d\ne f\left(n\right)\)</span> כי הן נבדלות בספרה ה-<span class="math">\(n\)</span>-ית.</p>
+<p>אם נסתכל שוב על הטבלה שלמעלה, אפשר לראות שהאופן שבו אני בונה את <span class="math">\(d\)</span> הוא על ידי כך שאני לוקח את <strong>האלכסון</strong> של הטבלה (שבו נמצאים <span class="math">\(a_{0}^{0},a_{1}^{1},a_{2}^{2}\)</span> וכן הלאה) וסוג של "הופך" אותו. לכן השיטה הזו נקראת <strong>האלכסון של קנטור</strong>, אבל אני משתדל לא לשים יותר מדי דגש על האספקט הויזואלי הזה שלה, כי הנסיון שלי הוא שזה מקשה על הבנה של שלל ההכללות האפשריות של השיטה, שברובן כבר אין ציור נחמד של אלכסון שאפשר להשתמש בו.</p>
+<p>אני רוצה לעזוב עכשיו את הדוגמא הזו ולעבור לדבר על תוצאה כללית יותר, אבל לפני כן יש לי חוב של איזו נקודה עדינה להתייחס אליה שהיא <strong>מאוד</strong> ספציפית לפרטים של ההוכחה הזו. אם מה שאני מדבר עליו פה לא ברור אפשר פשוט לדלג להמשך.</p>
+<p>ובכן, הבעיה הבסיסית שלא התייחסתי אליה עדיין היא ש-<span class="math">\(0.999\ldots=1\)</span>.</p>
+<p>השוויון הזה נראה שגוי? ובכן, יש לי <a href="https://gadial.net/2008/06/07/almost_1_is_one/">פוסט</a> בנושא, גם כן מראשית ימי הבלוג. השוויון נכון לגמרי (לא "בקירוב" או "בשאיפה"), ולא רק הוא: <strong>כל</strong> מספר עשרוני שמסתיים בסדרה אינסופית של 9 ניתן בעצם לכתיבה בשתי דרכים שונות. למשל, <span class="math">\(0.4999\ldots=0.5000\ldots\)</span>. הבשורות הטובות הן שזה היוצא מן הכלל היחיד - כל מספר ממשי שלא מסתיים בסדרה אינסופית של 0 או 9 ניתן לכתיבה רק בדרך אחת.</p>
+<p>למה זה לא יוצר בעיות? ראשית, שימו לב שהמספר שאני בונה כולל רק את הספרות 3 ו-4, כך שזה לא יכול לקרות לו - יש לו ייצוג יחיד. לכן בפרט לא ייתכן שאני אבנה "בטעות" את <span class="math">\(0.999\ldots\)</span> ולכן אבנה בפועל מספר שלא שייך ל-<span class="math">\(\left(0,1\right)\)</span>. שנית, בהחלט <strong>ייתכן</strong> שהשטיק הזה של ה-<span class="math">\(999\)</span> יקלקל לי את טיעון ה"שונה בספרה אחת". למשל, אם בניתי עד כה את <span class="math">\(d=0.44\dots\)</span> והמספר הבא שאני תוקף הוא <span class="math">\(0.443999\ldots\)</span>, אז אני אוסיף ל-<span class="math">\(d\)</span> את הספרה <span class="math">\(4\)</span> ואקבל <span class="math">\(d=0.444\ldots\)</span> ש<strong>אינו</strong> שונה מ-<span class="math">\(0.443999\ldots\)</span> בספרה השלישית. כל הטיעון שלי קורס! אבל, למרות ש-<span class="math">\(d\)</span> לא שונה מהמספר הזה בספרה <strong>השלישית</strong>, הוא בהכרח שונה ממנו <strong>בכל יתר הספרות</strong> כי יתר הספרות במספר ההוא הן 9, ואילו אצלי הן 3 ו-4. או במילים פשוטות יותר: מכיוון ש-<span class="math">\(d\)</span> נבנה בצורה כזו שהוא בעל ייצוג יחיד, הוא אוטומטית שונה מכל המספרים <strong>שאינם בעלי ייצוג יחיד</strong>, ונשאר רק לבחון אם הוא שונה מהמספרים שהם כן בעלי ייצוג יחיד.</p>
+<p>אז עם זה סיימנו את האלכסון של קנטור, אבל בעצם זו רק נקודת הפתיחה שלנו למשהו מגניב עוד יותר.</p>
+<h2>משפט קנטור על קבוצת החזקה</h2>
+
+<p>מה שראינו באלכסון של קנטור הוא שיש לפחות <strong>שני</strong> גדלים שונים של אינסוף: זה של <span class="math">\(\mathbb{N}\)</span> וזה של <span class="math">\(\mathbb{R}\)</span>. עכשיו, במחי הוכחה שהיא אפילו עוד יותר קצרה, אני אוכל להראות שיש <strong>אינסוף</strong> גדלים שונים של אינסוף. הנה הטענה: אם <span class="math">\(A\)</span> היא קבוצה <strong>כלשהי</strong> (סופית, לא סופית, לא משנה מה), אז <span class="math">\(\left|A\right|<\left|\mathcal{P}\left(A\right)\right|\)</span> כאשר כאן <span class="math">\(\mathcal{P}\left(A\right)\triangleq\left\{ B\ |\ B\subseteq A\right\} \)</span> היא <strong>קבוצת החזקה</strong> של <span class="math">\(A\)</span> - אוסף כל תתי-הקבוצות של <span class="math">\(A\)</span>. עבור קבוצות סופיות אנחנו יודעים שזה נכון כי יש לנו את השוויון <span class="math">\(\left|\mathcal{P}\left(A\right)\right|=2^{\left|A\right|}\)</span> וכמובן ש-<span class="math">\(n<2^{n}\)</span> לכל מספר טבעי, כולל 0. אבל מה קורה עם קבוצות אינסופיות?</p>
+<p>ראשית, צריך להוכיח ש-<span class="math">\(\left|A\right|\le\left|\mathcal{P}\left(A\right)\right|\)</span> כלומר שיש פונקציה חח"ע מ-<span class="math">\(A\)</span> אל <span class="math">\(\mathcal{P}\left(A\right)\)</span>. את זה קל לעשות: הפונקציה <span class="math">\(f\left(a\right)=\left\{ a\right\} \)</span> עובדת. לכן כל מה שנשאר לעשות הוא להוכיח ש-<span class="math">\(\left|A\right|\ne\left|\mathcal{P}\left(A\right)\right|\)</span> ואת זה הוכיח קנטור באמצעות טיעון שמאוד מזכיר את טיעון האלכסון שלו, אבל יש מצב שבמבט ראשון ייראה לא קשור בעליל.</p>
+<p>ובכן, קנטור אומר את הדבר הבא: בואו ניקח פונקציה <span class="math">\(f:A\to\mathcal{P}\left(A\right)\)</span> <strong>כלשהי</strong>, ונוכיח כי <span class="math">\(f\)</span> אינה יכולה להיות על. כלומר, אנחנו רוצים לבנות איבר <span class="math">\(D\in\mathcal{P}\left(A\right)\)</span> כך ש-<span class="math">\(f\left(a\right)\ne D\)</span> לכל <span class="math">\(a\in A\)</span>. כיצד נעשה זאת? נגדיר את <span class="math">\(D\)</span> בצורה קצת מחוכמת שמתבססת על <span class="math">\(f\)</span>: <span class="math">\(D\triangleq\left\{ a\in A\ |\ a\notin f\left(a\right)\right\} \)</span>. כלומר, <span class="math">\(D\)</span> כוללת את כל אברי <span class="math">\(A\)</span> שאינם שייכים לקבוצה שמתקבלת מההפעלה של <span class="math">\(f\)</span> עליהם - האיברים שאינם שייכים <strong>לתמונה</strong> שלהם.</p>
+<p>עכשיו, אומר קנטור, בואו נניח בשלילה לרגע שיש <span class="math">\(d\in A\)</span> כך ש-<span class="math">\(f\left(d\right)=D\)</span>. מה קורה כעת? יש שתי אפשרויות:</p>
+<ol> <li>אם <span class="math">\(d\in D\)</span> אז על פי הגדרת <span class="math">\(D\)</span>, האיבר <span class="math">\(d\)</span> צריך לקיים את קריטריון השייכות ל-<span class="math">\(D\)</span>, כלומר לקיים <span class="math">\(d\notin f\left(d\right)\)</span>. אבל <span class="math">\(f\left(d\right)=D\)</span>, כלומר קיבלנו <span class="math">\(d\notin D\)</span> בסתירה לנקודת המוצא שלנו.</li>
+
+
+<li>אם לעומת זאת <span class="math">\(d\notin D\)</span> אז מכיוון ש-<span class="math">\(D=f\left(d\right)\)</span> קיבלנו ש-<span class="math">\(d\notin f\left(d\right)\)</span>. זה אומר ש-<span class="math">\(d\)</span> מקיימת את הקריטריון שמגדיר את <span class="math">\(D\)</span>, ולכן <span class="math">\(d\in D\)</span> - שוב, בסתירה לנקודת המוצא שלנו.</li>
+
+</ol>
+
+<p>מכיוון שבשני המקרים הגענו לסתירה, המסקנה היא שההנחה שלנו שבכלל קיימת <span class="math">\(d\in A\)</span> כך ש-<span class="math">\(f\left(d\right)=D\)</span> אינה נכונה, מה שמסיים את ההוכחה: הראינו ש-<span class="math">\(D\)</span> לא שייכת לתמונה של <span class="math">\(f\)</span> ולכן <span class="math">\(f\)</span> אינה על, ומכיוון ש-<span class="math">\(f\)</span> הייתה פונקציה כלשהי, המסקנה היא שלא קיימת פונקציה חח"ע ועל מ-<span class="math">\(A\)</span> אל <span class="math">\(\mathcal{P}\left(A\right)\)</span>.</p>
+<p>יש <strong>המון</strong> שאלות שאני מרגיש שצצות בעקבות ההוכחה הזו. מעבר ל"מה לכל הרוחות" שהרגשתי בפעם הראשונה שראיתי אותה, הנה שאלות קונקרטיות יותר:</p>
+<ol> <li>למה זה מזכיר לנו בצורה חשודה את הפרדוקס של ראסל?</li>
+
+
+<li>איך זה בכלל קשור לאלכסון של קנטור?</li>
+
+
+<li>רגע, כמה אינסופים בכלל יש?</li>
+
+</ol>
+
+<p>בואו נתחיל מ-3. משפט קנטור נותן לנו שיטה לבנות סדרה אינסופית של אינסופים: <span class="math">\(\left|\mathbb{N}\right|<\left|\mathcal{P}\left(\mathbb{N}\right)\right|<\left|\mathcal{P}\left(\mathcal{P}\left(\mathbb{N}\right)\right)\right|<\ldots\)</span>. יש בתורת הקבוצות סימון פורמלי לגדלים הללו: <span class="math">\(\left|\mathbb{N}\right|=\beth_{0}\)</span> (כן, זו האות העברית ב', בפונט מתמטי מוזר) ו-<span class="math">\(\left|\mathcal{P}\left(\mathbb{N}\right)\right|=\beth_{1}\)</span> ו-<span class="math">\(\left|\mathcal{P}\left(\mathcal{P}\left(\mathbb{N}\right)\right)\right|=\beth_{2}\)</span> וכן הלאה: קיבלנו סדרה אינסופית. מכיוון שיש לנו התאמה חח"ע ועל בין <span class="math">\(\mathbb{N}\)</span> ובין קבוצת הבתים הזו, הראינו שיש אינסוף "קטן" של קבוצות אינסופיות. אבל בפועל <strong>זו מראית עין מטעה</strong> כי יש <strong>הרבה יותר</strong> קבוצות אינסופיות שעדיין לא דיברתי עליהן ולא ברור לנו איך אפשר "לבנות" בכלל. פורמלית האינסוף של "אוסף כל האינסופים" הולך להיות <strong>כל כך גדול</strong> שאוסף כל האינסופים הזה לא יוכל להיות קבוצה. אבל על זה אי אפשר לדבר פורמלית כרגע אז נעזוב את זה.</p>
+<p>שנית, זה מזכיר בצורה חשודה את הפרדוקס של ראסל כי <strong>ככה ראסל גילה את הפרדוקס של ראסל</strong> - על ידי זה שהוא קרא את ההוכחה של קנטור וניסה לשחק איתה. אבל בניגוד לפרדוקס של ראסל, ההוכחה של קנטור לא יוצרת פרדוקס במתמטיקה כי הקבוצה <span class="math">\(D\triangleq\left\{ a\in A\ |\ a\notin f\left(a\right)\right\} \)</span> הוגדרה בצורה תקינה פורמלית, על ידי לקיחת קבוצה קיימת <span class="math">\(A\)</span> וגזירת תת-קבוצה שלה באמצעות קריטריון קונקרטי כלשהו.</p>
+<p>לבסוף, איך זה קשור לאלכסון של קנטור? כאן לא היו לנו מספרים ממשיים, או אלכסון, או שום דבר. אבל אני רוצה שנשתכנע שזו בעצם אותה הוכחה בדיוק על ידי כך שנזהה את "רוח" ההוכחה - מה שמשתמשים בו תמיד גם בטיעוני לכסון מתוחכמים הרבה יותר.</p>
+<h2>מה זה בעצם לכסון?</h2>
+
+<p>ובכן, בואו ננסה להציג טיעון "לכסון" בצורה כללית ונראה איך הוא בא לידי ביטוי בשתי ההוכחות הללו. בטיעון "לכסון" יש לנו שתי קבוצות, <span class="math">\(A\subseteq B\)</span> ואנחנו רוצים להוכיח ש-<span class="math">\(A\ne B\)</span> על ידי בניה של איבר של <span class="math">\(B\)</span> שאינו שייך ל-<span class="math">\(A\)</span>.</p>
+<p>בהוכחה של האלכסון של קנטור, <span class="math">\(A\)</span> הייתה <span class="math">\(f\left(\mathbb{N}\right)\)</span> - קבוצת כל המספרים שסימנתי בתור <span class="math">\(\left\{ a_{0},a_{1},a_{2},\ldots\right\} \)</span> ו-<span class="math">\(B\)</span> הייתה <span class="math">\(\left(0,1\right)\)</span>.</p>
+<p>בהוכחה של המשפט <span class="math">\(\left|X\right|<\left|\mathcal{P}\left(X\right)\right|\)</span> (שיניתי לאיקס כדי לא להתנגש עם <span class="math">\(A\)</span>), הקבוצה <span class="math">\(A\)</span> היא הקבוצה <span class="math">\(f\left(X\right)\)</span> - כל התמונות של הפעלת <span class="math">\(f\)</span> על אברי <span class="math">\(X\)</span>, ו-<span class="math">\(B\)</span> הייתה <span class="math">\(\mathcal{P}\left(X\right)\)</span>.</p>
+<p>בשני המקרים הללו הקבוצה <span class="math">\(A\)</span> נבחרת בתור "התמונה של פונקציה שאנחנו רוצים להראות שאינה על" אבל יש טיעוני לכסון אחרים (למשל בתורת החישוביות) שבהן לא רוצים להראות שפונקציה היא על אלא שקבוצה כלשהי מוכלת ממש באחרת ("כל הפונקציות שאפשר לחשב בזמן פולינומי הן תת-קבוצה ממש של כל הפונקציות שאפשר לחשב בזמן אקספוננציאלי") ולכן הניסוח שלי.</p>
+<p>עכשיו, הרעיון הוא שכדי להוכיח ש-<span class="math">\(A\ne B\)</span> אנחנו בונים איבר ספציפי <span class="math">\(b\in B\)</span> בצורה כזו שהוא יהיה שונה מכל אברי <span class="math">\(A\)</span>. כדי לעשות את זה אנחנו מנצלים <strong>חופש בחירה</strong> שיש לנו בבניה של אברי <span class="math">\(B\)</span>. אפשר לחשוב על אברי <span class="math">\(B\)</span> כבעלי "תכונות" מסויימות, שאפשר לשלוט עליהן בצורה בלתי תלויה פחות או יותר, וכשאנחנו בונים את <span class="math">\(b\)</span> אז לכל <span class="math">\(a\in A\)</span>, אנחנו מהנדסים את אחת מהתכונות של <span class="math">\(b\)</span> כדי שתהיה שונה מאותה התכונה אצל <span class="math">\(a\)</span>.</p>
+<p>באלכסון של קנטור, <span class="math">\(b\)</span> היה האיבר שכינתי <span class="math">\(d=0.d_{0}d_{1}d_{2}\ldots\)</span> וה"תכונות" הן פשוט הספרות של <span class="math">\(d\)</span>. את <span class="math">\(d_{0}\)</span> הינדסתי כדי להיות שונה מ-<span class="math">\(a_{0}\)</span>, אז <span class="math">\(d_{1}\)</span> כדי להיות שונה מ-<span class="math">\(a_{1}\)</span> וכן הלאה. שימו לב שלא היה לי חופש בחירה <strong>מוחלט</strong> של הספרות <span class="math">\(d_{i}\)</span> הללו - נזהרתי לא להשתמש ב-0 או 9 כדי לא להתנגש בתופעה הקטנונית והמצערת של <span class="math">\(0.999\ldots=1\)</span>.</p>
+<p>במשפט על קבוצת החזקה, <span class="math">\(b\)</span> היה הקבוצה <span class="math">\(D\)</span> שבניתי וה"תכונות" היו האיברים של <span class="math">\(D\)</span>. לכל <span class="math">\(x\in X\)</span>, ה"תכונה" הייתה השאלה האם <span class="math">\(x\in D\)</span> או <span class="math">\(x\notin D\)</span>, ואת זה באמת שיכלתי לבחור באופן בלתי תלוי לכל <span class="math">\(x\)</span>.</p>
+<p>עכשיו, נקודה שכדאי לשים אליה לב היא שבשתי ההוכחות, הייתה לי דרך כלשהי <strong>לאנדקס</strong> את האיברים של <span class="math">\(A\)</span>, והתבססתי על שיטת האינדקס הזו כשבניתי את <span class="math">\(b\)</span>. באלכסון של קנטור, <span class="math">\(A=\left\{ a_{0},a_{1},a_{2},\ldots\right\} \)</span> והאינדקסים של האיברים הם פשוט מספרים טבעיים. נעזרתי את זה כשבניתי את <span class="math">\(d=0.d_{0}d_{1}d_{2}\ldots\)</span>: השתמשתי <strong>באותה קבוצת אינדקסים</strong> כדי לאנדקס את <strong>הספרות</strong> של <span class="math">\(d\)</span>. שימו לב שזה לא מובן מאליו: יצרנו כאן קשר בין האינדקסים של <strong>אברים</strong> של <span class="math">\(A\)</span> ובין האינדקסים של <strong>הספרות שמרכיבות</strong> את <span class="math">\(d\)</span>.</p>
+<p>בהוכחה של המשפט עם קבוצת החזקה, ה"אינדקסים" היו האיברים של <span class="math">\(X\)</span>. כזכור, הגדרתי את <span class="math">\(A\)</span> בתור <span class="math">\(f\left(X\right)\)</span>, כלומר כל איבר של <span class="math">\(A\)</span> היה קבוצה מהצורה <span class="math">\(f\left(x\right)\)</span> עבור <span class="math">\(x\in X\)</span>, ואני ניצלתי את האינדקס הזה כדי לבנות קבוצה <span class="math">\(D\)</span> כך ש-<span class="math">\(x\in D\iff x\notin f\left(x\right)\)</span>, כך ש-<span class="math">\(D\)</span> (הקבוצה שאני בונה) ו-<span class="math">\(f\left(x\right)\)</span> (הקבוצה שמאונדקסת על ידי <span class="math">\(x\)</span>) נבדלו ביניהן בתכונה "<span class="math">\(x\)</span> שייך אלי".</p>
+<p>אני מקווה שהדמיון בין שתי ההוכחות ברור יותר עכשיו, אבל אם אני מתפאר כל כך בכלליות של שיטת הלכסון, אולי כדאי לי להציג <strong>עוד</strong> דוגמא או שתיים לפני שאני בורח.</p>
+<h2>עוד דוגמאות ללכסונים</h2>
+
+<p>אני רוצה לתת עוד דוגמא או שתיים לאופן שבו משתמשים בכלי של לכסון כדי להוכיח שקבוצה כלשהי היא גדולה יותר מהמספרים הטבעיים. לשם כך אני אסתכל על קבוצת ה<strong>סדרות</strong> של טבעיים: קבוצת הפונקציות <span class="math">\(f:\mathbb{N}\to\mathbb{N}\)</span>, ואקח ממנה תת-קבוצות מסוימות.</p>
+<p>בדוגמא הראשונה שלי, <span class="math">\(B\)</span> היא קבוצת הסדרות של טבעיים שבה במקומות <strong>האי-זוגיים</strong> יש תמיד 42. למה? ככה. כדי להקשות. פורמלית, <span class="math">\(B=\left\{ f\in\mathbb{N}^{\mathbb{N}}\ |\ \forall n\in\mathbb{N}:f\left(2n+1\right)=42\right\} \)</span>. טיעון לכסון שמטרתו להוכיח ש-<span class="math">\(\left|\mathbb{N}\right|\ne\left|B\right|\)</span> מתחיל כך: ניקח פונקציה כלשהי <span class="math">\(g:\mathbb{N}\to B\)</span> ונוכיח שאינה חח"ע. נסמן <span class="math">\(A=g\left(\mathbb{N}\right)=\left\{ f_{0},f_{1},f_{2},\ldots\right\} \)</span> - הנה יש לנו "אינדוקס" של אברי <span class="math">\(A\)</span> כמו קודם. עכשיו אני אבנה פונקציה חדשה, <span class="math">\(h\in B\)</span>, בצורה שמבטיחה ש-<span class="math">\(h\ne f_{n}\)</span> לכל <span class="math">\(n\in\mathbb{N}\)</span>.</p>
+<p>הדבר ה"טבעי" היה אולי להגדיר כך: <span class="math">\(h\left(n\right)=\begin{cases} 4 & f_{n}\left(n\right)\ne4\\ 3 & f_{n}\left(n\right)=4 \end{cases}\)</span>. זה מאוד מתאים לאלכסון של קנטור שראינו קודם. זה גם מאוד <strong>שגוי</strong> כי אין לנו חופש בחירה כזה כשאנחנו בונים את <span class="math">\(h\)</span>. כזכור, היעד שלנו הוא שיתקיים <span class="math">\(h\in B\)</span> וכדי שזה יקרה, על ערכים <strong>אי זוגיים</strong> אני חייב להגדיר את <span class="math">\(h\)</span> להחזיר 42.</p>
+<p>אם כך, לכאורה אני בצרות! איך אני אוכל להבטיח ש-<span class="math">\(h\)</span> שונה מ-<span class="math">\(f_{1}\)</span> אם אני לא יכול להגדיר אותה על <span class="math">\(1\)</span> איך שבא לי?! אם <span class="math">\(h\left(1\right)=f_{1}\left(1\right)=42\)</span>, כל טיעון האלכסון של קנטור נהרס! הו לא!</p>
+<p>כמובן שבפועל זה מכשול זניח שקל מאוד לעקוף. אני <strong>עדיין</strong> אשתמש באינדקס של <span class="math">\(f_{n}\)</span>; אני פשוט אכפול אותו ב-2:</p>
+<p><span class="math">\(h\left(n\right)=\begin{cases} 42 & n=2k+1\\ 4 & n=2k\wedge f_{k}\left(n\right)\ne4\\ 3 & n=2k\wedge f_{k}\left(n\right)\ne4 \end{cases}\)</span></p>
+<p>מה עשיתי פה? כש-<span class="math">\(h\)</span> מקבלת קלט, קודם כל היא בודקת אם הוא זוגי או לא. אם הוא אי זוגי, אין לה ברירה - היא מחזירה 42. אם הוא זוגי, היא <strong>מחלקת אותו ב-</strong><strong>2</strong> והתוצאה שהיא מקבלת היא האינדקס של ה-<span class="math">\(f\)</span> שהיא "תתקוף" באמצעות הקלט <span class="math">\(n\)</span>. שימו לב שאני מגדיר את <span class="math">\(h\left(n\right)\)</span> כך ש-<span class="math">\(h\left(n\right)\ne f_{k}\left(n\right)\)</span> - כלומר, ש-<span class="math">\(h\)</span> ו-<span class="math">\(f_{k}\)</span> יבדלו זו מזו במקום ה-<span class="math">\(n\)</span>-י. אם הייתי מגדיר <span class="math">\(h\left(n\right)\ne f_{k}\left(k\right)\)</span> אז מה שיש בצד ימין היה מזכיר יותר את האלכסון ה"קלאסי" של קנטור, אבל הוא גם לא היה אומר שום דבר - אם <span class="math">\(n\ne k\)</span> אין שום דבר מעניין שאפשר להסיק <span class="math">\(h\left(n\right)\ne f_{k}\left(k\right)\)</span>; אי אפשר להסיק מזה <span class="math">\(h\ne f_{k}\)</span>.</p>
+<p>הדוגמא הזו היא המחשה לסיבה שבגללה אני לא אוהב שמדברים על אלכסון ויזואלי בהוכחת האלכסון של קנטור - אם ננסה לכתוב את רשימת הערכים של הפונקציות, כמו בטבלה היפה שציירתי למעלה עבור האלכסון, נגלה שמה ש-<span class="math">\(h\)</span> "תוקפת" הם ערכים שמסודרים במין אלכסון עקום שכזה, עם שיפוע ששונה מ-45 מעלות - ויש דוגמאות שבהן זה עוד יותר מתחרבש.</p>
+<p>נעבור לדוגמא השניה שלי. בדוגמא הזו, <span class="math">\(B\)</span> תהיה קבוצת הסדרות של טבעיים שהן <strong>מונוטוניות עולות</strong>. סדרה <span class="math">\(f\)</span> היא מונוטונית עולה אם לכל <span class="math">\(n<m\)</span> מתקיים <span class="math">\(f\left(n\right)<f\left(m\right)\)</span> - או במילים אחרות, לכל שני איברים סמוכים בסדרה, הראשון קטן מהשני. כמקודם, הטיעון האלכסוני מגיע לכך שיש לי קבוצה <span class="math">\(\left\{ f_{0},f_{1},\ldots\right\} \)</span> של סדרות כאלו ואני רוצה לבנות אחת חדשה <span class="math">\(h\)</span> ששונה מהן.</p>
+<p>הפעם הבניה <span class="math">\(h\left(n\right)=\begin{cases} 4 & f_{n}\left(n\right)\ne4\\ 3 & f_{n}\left(n\right)=4 \end{cases}\)</span> לא תעבור כי <span class="math">\(h\)</span> לא תהיה מונוטונית. מה שטוב בדרישת המונוטוניות הזו הוא בכך שהיא קצת מקלקלת לי את ה<strong>אי-תלות</strong> בין ערכים שונים של <span class="math">\(h\)</span>. אם נעיף מבט בתיאור הכללי של של שיטת הלכסון נראה שכתבתי ניסוח מאוד מעורפל: "אפשר לחשוב על אברי <span class="math">\(B\)</span> כבעלי "תכונות" מסויימות, שאפשר לשלוט עליהן בצורה בלתי תלויה <strong>פחות או יותר</strong>". עכשיו אנחנו ב"פחות" הזה. אבל אין סיבה שזה יעצור אותנו - כל מה שאנחנו צריכים הוא שכל איבר יהיה גדול יותר מהקודם <strong>וגם</strong> מהאיבר המקביל אצל <span class="math">\(f\)</span>. אז אני אשתמש בסימון <span class="math">\(h\left(-1\right)=0\)</span>, וכעת אגדיר <span class="math">\(h\left(n\right)=h\left(n-1\right)+f_{n}\left(n\right)+1\)</span>. כאן אפילו לא צריך חלוקה למקרים.</p>
+<p>מה קורה פה? ראשית, בגלל שאנחנו מוסיפים 1, אז <span class="math">\(h\left(n\right)>f_{n}\left(n\right)\)</span> ולכן <span class="math">\(h\ne f_{n}\)</span>. שנית, בגלל אותה תוספת 1, אנחנו מקבלים <span class="math">\(h\left(n\right)>h\left(n-1\right)\)</span> ולכן הסדרה מונוטונית עולה. זה מסיים את ההוכחה. למעשה, זה טיעון כל כך פשוט שלא ברור למה באלכסון המקורי של קנטור לא הגדרתי <span class="math">\(d_{n}=a_{n}^{n}+1\)</span>, אבל התשובה פשוטה: שם ה-<span class="math">\(d\)</span>-ים היו <strong>ספרות</strong> בייצוג עשרוני, כלומר היו מוגבלים להיות בין 0 ל-9. כאן אין לי הגבלה כזו.</p>
+<h2>ועכשיו למשהו לא קשור בעליל - פונקציות שאינן ניתנות לחישוב</h2>
+
+<p>אני לא יכול לסיים פוסט על לכסון בלי לגלוש לתחום שאהוב עלי במיוחד ולכסונים מככבים גם בו - תורת החישוביות. מכיוון ששולי הפוסט הזה צרים מלהכיל מבוא מלא לחישוביות, הנה התקציר: במרכז מה שעושים בחישוביות נמצא <strong>מודל חישובי</strong> כלשהו. לעתים קרובות מדברים על משהו שנקרא <strong>מכונת טיורינג</strong> אבל אני לא צריך את זה פה ואדבר על תוכניות מחשב בשפה קונקרטית כלשהי - נאמר, פייתון. לא צריך להכיר את פייתון בשביל המשך הטיעון - רק לדעת שכל תוכנית מחשב כזו אפשר <strong>לקודד</strong> באמצעות מספר טבעי (זה האופן שבו קבצי טקסט נשמרים בזכרון של המחשב, פחות או יותר). הקידוד הזה הוא חד-חד-ערכי ועל ולכן אפשר לסמן את קבוצת כל תוכניות הפייתון ב-<span class="math">\(\left\{ M_{0},M_{1},M_{2},\ldots\right\} \)</span>.</p>
+<p>עכשיו, הרבה תוכניות פייתון הן "ג'יבריש" - יש בהן איזו שגיאת כתיב או משהו דומה ואי אפשר בכלל להריץ אותן. הן לא מעניינות אותי. תוכניות אחרות, כשמריצים אותן, עושות כל מני דברים מגניבים כמו סימולציה של חישוב קוונטי וכדומה - גם זה לא מעניין אותי. כל מה שמעניין אותי הוא תוכניות שפועלות כך: מקבלות כקלט מספר טבעי, רצות עליו ואם סיימו - עונות "כן" או "לא". אלו תוכניות שבמהותן <strong>מזהות</strong> קבוצה של מספרים - למשל, יש תוכניות שיודעות לזהות את קבוצות המספרים הראשוניים, הזוגיים, מספרי פרמה ומה שתרצו. על תוכניות ש<strong>לא</strong> מתאימות לתבנית הזו - תוכניות ג'יבריש וסימולטורים קוונטים וכל היתר - אני אחשוב בתור תוכניות שפשוט אומרות "לא" על הכל ולכן "מזהות" את הקבוצה הריקה של טבעיים.</p>
+<p>נניח ש-<span class="math">\(L\)</span> היא קבוצה של מספרים טבעיים ו-<span class="math">\(M\)</span> היא תוכנית מחשב כלשהי. אני אומר ש-<span class="math">\(M\)</span> <strong>מכריעה</strong> את <span class="math">\(L\)</span> אם:</p>
+<ul> <li>לכל <span class="math">\(a\in L\)</span>, התוכנית <span class="math">\(M\)</span> עוצרת על הקלט <span class="math">\(a\)</span> עם התשובה "כן"</li>
+
+
+<li>לכל <span class="math">\(a\notin L\)</span> התוכנית <span class="math">\(M\)</span> עוצרת על הקלט <span class="math">\(a\)</span> עם התשובה "לא"</li>
+
+</ul>
+
+<p>ועכשיו בואו נסבך: אני אומר ש-<span class="math">\(M\)</span> <strong>מקבלת</strong> את <span class="math">\(A\)</span> אם:</p>
+<ul> <li>לכל <span class="math">\(a\in L\)</span>, התוכנית <span class="math">\(M\)</span> עוצרת על הקלט <span class="math">\(a\)</span> עם התשובה "כן"</li>
+
+
+<li>לכל <span class="math">\(a\notin L\)</span> התוכנית <span class="math">\(M\)</span> עוצרת על הקלט <span class="math">\(a\)</span> עם התשובה "לא" <strong>או שאינה עוצרת בכלל</strong></li>
+
+</ul>
+
+<p>כלומר, "לקבל" את <span class="math">\(L\)</span> זה משהו שקצת יותר קל לעשות מאשר "להכריע" את <span class="math">\(L\)</span>, כי על קלטים שלא שייכים ל-<span class="math">\(L\)</span> אפשר פשוט לא לעצור. האם יש הבדל מהותי בין שתי ההגדרות? כלומר, האם קיימת קבוצה <span class="math">\(L\)</span> שאפשר <strong>לקבל</strong> אבל אי אפשר <strong>להכריע</strong>? התשובה חיובית ואני הולך להראות איך מוכיחים את זה בלכסון.</p>
+<p>הנה איך שמבנה הלכסון שהצגתי קודם עובד כאן: <span class="math">\(B\)</span> שלי תהיה קבוצת כל קבוצות הטבעיים <span class="math">\(L\)</span> שאפשר <strong>לקבל</strong> ואילו <span class="math">\(A\subseteq B\)</span> תהיה קבוצת כל קבוצות הטבעיים <span class="math">\(L\)</span> שאפשר <strong>להכריע</strong>. יש לי דרך פשוטה לאנדקס את אברי <span class="math">\(A\)</span>: אם אפשר להכריע את <span class="math">\(L\)</span> אז <strong>קיימת</strong> תוכנית <span class="math">\(M\)</span> שמכריעה את <span class="math">\(L\)</span>. כבר ראינו קודם שאפשר למספר את <strong>כל</strong> התוכניות, כך שגם ל-<span class="math">\(M\)</span> הזו יש מספר סידורי כלשהו, <span class="math">\(n\)</span>, כלומר אני מסמן אותה ב-<span class="math">\(M_{n}\)</span>. עכשיו אני אבנה קבוצה <span class="math">\(D\)</span> של טבעיים באופן הבא: <span class="math">\(D\)</span> תכיל את ה-<span class="math">\(n\)</span>-ים ש-<span class="math">\(M_{n}\)</span> אומרת עליהם "לא".</p>
+<p>הנה איך נובע מההגדרה הזו שלא קיימת מכונה <span class="math">\(M\)</span> שמכריעה את <span class="math">\(D\)</span>: נסתכל על המכונה <span class="math">\(M_{n}\)</span>, עבור <span class="math">\(n\)</span> כלשהו. מה המכונה <span class="math">\(M_{n}\)</span> עושה על הקלט <span class="math">\(n\)</span>? ייתכן ש-<span class="math">\(M_{n}\)</span> <strong>בכלל לא עוצרת</strong> על הקלט הזה, אבל אז <span class="math">\(M_{n}\)</span> היא לא מכונה שמכריעה קבוצות; מכונה שמכריעה קבוצות חייבת לעצור על כל קלט. מכיוון שכל מה שאנחנו רוצים לעשות הוא להראות ש-<span class="math">\(D\)</span> לא מוכרעת על ידי <span class="math">\(M_{n}\)</span>, סיימנו במקרה הזה. נשארנו עם המקרה שבו <span class="math">\(M_{n}\)</span> כן עוצרת על <span class="math">\(n\)</span>. במקרה הזה, אם <span class="math">\(M_{n}\)</span> אומרת "לא" אז <span class="math">\(n\in D\)</span> על פי הגדרת <span class="math">\(D\)</span>. אם לעומת זאת <span class="math">\(M_{n}\)</span> אומרת "כן" אז <span class="math">\(n\notin D\)</span> על פי הגדרת <span class="math">\(D\)</span>. בכל אחד משני המקרים הללו, <span class="math">\(M_{n}\)</span> עונה את התשובה <strong>הלא נכונה</strong> מבחינת <span class="math">\(D\)</span>, ולכן הקבוצה ש-<span class="math">\(M_{n}\)</span> מכריעה איננה <span class="math">\(D\)</span>.</p>
+<p>האם סיימנו? עוד לא, כי עדיין צריך להראות ש-<span class="math">\(D\)</span> שלנו שייכת ל-<span class="math">\(B\)</span> - כלומר, ש-<span class="math">\(D\)</span> היא שפה שאפשר <strong>לקבל</strong>. בשביל זה צריך להציג תוכנית מחשב שעושה את זה בפועל, ואת זה אעשה בנפנוף ידיים (כלומר, לא אכתוב פה קוד פייתון). הרעיון הוא פשוט: התוכנית שלנו תקבל קלט <span class="math">\(n\)</span>. בעזרת הקלט הזה היא תבנה את הקוד של תוכנית המחשב <span class="math">\(M_{n}\)</span>, תריץ את <span class="math">\(M_{n}\)</span> על <span class="math">\(n\)</span> ו<strong>אם</strong> <span class="math">\(M_{n}\)</span> עצרה ואמרה "לא", התוכנית שלנו תגיד "כן". אם <span class="math">\(M_{n}\)</span> עצרה ואמרה "כן" התוכנית שלנו תגיד "לא", ואם <span class="math">\(M_{n}\)</span> לא עצרה גם התוכנית שלנו מן הסתם לא תעצור (כי היא מריצה את <span class="math">\(M_{n}\)</span> עד אינסוף ולא יודעת מתי "להתייאש"). קל לראות שהתוכנית שלנו אכן מקבלת את <span class="math">\(D\)</span> על פי ההגדרה שהצגתי.</p>
+<p>איך נפנוף הידיים שלי בא לידי ביטוי? ראשית, בהנחה שאפשר לשחזר את <span class="math">\(M_{n}\)</span> מתוך <span class="math">\(n\)</span> - כדי להסביר את זה צריך להיכנס לפרטים של איך בדיוק מקודדים תוכניות מחשב - לא אעשה את זה כאן, וממילא זה מה שעורכי טקסט עושים כשהם טוענים תוכניות מחשב מקבצים. שנית, בהנחה שתוכנית מחשב שלי יודעת להריץ תוכנית מחשב אחרת, שנתונה לה כקלט - גם את זה קל לעשות במחשבים מודרניים. מתי הדברים הללו לא היו מובנים מאליהם? בשנת 1936, כשאלן טיורינג פרסם את המאמר שלו ``On computable numbers, with an application to the Entscheidungsproblem'' שבו הוא:</p>
+<ol> <li>הציג את המודל של מכונת טיורינג, שהיא סוג של מחשב מאוד פשוט לתכנות.</li>
+
+
+<li>הראה איך אפשר לקודד את המודל הזה באמצעות מספרים טבעיים כך שאפשר יהיה "לשחזר" את המכונה מתוך הקידוד.</li>
+
+
+<li>הראה איך אפשר להריץ מכונה בהינתן קידוד שלה (מה שיודע לבצע הרצה כזו נקרא "מכונת טיורינג אוניברסלית").</li>
+
+</ol>
+
+<p>על הרעיונות המאוד לא טריוויאליים לשעתו הללו הוא הרכיב את טיעון הלכסון, שכבר היה נפוץ יחסית בתקופה הזו וקורט גדל השתמש בוריאציה עליו בהוכחת משפטי אי השלמות שלו כמה שנים קודם, והגיע לתוצאה שהיא פחות או יותר מה שהראיתי כאן. למעשה, טיורינג עשה קצת יותר מזה - הוא לא סתם הוכיח ש<strong>קיימת</strong> קבוצה שאי אפשר להכריע אלא נתן אחת קונקרטית מאוד ("בעיית העצירה"). היתרון בהוכחה האלכסונית שהצגתי פה הוא שקל להכליל אותה לעוד סיטואציות: למשל, קבוצות שצריך להכריע תחת מגבלת זמן מסויימת אל מול קבוצות שעבורן אין מגבלת זמן שכזו.</p>
+<p>בזאת סיימנו את מה שיש לי להגיד כרגע על לכסונים - בפוסט הבא של תורת הקבוצות נחזור לדבר על דברים קונקרטיים יותר, כמו המספרים הרציונליים: מה בעצם קורה איתם? מה הגודל האינסופי שלהם? הרי יש קטע כזה שבין כל שני מספרים ממשיים יש מספר רציונלי, אז בוודאי צריך להתקיים <span class="math">\(\left|\mathbb{Q}\right|=\left|\mathbb{R}\right|\)</span>. נכון? נכון? נכון? לא נכון...?</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2020/10/31/denumerable_sets/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת הקבוצות - קבוצות בנות מניה</span>
+            </a>
+            
+            
+            
+            <a href="/2020/10/09/what_are_infinite_sets/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">תורת הקבוצות - מה זו בעצם קבוצה אינסופית?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

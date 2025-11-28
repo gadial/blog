@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה זה בעצם המספרים הממשיים? (חלק א&#39;: השיטה העשרונית) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז מה זה בעצם המספרים הממשיים? (חלק א&#39;: השיטה העשרונית)</h1>
+            <div class="post-meta">
+                <span class="date">2024-08-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מספרים ממשיים.html">מספרים ממשיים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><strong>המספרים הממשיים</strong> הם אחד מהדברים המרכזיים במתמטיקה. הם מופיעים בערך בכל מקום. בבית הספר משתמשים בהם כל הזמן באופן מובלע; כשמתחילים ללמוד מתמטיקה ברמת אוניברסיטה הם צצים מייד בתור העולם המרכזי שבו מתרחש החשבון הדיפרנציאלי והאינטגרלי, בתור בסיס למה שקורה באלגברה לינארית, בתור קבוצה מעניינת במיוחד בתורת הקבוצות, וכו' וכו' וזה עוד בלי שנתחיל לדבר על השימושים שלהם בפיזיקה ויתר המדעים.</p>
+<p>רק דבר אחד לא ממש ברור - <strong>מהם </strong>המספרים הממשיים? במתמטיקה מגדירים כל דבר אפשרי בערך, אז איך הממשיים מוגדרים? מתברר שזה לא כל כך פשוט. יש הגדרה קצרה וקולעת שאני אוהב: <strong>השדה הסדור השלם</strong>. כרגע ההגדרה הזו היא פשוט רצף אקראי של מילים שלא אומר שום דבר ולא ברור מה הקשר בינו לבין מה שכולם מכירים מבית הספר, אז בואו נחזור קודם כל ליסודות ונדבר על מה שכולם יודעים, ואז נראה למה צריך יותר מזה ואיך אפשר לעשות את זה.</p>
+<p>כשאני מבקש מאנשים להגדיר את הממשיים, הגדרה די נפוצה היא "כל המספרים, חוץ מהמרוכבים". זו הגדרה שמשמחת אותי כי אני תמיד אוהב לראות כמה הרבה אנשים מכירים את המספרים המרוכבים, אבל זו לא הגדרה מועילה כל כך עבורנו כי היא מניחה שאנחנו כבר יודעים מה זה כל המספרים ורק צריך לסנן החוצה את אלו הבעייתיים. אז אני לא אדבר פה בכלל על מרוכבים, ולא אניח שאנחנו כבר מכירים ממשיים.</p>
+<p>הגדרה נפוצה אחרת היא "כל המספרים שעל ציר המספרים" ועוד אחזור גם אליה בהמשך כי יש איתה כמה בעיות לטעמי, אבל הברורה ביותר היא שגם פה אנחנו מסבירים מה זה אובייקט מסובך (הממשיים) על ידי הנחה שאנחנו כבר מכירים אובייקט מסובך (ציר המספרים שהוא לכאורה פשוט אבל בפועל ממש לא).</p>
+<p>אז הנה ההגדרה הכי פשוטה ומוכרת שגם עובדת לא רע בפועל: <strong>כל המספרים שאפשר לכתוב בייצוג עשרוני</strong>. בואו נראה כמה דוגמאות לפני שנסביר מה זה בכלל ייצוג עשרוני: <span class="math">\(42\)</span> הוא מספר ממשי. גם <span class="math">\(-13\)</span> הוא מספר ממשי. גם <span class="math">\(0.5\)</span> הוא מספר ממשי (שאנחנו מכירים בתור "חצי"). גם <span class="math">\(1.4142\ldots\)</span> הוא מספר ממשי (שאנחנו מכירים בתור <span class="math">\(\sqrt{2}\)</span>). גם <span class="math">\(3.14159\ldots\)</span> הוא מספר ממשי (שאנחנו מכירים בתור <span class="math">\(\pi\)</span>).</p>
+<p>כל המספרים הללו נכתבים בצורה דומה: סדרה של <strong>ספרות</strong>, כשכל ספרה היא בין 0 ל-9. אנחנו קוראים את הספרות הללו משמאל לימין. לפני הספרות עשוי להופיע הסימן <span class="math">\(-\)</span> שמציין "מינוס" ואומר שהמספר הוא שלילי. בתוך סדרת הספרות עשויה להופיע נקודה (שנקראת "הנקודה העשרונית") וייתכן שבצד ימין של הספרות יופיעו שלוש נקודות, "<span class="math">\(\ldots\)</span>" שהמשמעות שלהן היא קצת טריקית אבל בגדול הן אומרות "ויש עוד ספרות בהמשך אבל נמאס לנו לכתוב אותן". זה הכל, אין עוד דקויות לאיך כותבים מספר בייצוג עשרוני - רק צריך להבין מה הכתיב הזה אומר בכלל.</p>
+<p>פחות או יותר כל שיטה שאני מכיר לכתיבת מספרים מבוססת על כמה "אבני בניין", מספרים פשוטים יחסית שיש לנו סימונים ספציפיים עבורם, ואז כתיבה של מספר מורכב יותר כוללת הוראות איך לקחת את אבני הבניין הללו ולחבר אותן ביחד. דוגמא פשוטה ויפה לזה היא השיטה הרומית, שבה <span class="math">\(I\)</span> הוא הסימן של 1, <span class="math">\(V\)</span> הוא הסימן של 5, <span class="math">\(X\)</span> הוא הסימן של 10 ויש עוד כל מני סימנים. כשכותבים <span class="math">\(XXVIII\)</span> אומרים "קחו פעמיים 10, תוסיפו לזה פעם אחת 5 ושלוש פעמים 1" וככה מקבלים את המספר 28. בשיטה הרומית יש גם התחכמות; כדי לא לכתוב את אותו סימן 4 פעמים ברצף, מרשים סוג של חיסור, כלומר עבור 9 במקום לכתוב <span class="math">\(VIIII\)</span> כותבים <span class="math">\(IX\)</span> כשהעובדה ש-<span class="math">\(I\)</span> בא לפני <span class="math">\(X\)</span> אומרת "במקום לחבר 1 בואו נחסר 1". בייצוג עשרוני למרבה השמחה אין שטיקים כאלה: תמיד מחברים, אין חיסורים ואין שום שטות אחרת.</p>
+<p>"אבני הבניין" בשיטה העשרונית הם המספרים <span class="math">\(1,10,100,1000\)</span> וכן הלאה - חזקות של 10. בשביל לפשט את העניינים אני אכתוב לפעמים <span class="math">\(10^{1}\)</span> במקום 10, <span class="math">\(10^{2}\)</span> במקום 100 וכן הלאה, וכמו כן <span class="math">\(10^{0}\)</span> במקום 1; <a href="https://gadial.net/2018/01/01/zero_power_equals_one/">יש לי פוסט</a> על למה להעלות דברים בחזקת 0 אמור להחזיר 1 אז לא אכנס לזה כאן.</p>
+<p>כשאני כותב מספר בשיטה העשרונית והנקודה העשרונית לא מופיעה, הרעיון הוא זה: הספרה <strong>הימנית ביותר</strong> אומרת כמה פעמים 1 משתתף במספר. הספרה הבאה אחריה לכיוון שמאל אומרת כמה פעמים 10 משתתף במספר, הבאה אחריה מדברת על 100 וכן הלאה. כלומר, כשאני כותב <span class="math">\(42\)</span> הכוונה היא לקחת את 1 ולחבר אותו פעמיים, ואז לקחת את 10 ולחבר אותו 4 פעמים: <span class="math">\(2\times1+4\times10\)</span>. ו-<span class="math">\(103\)</span> פירושו <span class="math">\(3\times1+0\times10+1\times100\)</span>. אני אישית מוצא את סגנון הכתיבה הזה בלתי קריא לחלוטין, עם כל האיקסים והמהומות. אני מעדיף <span class="math">\(3\cdot10^{0}+0\cdot10^{1}+1\cdot10^{2}\)</span> שקצת יותר קל לי לקרוא. מה שאפשר לראות כאן קצת יותר בקלות הוא שהמספר בנוי מסכום של חזקות של 10 שמוכפלות במספרים שהיו הספרות שהופיעו בייצוג העשרוני: בהקשר הזה, המספרים הללו נקראים <strong>המקדמים</strong> של החזקות.</p>
+<p>עם השיטה שהצגתי עד עכשיו אפשר לבנות את כל המספרים <strong>הטבעיים</strong>, שהם המספרים הפשוטים ביותר שאנחנו מכירים - <span class="math">\(1,2,3\)</span> וכן הלאה (גם 0 יכול להיחשב מספר טבעי אבל לא ניכנס לזה) ומסומנים ב-<span class="math">\(\mathbb{N}\)</span>. אני מניח שאנחנו מכירים את המספרים הטבעיים, ואני מניח גם שאנחנו בסדר עם המספרים השליליים. הטבעיים והשליליים יחד עם 0 נקראים <strong>המספרים השלמים</strong> ומסומנים ב-<span class="math">\(\mathbb{Z}\)</span>. בשיטה העשרונית כדי לייצג מספר שלילי מה שעושים הוא כאמור להוסיף סימן מינוס לפניו, כך שאנחנו כבר עכשיו יודעים איך לתאר את כל המספרים השלמים.</p>
+<p>כשמתחילים לדבר על שברים הסיפור מסתבך. בדרך כלל נוח לנו לתאר שברים באמצעות <strong>קו שבר</strong>: את "חצי" אנחנו כותבים בתור <span class="math">\(\frac{1}{2}\)</span> ואת "שליש" בתור <span class="math">\(\frac{1}{3}\)</span> ואת "שלושת-רבעי" בתור <span class="math">\(\frac{3}{4}\)</span> וכן הלאה. בשיטת הכתיבה הזו יש לנו קו - קו השבר - שמעליו יש מספר שלם שנקרא <strong>המונה</strong>, מתחתיו יש מספר שנקרא <strong>המכנה</strong> והאינטואיציה הוא שהמספר שמיוצג בצורה כזו הוא התוצאה של חילוק המונה במכנה. לכן <span class="math">\(\frac{5}{10}\)</span> הוא שיטה אחרת לכתוב <span class="math">\(\frac{1}{2}\)</span>, למשל. זו שיטת כתיב שימושית בצורה יוצאת מן הכלל, וגם במתמטיקה מתקדמת זה האופן שבו בדרך כלל מתארים שברים.</p>
+<p>אם רוצים לתאר שברים בעזרת כתיב עשרוני, אנחנו מסתבכים. אמרנו שכתיב עשרוני עובד עם לחבר חזקות של 10, אבל איזה חזקות של 10 אפשר לחבר בכלל כדי לקבל <span class="math">\(\frac{1}{2}\)</span>? לכאורה החזקה הקטנה ביותר של 10 היא <span class="math">\(10^{0}=1\)</span> שהיא לבדה גדולה מחצי. אז בשביל לקבל שברים צריך להכניס לתמונה סוג חדש של חזקות של 10: חזקות <strong>שליליות</strong>. ההגדרה די פשוטה: אם <span class="math">\(n\)</span> הוא מספר טבעי (בפרט, לא שלילי) אז <span class="math">\(10^{-n}=\frac{1}{10^{n}}\)</span>. כלומר, <span class="math">\(10^{-1}\)</span> הוא עשירית, <span class="math">\(10^{-2}\)</span> הוא מאית וכן הלאה. אם יש לי עשיריות, אני יודע לתאר את חצי: <span class="math">\(5\cdot\frac{1}{10}\)</span> הולך לצאת בדיוק חצי, כמו שראינו. אז כשאני הולך לכתוב את חצי בשיטה העשרונית, אני אשתמש בספרה 5 - אבל איך מסמנים שאני מתחיל להשתמש בחזקות שליליות של 10 במקום בחיוביות?</p>
+<p>כאן נכנסת לתמונה <strong>הנקודה העשרונית</strong>. את חצי כותבים בתור <span class="math">\(0.5\)</span>. מה זה אומר? ה-0 בצד שמאל הוא ספרת האחדות. הנקודה שמימין ל-0 הזה אומרת "כאן מתחילות להופיע חזקות שליליות של 10" וככל שמתקדמים יותר ימינה, מקבלים חזקות שליליות קטנות יותר של 10. ב-<span class="math">\(0.5\)</span> יש רק ספרה אחת, שמייצגת את המקדם של החזקה השלילית <span class="math">\(10^{-1}\)</span>. כלומר, המספר הזה הוא</p>
+<p><span class="math">\(0\cdot10^{0}+5\cdot10^{-1}\)</span></p>
+<p>וכפי שראינו, זה אכן יוצא חצי. זה היה פשוט, אבל מהר מאוד זה מסתבך. כדי לכתוב <span class="math">\(\frac{1}{4}\)</span>, למשל, אני נזקק ל-<span class="math">\(0.25\)</span>, כי</p>
+<p><span class="math">\(2\cdot\frac{1}{10}+5\cdot\frac{1}{100}=\frac{25}{100}=\frac{1}{4}\)</span></p>
+<p>אפשר לחשוב על זה ככה: ראשית שאלתי את עצמי - האם יש מספר טבעי <span class="math">\(a\)</span> כך ש-<span class="math">\(\frac{a}{10}=\frac{1}{4}\)</span>? קל לראות שאין כזה, כי <span class="math">\(a\)</span> צריך לצאת <span class="math">\(2.5\)</span> בעצמו. אז הלכנו אל החזקה הבאה בתור ושאלנו את עצמנו האם יש <span class="math">\(a\)</span> טבעי כך ש-<span class="math">\(\frac{a}{100}=\frac{1}{4}\)</span>. כאן התשובה הייתה חיובית: <span class="math">\(a=25\)</span>. אבל אי אפשר לכתוב מספר שבו המקדם של ספרת המאיות היא 25 כי 25 הוא גדול מ-<span class="math">\(9\)</span>, שהיא הספרה הגדולה ביותר, אז היה הכרח "לפצל" את המספר לסכום. זה קצת מבלבל אבל באמת שלא כזה נורא.</p>
+<p>מה שכן נורא הוא <span class="math">\(\frac{1}{3}\)</span>. הבעיה איתו היא שפשוט <strong>לא קיים</strong> מספר <span class="math">\(a\)</span> שלם כך ש-<span class="math">\(\frac{a}{10}=\frac{1}{3}\)</span>. או <span class="math">\(\frac{a}{100}=\frac{1}{3}\)</span>. או <span class="math">\(\frac{a}{10^{n}}=\frac{1}{3}\)</span> ולא משנה איזו חזקה של <span class="math">\(10\)</span> ניקח. למה? כי נניח ש-<span class="math">\(\frac{a}{10^{n}}=\frac{1}{3}\)</span> כן מתקיים עבור מספר שלם <span class="math">\(a\)</span> כלשהו, אז <span class="math">\(a=\frac{10^{n}}{3}\)</span>, כלומר <span class="math">\(10^{n}\)</span> מתחלק ב-3 <strong>בלי שארית</strong> וזה פשוט לא נכון - כל חזקה של 10 שנחלק ב-3 תחזיר שארית 1. אז יש לנו בעיה. ולמעשה, יש לנו את הבעיה הזו כמעט תמיד, עבור <strong>כל</strong> מכנה שהמספר שבו לא מחלק בלי שארית חזקה כלשהי של 10. ובגלל ש-<span class="math">\(10=2\cdot5\)</span> כש-<span class="math">\(2,5\)</span> ראשוניים, גם קל לאפיין את המספרים הבעייתים: כל מספר שיש לו גורם ראשוני שהוא לא 2 או 5 יהיה בעייתי. כמעט כל המספרים! הדוגמאות הנחמדות של <span class="math">\(\frac{1}{2}\)</span> ושל <span class="math">\(\frac{1}{4}\)</span> (כמו גם <span class="math">\(\frac{1}{5}\)</span> למשל, שיוצא <span class="math">\(0.2\)</span>) הן היוצא מן הכלל. ברוב המוחלט של המקרים פשוט <strong>אי אפשר</strong> לכתוב את השבר בתור סכום סופי של חזקות שליליות של 10.</p>
+<p>אז מה עושים? אה, כאן הכיף מתחיל. משתמשים במספר <strong>אינסופי</strong> של חזקות שליליות של 10. למשל, בהחלט יש מצב שכבר ידעתם ש-<span class="math">\(\frac{1}{3}=0.333\ldots\)</span>. בדור שלי ידענו את זה כי השתעממנו למוות בשיעור מתמטיקה ועשינו דברים אקראיים עם מחשבונים, למשל לחלק 1 ב-3 ולצהול איך המסך של המחשבון התמלא בספרות. אבל מחשבון לא כותב בדרך כלל <span class="math">\(0.333\ldots\)</span>. הוא כותב משהו כמו <span class="math">\(0.333333333\)</span> וזהו. או אולי <span class="math">\(0.3333333334\)</span> אם הוא ממש רוצה לשגע אותנו. אין אצלו את שלוש הנקודות, מה שיוצר אולי אשליה ש-<span class="math">\(\frac{1}{3}=0.33333333\)</span>, אבל זה פשוט לא נכון: למשל, <span class="math">\(0.333=\frac{3}{10}+\frac{3}{100}+\frac{3}{1000}=\frac{333}{1000}\)</span>, והמספר הזה הוא לא <span class="math">\(\frac{1}{3}\)</span>. אם נכפיל אותו ב-3 נקבל <span class="math">\(\frac{999}{1000}\)</span>, לא 1. ואם נכפיל ב-3 את <span class="math">\(\frac{334}{1000}\)</span> נקבל <span class="math">\(\frac{1002}{1000}\)</span>, לא 1. אז לעצור אחרי מספר סופי של 3-ים משאיר אותנו עם <strong>קירוב</strong> של המספר, לא עם המספר עצמו, וגם לשנות את הספרה האחרונה לא יעזור לנו. אנחנו חייבים אינסוף ספרות.</p>
+<p>מה קורה כשיש אינסוף ספרות? ובכן, האינטואיציה היא שמשהו כמו <span class="math">\(0.333\ldots\)</span> הוא הסכום</p>
+<p><span class="math">\(\frac{3}{10}+\frac{3}{100}+\frac{3}{1000}+\ldots\)</span></p>
+<p>שפשוט נמשך עוד ועוד עד אינסוף, מה שבמתמטית מסומן בקיצור בתור <span class="math">\(\sum_{n=1}^{\infty}\frac{3}{10^{n}}\)</span>. זה מה שנקרא <strong>טור אינסופי</strong>. יש במתמטיקה תחום מכובד ומפותח שמטפל בין היתר בטורים אינסופיים - החשבון הדיפרנציאלי והאינטגרלי. במסגרת שלו אפשר להוכיח שהטור <span class="math">\(\sum_{n=1}^{\infty}\frac{3}{10^{n}}\)</span> באמת מתכנס, כלומר שאפשר לייחס ערך מספרי לסכום שלו, וגם אפשר להוכיח שהערך הזה יהיה <span class="math">\(\frac{1}{3}\)</span>. אבל מה זה אומר? שאנחנו נזקקים למתמטיקה מתקדמת למדי כדי להסביר סימון <strong>פשוט</strong>. הרי <span class="math">\(\frac{1}{3}\)</span> זה משהו שאנחנו מכירים מבית הספר היסודי; איך זה הגיוני בכלל שאנחנו נזקקים לחומר של אוניברסיטה כדי להצדיק כתיב עשרוני לאותו מספר? זו שאלה שאני תוהה כמה אנשים בכלל טורחים לשאול את עצמם; הרי רואים גם את השיטה העשרונית, וגם את השטיק של <span class="math">\(0.333\ldots\)</span> בשלב מוקדם יחסית של ההיכרות עם המתמטיקה, ואני חושד שפשוט קל לקבל את זה ש"זה עובד" בלי לפקפק יותר מדי. הפקפוקים מגיעים רק כשאנשים מגיעים לפינות אפלות, כמו השאלה האם <span class="math">\(0.999\ldots\)</span> שווה ל-1 (תשובה: כן, בוודאי, זה נובע ישירות מההגדרה של <span class="math">\(0.999\ldots\)</span> ועוד נחזור לזה בסדרת הפוסטים הזו).</p>
+<p>מה שראינו עד עכשיו עשוי לתת רושם שכשכותבים מספר בייצוג עשרוני אינסופי, מה שקורה הוא פשוט שיש ספרה שחוזרת על עצמה לנצח. בדרך כלל המצב מסובך יותר. אם למשל נחשב את <span class="math">\(\frac{1}{7}\)</span> נגלה ש-<span class="math">\(\frac{1}{7}=0.142857142857\ldots\)</span>, כלומר רצף הספרות <span class="math">\(142857\)</span> חוזר על עצמו לנצח, לא סתם ספרה בודדת. הדרך הטובה ביותר להרגיש "מה קורה כאן" היא באמת לחשב בפועל את <span class="math">\(\frac{1}{7}\)</span> לפי שיטת החילוק הארוך (אני מציג אותה ומראה את החישוב הספציפי הזה <a href="https://gadial.net/2021/03/24/how_to_division/">כאן</a>). בלי להיכנס יותר מדי לפרטים, מה שקורה בחילוק ארוך הוא שהחל משלב מסוים, המשך תהליך החילוק תלוי רק בשארית שיש לנו כרגע, ואם אנחנו למשל מחלקים ב-7 אז השארית הזו תהיה מספר מ-0 עד 6. זה אומר שמתישהו אותה שארית תחזור על עצמה פעמיים, ואז המשך החישוב יהיה חזרה שוב ושוב על מה שקורה בין מופעים עוקבים של השארית הזו. גם אם לא עקבתם, השורה התחתונה היא זו: כשאנחנו מחשבים את הייצוג העשרוני של שבר, הוא תמיד יהיה מחזורי החל ממקום מסויים אחרי הנקודה העשרונית.</p>
+<p>התוצאה הזו יכולה לתת לנו תקווה שבעצם, אפשר לתת ייצוג עשרוני <strong>סופי</strong> לכל מספר. במקום השלוש נקודות המטופשות הללו אפשר פשוט לשים קו מעל הספרות שהולכות לחזור על עצמן. למשל, במקום לכתוב <span class="math">\(0.333\ldots\)</span> לכתוב פשוט <span class="math">\(0.\overline{3}\)</span>. במקום לכתוב <span class="math">\(0.142857142857\ldots\)</span> לכתוב פשוט <span class="math">\(0.\overline{142857}\)</span>, וכן הלאה.</p>
+<p>העניין הוא, שזה באמת נותן לנו רק את השברים. במתמטית "השברים" נקראים <strong>מספרים רציונליים</strong>, מסומנים ב-<span class="math">\(\mathbb{Q}\)</span>, והם קבוצה חשובה ביותר ומרכזית לשלל ענפי המתמטיקה - והם רחוקים מלכלול את כל המספרים שמעניינים אותנו. למשל, <span class="math">\(\sqrt{2}\)</span> הוא <strong>לא</strong> מספר רציונלי (<a href="https://gadial.net/2008/10/31/irrationality_of_square_roots/">כאן</a> אני מדבר על זה) וגם <span class="math">\(\pi\)</span> הוא לא מספר רציונלי. בפרט, זה אומר שאין להם ייצוג מחזורי כשבר עשרוני - אנחנו <strong>חייבים</strong> לכתוב משהו מטופש כמו <span class="math">\(\pi=3.14159\ldots\)</span> כששלוש הנקודות אומרות "כן, ומכאן והלאה זה נמשך, אבל זה לא נמשך באופן מחזורי ובתכל'ס פשוט אין לי מושג מה הספרות הולכות להיות אבל אני יכול לנסות לחשב אותן אם אתאמץ".</p>
+<p>אז בשביל מספרים כלליים, אני <strong>חייב</strong> להרשות את זה שהייצוג העשרוני יהיה אינסופי, גם אם הספרות לא חוזרות על עצמן. זה מוביל אותנו להגדרה הכללית של ייצוג עשרוני של מספר ממשי: סדרה אינסופית של ספרות, שכוללת סימן של נקודה איפה שהוא בתוכה, ויכולה גם להתחיל בסימן מינוס.</p>
+<p>ההגדרה נשמעת אולי קצת מוגזמת: ב-<span class="math">\(0.5\)</span> אין אינסוף ספרות, וב-<span class="math">\(42\)</span> אין אפילו נקודה עשרונית. אבל כמובן, אפשר לחשוב על הסימונים הללו בתור קיצורים. <span class="math">\(0.5\)</span> הוא קיצור של <span class="math">\(0.5000\ldots\)</span> ואילו <span class="math">\(42\)</span> הוא קיצור של <span class="math">\(42.000\ldots\)</span>. זה מאפשר לנו לתת הגדרה די פשוטה לייצוג עשרוני של מספר ממשי.</p>
+<p>אז מה בעצם הבעיה פה?</p>
+<p>חשוב לי להבהיר שאין בעיה <strong>אמיתית</strong>. אני מעדיף גישות אחרות להגדרת הממשיים ואראה את כולן, אבל אפשר להגדיר את המספרים הממשיים גם בעזרת הגישה הזו ובהמשך אני כנראה גם אסביר כל הפרטים, אבל זה בהחלט לא יהיה חף מסיבוכים טכניים. לב הקושי הוא בזה שלא מספיק להגדיר את המספרים עצמם; צריך גם להגדיר עליהם פעולות אלגבריות כמו חיבור וכפל. אבל כרגע זה אפילו לא מה שמעניין אותי.</p>
+<p>מה שמעניין אותי הוא שאני חושב שלפעמים מתפספסת ההבנה עד כמה ההגדרה שנתנו כרגע היא גורפת ומה המשמעויות שלה. סדרות אינסופיות של ספרות יש <strong>המון</strong> - בלשון של תורת הקבוצות, זו <a href="https://gadial.net/2007/08/25/cantor_cardinality/">קבוצה לא בת מניה</a>. המשמעות של זה היא שעבור רובם המוחץ, המכריע של המספרים הממשיים <strong>אין דרך לחשב את הספרות שלהם</strong> כמו שהיה במקרה של <span class="math">\(\pi\)</span>. אצל <span class="math">\(\pi\)</span>, כזכור, אמרתי "אוקיי אני שם פה שלוש נקודות כדי להגיד שאין לי כוח לתאר עוד ספרות, אבל <strong>בעיקרון</strong> גם אם תבקשו ממני לחשב את הספרה במקום ה-1,345,823 אני אוכל לעשות את זה". עבור רוב המספרים הממשיים אין את זה, ולעולם לא יהיה (אינטואיטיבית, זה נובע מכך שיש רק מספר בן מניה של תוכניות מחשב אפשריות אבל מספר לא בן מניה של ממשיים). אפילו יותר גרוע מזה - עזבו אתכם מלחשב, את רוב המספרים הממשיים לא ניתן בכלל <strong>להגדיר</strong>. מה שאני יודע להגדיר הוא את קבוצת <strong>כל</strong> המספרים הממשיים, אבל איברים קונקרטיים וספציפיים שלה? אני יכול להצביע אינדיבידואלית רק על מיעוט זניח מביניהם. כמעט כל המספרים הממשיים הם משהו שאף פעם לא נכתוב, אף פעם לא נשתמש בו במפורש בחישוב, אף פעם לא יהיה רלוונטי לחיים שלנו בשום צורה.</p>
+<p>זו, אגב, גם תשובה לאלו שמגדירים מספרים ממשיים בתור "כל המספרים שיכולים להתקבל בתור תוצאת מדידה פיזיקלית" (נעזוב את השאלה האם גם מרוכבים יכולים להתקבל כך) - כל מכשירי המדידה שלנו הם בעלי רזולוציה מוגבלת, ויוצא שאנחנו מודדים רק כמות בת מניה של מספרים, אז גם בגישה הזו אנחנו לא מגרדים את כל קבוצת הממשיים. ההגדרה שנתתי למעלה מנסה לחמוק מזה עם מעבר לדיבור על משהו פוטנציאלי ("<strong>שיכולים</strong> להתקבל") אבל אני חושב שאם נוקטים בגישה הזו הדבר ההוגן לעשות הוא קודם לתאר את כל סט מכשירי המדידה שעומדים לרשותנו, ואז לשאול את השאלה האם נוכל למדוד איתם את כל המספרים הממשיים (לא; נוכל למדוד איתם רק קבוצה בת מניה של מספרים, כלומר זניחה יחסית לכל המספרים הממשיים).</p>
+<p>העניינים הללו מעלים שאלה מצוינת - אם כך, בשביל מה אנחנו בכלל צריכים את המספרים הממשיים? אי אפשר פשוט להצטמצם רק למספרים שאפשר לחשב אותם או משהו? התשובה היא שאפשר, ויש כאלו שעושים את זה, אבל את רוב המתמטיקאים זה פשוט לא מעניין, כי הרבה יותר <strong>קל</strong> לעבוד עם המספרים הממשיים. כי אולי להצביע על ממשיים אינדיבידואליים זה כאב ראש, אבל כשמסתכלים על הקבוצה כולה, המכלול - זו קבוצה עם תכונות מאוד נוחות ויפות שמאפשרות למתמטיקאים להוכיח משפטים בקלות יחסית. כשאני קורא לממשיים "השדה הסדור השלם" אני בעצם מציין בדיוק את התכונות הללו. בפוסט הבא נדבר עליהן יותר לעומק.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2024/08/31/real_numbers_ordered_fields/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אז מה זה בעצם המספרים הממשיים? (חלק ב&#39;: השדה הסדור השלם)</span>
+            </a>
+            
+            
+            
+            <a href="/2024/08/09/dividing_by_zero_allowed/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">למה מותר לחלק באפס?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

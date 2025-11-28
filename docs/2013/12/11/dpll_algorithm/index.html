@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פותרים את SAT - אלגוריתם DPLL - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>פותרים את SAT - אלגוריתם DPLL</h1>
+            <div class="post-meta">
+                <span class="date">2013-12-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/לוגיקה.html">לוגיקה</a>
+                    
+                    <a href="/categories/מבני נתונים ואלגוריתמים.html">מבני נתונים ואלגוריתמים</a>
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/DPLL.html">DPLL</a>
+                    
+                    <a href="/tags/SAT.html">SAT</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>הגענו סוף סוף לדבר על האופן שבו פותרים את בעיית SAT במקרה הכללי. יש לנו פסוק CNF <span class="math">\(\varphi\)</span> ואין לו בהכרח צורה "נחמדה" כמו בבעיות 2SAT או HORNSAT שראינו בפוסט הקודם - מה עושים?</p>
+<p>ראשית כל ההסתייגות הבלתי נמנעת - אי אפשר להבטיח שמה שנעשה יהיה <strong>יעיל</strong>, כלומר ייגמר מהר יחסית לגודל הפסוק. SAT היא באופן כללי בעיה NP-שלמה, מה שאומר שאם יימצא פתרון יעיל כזה יקרה משהו מאוד, מאוד מפתיע בעולם של מדעי המחשב. אבל כשמדברים על בעיות NP-שלמות מדברים על אלגוריתמים שהם עדיין יעילים גם במקרים הגרועים ביותר - גם אם מישהו זדוני יהנדס בכוונה קלט כדי להכשיל את האלגוריתם, האלגוריתם עדיין יעבוד טוב יחסית. בעולם האמיתי זה לא מה שנדרש מאיתנו - אנחנו רוצים אלגוריתמים שיעבדו לא רע על קלטים "מציאותיים" - וההנחה המובלעת שלנו היא שקלטים מציאותיים לא יכילו פתולוגיות שמכשילות אלגוריתמים, ולכן דרכים <strong>סבירות</strong> להתמודד עם הבעיה יצליחו לפתור אותה לא רע. זו התקווה שלנו על הנייר; בפועל יש אלגוריתמים שעובדים מצויין עבור חלק מהקלטים המציאותיים, ועובדים לא משהו עבור קלטים מציאותיים אחרים, וקשה לתת הסברים תיאורטיים למה זה קורה.</p>
+<p>עכשיו בואו נעבור לתאר את האלגוריתם הבסיסי של התחום - כל כך בסיסי עד שרוב האלגוריתמים שמשתמשים בהם בימינו עדיין מבוססים על המבנה שלו ופשוט מרחיבים ומשפרים את השלבים. האלגוריתם נקרא DPLL על שם ממציאיו: D הוא מרטין דיוויס, שכבר הזכרתי בהקשר של הבעיה העשירית של הילברט; P הוא הילארי פוטנאם, שמפורסם מאוד בעיקר כפילוסוף ולוגיקאי; ו-LL הם ג'ורג' לוגמן ודיוויד לאבלנד שאין לי מושג מי הם. היסטורית דיוויס ופוטנאם המציאו את האלגוריתם ולוגמן ולאבלנד שיפרו אותו, אבל לא ניכנס לפרטים הללו כאן.</p>
+<p>האלגוריתם כל כך פשוט שאפשר לתאר אותו בשורה אחת, בהינתן קצת ידע מוקדם - בצעו את כל פעולות הפעפוע וההשמה במשתנים טהורים שאתם יכולים, ואז תציבו ערך במשתנה כלשהו ותבצעו חזרה לאחור במידת הצורך.</p>
+<p>עכשיו בואו נבין מה כל מושג כאן אומר.</p>
+<p>ראשית כל "פעפוע" ו"השמה במשתנים טהורים" הם פישוטים טריוויאליים שאפשר להפעיל על פסוק כדי לקבל פסוק שקול פשוט יותר. פעפוע (Unit Propagation) הוזכר בפוסט הקודם: אם ב-CNF שלי יש פסוקית עם ליטרל יחיד בתוכה, אין לנו ברירה - אנחנו יודעים איזה ערך אנחנו <strong>חייבים</strong> להציב במשתנה של הליטרל כדי שלפסוק יהיה סיכוי להסתפק. אחרי שאנחנו מבצעים את ההשמה הזו, ייתכן שפסוקית אחרת תהפוך להיות בעלת ליטרל יחיד (אם קודם היו בה רק שני ליטרלים, שאחד מהם היה השלילה של הליטרל שאותו פעפענו), וכן הלאה.</p>
+<p>"השמה במשתנה טהור" (Pure Variable Assignment) אומרת את הדבר הבא: נניח שיש לנו משתנה <span class="math">\(x\)</span> כך שבכל פסוקית שבה הוא מופיע זה תמיד בתור <span class="math">\(x\)</span> ואף פעם לא בתור השלילה <span class="math">\(\neg x\)</span>. זה המובן של "טהור", אבל כדי שלא להיות גזענים כלפי ליטרלים גם אם הליטרל <span class="math">\(\neg x\)</span> מופיע בכל הפסוקיות שבהן מופיע המשתנה <span class="math">\(x\)</span> ואילו הליטרל <span class="math">\(x\)</span> לא מופיע אף פעם נאמר ש-<span class="math">\(x\)</span> טהור. במקרה שבו כל המופעים של <span class="math">\(x\)</span> הם חיוביים (כלומר, הוא מופיע בתור הליטרל <span class="math">\(x\)</span>) אנחנו יכולים רק להרוויח מכך שנציב ב-<span class="math">\(x\)</span> את הערך 1 - זה יספק מיידית את הפסוקיות שבהן <span class="math">\(x\)</span> הופיע, ושאר הפסוקיות יוותרו ללא שינוי (בעוד שאם <span class="math">\(\neg x\)</span> היה מופיע בפסוקית כלשהי זה היה משנה אותה לרעה - היא הייתה "מאבדת" ליטרל). בדומה, אם כל המופעים של <span class="math">\(x\)</span> הם שליליים בתור הליטרל <span class="math">\(\neg x\)</span>, אפשר רק להרוויח מכך שנציב ב-<span class="math">\(x\)</span> 0, ולכן עושים זאת. אחרי ההצבה הזו ייתכן שאחד המשתנים שקודם לא היה טהור יהפוך לטהור (כי "חיסלנו" את כל הפסוקיות שבהן הופיע מופע שלילי שלו ונותרו רק המופעים החיוביים, למשל) ולכן גם כאן התהליך יכול להימשך כמה פעמים.</p>
+<p>אחרי שבצענו פעפוע והשמה במשתנים טהורים אולי יהיה אפשר לבצע שוב פעפוע, ואחרי זה אולי אפשר יהיה לבצע שוב השמה במשתנים טהורים - אתם מבינים את הרעיון. חלק מהאתגר בבניית פותרי SAT יעילים היא לבצע את כל הפעפועים-והשמות הללו מהר ככל הניתן. אבל כרגע אני סתם מבצע סקירה כללית ולכן לא אכנס לפרטים הללו (לא שאני בקיא בהם במיוחד בכל מקרה).</p>
+<p>אחרי שכל זה נגמר, לא נשאר לאלגוריתם לעשות משהו ש"מובן מאליו" שאפשר לעשות, אז הוא פשוט בוחר משתנה כלשהו ומציב בו ערך כלשהו. אחר כך הוא חוזר לבצע פעפועים והשמות במשתנים טהורים עד שהוא שוב נתקע, ואז הוא שוב מציב ערך כלשהו במשתנה כלשהו וכן הלאה. אם בסופו של דבר נמצאה השמה מספקת, מה טוב; אם מתישהו הגענו לפסוק לא ספיק (פסוקית אחת "התרוקנה"), האלגוריתם מתחיל <strong>לחזור לאחור</strong>. הוא מבטל את כל הפעפועים-והשמות שבוצעו מאז הפעם האחרונה שבה הוא בחר ערך למשתנה, חוזר אל המשתנה הזה ומציב בו את הערך ההפוך, ואז עושה שוב פעפועים והשמות. אם גם זה נכשל, הוא שוכח מהמשתנה הזה וחוזר אל המשתנה שהוא בחר לו ערך <strong>לפניו</strong> ומציב בו את הערך ההפוך, וכן הלאה.</p>
+<p>הדבר הזה הוא דוגמה סטנדרטית לאלגוריתם Backtracking. אלגוריתם כזה מנסה לבנות באופן הדרגתי פתרון לבעיה כלשהי, תוך הסתמכות על כך שהוא יכול לפעמים לזהות "באמצע" הבניה שמשהו התקלקל ואז להתחיל לחזור לאחור ולתקן את עצמו מבלי לבזבז עוד זמן על המשך הבניה המקולקלת עד הסוף. בשל כך, אלגוריתמי Backtracking הם יעילים יותר מאשר "סתם" חיפוש ממצה שעובר על כל ההשמות האפשריות. דוגמה יומיומית שאני מקווה שרובכם מכירים היא <strong>סודוקו</strong> - המשחק הזה ניתן לפתרון באופן שמאוד דומה ל-DPLL: קודם כל השחקן בוחר לכל משבצת ש"חייבת" לקבל מספר כלשהו את המספר שלה, ואז הוא בוחר משבצת ו"מנחש" לה ערך (לרוב משבצת שיש לה רק מעט ערכים אפשריים) ואז רואה מה נובע מכך; אם הוא רואה שהוא נתקע, הוא חוזר לאחור ומתקן את הניחוש. בשל הגודל הקטן יחסית של הלוח והעובדה שיש <strong>הרבה</strong> דרכים לצמצם את טווח הערכים שמשבצת יכולה לקבל, אלגוריתם Backtracking שכזה עבור סודוקו יעבוד טוב מאוד בפועל (אבל באופן כללי, כאשר מרשים ללוח הסודוקו להיות מגודל <span class="math">\(n^{2}\times n^{2}\)</span> - בלוח רגיל <span class="math">\(n=3\)</span> - מדובר גם כן על בעיה NP-שלמה).</p>
+<p>כל "הנהלת החשבונות" הזו של איזה משתנים צריך לתקן ולשנות ולשכוח מההשמה שלהם וכדומה יכולה להיראות די סבוכה לביצוע וגועלית, אבל זה לא באמת קשה במיוחד. אפשר, למשל, לשמור רשימה של כל המשתנים שהצבנו בהם ערך עד השלב הנוכחי באלגוריתם, מסודרים לפי הסדר שבו הצבנו בהם ערך, כאשר לכל משתנה כזה אנו גם זוכרים אם הצבנו בו ערך כי <strong>בחרנו</strong> עבורו ערך, או כי ההצבה הזו <strong>נבעה</strong> מתוך כללי הפעפוע והמשתנים הטהורים. משתנה מן הסוג הראשון נקרא Decision Variable - "משתנה בחירה"? אם כן, כאשר אנחנו "נתקעים" אנחנו מבטלים את כל ההשמות האחרונות שבוצעו למשתנים עד למשתנה הבחירה האחרון; אם עד כה בחרנו לו רק ערך אחד, מחליפים לערך האחר, ואם כבר בחרנו לו את שני הערכים חוזרים אחורה אל משתנה הבחירה הקודם, וכן הלאה.</p>
+<p>אם כן, זהו האלגוריתם הבסיסי. אבל מאז DPLL עבר קצת זמן בכל זאת - איזה שיפורים קיימים לאלגוריתם בימינו? מן הסתם יש הרבה יותר שיפורים ממה שאני מכיר, אבל אפשר לדבר על האספקטים השונים של האלגוריתם שאפשר לשפר.</p>
+<p>ראשית, כללי ההסקה של הפעפוע והשמת המשתנים הטהורים הם מן הסתם לא הכללים היחידים שאפשר להשתמש בהם. המחיר של כללים נוספים, מורכבים יותר (שלא אציג כרגע) הוא שלוקח יותר זמן לבדוק אם אפשר להשתמש בהם או לא; כמו כן, יש כללים שמעבירים את הפסוק לפסוק אחר שאינו שקול לו בכלל. את הנקודה הזו כדאי לחדד: שני פסוקים <span class="math">\(\varphi,\psi\)</span> הם <strong>שקולים</strong> אם כל השמה שמספקת את <span class="math">\(\varphi\)</span> מספקת גם את <span class="math">\(\psi\)</span> ולהפך. כללי ההיסק שראינו עד כה מייצרים מ-<span class="math">\(\varphi\)</span> פסוק שקול לו. אבל לפעמים כל מה שאנחנו רוצים לדעת הוא אם <span class="math">\(\varphi\)</span> ספיק או לא, ולצורך כך מספיק לקבל פסוק <span class="math">\(\psi\)</span> בעל התכונה שהוא ספיק אם ורק אם <span class="math">\(\varphi\)</span> ספיק - במקרה הזה אומרים ש-<span class="math">\(\varphi,\psi\)</span> הם <strong>שקולי-ספיקות</strong>, שזה תרגום גרוע שהמצאתי ל-Equisatisfiable. אם כן, יש כללי היסק שמעבירים את הפסוק שאנחנו בודקים לפסוק שקול-ספיקות אליו; לפעמים זה טוב ולפעמים זה לא טוב.</p>
+<p>שנית, לא אמרתי כלום על האופן שבו בוחרים באיזה משתנה להציב ערך, ואיזה משני הערכים האפשריים להציב בו קודם; כאן יש כר נרחב ל-הנה באה מילה גסה-היוריסטיקות. גם על זה לא אגיד כלום.</p>
+<p>לבסוף, החלק המשמעותי ביותר שאפשר לטפל בו בצורה שונה הוא זה של החזרה לאחור עם זיהוי כשלון. בשנים האחרונות מאוד פופולרית גישה שונה ומתוחכמת יותר לטיפול בשלב הזה מאשר זו של DPLL - גישה חשובה מספיק כדי לזכות לשם משל עצמה - Conflict Driven Clause Learning, ובקיצור CDCL. את הרעיון המלא יחסית אציג בפוסט הבא, אז בינתיים טיזר: שני הדברים המרכזיים שהאלגוריתם עושה באופן שונה מ-DPLL הן שהוא לא חוזר צעד אחד אחורה אל משתנה הבחירה האחרון אלא יכול לחזור כמה וכמה רמות אחורה, ושכאשר הוא "נתקע" הוא מנתח את מה שהשתבש ו<strong>לומד</strong> מזה פסוקית חדשה שאותה הוא מוסיף לפסוק שהוא מנסה לפתור. באופן מעניין למדי זה "חוסך" לו את הצורך לבצע ניהול חשבונות עבור משתני הבחירה - האלגוריתם לא צריך "להפוך" את הערך של משתנה בחירה בשום שלב, זה כבר נובע מעצמו מהדברים שהוא למד. כאמור, אדבר על זה בפוסט הבא.</p>
+<p>מילה אחת לסיום - כל מה שדיברתי עליו כאן הוא רק משפחה אחת של אלגוריתמים - אלו שמנסים לפתור את הפסוק או להשתכנע שהוא לא פתיר. אפשר גם לנקוט בגישה שונה לגמרי - לחפש באופן הסתברותי השמה מספקת. הגישה הזו עשויה להיות מהירה משמעותית יותר אם יש הרבה השמות מספקות ואנחנו פשוט צריכים למצוא אחת (למשל, אם אנחנו רוצים למצוא מערכת שעות שמתאימה לאילוצים שהם לא <strong>עד כדי כך</strong> גרועים); החסרון של השיטה היא שלא ניתן להשתכנע באמצעותה שהפסוק כלל אינו ספיק. החסרון הנוסף של השיטה הוא שאני לא יודע עליה כלום ולכן לא אכתוב עליה בשלב זה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/12/13/crowded_bus_paradox/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">פרדוקס האוטובוס הצפוף</span>
+            </a>
+            
+            
+            
+            <a href="/2013/11/24/hornsat_and_2sat/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">פותרים את SAT: המקרים של HORNSAT ו-2SAT</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

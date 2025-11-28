@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>כשחבורות ושדות מתנגשים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>כשחבורות ושדות מתנגשים</h1>
+            <div class="post-meta">
+                <span class="date">2018-05-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה מופשטת.html">אלגברה מופשטת</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/תורת גלואה.html">תורת גלואה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>סדרת הפוסטים שלי על אלגברה מופשטת מתקרבת אל אחת מנקודות השיא שלה - <strong>המשפט היסודי של תורת גלואה</strong>. זה לא מה שנעשה היום. מה שנעשה היום הוא את כל עבודת ההכנה שנדרשת עד שמגיעים למשפט הזה, ובפרט תהיה לנו הוכחה אחת שהיא הלב הטכני של כל הסיפור. יהיה בסדר; זו הוכחה טכנית אבל יש לה את האלגנטיות שלה ואפשר "להרגיש" באמצעותה למה הדברים עובדים. את ההוכחה עצמה אשמור לסוף, כי בעזרת המשפט שהיא מוכיחה נוכל לעשות דברים מעניינים שחבל להתאפק איתם. בפרט, נבין הרבה יותר טוב מה זו בכלל <strong>הרחבת גלואה </strong>שהזכרנו בחטף בפוסט הקודם.</p>
+<h2>מחבורה לשדה ומשדה לחבורה</h2>
+<p>בואו נזכיר על מה דיברנו בפעם הקודמת: הייתה לנו הרחבת שדות <span class="math">\(E/F\)</span> ודיברנו על <span class="math">\(\text{Aut}\left(E/F\right)\)</span> - חבורת האוטומורפיזמים של <span class="math">\(E\)</span> ש<strong>משמרים</strong> את <span class="math">\(F\)</span>. כאן זה ש-<span class="math">\(\sigma\in\text{Aut}\left(E/F\right)\)</span> "משמר" את <span class="math">\(F\)</span> פירושו ש-<span class="math">\(\sigma a=a\)</span> לכל <span class="math">\(a\in F\)</span> (להבדיל ממושג חלש יותר, <span class="math">\(\sigma\left(F\right)\subseteq F\)</span> שלא מונע מ-<span class="math">\(\sigma\)</span> לשנות איברים של <span class="math">\(F\)</span> אבל כן מונע ממנו להוציא דברים מגבולות <span class="math">\(F\)</span>). אמרנו גם ש-<span class="math">\(E/F\)</span> היא <strong>הרחבת גלואה</strong> אם <span class="math">\(\left[E:F\right]=\left|\text{Aut}\left(E/F\right)\right|\)</span> ובמקרה הזה אני מסמן את <span class="math">\(\text{Aut}\left(E/F\right)\)</span> גם בסימון הנוסף <span class="math">\(\text{Gal}\left(E/F\right)\)</span>.</p>
+<p>דיברנו על התהליך שבו אנחנו מפיקים חבורה מתוך הרחבה. ליתר דיוק, בהינתן <span class="math">\(E\)</span>, אנחנו מפיקים תתי-חבורות של <span class="math">\(\text{Aut}\left(E\right)\)</span> על ידי התבוננות על תתי-שדות של <span class="math">\(E\)</span>. מה שאנחנו רוצים לדבר עליו עכשיו הוא התהליך ההפוך: בהינתן תת-חבורה <span class="math">\(G\)</span> של <span class="math">\(\text{Aut}\left(E\right)\)</span>, בואו נגדיר את <span class="math">\(F\)</span> להיות השדה שתת-החבורה הזו משמרת. כלומר, <span class="math">\(F\triangleq\left\{ a\in E\ |\ \sigma a=a,\forall\sigma\in G\right\} \)</span> (קל להוכיח שזה אכן שדה; זה נובע מכך ש-<span class="math">\(\sigma\)</span> הומומורפיזם של שדות). המשפט המרכזי לפוסט הזה, שאת ההוכחה שלו כאמור אני שומר לסוף הפוסט, הוא ש<strong>תמיד</strong> מתקיים <span class="math">\(\left[E:F\right]=\left|G\right|\)</span>. ה"תמיד" הזה עשוי להיות מבלבל; הרי ראינו שלא כל הרחבה היא הרחבת גלואה, אבל הכיוון השני "תמיד" עובד. ובכן, הנקודה היא שלא מובטח לנו ש<strong>כל</strong> תת-שדה של <span class="math">\(E\)</span> אכן יהיה בר הפקה בצורה שכזו; רק אם <span class="math">\(E/F\)</span> היא גלואה זה יעבוד.</p>
+<p>בואו נראה מה המסקנות מהמשפט שהצגתי. ראשית, בואו נראה ש-<span class="math">\(\left|\text{Aut}\left(E/F\right)\right|\le\left[E:F\right]\)</span> תמיד, גם בהרחבה שאיננה גלואה. הרעיון הוא זה: אם <span class="math">\(G=\text{Aut}\left(E/F\right)\)</span>, המשפט מבטיח לנו שמתקיים <span class="math">\(\left|G\right|=\left[E:K\right]\)</span> כאשר <span class="math">\(K\)</span> הוא השדה ש-<span class="math">\(G\)</span> משמרת. מה השדה הזה? ברור לנו שהוא <strong>מכיל</strong> את <span class="math">\(F\)</span>, מכיוון ש-<span class="math">\(G=\text{Aut}\left(E/F\right)\)</span> ולכן על פי הגדרה משמרת את כל <span class="math">\(F\)</span>, אבל זה לא אומר שאין <strong>עוד</strong> איברים ש-<span class="math">\(G\)</span> משמרת. לכן באופן כללי <span class="math">\(F\subseteq K\subseteq E\)</span> ולכן</p>
+<p><span class="math">\(\left[E:F\right]=\left[E:K\right]\left[K:F\right]=\left|G\right|\left[K:F\right]\)</span> ומכאן ש-<span class="math">\(\left|\text{Aut}\left(E/F\right)\right|=\frac{\left[E:F\right]}{\left[K:F\right]}\le\left[E:F\right]\)</span> כמו שרצינו.</p>
+<p>שנית, בואו נראה שכל הרחבה שמתקבלת מ-<span class="math">\(G\)</span> באופן שתיארתי היא <strong>כן</strong> הרחבת גלואה. כלומר: ניקח תת-חבורה <span class="math">\(G\)</span> של <span class="math">\(\text{Aut}\left(E\right)\)</span>, ונגדיר את <span class="math">\(F\)</span> להיות השדה שהיא משמרת. אני טוען ש-<span class="math">\(\text{Aut}\left(E/F\right)=G\)</span>. אני כבר יודע כיוון אחד: <span class="math">\(G\)</span> בוודאי מוכלת ב-<span class="math">\(\text{Aut}\left(E/F\right)\)</span>, כי היא חבורה של אוטומורפיזמים של <span class="math">\(E\)</span> שמשמרים את <span class="math">\(F\)</span>. השאלה היא למה אין אוטומורפיזמים כאלו גם מחוץ ל-<span class="math">\(G\)</span>. הנימוק הוא מאוד פשוט:</p>
+<p><span class="math">\(\left[E:F\right]=\left|G\right|\le\left|\text{Aut}\left(E/F\right)\right|\le\left[E:F\right]\)</span></p>
+<p>ולכן בפרט <span class="math">\(\left|G\right|=\left|\text{Aut}\left(E/F\right)\right|\)</span> . אינטואיטיבית, כל אוטומורפיזם של <span class="math">\(E\)</span> שמשמר את <span class="math">\(F\)</span> מכריח את המימד של <span class="math">\(E\)</span> מעל <span class="math">\(F\)</span> לגדול עוד ועוד; אבל המימד הזה חסום מלכתחילה על ידי הגודל של <span class="math">\(G\)</span> ש"יצרה" את <span class="math">\(F\)</span> מלכתחילה, על פי המשפט הקסום שאומר <span class="math">\(\left[E:F\right]=\left|G\right|\)</span>. מכיוון שקיבלנו פה ש-<span class="math">\(\left|\text{Aut}\left(E/F\right)\right|=\left[E:F\right]\)</span> המסקנה היא ש-<span class="math">\(E/F\)</span> היא הרחבת גלואה.</p>
+<p>העסק הזה מבלבל, אז הנה תמצית:</p>
+<ul>
+    <li>אם נתונה לנו הרחבה <span class="math">\(E/F\)</span> ואנחנו מסיקים ממנה חבורת אוטומורפיזמים <span class="math">\(G\)</span> של <span class="math">\(E\)</span> שמשמרת את <span class="math">\(F\)</span>, זה <strong>לא</strong> מבטיח ש-<span class="math">\(E/F\)</span> גלואה.</li>
+    <li>אם נתונה לנו חבורת אוטומורפיזמים <span class="math">\(G\)</span> של <span class="math">\(E\)</span> ואנחנו מסיקים ממנה הרחבה <span class="math">\(E/F\)</span> כאשר <span class="math">\(F\)</span> השדה ש-<span class="math">\(G\)</span> משמרת, זה <strong>כן</strong> מבטיח ש-<span class="math">\(E/F\)</span> גלואה.</li>
+</ul>
+<p>בפרט, הנקודה השניה נותנת לנו אפיון שקול חדש להרחבת גלואה: <span class="math">\(E/F\)</span> היא הרחבת גלואה אם ורק אם קיימת תת-חבורה של <span class="math">\(\text{Aut}\left(E\right)\)</span> ש-<span class="math">\(F\)</span> הוא בדיוק השדה שהיא משמרת. אפשר אפילו לחדד את זה: <span class="math">\(E/F\)</span> גלואה אם ורק אם השדה שאותו <span class="math">\(\text{Aut}\left(E/F\right)\)</span> משמרת הוא <span class="math">\(F\)</span>.</p>
+<p>עכשיו, בואו נחזור למה ש<strong>עלול להיכשל</strong>. ראינו שייתכן שאני אקח הרחבה <strong>שאיננה גלואה</strong> <span class="math">\(E/F\)</span>, אגדיר <span class="math">\(G=\text{Aut}\left(E/F\right)\)</span>, ואז אנסה "להפוך" את התהליך ולהגדיר את השדה ש-<span class="math">\(G\)</span> משמרת; באופן כללי אני עלול להיתקע עם שדה <span class="math">\(F\subseteq K\subseteq E\)</span> כך ש-<span class="math">\(F\ne K\)</span>. במילים אחרות, יוצא לנו ש-<span class="math">\(\text{Aut}\left(E/F\right)=\text{Aut}\left(E/K\right)\)</span> למרות ש-<span class="math">\(F\ne K\)</span>; ההתאמה שלוקחת תת-שדה של <span class="math">\(E\)</span> ומחזירה חבורת אוטומורפיזמים איננה חד-חד-ערכית.</p>
+<p>לעומת זאת, הכיוון ההפוך הוא <strong>כן</strong> חד-חד-ערכי. כלומר, אם <span class="math">\(G_{1}\ne G_{2}\)</span> הן שתי תת-חבורות שונות של <span class="math">\(\text{Aut}\left(E\right)\)</span> ואנחנו בונים את <span class="math">\(F_{1},F_{2}\)</span> שהם השדות שהן משמרות, אז <span class="math">\(F_{1}\ne F_{2}\)</span>. למה? כי בואו נניח ש-<span class="math">\(F_{1}=F_{2}\)</span>. אז ממה שכבר ראינו: <span class="math">\(G_{1}=\text{Aut}\left(E/F_{1}\right)=\text{Aut}\left(E/F_{2}\right)=G_{2}\)</span>.</p>
+<p>החד-חד ערכיות הזו היא הבסיס למשפט היסודי של תורת גלואה.</p>
+<h2>הרחבת גלואה ושדות פיצול של פולינומים ספרביליים</h2>
+<p>עכשיו אני רוצה לעבור למשפט שהוא התכל'ס של "מה זו הרחבת גלואה" - הרחבת גלואה היא שדה פיצול של פולינום ספרבילי. כזכור, פולינום ספרבילי הוא כזה שאין לו שורש מרובה, כלומר אפשר לכתוב אותו בתור <span class="math">\(\left(x-a_{1}\right)\left(x-a_{2}\right)\dots\left(x-a_{n}\right)\)</span> כאשר כל ה-<span class="math">\(a_{i}\)</span>-ים שונים זה מזה - אלו הם ה<strong>שורשים</strong> של הפולינום. אז הרחבת גלואה היא מה שמתקבל כשלוקחים שדה, לוקחים פולינום תמים מעליו שהוא ספרבילי, ודוחפים לתוך השדה את <strong>כל</strong> השורשים שלו. בהכרח אלו יהיו כולם, ולא רק חלק; אם רק חלק מהשורשים התווספו לשדה, אז בהחלט ייתכן שלא יהיו לנו מספיק אוטומורפיזמים כדי שיתקיים הקריטריון של <span class="math">\(\left|\text{Aut}\left(E/F\right)\right|=\left[E:F\right]\)</span>. בשלב הזה כל הטענה הזו נשמעת מאוד חשודה; אני חושב שלראות את ההוכחה שלה, שכוללת רגע מפיל אסימון אחד לפחות, היא הדבר הכי מועיל לאינטואיציה כאן.</p>
+<p>החלק ה<strong>פחות חשוד</strong> הוא הטענה ששדה הפיצול של פולינום ספרבילי הוא הרחבת גלואה. אני אציג את ההוכחה הזו בנפנוף ידיים כדי לעזור להתמקד ברעיון שלה; אל תלמדו אותה מהפוסט הזה ישירות למבחן אלא קחו ספר ושימו לב לנקודות העדינות בניסוח שלו שהן חשובות כשרוצים להוכיח פורמלית עד הסוף.</p>
+<p>בואו ניקח <span class="math">\(p\left(x\right)\in F\left[x\right]\)</span> שהוא ספרבילי ונגדיר את <span class="math">\(E\)</span> להיות שדה הפיצול שלו. אם <span class="math">\(E=F\)</span> אז סיימנו; <span class="math">\(\left|\text{Aut}\left(E/F\right)\right|=\left[E:F\right]=1\)</span>. אחרת, משדה הפיצול הזה ניקח איבר <span class="math">\(a\in E\)</span> כך ש-<span class="math">\(a\notin F\)</span> והוא שורש של <span class="math">\(p\)</span>: <span class="math">\(p\left(x\right)=0\)</span>, ונסתכל על ההרחבה <span class="math">\(F\left(a\right)\)</span>. אנחנו יודעים ש-<span class="math">\(\left[E:F\right]=\left[E:F\left(a\right)\right]\left[F\left(a\right):F\right]\)</span>, ומכיוון ש-<span class="math">\(a\notin F\)</span> אני יודע ש-<span class="math">\(\left[F\left(a\right):F\right]&gt;1\)</span> כלומר <span class="math">\(\left[E:F\right]&lt;\left[E:F\left(a\right)\right]\)</span> וזה נותן לנו איזה שהוא פתח להוכחה אינדוקטיבית.</p>
+<p>אנחנו יודעים ש-<span class="math">\(\left[F\left(a\right):F\right]\)</span> שווה למעלה של <strong>הפולינום המינימלי</strong> <span class="math">\(m_{a,F}\left(x\right)\)</span> של <span class="math">\(a\)</span> מעל השדה <span class="math">\(F\)</span>; הפולינום הזה מחלק את <span class="math">\(p\left(x\right)\)</span> שממנו התחלנו. זה פולינום שהמקדמים שלו כולם ב-<span class="math">\(F\)</span> ולכן כל אוטומורפיזם ב-<span class="math">\(\text{Aut}\left(E/F\right)\)</span> מבצע פרמוטציה על השורשים שלו.</p>
+<p>כמה שורשים יש לפולינום הזה? באופן כללי, לפולינום מעל שדה יש <strong>לכל היותר</strong> מספר שורשים ששווה למעלה שלו; במקרה שבו הפולינום ספרבילי מספר השורשים הוא <strong>בדיוק</strong> המעלה שלו. הפולינום המינימלי הוא ספרבילי כי הוא מחלק פולינום ספרבילי, ולכן זה מתקיים עבורו. כלומר, כשאני בא להגדיר אוטומורפיזם כלשהו ב-<span class="math">\(\text{Aut}\left(E/F\right)\)</span> ואני ניצב בפני השאלה "לאן להעביר את <span class="math">\(a\)</span>?" יש לי בדיוק <span class="math">\(\text{deg}m_{a,F}=\left[F\left(a\right):F\right]\)</span> בחירות אפשריות.</p>
+<p>מכיוון שכל איבר ב-<span class="math">\(F\left(a\right)\)</span> ניתן לכתיבה בעזרת אברי <span class="math">\(F\)</span> ו-<span class="math">\(a\)</span>, הרי שמרגע שביצעתי את הבחירה לאן להעביר את <span class="math">\(a\)</span>, האוטומורפיזם שבניתי נקבע באופן יחיד על כל <span class="math">\(F\left(a\right)\)</span>. עכשיו מגיע הרגע של נפנוף הידיים הפרוע: אני יכול להשתמש בהנחת האינדוקציה שלי (שלא ניסחתי במפורש כי כשננסה לנסח אותה במפורש נראה שהיא צריכה להיות קצת יותר מסובכת) כדי להראות ש-<span class="math">\(\left|\text{Aut}\left(E/F\left(a\right)\right)\right|=\left[E:F\left(a\right)\right]\)</span>. אפשר לחשוב על אוטומורפיזם שכזה על <span class="math">\(E\)</span> שמשמר את <span class="math">\(F\left(a\right)\)</span> כאילו (נפנוף ידיים!) הוא ניתן להרחבה לאוטומורפיזם של <span class="math">\(E\)</span> שמשמר רק את <span class="math">\(F\)</span> על ידי כך שנגיד לאן <span class="math">\(a\)</span> צריך לעבור, ואנחנו יודעים שאנחנו יכולים להעביר את <span class="math">\(a\)</span> לכל שורש אחר של <span class="math">\(m_{a,F}\)</span> מבלי (נפנוף ידיים!) שיווצרו עם זה בעיות; כלומר, לכל אוטומורפיזם ב-<span class="math">\(\text{Aut}\left(E/F\left(a\right)\right)\)</span> יש לנו <span class="math">\(\left[F\left(a\right):F\right]\)</span> דרכים שונות להרחיב אותו, ומכיוון ש-<span class="math">\(\left|\text{Aut}\left(E/F\left(a\right)\right)\right|=\left[E:F\left(a\right)\right]\)</span> אני אקבל ש-<span class="math">\(\left|\text{Aut}\left(E/F\right)\right|=\left[E:F\left(a\right)\right]\left[F\left(a\right):F\right]=\left[E:F\right]\)</span> כפי שרציתי.</p>
+<p>ההוכחה הזו, אולי שמתם לב, קצת מנפנפת בידיים, אבל היא מציגה בדיוק את הסיבה שבגללה ההרחבה הופכת להיות גלואה: אפשר לחשוב על שדה פיצול בתור משהו שמתקבל באמצעות סדרה של הרחבות פשוטות. ה"קפיצה במימד של ההרחבה" שאני מקבל עם כל הרחבה פשוטה שכזו מתאימה בדיוק לחופש התמרון שיש לי כשאני בא להגדיר אוטומורפיזם וצריך להחליט מה לעשות עם האיבר שבאמצעותו הרחבתי את אותה הרחבה פשוטה. אי-ספרביליות מקלקלת את כל זה בכך שהיא מקטינה את חופש הבחירה הזה שלי (כי יש פחות שורשים לבחור מהם) למרות שהקפצה במימד של ההרחבה נותרת זהה (כי הקפיצה במימד של ההרחבה תמיד מתאימה למעלה של הפולינום המינימלי, גם אם הוא לא ספרבילי; זכרו שראינו בפוסט הקודם דוגמא מוזרה של פולינום אי פריק שאינו ספרבילי שדרשה מאיתנו ללכת לשדה אינסופי ממציין <span class="math">\(p\)</span> ).</p>
+<p>עכשיו בואו נעבור לדבר על הכיוון השני של המשפט, שהוא מוזר יותר: אם <span class="math">\(E/F\)</span> הרחבת גלואה אז <strong>בודאות</strong> <span class="math">\(E/F\)</span> היא שדה פיצול של פולינום ספרבילי. מה זה פה? מאיפה בכלל מתחילים? איך מוצאים את הפולינום הזה?</p>
+<p>ובכן, האינטואיציה של <strong>זה</strong> היא דווקא די קלה. אם <span class="math">\(E/F\)</span> היא הרחבת שדות סופית, אז אנחנו כבר יודעים ש-<span class="math">\(E=F\left(a_{1},\dots,a_{n}\right)\)</span>; זה היה <a href="http://gadial.net/2018/04/09/simple_finite_algebraic_field_extensions/">אחד הדברים הראשונים שראינו</a> על הרחבת שדות. לכל <span class="math">\(a_{i}\)</span> כזה, אני מסמן את הפולינום המינימלי שלו מעל <span class="math">\(F\)</span> ב-<span class="math">\(m_{a_{i},F}\left(x\right)\)</span>. אם אני אקח עכשיו את פולינום המכפלה <span class="math">\(\prod_{i=1}^{n}m_{a_{i},F}\left(x\right)\)</span> אני אקבל פולינום יחיד ש-<span class="math">\(a_{1},\dots,a_{n}\)</span> נמנים על השורשים שלו, ואז אני אקח את שדה הפיצול שלו ואקבל בין היתר את <span class="math">\(a_{1},\dots,a_{n}\)</span> בפנים. אבל עם הרעיון הנחמד הזה יש שתי בעיות:</p>
+<ul>
+    <li>הפולינום שאקבל לא בהכרח יהיה ספרבילי.</li>
+    <li>לא ברור למה בשדה הפיצול שלו לא יהיו איברים <strong>נוספים</strong>, שאינם דווקא ב-<span class="math">\(E\)</span>.</li>
+</ul>
+<p>הפתרון לשני אלו טמון במשפט המאוד מפתיע (לטעמי) הבא: אם <span class="math">\(E/F\)</span> היא הרחבת גלואה ו-<span class="math">\(p\left(x\right)\in F\left[x\right]\)</span> הוא פולינום <strong>אי פריק</strong> מעל <span class="math">\(F\)</span> שיש לו שורש ב-<span class="math">\(E\)</span>, אז קורים שני דברים:</p>
+<ol>
+    <li><span class="math">\(p\left(x\right)\)</span> ספרבילי.</li>
+    <li><span class="math">\(p\left(x\right)\)</span> מתפרק מעל <span class="math">\(E\)</span> לגורמים לינאריים, כלומר <strong>כל</strong> השורשים של <span class="math">\(p\left(x\right)\)</span> (ולא רק אחד) נמצאים ב-<span class="math">\(E\)</span>.</li>
+</ol>
+<p>זו אולי התכונה שהכי מבהירה לי, אינטואיטיבית, מה ה"כוח" של הרחבת גלואה - אם פולינום כלשהו מעל <span class="math">\(F\)</span> שאין לו שורשים בכלל ב-<span class="math">\(F\)</span> מחליט לעשות לנו טובה ולתת לנו איזה שורש מסכן אחד ב-<span class="math">\(E\)</span>, אז זהו, המשחק נגמר - אוטומטית כולם יהיו ב-<span class="math">\(E\)</span>. הרחבת גלואה היא כזו שמבטיחה לנו ש"לא יהיו חסרים שורשים לאף פולינום". והאופן שבו אני אוכיח את זה יפיל לכולנו (בתקווה) את האסימון בנוגע לשאלה <strong>למה </strong>הקסם הזה קורה.</p>
+<p>בואו נסמן <span class="math">\(G=\text{Gal}\left(E/F\right)\)</span>. ניקח <span class="math">\(p\left(x\right)\in F\left[x\right]\)</span> שהוא אי-פריק מעל <span class="math">\(F\)</span> אבל יש לו שורש <span class="math">\(a\in E\)</span>, ועכשיו נפעיל על השורש הזה את כל האיברים של <span class="math">\(G\)</span>, כלומר נסתכל על הקבוצה <span class="math">\(\left\{ \sigma a\ |\ \sigma\in G\right\} \)</span>. האיברים הללו נקראים <strong>צמודי הגלואה</strong> של <span class="math">\(a\)</span>. זו קבוצה של איברים של <span class="math">\(E\)</span> שכולם שורשים של <span class="math">\(p\left(x\right)\)</span>; מן הסתם, מה שאנחנו מקווים להגיד הוא שאלו הם <strong>כל</strong> השורשים של <span class="math">\(p\left(x\right)\)</span>. בואו נסמן את אברי הקבוצה הזו ב-<span class="math">\(a_{1},a_{2},\dots,a_{k}\)</span> (כשאנחנו כותבים כל איבר של הקבוצה רק פעם אחת, אפילו אם הוא התקבל בכמה דרכים שונות).</p>
+<p>עכשיו בואו נגדיר פולינום <strong>חדש</strong> שהוא ספרבילי ואלו בדיוק השורשים שלו:</p>
+<p><span class="math">\(q\left(x\right)=\left(x-a_{1}\right)\left(x-a_{2}\right)\dots\left(x-a_{k}\right)\)</span></p>
+<p>אני טוען ש-<span class="math">\(p\left(x\right)=q\left(x\right)\)</span>. אבל למה? כאן מגיע השפן שאני שולף מהכובע - המהות של המהות של הסיבה שבגללה תורת גלואה עובדת לדעתי - ואפשר לתמצת למשפט המחץ <strong>כי מקדמים של פולינום מתוקן ספרבילי הם פונקציות סימטריות בשורשים שלו</strong>.</p>
+<p>בואו נסביר את זה.</p>
+<p>אם יש לנו פולינום ממעלה שניה עם השורשים <span class="math">\(a_{1},a_{2}\)</span> אז קל לבדוק, על ידי כך שפותחים סוגריים במפורש, ש-<span class="math">\(\left(x-a_{1}\right)\left(x-a_{2}\right)=x^{2}-\left(a_{1}+a_{2}\right)+a_{1}a_{2}\)</span>. כלומר, המקדם החופשי הוא מכפלה של השורשים והמקדם שאחריו הוא סכום שלהם. זה נקרא <strong>נוסחאות וייטה</strong>, אבל אפשר להפעיל אותן בצורה דומה על פולינום ממעלה כלשהי, עם מספר כלשהו של שורשים. השורה התחתונה תהיה תמיד זהה: המקדם שאחרי המקדם המוביל הוא מינוס של סכום כל השורשים; המקדם שאחריו הוא סכום כל המכפלות של שני שורשים, זה שאחריו הוא מינוס הסכום של כל המכפלות של שלושה שורשים וכן הלאה. הנה דוגמא עבור פולינום ממעלה שלישית עם שורשים <span class="math">\(a_{1},a_{2},a_{3}\)</span>:</p>
+<p><span class="math">\(x^{3}-\left(a_{1}+a_{2}+a_{3}\right)+\left(a_{1}a_{2}+a_{1}a_{3}+a_{2}a_{3}\right)-a_{1}a_{2}a_{3}\)</span></p>
+<p>מה זו "פונקציה סימטרית"? <span class="math">\(f\left(x_{1},\dots,x_{n}\right)\)</span> היא סימטרית אם לכל זוג אינדקסים <span class="math">\(i\ne j\)</span>, והשמה לפונקציה, אם נחליף את הערכים שבמקומות <span class="math">\(i,j\)</span> הפלט של הפונקציה לא ישתנה. כלומר, <span class="math">\(f\left(a_{1},\dots,a_{i},\dots,a_{j},\dots,a_{n}\right)=f\left(a_{1},\dots,a_{j},\dots,a_{i},\dots,a_{n}\right)\)</span>. אם אפשר להחליף ערכים עבור <strong>זוג</strong> אינדקסים וששום דבר לא ישתנה, אפשר לעשות את זה כמה פעמים שרוצים, ומכיוון שכל תמורה ניתן להציג בתור הרכבה של חילופים של זוגות של איברים, נקבל שפונקציה סימטרית היא כזו שהפלט שלה נשאר קבוע תחת תמורות של אברי הקלט; במילים אחרות, הפלט תלוי רק בזהות של הקלטים, לא בסדר שלהם.</p>
+<p>קל לראות שמקדמי הפולינום שלנו הם פונקציות סימטריות שכאלו בשורשים. מה שאומר שאם אנחנו מפעילים תמורה <span class="math">\(\sigma\)</span> כלשהי על השורשים, זה לא משנה את המקדמים של הפולינום. מה זה אומר? שלכל <span class="math">\(\sigma\in\text{Gal}\left(E/F\right)\)</span>, המקדמים של <span class="math">\(q\left(x\right)\)</span> משתמרים על ידי <span class="math">\(\sigma\)</span>. אבל מה המשמעות של זה ש-<span class="math">\(E/F\)</span> היא הרחבת גלואה? שאם איבר כלשהו משתמר על ידי <strong>כל</strong> האיברים של <span class="math">\(\text{Gal}\left(E/F\right)\)</span>, זה אומר שהוא שייך ל-<span class="math">\(F\)</span>. לכן <strong>כל</strong> המקדמים של <span class="math">\(q\left(x\right)\)</span> שייכים ל-<span class="math">\(F\)</span> ולכן <span class="math">\(q\left(x\right)\in F\left[x\right]\)</span>.</p>
+<p>עכשיו, מה קורה? <span class="math">\(p\left(x\right)\)</span> היה פולינום אי-פריק, אבל מצד שני כל שורש של <span class="math">\(q\left(x\right)\)</span> הוא גם שורש שלו, ולכן <span class="math">\(q\left(x\right)\)</span> מחלק אותו בלי שארית, מה שמכריח את <span class="math">\(q\left(x\right)=p\left(x\right)\)</span>. קיבלנו ש-<span class="math">\(p\left(x\right)\)</span> הוא פולינום ספרבילי (כי בנינו את <span class="math">\(q\left(x\right)\)</span> להיות ספרבילי) שכל השורשים שלו הם ב-<span class="math">\(E\)</span> (כי בנינו את <span class="math">\(q\left(x\right)\)</span> רק מהשורשים של <span class="math">\(p\left(x\right)\)</span> שהיו שייכים ל-<span class="math">\(E\)</span>). זה מסיים את הטענה המרכזית שלי כאן.</p>
+<p>אם כן, ראינו שאם <span class="math">\(E/F\)</span> גלואה ו-<span class="math">\(p\left(x\right)\in F\left[x\right]\)</span> אי-פריק מעל <span class="math">\(F\)</span> ועם שורש אחד ב-<span class="math">\(E\)</span> אז כל השורשים שלו ב-<span class="math">\(E\)</span> והוא ספרבילי. עם הידע הזה בואו נחזור לכך ש-<span class="math">\(E=F\left(a_{1},\dots,a_{n}\right)\)</span> ואני רוצה להציג את <span class="math">\(E\)</span> כשדה פיצול של פולינום ספרבילי מעל <span class="math">\(F\)</span>. אני לוקח את הפולינומים המינימליים <span class="math">\(m_{a_{i},F}\left(x\right)\)</span> של היוצרים של <span class="math">\(E\)</span>. הם אי-פריקים מעל <span class="math">\(F\)</span> כי פולינום מינימלי הוא תמיד אי-פריק. כמו כן, יש להם שורש ב-<span class="math">\(E\)</span> כי לכל <span class="math">\(i\)</span> אנחנו יודעים ש-<span class="math">\(a_{i}\in E\)</span> הוא שורש של <span class="math">\(m_{F,a_{i}}\)</span> (זו המהות של הפולינום הזה). לכן כל השורשים של הפולינום המינימלי הזה שייכים ל-<span class="math">\(E\)</span>. לכן אם נגדיר פולינום שהוא המכפלה של כל הפולינומים המינימליים הללו, שדה הפיצול שלו יהיה בדיוק <span class="math">\(E\)</span>.</p>
+<p>הבעיה היחידה שנותרה היא שהמכפלה הזו לאו דווקא תהיה ספרבילית. מכיוון שכל הפולינומים המינימליים ספרביליים (כי כאמור - ראינו שאי פריק מעל <span class="math">\(F\)</span> ובעל שורש ב-<span class="math">\(E\)</span> גורר ספרבילי) הדרך היחידה שבה המכפלה לא תהיה ספרבילית היא אם יש שני פולינומים מינימליים שיש להם שורש משותף. אבל ראינו לפני רגע איך שורש אחד <strong>כלשהו</strong> של הפולינומים הללו קובע אותם במפורש (בהינתן השורש הזה, הפולינום שהוא קובע הוא זה ששורשיו הם בדיוק צמודי הגלואה של השורש). לכן אם יש לשני פולינומים מינימליים שורש משותף הם זהים, ואפשר פשוט לא לקחת אחד מהם למכפלה. בצורה הזו מובטח שנקבל פולינום ספרבילי ששדה הפיצול שלו הוא <span class="math">\(E\)</span>.</p>
+<p>ראינו פה שתי תכונות חדשות ומעניינות של פולינומים אי-פריקים בהרחבת גלואה. התכונות הללו הן מוטביציה לשתי הגדרות של תכונות כלליות של הרחבות:</p>
+<ul>
+    <li>הרחבה <span class="math">\(E/F\)</span> היא <strong>נורמלית</strong> אם לכל פולינום אי-פריק <span class="math">\(p\left(x\right)\in F\left[x\right]\)</span> או שאין לו שורש ב-<span class="math">\(E\)</span>, או שכל השורשים שלו הם ב-<span class="math">\(E\)</span>.</li>
+    <li>הרחבה <span class="math">\(E/F\)</span> היא <strong>ספרבילית</strong> אם לכל <span class="math">\(a\in E\)</span>, הפולינום המינימלי של <span class="math">\(a\)</span> מעל <span class="math">\(F\)</span> הוא ספרבילי.</li>
+</ul>
+<p>ראינו זה עתה שהרחבת גלואה היא נורמלית וספרבילית - אלו התכונות שניצלנו כדי להוכיח שהרחבת גלואה היא שדה פיצול של פולינום ספרבילי. אם כן, יש לנו שרשרת של גרירות: "גלואה" גורר "נורמלית וספרבילית" וזה גורר "שדה פיצול של פולינום ספרבילי" שגורר, כפי שראינו קודם, "גלואה". לכן כל אלו שקולים. נוסיף לזה את הטענה שראינו קודם על השדה ש-<span class="math">\(\text{Aut}\left(E/F\right)\)</span> משמרת, וקיבלנו ארבע הגדרות שקולות ל"מתי <span class="math">\(E/F\)</span> היא הרחבת גלואה"</p>
+<ol>
+    <li>אם <span class="math">\(\left[E:F\right]=\left|\text{Aut}\left(E/F\right)\right|\)</span>.</li>
+    <li>אם השדה ש-<span class="math">\(\text{Aut}\left(E/F\right)\)</span> משמרת הוא <span class="math">\(F\)</span>.</li>
+    <li>אם <span class="math">\(E/F\)</span> הרחבה נורמלית וספרבילית.</li>
+    <li>אם <span class="math">\(E\)</span> הוא שדה פיצול של פולינום ספרבילי מעל <span class="math">\(F\)</span>.</li>
+</ol>
+<h2>הוכחת המשפט ה"קשה"</h2>
+<p>חזרה אל החוב שלי מתחילת הפוסט. כזכור, אני רוצה להוכיח שאם <span class="math">\(E\)</span> שדה ו-<span class="math">\(G\)</span> תת-חבורה של <span class="math">\(\text{Aut}\left(E\right)\)</span> ואני מגדיר את <span class="math">\(F\)</span> להיות השדה ש-<span class="math">\(G\)</span> משמרת, אז <span class="math">\(\left[E:F\right]=\left|G\right|\)</span>. את ההוכחה אפשר לחלק לשני חלקים ששניהם דומים באופיים: מניחים ש-<span class="math">\(\left[E:F\right]\)</span> גדול או קטן מ-<span class="math">\(\left|G\right|\)</span>, ובכל אחד מהמקרים הללו משתמשים באלגברה לינארית בסיסית ובתכונות הנחמדות של אוטומורפיזמים כדי ליצור איבר שהוא "טוב מכדי להתקיים". התכונה הרלוונטית לי מאלגברה לינארית היא זו: אם יש לי מערכת הומוגנית של <span class="math">\(k\)</span> משוואות לינאריות ב-<span class="math">\(n\)</span> נעלמים כך ש-<span class="math">\(k&lt;n\)</span>, אז תמיד קיים לה פתרון לא טריוויאלי ("מערכת הומוגנית" היא מערכת מהצורה <span class="math">\(Ax=0\)</span>, ו"פתרון לא טריוויאלי" הוא כזה שבו לא כל המשתנים מקבלים 0).</p>
+<p>עוד תכונה שאזדקק לה היא שאוטומורפיזמים של <span class="math">\(E\)</span> הם <strong>בלתי תלויים לינארית</strong> מעל <span class="math">\(E\)</span>. למה אני מתכוון? אם <span class="math">\(\sigma_{1},\dots,\sigma_{n}\)</span> הם אוטומורפיזמים כלשהם של <span class="math">\(E\)</span> אז לא קיים צירוף לינארי לא טריוויאלי שלהם שהוא פונקציית האפס, כלומר אם <span class="math">\(a_{1}\sigma_{1}\left(x\right)+\dots+a_{n}\sigma_{n}\left(x\right)=0\)</span> לכל <span class="math">\(x\in E\)</span>, אז <span class="math">\(a_{1}=\dots=a_{n}\)</span>.</p>
+<p>כדי להוכיח את התכונה הזו נניח בשלילה שיש צירוף לינארי לא טריוויאלי שכזה. בלי הגבלת הכלליות אפשר להניח ש-<span class="math">\(a_{1},\dots,a_{m}\)</span> הם המקדמים ששונים מאפס ופשוט לשכוח מהאחרים. יותר מכך - אפשר להניח ש-<span class="math">\(m\)</span> הוא המספר המינימלי שעבורו קיים צירוף לינארי לא טריוויאלי שכזה, וש-<span class="math">\(m&gt;1\)</span> (כי <span class="math">\(a_{1}\sigma_{1}\)</span> הוא אוטומורפיזם ולכן בוודאי שלא פונקציית האפס). התעלול עכשיו יהיה לייצר צירוף לינארי לא טריוויאלי מתאפס <strong>קטן יותר</strong>. אני אקח את</p>
+<p><span class="math">\(a_{1}\sigma_{1}\left(x\right)+\dots+a_{m}\sigma_{m}\left(x\right)=0\)</span></p>
+<p>ועכשיו אני רוצה "למחוק" מהצירוף הזה את <span class="math">\(\sigma_{m}\)</span> תוך שאני משאיר לכל הפחות את <span class="math">\(\sigma_{1}\)</span>. לשם כך אני צריך איכשהו להבדיל בין שני אלו; מכיוון שהם פונקציות, אז העובדה שהם שונים מעידה על כך שקיים לפחות <span class="math">\(x_{0}\)</span> אחד כך ש-<span class="math">\(\sigma_{1}\left(x_{0}\right)\ne\sigma_{m}\left(x_{0}\right)\)</span>. בהכרח <span class="math">\(x_{0}\ne0\)</span> אחרת שניהם היו מחזירים עליו 0. אם הצירוף הלינארי שלעיל נכון לכל <span class="math">\(x\in E\)</span>, הוא נכון בפרט עבור <span class="math">\(x_{0}\cdot y\)</span> כאשר <span class="math">\(y\in E\)</span> איבר כלשהו. לכן אפשר לכתוב:</p>
+<p><span class="math">\(a_{1}\sigma_{1}\left(x_{0}y\right)+\dots+a_{m}\sigma_{m}\left(x_{0}y\right)=0\)</span></p>
+<p>ותוך שימוש בכך שה-<span class="math">\(\sigma\)</span>-ות הן הומומורפיזמים:</p>
+<p><span class="math">\(a_{1}\sigma_{1}\left(x_{0}\right)\sigma_{1}\left(y\right)+\dots+a_{m}\sigma_{m}\left(x_{0}\right)\sigma_{m}\left(y\right)=0\)</span></p>
+<p>עכשיו ניקח את המשוואה שהתחלנו ממנה, ונכפול את כולה ב-<span class="math">\(\sigma_{m}\left(x_{0}\right)\)</span>. נקבל:</p>
+<p><span class="math">\(a_{1}\sigma_{m}\left(x_{0}\right)\sigma_{1}\left(y\right)+\dots+a_{m}\sigma_{m}\left(x_{0}\right)\sigma_{m}\left(y\right)=0\)</span></p>
+<p>ועכשיו נחסר את המשוואה הזו שקיבלנו מהמשוואה שקיבלנו לפני רגע. נקבל:</p>
+<p><span class="math">\(a_{1}\left(\sigma_{1}\left(x_{0}\right)-\sigma_{m}\left(x_{0}\right)\right)\sigma_{1}\left(y\right)+\dots+a_{m-1}\left(\sigma_{m-1}\left(x_{0}\right)-\sigma_{m}\left(x_{0}\right)\right)\sigma_{m-1}\left(y\right)=0\)</span></p>
+<p>מה קיבלנו פה? צירוף לינארי של <span class="math">\(m-1\)</span> איברים לכל היותר ששווה גם הוא אפס לכל <span class="math">\(y\in E\)</span>. לא כל המקדמים של הצירוף הזה הם אפס, כי <span class="math">\(a_{1}\left(\sigma_{1}\left(x_{0}\right)-\sigma_{m}\left(x_{0}\right)\right)\ne0\)</span>. זו סתירה להנחה שלנו ש-<span class="math">\(m\)</span> היה מינימלי, מה שמוכיח שכל ה-<span class="math">\(\sigma\)</span>-ות הן בלתי תלויות לינארית מעל <span class="math">\(E\)</span>.</p>
+<p>עכשיו, משאני מצוייד בידע הזה, אפשר סוף סוף להוכיח ש-<span class="math">\(\left[E:F\right]=\left|G\right|\)</span>. נסמן <span class="math">\(\left|G\right|=n\)</span> (כלומר <span class="math">\(G=\left\{ \sigma_{1},\sigma_{2},\dots,\sigma_{n}\right\} \)</span>), ונטפל בנפרד במקרים של <span class="math">\(\left[E:F\right]&lt;n\)</span> ו-<span class="math">\(\left[E:F\right]&gt;n\)</span>. נתחיל מהראשון. במקרה הראשון, אסמן <span class="math">\(k=\left[E:F\right]\)</span> וניקח בסיס <span class="math">\(a_{1},\dots,a_{k}\in E\)</span> ל-<span class="math">\(E\)</span> מעל <span class="math">\(F\)</span>. עכשיו אשתמש בדברים הללו כדי ליצור מערכת משוואות לינארית הומוגנית של <span class="math">\(k\)</span> משוואות ב-<span class="math">\(n\)</span> נעלמים - ומכיוון ש-<span class="math">\(k&lt;n\)</span> אז כפי שאמרתי לעיל, יהיה לה פתרון לא טריוויאלי:</p>
+<p><span class="math">\(\sigma_{1}\left(a_{1}\right)x_{1}+\dots+\sigma_{n}\left(a_{1}\right)x_{n}=0\)</span></p>
+<p><span class="math">\(\vdots\)</span></p>
+<p><span class="math">\(\sigma_{1}\left(a_{k}\right)x_{1}+\dots+\sigma_{n}\left(a_{k}\right)x_{n}=0\)</span></p>
+<p>בואו נסמן את הפתרון הזה ב-<span class="math">\(\beta_{1},\dots,\beta_{n}\in E\)</span>. אני ארצה להוכיח שמתקיים <span class="math">\(\beta_{1}\sigma_{1}+\dots+\beta_{n}\sigma_{n}=0\)</span>, מה שעומד בסתירה לכך שראינו שאוטומורפיזמים הם בלתי תלויים לינארית.</p>
+<p>כדי להראות את השוויון הזה, אני צריך איכשהו להראות ש-</p>
+<p><span class="math">\(\beta_{1}\sigma_{1}\left(\alpha\right)+\dots+\beta_{n}\sigma_{n}\left(\alpha\right)=0\)</span></p>
+<p><strong>לכל</strong> <span class="math">\(\alpha\in E\)</span>. כרגע יש לי את השוויון הזה, אבל לא לכל <span class="math">\(\alpha\)</span> אלא רק לאיברים <span class="math">\(a_{1},\dots,a_{n}\)</span>. מצד אחד, זה לא מספיק; מצד שני, אלו לא איברים שרירותיים של <span class="math">\(E\)</span> אלא <strong>בסיס</strong> ל-<span class="math">\(E\)</span>, מה שאומר שאני יכול לכתוב</p>
+<p><span class="math">\(\alpha=\lambda_{1}a_{1}+\dots+\lambda_{k}a_{k}\)</span></p>
+<p>עבור <span class="math">\(\lambda_{1},\dots,\lambda_{k}\in F\)</span>. כאן נכנס לתמונה הקלף המנצח שלי: המקדמים הללו לא סתם שייכים ל-<span class="math">\(E\)</span> אלא ל-<span class="math">\(F\)</span>. מי זה <span class="math">\(F\)</span>? אולי הלכנו לאיבוד בסבך המשוואות, אבל <span class="math">\(F\)</span> <strong>הוגדר</strong> בתור מה שכל אברי החבורה <span class="math">\(G\)</span> משמרים. כלומר, <span class="math">\(\sigma_{i}\left(\lambda_{j}\right)=\lambda_{j}\)</span> לכל <span class="math">\(1\le i\le n\)</span> ו-<span class="math">\(1\le j\le k\)</span>.</p>
+<p>על כן, אם אכפול את המשוואה הראשונה ב-<span class="math">\(\lambda_{1}\)</span>, את השניה ב-<span class="math">\(\lambda_{2}\)</span> וכן הלאה, אני אקבל:</p>
+<p><span class="math">\(\sigma_{1}\left(\lambda_{1}a_{1}\right)\beta_{1}+\dots+\sigma_{n}\left(\lambda_{1}a_{1}\right)\beta_{n}=0\)</span></p>
+<p><span class="math">\(\vdots\)</span></p>
+<p><span class="math">\(\sigma_{1}\left(\lambda_{k}a_{k}\right)\beta_{1}+\dots+\sigma_{n}\left(\lambda_{k}a_{k}\right)\beta_{n}=0\)</span></p>
+<p>ועכשיו נחבר את כל המשוואות יחד, ונקבל את <span class="math">\(\beta_{1}\sigma_{1}\left(\alpha\right)+\dots+\beta_{n}\sigma_{n}\left(\alpha\right)=0\)</span> שלנו. הגענו לסתירה עבור המקרה <span class="math">\(\left[E:F\right]&lt;n\)</span>, תוך שאנו מסתמכים חזק על כך ש-<span class="math">\(F\)</span> הוא השדה ש-<span class="math">\(G\)</span> משמרת וש-<span class="math">\(G\)</span> היא קבוצת אוטומורפיזמים. עם זאת, שימו לב ש<strong>לא</strong> השתמשתי עדיין בכלל בכך ש-<span class="math">\(G\)</span> חבורה.</p>
+<p>אם כן, קדימה אל המקרה <span class="math">\(\left[E:F\right]&gt;n\)</span> שאיתו נסיים!</p>
+<p>במקרה הזה פחות חשוב לנו מה המימד המדויק <span class="math">\(\left[E:F\right]\)</span> אלא רק שאנחנו מסוגלים למצוא <span class="math">\(n+1\)</span> איברים של <span class="math">\(E\)</span> שהם בלתי תלויים לינארית מעל <span class="math">\(F\)</span>. נסמן אותם <span class="math">\(a_{1},\dots,a_{n+1}\)</span>. נבנה עכשיו מערכת של <span class="math">\(n\)</span> משוואות ב-<span class="math">\(n+1\)</span> נעלמים, בצורה טיפה שונה ממה שהיה קודם:</p>
+<p><span class="math">\(\sigma_{1}\left(a_{1}\right)x_{1}+\dots+\sigma_{1}\left(a_{n+1}\right)x_{n+1}\)</span></p>
+<p><span class="math">\(\vdots\)</span></p>
+<p><span class="math">\(\sigma_{n}\left(a_{1}\right)x_{1}+\dots+\sigma_{n}\left(a_{n+1}\right)x_{n+1}\)</span></p>
+<p>קודם כל משוואה הוקדשה ל<strong>איבר בסיס</strong> אחד; הפעם כל משוואה מוקדשת ל<strong>אוטומורפיזם</strong> אחד. כמקודם, המסקנה היא אותה מסקנה: יש לנו <span class="math">\(\beta_{1},\dots,\beta_{n+1}\)</span> מעל <span class="math">\(E\)</span> שהם פתרון לא טריוויאלי של המשוואה. אבל מה הסתירה שננסה להגיע אליה עכשיו?</p>
+<p>כמו שהיה במקרה של אי-התלות של האוטומורפיזמים, גם כאן אני רוצה להגיע לסתירה מסוג "נתחיל עם צירוף לינארי עם מספר מינימלי של מקדמים שונה מאפס, ואז נקטין את מספר המקדמים באחד". כאן המקדמים הם ה-<span class="math">\(\beta\)</span>-ים. לא סתם ניקח פתרון אקראי של המשוואה, אלא נבחר אותו בחוכמה כך שמספר ה-<span class="math">\(\beta\)</span>-ים השונים מאפס בפתרון הוא מינימלי. אפשר גם להניח שה-<span class="math">\(\beta\)</span>-ים השונים מאפס הם <span class="math">\(\beta_{1},\dots,\beta_{k}\)</span> (אולי צריך למספר מחדש איברים בשביל זה). וחוץ מזה, אפשר גם לחלק את כל המשוואות ב-<span class="math">\(\beta_{k}\)</span>, אז אפשר להניח ש-<span class="math">\(\beta_{k}=1\)</span>. <strong>וחוץ מזה</strong> (תאמינו לי שהכל הכרחי) אני גם יודע בודאות שאחד מה-<span class="math">\(\beta\)</span>-ים לא שייך ל-<span class="math">\(F\)</span>. קחו שניה ותנסו לחשוב למה. אסביר בשורה הבאה.</p>
+<p>מכיוון ש-<span class="math">\(G\)</span> חבורה, היא כוללת את אוטומורפיזם הזהות. אז אחת מהמשוואות שראינו היא פשוט המשוואה <span class="math">\(a_{1}\beta_{1}+\dots+a_{n+1}\beta_{n+1}=0\)</span>. אם כל ה-<span class="math">\(\beta\)</span>-ים היו שייכים ל-<span class="math">\(F\)</span>, אז היינו מקבלים צירוף לינארי לא טריוויאלי של האיברים הבלתי תלויים לינארית <span class="math">\(a_{1},\dots,a_{n+1}\)</span>. המסקנה אם כן היא ש-<span class="math">\(\beta\)</span> כלשהו אינו ב-<span class="math">\(F\)</span>, וזה הדבר המרכזי שנשחק עליו. את ה-<span class="math">\(\beta\)</span> בר המזל נסמן ב-<span class="math">\(\beta_{1}\)</span> - שוב, אפשר למספר מחדש כדי להבטיח את זה.</p>
+<p>וכעת, לאקשן.</p>
+<p>כל משוואה לעיל הוקדשה לאוטומורפיזם אחר. אחרי שנציב את ה-<span class="math">\(\beta\)</span>-ים, נקבל משוואות שנראות ככה:</p>
+<p><span class="math">\(\sigma_{i}\left(a_{1}\right)\beta_{1}+\dots+\sigma_{i}\left(a_{k-1}\right)\beta_{k-1}+\sigma_{i}\left(a_{k}\right)=0\)</span></p>
+<p>מכיוון ש-<span class="math">\(\beta_{1}\notin F\)</span> הרי ש<strong>בהכרח </strong>קיים <span class="math">\(\sigma\in G\)</span> כך ש-<span class="math">\(\sigma\left(\beta_{1}\right)\ne\beta_{1}\)</span>. אם לא היה קיים <span class="math">\(\sigma\)</span> כזה, אז היינו מקבלים <span class="math">\(\beta_{1}\in F\)</span>. מה נעשה עם <span class="math">\(\sigma\)</span>? פשוט מאוד - נפעיל אותו על כל אחת מהמשוואות, ונשתמש בכך שהוא אוטומורפיזם כדי לקבל</p>
+<p><span class="math">\(\sigma\sigma_{i}\left(a_{1}\right)\sigma\left(\beta_{1}\right)+\dots+\sigma\sigma_{i}\left(a_{k-1}\right)\sigma\left(\beta_{k-1}\right)+\sigma\sigma_{i}\left(a_{k}\right)=0\)</span></p>
+<p>מה קיבלנו פה? קודם הייתה לנו משוואה שאמרה "הנה צירוף לינארי של הפעלת האוטומורפיזם <span class="math">\(\sigma_{i}\)</span> על האיברים <span class="math">\(a_{1},\dots,a_{k}\)</span> ששווה אפס". עכשיו קיבלנו משוואה שאומרת "הנה צירוף לינארי <strong>עם מקדמים אחרים</strong> של הפעלת האוטומורפיזם <span class="math">\(\sigma\sigma_{i}\)</span> על האיברים <span class="math">\(a_{1},\dots,a_{k}\)</span> ששווה אפס". כאן נכנסת לתמונה העובדה ש-<span class="math">\(G\)</span> היא <strong>חבורה</strong>. בחבורה, כפל באיבר כלשהו של כל אברי החבורה בסך הכל מבצע תמורה שלהם. כלומר, <span class="math">\(\left\{ \sigma_{1},\dots,\sigma_{n}\right\} \)</span> היא אותה קבוצה בדיוק כמו <span class="math">\(\left\{ \sigma\sigma_{1},\dots,\sigma\sigma_{n}\right\} \)</span>. מכאן שלכל <span class="math">\(\sigma_{i}\)</span>, קיבלנו בסופו של דבר את המשוואה</p>
+<p><span class="math">\(\sigma_{i}\left(a_{1}\right)\sigma\left(\beta_{1}\right)+\dots+\sigma_{i}\left(a_{k-1}\right)\sigma\left(\beta_{k-1}\right)+\sigma_{i}\left(a_{k}\right)=0\)</span></p>
+<p>נפחית מהמשוואה הזו את המשוואה של <span class="math">\(\sigma_{i}\)</span> שהייתה לנו קודם, כלומר את</p>
+<p><span class="math">\(\sigma_{i}\left(a_{1}\right)\beta_{1}+\dots+\sigma_{i}\left(a_{k-1}\right)\beta_{k-1}+\sigma_{i}\left(a_{k}\right)=0\)</span></p>
+<p>ונקבל:</p>
+<p><span class="math">\(\sigma_{i}\left(a_{1}\right)\left(\beta_{1}-\sigma\left(\beta_{1}\right)\right)+\dots+\sigma_{i}\left(a_{k-1}\right)\left(\beta_{k-1}-\sigma\left(\beta_{k-1}\right)\right)=0\)</span></p>
+<p>שימו לב שהחיסור <strong>העלים את האיבר האחרון</strong> בסכום; זאת מכיוון שהאיבר האחרון הזה היה עבור <span class="math">\(\beta_{k}=1\)</span>, וזה איבר ש-<span class="math">\(\sigma\)</span> <strong>בודאות כן משמרת</strong>. באותו אופן, בחרנו את <span class="math">\(\sigma\)</span> מלכתחילה כדי ש- <span class="math">\(\beta_{1}\)</span> יהיה איבר ש-<span class="math">\(\sigma\)</span> <strong>בודאות לא משמרת</strong>, ולכן <span class="math">\(\beta_{1}\ne\sigma\left(\beta_{1}\right)\)</span>, כלומר <span class="math">\(\beta_{1}-\sigma\left(\beta_{1}\right)\ne0\)</span>, כלומר המקדם הראשון בצירוף הלינארי שקיבלנו אינו אפס.</p>
+<p>מה קרה? קיבלנו <strong>פתרון חדש</strong> למערכת המשוואות שממנה התחלנו. פתרון שבו יש רק <span class="math">\(k-1\)</span> איברים שונים מאפס, בסתירה להנחה שלנו ש-<span class="math">\(k\)</span> הוא המספר המינימלי של איברים שונים מאפס בפתרון לא טריוויאלי <strong>כלשהו</strong> למערכת המשוואות הזו. זה מסיים את ההוכחה.</p>
+<p>האם זה היה טכני? כן, במידה מסויימת.</p>
+<p>האם זה היה קשה? כן, במידה מסויימת, אם כי כל המעברים פה פשוטים למדי.</p>
+<p>האם זה עוזר לנו להבין <strong>למה </strong>תורת גלואה עובדת? כן, במידה מסויימת: כל המרכיבים החשובים של תורת גלואה (בסיס של שדה אחד מעל אחר, חבורת אוטומורפיזמים, שימור של השדה הקטן) באים כאן לידי ביטוי. לכן אני חושב שלמרות שההוכחה היא טכנית למדי, היא עדיין אלגנטית ויפה מאוד, ויש חשיבות גדולה ל"להרגיש אותה בידיים" כדי להבין מה בעצם הולך בתורת גלואה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2018/05/21/fundamental_theorem_of_galois_theory/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">המשפט היסודי של תורת גלואה</span>
+            </a>
+            
+            
+            
+            <a href="/2018/04/26/galois_theory_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מבוא לתורת גלואה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

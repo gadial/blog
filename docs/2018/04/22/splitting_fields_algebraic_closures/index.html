@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שדות פיצול וסגורים אלגבריים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>שדות פיצול וסגורים אלגבריים</h1>
+            <div class="post-meta">
+                <span class="date">2018-04-22</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה מופשטת.html">אלגברה מופשטת</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/סגור אלגברי.html">סגור אלגברי</a>
+                    
+                    <a href="/tags/שדה פיצול.html">שדה פיצול</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>סדרת הפוסטים שלי על תורת השדות <a href="http://gadial.net/2018/04/03/field_extensions_intro/">התחילה</a> עם הסיטואציה הבאה: נניח שיש לנו שדה <span class="math">\(F\)</span> ופולינום <span class="math">\(p\left(x\right)\in F\left[x\right]\)</span>. אז אנחנו יודעים לבצע להטוט שמייצר יש מאין שורש של הפולינום <span class="math">\(p\left(x\right)\)</span> הזה אפילו אם ב-<span class="math">\(F\)</span> אין לו שורשים בכלל; אנחנו בונים <strong>הרחבת שדות</strong> <span class="math">\(E/F\)</span> שבה לפולינום <span class="math">\(p\left(x\right)\)</span> יש שורש.</p>
+<p>בגלל הדחף הבלתי נשלט של המתמטיקאים להכליל הכל ומייד, מייד מתעוררות שתי שאלות טבעיות:</p>
+<ul>
+    <li>האם אפשר לבנות הרחבה <span class="math">\(E/F\)</span> שבה לפולינום <span class="math">\(p\left(x\right)\)</span> יש את <strong>כל</strong> השורשים שלו?</li>
+    <li>האם אפשר לבנות הרחבה <span class="math">\(E/F\)</span> שבה <strong>לכל</strong> פולינום יהיו <strong>כל</strong> השורשים שלו?</li>
+</ul>
+<p>התשובה לשני אלו חיובית. עבור השאלה הראשונה, השדה <span class="math">\(E\)</span> הקטן ביותר שיקיים את התכונה המבוקשת נקרא <strong>שדה הפיצול</strong> של <span class="math">\(p\left(x\right)\)</span>, ואילו עבור השאלה השניה השדה <span class="math">\(E\)</span> הקטן ביותר שיקיים את התכונה המבוקשת נקרא <strong>הסגור האלגברי</strong> של <span class="math">\(F\)</span>. הבניה של היצורים הללו תהיה דומה באופיה לבניה של שדה השורש של <span class="math">\(p\left(x\right)\)</span> מעל <span class="math">\(F\)</span> שכבר ראינו - אבל עם עוד קצת סיבוכים מתמטיים, בפרט במקרה של הסגור האלגברי, שרק מחדדים את האלגנטיות של הפתרון.</p>
+<h2>שדות פיצול</h2>
+<p>נתחיל עם שדות פיצול, שהם הסיפור הפשוט יותר כאן. אם <span class="math">\(p\left(x\right)\)</span> פולינום מעל <span class="math">\(F\)</span> כך שכל השורשים של <span class="math">\(p\left(x\right)\)</span> שייכים ל-<span class="math">\(F\)</span>, אז אפשר לכתוב <span class="math">\(p\left(x\right)=\left(x-a_{1}\right)\cdots\left(x-a_{n}\right)\)</span> כאשר <span class="math">\(a_{1},\dots,a_{n}\)</span> הם השורשים (הלאו דווקא שונים זה מזה) של <span class="math">\(p\left(x\right)\)</span>. במילים אחרות, בחוג <span class="math">\(F\left[x\right]\)</span> הפולינום <span class="math">\(p\left(x\right)\)</span> <strong>מתפרק לגורמים לינאריים</strong>. כשפולינום מתפרק לגורמים לינאריים אומרים שהוא <strong>מתפצל</strong> (או אפילו "מתפצל לחלוטין" אם לא רוצים להשאיר מקום לספק, הרי "פיצול" נשמע כמו סתם פירוק למכפלה של שני פולינומים).</p>
+<p>בואו נסתכל לרגע על הפולינום <span class="math">\(p\left(x\right)=x^{2}+1\)</span> מעל <span class="math">\(\mathbb{Q}\)</span>. השורשים שלו הם המספרים המרוכבים <span class="math">\(i,-i\)</span>, ולכן ברור שמעל הרציונליים הוא אי-פריק, כלומר לא מתפצל. עם זאת, מעל המרוכבים <span class="math">\(\mathbb{C}\)</span> מתקיים <span class="math">\(p\left(x\right)=\left(x-i\right)\left(x+i\right)\)</span> - הפולינום התפצל. העניין הוא שהמרוכבים הם שדה ענקי; המימד של ההרחבה <span class="math">\(\mathbb{C}/\mathbb{Q}\)</span> הוא אינסופי. לא צריך כל כך הרבה הרחבה רק כדי לפצל את הפולינום המסכן הזה; גם השדה <span class="math">\(\mathbb{Q}\left(i\right)\)</span>, שהוא הרחבה ממעלה 2 של <span class="math">\(\mathbb{Q}\)</span>, היה מפצל את <span class="math">\(p\left(x\right)\)</span>. מצד שני, אם שדה <strong>כלשהו</strong> שמרחיב את <span class="math">\(\mathbb{Q}\)</span> מפצל את <span class="math">\(p\left(x\right)\)</span> הוא בוודאי חייב לכלול את השורש <span class="math">\(i\)</span> של <span class="math">\(\mathbb{Q}\)</span>, ומכאן שכל שדה שמפצל את <span class="math">\(p\left(x\right)\)</span> יכיל את <span class="math">\(\mathbb{Q}\left(i\right)\)</span> (ש<strong>מוגדר</strong> להיות השדה המינימלי שמכיל את <span class="math">\(\mathbb{Q}\)</span> ואת <span class="math">\(i\)</span>). על כן, <span class="math">\(\mathbb{Q}\left(i\right)\)</span> הוא שדה הפיצול של <span class="math">\(x^{2}+1\)</span> מעל <span class="math">\(\mathbb{Q}\)</span>.</p>
+<p>באופן כללי, שדה פיצול של פולינום <span class="math">\(p\left(x\right)\)</span> מעל <span class="math">\(F\)</span> הוא ההרחבה הקטנה ביותר של <span class="math">\(F\)</span> שמפצלת את <span class="math">\(p\left(x\right)\)</span>. מכיוון שכל הרחבה שמפצלת את <span class="math">\(p\left(x\right)\)</span> חייבת לכלול את השורשים של <span class="math">\(p\left(x\right)\)</span>, אז ההרחבה של <span class="math">\(F\)</span> שמתקבלת בדיוק מהוספת השורשים הללו - מה שסימנתי <span class="math">\(F\left(a_{1},a_{2},\dots,a_{n}\right)\)</span> בפוסט קודם - תהיה שדה פיצול של <span class="math">\(p\left(x\right)\)</span>. אבל יש כאן כמה נקודות עדינות שצריך להתייחס אליהן. ראשית, כאשר נתון לנו פולינום <span class="math">\(p\left(x\right)\)</span> מעל <span class="math">\(F\)</span>, לא נתון לנו שקיימים לו שורשים בכלל מעבר למה שנמצא בתוך <span class="math">\(F\)</span>. אין לנו איזו הרחבה פלאית <span class="math">\(E\)</span> של <span class="math">\(F\)</span> שבה הפולינום מתפצל; כל האתגר הוא לבנות אותה בעצמנו. את זה אנחנו יודעים לעשות "צעד-צעד" - בכל פעם לבנות הרחבת שדות שמוסיפה שורש אחד. אז הנה דרך מסודרת לעשות את זה:</p>
+<p>אם ל-<span class="math">\(p\left(x\right)\)</span> יש שורש ב-<span class="math">\(F\)</span>, נהדר! נסמן אותו <span class="math">\(a_{1}\)</span> ונגדיר "הרחבה" <span class="math">\(F_{1}=F\left(a_{1}\right)\)</span> (שבעצם תהיה שווה ל-<span class="math">\(F\)</span> כי לא הוספנו כלום). אם אין לו שורש ב-<span class="math">\(F\)</span>, נהדר! נבנה שדה הרחבה <span class="math">\(F_{1}/F\)</span> שמכיל שורש של <span class="math">\(p\left(x\right)\)</span> ונסמן את השורש הזה <span class="math">\(a_{1}\)</span>. כלומר, בשני המקרים קיבלנו <span class="math">\(F_{1}=F\left(a_{1}\right)\)</span>. כעת נסתכל על הפולינום <span class="math">\(p_{1}=\frac{p\left(x\right)}{\left(x-a_{1}\right)}\)</span> ונחפש שורש שלו מעל <span class="math">\(F_{1}\)</span> באותה הדרך וכן הלאה. כך נקבל סדרה <span class="math">\(F_{1},F_{2},\dots\)</span> של הרחבות של <span class="math">\(F\)</span> ופולינומים <span class="math">\(p_{1},p_{2},\dots\)</span> שהם רכיבים הולכים וקטנים מתוך <span class="math">\(p\)</span>. כל צעד מקטין את הדרגה של הפולינום שאנחנו עובדים עליו כרגע ב-<span class="math">\(1\)</span>, ולכן אם <span class="math">\(n\)</span> היא הדרגה של <span class="math">\(p\)</span> המקורי, נסיים תוך <span class="math">\(n\)</span> צעדים, אחרי שמצאנו/המצאנו <span class="math">\(n\)</span> שורשים (לאו דווקא שונים זה מזה) <span class="math">\(a_{1},\dots,a_{n}\)</span> ובנינו <span class="math">\(n\)</span> הרחבות פשוטות מהצורה <span class="math">\(F_{k}=F_{k-1}\left(a_{k}\right)\)</span> (כאשר <span class="math">\(F_{0}=F\)</span>). כבר ראינו בפוסט קודם שלי שסדרה כזו של הרחבות פשוטות שנוצרת מהוספה סדרתית של <span class="math">\(a_{1},a_{2},\dots,a_{n}\)</span> נותנת לנו את ההרחבה <span class="math">\(F\left(a_{1},\dots,a_{n}\right)\)</span> של <span class="math">\(F\)</span>; הנקודה העדינה פה היא שכשהתחלתי את ההוכחה לא הנחתי שכבר קיימים איברים <span class="math">\(a_{1},\dots,a_{n}\)</span> אלא יצרתי אותם יש מאין במהלך ההוכחה.</p>
+<p>הבונוס הוא שאני מקבל הערכה כלשהי למימד של שדה הפיצול: <span class="math">\(\left[F_{1}:F_{0}\right]\le n\)</span> כי <span class="math">\(F_{1}\)</span> מתקבלת על ידי הוספת שורש של פולינום ממעלה <span class="math">\(n\)</span>, ולכן הפולינום המינימלי של השורש הזה הוא מדרגה לכל היותר <span class="math">\(n\)</span>. מאותו נימוק גם <span class="math">\(\left[F_{2}:F_{1}\right]\le n-1\)</span> וכן הלאה: נקבל ש-<span class="math">\(\left[F_{n}:F\right]=\left[F_{n}:F_{n-1}\right]\cdots\left[F_{1}:F_{0}\right]\le1\cdot2\cdots n=n!\)</span>. כלומר, המימד של שדה פיצול של <span class="math">\(p\left(x\right)\)</span> ממעלה <span class="math">\(n\)</span> מעל <span class="math">\(F\)</span> הוא לכל היותר <span class="math">\(n!\)</span>, אם כי ברוב המוחץ של המקרים המימד יהיה קטן משמעותית יותר (אבל "במקרה הכללי" הוא יהיה שווה בדיוק <span class="math">\(n!\)</span>; אותו "מקרה כללי" יהיה בעל חשיבות אדירה בהמשך, כשנדבר על תורת גלואה, ואז נראה אותו).</p>
+<p>עוד נקודה עדינה אף יותר שצריך להתייחס אליה הוא ששדה הפיצול הוא <strong>לא יחיד</strong>. אמנם, דיברתי על "השדה הקטן ביותר" וכל אופן ההצגה שלי היה כאילו יש לפולינום רק שדה פיצול אחד, אבל זה לא בהכרח המצב. הוכחת הקיום שלי של שדה הפיצול התבססה על <strong>שיטת בניה ספציפית</strong> של שדה הרחבה שמוסיף שורשים לפולינום; בוודאי שאפשר לתת בניות שונות שיתנו שדות שונים. יותר מכך - הבניה שלי תלויה בסדר שבו אני בוחר לאיזה גורם אי-פריק של הפולינום בא לי להוסיף שורש באותו הרגע. בחירות שונות יניבו שדות הרחבה שונים. העניין הוא שכל הדברים הללו הם בסופו של יום <strong>איזומורפיים</strong>. הסיבה שהיה לי נוח להציג שיטה אחת ליצור יש מאין שורש לפולינום ולא לדון בכלל על שיטות אפשריות היא שאפשר להוכיח שכל הרחבה שמוסיפה שורש אחד לפולינום תהיה איזומורפית למה שבנינו. באופן כללי בתורת השדות הרבה ממה שאנחנו מדברים עליו הוא "עד כדי איזומורפיזם" עד שאנחנו כבר שוכחים מהשטות הזו של "פורמלית אלו לא אותם שדות".</p>
+<p>העסק הזה תקף גם לשדות פיצול: אפשר להוכיח שכל שני שדות פיצול של <span class="math">\(p\left(x\right)\)</span> מעל <span class="math">\(F\)</span> יהיו איזומורפיים. ההוכחה היא אחת מאותן הוכחות שכמעט כותבות את עצמן, אבל בהבדל אחד - אם לא בוחרים נקודת פתיחה חכמה, פשוט נתקעים, וזה לקח שכדאי לזכור גם באופן כללי. מה הבעיה? הנה הניסוח הנאיבי שהייתי מנסח בו את המשפט שאנחנו רוצים להוכיח: אם <span class="math">\(p\left(x\right)\)</span> פולינום מעל <span class="math">\(F\)</span> ואם <span class="math">\(E_{1},E_{2}\)</span> שני שדות פיצול של <span class="math">\(p\left(x\right)\)</span> מעל <span class="math">\(F\)</span> אז <span class="math">\(E_{1}\cong E_{2}\)</span> (הסימון <span class="math">\(\cong\)</span> מייצג איזומורפיזם).</p>
+<p>הוכחה של טענה כזו מזמינה אינדוקציה על המעלה של <span class="math">\(p\left(x\right)\)</span>. אני אומר - בואו ניקח <span class="math">\(a\in E_{1}\)</span> ו-<span class="math">\(b\in E_{2}\)</span> שהם שורשים של <span class="math">\(p\left(x\right)\)</span> מעל השדות הללו. אנחנו <strong>יודעים </strong>ש-<span class="math">\(F\left(a\right)\cong F\left(b\right)\)</span> כי כל שני שדות שורש של אותו פולינום הם איזומורפיים. אז אפשר להסתכל על <span class="math">\(p_{1}\left(x\right)=\frac{p\left(x\right)}{x-a}\)</span> ו-<span class="math">\(p_{2}\left(x\right)=\frac{p\left(x\right)}{x-b}\)</span> מעל שני השדות הללו ועכשיו... אה... המ... מה ש<strong>רציתי</strong> לעשות הוא להשתמש בהנחת האינדוקציה, אבל הנחת האינדוקציה שלי מדברת על פולינום <strong>אחד</strong> מעל שדה <strong>אחד</strong> שיש לו שני שדות פיצול, ואילו כאן יש לי <strong>שני</strong> פולינומים (<span class="math">\(p_{1},p_{2}\)</span>) מעל <strong>שני</strong> שדות (<span class="math">\(F\left(a\right),F\left(b\right)\)</span>) עם שני שדות פיצול. הנחת האינדוקציה שלי <strong>חלשה מדי</strong> מכדי להתמודד עם הסיטואציה הזו. גם להגיד "אוקיי, בואו נוותר על האינדוקציה ובמקום זה פשוט נבנה את שדה השורש הבא בתור" לא תעבוד יותר - אין לי כרגע משפט שאומר שאם יש לי שני פולינומים שונים מעל שני שדות שונים אז יהיה להם את אותו שדה שורש; זה לא בהכרח נכון בכלל. צריך איכשהו להשתמש בזה ש-<span class="math">\(F\left(a\right)\cong F\left(b\right)\)</span>.</p>
+<p>אז הניסוח הנאיבי של המשפט כושל, ומזמין ניסוח כללי יותר, שכשאני נתקל בו בספרי הלימוד בלי לזכור מראש <strong>למה</strong> הוא כללי כל כך, הוא נראה לי כבד שלא לצורך, אבל עכשיו ברור לנו למה הוא הכרחי: אם <span class="math">\(F_{1}\cong F_{2}\)</span> הם שני שדות איזומורפיים עם איזומורפיזם <span class="math">\(\varphi:F_{1}\to F_{2}\)</span>, ו-<span class="math">\(p_{1}\in F_{1}\left[x\right]\)</span> פולינום ו-<span class="math">\(p_{2}=\varphi\left(p_{1}\right)\in F_{2}\left[x\right]\)</span> הוא הפולינום המתקבל מ-<span class="math">\(p_{1}\)</span> על ידי הפעלת <span class="math">\(\varphi\)</span> <strong>על המקדמים</strong> של <span class="math">\(p_{1}\)</span>, ואם <span class="math">\(E_{1}/F_{1}\)</span> הוא שדה פיצול של <span class="math">\(p_{1}\)</span> ו-<span class="math">\(E_{2}/F_{2}\)</span> הוא שדה פיצול של <span class="math">\(p_{2}\)</span> - אז במקרה זה <span class="math">\(E_{1}\cong E_{2}\)</span> עם איזומורפיזם <span class="math">\(\psi:E_{1}\to E_{2}\)</span> כך ש-<span class="math">\(\psi\)</span> מצומצם ל-<span class="math">\(F_{1}\)</span> נותן את <span class="math">\(\varphi\)</span>. עם הניסוח הזה, ההוכחה היא באמת אינדוקציה שגרתית בסגנון של מה שכתבתי למעלה; ברשותכם אוותר על הפרטים.</p>
+<h2>סגור אלגברי</h2>
+<p>כשדיברתי קודם על הפולינום <span class="math">\(x^{2}+1\)</span> ורציתי לתת דוגמא לשדה שבו הוא מתפצל, נתתי את <span class="math">\(\mathbb{C}\)</span>, המרוכבים. למה דווקא את המרוכבים? כי לכל מי שמכיר קצת מתמטיקה, המרוכבים הם שדה הפיצול האולטימטיבי - <strong>כל</strong> פולינום במקדמים רציונליים מתפצל ב-<span class="math">\(\mathbb{C}\)</span>. למעשה, כל פולינום במקדמים <strong>ממשיים</strong> מתפצל. למעשה, כל פולינום במקדמים <strong>מרוכבים</strong> מתפצל. התוצאה הזו נקראת <strong>המשפט היסודי של האלגברה</strong> והיא הוזכרה בבלוג הזה אינספור פעמים. אפשר לנסח אותה בתור "כל פולינום ב-<span class="math">\(\mathbb{C}\left[x\right]\)</span> מתפצל מעל <span class="math">\(\mathbb{C}\)</span> לגורמים לינאריים" ואפשר באופן שקול לגמרי לנסח אותה בתור "לכל פולינום לא קבוע ב-<span class="math">\(\mathbb{C}\left[x\right]\)</span> יש שורש ב-<span class="math">\(\mathbb{C}\)</span>" (ואז אפשר לחלק ב-<span class="math">\(x\)</span> פחות השורש הזה ולמצוא שורש לפולינום שהתקבל וכן הלאה עד שמפצלים לגורמים לינאריים). העניין הוא ש-<span class="math">\(\mathbb{C}\)</span> הוא לא ייחודי. יש עוד שדות עם התכונה הזו שלו, כך שהיא זוכה לשם כללי: שדה <span class="math">\(F\)</span> הוא <strong>סגור אלגברית</strong> אם כל פולינום מעל <span class="math">\(F\)</span> מתפצל לגורמים לינאריים, ובאופן שקול, אם לכל פולינום לא קבוע מעל <span class="math">\(F\)</span> יש שורש ב-<span class="math">\(F\)</span>.</p>
+<p>עכשיו, ל-<span class="math">\(\mathbb{C}\)</span> יש את התכונה הנחמדה מבחינת <span class="math">\(\mathbb{Q}\)</span> לפיה כל פולינום מעל <span class="math">\(\mathbb{Q}\)</span> מתפצל ב-<span class="math">\(\mathbb{C}\)</span>, אבל יש להרחבה <span class="math">\(\mathbb{C}/\mathbb{Q}\)</span> תכונה לא נחמדה: היא לא אלגברית. יש איברים של <span class="math">\(\mathbb{C}\)</span> שאין אף פולינום ב-<span class="math">\(\mathbb{Q}\)</span> שמאפס אותם; למשל <span class="math">\(\pi\)</span>. התחושה היא ש-<span class="math">\(\mathbb{C}\)</span> הוא הרחבה "גדולה מדי" של <span class="math">\(\mathbb{Q}\)</span> אם כל מה שמעניין אותנו הוא לפצל כל פולינום ב-<span class="math">\(\mathbb{Q}\)</span>. זה לא מקרי; הסיבה ש-<span class="math">\(\mathbb{C}\)</span> קיים הוא בשביל להוות שדה סגור אלגברית הרחבה אלגברית <strong>עבור שדה אחר</strong>, עבור <span class="math">\(\mathbb{R}\)</span>, והסיבות לקיום של <span class="math">\(\mathbb{R}\)</span> מבחינתנו הן לא משהו שמנוסח באלגברה שיש לנו כרגע (בנפנוף ידיים, אנחנו צריכים את <span class="math">\(\mathbb{R}\)</span> כדי לעשות <strong>חדו"א</strong> כמו שצריך; ספציפית, אנחנו זקוקים לתכונה לפיה לכל קבוצה חסומה ב-<span class="math">\(\mathbb{R}\)</span> יש חסם עליון או באופן שקול, לכך שכל סדרת קושי ב-<span class="math">\(\mathbb{R}\)</span> תתכנס). האינטואיציה הזו נותנת לנו מוטיבציה לעוד הגדרה כללית: <span class="math">\(E\)</span> הוא <strong>סגור אלגברי</strong> של <span class="math">\(F\)</span> אם <span class="math">\(E\)</span> הוא שדה סגור אלגברית שהוא גם הרחבה אלגברית של <span class="math">\(F\)</span>. כמו עם כל אובייקט מתמטי שאנחנו מגדירים, עולות מייד שתי שאלות:</p>
+<ul>
+    <li>האם האובייקט קיים?</li>
+    <li>האם האובייקט יחיד?</li>
+</ul>
+<p>ראינו דוגמא לזה בפוסט הנוכחי: בהינתן שדה ופולינום מעליו, <strong>קיים</strong> שדה פיצול לפולינום, ושדה הפיצול הזה הוא <strong>יחיד</strong> עד כדי איזומורפיזם (ה"עד כדי" הזה קריטי, כמובן; הרבה הוכחות של "יחידות" במתמטיקה הן "יחיד עד כדי מה שחשוב לנו כרגע"). על פניו נראה די מתבקש שזו תהיה הסיטואציה גם עם סגור אלגברי, וזה נכון חלקית: לכל שדה <span class="math">\(F\)</span> קיים סגור אלגברי והוא יחיד עד כדי איזומורפיזם, אבל זאת רק בהנחת <a href="http://gadial.net/2012/06/04/choice_order_zorn/">אקסיומת הבחירה</a> (גם עבור הוכחת הקיום וגם עבור הוכחת היחידות). לי אישית אין בעיה עם אקסיומת הבחירה, אבל הנוכחות שלה בהוכחה מסויימת תמיד מצביעה על כך שאנחנו עושים סוג של קסם באותה הוכחה ובונים אובייקט מורכב, שלא נוכל לתאר בהכרח במפורש.</p>
+<p>בפוסט הזה אסתפק בהוכחת ה"קיים" ולא אכנס להוכחת היחידות, כי הוא יהיה מספיק ארוך גם ככה. בואו נתחיל עם האבחנה שאפשר להחליש קצת את הדרישה מסגור אלגברי. בהינתן שדה <span class="math">\(F\)</span>, נסמן ב-<span class="math">\(\overline{F}\)</span> שדה שמרחיב אלגברית את <span class="math">\(F\)</span> וכל פולינום ב-<span class="math">\(F\)</span> מתפצל בו (הסימון קצת מרמז על כך שה-<span class="math">\(\overline{F}\)</span> הזה הוא יחיד, אבל זה לא נדרש פה). אני טוען ש-<span class="math">\(\overline{F}\)</span> הוא סגור אלגברית (וכתוצאה מכך, <span class="math">\(\overline{\overline{F}}=\overline{F}\)</span>; מתאים לאינטואיציה המתמטית הכללית לגבי "סגור" של משהו). ההוכחה פשוטה, בהינתן דברים שראינו בפוסטים קודמים: ניקח פולינום <span class="math">\(p\left(x\right)\in\overline{F}\)</span>; אנחנו רוצים להראות שקיים לו שורש ב-<span class="math">\(\overline{F}\)</span>. יהא <span class="math">\(a\)</span> שורש כלשהו של <span class="math">\(p\left(x\right)\)</span> שאנחנו לוקחים מתוך שדה הפיצול של <span class="math">\(p\)</span> שמרחיב את <span class="math">\(\overline{F}\)</span>. אז ההרחבה הפשוטה <span class="math">\(\overline{F}\left(a\right)\)</span> היא אלגברית (ראינו שהרחבה פשוטה על ידי איבר אלגברי היא אלגברית). מכאן שיש לנו מגדל של הרחבות אלגבריות: <span class="math">\(F\subseteq\overline{F}\subseteq\overline{F}\left(a\right)\)</span>. ראינו שבמגדל של הרחבות אלגבריות, השדה האחרון אלגברי מעל השדה הראשון, כלומר <span class="math">\(\overline{F}\left(a\right)\)</span> אלגברי מעל <span class="math">\(F\)</span> ובפרט <span class="math">\(a\)</span> אלגברי מעל <span class="math">\(F\)</span>, כלומר <span class="math">\(a\)</span> הוא שורש של פולינום עם מקדמים מ-<span class="math">\(F\)</span> ולכן בוודאי שייך ל-<span class="math">\(\overline{F}\)</span> שמכילה את כל השורשים של כל הפולינומים עם מקדמים מ-<span class="math">\(F\)</span>. מכאן שהגדרה שקולה וקצת יותר פשוטה לסגור אלגברי של <span class="math">\(F\)</span> היא - שדה <span class="math">\(E\)</span> שמרחיב אלגברית את <span class="math">\(F\)</span> ולכל פולינום ב-<span class="math">\(F\)</span> יש שורש ב-<span class="math">\(E\)</span>.</p>
+<p>למה שיהיה קשה, בהינתן <span class="math">\(F\)</span>, לבנות את <span class="math">\(\overline{F}\)</span>? למה לא לומר "ראינו שלכל פולינום מעל <span class="math">\(F\)</span> קיימים שורשים היכן שהוא; למה לא לקחת את כל השורשים הללו, להוסיף ל-<span class="math">\(F\)</span> ולסגור?" ובכן, עד כה כשהוספנו איברים לשדה ו"סגרנו" אותו, זה תמיד היה בהקשר שבו האיברים שהוספנו חיים בתוך שדה גדול יותר שאנחנו כבר יודעים שקיים. הסיטואציה היחידה שבה יצרנו איברים חדשים יש מאין הייתה כשבנינו שדה שורש, ושם באמת לא אמרנו "נוסיף שורש ונסגור" אלא עשינו משהו הפוך - לקחנו חוג גדול מעל השדה הנוכחי שלנו, ויצרנו <strong>חוג מנה</strong> - "הקטנו" את החוג שלנו. סתם להגיד "נוסיף איברים ונסגור" זה חסר משמעות.</p>
+<p>אני רוצה לחדד את הבעיה העקרונית שעלולה להיווצר פה. בואו נניח שיש לנו <strong>שלושה</strong> פולינומים מעל <span class="math">\(F\)</span>, נקרא להם <span class="math">\(p,q,r\)</span>. נניח ש-<span class="math">\(p\left(a\right)=0,r\left(c\right)=0\)</span> ו-<span class="math">\(q\left(b\right)=0\)</span> עבור <span class="math">\(a,b,c\)</span> שחיים בהרחבה כלשהי של <span class="math">\(F\)</span>. מה אנחנו יכולים להגיד על הקשר בין <span class="math">\(a,b,c\)</span>? התשובה היא, במבט ראשון, ששום דבר, אבל כמובן שקשר כלשהו עשוי להיות: למשל, אם <span class="math">\(F=\mathbb{Q}\)</span> ו-<span class="math">\(p=x^{2}-2\)</span> ו-<span class="math">\(q=x^{2}-3\)</span> אז <span class="math">\(a=\sqrt{2}\)</span> ו-<span class="math">\(b=\sqrt{3}\)</span> יהיו שורשים של הפולינומים הללו, ואז <span class="math">\(ab=\sqrt{6}\)</span> יהיה שורש של הפולינום <span class="math">\(r=x^{2}-6\)</span>. כלומר, יש לנו <strong>קשר אלגברי</strong> בין שורשים של הפולינומים הללו: <span class="math">\(ab=c\)</span>. אם אנחנו רוצים לומר משהו בסגנון "ניקח את כל השורשים של כל הפולינומים ונדחוף אותם פנימה", לא מספיק לנו לעשות את זה - צריך לדחוף פנימה גם את כל הקשרים האלגבריים ביניהם. כלומר, יש לנו פה הזמנה לתסבוכת.</p>
+<p>דרך יותר אינטואיטיבית אולי היא להסתכל על שדות הפיצול של כל הפולינומים מעל <span class="math">\(F\)</span>. יש לנו ערב-רב של שדות, וסתם לאחד שדות לא מניב בהכרח שדה, אבל אם יש לנו <strong>יחסי הכלה</strong> בין חלק מהשדות בערב-רב כבר יש יותר עם מה לעבוד - תחשבו על לבנות שדה גדול ומאוחד מתוך הרבה חתיכות קטנות - הרבה "טלאים" שמסתדרים יפה אחד עם השני. זה נשמע קצת עקום, אבל למעשה זה הרעיון מאחורי שלל הוכחות יפות במתמטיקה, עם עקב האכילס שהכלי הטכני שמשמש אותנו למלאכת ההרכבה הקסומה הזו הוא אקסיומת הבחירה, בתחפושת שלה בתור <strong>הלמה של צורן</strong>. אני לא אנקוט בשיטה הזו כאן כי אני רוצה להציג הוכחה קצת יותר אלגנטית, אבל אי אפשר להתחמק מאקסיומת הבחירה - ההוכחה שלי תתבסס על משפט קצת יותר בסיסי שכן מוכיחים בעזרת "שמיכת טלאים" שכזו, והוא מגיע מתורת החוגים: אם <span class="math">\(R\)</span> חוג ו-<span class="math">\(I\ne R\)</span> אידאל כלשהו שאינו כל החוג, אז קיים אידאל <strong>מקסימלי</strong> <span class="math">\(J\)</span> ב-<span class="math">\(R\)</span> כך ש-<span class="math">\(I\subseteq J\)</span>.</p>
+<p>הלמה של צורן היא בדיוק כלי שמייצר לנו איברים מקסימליים שכאלו. הניסוח שלה הוא זה: אם <span class="math">\(A\)</span> קבוצה שסדורה ביחס סדר חלקי <span class="math">\(\le\)</span> כלשהו, כך שלכל שרשרת <span class="math">\(C\subseteq A\)</span> של איברים קיים ב-<span class="math">\(A\)</span> חסם מלעיל, אז יש ב-<span class="math">\(A\)</span> איבר מקסימלי. "שרשרת" היא קבוצה שכל שני איברים בה ניתנים להשוואה, ו"חסם מלעיל" של שרשרת הוא איבר שגדול או שווה מכל האיברים בשרשרת.</p>
+<p>במקרה שלנו, <span class="math">\(A\)</span> היא קבוצת כל האידאלים של <span class="math">\(R\)</span> שאינם <span class="math">\(R\)</span> עצמו ומכילים את <span class="math">\(I\)</span>. יחס הסדר <span class="math">\(\le\)</span> הוא במקרה הזה בסך הכל יחס ההכלה <span class="math">\(\subseteq\)</span>. אם נתונה לנו שרשרת <span class="math">\(C\)</span> של אידאלים, האיחוד של כל האידאלים בה <strong>כן</strong> יהיה אידאל בעצמו. איחוד של שני אידאלים כלליים <span class="math">\(S,T\)</span> לא ייתן אידאל כי אם <span class="math">\(a\in S\)</span> ו-<span class="math">\(b\in T\)</span> אז <span class="math">\(a+b\)</span> לאו דווקא יהיה שייך לאף אחד מהם; אבל בשרשרת אחד משני האידאלים מוכל בשני ולכן <span class="math">\(a,b\)</span> שניהם שייכים לאחד מהאידאלים ולכן <span class="math">\(a+b\)</span> גם שייך אליו. האיחוד של כל האידאלים בשרשרת גם בוודאי מכיל גם אחד מהם ולכן הוא חסם מלעיל שלה, והמסקנה היא שקיים אידאל ב-<span class="math">\(R\)</span> שמכיל את <span class="math">\(I\)</span> ושונה מ-<span class="math">\(R\)</span> שהוא מקסימלי. עד כאן אקסיומת הבחירה; לא אזדקק לה בהמשך ההוכחה של קיום סגור אלגברי.</p>
+<p>אני אוכיח קיום של סגור אלגברי בשני שלבים: בחלק הראשון, הקשה, אני אוכיח שלכל שדה <span class="math">\(F\)</span> יש הרחבה שהיא סגורה אלגברית; היא לאו דווקא תהיה סגור אלגברי כי היא לאו דווקא תהיה אלגברית מעל <span class="math">\(F\)</span>. ברגע שיש לנו הרחבה כזו, אפשר לעשות את תעלול "ניקח את השדה שנוצר על ידי כל שורשי הפולינומים" שתיארתי לעיל; אפרמל את זה בהמשך.</p>
+<p>ההוכחה שאציג כעת לקיום הרחבה סגורה אלגברית של <span class="math">\(F\)</span> היא של ארטין, ואני חושב שהיא מהממת; רק אחרי שקוראים כל מני הוכחות אחרות שניגשות לעניין בצורה ישירה יותר ועושות מהומות טכניות קל לטעמי להעריך עד כמה ההוכחה של ארטין פשוטה וכמה שהיא הכללה טבעית של בניית שדה שורש. בואו ניזכר מה זה אומר לבנות שדה שורש: אנחנו מתחילים עם שדה <span class="math">\(F\)</span> ופולינום לא קבוע <span class="math">\(p\left(x\right)\in F\left[x\right]\)</span> שאנחנו רוצים לייצר עבורו שורש יש מאין. אז אנחנו נוקטים בטכניקה הבאה: אנחנו ממציאים יש מאין "משתנה" שאני אסמן כאן דווקא באות <span class="math">\(t\)</span>, ומסתכלים על החוג <span class="math">\(F\left[t\right]\)</span> של הפולינומים עם מקדמים מ-<span class="math">\(F\)</span> במשתנה <span class="math">\(t\)</span>. המטרה הכמעט מוצהרת שלי היא ש-<span class="math">\(t\)</span> יהיה בסופו של דבר שורש של <span class="math">\(p\left(x\right)\)</span>. כדי להשיג את האפקט הזה, אני לוקח את כל החוג <span class="math">\(F\left[t\right]\)</span> ומחלק אותו באידאל <span class="math">\(\left\langle p\left(t\right)\right\rangle \)</span> - האידאל שאני מקבל מכך שאני לוקח את הפולינום <span class="math">\(p\left(x\right)\)</span>, "מציב את <span class="math">\(t\)</span>" בתוכו, ואז יוצר מתוכו אידאל. אחרי החלוקה, החוג <span class="math">\(F\left[t\right]/\left\langle p\left(t\right)\right\rangle \)</span> יהיה בפועל החוג <span class="math">\(F\left[t\right]\)</span> עם היחס החדש <span class="math">\(p\left(t\right)=0\)</span>, כלומר <span class="math">\(t\)</span> הוא אכן שורש של <span class="math">\(p\)</span>, כתוצאה מהחלוקה הזו. הבעיה היחידה בכל הבניה הזו? לא מובטח לי ש-<span class="math">\(F\left[t\right]/\left\langle p\left(t\right)\right\rangle \)</span> יהיה שדה; הוא שדה אך ורק כאשר <span class="math">\(p\left(x\right)\)</span> הוא <strong>אי-פריק</strong>. לכן, אפשר "לתקן" את הבניה: במקום לחלק ב-<span class="math">\(\left\langle p\left(t\right)\right\rangle \)</span> אפשר לקחת גורם אי פריק <span class="math">\(q\left(x\right)\)</span> של <span class="math">\(p\left(x\right)\)</span>, ולחלק ב-<span class="math">\(\left\langle q\left(t\right)\right\rangle \)</span>. האידאל <span class="math">\(\left\langle q\left(t\right)\right\rangle \)</span> הוא <strong>כן</strong> אידאל מקסימלי, וכזה שמרחיב את <span class="math">\(\left\langle p\left(t\right)\right\rangle \)</span>.</p>
+<p>ההוכחה של ארטין עושה את אותו דבר, רק בבת אחת עבור <strong>כל</strong> הפולינומים מעל <span class="math">\(F\)</span>. התעלול המרכזי הוא להשתמש <strong>במשתנה שונה לכל פולינום</strong>. לכל <span class="math">\(p\left(x\right)\in F\left[x\right]\)</span>, נוסיף משתנה חדש <span class="math">\(t_{p}\)</span> שיצרנו יש מאין, והמטרה שלנו בחיים הוא לבנות שדה שבו <span class="math">\(t_{p}\)</span> יהיה שורש של <span class="math">\(p\)</span>, כלומר שיתקיים <span class="math">\(p\left(t_{p}\right)=0\)</span> באותו שדה. לצורך כך נסתכל על החוג <span class="math">\(R=F\left[\dots,t_{p},\dots\right]\)</span> של כל הפולינומים עם משתנים מהקבוצה <span class="math">\(\left\{ t_{p}\ |\ p\left(x\right)\in F\left[x\right]\right\} \)</span>. <span class="math">\(R\)</span> הזה הוא חוג ענקי, מפלצתי; יש בו מספר כביר של משתנים שמסתובבים להם. זה לא מפריע לנו. כל <strong>פולינום</strong> במשתנים הללו הוא יצור סופי - כולל רק מספר סופי של מחוברים שכל אחד מהם הוא מכפלה של מספר סופי של משתנים ועוד מקדם מ-<span class="math">\(F\)</span>.</p>
+<p>במקרה של בניית שדה שורש, השלב הבא היה לקחת את האידאל שנוצר על ידי האיבר <span class="math">\(p\left(t\right)\)</span> בחוג <span class="math">\(F\left[t\right]\)</span>. במקרה הנוכחי נעשה משהו דומה מאוד: נגדיר אידאל <span class="math">\(I\)</span> שהוא האידאל שנוצר מ<strong>כל</strong> האיברים <span class="math">\(p\left(t_{p}\right)\)</span>; כל הפולינומים מהחוג <span class="math">\(F\left[x\right]\)</span> המקורי רק עם משתנה חדש במקום <span class="math">\(x\)</span>; והמשתנה החדש הזה הוא בדיוק אותו <span class="math">\(t_{p}\)</span> שהתווסף במיוחד עבורם; לכל פולינום יש את המשתנה "שלו". אם נסתכל עכשיו על חוג המנה <span class="math">\(R/I\)</span> נקבל שבחוג הזה <span class="math">\(p\left(t_{p}\right)=0\)</span> <strong>לכל</strong> פולינום <span class="math">\(p\)</span> מעל <span class="math">\(F\)</span>. הבעיה היא שלא מובטח לי שהחוג הזה הוא שדה; לצורך כך אני צריך לחלק באידאל מקסימלי. לא מובטח לי ש-<span class="math">\(I\)</span> הוא אידאל מקסימלי שכזה, אבל אם <span class="math">\(I\ne R\)</span> מה שכן מובטח לי, בזכות אקסיומת הבחירה ומה שתיארתי קודם, ש-<span class="math">\(I\)</span> <strong>מוכל</strong> באידאל מקסימלי <span class="math">\(J\)</span> שכזה כך ש-<span class="math">\(R/J\)</span> יהיה שדה שבו לכל פולינום <span class="math">\(p\)</span> מעל <span class="math">\(F\)</span> יש שורש. זו המקבילה של ההוכחה הזו למעבר מ-<span class="math">\(\left\langle p\left(t\right)\right\rangle \)</span> אל <span class="math">\(\left\langle q\left(t\right)\right\rangle \)</span> שתיארתי קודם.</p>
+<p>כדי להשתמש בטענה הזו אני צריך להוכיח ש-<span class="math">\(I\ne R\)</span>. התעלול פה הוא פשוט ויפה: אם <span class="math">\(I=R\)</span> אז קיים איבר ב-<span class="math">\(I\)</span> ששווה 1 (כלומר, שווה לפולינום הקבוע 1). אברי <span class="math">\(I\)</span> הם צירופים לינאריים סופיים של היוצרים - הפולינומים <span class="math">\(p\left(t_{p}\right)\)</span> - עם מקדמים כלליים מתוך <span class="math">\(R\)</span>, כלומר יש לנו את הצירוף הלינארי <span class="math">\(1=f_{1}p_{1}\left(t_{p_{1}}\right)+\dots+f_{n}p_{n}\left(t_{p_{n}}\right)\)</span> כאשר ה-<span class="math">\(f_{1},\dots,f_{n}\in R\)</span> הם פלינומים במשתנים כלשהם מבין ה-<span class="math">\(t_{p}\)</span>-ים של החוג <span class="math">\(R\)</span>.</p>
+<p>אינטואיטיבית, מה שאני רוצה לעשות עכשיו הוא <strong>להציב</strong> ב-<span class="math">\(t_{p_{1}},\dots,t_{p_{n}}\)</span> ערכים שמאפסים את הפולינומים <span class="math">\(p_{1},\dots,p_{n}\)</span> (ובשאר המשתנים של החוג <span class="math">\(R\)</span> אני אציב משהו שרירותי, למשל 0) אם אעשה דבר כזה, אקבל את המשוואה <span class="math">\(1=0\)</span> שהיא כמובן בלתי אפשרית ואגיע לסתירה. אבל כדי להציב את הערכים הללו אני צריך שתהיה קיימת הרחבה <span class="math">\(E/F\)</span> שבה יש לכל הפולינומים הללו שורש; האם זו לא ביצה ותרנגולת? לכאורה זה בדיוק מה שאני מנסה לבנות כרגע. אלא ש-<span class="math">\(p_{1},\dots,p_{n}\)</span> זה <strong>מספר סופי</strong> של פולינומים, ולכן אפשר לנקוט בתעלול הבא: נסתכל על הפולינום שהוא המכפלה שלהם, <span class="math">\(p_{1}\cdots p_{n}\)</span>; זה פולינום תקין לגמרי מעל <span class="math">\(F\)</span>. על כן, קיים לו <strong>שדה פיצול</strong> <span class="math">\(E\)</span>. בשדה <span class="math">\(E\)</span> הזה כל הפולינומים <span class="math">\(p_{1},\dots,p_{n}\)</span> מתפרקים לגורמים לינאריים ולכן <span class="math">\(E\)</span> כולל את השורשים שלהם, ומכאן שאפשר לבצע את ההצבה שדיברתי עליה ולקבל את ה"שוויון" <span class="math">\(1=0\)</span> מעל <span class="math">\(E\)</span>, ובכך להגיע לסתירה עם ההנחה ש-<span class="math">\(I=R\)</span>.</p>
+<p>זה מסיים את השלב הזה בהוכחה: הראינו שאם יש לנו שדה <span class="math">\(F\)</span>, אז אנחנו יודעים לבנות הרחבה <span class="math">\(E/F\)</span> כך שלכל פולינום ב-<span class="math">\(F\)</span> יש שורש ב-<span class="math">\(E\)</span>. בשלב הזה אני יכול לעצור ולהגדיר את <span class="math">\(\overline{F}\)</span> בתור אוסף כל האיברים האלגבריים ב-<span class="math">\(E\)</span>, אבל אני רוצה לשכנע אתכם שאפשר לבנות את <span class="math">\(E/F\)</span> כך ש-<span class="math">\(E\)</span> יהיה <strong>סגור אלגברית</strong>. כרגע לא מובטח שהוא סגור אלגברית; רק מובטח שלכל פולינום ב-<span class="math">\(F\left[x\right]\)</span> יש שורש, אבל לא שלכל פולינום ב-<span class="math">\(E\left[x\right]\)</span> יש שורש.</p>
+<p>אז מה עושים? בואו נגדיר סדרה אינסופית של שדות, <span class="math">\(F_{0}\subseteq F_{1}\subseteq F_{2},\dots\)</span> כך ש-<span class="math">\(F_{0}=0\)</span> ואילו <span class="math">\(F_{n}\)</span> מתקבל מתוך <span class="math">\(F_{n-1}\)</span> על ידי הבניה שתיארתי, שמבטיחה שלכל פולינום מעל <span class="math">\(F_{n-1}\)</span> יהיה שורש ב-<span class="math">\(F_{n}\)</span>. כעת נגדיר <span class="math">\(E=\bigcup_{n=0}^{\infty}F_{n}\)</span>. זה שדה בגלל שזה איחוד של שדות <strong>שמכילים זה את זה</strong>; הוא סגור אלגברית כי אם ניקח פולינום כלשהו ב-<span class="math">\(E\)</span>, אז מכיוון שיש לפולינום רק מספר סופי של מקדמים, קיים <span class="math">\(F_{k}\)</span> בשרשרת שכל המקדמים נמצאים בתוכו, ואז השורש שלו נמצא ב-<span class="math">\(F_{k+1}\)</span> ומכאן שהוא נמצא ב-<span class="math">\(E\)</span>, מה שמסיים את ההוכחה. כלומר, מרגע שהיה לי כבר את התהליך של "בניית שדה שורש לכל הפולינומים בבת אחת", להפיק מזה שדה סגור אלגברית זה כבר קל.</p>
+<p>מה שאני אוהב בהוכחה הנפלאה הזו הוא עד כמה בולט בה הייחוד של היצורים המוזרים הללו שנקראים "פולינומים". ההוכחה עוסקת באובייקטים שיכולים להיות ענקיים: שדות ענק לא בני מניה, חוגי פולינומים עם מספר מפלצתי של משתנים, וכדומה; אבל <strong>הסופיות</strong> של הפולינומים עצמם משרה סדר גדול בתוך הכאוס של הסיטואציה. התופעה הזו של "אובייקט סופי בתוך כאוס אינסופי שעושה סדר" חוזרת על עצמה שוב ושוב במתמטיקה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2018/04/26/galois_theory_intro/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מבוא לתורת גלואה</span>
+            </a>
+            
+            
+            
+            <a href="/2018/04/16/field_theory_straightedge_and_compass/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">שלוש בעיות הבניה בסרגל ומחוגה של היוונים (או: למה אי אפשר לרבע את המעגל)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

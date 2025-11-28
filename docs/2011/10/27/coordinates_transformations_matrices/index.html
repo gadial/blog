@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קואורדינטות, טרנספורמציות, מטריצות וחיות אחרות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>קואורדינטות, טרנספורמציות, מטריצות וחיות אחרות</h1>
+            <div class="post-meta">
+                <span class="date">2011-10-27</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/tags/טרנספורמציות לינאריות.html">טרנספורמציות לינאריות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בשעה טובה הגענו אל מה שאני מחשיב בתור אחת התוצאות היפות ביותר במתמטיקה בסיסית. לצערי קל לפספס את היופי כאן (אני כבר מתאר לעצמי קוראים נזעמים שבסוף הפוסט ירטנו שזה בכלל לא יפה או מעניין) ואני מקווה שאצליח להיות משכנע.</p>
+<p>נתחיל ממשהו קונקרטי. כזכור, <span class="math">\(\mathbb{R}^{2}\)</span>, המרחב האוקלידי, מורכב מנקודות שכל אחת מהן היא זוג מספרים <span class="math">\(\left(x,y\right)\)</span>. אנחנו חושבים על המספרים הללו בתור <strong>הקואורדינטות</strong> של הנקודה - אבל מה זו בעצם קואורדינטה?</p>
+<p>קואורדינטה, במובן היבש ביותר, היא מספר שבא לתאר מיקום. כדי לתאר מרחב כלשהו אנחנו צריכים להחליט על <strong>מערכת קואורדינטות</strong> עבורו, ואז כל נקודה במרחב מתוארת על ידי כמה מספרים שמתארים את האופן שבו אותה נקודה מתאימה למערכת הקואורדינטות. בדוגמה של המישור מערכת הקואורדינטות היא פשוטה - יש לנו ציר <span class="math">\(x\)</span> וציר <span class="math">\(y\)</span>, שהם שניהם קווים ישרים מאונכים; לציר ה-<span class="math">\(x\)</span> יש כיוון חיובי שהוא ימינה, ולציר ה-<span class="math">\(y\)</span> יש כיוון חיובי שהוא למעלה, ונקודת המפגש שלהם נקראת "ראשית הצירים", וכל קואורדינטה אומרת כמה צריך ללכת לאורך הצירים כדי להגיע אל הנקודה. למשל, <span class="math">\(\left(3,-2\right)\)</span> פירושו שצריך ללכת 3 יחידות לכיוון ימין על ציר <span class="math">\(x\)</span>, ואז ללכת <span class="math">\(2\)</span> יחידות לכיוון <strong>למטה</strong> (הכיוון השלילי) במקביל לציר <span class="math">\(y\)</span>, ואז מגיעים אל הנקודה המבוקשת.</p>
+<p>מה שאני רוצה שתבינו הוא שמערכת הצירים הזו היא <strong>שרירותית</strong>. אפשר היה לכוון את אחד מהצירים בכיוון ההפוך ועדיין היינו מסוגלים לתאר את כל המישור, רק שאם למשל היינו מכוונים את ציר <span class="math">\(x\)</span> בכיוון ההפוך, הקואורדינטות של הנקודה שקודם היו <span class="math">\(\left(3,-2\right)\)</span> כעת יהיו <span class="math">\(\left(-3,-2\right)\)</span>.</p>
+<p>אבל אפשר היה לעשות דברים יותר מעוותים מסתם לשנות כיוון. אפשר היה למחוק את ציר <span class="math">\(y\)</span> לחלוטין ולהחליף אותו בציר שאקרא לו ציר <span class="math">\(d\)</span> (מלשון diagonal) שהוא בכלל לא ניצב לציר <span class="math">\(x\)</span> אלא בזווית של 45 מעלות אליו. במילים אחרות, הוא הקו שמורכב מכל הנקודות מהצורה <span class="math">\(\left(a,a\right)\)</span> (כשם שציר <span class="math">\(y\)</span> היה הקו שמורכב מכל הנקודות מהצורה <span class="math">\(\left(0,a\right)\)</span>). כעת, הנקודה שקודם הקואורדינטות שלה היו <span class="math">\(\left(3,-2\right)\)</span> תהיה כעת בעלת הקואורדינטות <span class="math">\(\left(5,-2\right)\)</span>. רגע, מה?</p>
+<p>אנחנו כל כך רגילים למערכת צירים שבה שני הצירים מאונכים זה לזה, שבכלל לא ברור מה המשמעות של קואורדינטות במערכת צירים שבה המצב אינו כזה. לכן כדאי להכניס את האלגברה הלינארית לתמונה כמה שיותר מהר - הדרך ה"נכונה" להכליל את הרעיונות הללו היא דרכה. אפשר לחשוב על כל מערכת צירים ב-<span class="math">\(\mathbb{R}^{2}\)</span> בתור זוג וקטורים <span class="math">\(v,u\in\mathbb{R}^{2}\)</span> שהם בלתי תלויים לינארית. מכיוון שהם בלתי תלויים לינארית ו-<span class="math">\(\mathbb{R}^{2}\)</span> הוא מרחב ממימד 2, אז הם בסיס; ולכן כל וקטור <span class="math">\(w\in\mathbb{R}^{2}\)</span> ניתן להצגה יחידה בתור <span class="math">\(w=\lambda v+\tau u\)</span>. ה<strong>קואורדינטות</strong> של <span class="math">\(w\)</span> במערכת הצירים שמוגדרת על ידי <span class="math">\(v,u\)</span> יהיו הזוג <span class="math">\(\left(\lambda,u\right)\)</span>.</p>
+<p>כאשר אנחנו חושבים על <span class="math">\(\mathbb{R}^{2}\)</span> מערכת הצירים ה"רגילה" שצצה לנו לראש היא זו שנקבעת על ידי הוקטורים <span class="math">\(\left(1,0\right),\left(0,1\right)\)</span>. אולי אתם זוכרים שקראתי לקבוצה הזו <strong>הבסיס הסטנדרטי</strong> של <span class="math">\(\mathbb{R}^{2}\)</span>, וזו בדיוק הסיבה. במערכת הזו, הקואורדינטות של <span class="math">\(\left(3,-2\right)\)</span> הן בדיוק <span class="math">\(\left(3,-2\right)\)</span>, אבל אם הבסיס שלנו היה <span class="math">\(\left(1,0\right),\left(1,1\right)\)</span> אז הקואורדינטות של ה-<span class="math">\(2\)</span>-יה <span class="math">\(\left(3,-2\right)\)</span> הן <span class="math">\(\left(5,-2\right)\)</span> כי <span class="math">\(\left(3,-2\right)=5\left(1,0\right)-2\left(1,1\right)\)</span>.</p>
+<p>מה שקורה למעלה הוא מבלבל מאוד בגלל שאנחנו משתמשים באותו סימון הן כדי לתאר וקטור - איבר במרחב - והן כדי לתאר את הקואורדינטות שלו. כדי להבהיר מי נגד מי כדאי לחשוב על מרחב וקטורי שנראה שונה. בואו נדבר על <span class="math">\(\mathbb{R}_{3}\left[x\right]\)</span> - מרחב הפולינומים עם מקדמים ממשיים ממעלה לכל היותר 2. בסיס מתבקש למרחב הזה הוא הקבוצה <span class="math">\(\left\{ x^{2},x,1\right\} \)</span> (כשאברי הבסיס סדורים משמאל לימין), ואז הקואורדינטות של הפולינום <span class="math">\(ax^{2}+bx+c\)</span> על פי הבסיס הזה הן פשוט הוקטור <span class="math">\(\left(a,b,c\right)\)</span> - שלשה של מספרים מתוך <span class="math">\(\mathbb{R}\)</span>. אבל, היינו יכולים לבחור גם בסיס שונה למרחב, למשל את הבסיס <span class="math">\(\left\{ x^{2}+1,2x,3\right\} \)</span>, ואז הקואורדינטות היו שונות: הקואורדינטות של הפולינום <span class="math">\(5x^{2}+9x\)</span> היו <span class="math">\(\left(5,\frac{9}{2},-\frac{5}{3}\right)\)</span> כי <span class="math">\(5x^{2}+9x=5\left(x^{2}+1\right)+\frac{9}{2}\left(2x\right)-\frac{5}{3}\left(3\right)\)</span>.</p>
+<p>זה מוביל אותנו להגדרה הפורמלית. אם <span class="math">\(V\)</span> הוא מרחב וקטורי מעל שדה <span class="math">\(\mathbb{F}\)</span> ו-<span class="math">\(B=\left\{b_1,\dots,b_n\right\}\)</span> הוא בסיס סופי עבורו (וכאן הסדר של הוקטורים בתוך הבסיס חשוב - אומרים במקרה הזה שזה <strong>בסיס סדור</strong>), אז לכל וקטור <span class="math">\(v\in V\)</span> מוגדר <strong>וקטור קואורדינטות</strong> של <span class="math">\(v\)</span> על פי הבסיס <span class="math">\(B\)</span> שמסומן ב-<span class="math">\(\left[v\right]_{B}\)</span>. הוקטור הזה הוא וקטור ב-<span class="math">\(\mathbb{F}^{n}\)</span> והוא מוגדר כך: <span class="math">\(v=\sum\lambda_{i}b_{i}\)</span> והצירוף הלינארי הזה הוא יחיד; אז <span class="math">\(\left[v\right]_{B}=\left(\lambda_{1},\dots,\lambda_{n}\right)\)</span>. למעשה, לרוב יהיה נוח לחשוב על <span class="math">\(\left[v\right]_{B}\)</span> בתור וקטור <strong>עמודה</strong> דווקא, כלומר <span class="math">\(\left[v\right]_{B}=\left[\begin{array}{c}\lambda_{1}\\\vdots\\\lambda_{n}\end{array}\right]\)</span>.</p>
+<p>כאן התכונות של הבסיס הן קריטיות. העובדה שכל איבר במרחב נפרש על ידי הבסיס קריטית לכך שלכל איבר יהיה קיים וקטור קואורדינטות, והעובדה שההצגה היא יחידה קריטית לכך שההגדרה תעבוד ותהיה חופשיה משאלות נוספות כמו "אם יש כמה וקטורי קואורדינטות אפשריות, את מי בוחרים?". אבל יש כאן משהו עמוק יותר מסתם ייצוג קומפקטי. בואו נזכור ש-<span class="math">\(\mathbb{F}^{n}\)</span> הוא מרחב וקטורי בפני עצמו עם פעולות חיבור וכפל בסקלר; ולא קשה לראות שמתקיים <span class="math">\(\left[v+u\right]_{B}=\left[v\right]_{B}+\left[u\right]_{B}\)</span> (כאן החיבור בצד שמאל הוא חיבור ב-<span class="math">\(V\)</span>, אבל החיבור מימין הוא חיבור ב-<span class="math">\(\mathbb{F}^{n}\)</span>), ובדומה <span class="math">\(\left[\lambda v\right]_{B}=\lambda\left[v\right]_{B}\)</span>. כלומר, אם נחשוב על הפעולה "בהינתן וקטור, החזר את וקטור הקואורדינטות שלו על פי <span class="math">\(B\)</span>" בתור פונקציה, זוהי בעצם <strong>טרנספורמציה לינארית</strong>; והיא חד-חד ערכית ועל בגלל ש-<span class="math">\(B\)</span> הוא בסיס. מה שראינו פה הוא ש<strong>כל</strong> מרחב וקטורי ממימד <span class="math">\(n\)</span> הוא <strong>איזומורפי</strong> למרחב <span class="math">\(\mathbb{F}^{n}\)</span>. זו הכללה חזקה של האבחנה הישנה שלי לפיה <span class="math">\(\mathbb{R}^{2}\)</span> ו-<span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> איזומורפיים; כעת כל מה שהיה עלי לומר הוא "הם מרחבים וקטוריים מאותו מימד ולכן הם איזומורפיים".</p>
+<p>זה מעלה את השאלה - אם כל מרחב וקטורי ממימד סופי הוא בבסיסו <span class="math">\(\mathbb{F}^{n}\)</span>, למה בכלל לדבר על מרחבים אחרים? יש לכך שתי תשובות. הראשונה היא שלפעמים נקודת מבט שונה מספקת תובנות אחרות; אבל השניה והיותר קונקרטית היא שאלגברה לינארית היא לא רק תחום שמתעסק בעצמו; כל הרעיון הוא שאובייקטים רבים ושונים מתגלים בתור מרחבים וקטוריים. האובייקטים הללו לעתים נדירות כוללים <strong>רק</strong> חיבור וכפל בסקלר; לרוב יש להם מבנה נוסף, ואם נחשוב עליהם בתור <span class="math">\(\mathbb{F}^{n}\)</span> ותו לא, המבנה הזה ילך לאיבוד. עם זאת, כשמתעסקים באלגברה לינארית נטו אני מוצא שאכן נוח לעתים קרובות לחשוב על המרחב הוקטורי הכללי שבו מתעסקים בתור <span class="math">\(\mathbb{F}^{n}\)</span>. שימו רק לב שכל זה תקף רק למרחבים ממימד סופי; מרחבים ממימד אינסופי הם סיפור שונה לגמרי.</p>
+<p>כעת, בפוסט הקודם אמרתי שכל מטריצה <span class="math">\(A\)</span> מסדר <span class="math">\(m\times n\)</span> מגדירה טרנספורמציה לינארית <span class="math">\(T_{A}:\mathbb{F}^{n}\to\mathbb{F}^{m}\)</span> שמוגדרת פשוט על ידי <span class="math">\(T_{A}\left(x\right)=Ax\)</span>, כש-<span class="math">\(x\)</span> הוא וקטור של <span class="math">\(\mathbb{F}^{n}\)</span> שמיוצג כוקטור עמודה. הפאנץ' שנובע מהשימוש בוקטורי קואורדינטות הוא ש<strong>כל</strong> טרנספורמציה לינארית בין שני מרחבים ממימד סופי ניתנת להצגה בתור <span class="math">\(T_{A}\)</span> עבור <span class="math">\(A\)</span> כלשהי. בואו ננסח את זה פורמלית: אם יש לנו טרנספורמציה לינארית <span class="math">\(T:V\to W\)</span> ויש לנו בסיסים <span class="math">\(B=\left\{ b_{1},\dots,b_{n}\right\} \)</span> של <span class="math">\(V\)</span> ו-<span class="math">\(C=\left\{ c_{1},\dots,c_{m}\right\} \)</span> של <span class="math">\(W\)</span>, אז קיימת מטריצה מסדר <span class="math">\(m\times n\)</span> שמסומנת כ-<span class="math">\(\left[T\right]_{B}^{C}\)</span> ("המטריצה המייצגת של <span class="math">\(T\)</span> על פי הבסיסים <span class="math">\(B,C\)</span>") כך שמתקיים הקשר הפשוט אך המכריע</p>
+<p><span class="math">\(\left[T\right]_{B}^{C}\cdot\left[v\right]_{B}=\left[T\left(v\right)\right]_{C}\)</span></p>
+<p>ובמילים - לכפול את <span class="math">\(\left[T\right]_{B}^{C}\)</span> בוקטור הקואורדינטות של <span class="math">\(v\)</span> על פי <span class="math">\(B\)</span> ייתן לנו את וקטור הקואורדינטות של <span class="math">\(T\left(v\right)\)</span> על פי <span class="math">\(C\)</span>. זה אומר ש<strong>כל</strong> טרנספורמציה לינארית בין מרחבים ממימד סופי ניתן לראות ככפל של מטריצה בוקטור.</p>
+<p>אלא שקורה כאן יותר מכך. טרנספורמציות לינאריות אפשר לחבר, ואפשר לכפול אותן בסקלר, ואפשר להרכיב אותן (הרכבה של שתי טרנספורמציות לינאריות היא הטרנספורמציה שמתקבל מכך שמפעילים אחת ואז את השניה). הפעולות הללו מתאימות לחיבור מטריצות, כפל מטריצה בסקלר, ו... כפל מטריצות. זו אולי הדוגמה המרכזית לשימושיות של כפל מטריצות - <strong>כפל מטריצות מתאים להרכבת הטרנספורמציות הלינאריות שהן מייצגות</strong>. זה אומר שטרנספורמציות ומטריצות הן אותו הדבר במובן עמוק יותר מאשר "שתיהן מהוות את אותו מרחב וקטורי" - גם הפעולות המורכבות יותר של הרכבה (אצל טרנספורמציות) וכפל (אצל מטריצות) הן זהות אצלן.</p>
+<p>בואו נבין איך מוצאים את המטריצה המייצגת הזו ואיך מוכיחים שהיא באמת עושה את מה שאני מתיימר לטעון שהיא עושה. כמיטב מסורת האלגברה הלינארית, זו הוכחה ש"כותבת את עצמה" כמעט לגמרי - אנחנו מתחילים מדבר פשוט מאוד שחייב לקרות, וממנו הכל נובע באופן טבעי ופשוט.</p>
+<p>אם כן, מה יש לנו? יש לנו טרנספורמציה <span class="math">\(T:V\to W\)</span> ויש לנו בסיסים <span class="math">\(B\)</span> ל-<span class="math">\(V\)</span> ו-<span class="math">\(C\)</span> ל-<span class="math">\(W\)</span>. אנחנו מחפשים את המטריצה <span class="math">\(\left[T\right]_{B}^{C}\)</span>. הדרך לחלץ אותה היא להבין איך היא חייבת לפעול על וקטורים פשוטים - וקשה למצוא וקטורים פשוטים יותר של קואורדינטות לפי הבסיס <span class="math">\(B\)</span> מאשר וקטורי הקואורדינטות של <strong>אברי</strong> הבסיס <span class="math">\(B\)</span>: וקטור הקואורדינטות של האיבר <span class="math">\(b_{i}\)</span> של הבסיס <span class="math">\(B\)</span> הוא פשוט מאוד הוקטור שכולו אפסים פרט לכניסה במקום <span class="math">\(i\)</span> שהיא 1, כי ההצגה היחידה של <span class="math">\(b_{i}\)</span> כצירוף לינארי של אברי הבסיס היא <span class="math">\(b_{i}\)</span> עצמו.</p>
+<p>כעת, <span class="math">\(T\left(b_{i}\right)\)</span>הוא איבר של <span class="math">\(W\)</span> ולכן ניתן להצגה כצירוף לינארי של אברי <span class="math">\(C\)</span>, כלומר <span class="math">\(T\left(b_{i}\right)=\sum_{j=1}^{m}a_{ji}c_{j}\)</span> כאשר <span class="math">\(a_{ji}\)</span> הם סקלרים - <span class="math">\(a_{ji}\)</span> הוא המקדם של הוקטור <span class="math">\(c_{j}\)</span> בצירוף הלינארי שנותן את <span class="math">\(T\left(b_{i}\right)\)</span>. החלק ה"חישובי" כאן הוא למצוא את אותם <span class="math">\(a_{ji}\)</span>-ים, וזה תלוי הן בטרנספורמציה <span class="math">\(T\)</span> והן בבסיסים <span class="math">\(B,C\)</span>. לרוב הגיוני לבחור בסיסים שבהם החישוב יהיה יותר נוח; זה מוביל אותנו באופן טבעי לשאלה "מה הבסיסים שבהם הכי טוב לייצג טרנספורמציה <span class="math">\(T\)</span>?" שנדבר עליה בהמשך.</p>
+<p>מרגע שנמצאו ה-<span class="math">\(a_{ji}\)</span>-ים הסיפור נגמר - המטריצה, באופן לא כל כך מפתיע, היא כזו שהכניסה ה-<span class="math">\(ji\)</span> בה היא <span class="math">\(a_{ji}\)</span>. בואו נבין למה זה עובד: אם <span class="math">\(A\)</span> היא המטריצה הנתונה ו-<span class="math">\(v_{i}\)</span> הוא וקטור הקואורדינטות של איבר הבסיס <span class="math">\(b_{i}\)</span>, אז <span class="math">\(Av_{i}\)</span> הוא וקטור עמודה מסדר <span class="math">\(m\)</span>, כך ש-<span class="math">\(\left[Av_{i}\right]_{j}=\sum_{k=1}^{n}a_{jk}\left[v_{i}\right]_{k}=a_{ji}\)</span>, כי כל האיברים בסכום מתאפסים למעט זה שמתאים לכניסה היחידה של <span class="math">\(v_{i}\)</span> שאיננה אפס - הכניסה <span class="math">\(i\)</span> עצמה. קיבלנו ש-<span class="math">\(\left[Av_{i}\right]_{j}\)</span> הוא בדיוק המקדם ה-<span class="math">\(j\)</span>-י של <span class="math">\(T\left(b_{i}\right)\)</span> בוקטור הקואורדינטות שלו על פי <span class="math">\(C\)</span>, כפי שרצינו; זה אומר שלפחות על אברי <span class="math">\(B\)</span> המטריצה המייצגת אכן עובדת היטב.</p>
+<p>לכאורה עכשיו צריך לבצע את אותו חישוב עבור איבר כללי ולא רק איבר בסיס, אבל <strong>אין בכך שום צורך</strong>. הסיבה לכך היא שטרנספורמציה לינארית נקבעת באופן <strong>יחיד</strong> על ידי פעולת מקדמיה על אברי הבסיס, וזה אומר, בניסוח קצת שונה, שאם שתי טרנספורמציות לינאריות מזדהות בפעולה שלהן על אברי בסיס כלשהו, הן אותה הטרנספורמציה. לכן, מכיוון שהטרנספורמציה שמוגדרת על ידי המטריצה <span class="math">\(A\)</span> מתנהגת על אברי <span class="math">\(B\)</span> בדיוק כמו <span class="math">\(T\)</span>, הם בדיוק אותה הטרנספורמציה. סוף הסיפור.</p>
+<p>אם לסכם באופן מילולי מה עושים בפועל: מחשבים את <span class="math">\(T\left(b_{i}\right)\)</span> לכל איבר בסיס <span class="math">\(b_{i}\)</span> ומציגים אותו כצירוף לינארי <span class="math">\(T\left(b_{i}\right)=\sum\lambda_{j}c_{j}\)</span>. לוקחים את וקטור הקואורדינטות של התוצאה, והוא יהיה ה<strong>עמודה</strong> ה-<span class="math">\(i\)</span>-ית במטריצה <span class="math">\(\left[T\right]_{B}^{C}\)</span>. פשוט למדי.</p>
+<p>כעת נותרה רק עוד טענה מרכזית אחת שציינתי ואני רוצה להוכיח. נניח ש-<span class="math">\(T:V\to W\)</span> ו-<span class="math">\(S:W\to U\)</span> הן שתי טרנספורמציות לינאריות. אפשר <strong>להרכיב</strong> אותן - להגדיר טרנספורמציה חדשה <span class="math">\(ST:V\to U\)</span> שמוגדרת פשוט כ-<span class="math">\(ST\left(v\right)=S\left(T\left(v\right)\right)\)</span> (הפעלה של <span class="math">\(T\)</span> ואז הפעלה של <span class="math">\(S\)</span> על התוצאה). אם <span class="math">\(B,C,D\)</span> הם בסיסים של <span class="math">\(V,W,U\)</span> בהתאמה, אז מתקיים:</p>
+<p><span class="math">\(\left[ST\right]_{B}^{D}=\left[S\right]_{C}^{D}\cdot\left[T\right]_{B}^{C}\)</span></p>
+<p>כלומר, הרכבת טרנספורמציות וכפל מטריצות זה אותו הדבר. אפשר היה לחשוש שההוכחה כאן תהיה טכנית ומסובכת, אבל למעשה היא טריוויאלית: פשוט צריך לשים לב לכך שמתקיים:</p>
+<p><span class="math">\(\left[S\right]_{C}^{D}\cdot\left[T\right]_{B}^{C}\cdot\left[v\right]_{B}=\left[S\right]_{C}^{D}\left[T\left(v\right)\right]_{C}=\left[S\left(T\left(v\right)\right)\right]_{D}=\left[ST\left(v\right)\right]_{D}\)</span></p>
+<p>כלומר, <span class="math">\(\left[S\right]_{C}^{D}\cdot\left[T\right]_{B}^{C}\)</span> פועלת על <span class="math">\(\left[v\right]_{B}\)</span> בדיוק כמו <span class="math">\(\left[ST\right]_{B}^{D}\)</span>, ולכן הן חייבות להיות אותה מטריצה (אם אתם עדיין לא משוכנעים שהן חייבות להיות זהות, נסו להוכיח פורמלית שלטרנספורמציה לינארית יש בדיוק מטריצה מייצגת אפשרית אחת לזוג בסיסים נתון). הסיבה שזה כל כך פשוט נובעת מכך שכפל מטריצות הוא אסוציאטיבי; זו טענה שדווקא דורשת הוכחה פורמלית ואני פשוט חמקתי ממנה (עם זאת, מעבר לכתיבה של סכום כפול אין שם שום דבר נורא).</p>
+<p>יש משהו יפה בכך שמשפט שאומר משהו כל כך לא מובן מאליו במבט ראשון הוא כל כך פשוט להוכחה; זה מראה שהמשהו הלא מובן מאליו הוא בעצם כן מובן מאליו, אחרי שמבינים את המובן מאליו.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/10/30/matrix_similarity/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">דמיון מטריצות</span>
+            </a>
+            
+            
+            
+            <a href="/2011/10/26/graham_scan/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הסריקה של גרהאם</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

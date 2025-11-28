@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה זה בעצם המספרים הממשיים? (חלק ב&#39;: השדה הסדור השלם) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז מה זה בעצם המספרים הממשיים? (חלק ב&#39;: השדה הסדור השלם)</h1>
+            <div class="post-meta">
+                <span class="date">2024-08-31</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מספרים ממשיים.html">מספרים ממשיים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p><a href="https://gadial.net/2024/08/11/real_numbers_decimal_notation/">בפוסט הקודם</a> התחלתי לדבר על המספרים הממשיים ומה הם בכלל. הראיתי את ההגדרה הנפוצה, שרובנו מכירים עוד מבית הספר, של מספר ממשי בתור משהו שיש לו פיתוח עשרוני, נאמר <span class="math">\(3.14159\ldots\)</span>. ההגדרה הזו בעצם מגדירה את המספרים הממשיים על ידי כך שהיא מדברת על האופן שבו מספר ממשי קונקרטי בנוי; אין כאן ממש התייחסות ל<strong>קבוצה</strong> של כל המספרים הממשיים.</p>
+<p>חוץ מזה, אמרתי שההגדרה בעייתית כי את רוב המספרים הממשיים אי אפשר ממש לתאר בעולם האמיתי בעזרת פיתוח עשרוני כי לרובם המכריע אין פיתוח עשרוני שיש לנו דרך לחשב את הספרות שלו, או אפילו לתת להם הגדרה קונקרטית כלשהי - הממשיים היא קבוצה "גדולה מדי" בשביל זה. זה נותן מוטיבציה כלשהי לחיפוש אחרי הגדרה שמדברת לא על הממשי הקונקרטי אלא על <strong>המכלול</strong> שלהם, כל הקבוצה, מה בעצם הקטע שלה.</p>
+<p>ועוד משהו בעייתי בהגדרה הזו היא שלא אמרתי בעצם מה אפשר לעשות עם המספרים הללו. מספרים הם משהו שקיים כדי שנוכל לעשות איתו דברים, ובפרט שנוכל לעשות דברים עם שני מספרים: לחבר, לחסר, להכפיל, לחלק, להשוות... אפשר לתת את ההגדרות הללו גם כשמגדירים ממשיים דרך פיתוח עשרוני, אבל זה מאלץ אותנו לנטוש את האינטואיציה הבית ספרית, ואני לא אעשה את זה כרגע.</p>
+<p>במקום להמשיך בכיוון הזה, אני ארצה בפוסט הזה להציג את ההגדרה שאני אישית אוהב: <strong>המספרים הממשיים הם השדה הסדור השלם</strong>. כרגע אין סיבה שתבינו מה אף אחת מהמילים בהגדרה הזו אומרות, מתמטית; עד סוף הפוסט אני מקווה שנבין את כולן. אבל לפני שנתחיל צריך לתת הבהרה קטנה מה בעצם הולך בהגדרה הזו.</p>
+<p>במתמטיקה, יש שתי דרכים מקובלות להגדיר אובייקט. דרך אחת היא לתאר במדויק מהו, כמו שעשיתי במקרה של הפיתוח העשרוני ("סדרה אינסופית של ספרות שכוללת נקודה ויכולה לכלול בהתחלה סימן מינוס"). דרך אחרת היא לתאר את האובייקט <strong>אקסיומטית</strong>. בצורה הזו לא אומרים במפורש מה האובייקט, אלא נותנים רשימה של <strong>תכונות</strong> שאנחנו מצפים שהאובייקט יקיים. התכונות הללו נקראות <strong>אקסיומות</strong>, אבל זה שונה מהשימוש במילה "אקסיומה" שהיוונים הקדמונים עשו או שאנחנו עושים בחיי היום יום. "אקסיומה" במובן היומיומי היא "משהו שאנחנו מניחים שהוא נכון בלי הוכחה". במובן המתמטי שלנו, אקסיומה היא תכונה שיכולה להתקיים עבור אובייקטים מסויימים ולא להתקיים עבור אחרים - אנחנו נראה לזה הרבה דוגמאות עוד מעט.</p>
+<p>מרגע שיש לנו אוסף של אקסיומות, אנחנו יכולים לדבר על האובייקטים שמקיימים את <strong>כל</strong> האקסיומות. ייתכן שיש המון כאלו, ייתכן שיש רק אובייקט אחד, וייתכן שאין בכלל. במקרה של הממשיים אפשר להראות שיש לכל היותר אובייקט אחד כזה, אבל זה בפני עצמו לא אומר שהוא קיים; בנוסף להגדרה האקסיומטית נצטרך גם לתת בניה קונקרטית של הממשיים. אי אפשר להתחמק מזה. אז למה אני אוהב את ההגדרה האקסיומטית? כי היא לטעמי מה שהכי עוזר לנו להבין מה זה בעצם הממשיים, ומה התכונות שלהם. בואו נתחיל ואני מקווה שזה יתבהר בהמשך.</p>
+<h2>שדה</h2>
+
+<h3>חזרה לבית הספר היסודי</h3>
+
+<p>"שדה" זה השם המפוצץ שהמתמטיקה העניקה לקבוצה שמקיימת את מה שלמדנו בבית הספר היסודי שמספרים מקיימים: יש פעולות חיבור, חיסור, כפל וחילוק ויש את חוק הקיבוץ, חוק החילוף וחוק הפילוג. את כללי החשבון אני מניח שאנחנו זוכרים (אבל יש לי <a href="https://gadial.net/2020/11/18/how_to_addition/">סדרת פוסטים</a> עליהם אם לא) אבל בואו נכתוב את החוקים במפורש:</p>
+<ul> <li><span class="math">\(\left(a+b\right)+c=a+\left(b+c\right)\)</span> (חוק הקיבוץ לחיבור)</li>
+
+
+<li><span class="math">\(\left(a\cdot b\right)\cdot c=a\cdot\left(b\cdot c\right)\)</span> (חוק הקיבוץ לכפל)</li>
+
+
+<li><span class="math">\(a+b=b+a\)</span> (חוק החילוף לחיבור)</li>
+
+
+<li><span class="math">\(a\cdot b=b\cdot a\)</span> (חוק החילוף לכפל)</li>
+
+
+<li><span class="math">\(a\cdot\left(b+c\right)=a\cdot b+a\cdot c\)</span> (חוק הפילוג).</li>
+
+</ul>
+
+<p>כל החוקים הללו מתקיימים יפה מאוד כבר על ידי קבוצת המספרים הטבעיים, שמסומנת ב-<span class="math">\(\mathbb{N}\)</span>. אבל <span class="math">\(\mathbb{N}\)</span> לא נקראת "שדה" כי יש דברים שחסרים. ספציפית, חיסור. החיסור חסר. אין ב-<span class="math">\(\mathbb{N}\)</span> חיסור. או, ליתר דיוק, בוודאי שיש ב-<span class="math">\(\mathbb{N}\)</span> חיסור, אבל הוא לא מוגדר עד הסוף כי אמנם <span class="math">\(5-2=3\)</span> אבל לא ממש ברור מה זה <span class="math">\(2-5\)</span> כל עוד "העולם" שלנו כולל רק את המספרים הטבעיים. אז אנחנו מרחיבים את <span class="math">\(\mathbb{N}\)</span> ומוסיפים פנימה את המספרים השליליים ואת 0 (או ש-0 כבר היה ב-<span class="math">\(\mathbb{N}\)</span>, תלוי את מי שואלים) ומקבלים את הקבוצה <span class="math">\(\mathbb{Z}\)</span>. מה שנחמד ב-<span class="math">\(\mathbb{Z}\)</span> הוא שהיא מקיימת את כל החוקים שכבר ראינו - כלומר, ההרחבה לא "עלתה" לנו באובדן של מבנה קיים, אבל אפשר לנסח בצורה נחמדה עוד חוקים בעזרתה:</p>
+<ul> <li>קיים איבר שמסומן ב-0 כך ש-<span class="math">\(a+0=a\)</span> לכל <span class="math">\(a\)</span></li>
+
+
+<li>לכל <span class="math">\(a\)</span> קיים איבר שמסומן ב-<span class="math">\(-a\)</span> ונקרא <strong>הנגדי</strong> של <span class="math">\(a\)</span> כך ש-<span class="math">\(a+\left(-a\right)=0\)</span></li>
+
+</ul>
+
+<p>בעזרת המושג הזה של "הנגדי" אפשר להגדיר חיסור בעזרת פעולת החיבור שכבר מוכרת לנו: <span class="math">\(a-b\)</span> זה בעצם <span class="math">\(a+\left(-b\right)\)</span>, כלומר מחברים ל-<span class="math">\(a\)</span> את הנגדי של <span class="math">\(b\)</span>. ואם אני כבר בקטע של שמות, אז ל-0 קוראים <strong>אדיש חיבורי</strong> בהקשר הזה, כי הוא לא משפיע על מי שמתחבר איתו.</p>
+<h3>מה שנחמד בשלמים ומה שלא</h3>
+
+<p>אני הולך להגדיר מושג שנקרא <strong>שדה</strong> אבל שווה לעצור לרגע ולהעיר שהאקסיומות שכבר ראינו משמשות גם להגדרת מבנים אלגבריים אחרים ש-<span class="math">\(\mathbb{Z}\)</span> הוא דוגמא מרכזית אליהם. למשל, המבנה <strong>חבורה</strong> שדורש רק קיום של פעולה אחת - חיבור - ורק את חוק הקיבוץ, קיום 0 וקיום נגדי. או המבנה <strong>חוג</strong> שדורש קיום של חיבור וכפל ואת חוקי הקיבוץ וחוק הפילוג ואת קיום 0 וקיום נגדי ואת חוק החילוף לחיבור אבל <strong>לא</strong> את חוק החילוף לכפל. אני לא אזדקק למושגים הללו בהמשך אבל שווה היה לפחות להזכיר אותם.</p>
+<p>עכשיו, האם השלמים <span class="math">\(\mathbb{Z}\)</span> הם האובייקט היחיד שמקיים את כל התכונות שראינו עד כה או שיש אחרים? התשובה היא שבהחלט יש אחרים, למשל <strong>פולינומים</strong>. הנה למשל פעולת הכפל של פולינומים: <span class="math">\(\left(x+3\right)\left(x+5\right)=x^{2}+8x+15\)</span>. קל לראות שכל התכונות שתיארתי עד כה מתקיימות גם עבור פולינומים (והדמיון שלהם ל-<span class="math">\(\mathbb{Z}\)</span> הוא למעשה גדול עד להפתיע אבל לא ניכנס לזה).</p>
+<p>מה בכל זאת חסר ב-<span class="math">\(\mathbb{Z}\)</span> שמדרבן אותנו להמשיך הלאה? חילוק. מכיוון שחילוק הוא סוג של הפעולה ההפוכה לכפל, אפשר לקוות להגדרה שלו שתהיה דומה למה שהלך במקרה של חיבור: קודם נגדיר "אדיש כפלי", כזה שכפל בו לא משנה את התוצאה (מי זה כבר יכול להיות? נו, 1 כמובן). אחר כך נגדיר "נגדי כפלי" (אני פשוט אקרא לזה <strong>הופכי</strong>) שכפל בו מחזיר 1; ולבסוף, נגדיר חילוק במישהו בתור כפל בהופכי שלו. זה עובד לא רע, חוץ מבעיה קטנה אחת: אין ל-<span class="math">\(0\)</span> הופכי כי לא יכול להיות איבר שמכפלה שלו ב-0 מחזירה את <span class="math">\(1\)</span>. הראיתי את זה ממש לא מזמן <a href="https://gadial.net/2024/08/09/dividing_by_zero_allowed/">בפוסט שלי</a> על כך שמותר לחלק באפס בכל מני סיטואציות; ובכן <strong>עכשיו</strong> זו לגמרי <strong>לא</strong> אחת מאותן סיטואציות.</p>
+<p>בואו ניזכר איך ההוכחה הלכה. הסתכלתי על הביטוי <span class="math">\(a\cdot0\)</span> ואז השתמשתי בכך ש-<span class="math">\(0=0+0\)</span> (כי הוא אדיש חיבורי) ולכן, על פי חוק הפילוג</p>
+<p><span class="math">\(a\cdot0=a\cdot\left(0+0\right)=a\cdot0+a\cdot0\)</span></p>
+<p>עכשיו חיסרתי את <span class="math">\(a\cdot0\)</span> משני האגפים - כלומר, חיברתי את הנגדי של <span class="math">\(a\cdot0\)</span> לשני האגפים (קיים כזה כי הנחנו שיש נגדי <strong>לכל איבר</strong> בקבוצה שלנו). כתוצאה מזה קיבלתי <span class="math">\(0=a\cdot0\)</span>, כלומר לא משנה באיזה איבר אני כופל את <span class="math">\(0\)</span>, אני אקבל 0. אבל הרי <span class="math">\(0\ne1\)</span> ולכן לא קיים <span class="math">\(a\)</span> כך ש-<span class="math">\(a\cdot0=1\)</span>.</p>
+<p>אלא אם כן באמת מתקיים <span class="math">\(0=1\)</span>. אבל אם היה מתקיים <span class="math">\(0=1\)</span> אז על ידי כפל ב-<span class="math">\(a\)</span> בשני האגפים היינו מקבלים <span class="math">\(0=a\)</span>, כלומר הדרך היחידה שבה יתקיים <span class="math">\(0=1\)</span> תהיה אם כל הקבוצה שלנו תהיה רק <span class="math">\(\left\{ 0\right\} \)</span> ותו לא.</p>
+<p>יודעים מה מעליב? שהקבוצה <span class="math">\(\left\{ 0\right\} \)</span> באמת מקיימת את כל הדרישות שכתבתי עד כה. והיא תקיים גם את הבאות בתור אם אני לא אדרוש במפורש <span class="math">\(0\ne1\)</span>, אז אני אדרוש את זה במפורש, ופשוט אגדיר הופכי לכל מי שאיננו 0:</p>
+<ul> <li>קיים איבר שמסומן ב-<span class="math">\(1\)</span> כך ש-<span class="math">\(0\ne1\)</span> ו-<span class="math">\(a\cdot1=a\)</span> לכל <span class="math">\(a\)</span></li>
+
+
+<li>לכל <span class="math">\(a\ne0\)</span> קיים איבר שמסומן ב-<span class="math">\(a^{-1}\)</span> ונקרא <strong>ההופכי</strong> של <span class="math">\(a\)</span> כך ש-<span class="math">\(a\cdot a^{-1}=1\)</span></li>
+
+</ul>
+
+<p>המספרים השלמים <span class="math">\(\mathbb{Z}\)</span> אמנם מקיימים את הדרישה על 1, אבל הם לא מקיימים את הדרישה על קיום הופכי. שני המספרים היחידים ב-<span class="math">\(\mathbb{Z}\)</span> שיש להם הופכי הם 1 ו-<span class="math">\(-1\)</span>; אצל שניהם הם ההופכיים של עצמם אבל באופן כללי זה לא חייב להיות ככה, כמובן.</p>
+<h3>הרציונליים נכנסים לתמונה</h3>
+
+<p>כדי לקבל מ-<span class="math">\(\mathbb{Z}\)</span> קבוצה שיש בה הופכי לכל מי ששונה מאפס, אנחנו מכניסים לתמונה <strong>שברים</strong>, מספרים מהצורה <span class="math">\(\frac{a}{b}\)</span> כך ש-<span class="math">\(b\ne0\)</span>, עם כללי חיבור וכפל שמכלילים את מה שאנחנו מכירים ממספרים שלמים:</p>
+<ul> <li><span class="math">\(\frac{a}{b}+\frac{c}{d}=\frac{ad+bc}{bd}\)</span></li>
+
+
+<li><span class="math">\(\frac{a}{b}\cdot\frac{c}{d}=\frac{ac}{bd}\)</span></li>
+
+</ul>
+
+<p>זה לא לגמרי מובן מאליו שכל התכונות שכבר ראינו עדיין מתקיימות תחת הכללים החדשים הללו, אבל לא כזה קשה לבדוק את זה. התוצאה שמתקבלת מסומנת ב-<span class="math">\(\mathbb{Q}\)</span> ואנחנו קוראים לה בדרך כל <strong>המספרים הרציונליים</strong>. אם אני רוצה לבנות <strong>פורמלית</strong> את <span class="math">\(\mathbb{Q}\)</span> (מה שאני לא עושה כאן) אני צריך קצת להיזהר כי למשל <span class="math">\(\frac{1}{2}=\frac{2}{4}\)</span>; אבל בפוסט הזה הגישה שלי היא לא לבנות שום דבר אלא רק לדבר על האקסיומות, ולראות אילו אובייקטים מקיימים אותן. והאקסיומות שתיארתי עד כה הן סוף הדרך מבחינת ההגדרה של מה זה <strong>שדה</strong>, והמספרים הרציונליים הם סוג של השדה הכי פשוט שקיים (אבל חכו עוד שניה עם זה). כדי לחדד את ההגדרה, בואו נאסוף את מה שפיזרתי לאורך החלק הזה</p>
+<p><strong>שדה</strong> הוא קבוצה <span class="math">\(F\)</span> עם שתי פעולות בינאריות "חיבור" <span class="math">\(+\)</span> ו"כפל" <span class="math">\(\cdot\)</span> (פעולה בינארית היא פונקציה שמקבלת זוג איברים מ-<span class="math">\(F\)</span> ומחזירה איבר ב-<span class="math">\(F\)</span>) שמקיימת את התכונות הבאות:</p>
+<ul> <li><span class="math">\(\left(a+b\right)+c=a+\left(b+c\right)\)</span></li>
+
+
+<li><span class="math">\(\left(a\cdot b\right)\cdot c=a\cdot\left(b\cdot c\right)\)</span></li>
+
+
+<li><span class="math">\(a+b=b+a\)</span></li>
+
+
+<li><span class="math">\(a\cdot b=b\cdot a\)</span> </li>
+
+
+<li><span class="math">\(a\cdot\left(b+c\right)=a\cdot b+a\cdot c\)</span></li>
+
+
+<li>קיים איבר שמסומן ב-0 כך ש-<span class="math">\(a+0=a\)</span> לכל <span class="math">\(a\)</span></li>
+
+
+<li>לכל <span class="math">\(a\)</span> קיים איבר שמסומן ב-<span class="math">\(-a\)</span> ונקרא <strong>הנגדי</strong> של <span class="math">\(a\)</span> כך ש-<span class="math">\(a+\left(-a\right)=0\)</span></li>
+
+
+<li>קיים איבר שמסומן ב-<span class="math">\(1\)</span> כך ש-<span class="math">\(0\ne1\)</span> ו-<span class="math">\(a\cdot1=a\)</span> לכל <span class="math">\(a\)</span></li>
+
+
+<li>לכל <span class="math">\(a\ne0\)</span> קיים איבר שמסומן ב-<span class="math">\(a^{-1}\)</span> ונקרא <strong>ההופכי</strong> של <span class="math">\(a\)</span> כך ש-<span class="math">\(a\cdot a^{-1}=1\)</span></li>
+
+</ul>
+
+<p>תשע האקסיומות הללו הן כל מה שיש; מתוכן אפשר להסיק כללים אחרים שמוכרים לנו, כמו למשל הכלל שכפל של משהו ב-0 תמיד מחזיר 0. </p>
+<p>בואו נוכיח עוד תכונה לדוגמא: שהאדיש החיבורי הוא יחיד. כלומר שאין איזה איבר <span class="math">\(0^{\prime}\ne0\)</span> כך ש-<span class="math">\(a+0^{\prime}=a\)</span> לכל <span class="math">\(a\)</span>. ההוכחה היא די טריוויאלית, כי אם נניח שיש <span class="math">\(0^{\prime}\)</span> כך ש-<span class="math">\(a+0^{\prime}=a\)</span> <strong>לכל</strong> <span class="math">\(a\)</span> אז זה בפרט נכון עבור <span class="math">\(a=0\)</span>, ואז <span class="math">\(0+0^{\prime}=0\)</span> (כי <span class="math">\(0^{\prime}\)</span> אדיש) אבל גם <span class="math">\(0+0^{\prime}=0^{\prime}\)</span> (כי <span class="math">\(0\)</span> אדיש) וקיבלנו <span class="math">\(0=0^{\prime}\)</span>.</p>
+<p>הנה משהו יותר טריקי באותה רוח: אני רוצה להראות שלא סתם אין אדיש נוסף, אלא שאפילו אם נבחר איבר <span class="math">\(a\)</span> ספציפי כלשהו, אין מישהו נוסף שמשמש כאדיש <strong>עבורו</strong>. כלומר, אם <span class="math">\(x\)</span> הוא איבר כלשהו כך ש-<span class="math">\(a+x=a\)</span> אז <span class="math">\(x=0\)</span>. על פניו גם זה טריוויאלי: בואו פשוט נעביר את <span class="math">\(a\)</span> אגף ונקבל <span class="math">\(x=0\)</span>. אבל בואו נעשה את זה לאט, כדי שנבין באילו כללים אנחנו משתמשים:</p>
+<p><span class="math">\(a+x=a\)</span> (זו נקודת המוצא שלנו)</p>
+<p><span class="math">\(-a+\left(a+x\right)=-a+a\)</span> (חיברנו <span class="math">\(-a\)</span> לשני האגפים; שימו לב ששמתי סוגריים על <span class="math">\(a+x\)</span> מאגף שמאל כדי להדגיש שפעולת החיבור שלהם "מתבצעת קודם")</p>
+<p><span class="math">\(\left(-a+a\right)+x=-a+a\)</span> (על אגף שמאל השתמשתי בחוק הקיבוץ לחיבור)</p>
+<p><span class="math">\(\left(a+\left(-a\right)\right)+x=a+\left(-a\right)\)</span> (על שני האגפים השתמשתי בחוק החילוף לחיבור)</p>
+<p><span class="math">\(0+x=0\)</span> (השתמשתי בכך שאיבר ועוד הנגדי שלו זה 0)</p>
+<p><span class="math">\(x+0=0\)</span> (עוד שימוש בחוק החילוף לחיבור)</p>
+<p><span class="math">\(x=0\)</span> (סיימנו)</p>
+<p>שימו לב לרמת הפדנטיות שלי: אני לא אומר <span class="math">\(0+x=x\)</span> ישירות, כי בניסוח שלי של מהו 0 אמרתי רק ש-<span class="math">\(a+0=a\)</span> לכל <span class="math">\(a\)</span>. הסיבה לכך שהגדרתי 0 ככה היא שידעתי שיהיה לי את חוק החילוף; אם חוק החילוף לא היה מובטח לי, הייתי מגדיר את האדיש בתור מישהו שמקיים <span class="math">\(a+0=0+a=a\)</span> (ואכן, אם תסכלו בהגדרות של תורת החבורות, איפה שכללי החילוף לא מובטחים, כך מגדירים).</p>
+<p>הנה עוד משהו באותו רוח - לכל <span class="math">\(a\)</span>, הנגדי של <span class="math">\(a\)</span> הוא יחיד. כלומר אם <span class="math">\(a+x=0\)</span> וגם <span class="math">\(a+y=0\)</span> אז <span class="math">\(x=y\)</span>. את זה קל למדי להראות: מכך ש-<span class="math">\(a+x=0=a+y\)</span> נסיק <span class="math">\(a+x=a+y\)</span> ועכשיו נחבר את <span class="math">\(-a\)</span> לשני האגפים, נשתמש בחוק הקיבוץ ונקבל <span class="math">\(x=y\)</span>.</p>
+<p>בעזרת יחידות הנגדי אני אוכיח עוד תכונה מעניינת במיוחד: <span class="math">\(\left(-a\right)\cdot\left(-b\right)=ab\)</span>, כלומר "מינוס כפול מינוס זה פלוס". <a href="https://gadial.net/2017/07/30/minus_minus/">יש לי פוסט</a> שמנסה להסביר את האינטואיציה מאחורי זה, אבל עכשיו אנחנו לא זקוקים לאינטואיציה - יש לנו <strong>אקסיומות</strong> ואפשר <strong>להוכיח</strong> מהן דברים.</p>
+<p>ראשית, בואו נראה ש-<span class="math">\(-a=\left(-1\right)\cdot a\)</span>. במילים: הנגדי של <span class="math">\(a\)</span> שווה לנגדי של 1 כפול <span class="math">\(a\)</span>. כדי להראות את זה בואו נסתכל על הסכום <span class="math">\(\left(-1\right)\cdot a+a\)</span>. נשתמש בחוק הפילוג ונקבל</p>
+<p><span class="math">\(\left(-1\right)\cdot a+a=\left(-1+1\right)\cdot a=0\cdot a=0\)</span></p>
+<p>ולכן קיבלנו ש-<span class="math">\(\left(-1\right)\cdot a\)</span> הוא באמת הנגדי של <span class="math">\(a\)</span>, תוך שאנחנו משתמשים במובלע בזה שהנגדי הוא <strong>יחיד</strong>.</p>
+<h3>עוד דוגמאות לשדות ובפרט שדות סופיים</h3>
+
+<p>עכשיו בואו נדבר על עוד שדות. מבית הספר אנחנו מכירים את הממשיים <span class="math">\(\mathbb{R}\)</span> שמכילים את <span class="math">\(\mathbb{Q}\)</span>, ואולי מכירים גם את המרוכבים <span class="math">\(\mathbb{C}\)</span> שמכילים את <span class="math">\(\mathbb{R}\)</span>: כולם שדות, אבל מכיוון שאני מנסה בפוסטים הללו להגדיר את <span class="math">\(\mathbb{R}\)</span> אולי לא נלך לכיוון של הדוגמאות האלו. האם יש עוד דברים? האמת היא שיש <strong>המון</strong> שדות. הנה דוגמא פשוטה: אנחנו יודעים ששורש 2 הוא לא מספר רציונלי, מה שמסומן ב-<span class="math">\(\sqrt{2}\notin\mathbb{Q}\)</span> (יש לי הסבר <a href="https://gadial.net/2008/10/31/irrationality_of_square_roots/">כאן</a>). אז אני יכול "לצרף" אותו ל-<span class="math">\(\mathbb{Q}\)</span> במובן הבא: אני יוצר קבוצה <span class="math">\(\mathbb{Q}\left(\sqrt{2}\right)=\left\{ a+b\sqrt{2}\ |\ a,b\in\mathbb{Q}\right\} \)</span>. איברים טיפוסיים של הקבוצה הם <span class="math">\(\sqrt{2}\)</span> ו-<span class="math">\(3-5\sqrt{2}\)</span> וגם <span class="math">\(17\)</span>. עכשיו, פעולות החיבור והכפל של איברים בקבוצה יתנהגו באופן המתבקש:</p>
+<ul> <li><span class="math">\(\left(a+b\sqrt{2}\right)+\left(c+d\sqrt{2}\right)=\left(a+c\right)+\left(b+d\right)\sqrt{2}\)</span></li>
+
+
+<li><span class="math">\(\left(a+b\sqrt{2}\right)\cdot\left(c+d\sqrt{2}\right)=\left(ac+2bd\right)+\left(bc+ad\right)\sqrt{2}\)</span></li>
+
+</ul>
+
+<p>לא קשה לראות שתחת ההגדרות הללו, קיבלנו ש-<span class="math">\(\mathbb{Q}\left(\sqrt{2}\right)\)</span> היא שדה. מכיוון שאפשר היה לעשות את המשחק הזה עם כל שורש של כל מספר רציונלי (וגם עם מספרים טיפה יותר מסובכים) אנחנו מקבלים פה בעצם עושר אדיר של שדות. יש תחום שלם - <strong>תורת השדות</strong> - שמתעסק בשדות הללו ובבלאגן העצום שלהם; זה התחום שבו מוכיחים <a href="https://gadial.net/2018/04/16/field_theory_straightedge_and_compass/">שלבעיות הבניה בסרגל ומחוגה של היוונים הקדמונים אין פתרון</a>, <a href="https://gadial.net/2018/07/12/insolvability_of_the_quintic/">ושאין נוסחה לפתרון משוואה ממעלה חמישית ומעלה</a>, אבל אני לא אדבר על זה כאן (והמתמטיקה המעורבת היא מסובכת יחסית, אם כי עדיין ברמה של תואר ראשון).</p>
+<p>בואו נעבור לראות עוד שדות, פשוטים יותר. קודם ראינו שבאופן מעליב משהו, הקבוצה <span class="math">\(\left\{ 0\right\} \)</span> היא כמעט שדה - הסיבה היחידה שהיא לא הייתה שדה היא הדרישה המפורשת שלנו ש-<span class="math">\(0\ne1\)</span>. אם כן, מה עם <span class="math">\(\left\{ 0,1\right\} \)</span>? האם הקבוצה הזו היא כן שדה? לכאורה לא, כי פעולת החיבור מוציאה אותנו מגבולות השדה: <span class="math">\(1+1=2\)</span>. אבל נניח שהיינו <strong>רוצים</strong> שהקבוצה הזו תהיה שדה, איך היינו צריכים "לתקן" את פעולת החיבור? ובכן, אפשר להגדיר או <span class="math">\(1+1=1\)</span> או <span class="math">\(1+1=0\)</span>. אבל ההגדרה הראשונה מובילה, אחרי העברת אגפים אל <span class="math">\(1=0\)</span> שכבר אמרנו שאסור. לעומת זאת ההגדרה <span class="math">\(1+1=0\)</span> היא מצוינת; היא לא גורמת לשום בעיות. עם ההגדרה הזו, <span class="math">\(\left\{ 0,1\right\} \)</span> היא <strong>באמת</strong> שדה, שבדרך כלל מסומן בתור <span class="math">\(\mathbb{Z}_{2}\)</span> או <span class="math">\(\mathbb{F}_{2}\)</span> ותכף נבין את הניואנס שמבדיל בין הסימונים.</p>
+<p>אם כן, <span class="math">\(\mathbb{F}_{2}\)</span> הוא השדה הזעיר ביותר שקיים. בפרט יש בו מספר <strong>סופי</strong> של איברים, להבדיל מ-<span class="math">\(\mathbb{Q}\)</span> האינסופי. האם יש עוד שדות שדומים ל-<span class="math">\(\mathbb{F}_{2}\)</span>? נראה די מתבקש להסתכל על הקבוצה <span class="math">\(\mathbb{Z}_{3}=\left\{ 0,1,2\right\} \)</span>. ושוב, אנחנו נתקלים בבעיה כשאנחנו מסתכלים על <span class="math">\(1+1+1\)</span> שלא יכול להיות שווה 3. הוא גם לא יכול להיות שווה 1 כי מ-<span class="math">\(1+1+1=1\)</span> נקבל <span class="math">\(2=0\)</span> ואז אין לנו שלושה איברים; והוא לא יכול להיות 2 כי אז <span class="math">\(1+1+1=2\)</span> יגרור <span class="math">\(1=0\)</span> כמו קודם; לכן אנחנו מגדירים <span class="math">\(1+1+1=0\)</span>. </p>
+<p>מההגדרה הזו עולה גם מה אמור לצאת <span class="math">\(2\cdot2\)</span>, כי הרי <span class="math">\(2=1+1\)</span> אז אפשר להשתמש בחוק הפילוג ולקבל <span class="math">\(2\cdot2=\left(1+1\right)\left(1+1\right)=1+1+1+1=1\)</span>. מה שקורה כאן בפועל הוא שב-<span class="math">\(\mathbb{Z}_{3}\)</span> אנחנו נדחפים להגדיר את פעולות החיבור והכפל <strong>מודולו </strong><strong>3</strong>. כלומר - מבצעים חיבור או כפל רגילים, אבל אחר כך מחלקים את התוצאה ב-3 ולוקחים רק את השארית. בגלל ש-<span class="math">\(1+1+1\)</span> מתחלק ב-3, השארית יוצאת 0 ולכן אנחנו מקבלים את השוויון <span class="math">\(1+1+1=0\)</span> שממנו אפשר להסיק גם במקרה של <span class="math">\(2\cdot2\)</span>. עם ההגדרות הללו, <span class="math">\(\mathbb{Z}_{3}\)</span> היא באמת שדה, שמסומן <span class="math">\(\mathbb{F}_{3}\)</span>.</p>
+<p>את הרעיון הזה אפשר להכליל לכל מספר טבעי <span class="math">\(n\)</span>: מסמנים ב-<span class="math">\(\mathbb{Z}_{n}\)</span> את הקבוצה <span class="math">\(\left\{ 0,1,2,\ldots,n-1\right\} \)</span> של כל המספרים הטבעיים מאפס עד <span class="math">\(n-1\)</span>; אם חושבים על זה רגע, זו קבוצת כל השאריות האפשריות שמתקבלות כשמחלקים מספר טבעי כלשהו ב-<span class="math">\(n\)</span>. פעולות החיבור והכפל מוגדרות על הקבוצה הזו כמו על מספרים טבעיים רגילים, אבל אחרי קבלת התוצאה מחלקים ב-<span class="math">\(n\)</span> ולוקחים את השארית. לא קשה לראות ש-<span class="math">\(\mathbb{Z}_{n}\)</span> הזו מקיימת את רוב התכונות היפות שדיברנו עליהן: חוקי הקיבוץ, החילוף והפילוג; קיום אדיש חיבורי (0) וקיום נגדי לכל איבר (הנגדי של <span class="math">\(a\ne0\)</span> הוא <span class="math">\(n-a\)</span> והנגדי של 0 הוא 0); וקיום אדיש כפלי (1). אבל <span class="math">\(\mathbb{Z}_{n}\)</span> הוא <strong>לא</strong> בהכרח שדה, והדוגמא הראשונה היא <span class="math">\(\mathbb{Z}_{4}\)</span>. </p>
+<p>הבעיה הבסיסית ב-<span class="math">\(\mathbb{Z}_{4}\)</span> היא ש-<span class="math">\(2\cdot2=0\)</span>, מה שמבטיח של-<span class="math">\(2\)</span> לא יכול להיות הופכי, כי נניח שהיה <span class="math">\(x\)</span> כלשהו כך ש-<span class="math">\(2x=1\)</span>, אז היינו כופלים את <span class="math">\(2\cdot2=0\)</span> ב-<span class="math">\(x\)</span> משני האגפים ומקבלים </p>
+<p><span class="math">\(0=0\cdot x=2\cdot2x=2\)</span></p>
+<p>כלומר <span class="math">\(0=2\)</span>, מה שאנחנו מניחים שלא מתקיים. זו תוצאה שנכונה לא ל-2 אלא באופן כללי במבנה שקראתי לו <strong>חוג</strong>: אומרים ש-<span class="math">\(a,b\)</span> הם <strong>מחלקי אפס</strong> אם <span class="math">\(ab=0\)</span> למרות ש-<span class="math">\(a\ne0\)</span> וגם <span class="math">\(b\ne0\)</span>, ואפשר להוכיח בדיוק באותו אופן שראינו שמחלקי אפס לא יכולים להיות הפיכים. </p>
+<p>כדי ש-<span class="math">\(\mathbb{Z}_{n}\)</span> יהיה שדה, הכרחי שלא יהיו בו מחלקי אפס. מכיוון שאם יש <span class="math">\(a,b>0\)</span> כך ש-<span class="math">\(n=ab\)</span> אז <span class="math">\(a,b\)</span> כן יהיו מחלקי אפס, תנאי הכרחי לכך ש-<span class="math">\(\mathbb{Z}_{n}\)</span> יהיה שדה הוא ש-<span class="math">\(n\)</span> יהיה <strong>ראשוני</strong>. <a href="https://gadial.net/2013/05/13/modular_arithmetic/">לא קשה להראות</a> שזה גם תנאי <strong>מספיק</strong>, כלומר שאם <span class="math">\(p\)</span> ראשוני אז <span class="math">\(\mathbb{Z}_{p}\)</span> הוא שדה, ובמקרה הזה מסמנים את השדה ב-<span class="math">\(\mathbb{F}_{p}\)</span>. הנה הניואנס המדובר: <span class="math">\(\mathbb{Z}_{n}\)</span> הוא סימון כללי עבור <strong>החוג</strong> שמשתמשים בו גם כשהחוג אינו שדה, אבל ב-<span class="math">\(\mathbb{F}_{n}\)</span> משתמשים רק כשהוא שדה.</p>
+<p>אם כן, קיבלנו עכשיו עושר של שדות חדשים: <span class="math">\(\mathbb{F}_{p}\)</span> לכל אחד מאינסוף הראשוניים <span class="math">\(p\)</span> הקיימים. בניגוד ל-<span class="math">\(\mathbb{Q}\)</span> כל השדות הללו הם <strong>סופיים</strong>. האם אלו כל השדות הסופיים? ובכן, לא, אבל זו נקודת התחלה טובה. אפשר להוכיח שלכל מספר ראשוני <span class="math">\(p\)</span> ולכל מספר טבעי <span class="math">\(n\)</span> קיים שדה אחד ויחיד עם <span class="math">\(p^{n}\)</span> איברים, שמסומן <span class="math">\(\mathbb{F}_{p^{n}}\)</span>, והשדה הזה מכיל את <span class="math">\(\mathbb{F}_{p}\)</span> בתור תת-קבוצה. </p>
+<p>איך בדיוק <span class="math">\(\mathbb{F}_{p^{n}}\)</span> נראה? זה טיפה טריקי: אפשר לחשוב על אברי <span class="math">\(\mathbb{F}_{p^{n}}\)</span> בתור <strong>פולינומים</strong> ממעלה קטנה מ-<span class="math">\(n\)</span> שהמקדמים שלהם שייכים ל-<span class="math">\(\mathbb{F}_{p}\)</span>, למשל אפשר לחשוב על אברי <span class="math">\(\mathbb{F}_{7^{3}}\)</span> בתור פולינומים כמו <span class="math">\(2x+5\)</span> ו-<span class="math">\(6x^{2}+2\)</span> ופעולת החיבור מוגדרת באופן הסטנדרטי עבור פולינומים, כך שבדוגמא שלי <span class="math">\(\left(6x^{2}+2\right)+\left(2x+5\right)=6x^{2}+2x+7=6x^{2}+2x\)</span> (ה-<span class="math">\(7\)</span> נעלם כי החיבור הוא מודולו 7 כי המקדמים של הפולינום הם איברים של <span class="math">\(\mathbb{F}_{7}\)</span>). אבל כפל הוא לא כזה פשוט. הרעיון הוא שכופלים את הפולינומים, ואז מחלקים את התוצאה <strong>בפולינום</strong> ספציפי ממעלה <span class="math">\(n\)</span> מעל <span class="math">\(\mathbb{F}_{p}\)</span> שנבחר מראש. כדי שזה יעבוד ונקבל שדה הפולינום הזה צריך להיות <strong>אי פריק</strong> אבל אני גולש פה כבר לנושא לא קשור - <a href="https://gadial.net/2011/07/14/finite_fields_intro/">הנה פוסט שלי</a> שמתעסק בשדות סופיים ונכנס לפרטים הללו.</p>
+<p>לסיום, בואו נעניק שם מפורש למושג המובלע שהשתמשנו בו בחלק הזה. אנחנו אומרים ש<strong>המציין</strong> של השדה <span class="math">\(\mathbb{F}\)</span> הוא <span class="math">\(n\)</span> אם לחבר את 1 לעצמו <span class="math">\(n\)</span> פעמים מחזיר 0 אבל כל חיבור של 1 לעצמו מספר קטן יותר של פעמים הוא לא 0. למשל, המציין של <span class="math">\(\mathbb{F}_{7}\)</span> הוא 7. כבר ראינו שהמציין של שדה חייב להיות מספר ראשוני, אם הוא קיים; אם לא משנה כמה פעמים נחבר את 1 לעצמו, תמיד נקבל משהו שונה מאפס, אומרים שהמציין של השדה הוא 0 (למשל, המציין של <span class="math">\(\mathbb{Q}\)</span> הוא 0).</p>
+<p>עכשיו כשאנחנו כבר מבינים פחות או יותר מה זה שדה, מה מפריד שדות מדברים דומים שאינם שדות, ויש לנו כמה דוגמאות קונקרטיות לשדות ובפרט <span class="math">\(\mathbb{Q}\)</span> והשדות <span class="math">\(\mathbb{F}_{p}\)</span>, אפשר להתקדם הלאה ולעבור אל עוד אקסיומות שאפשר להוסיף לשדה והן פחות נפוצות באלגברה אבל סופר-שימושיות בחשבון דיפרנציאלי ואינטגרלי: אקסיומות <strong>סדר</strong>.</p>
+<h2>סדור</h2>
+
+<h3>מה זה "מספר חיובי"?</h3>
+
+<p>כשאנחנו כותבים <span class="math">\(3<5\)</span> אנחנו יודעים למה אנחנו מתכוונים: 5 גדול מ-3. הוא בא "אחריו" בסדר של המספרים. אנחנו הרי סופרים ככה: אחת, שתיים, שלוש, ארבע, חמש. שלוש בא קודם, חמש אחר כך, אז זה מסומן קומפקטית ב-<span class="math">\(3<5\)</span>. אז אינטואיציה יש, אבל איך מגדירים את זה <strong>פורמלית</strong>?</p>
+<p>ההגדרה ה"סדרתית" לא תביא אותנו יותר מדי רחוק אם יש לנו שאיפות גדולות יותר מאשר לדבר על הטבעיים. אנחנו רוצים הגדרה שיהיה בה הגיון בהרבה שדות, למשל ב-<span class="math">\(\mathbb{Q}\)</span>. יש לנו את האינטואיציה לכך ש-<span class="math">\(\frac{1}{2}<\frac{3}{4}\)</span>, אבל איך זה מוגדר פורמלית? לנסות לסדר את השברים בסדרה כמו שעשינו עם הטבעיים זה כאב ראש שלא ייאמן (נסו!) אבל למרבה המזל יש לנו טריק פשוט מאוד: פשוט נסתכל על <span class="math">\(\frac{3}{4}-\frac{1}{2}\)</span> ונשאל את עצמנו - האם זה מספר <strong>חיובי</strong> או <strong>שלילי</strong>?</p>
+<p>כמובן, במבט ראשון לא פתרנו הרבה כי מה זה בכלל "מספר חיובי"? ההגדרה הפשוטה היא - מספר <span class="math">\(a\)</span> הוא חיובי אם <span class="math">\(0<a\)</span>, כלומר אני מגדיר חיוביים בעזרת הסימן <span class="math">\(<\)</span> של "גדול מ-". אבל היופי בעניין הוא שאני <strong>לא צריך</strong> את הסימן הזה כדי להגדיר חיובי. מלכתחילה אני קורא למספרים הטבעיים (בלי אפס) "החיוביים" ולנגדיים שלהם "השליליים", אז אני יכול להתבסס על הדיכוטומיה הזו כדי להגדיר את <span class="math">\(<\)</span> מלכתחילה.</p>
+<p>זה נשמע קצת רעוע, אני מודה, אבל היופי פה שזה באמת עובד, וכדי לראות כמה טוב זה עובד אני אעשה את זה על שדה כללי, עם הגדרות אבסטרקטיות, ונראה כמה רחוק אפשר להגיע.</p>
+<p>הרעיון הוא זה: נניח ש-<span class="math">\(\mathbb{F}\)</span> הוא שדה כלשהו. עכשיו אנחנו מגדירים עליו מבנה חדש באמצעות קבוצה <span class="math">\(P\subseteq\mathbb{F}\)</span> שאנחנו קוראים לאיברים שלה <strong>חיוביים</strong>. כדי שדברים יעבדו כמו שאנחנו מצפים, אנחנו דורשים שלוש אקסיומות מה"חיוביים" הללו:</p>
+<ul> <li>לכל <span class="math">\(a\in\mathbb{F}\)</span> בדיוק אחד מהבאים מתקיים: או ש-<span class="math">\(a\in P\)</span>, או ש-<span class="math">\(-a\in P\)</span>, או ש-<span class="math">\(a=0\)</span>.</li>
+
+
+<li>אם <span class="math">\(a,b\in P\)</span> אז <span class="math">\(a+b\in P\)</span></li>
+
+
+<li>אם <span class="math">\(a,b\in P\)</span> אז <span class="math">\(a\cdot b\in P\)</span></li>
+
+</ul>
+
+<p>זה הכל! האקסיומה הראשונה אומרת "כל איבר שונה מאפס הוא או חיובי או שלילי". שתי האחרות אומרות "סכום ומכפלה של חיוביים הוא חיובי". אלו בבירור תכונות שאנחנו מצפים מחיוביים לקיים ומתקיימות עבור <span class="math">\(\mathbb{N}\)</span>; מה שנראה קצת הזוי פה הוא שזה מספיק כדי להגדיר את יחס הסדר <span class="math">\(<\)</span> ולהסיק את כל התכונות שלו, אבל למרבה השמחה זה בדיוק מה שקורה, ואנחנו קוראים בשם <strong>שדה סדור</strong> לשדה <span class="math">\(\mathbb{F}\)</span> עם תת-קבוצה <span class="math">\(P\)</span> שמקיימת את האקסיומות הללו.</p>
+<p>בתור התחלה, בואו נשים לב ש-<span class="math">\(1\)</span> הוא תמיד חיובי, לא משנה כמה מוזר ננסה ש-<span class="math">\(P\)</span> תהיה. מכיוון ש-<span class="math">\(0\ne1\)</span> יש ל-1 בדיוק שתי ברירות: או ש-<span class="math">\(1\in P\)</span> או ש-<span class="math">\(-1\in P\)</span>. אבל זכרו שראינו שמינוס כפול מינוס הוא פלוס (ואת זה ראינו עוד לפני שהתחלנו לדבר על חיוביים ושליליים!) אז אם <span class="math">\(-1\in P\)</span>, מהאקסיומה על כפל נקבל ש-<span class="math">\(1=\left(-1\right)\cdot\left(-1\right)\in P\)</span>, בסתירה להנחה ש-<span class="math">\(-1\in P\)</span>. אז המסקנה שלנו היא ש-<span class="math">\(1\in P\)</span> ואילו <span class="math">\(-1\notin P\)</span>, כלומר 1 הוא תמיד חיובי ו-<span class="math">\(-1\)</span> הוא תמיד שלילי. עכשיו אפשר להשתמש בסגירות של <span class="math">\(P\)</span> לחיבור כדי לקבל שבכל שדה סדור, כל האיברים מהצורה <span class="math">\(n\)</span> (חיבור של <span class="math">\(1\)</span> לעצמו <span class="math">\(n\)</span> פעמים) הם חיוביים וכל האיברים מהצורה <span class="math">\(-n\)</span> הם שליליים. במילים אחרות, כל שדה סדור ממציין 0 מכיל עותק של <span class="math">\(\mathbb{Z}\)</span> ששומר על המשמעות המקורית של "חיוביים" ו"שליליים" ב-<span class="math">\(\mathbb{Z}\)</span>.</p>
+<p>ההגדרה של <span class="math">\(P\)</span> השתמשה בצורה מהותית באיברים נגדיים, אבל מה עם איברים הופכיים? אם <span class="math">\(a\in P\)</span>, האם גם <span class="math">\(a^{-1}\in P\)</span>? התשובה חיובית. ראשית שימו לב ש-<span class="math">\(a^{-1}\)</span> בכלל מוגדר; אם היה מתקיים <span class="math">\(a=0\)</span> הוא לא היה מוגדר, אבל <span class="math">\(a\in P\)</span> ולכן <span class="math">\(a\ne0\)</span>. שנית, בגלל ש-<span class="math">\(a^{-1}\ne0\)</span> מאותו נימוק, אז או ש-<span class="math">\(a^{-1}\in P\)</span> או ש-<span class="math">\(-a^{-1}\in P\)</span>. בואו נניח בשלילה שדווקא המקרה השני מתקיים, אז בגלל שגם <span class="math">\(a\in P\)</span> נקבל <span class="math">\(-1=\left(-a^{-1}\right)\cdot a\in P\)</span> וזו סתירה, לכן <span class="math">\(a^{-1}\in P\)</span>.</p>
+<p>התוצאה שזה עתה ראיתי מאפשרת לי לדבר על <span class="math">\(\mathbb{Q}\)</span>. כזכור, כל שדה ממציין 0 מכיל יותר מאשר עותק של <span class="math">\(\mathbb{Z}\)</span> - הוא מכיל עותק של <span class="math">\(\mathbb{Q}\)</span>; האם גם בו נשמרת המשמעות המקורית של "חיוביים" ו"שליליים"? כל מספר רציונלי ניתן לכתיבה בתור <span class="math">\(\frac{a}{b}\)</span>, שזו דרך אחרת לכתוב את הביטוי <span class="math">\(a\cdot b^{-1}\)</span> שמשתמש ישירות באקסיומות השדה. כך ש-<span class="math">\(b\ne0\)</span>. אם <span class="math">\(a=0\)</span> אז <span class="math">\(\frac{a}{b}=0\)</span>. אחרת, אם <span class="math">\(a\in P\)</span> וגם <span class="math">\(b\in P\)</span> אז <span class="math">\(b^{-1}\in P\)</span> ממה שראינו ולכן <span class="math">\(ab^{-1}\in P\)</span>. באופן דומה, אם <span class="math">\(-a,-b\in P\)</span> נקבל שוב <span class="math">\(\frac{a}{b}\in P\)</span> ואילו אם <span class="math">\(a,-b\in P\)</span> או <span class="math">\(-a,b\in P\)</span> נקבל ש-<span class="math">\(-ab^{-1}\in P\)</span> . זה תואם את המשמעות הרגילה של חיוביים והשליליים עבור הרציונליים.</p>
+<p>מה עם שדות שהם לא ממציין 0, למשל <span class="math">\(\mathbb{F}_{5}\)</span>? באופן די מובהק פשוט <strong>לא ניתן</strong> להגדיר עליהם סדר. כי אם <span class="math">\(\mathbb{F}\)</span> הוא שדה ממציין <span class="math">\(n\)</span>, אז מצד אחד <span class="math">\(1,n-1\)</span> שניהם חיוביים ממה שכבר ראינו, אבל אז גם <span class="math">\(1+\left(n-1\right)\)</span> צריך להיות חיובי - אבל הוא יוצא 0, ו-0 הוא לא חיובי. אז מלכתחילה כשאנחנו מדברים על "שדה סדור" אנחנו מתכוונים לשדה ממציין 0 (ובפרט, אין שדה סדור סופי).</p>
+<h3>איך מגדירים סדר וערך מוחלט בעזרת החיוביים</h3>
+
+<p>עכשיו בואו נשתמש בחיוביים והשליליים כדי להגדיר יחס סדר <span class="math">\(<\)</span>, ונעשה את זה על פי הרעיון האינטואיטיבי שכבר ראינו קודם: נאמר ש-<span class="math">\(a<b\)</span> אם <span class="math">\(b-a\in P\)</span>. ונרחיב את הסימון כך ש-<span class="math">\(a\le b\)</span> אם <span class="math">\(a<b\)</span> או <span class="math">\(a=b\)</span>.</p>
+<p>אנחנו רגילים לחשוב על <span class="math">\(\le\)</span> בתור <strong>יחס סדר</strong>, כלומר משהו שמקיים שלוש אקסיומות משל עצמו:</p>
+<ul> <li><span class="math">\(a\le a\)</span> לכל <span class="math">\(a\)</span> ("רפלקסיביות")</li>
+
+
+<li>אם <span class="math">\(a\le b\)</span> וגם <span class="math">\(b\le a\)</span> אז <span class="math">\(a=b\)</span> ("אנטיסימטריות")</li>
+
+
+<li>אם <span class="math">\(a\le b\)</span> וגם <span class="math">\(b\le c\)</span> אז <span class="math">\(a\le c\)</span> ("טרנזיטיביות")</li>
+
+</ul>
+
+<p>אפשר להוכיח ש-<span class="math">\(\le\)</span> שלנו מקיים את שלוש התכונות הללו.</p>
+<p>רפלקסיביות זה פשוט על פי הגדרה: אמרנו שאם <span class="math">\(a=b\)</span> אז <span class="math">\(a\le b\)</span> אז ברור שלכל <span class="math">\(a\)</span> מתקיים <span class="math">\(a\le a\)</span>.</p>
+<p>אנטיסימטריות זה גם כן די פשוט. אם <span class="math">\(a=b\)</span> סיימנו, אחרת נניח ש-<span class="math">\(a\ne b\)</span> ולכן ההנחות שלנו הן ש-<span class="math">\(a<b\)</span> וגם <span class="math">\(b<a\)</span>, כלומר על פי ההגדרה שלנו <span class="math">\(b-a\in P\)</span> וגם <span class="math">\(a-b\in P\)</span>. עכשיו, שימו לב ש-<span class="math">\(a-b=-\left(b-a\right)\)</span> (צריך להוכיח את זה מאקסיומות השדה אבל זה קל) אז הגענו לסתירה: מצאנו איבר שגם הוא וגם הנגדי שלו שייכים שניהם ל-<span class="math">\(P\)</span>, בסתירה לאקסיומה שאומרת שבדיוק אחד משניהם שייך ל-<span class="math">\(P\)</span>. המסקנה היא שההנחה ש-<span class="math">\(a\ne b\)</span> לא הייתה נכונה ולכן <span class="math">\(a=b\)</span>, שזה מה שרצינו.</p>
+<p>עבור הטרנזיטיביות, הנתון שלנו הוא <span class="math">\(a\le b\)</span> וגם <span class="math">\(b\le c\)</span>. אם <span class="math">\(a=b\)</span> אז מ-<span class="math">\(b\le c\)</span> ברור ש-<span class="math">\(a\le c\)</span> (פשוט כותבים <span class="math">\(a\)</span> במקום <span class="math">\(b\)</span>) ובדומה אם <span class="math">\(b=c\)</span> אז מ-<span class="math">\(a\le b\)</span> ברור ש-<span class="math">\(a\le c\)</span>. לכן נשאר לנו להוכיח רק שאם <span class="math">\(a<b\)</span> וגם <span class="math">\(b<c\)</span> אז <span class="math">\(a\le c\)</span>. משתי ההנחות הללו אנחנו מקבלים <span class="math">\(b-a\in P\)</span> וגם <span class="math">\(c-b\in P\)</span> ועל פי הסגירות של <span class="math">\(P\)</span> לחיבור נקבל ש-<span class="math">\(c-a=\left(c-b\right)+\left(b-a\right)\in P\)</span>, כמו שרצינו.</p>
+<p>בתורת הקבוצות כשמדברים על יחסי סדר, שלוש האקסיומות למעלה מגדירות את מה שנקרא <strong>סדר חלקי</strong>. בסדר חלקי, ייתכן שיהיו איברים שבכלל אי אפשר להשוות ביניהם, וזה יכול לסבך מאוד דברים. אצלנו, ביחס הסדר של שדה סדור, זה פשוט לא יכול לקרות ויחס הסדר יהיה מה שנקרא <strong>מלא</strong>, כלומר לכל <span class="math">\(a,b\in\mathbb{F}\)</span> או שמתקיים <span class="math">\(a<b\)</span> או שמתקיים <span class="math">\(b<a\)</span> או שמתקיים <span class="math">\(a=b\)</span>. זה נובע ישירות מכך ש-<span class="math">\(b-a\in P\)</span> או ש-<span class="math">\(-\left(b-a\right)\in P\)</span> או ש-<span class="math">\(b-a=0\)</span>, כלומר מהאקסיומה הראשונה שהייתה לנו על <span class="math">\(P\)</span>.</p>
+<p>הוכחנו כאן ש-<span class="math">\(\le\)</span> הוא יחס סדר כמו שלומדים בקורס בתורת הקבוצות, אבל למה לעצור כאן? בואו נוכיח את הטענות שראינו בבית הספר! למשל, שאם <span class="math">\(x<y\)</span> ובנוסף <span class="math">\(a>0\)</span> אז <span class="math">\(ax<ay\)</span>. כדי להוכיח את זה, נסתכל על <span class="math">\(ay-ax=a\left(y-x\right)\)</span>. מכך ש-<span class="math">\(x<y\)</span> אנחנו מקבלים ש-<span class="math">\(y-x\in P\)</span> ומכך ש-<span class="math">\(a>0\)</span> אנחנו מקבלים ש-<span class="math">\(a\in P\)</span> (כי <span class="math">\(a=a-0\in P\)</span>) ולכן המכפלה שלהם גם שייכת ל-<span class="math">\(P\)</span> וקיבלנו את מה שרצינו.</p>
+<p>עוד דבר שראינו בבית הספר הוא שכפל במספר שלילי <strong>הופך</strong> את כיוון אי השוויון, כלומר אם <span class="math">\(x<y\)</span> ו-<span class="math">\(a<0\)</span> אז <span class="math">\(ax>ay\)</span>. כדי להוכיח את זה, בואו נסתכל על <span class="math">\(ax-ay=a\left(x-y\right)=-a\left(y-x\right)\)</span>. מכיוון ש-<span class="math">\(x<y\)</span> אז <span class="math">\(y-x\in P\)</span> ומכיוון ש-<span class="math">\(a<0\)</span> אז <span class="math">\(-a\in P\)</span> ולכן שוב קיבלנו מכפלה ששייכת ל-<span class="math">\(P\)</span>, כפי שרצינו.</p>
+<p>ועוד דבר שראינו בבית הספר הוא שגם לקחת הופכי לשני האגפים של אי שוויון במספרים חיוביים <strong>הופך</strong> את כיוון אי השוויון. כלומר, אם <span class="math">\(0<x<y\)</span> אז <span class="math">\(x^{-1}>y^{-1}\)</span>. כדי לראות את זה, פשוט נכפול את שני האגפים של <span class="math">\(x<y\)</span> ב-<span class="math">\(x^{-1}\)</span> מצד שמאל ואז נכפול את שני האגפים ב-<span class="math">\(y^{-1}\)</span> מצד ימין ונקבל <span class="math">\(y^{-1}<x^{-1}\)</span>. הכל מסתדר מאוד נחמד.</p>
+<p>עוד משהו נחמד הוא שעכשיו אנחנו יכולים להגדיר <strong>ערך מוחלט</strong>. זו פונקציה קטנה ותמימה למראה שהופכת לקריטית ממש כשמתחילים לדבר על חשבון דיפרנציאלי ואינטגרלי, וקל להגדיר אותה בכל שדה סדור (אפשר להגדיר אותה גם בשדות לא סדורים אבל זה סיפור אחר). לכל <span class="math">\(x\)</span> נגדיר</p>
+<p><span class="math">\(\left|x\right|=\begin{cases} x & x\ge0\\ -x & x<0 \end{cases}\)</span></p>
+<p>ומה שנחמד לראות הוא שכבר בהגדרה האבסטרקטית הזו, מתקיימות התכונות הבסיסיות שאנחנו רגילים אליהן מערך מוחלט "רגיל" ואפשר להוכיח אותן מהכמות הבאמת זעומה של אקסיומות שעליהן הסתמכנו.</p>
+<p>ראשית, אם <span class="math">\(x\ne0\)</span>, אז גם <span class="math">\(\left|x\right|\ne0\)</span>, פשוט כי אם <span class="math">\(x\ne0\)</span> אז <span class="math">\(\left|x\right|\)</span> הוא או <span class="math">\(x\)</span> או <span class="math">\(-x\)</span> ושניהם שונים מאפס.</p>
+<p>שנית, לכל <span class="math">\(x,y\in\mathbb{F}\)</span> מתקיים <span class="math">\(\left|xy\right|=\left|x\right|\cdot\left|y\right|\)</span>, כלומר פונקציית הערך המוחלט היא <strong>כפלית</strong>. את זה אפשר לראות למשל על ידי בדיקה מפורשת של כל: למשל, אם <span class="math">\(x,y\ge0\)</span> אז <span class="math">\(\left|x\right|=x,\left|y\right|=y\)</span> וכמו כן <span class="math">\(xy\ge0\)</span> ולכן <span class="math">\(\left|xy\right|=xy=\left|x\right|\left|y\right|\)</span>. והנה דוגמא טיפה יותר מסובכת: אם <span class="math">\(x\ge0\)</span> אבל <span class="math">\(y<0\)</span> אז <span class="math">\(xy\le0\)</span> ולכן נצטרך לחלק פה למקרים: אם <span class="math">\(x=0\)</span> אז <span class="math">\(xy=0=0\cdot\left|y\right|=\left|x\right|\cdot\left|y\right|\)</span> . לעומת זאת אם <span class="math">\(x>0\)</span> אז <span class="math">\(xy<0\)</span> ולכן <span class="math">\(\left|xy\right|=-xy=x\left(-y\right)=\left|x\right|\left|y\right|\)</span>, וכן הלאה.</p>
+<p>התכונה השלישית היא המעניינת מכולן: <strong>אי-שוויון המשולש</strong>, שאפילו שמו מגיע לו מגאומטריה שפשוט לא קיימת כאן, בעולם של ההגדרות האלגבריות הטהורות:</p>
+<p><span class="math">\(\left|x+y\right|\le\left|x\right|+\left|y\right|\)</span></p>
+<p>הטריק בהוכחה הוא לשים לב שלכל <span class="math">\(a\in\mathbb{F}\)</span> מתקיים <span class="math">\(\left|a\right|^{2}=a^{2}\)</span> פשוט כי אם <span class="math">\(a\ge0\)</span> זה ברור ואם <span class="math">\(a<0\)</span> אז <span class="math">\(\left|a\right|^{2}=\left(-a\right)\left(-a\right)=a^{2}\)</span> כי מינוס כפול מינוס זה פלוס, כמו שראינו. אז אפשר לכתוב:</p>
+<p><span class="math">\(\left|x+y\right|^{2}=\left(x+y\right)^{2}=x^{2}+2xy+y^{2}\le\)</span></p>
+<p><span class="math">\(\left|x\right|^{2}+2\left|xy\right|+\left|y\right|^{2}=\left|x\right|^{2}+2\left|x\right|\left|y\right|+\left|y\right|^{2}=\left(\left|x\right|+\left|y\right|\right)^{2}\)</span></p>
+<p>כאן השתמשנו בכך ש-<span class="math">\(xy\le\left|xy\right|\)</span>, שקל להוכיח באופן כללי כי אם <span class="math">\(a\ge0\)</span> אז <span class="math">\(a=\left|a\right|\)</span> ואם <span class="math">\(a<0\)</span> אז <span class="math">\(-a>0\)</span> ואז <span class="math">\(-a-a=-2a>0\)</span> כך ש-<span class="math">\(a<-a=\left|a\right|\)</span>.</p>
+<p>הגענו אל המסקנה <span class="math">\(\left|x+y\right|^{2}\le\left(\left|x\right|+\left|y\right|\right)^{2}\)</span>. מה שאנחנו באמת רוצים לעשות הוא "להוציא שורש" משני האגפים. כלומר, להראות שאם <span class="math">\(a,b\ge0\)</span> שניהם וגם <span class="math">\(a^{2}\le b^{2}\)</span> אז <span class="math">\(a\le b\)</span>. הנה דרך אחת להראות את זה: אם <span class="math">\(a^{2}\le b^{2}\)</span> אז <span class="math">\(b^{2}-a^{2}\ge0\)</span> אבל <span class="math">\(b^{2}-a^{2}=\left(b-a\right)\left(b+a\right)\)</span>. עכשיו, הנחנו ש-<span class="math">\(a,b\ge0\)</span> ולכן <span class="math">\(b+a\ge0\)</span>. מכאן שאם לא היה מתקיים <span class="math">\(a\le b\)</span> אז היה מתקיים <span class="math">\(b-a<0\)</span> מה שהיה גורר ש-<span class="math">\(b^{2}-a^{2}<0\)</span>, בסתירה להנחה המקורית שלנו. זה מסיים את ההוכחה של אי שוויון המשולש.</p>
+<h3>ארכימדיות</h3>
+
+<p>אני רוצה לתת עכשיו עוד הגדרה די מהותית, שתהפוך להיות חשובה מאוד בהמשך: <strong>ארכימדיות</strong> של שדה סדור (מארכימדס, המתמטיקאי היווני). דרך אחת לנסח את תכונת הארכימדיות של שדה סדור <span class="math">\(\mathbb{F}\)</span> היא שלכל <span class="math">\(a\in\mathbb{F}\)</span> קיים <span class="math">\(n\in\mathbb{Z}\)</span> כך ש-<span class="math">\(a<n\)</span> . כאן צריך לחדד שב-<span class="math">\(\mathbb{Z}\)</span> הכוונה שלי היא לתת-הקבוצה של <span class="math">\(\mathbb{F}\)</span> שנוצרת על ידי חיבור/חיסור של <span class="math">\(1\)</span> לעצמו (זכרו שמקבלים את <span class="math">\(\mathbb{Z}\)</span> רק אם השדה ממציין 0, אבל אם הוא לא ממציין 0 הוא בפרט לא סדור). במילים אחרות, האיברים של השדה אף פעם לא "בורחים" מבחינת גודלם למספרים הטבעיים.</p>
+<p>יש עוד כמה דרכים לראות את זה. ראשית, ארכימדיות הוגדרה בתור "קיים <span class="math">\(n\)</span> גדול יותר" אבל מזה נובע מייד גם "קיים <span class="math">\(n\)</span> קטן יותר", כלומר לכל <span class="math">\(a\in\mathbb{F}\)</span> קיים <span class="math">\(n\in\mathbb{Z}\)</span> כך ש-<span class="math">\(n<a\)</span>. כדי לראות את זה, פשוט נפעיל ארכימדיות "רגילה" על <span class="math">\(-a\)</span>, נקבל שקיים <span class="math">\(n^{\prime}\)</span> כך ש-<span class="math">\(-a<n^{\prime}\)</span>, נכפול את שני האגפים ב-<span class="math">\(-1\)</span>, מה שכבר ראינו שהופך את הסדר, נסמן <span class="math">\(n=-n^{\prime}\)</span> ונקבל <span class="math">\(n<a\)</span>.</p>
+<p>שנית, "קיים מספר טבעי גדול כרצוננו" זה אותו הדבר כמו "קיים מספר רציונלי חיובי קטן כרצוננו". כלומר, לכל <span class="math">\(a>0\)</span> קיים <span class="math">\(n\in\mathbb{Z}\)</span> כך ש-<span class="math">\(\frac{1}{n}<a\)</span> - כדי לראות את זה, ניקח <span class="math">\(n\)</span> כך ש-<span class="math">\(a^{-1}<n\)</span> ואז ניקח הופכי לשני האגפים ונקבל <span class="math">\(\frac{1}{n}<a\)</span>.</p>
+<p>עוד דרך לחשוב על זה, שאני אוהב במיוחד, היא זו: בואו ניקח <span class="math">\(\varepsilon>0\)</span> כלשהו, כשהאינטואיציה היא לחשוב על <span class="math">\(\varepsilon\)</span> בתור משהו ממש ממש קטן (זה השימוש הסטנדרטי של האות הזו בחדו"א). בואו ניקח גם <span class="math">\(M>0\)</span> כלשהו, כשהאינטואיציה היא לחשוב עליו בתור מספר ממש ממש ענק. אז ארכימדיות פירושה שקיים <span class="math">\(n\)</span> כך ש-<span class="math">\(n>\frac{M}{\varepsilon}\)</span>, או במילים אחרות <span class="math">\(n\varepsilon>M\)</span>. זה אומר שלא משנה עד כמה משהו קטן - אם אנחנו בשדה ארכימדי, לחבר אותו מספר פעמים לעצמו יגרום לו לעבור בגודלו כל מספר כולל ענקיים.</p>
+<p>כמובן, שאלה מתבקשת עכשיו היא אילו שדות סדורים הם לא ארכימדיים. התשובה היא שיש כאלו, אבל להציג אותם קונקרטית יהיה מתוסבך מדי אם אני רוצה לסיים מהר את החלק הזה. עדיין, בואו נחשוב מה המשמעות של קיום שלהם. יש למשל שדה לא ארכימדי שמרחיב את הממשיים, <span class="math">\(\mathbb{R}\)</span> (שדה ה"היפר-ממשיים"). בשדה כזה יהיה איבר <span class="math">\(\omega\)</span> כך ש-<span class="math">\(n<\omega\)</span> לכל <span class="math">\(n\)</span> טבעי; על <span class="math">\(\omega\)</span> הזה אפשר לחשוב בתור איבר מגודל "אינסופי". מכיוון שאנחנו בשדה קיים לו הופכי, <span class="math">\(\omega^{-1}\)</span>; אי השוויון <span class="math">\(n<\omega\)</span> מלמד אותנו ש-<span class="math">\(\omega^{-1}<\frac{1}{n}\)</span>. כלומר נקבל ש-<span class="math">\(\omega^{-1}\)</span> קטן מכל מספר ממשי (כי לכל מספר ממשי קיים <span class="math">\(\frac{1}{n}\)</span> שקטן ממנו); <span class="math">\(\omega^{-1}\)</span> הוא מה שמכונה במתמטיקה מודרנית "אינפיניטסימל" (מושג שהייתה לו משמעות הרבה יותר רופפת בימי התהוות החדו"א).</p>
+<p>הקיום של שדות לא ארכימדיים שמכלילים את הממשיים הוא מבחינתי תמרור אזהרה עצום להגדרה של הממשיים בתור "כל המספרים על ציר המספרים". הגישה הזו מניחה שהאינפיניטסימל <span class="math">\(\omega^{-1}\)</span> בכלל לא נמצא על ציר המספרים. עוד הייתי יכול להבין טענות ש-<span class="math">\(\omega\)</span> לא נמצא עליו כי הוא אי שם הרחק באינסוף רחוק רחוק - אבל לטעון ש-<span class="math">\(\omega^{-1}\)</span> הוא לא על ציר המספרים, בהינתן כמה שהוא קרוב לאפס - זה כבר מוזר. אני אישית לא מצליח לחשוב על דרך טובה לנמק למה אסור למה שאנחנו קוראים לו "ציר המספרים" לכלול את <span class="math">\(\omega^{-1}\)</span> בלי פשוט לומר "אנחנו מגדירים את ציר המספרים להיות <span class="math">\(\mathbb{R}\)</span>" וחסל (זו הגישה שלי), מה שכמובן מונע מאיתנו להגדיר את <span class="math">\(\mathbb{R}\)</span> בתור ציר המספרים.</p>
+<h3>צפיפות</h3>
+
+<p>לפני שנמשיך לחלק הבא, יש עוד תכונה סופר-חשובה אחת שתהיה סופר-שימושית בהמשך שכבר אפשר לדבר עליה. מה ההבדל העקרוני בין <span class="math">\(\mathbb{Z}\)</span> ובין <span class="math">\(\mathbb{Q}\)</span> בתור חוגים סדורים? ובכן, <span class="math">\(\mathbb{Q}\)</span> הוא לא סתם חוג אלא שדה וזה באמת הבדל מהותי, אבל אני חושב יותר על הבדל שקשור ליחס הסדר עצמו. ב-<span class="math">\(\mathbb{Z}\)</span>, מתקיים למשל אי השוויון <span class="math">\(3<4\)</span>, ויוצא שבין שני המספרים הללו אין עוד איבר נוסף - אני יכול "לדלג בצעד אחד" מ-<span class="math">\(3\)</span> אל <span class="math">\(4\)</span>. לעומת זאת ב-<span class="math">\(\mathbb{Q}\)</span> אין דבר כזה: לכל <span class="math">\(a,b\in\mathbb{Q}\)</span> כך ש-<span class="math">\(a<b\)</span> קיים <span class="math">\(c\in\mathbb{Q}\)</span> כך ש-<span class="math">\(a<c<b\)</span>. התכונה הזו, של קיום איבר <strong>בין</strong> כל זוג איברים שונים זה מזה נקרא <strong>צפיפות</strong> ובאמת שהוא חשוב בצורה בלתי רגילה. אז ההבדל בין <span class="math">\(\mathbb{Z}\)</span> ובין <span class="math">\(\mathbb{Q}\)</span> שרציתי לדבר עליו: יחס הסדר של <span class="math">\(\mathbb{Z}\)</span> לא צפוף אבל של <span class="math">\(\mathbb{Q}\)</span> כן.</p>
+<p>המקרה של <span class="math">\(\mathbb{Z}\)</span> מראה לנו שקיימים חוגים סדורים שאינם צפופים. אבל האם כל <strong>שדה</strong> סדור הוא צפוף? ובכן, כן, בצורה לא מעניינת: יהיו <span class="math">\(a<b\)</span> איברים כלשהם של שדה סדור <span class="math">\(\mathbb{F}\)</span>, אז <span class="math">\(a=\frac{a+a}{2}<\frac{a+b}{2}<\frac{b+b}{2}=b\)</span> ולכן <span class="math">\(\frac{a+b}{2}\)</span> הוא איבר שנמצא בין <span class="math">\(a\)</span> לבין <span class="math">\(b\)</span>. בגלל שזה היה פשוט <strong>מדי</strong>, אנחנו יכולים לחפש תכונת צפיפות <strong>עוד יותר</strong> יעילה. מה שהוכחתי הוא שבכל שדה סדור <span class="math">\(\mathbb{F}\)</span>, לכל זוג איברים <span class="math">\(a,b\in\mathbb{F}\)</span> קיים <span class="math">\(c\in\mathbb{F}\)</span> כך ש-<span class="math">\(a<c<b\)</span>. עכשיו, בגלל ש-<span class="math">\(\mathbb{F}\)</span> שדה <strong>סדור</strong> הוא ממציין 0 ולכן מכיל עותק של <span class="math">\(\mathbb{Q}\)</span>, ואני יכול להראות שהעותק הזה של <span class="math">\(\mathbb{Q}\)</span> צפוף <strong>בתוך</strong> <span class="math">\(\mathbb{F}\)</span> במובן הזה שאת ה-<span class="math">\(c\)</span> שנמצא בין כל <span class="math">\(a,b\in\mathbb{F}\)</span> אני יכול לבחור מתוך <span class="math">\(\mathbb{Q}\)</span>. למה ההוכחה הנוכחית לא עובדת? כי אני בונה את <span class="math">\(c\)</span> שלי בתור הסכום <span class="math">\(\frac{a+b}{2}\)</span>, מה שנותן לי משהו שאנחנו רק יודעים עליו שהוא איבר כללי ב-<span class="math">\(\mathbb{F}\)</span> ולכן לא חייב להיות רציונלי. ובאמת, עבור <span class="math">\(\mathbb{F}\)</span> <strong>לא ארכימדי</strong> אני לא אוכל לקבל צפיפות של <span class="math">\(\mathbb{Q}\)</span> בתוך <span class="math">\(\mathbb{F}\)</span>. אבל אם <span class="math">\(\mathbb{F}\)</span> ארכימדי, אפשר להוכיח את זה.</p>
+<p>הנקודה המרכזית היא שאם <span class="math">\(b-a>1\)</span>, אז <strong>קל</strong> למצוא איבר רציונלי ביניהם, ולא סתם רציונלי אלא ממש מספר שלם. למה? ובכן, התכונה הארכימדית אומרת לנו שקיים <span class="math">\(m\)</span> שלם כך ש-<span class="math">\(a<m\)</span>. יש הרבה <span class="math">\(m\)</span>-ים כאלו, אבל אני יכול לבחור מתוכם את <strong>המינימלי</strong>. זה דורש נימוק בפני עצמו, אבל הנה נימוק זריז: ראשית, מכיוון שהשדה ארכימדי קיים <span class="math">\(n_{1}\)</span> כך ש-<span class="math">\(n_{1}<a\)</span> וגם קיים <span class="math">\(n_{2}\)</span> כך ש-<span class="math">\(a<n_{2}\)</span>. עכשיו אפשר להסתכל על הקבוצה <span class="math">\(\left\{ n\in\mathbb{Z}\ |n_{1}\le n\le n_{2},a<n\right\} \)</span>. זו קבוצה <strong>סופית</strong> כי יש רק מספר סופי של שלמים בין <span class="math">\(n_{1}\)</span> ל-<span class="math">\(n_{2}\)</span> - בדיוק <span class="math">\(n_{2}-n_{1}+1\)</span> כאלו. כמו כן זו לא קבוצה ריקה, כי לפחות עבור <span class="math">\(n_{2}\)</span> אנחנו יודעים ש-<span class="math">\(a<n_{2}\)</span>. לכן קיים לה איבר מינימלי <span class="math">\(m\)</span> (אני עוד מעט אדבר על איברים מינימליים יותר בפירוט, למי שעדיין חשדנים). ה-<span class="math">\(m\)</span> הזה יקיים ש-<span class="math">\(a<m\)</span> אבל <span class="math">\(m-1<a\)</span>.</p>
+<p>עכשיו, נתון לי ש-<span class="math">\(b-a>1\)</span>, כלומר <span class="math">\(a+1<b\)</span>. ניקח את <span class="math">\(m-1<a\)</span>, נחבר 1 לשני האגפים, ונקבל <span class="math">\(m<a+1<b\)</span>; קיבלנו ש-<span class="math">\(a<m<b\)</span>, כמו שרצינו.</p>
+<p>זה מסיים את הוכחת הצפיפות למקרה של <span class="math">\(b-a>1\)</span>. באופן כללי, אם <span class="math">\(a<b\)</span> אז <span class="math">\(b-a>0\)</span> ולכן ארכימדיות נותנת לנו שקיים <span class="math">\(n>0\)</span> שלם כך ש-<span class="math">\(\frac{1}{b-a}<n\)</span>. נכפול את שני האגפים ב-<span class="math">\(b-a\)</span> ונקבל <span class="math">\(1<bn-an\)</span>, ועכשיו אני יכול להשתמש במה שהוכחתי לפני רגע ולהראות שקיים <span class="math">\(m\)</span> שלם כך ש-<span class="math">\(an<m<bn\)</span>. לסיום אני אחלק את כל האגפים ב-<span class="math">\(n\)</span> ואקבל <span class="math">\(a<\frac{m}{n}<b\)</span>, וסיימנו! זה לא היה קל במיוחד אבל זו תוצאה שימושית ביותר.</p>
+<h2>שלם</h2>
+
+<h3>מה בעצם חסר?</h3>
+
+<p>בשלב הזה אנחנו יודעים מה זה שדה סדור, וגם יש לנו דוגמא טובה לשדה סדור שכזה: <span class="math">\(\mathbb{Q}\)</span>. אז מה עוד אנחנו צריכים?</p>
+<p>ובכן, ראשית אנחנו צריכים <strong>מספרים</strong>. חסרים לנו מספרים. לא יעלה על הדעת שנסתפק במספרים שיש ב-<span class="math">\(\mathbb{Q}\)</span>. אם אני מצייר ריבוע עם אורך צלע 1 ומותח בו אלכסון, האורך של האלכסון הזה יהיה <span class="math">\(\sqrt{2}\)</span> (נובע ממשפט פיתגורס). אבל <span class="math">\(\sqrt{2}\notin\mathbb{Q}\)</span>, אז חסרים לי מספרים. אני רוצה לפחות את כל השורשים <span class="math">\(\sqrt{n}\)</span> לכל <span class="math">\(n\ge0\)</span>. ולמה לא גם את השורשים השלישיים, <span class="math">\(\sqrt[3]{n}\)</span>? ובעצם שיהיה <span class="math">\(\sqrt[k]{n}\)</span> לכל <span class="math">\(n\ge0\)</span> ו-<span class="math">\(k>0\)</span>. אפשר אפילו להגדיל ולומר שאני רוצה את כל המספרים <strong>האלגבריים</strong>, כלומר כל המספרים שאני יכול לקבל בתור שורשים של פולינום עם מקדמים רציונליים, אבל אני מעדיף לא ללכת לכיוון של טענות כאלו כי הן שוב מניחות שאני כבר מכיר את "העולם הרחב" של המספרים ופשוט גוזר מתוכו תת-קבוצה מעניינת, וכרגע אני רק רוצה להצביע על מספרים קונקרטיים שברור שחסרים לי. גם <span class="math">\(\pi\)</span> חסר. גם <span class="math">\(e\)</span> חסר. בקיצור, <span class="math">\(\mathbb{Q}\)</span> ממש לא מספיק.</p>
+<p>העניין הוא שאם אני אוסיף את כל המספרים הללו, הכל הולך ממש להסתבך. ראיתי למשל שאם אני מוסיף את <span class="math">\(\sqrt{2}\)</span> ל-<span class="math">\(\mathbb{Q}\)</span> ו"סוגר" את הקבוצה כך שעדיין אקבל שדה, אני אצטרך להוסיף את כל האיברים מהצורה <span class="math">\(a+b\sqrt{2}\)</span> כך ש-<span class="math">\(a,b\in\mathbb{Q}\)</span>. אם אני אוסיף את <span class="math">\(\pi\)</span> זה יהיה יותר בעייתי - אני אצטרך להוסיף את כל האיברים מהצורה <span class="math">\(a_{0}+a_{1}\pi+a_{2}\pi^{2}+a_{3}\pi^{3}+\ldots+a_{k}\pi^{k}\)</span>. אבל אפילו זה לא מספיק, כי מכיוון ש-<span class="math">\(\pi>1\)</span> אז <span class="math">\(0<\pi^{-1}<1\)</span> ולכן אני יכול לקחת סכומים <strong>אינסופיים</strong> של חזקות שליליות של <span class="math">\(\pi\)</span> ולצפות שזה יתכנס למשהו, ובעצם אני מכניס לתמונה המון שיקולים של חדו"א למרות <strong>שעדיין לא פיתחתי את החדו"א כי אין לי איפה</strong> כי החדו"א הרי מתחיל מזה שמדברים על השדה שבו האקשן הולך להתרחש. בקיצור, כל הגישה הזו של "בואו נרחיב את <span class="math">\(\mathbb{Q}\)</span> עם איברים קונקרטיים" היא קצת מבורחשת, ואני לא רוצה לנקוט בה בכלל (וגם הבניות הקונקרטיות של <span class="math">\(\mathbb{R}\)</span> שאראה בהמשך לא עושות את זה).</p>
+<p>מה שאני אעשה, כמו קודם, הוא לשאול את עצמי - איזו אקסיומה חסרה לי? איזו תכונה נוספת של השדה הסדור שאני בונה תיתן לי את מה שאני צריך? וכאן מגיעות בשורות טובות נחמדות מאוד: יש אקסיומה <strong>אחת</strong>, פשוטה יחסית לניסוח מילולי ודי אינטואיטיבית מבחינת מה שהיא עושה, שהיא <strong>כל</strong> מה שחסר לי. מרגע שאוסיף אותה אקבל את <span class="math">\(\sqrt{2}\)</span> ואת <span class="math">\(\pi\)</span> ואת <span class="math">\(e\)</span> ואת כל המספרים שחסרים לי, והשדה שאני בונה יהפוך להיות מקום <strong>ממש נחמד</strong> שבו אפשר להוכיח את כל משפטי הבסיס של החדו"א (שלא אציג בפוסט הזה אבל נראה בהמשך למה הם צריכים דווקא את האקסיומה הזו). האקסיומה המושלמת הזו נקראת <strong>אקסיומת השלמות</strong> (באנגלית משחק המילים הדלוח הזה לא עובד; היא נקראת Axiom of Completeness). הנה הניסוח שלה, ותכף אסביר מה הוא אומר: <strong>לכל קבוצה לא ריקה וחסומה מלעיל קיים חסם עליון</strong>.</p>
+<p>מה זו קבוצה אנחנו יודעים. בהקשר שלנו יש לנו שדה <span class="math">\(\mathbb{F}\)</span> ו"קבוצה" היא בסך הכל אוסף של איברים מתוכו, מה שמסומן ב-<span class="math">\(A\subseteq\mathbb{F}\)</span>. הקבוצה הריקה מסומנת ב-<span class="math">\(\emptyset\)</span> אז כדי להגיד שקבוצה לא ריקה אנחנו כותבים <span class="math">\(A\ne\emptyset\)</span>. החלק הבאמת מעניין בהגדרה הוא זה שמערב את המילה "חסם" להטיותיה השונות.</p>
+<h3>חסמים</h3>
+
+<p>קבוצה <strong>חסומה</strong> זה כבר עניין של הכנסת יחס הסדר <span class="math">\(\le\)</span> לתמונה. אנחנו אומרים ש-<span class="math">\(A\)</span> <strong>חסומה מלעיל</strong> ("חסומה מלמעלה") אם קיים <span class="math">\(b\in\mathbb{F}\)</span> כך שלכל <span class="math">\(a\in A\)</span> מתקיים <span class="math">\(a\le b\)</span>. יש כמובן גם הגדרה מקבילה עבור חסם מלמטה: אומרים ש-<span class="math">\(A\)</span> <strong>חסומה מלרע</strong> אם קיים <span class="math">\(b\in\mathbb{F}\)</span> כך שלכל <span class="math">\(a\in A\)</span> מתקיים <span class="math">\(b\le a\)</span>, ואנחנו אומרים ש-<span class="math">\(A\)</span> <strong>חסומה</strong> אם היא חסומה גם מלעיל וגם מלרע (למרות שבטח לפעמים יתפקשש לי סתם "חסומה" גם על קבוצה שחסומה רק מכיוון אחד). הנה כמה דוגמאות פשוטות עבור המקרה של <span class="math">\(\mathbb{F}=\mathbb{Q}\)</span>: הקבוצה <span class="math">\(A=\mathbb{N}\)</span> היא חסומה מלרע (על ידי 0, למשל) אבל לא חסומה מלעיל. לעומת זאת הקבוצה <span class="math">\(\left\{ \frac{1}{n}\ |\ n\in\mathbb{N}^{+}\right\} \)</span> (<span class="math">\(\mathbb{N}^{+}\)</span> פירושו הטבעיים פרט ל-0, ולא משנה אם בהגדרה שלנו הטבעיים כוללים את 0 או לא) חסומה גם מלרע (על ידי 0 שוב) וגם מלעיל (על ידי 1). שימו לב להבדל בין שני החסמים: בעוד ש-1 הוא איבר של הקבוצה (<span class="math">\(1=\frac{1}{1}\)</span>), 0 הוא לא איבר של הקבוצה. על 1 אנחנו אומרים שהוא גם <strong>איבר מקסימלי</strong> של הקבוצה, אבל מה נגיד על 0? ובכן, נגיד שהוא <strong>חסם תחתון</strong>, אבל אני מקדים את המאוחר.</p>
+<p>ראשית בואו נדבר על מינימום ומקסימום. אם <span class="math">\(A\)</span> קבוצה, וקיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(b\le a\)</span> לכל <span class="math">\(b\in A\)</span> אז אומרים ש-<span class="math">\(a\)</span> הוא <strong>המקסימום</strong> של <span class="math">\(A\)</span> ומסמנים <span class="math">\(a=\max A\)</span>. באופן דומה, אם קיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(a\le b\)</span> לכל <span class="math">\(b\in A\)</span> אז אומרים ש-<span class="math">\(a\)</span> הוא <strong>המינימום</strong> של <span class="math">\(A\)</span> ומסמנים <span class="math">\(a=\min A\)</span>. לקבוצה יכול להיות רק מקסימום יחיד, כי אם <span class="math">\(a,a^{\prime}\)</span> שניהם מקיימים את ההגדרה אז בגלל ששניהם איברים בקבוצה, מתקיים גם <span class="math">\(a\le a^{\prime}\)</span> וגם <span class="math">\(a^{\prime}\le a\)</span> ומאנטיסימטריות נובע ש-<span class="math">\(a=a^{\prime}\)</span>, ובאופן דומה גם המינימום הוא יחיד, אם הוא קיים. אבל הוא לא חייב להיות קיים, ובואו נראה מה יכול להשתבש.</p>
+<p>ראשית, אם <span class="math">\(A=\emptyset\)</span> אז לא יכול להיות בה מקסימום מהטעם הפשוט שמקסימום חייב להיות איבר בקבוצה וזה קצת קשה עבור קבוצה בלי איברים. שנית, אם <span class="math">\(A\)</span> לא חסומה מלעיל אז מן הסתם לא יהיה לה מקסימום, כי אם אין <strong>בכלל</strong> מישהו שגדול או שווה לכל אברי הקבוצה, ברור שלא יהיה מישהו שהוא <strong>גם</strong> בקבוצה וגם גדול או שווה לכל איבריה. אבל גם בלי שתי הבעיות הברורות האלו, עדיין יכולות להיות קבוצות שהן לא ריקות, חסומות מלעיל ואין להן מקסימום. הנה דוגמא - הקבוצה</p>
+<p><span class="math">\(\left\{ 0.9,0.99,0.999,\ldots\right\} \)</span></p>
+<p>אפשר לחשוב על האיברים בקבוצה הזו כאילו הם עולים ועולים, <span class="math">\(0.9<0.99<0.999<\ldots\)</span>, אבל הם אף פעם לא עוברים את 1. מצד שני, הם גם לא מגיעים אל 1, כי כל איבר בקבוצה הזו הוא מהצורה <span class="math">\(1-\frac{1}{10^{n}}\)</span> עבור <span class="math">\(n\ge1\)</span>, ולכן תמיד קטן מ-1. <strong>אם</strong> הייתי מוסיף את 1 לקבוצה, אז הוא היה האיבר המקסימלי שלה; אבל הוא לא שם. </p>
+<p>שימו לב שהסיטואציה הזו דרשה ממני קבוצה עם אינסוף איברים. אם יש קבוצה לא ריקה עם מספר <strong>סופי</strong> של איברים, תמיד קיים לה מקסימום. הנה הוכחה פשוטה: לקבוצה בת איבר אחד יש מקסימום - האיבר האחד הזה. נניח באינדוקציה שלקבוצה בת <span class="math">\(n\)</span> איברים יש תמיד מקסימום; תהא <span class="math">\(A=\left\{ a_{1},\ldots,a_{n},a_{n+1}\right\} \)</span> קבוצה עם <span class="math">\(n+1\)</span> איברים. אז לקבוצה <span class="math">\(A^{\prime}=\left\{ a_{1},\ldots,a_{n}\right\} \)</span> יש מקסימום, <span class="math">\(b=\max A^{\prime}\)</span>. עכשיו, אם <span class="math">\(a_{n+1}>b\)</span> אז קל לראות ש-<span class="math">\(\max A=a_{n+1}\)</span> ואחרת קל לראות ש-<span class="math">\(\max A=b\)</span>. זה מוכיח פורמלית את הטיעון שהשתמשתי בו קודם, כשהוכחתי ש-<span class="math">\(\mathbb{Q}\)</span> היא קבוצה צפופה ב-<span class="math">\(\mathbb{F}\)</span>.</p>
+<p>עכשיו אפשר סוף סוף לסיים את הגדרת אקסיומת השלמות. כזכור, היא אומרת "לכל קבוצה לא ריקה וחסומה מלעיל קיים חסם עליון" אז רק נשאר להסביר מה זה <strong>חסם עליון</strong>, וזה קל: זה החסם מלעיל המינימלי של הקבוצה <strong>אם הוא קיים</strong>. באופן דומה מגדירים <strong>חסם תחתון</strong> בתור החסם מלרע המקסימלי, אם הוא קיים. לשני אלו יש שמות שאני מחבב קצת יותר מאשר "חסם עליון" (שלטעמי הוא תרגום לא טוב של least upper bound כי החלק של ה-least התפספס) - <strong>סופרמום</strong> לחסם עליון ו<strong>אינפימום</strong> לחסם תחתון. והם מוגדרים פורמלית כך:</p>
+<p><span class="math">\(\sup A=\min\left\{ b\in\mathbb{F}\ |\ \forall a\in A:a\le b\right\} \)</span></p>
+<p><span class="math">\(\inf A=\max\left\{ b\in\mathbb{F}\ |\ \forall a\in A:b\le a\right\} \)</span></p>
+<p>בואו נדבר על ההגדרה של סופרמום (הדיון על אינפימום יהיה זהה, אבל מעצבן להתייחס לשניהם בבת אחת). ההגדרה של סופרמום דורשת לקחת מינימום על קבוצת כל החסמים העליונים של <span class="math">\(A\)</span>. ראינו כבר שלקיחת מינימום היא פעולה "מסוכנת" כי הוא עשוי לא להיות קיים, וראינו שלוש בעיות אפשריות: ראשית, אם הקבוצה שעליה לוקחים מינימום היא ריקה - במקרה שלנו זה אומר שאין ל-<span class="math">\(A\)</span> חסמים מלעיל, כלומר שהיא לא חסומה. אז אוקיי, <span class="math">\(\sup A\)</span> לא מוגדר אם <span class="math">\(A\)</span> לא חסומה מלעיל, נשמע הגיוני.</p>
+<p>הבעיה השניה היא אם הקבוצה שעליה לוקחים מינימום היא לא חסומה מלרע. זה אומר שלכל <span class="math">\(b\)</span>, לא משנה כמה קטן, עדיין תתקיים התכונה שלכל <span class="math">\(a\in A\)</span> מתקיים <span class="math">\(a\le b\)</span>. זה לא ממש הגיוני, כי אם ניקח <span class="math">\(b=a-1\)</span> עבור <span class="math">\(a\in A\)</span> <strong>כלשהו</strong> נקבל מישהו שהוא כבר לא חסם מלעיל של כל <span class="math">\(A\)</span>. כלומר, סיטואציה כזו יכולה לצוץ רק אם <span class="math">\(A\)</span> ריקה. כש-<span class="math">\(A\)</span> ריקה, התנאי "לכל <span class="math">\(a\in A\)</span> מתקיים <span class="math">\(a\le b\)</span>" מתקיים <strong>תמיד</strong>, לכל <span class="math">\(b\)</span>; זה מה שנקרא במתמטיקה "נכון באופן ריק" (כדי לראות למה זה ככה, שווה לחשוב על הטענה השקולה לוגית: "לא קיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(b<a\)</span>"; ברור שאם <span class="math">\(A\)</span> ריקה אז באמת לא קיים כזה). אז אוקיי, <span class="math">\(\sup A\)</span> לא מוגדר אם <span class="math">\(A\)</span> ריקה, נשמע הגיוני.</p>
+<p>מה שאקסיומת השלמות אומרת הוא שאלו שתי הבעיות <strong>היחידות</strong> שיכולות להיווצר, ושבכל מקרה אחר, יהיה ל-<span class="math">\(A\)</span> סופרמום. כדי להבין למה זה כל כך חזק, ואיך זה פותר לנו בעיות ו"יוצר" לנו מספרים כמו <span class="math">\(\sqrt{2}\)</span>, בואו נראה את הדוגמא הקלאסית - הקבוצה <span class="math">\(A=\left\{ q\in\mathbb{Q}\ |\ q^{2}\le2\right\} \)</span>.</p>
+<p>האם הקבוצה הזו לא ריקה? בוודאי, <span class="math">\(0\in A\)</span>. האם הקבוצה הזו חסומה מלעיל? בוודאי, <span class="math">\(2\in A\)</span> כי אם <span class="math">\(q>2\)</span> אז <span class="math">\(q^{2}>4\)</span> ומן הסתם לא מתקיים <span class="math">\(q^{2}<2\)</span>. מכאן שקיים לקבוצה הזו סופרמום. מי הוא יהיה? ובכן, אם ניקח את אברי <span class="math">\(q\)</span> ונגדיל אותם עוד ועוד עד שיהיה שוויון, <span class="math">\(q^{2}=2\)</span>, אז נקבל <span class="math">\(q=\sqrt{2}\)</span> ולכן האינטואיציה היא ש-<span class="math">\(\sup A=\sqrt{2}\)</span>, אבל צריך להיזהר מאוד כאן: <span class="math">\(\sqrt{2}\)</span> הוא לא מספר רציונלי, ולכן הוא לא איבר של <span class="math">\(A\)</span>, אז עדיין צריך לשלול את האפשרות שיש חסם מלעיל <strong>קטן יותר</strong> ל-<span class="math">\(A\)</span>. למרבה השמחה, קל לשלול את זה. ניקח <span class="math">\(r\)</span> כלשהו כך ש-<span class="math">\(r<\sqrt{2}\)</span>. עכשיו אפשר להשתמש בתכונת <strong>הצפיפות</strong> של הרציונליים שהוכחתי קודם ולקבל שקיים <span class="math">\(q\in\mathbb{Q}\)</span> כך ש-<span class="math">\(r<q<\sqrt{2}\)</span>. בפרט <span class="math">\(q^{2}<2\)</span> ולכן <span class="math">\(q\in A\)</span>, ולכן <span class="math">\(r\)</span> לא יכול להיות חסם מלעיל של <span class="math">\(A\)</span>, וזה <strong>לכל</strong> <span class="math">\(r<\sqrt{2}\)</span>. בנוסף, ברור ש-<span class="math">\(\sqrt{2}\)</span> עצמו הוא חסם מלעיל שכזה, כי אם <span class="math">\(q>\sqrt{2}\)</span> אז <span class="math">\(q^{2}>2\)</span> ולכן <span class="math">\(q\notin A\)</span>. זה מוכיח ש-<span class="math">\(\sup A=\sqrt{2}\)</span>.</p>
+<h3>דוגמא בעזרת שורש 2</h3>
+
+<p>עכשיו אני רוצה לסבך עוד יותר את העניינים, ואלו שאין להם כוח לנקודה העדינה שאני מתעקש עליה כאן מוזמנים לדלג. ההוכחה שהראיתי עכשיו חייתה "בתוך" <span class="math">\(\mathbb{R}\)</span>. היא הניחה ש-<span class="math">\(\sqrt{2}\)</span> קיים ואפשר להשתמש בצפיפות הרציונליים יחד איתו. אבל בואו נניח עכשיו שאנחנו עוברים לחיות ביקום <span class="math">\(\mathbb{Q}\)</span> ולא יודעים על שום דבר מחוצה לו, ובפרט <span class="math">\(\sqrt{2}\)</span> לא קיים מבחינתנו. האם יש דרך להוכיח שלקבוצה <span class="math">\(A\)</span> במקרה הזה פשוט <strong>לא יהיה סופרמום</strong>? אחרת <span class="math">\(A\)</span> היא לא דוגמא מעניינת כל כך - היא לא מראה לנו בעיה שיש ב"סתם" שדה סדור ושדה סדור <strong>שלם</strong> פותר.</p>
+<p>אז בואו נוכיח שאין ל-<span class="math">\(A\)</span> סופרמום ב-<span class="math">\(\mathbb{Q}\)</span>, עם הוכחה שמשתמשת רק ב-<span class="math">\(\mathbb{Q}\)</span>. ראשית, בואו ניקח <span class="math">\(0<r\in\mathbb{Q}\)</span> כך ש-<span class="math">\(r^{2}>2\)</span> ונראה שלא ייתכן ש-<span class="math">\(r=\sup A\)</span>; נעשה את זה על ידי מציאת <span class="math">\(d<r\)</span> שהוא חסם מלעיל של <span class="math">\(A\)</span> - ובשביל זה מספיק למצוא <span class="math">\(d<r\)</span> כך ש-<span class="math">\(d^{2}>2\)</span> כי אז לכל <span class="math">\(q\in A\)</span> שמקיים <span class="math">\(q>0\)</span> יתקיים <span class="math">\(q^{2}<d^{2}\)</span> וראינו שאפשר להסיק מזה <span class="math">\(q<d\)</span> (אני לא טורח לטפל ב-<span class="math">\(r\)</span> שלילי כי אם <span class="math">\(r<0\)</span> הוא בוודאי לא חסם מלעיל של <span class="math">\(A\)</span> שכוללת את 0).</p>
+<p>איך אני אמצא את <span class="math">\(d\)</span> ואעשה את זה בצורה שלא תהיה טכנית ויבשה? ובכן, בואו נחשוב על הסיטואציה בתור נסיון <strong>לקרב</strong> את <span class="math">\(\sqrt{2}\)</span> באמצעות שיטת הקירוב היפהפיה של הרון מאלכסנדריה. הרעיון של השיטה הוא זה: נניח שאנחנו רוצים למצוא שורש למספר <span class="math">\(N\)</span>. בואו נבנה סדרה <span class="math">\(a_{1},a_{2},a_{3},\ldots\)</span> של קירובים לשורש הזה. נתחיל עם מספר כלשהו <span class="math">\(a_{1}\)</span> שיהיה קירוב גס כלשהו של שורש <span class="math">\(N\)</span>. למשל, עבור <span class="math">\(N=2\)</span> אפשר לקחת <span class="math">\(a_{1}=4\)</span>. עכשיו נתחיל <strong>לשפר</strong> את הקירוב על ידי הפעלה נשנית של הכלל הבא:</p>
+<p><span class="math">\(a_{n+1}=\frac{1}{2}\left(a_{n}+\frac{N}{a_{n}}\right)\)</span></p>
+<p>הרעיון פה: ניקח את הקירוב הנוכחי שלנו, ונחלק את <span class="math">\(N\)</span> בו. אם הקירוב הנוכחי היה יוצא <strong>בדיוק</strong> <span class="math">\(\sqrt{N}\)</span> אז החלוקה של <span class="math">\(N\)</span> בקירוב הייתה יוצאת <span class="math">\(\sqrt{N}\)</span> בעצמה. אחרת, יצא לנו מספר קצת שונה - אם למשל <span class="math">\(a_{n}\)</span> הוא גדול מדי מכדי להיות השורש, אז <span class="math">\(\frac{N}{a_{n}}\)</span> ייצא קטן מדי מכדי להיות השורש. ועכשיו אומר הרון - אוקיי, בואו ניקח <strong>ממוצע חשבוני</strong> של שני המספרים הללו - נראה לי שהוא יהיה קרוב יותר לשורש. עבור הדוגמא שלנו עם <span class="math">\(N=2\)</span> ו-<span class="math">\(a_{1}=4\)</span> נקבל <span class="math">\(a_{2}=\frac{1}{2}\left(4+\frac{1}{2}\right)=\frac{9}{4}=2.25\)</span> וזה יותר טוב! אם נמשיך את הסדרה, נקבל התכנסות מהירה בצורה מפתיעה אל <span class="math">\(\sqrt{2}\)</span>:</p>
+<p><span class="math">\(4,2.25,1.569444\ldots,1.42189\ldots,1.414234\ldots\)</span></p>
+<p>אפשר לחשוב על השיטה הזו בתור מקרה פרטי של <strong>אלגוריתם ניוטון-רפסון</strong> והזכרתי אותה פה בעבר <a href="https://gadial.net/2017/08/22/0x5f3759df_part_1/">בפוסט</a> על המעשה המופלא בקבוע המסתורי 0x5f3759df, אבל נראה לי שכבר סטיתי מספיק מהעניין. הפואנטה שלי: אני רוצה בהינתן <span class="math">\(0<r\in\mathbb{Q}\)</span> כך ש-<span class="math">\(r^{2}>2\)</span> לקבל <span class="math">\(d<r\)</span> כך שעדיין <span class="math">\(2<d^{2}\)</span> - זה בדיוק מה ששיטת הרון תיתן לי. אני אגדיר</p>
+<p><span class="math">\(d=\frac{1}{2}\left(r+\frac{2}{r}\right)=\frac{r}{2}+\frac{1}{r}\)</span></p>
+<p>ואקבל <span class="math">\(d\)</span> רציונלי כי <span class="math">\(r\)</span> היה רציונלי. בואו נראה שהוא עובד.</p>
+<p>דבר ראשון, קל לראות ש-<span class="math">\(d<r\)</span>, כי מכיוון ש-<span class="math">\(2<r^{2}\)</span> אז נחלק ב-<span class="math">\(2r\)</span> ונקבל <span class="math">\(\frac{1}{r}<\frac{r}{2}\)</span> ולכן </p>
+<p><span class="math">\(d=\frac{r}{2}+\frac{1}{r}<\frac{r}{2}+\frac{r}{2}=r\)</span></p>
+<p>שנית,</p>
+<p><span class="math">\(d^{2}=\left(\frac{r}{2}+\frac{1}{r}\right)^{2}=\frac{r^{2}}{4}+1+\frac{1}{r^{2}}\)</span></p>
+<p>אנחנו רוצים להראות ש-<span class="math">\(d^{2}>2\)</span>, אז מספיק להראות שאם <span class="math">\(r^{2}>2\)</span> אז <span class="math">\(\frac{r^{2}}{4}+\frac{1}{r^{2}}>1\)</span>. קל לראות את זה בשיטות של תיכון אם מסמנים <span class="math">\(x=r^{2}\)</span>, מקבלים את אי השוויון <span class="math">\(\frac{x}{4}+\frac{1}{x}>1\)</span> שעבור <span class="math">\(x>0\)</span> מתורגם לאי השוויון <span class="math">\(x^{2}-4x+4>0\)</span>. אגף שמאל הוא פרבולה "צוחקת" שנקודת החיתוך הימנית שלה עם ציר <span class="math">\(x\)</span> היא <span class="math">\(x=2\)</span> ולכן היא חיובית לכל <span class="math">\(x>2\)</span>, שזה מה שרצינו.</p>
+<p>כל הזוועה הזו הראתה לנו ש-<span class="math">\(r\)</span> הוא לא חסם עליון של <span class="math">\(A\)</span> כי אפשר למצוא חסם מלעיל קטן יותר, <span class="math">\(d\)</span>, אבל התחלנו מההנחה ש-<span class="math">\(r^{2}>2\)</span>. אולי בכלל החסם הטוב ביותר מקיים <span class="math">\(r^{2}<2\)</span>? כלומר, הוא איבר של <span class="math">\(A\)</span> בעצמו? אולי יש ב-<span class="math">\(A\)</span> איבר מקסימלי?</p>
+<p>במקרה הזה לנסות להשתמש בנוסחת הרון לא עובד (אם אני אגדיר <span class="math">\(d=\frac{r}{2}+\frac{1}{r}\)</span> אני אקבל <span class="math">\(d^{2}>2\)</span>) וכבר אין לי רעיונות לדברים נחמדים להראות אז בואו נעשה את זה בכוח: נגדיר <span class="math">\(d=r+\varepsilon\)</span> כשהרעיון הוא שנקבע את <span class="math">\(\varepsilon\)</span> להיות מספר חיובי קטן ותכף נראה כמה קטן. אז </p>
+<p><span class="math">\(d^{2}=r^{2}+2r\varepsilon+\varepsilon^{2}\)</span></p>
+<p>ולכן כדי שיתקיים <span class="math">\(d^{2}<2\)</span> צריך שיתקיים <span class="math">\(\left(2r+\varepsilon\right)\varepsilon<2-r^{2}\)</span>. אם אני אוודא ש-<span class="math">\(\varepsilon<r\)</span> אז מספיק לי אפילו למצוא <span class="math">\(\varepsilon\)</span> שעבורו <span class="math">\(\left(2r+\varepsilon\right)\varepsilon<3r\varepsilon<2-r^{2}\)</span>. עכשיו, <span class="math">\(2-r^{2}\)</span> הוא מספר קבוע וגם <span class="math">\(3r\)</span> הוא מספר קבוע, אז אפשר להשתמש בארכימדיות של <span class="math">\(\mathbb{Q}\)</span> כדי למצוא <span class="math">\(\varepsilon\)</span> מתאים.</p>
+<h3>סיום זריז לפני הגרנד פינאלה</h3>
+
+<p>אם לסכם את מה שראינו בדוגמא - ב-<span class="math">\(\mathbb{Q}\)</span> יש קבוצות לא ריקות וחסומות בלי חסם עליון, אבל כאלו שיוצרות אצלנו תחושה חזקה ש<strong>אמור</strong> להיות להן חסם עליון. שאפילו בלי להכיר את <span class="math">\(\mathbb{R}\)</span>, יש איזה איבר קונקרטי אחד שאנחנו <strong>מצפים</strong> שיהיה החסם העליון שלהן, וזה שאין כזה - זה מרגיש לנו כמו "חור" בציר המספרים, שתכונת השלמות באה לסתום.</p>
+<p>זו אינטואיציה טובה; היא תוביל לאחת משתי הבניות הפורמליות של הממשיים שאני הולך להציג, זו של <strong>חתכי דדקינד</strong>. כרגע, כזכור, אני עדיין לא בונה שום דבר - אני רק שואל את עצמי אילו תכונות אני <strong>רוצה</strong> שיהיו לממשיים. זה מעביר אותנו ישירות אל החלק הבא והאחרון.</p>
+<h2>ה</h2>
+
+<h3>מה אני רוצה עכשיו?</h3>
+
+<p>ההגדרה שלי בתחילת הפוסט הייתה כזכור "השדה הסדור השלם". מה זה שדה - ראינו. מה זה שדה סדור - ראינו. מה זה שדה סדור שלם - ראינו. מה שעדיין לא ברור הוא התפקיד של האות ה' בביטוי הזה. אות קטנה, משמעות גדולה: כשאני מדבר על "<strong>ה</strong>שדה הסדור השלם" הכוונה היא <strong>שקיים</strong> שדה כזה והוא <strong>יחיד</strong>. כלומר, כשאני משתמש בהגדרה הזו אני טוען טענת קיום ויחידות, שהיא משהו שצריך <strong>להוכיח</strong>. במובן הזה ההגדרה שלי היא יותר מסתם הגדרה - היא גם הבטחה.</p>
+<p>מצד שני, זה מרגיש שאני קצת מרמה כי אני לא <strong>באמת</strong> מסביר עד הסוף איך אפשר לקבל לידיים את האובייקט שאני מגדיר. כאמור, זה דבר די סטנדרטי במתמטיקה; אנחנו צריכים להבדיל בין הגדרה אקסיומטית שמתארת תכונות רלוונטיות של אובייקטים שאחר כך אפשר להשתמש בהן כדי להוכיח תכונות נוספות של האובייקטים, וההוכחה תהיה תקפה <strong>לכל</strong> אובייקט שמקיים את התכונות - ובין מה שאני מעדיף לקרוא לו <strong>בנייה</strong> שמתאר איך מייצרים את האובייקט מתוך אובייקטים פשוטים יותר.</p>
+<p>ראינו סוג של בניה בפוסט הקודם, עם הייצוגים העשרוניים; זו לא הייתה בניה מלאה כי הגדרתי את האובייקטים של הקבוצה אבל לא את פעולות החיבור והכפל ולא את האופן שבו מוגדר יחס הסדר (כל אלו לא טריוויאליים). אני אראה בפוסט הבא שתי בניות נוספות, שאותן אציג עד הסוף. יותר מזה - שתי הבניות <strong>לא</strong> הולכות לבנות את אותו הדבר, במובן זה שאחת מהן תיצור לנו אוסף של קבוצות של רציונליים, ואילו השניה תיצור אוסף של מחלקות שקילות של סדרות של רציונליים. אלו שני אובייקטים שונים, מה שמעלה את השאלה - מי מביניהם יהיה <span class="math">\(\mathbb{R}\)</span> "האמיתי"? התשובה היא ששניהם הם <span class="math">\(\mathbb{R}\)</span> האמיתי, במובן זה ששניהם מקיימים את התכונות המהותיות שאנחנו מצפים להן מ-<span class="math">\(\mathbb{R}\)</span> - שניהם יהיו <strong>שדה סדור שלם</strong> ויותר מכך - <strong>שביחס לתכונות הללו</strong> הם יהיו בדיוק אותו אובייקט עד כדי שינוי שמות האיברים. זו המהות של טיעון ה"יחידות", ואותו אני אוכל להוכיח כאן, אפילו לפני שאני מציג בניות אלו ואחרות. פורמלית, אני אוכיח שאם <span class="math">\(\mathbb{F}_{1},\mathbb{F}_{2}\)</span> הם שני שדות סדורים שלמים, אז הם <strong>איזומורפיים</strong>, עם ההגדרה הבאה של איזומורפיזם:</p>
+<p><span class="math">\(f:\mathbb{F}_{1}\to\mathbb{F}_{2}\)</span> הוא <strong>איזומורפיזם</strong> של שדות סדורים אם <span class="math">\(f\)</span> פונקציה חד-חד-ערכית ועל ומתקיים</p>
+<ul> <li><span class="math">\(f\left(x+y\right)=f\left(x\right)+f\left(y\right)\)</span></li>
+
+
+<li><span class="math">\(f\left(x\cdot y\right)=f\left(x\right)\cdot f\left(y\right)\)</span></li>
+
+
+<li><span class="math">\(x<y\)</span> אם ורק אם <span class="math">\(f\left(x\right)<f\left(y\right)\)</span></li>
+
+</ul>
+
+<p>אני אזכיר מה "חד-חד-ערכית" ו"על" אומרים (ויש לי גם <a href="https://gadial.net/2020/05/15/invertible_functions/">פוסט</a>): <span class="math">\(f:A\to B\)</span> היא חח"ע אם <span class="math">\(f\left(x\right)=f\left(y\right)\)</span> גורר <span class="math">\(x=y\)</span>, כלומר אם קלטים שונים מתמפים לפלטים שונים. <span class="math">\(f:A\to B\)</span> היא על אם לכל <span class="math">\(b\in B\)</span> קיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(f\left(a\right)=b\)</span>, כלומר כל איבר של <span class="math">\(B\)</span> מתקבל כפלט של <span class="math">\(f\)</span> על משהו מ-<span class="math">\(A\)</span>. זה שפונקציה היא גם חח"ע וגם על אומר שאפשר לחשוב עליה כאילו היא מסדרת את אברי <span class="math">\(A\)</span> ו-<span class="math">\(B\)</span> בזוגות-זוגות - לכל איבר של <span class="math">\(a\)</span> יש בן זוג אחד ויחיד מ-<span class="math">\(b\)</span>, וההפך. זה מאפשר לנו לדמיין ש-<span class="math">\(B\)</span> היא פשוט "אברי <span class="math">\(A\)</span> עם שמות אחרים": לוקחים את <span class="math">\(A\)</span>, מחליפים את השם של כל איבר <span class="math">\(a\in A\)</span> ב-<span class="math">\(f\left(a\right)\)</span>, מקבלים את <span class="math">\(B\)</span>.</p>
+<p>אם על <span class="math">\(A,B\)</span> יש עוד <strong>מבנה</strong> מלבד סתם איברים, האשליה הזו של שינוי השם עשוי להתנפץ. למשל, אם <span class="math">\(A=\mathbb{N}\)</span> ו-<span class="math">\(B=\mathbb{Z}\)</span> אז פונקציה חח"ע ועל <span class="math">\(f:A\to B\)</span> היא <span class="math">\(f\left(n\right)=\begin{cases} \frac{n}{2} & n\equiv_{2}0\\ -\frac{n+1}{2} & n\equiv_{2}1 \end{cases}\)</span>. מה ש-<span class="math">\(f\)</span> עושה הוא להעביר את סדרת הטבעיים <span class="math">\(0,1,2,3,\ldots\)</span> אל סדרת השלמים <span class="math">\(0,-1,1,-2,2,\ldots\)</span>. זו התאמה חח"ע ועל, אבל היא ממש לא מתנהגת יפה עם המבנה הנוסף שיש לנו על <span class="math">\(\mathbb{N}\)</span>. למשל, <span class="math">\(1+1=2\)</span> ולכן אם <span class="math">\(f\)</span> היא בסך הכל שינוי שם היינו מצפים שיתקיים <span class="math">\(f\left(1\right)+f\left(1\right)=f\left(2\right)\)</span>. אבל <span class="math">\(f\left(2\right)=1\)</span> ואילו <span class="math">\(f\left(1\right)=-1\)</span> ולכן <span class="math">\(f\left(1\right)+f\left(1\right)=-2=f\left(3\right)\ne f\left(2\right)\)</span>, כך שהאשליה שיש כאן שינוי שמות ותו לא מתנפצת ברגע שבו אנחנו מצפים משינוי השמות לשחק יפה עם המבנה הנוסף שיש על הקבוצות.</p>
+<h3>מה הולכים להוכיח ואיך</h3>
+
+<p>על שדה סדור יש שלושה מבנים: פעולת החיבור, פעולת הכפל ויחס הסדר <span class="math">\(<\)</span> (או באופן שקול, הקבוצה <span class="math">\(P\)</span>; במקום הדרישה השלישית היינו יכולים לדרוש <span class="math">\(f\left(P_{1}\right)=P_{2}\)</span>). האתגר שלי יהיה להציג פונקציה שמשחקת יפה עם כולם.</p>
+<p>הנה בגדול הרעיון:</p>
+<ul> <li>ראשית נראה שכל שדה סדור מכיל עותק של <span class="math">\(\mathbb{Q}\)</span> וששני העותקים הללו איזומורפיים.</li>
+
+
+<li>אחר כך נראה שכל שדה סדור <strong>שלם</strong> הוא ארכימדי.</li>
+
+
+<li>המסקנה מזה תהיה שאפשר להציג כל איבר בשדה בתור <span class="math">\(\sup\)</span> של קבוצה של רציונליים, וזה יאפשר לנו להרחיב את האיזומורפיזם של הרציונליים לאיזומורפיזם של כל השדה.</li>
+
+</ul>
+
+<p>בעצם, בואו נתחיל מזה שכל שדה סדור שלם הוא ארכימדי, זו תוצאה קלילה להוכחה וככה היא לא תקטע את הרצף של מה שנעשה אחר כך. ניקח שדה סדור שלם <span class="math">\(\mathbb{F}\)</span> כלשהו. כבר ראינו שבגלל שהשדה סדור, הוא חייב להיות ממציין 0, כלומר כל האיברים <span class="math">\(1,1+1,1+1+1,\ldots\)</span> קיימים ושונים זה מזה - במילים אחרות, יש בתוך <span class="math">\(\mathbb{F}\)</span> עותק של <span class="math">\(\mathbb{Z}\)</span>. עכשיו, אם <span class="math">\(\mathbb{F}\)</span> <strong>לא ארכימדי</strong>, מה זה אומר? ארכימדיות פירושה שלכל <span class="math">\(a\in\mathbb{F}\)</span> קיים <span class="math">\(n\in\mathbb{Z}\)</span> כך ש-<span class="math">\(a<n\)</span>. </p>
+<p>אם ניקח את השלילה של הטענה הזו נקבל שקיים <span class="math">\(a\in\mathbb{F}\)</span> כך שלכל <span class="math">\(n\in\mathbb{Z}\)</span> מתקיים <span class="math">\(n\le a\)</span>. במילים אחרות, <span class="math">\(a\)</span> הוא <strong>חסם מלעיל</strong> של <span class="math">\(\mathbb{Z}\)</span>, והשלמות של <span class="math">\(\mathbb{F}\)</span> אומרת ש-<span class="math">\(d=\sup\mathbb{Z}\)</span> קיים. עכשיו, בואו ניקח <span class="math">\(n\in\mathbb{Z}\)</span> כלשהו. מכיוון שגם <span class="math">\(n+1\in\mathbb{Z}\)</span>, אנחנו יודעים ש-<span class="math">\(n+1<d\)</span>, כלומר <span class="math">\(n<d-1\)</span>, וזה נכון <strong>לכל</strong> <span class="math">\(n\in\mathbb{Z}\)</span> ולכן גם <span class="math">\(d-1\)</span> חסם מלעיל של <span class="math">\(\mathbb{Z}\)</span>, בסתירה למינימליות של <span class="math">\(d\)</span>. כלומר - בשדה סדור, או ש-<span class="math">\(\mathbb{Z}\)</span> לא חסומה (כלומר, השדה ארכימדי) או שהשדה לא שלם, אין עוד אפשרויות.</p>
+<p>עכשיו בואו נדבר על <span class="math">\(\mathbb{Q}\)</span>. ראינו כבר במהלך הפוסט שיש ב-<span class="math">\(\mathbb{F}\)</span> קבוצה שזהה ל-<span class="math">\(\mathbb{Q}\)</span>, אבל בואו נעשה את זה שוב, הכי מסודר שאפשר. מה שאקסיומות השדה נותנות לנו הוא קיום של איברים <span class="math">\(0,1\in\mathbb{F}\)</span>. שימו לב שהאיברים הללו הם <strong>לא</strong> המספרים 0,1; הם סתם שני איברים של <span class="math">\(\mathbb{F}\)</span> שזכו לסימון מיוחד. אז בואו כרגע ניתן להם סימון אחר: את האדיש החיבורי אסמן ב-<span class="math">\(\mathcal{O}\)</span> ואת האדיש הכפלי אסמן ב-<span class="math">\(\mathcal{I}\)</span>. מה שאני יודע לומר הוא שלכל <span class="math">\(a\in\mathbb{F}\)</span> מתקיים <span class="math">\(a+\mathcal{O}=a\)</span> ו-<span class="math">\(a\cdot\mathcal{I}=a\)</span>. עכשיו בואו נבנה מזה את <span class="math">\(\mathbb{Q}\)</span>.</p>
+<h3>בונים את הרציונליים (מתוך השדה הקיים)</h3>
+
+<p>ראשית, לכל מספר טבעי <span class="math">\(n\in\mathbb{N}\)</span> בואו נגדיר איבר <span class="math">\(\mathcal{Z}_{n}\in\mathbb{F}\)</span>. נעשה את זה רקורסיבית: <span class="math">\(\mathcal{Z}_{0}=\mathcal{O}\)</span> ואם <span class="math">\(\mathcal{Z}_{n}\)</span> כבר הוגדר, נגדיר <span class="math">\(\mathcal{Z}_{n+1}=\mathcal{Z}_{n}+\mathcal{I}\)</span>.</p>
+<p>עכשיו אני רוצה לטעון ש-<span class="math">\(\mathcal{Z}_{k}+\mathcal{Z}_{n}=\mathcal{Z}_{k+n}\)</span>. ההוכחה תכה אותנו בכזה הלם של טרחנות שנוותר על המשך ההוכחות בסגנון, כי זה הכל אותו דבר (מי שמכירים את ההגדרות הפורמליות של טבעיים ירגישו בוודאי בבית עם ההוכחה הזו). אני אוכיח את הטענה באינדוקציה על <span class="math">\(n\)</span>. אם <span class="math">\(n=0\)</span> אז על פי הגדרה, <span class="math">\(\mathcal{Z}_{0}=\mathcal{O}\)</span> ולכן </p>
+<p><span class="math">\(\mathcal{Z}_{k}+\mathcal{Z}_{0}=\mathcal{Z}_{k}+\mathcal{O}=\mathcal{Z}_{k}=\mathcal{Z}_{k+0}\)</span></p>
+<p>ואם הטענה כבר הוכחה עבור <span class="math">\(n\)</span> ואנחנו רוצים להוכיח אותה עבור <span class="math">\(n+1\)</span>, נשתמש בכך ש-<span class="math">\(\mathcal{Z}_{n+1}=\mathcal{Z}_{n}+\mathcal{I}\)</span> ונקבל</p>
+<p><span class="math">\(\mathcal{Z}_{k}+\mathcal{Z}_{n+1}=\mathcal{Z}_{k}+\left(\mathcal{Z}_{n}+\mathcal{I}\right)=\left(\mathcal{Z}_{k}+\mathcal{Z}_{n}\right)+\mathcal{I}=\)</span></p>
+<p><span class="math">\(=\mathcal{Z}_{k+n}+\mathcal{I}=\mathcal{Z}_{\left(k+n\right)+1}=\mathcal{Z}_{k+\left(n+1\right)}\)</span></p>
+<p>אני לא חושב שקיימת אפשרות להיות יותר פדנט מזה, אבל לא הכל נורא! עכשיו אנחנו רואים יפה וברור שבהוכחה הזו משתמשים <strong>באסוציאטיביות החיבור</strong> ("חוק הקיבוץ") גם ב-<span class="math">\(\mathbb{F}\)</span> וגם ב-<span class="math">\(\mathbb{N}\)</span>. בלי אסוציאטיביות, שום דבר לא היה עובד! אנחנו לא תמיד מעריכים עד כמה היקום היה קורס בלי אסוציאטיביות.</p>
+<p>בכל מקרה, עכשיו אני ארשה לעצמי לנופף ידיים בפראות בהמשך. לא קשה להוכיח גם ש-<span class="math">\(\mathcal{Z}_{k}\cdot\mathcal{Z}_{n}=\mathcal{Z}_{k\cdot n}\)</span> ולא קשה גם להוכיח ש-<span class="math">\(\mathcal{Z}_{k}<\mathcal{Z}_{n}\)</span> אם ורק אם <span class="math">\(k<n\)</span>, הכל עם אינדוקציות מזעזעות. לכן מה שעשיתי כאן בעצם היה להגדיר פונקציה <span class="math">\(f:\mathbb{N}\to\mathbb{F}\)</span> על ידי <span class="math">\(f\left(n\right)=\mathcal{Z}_{n}\)</span>, והפונקציה הזו מקיימת את שלוש הדרישות שלי:</p>
+<ul> <li><span class="math">\(f\left(n+k\right)=f\left(n\right)+f\left(k\right)\)</span></li>
+
+
+<li><span class="math">\(f\left(n\cdot k\right)=f\left(n\right)\cdot f\left(k\right)\)</span></li>
+
+
+<li><span class="math">\(n<k\)</span> אם ורק אם <span class="math">\(f\left(n\right)<f\left(k\right)\)</span></li>
+
+</ul>
+
+<p>בנוסף, זו פונקציה חח"ע, כי אם <span class="math">\(\mathcal{Z}_{n}=\mathcal{Z}_{k}\)</span> עבור <span class="math">\(k<n\)</span> אז נשתמש בטענה הנכונה תמיד <span class="math">\(\mathcal{Z}_{k}+\mathcal{Z}_{n-k}=\mathcal{Z}_{n}\)</span>, נעביר את <span class="math">\(\mathcal{Z}_{k}\)</span> אגף, נשתמש ב-<span class="math">\(\mathcal{Z}_{n}=\mathcal{Z}_{k}\)</span> ונקבל <span class="math">\(\mathcal{Z}_{n-k}=\mathcal{O}\)</span>, ומכיוון ש-<span class="math">\(n-k>0\)</span> המסקנה היא שקיבלנו סכום של <span class="math">\(\mathcal{I}\)</span>-ים שמסתכם לאפס - זאת בסתירה למה שכבר ראינו, שהשדה הוא ממציין 0.</p>
+<p>המסקנה היא ש-<span class="math">\(f\)</span> היא פונקציית "אותו הדבר רק בסימון אחר" מצויינת, ולכן אפשר לנטוש את כל פיאסקו הכתיבה של דברים בתור <span class="math">\(\mathcal{Z}_{n}\)</span> וכאלו ופשוט לכתוב <span class="math">\(0,1,2\ldots,n,\ldots\)</span> עבור האיברים שהגדרתי פה ולהתייחס אליהם כאילו הם "באמת" הטבעיים.</p>
+<p>מרגע שיש לנו את זה, אפשר להרחיב את הגדרת <span class="math">\(f\)</span>. ראשית, נגדיר אותה על כל <span class="math">\(\mathbb{Z}\)</span>, כלומר צריך להסביר איך היא מתנהגת גם על השליליים, איברים מהצורה <span class="math">\(-n\)</span> כך ש-<span class="math">\(n\in\mathbb{N}\)</span>: <span class="math">\(f\left(-n\right)=-n\)</span>. זו נראית הגדרה כמעט ריקה, אבל העיקרון לא טריוויאלי: אנחנו מזמנים את <span class="math">\(\mathcal{Z}_{n}\)</span>, ואז מפעילים את האקסיומה של <span class="math">\(\mathbb{F}\)</span> שאומרת שקיים לו נגדי, שמסומן <span class="math">\(-\mathcal{Z}_{n}\)</span>, וזה מה ש-<span class="math">\(f\)</span> תחזיר - רק שכאמור, כבר הפסקתי עם השטות של כתיבת <span class="math">\(\mathcal{Z}_{n}\)</span> ואני כותב <span class="math">\(n\)</span> וזהו.</p>
+<p>גם על ההגדרה הזו צריך להוכיח שהיא מקיימת את שלוש התכונות שלמעלה. זה עובד. תסמכו עלי. בואו נרוץ אל הרחבת <span class="math">\(f\)</span> לכל <span class="math">\(\mathbb{Q}\)</span>. מה שמדגדג לומר הוא שנגדיר לכל <span class="math">\(a,b\in\mathbb{Z}\)</span> כך ש-<span class="math">\(b\ne0\)</span> את ההגדרה הבאה:</p>
+<p><span class="math">\(f\left(\frac{a}{b}\right)=a\cdot b^{-1}\)</span></p>
+<p>כלומר, אנחנו לוקחים את האיבר ב-<span class="math">\(\mathbb{F}\)</span> שמתאים ל-<span class="math">\(a\)</span> והאיבר ב-<span class="math">\(\mathbb{F}\)</span> שמתאים ל-<span class="math">\(b\)</span>, משתמשים בזה שהאיבר שמתאים ל-<span class="math">\(b\)</span> יהיה שונה מ-0 כי <span class="math">\(b\)</span> שונה מאפס ו-<span class="math">\(f\)</span> חח"ע, משתמשים באקסיומות השדה כדי למצוא הופכי ל-<span class="math">\(b\)</span> הזה וכופלים אותו ב-<span class="math">\(a\)</span>. אין שום בעיה בהגדרה הזו אבל צריך לוודא שהיא מה שנקרא <strong>מוגדרת היטב</strong> כי קיימת הסכנה ש<strong>אותו מספר רציונלי</strong> יניב פלטים שונים של <span class="math">\(f\)</span>, כתלות בייצוג שלו. כלומר, אני רוצה להראות למשל ש-<span class="math">\(f\left(\frac{1}{2}\right)=f\left(\frac{2}{4}\right)\)</span>. זה לא לגמרי מובן מאליו כי באגף ימין של ההגדרה אין מספרים אלא יש איברים של <span class="math">\(\mathbb{F}\)</span> ולכו תדעו איזה מוזרויות יש להם, אבל למרבה המזל ההוכחה די פשוטה.</p>
+<p>נניח שברציונליים, <span class="math">\(\frac{a}{b}=\frac{c}{d}\)</span>. כלומר, <span class="math">\(ad=bc\)</span>. זו משוואה של מספרים ב-<span class="math">\(\mathbb{Z}\)</span>, ולכן היא נכונה גם בתוך <span class="math">\(\mathbb{F}\)</span>. לכן אפשר לקחת את <span class="math">\(ad=bc\)</span> בתוך <span class="math">\(\mathbb{F}\)</span> ולכפול את שני האגפים ב-<span class="math">\(b^{-1}\)</span> וב-<span class="math">\(d^{-1}\)</span> ולקבל <span class="math">\(ab^{-1}=cd^{-1}\)</span>, כלומר <span class="math">\(f\left(\frac{a}{b}\right)=ab^{-1}=cd^{-1}=f\left(\frac{c}{d}\right)\)</span>, שזה מה שרצינו. אנחנו עדיין צריכים להוכיח ששאר התכונות של <span class="math">\(f\)</span> מתקיימות - זה כאמור תרגיל טוב שאני לא הולך לעשות כאן. קיבלנו <span class="math">\(f:\mathbb{Q}\to\mathbb{F}\)</span> שהיא חח"ע ומכבדת את המבנה של השדה. במתמטית קוראים לזה <strong>שיכון</strong> (להבדיל מאיזומורפיזם; כי כאן <span class="math">\(f\)</span> לא על כל <span class="math">\(\mathbb{F}\)</span>). מכאן ואילך אני יכול להתייחס ל-<span class="math">\(\mathbb{F}\)</span> כאילו יש עותק של <span class="math">\(\mathbb{Q}\)</span> שיושב בתוכה, כמו שבעצם עשיתי גם קודם.</p>
+<p>עכשיו הגענו סוף סוף אל הפאנץ' האחרון: יש לי שני שדות סדורים שלמים <span class="math">\(\mathbb{F}_{1},\mathbb{F}_{2}\)</span>. אני רוצה להגדיר <span class="math">\(g:\mathbb{F}_{1}\to\mathbb{F}_{2}\)</span> שהיא חח"ע, על ומכבדת את המבנה של השדה הסדור. איך אני אעשה את זה? התשובה היא שכל אחד ואחד מהאיברים של השדות הללו הוא <strong>חסם עליון של קבוצה של רציונליים</strong> ואני הולך לבנות את <span class="math">\(g\)</span> כך שהיא מעבירה את החסם העליון של קבוצה ב-<span class="math">\(\mathbb{F}_{1}\)</span> אל החסם העליון של <strong>אותה קבוצה</strong> ב-<span class="math">\(\mathbb{F}_{2}\)</span>.</p>
+<p>בואו ננסח את זה פורמלית. אנחנו יודעים שיש תת-שדות <span class="math">\(\mathbb{Q}_{1}\subseteq\mathbb{F}_{1}\)</span> ו-<span class="math">\(\mathbb{Q}_{2}\subseteq\mathbb{F}_{2}\)</span> שאיזומורפים לרציונליים ובפרט איזומורפים זה לזה, עם פונקציה <span class="math">\(f:\mathbb{Q}_{1}\to\mathbb{Q}_{2}\)</span> שהיא איזומורפיזם. אני הולך <strong>להרחיב</strong> את <span class="math">\(f\)</span> הזו כדי להגדיר איזומורפיזם <span class="math">\(f:\mathbb{F}_{1}\to\mathbb{F}_{2}\)</span> באופן הבא: לכל <span class="math">\(x\in\mathbb{F}_{1}\)</span> נגדיר קבוצה <span class="math">\(A_{x}\subseteq\mathbb{F}_{2}\)</span> (כלומר, של איברים <strong>בשדה השני</strong>) על ידי </p>
+<p><span class="math">\(A_{x}=\left\{ f\left(q\right)\ |\ q\in\mathbb{Q}_{1}\wedge q<x\right\} \)</span> </p>
+<p>עכשיו אני אגדיר <span class="math">\(f\left(x\right)=\sup A_{x}\)</span>. זהו, זו כל ההגדרה - ועכשיו תגיע המהומה הגדולה מכולן, להראות שההגדרה הזו עובדת. </p>
+<h3>המהומה הגדולה מכולן</h3>
+
+<p>מה זה אומר, להראות שההגדרה עובדת? צריך להוכיח את כל הדברים הבאים:</p>
+<ul> <li><span class="math">\(f\)</span> מוגדרת היטב (לכל קלט קיים פלט יחיד)</li>
+
+
+<li><span class="math">\(f\)</span> חד-חד-ערכית</li>
+
+
+<li><span class="math">\(f\)</span> על</li>
+
+
+<li><span class="math">\(f\left(x+y\right)=f\left(x\right)+f\left(y\right)\)</span></li>
+
+
+<li><span class="math">\(f\left(x\cdot y\right)=f\left(x\right)\cdot f\left(y\right)\)</span></li>
+
+
+<li><span class="math">\(x<y\)</span> אם ורק אם <span class="math">\(f\left(x\right)<f\left(y\right)\)</span></li>
+
+</ul>
+
+<p>ראשית צריך להראות ש-<span class="math">\(f\)</span> מוגדרת היטב. יש כאן שתי סכנות: גם סכנה של הגדרה כפולה, וגם סכנה שיהיו קלטים שעבורם <span class="math">\(f\)</span> לא מוגדרת. נתחיל עם ההגדרה הכפולה: הרי לקחתי פונקציה <strong>קיימת</strong> <span class="math">\(f:\mathbb{Q}_{1}\to\mathbb{Q}_{2}\)</span> והגדרתי באמצעותה פונקציה <strong>חדשה</strong> <span class="math">\(f:\mathbb{F}_{1}\to\mathbb{F}_{2}\)</span>. אני רוצה להראות שאם <span class="math">\(x\in\mathbb{Q}_{1}\)</span> אז שתי ההגדרות מסכימות זו עם זו על <span class="math">\(x\)</span>, כלומר ש-<span class="math">\(f\left(x\right)=\sup A_{x}\)</span> (אגף שמאל הוא ההגדרה "המקורית", אגף ימין הוא ההגדרה החדשה). אפשר ובצדק לשאול למה לא פשוט להגדיר פונקציה <strong>חדשה</strong> בעזרת <span class="math">\(f\)</span> אבל לקרוא לפונקציה החדשה הזו <span class="math">\(g\)</span> ואז לדלג על השלב הזה; התשובה היא שאני אסתמך על כך שהפונקציה שבניתי מרחיבה את <span class="math">\(f\)</span> המקורית בהמשך ההוכחה, כשנצטרך להוכיח שהפונקציה החדשה היא על.</p>
+<p>נתחיל עם להראות ש-<span class="math">\(\sup A_{x}\le f\left(x\right)\)</span> עבור <span class="math">\(x\in\mathbb{Q}_{1}\)</span>. בשביל זה מספיק להראות ש-<span class="math">\(f\left(x\right)\)</span> הוא חסם מלעיל של <span class="math">\(A_{x}\)</span> כי הסופרמום של <span class="math">\(A_{x}\)</span> קטן או שווה לכל חסם מלעיל שלה. אז ניקח איבר כללי ב-<span class="math">\(A_{x}\)</span>, כלומר איבר <span class="math">\(f\left(q\right)\)</span> כך ש-<span class="math">\(q<x\)</span>, ועכשיו נשתמש בכך ש-<span class="math">\(f\)</span> היא איזומורפיזם, כלומר משמרת סדר, כלומר <span class="math">\(f\left(q\right)<f\left(x\right)\)</span>, שהוא מה שרצינו. עכשיו, בואו נראה שלא ייתכן ש-<span class="math">\(\sup A_{x}<f\left(x\right)\)</span>: במקרה הזה, הצפיפות של <span class="math">\(\mathbb{Q}_{2}\)</span> ב-<span class="math">\(\mathbb{F}_{2}\)</span> נותנת לנו איבר <span class="math">\(p^{\prime}\in\mathbb{Q}_{2}\)</span> כך ש-<span class="math">\(\sup A_{x}<p^{\prime}<f\left(x\right)\)</span>. במקום לעבוד עם <span class="math">\(p^{\prime}\)</span> ישירות, יהיה לי כאן ובהמשך יותר קל לדבר עליו בתור <span class="math">\(f\left(p\right)\)</span> עבור <span class="math">\(p\in\mathbb{Q}_{1}\)</span> - אני יודע ש-<span class="math">\(p\)</span> כזה קיים כי <span class="math">\(f\)</span> היא איזומורפיזם ולכן פשוט <span class="math">\(p=f^{-1}\left(p^{\prime}\right)\)</span>.</p>
+<p>אם כן, נתון לי <span class="math">\(\sup A_{x}<f\left(p\right)<f\left(x\right)\)</span>. אי השוויון <span class="math">\(f\left(p\right)<f\left(x\right)\)</span> פירושו <span class="math">\(p<x\)</span> (שוב, כי <span class="math">\(f\)</span> איזומורפיזם ובפרט משמרת סדר), כלומר <span class="math">\(f\left(p\right)\in A_{x}\)</span> על פי הגדרת <span class="math">\(A_{x}\)</span> ולכן <span class="math">\(f\left(p\right)\le\sup A_{x}\)</span> - סתירה לנתון <span class="math">\(\sup A_{x}<f\left(p\right)\)</span>. זה מראה לנו ש-<span class="math">\(\sup A_{x}=f\left(x\right)\)</span>.</p>
+<p>זה עדיין לא מסיים את ההוכחה ש-<span class="math">\(f\)</span> מוגדרת היטב כי יש עוד סכנה: שעבור <span class="math">\(x\)</span> כלשהו, <span class="math">\(A_{x}\)</span> תהיה קבוצה נטולת סופרמום. אני כמובן משתמש פה חזק בכך ש-<span class="math">\(\mathbb{F}_{2}\)</span> מקיים את אקסיומת השלמות (ומתי אשתמש בה עבור <span class="math">\(\mathbb{F}_{1}\)</span>?) אבל גם עם אקסיומת השלמות אני עדיין צריך להשתכנע ש-<span class="math">\(A_{x}\)</span> לא ריקה (הארכימידיות של <span class="math">\(\mathbb{F}_{2}\)</span> נותנת את זה מיד) וש-<span class="math">\(A_{x}\)</span> חסומה. החסימות נובעת מהארכימידית של <span class="math">\(\mathbb{F}_{1}\)</span>, שנותנת לנו <span class="math">\(n\)</span> כך ש-<span class="math">\(x<n\)</span>. אז <span class="math">\(f\left(n\right)\)</span> הוא חסם מלעיל של <span class="math">\(A_{x}\)</span>, כי אם ניקח איבר כלשהו ב-<span class="math">\(A_{x}\)</span> הוא מהצורה <span class="math">\(f\left(q\right)\)</span> כך ש-<span class="math">\(q<x\)</span> ולכן מטרנזיטיביות יחס הסדר, <span class="math">\(q<n\)</span> ומכך ש-<span class="math">\(f\)</span> היא איזומורפיזם נקבל <span class="math">\(f\left(q\right)<f\left(n\right)\)</span>. זה מסיים את הטענה ש-<span class="math">\(g\)</span> מוגדרת היטב, כי ראינו שאכן <span class="math">\(\sup A_{x}\)</span> קיים.</p>
+<p>כדי לראות ש-<span class="math">\(f\)</span> חח"ע, בואו ניקח <span class="math">\(x\ne y\in\mathbb{F}_{1}\)</span> כלשהם ונראה ש-<span class="math">\(f\left(x\right)\ne f\left(y\right)\)</span>. בלי הגבלת הכלליות אני אניח ש-<span class="math">\(x<y\)</span>, ומהצפיפות של הרציונליים קיימים <span class="math">\(p_{1},p_{2}\in\mathbb{Q}_{1}\)</span> כך ש-<span class="math">\(x<p_{1}<p_{2}<y\)</span>. עכשיו, <span class="math">\(f\left(p_{1}\right)\)</span> הוא חסם מלעיל של <span class="math">\(A_{x}\)</span>, כי אם <span class="math">\(q<x\)</span> אז בפרט <span class="math">\(q<x<p_{1}\)</span> ולכן <span class="math">\(f\left(q\right)<f\left(p_{1}\right)\)</span> (כבר ראינו לפני רגע את אותו טיעון) ולכן <span class="math">\(\sup A_{x}\le f\left(p_{1}\right)\)</span> (כי הסופרמום הוא החסם מלעיל הקטן ביותר). בנוסף, <span class="math">\(p_{2}<y\)</span> פירושו על פי הגדרה <span class="math">\(f\left(p_{2}\right)\in A_{y}\)</span> ולכן <span class="math">\(f\left(p_{2}\right)\le\sup A_{y}\)</span> ולכן</p>
+<p><span class="math">\(f\left(x\right)=\sup A_{x}\le f\left(q\right)<f\left(p\right)\le\sup A_{y}=f\left(y\right)\)</span></p>
+<p>כלומר <span class="math">\(f\left(x\right)<f\left(y\right)\)</span> ובפרט <span class="math">\(f\left(x\right)\ne f\left(y\right)\)</span>. שימו לב שבעצם הוכחנו כבר חצי מהתכונה האחרונה: הראינו שאם <span class="math">\(x<y\)</span> אז <span class="math">\(f\left(x\right)<f\left(y\right)\)</span>. אבל למעשה, זה נותן לנו גם את החצי השני: אם <span class="math">\(f\left(x\right)<f\left(y\right)\)</span> אבל <span class="math">\(y\le x\)</span> אז <span class="math">\(f\left(y\right)\le f\left(x\right)\)</span> וקיבלנו סתירה (כאן אנחנו מסתמכים על כך שיחס הסדר הוא <strong>מלא</strong>; עבור יחס סדר כללי לא מקבלים את שני הכיוונים ביחד).</p>
+<p>כדי לראות ש-<span class="math">\(f\)</span> על, בואו ניקח <span class="math">\(y\in\mathbb{F}_{2}\)</span> כלשהו ונמצא <span class="math">\(x\in\mathbb{F}_{1}\)</span> כך ש-<span class="math">\(f\left(x\right)=y\)</span>. לצורך כך, בואו נסתכל על הקבוצה <span class="math">\(B_{y}=\left\{ q\in\mathbb{Q}_{1}\ |\ f\left(q\right)<y\right\} \)</span> - זו הגדרה שמזכירה את זו של <span class="math">\(A_{x}\)</span> ולא במקרה - זה כאילו אני מנסה להגדיר פונקציה בכיוון ההפוך, מ-<span class="math">\(\mathbb{F}_{2}\)</span> אל <span class="math">\(\mathbb{F}_{1}\)</span>, אז גם ברור מה יהיה הצעד הבא: אני ארצה להגדיר <span class="math">\(x=\sup B_{y}\)</span>. בשביל זה אצטרך לראות ש-<span class="math">\(B_{y}\)</span> לא ריקה וחסומה. בשביל שני אלו אני אשתמש בכך ש-<span class="math">\(f\)</span> היא איזומורפיזם, כלומר <span class="math">\(f^{-1}\)</span> קיימת: אני אשתמש בארכימדיות של <span class="math">\(\mathbb{F}_{2}\)</span> כדי לקבל איברים <span class="math">\(f\left(q_{1}\right)<y<f\left(q_{2}\right)\)</span> כך ש-<span class="math">\(q_{1},q_{2}\in\mathbb{Q}_{1}\)</span>, ואז <span class="math">\(q_{1}\in B_{y}\)</span> ולכן זו לא קבוצה ריקה, ו-<span class="math">\(f\left(q_{2}\right)\)</span> יהיה חסם מלעיל של <span class="math">\(B_{y}\)</span>, כי אם <span class="math">\(q\in B_{y}\)</span> אז <span class="math">\(f\left(q\right)<y<f\left(q_{2}\right)\)</span> ולכן בגלל ש-<span class="math">\(f\)</span> משמרת סדר <span class="math">\(f\left(q\right)<f\left(q_{2}\right)\)</span> ייתן לנו <span class="math">\(q<q_{2}\)</span>.</p>
+<p>הגדרתי את <span class="math">\(x\)</span> אבל עדיין צריך להראות ש-<span class="math">\(f\left(x\right)=y\)</span>. האם ייתכן ש-<span class="math">\(f\left(x\right)<y\)</span>? במקרה כזה, צפיפות הרציונליים תיתן לנו <span class="math">\(p\in\mathbb{Q}_{1}\)</span> כך ש-<span class="math">\(f\left(x\right)<f\left(p\right)<y\)</span>, אבל מכיוון ש-<span class="math">\(f\left(p\right)<y\)</span> הרי ש-<span class="math">\(p\in B_{y}\)</span>, ולכן מכיוון ש-<span class="math">\(x=\sup B_{y}\)</span> אז <span class="math">\(p\le x\)</span> ולכן <span class="math">\(f\left(p\right)\le f\left(x\right)\)</span> (זה נובע מכך שכבר הוכחנו שאם <span class="math">\(a<b\)</span> אז <span class="math">\(f\left(a\right)<f\left(b\right)\)</span>) וזו סתירה לכך ש-<span class="math">\(f\left(x\right)<f\left(p\right)\)</span>. נשאר רק להראות שלא ייתכן <span class="math">\(y<f\left(x\right)\)</span>. אם זה כן היה מתקיים, אז היינו מקבלים <span class="math">\(f^{-1}\left(y\right)<x\)</span>, אבל <span class="math">\(f^{-1}\left(y\right)\)</span> הוא בעצמו חסם מלעיל של <span class="math">\(B_{y}\)</span> (כי אם <span class="math">\(f\left(q\right)<y\)</span> אז <span class="math">\(q<f^{-1}\left(y\right)\)</span>) ולכן <span class="math">\(f^{-1}\left(y\right)<x\)</span> סותר את ההגדרה <span class="math">\(x=\sup B_{y}\)</span>. זה מסיים את החלק הזה של ההוכחה.</p>
+<p>עכשיו צריך להוכיח ש-<span class="math">\(f\left(x+y\right)=f\left(x\right)+f\left(y\right)\)</span>. כרגיל כבר, אנחנו מניחים שזה לא המצב ולכן אפשר לכתוב <span class="math">\(f\left(x+y\right)<f\left(x\right)+f\left(y\right)\)</span> או <span class="math">\(f\left(x+y\right)>f\left(x\right)+f\left(y\right)\)</span> ולהתעלל בכל אחד מהמקרים הללו לחוד עם כל מני רציונליים שנדחפים בין האיברים. במקרה <span class="math">\(f\left(x+y\right)<f\left(x\right)+f\left(y\right)\)</span> אני אמצא <span class="math">\(p\in\mathbb{Q}_{1}\)</span> כך ש-<span class="math">\(f\left(x+y\right)<f\left(p\right)<f\left(x\right)+f\left(y\right)\)</span> .</p>
+<p>בואו נסתכל על <span class="math">\(f\left(x+y\right)<f\left(p\right)\)</span>. בגלל ש-<span class="math">\(f\)</span> משמרת סדר, <span class="math">\(x+y<p\)</span>, ועכשיו נשתמש בטריק יפה. נמצא <span class="math">\(q_{x},q_{y}\in\mathbb{Q}_{1}\)</span> כך ש-<span class="math">\(p=q_{x}+q_{y}\)</span> ו-<span class="math">\(x<q_{x}\)</span> ו-<span class="math">\(y<q_{y}\)</span>, באופן הבא: מכיוון ש-<span class="math">\(x+y<p\)</span> אז <span class="math">\(x<p-y\)</span>, ולכן ניתן לבחור רציונלי <span class="math">\(q_{x}\)</span> כך ש-<span class="math">\(x<q_{x}<p-y\)</span>. עכשיו נגדיר <span class="math">\(q_{y}=p-q_{x}\)</span>; <span class="math">\(q_{y}\)</span> יהיה רציונלי כי <span class="math">\(p\)</span> ו-<span class="math">\(q_{x}\)</span> שניהם רציונליים. בנוסף, <span class="math">\(q_{y}=p-q_{x}>p-\left(p-y\right)=y\)</span>, כלומר קיבלתי <span class="math">\(x<q_{x}\)</span> וגם <span class="math">\(y<q_{y}\)</span>, כמו שרציתי.</p>
+<p>עכשיו נשתמש במספרים הללו:</p>
+<p><span class="math">\(f\left(p\right)=f\left(q_{x}+q_{y}\right)=f\left(q_{x}\right)+f\left(q_{y}\right)>f\left(x\right)+f\left(y\right)\)</span></p>
+<p>וקיבלנו סתירה ל-<span class="math">\(f\left(p\right)<f\left(x\right)+f\left(y\right)\)</span>. המעבר השני מתבסס על כך ש-<span class="math">\(f\)</span> בגרסה המצומצמת שלה היא איזומורפיזם של <span class="math">\(\mathbb{Q}_{1}\)</span> ו-<span class="math">\(\mathbb{Q}_{2}\)</span>.</p>
+<p>במקרה השני, <span class="math">\(f\left(x\right)+f\left(y\right)<f\left(x+y\right)\)</span>, עושים משהו דומה - זה מה שנקרא "תרגיל טוב" כדי לוודא שהבנו את הרעיון.</p>
+<p>נשאר לנו רק להראות <span class="math">\(f\left(x\cdot y\right)=f\left(x\right)\cdot f\left(y\right)\)</span>. ראשית נוכיח את זה עבור ערכים חיוביים, <span class="math">\(0<x,y\)</span>, כי כאן נמצא עיקר הרעיון. כמו קודם, אני אניח שאין שוויון ואטפל במקרה <span class="math">\(f\left(xy\right)<f\left(x\right)f\left(y\right)\)</span> והמקרה השני יהיה "תרגיל טוב". אני אמצא <span class="math">\(p\in\mathbb{Q}_{1}\)</span> כך ש-<span class="math">\(f\left(xy\right)<f\left(p\right)<f\left(x\right)f\left(y\right)\)</span> ואז אמצא <span class="math">\(q_{x},q_{y}\in\mathbb{Q}_{1}\)</span> כך ש-<span class="math">\(x<q_{x},y<q_{y}\)</span> ו-<span class="math">\(q_{x}q_{y}=p\)</span> , כך שאני אקבל</p>
+<p><span class="math">\(f\left(p\right)=f\left(q_{x}q_{y}\right)=f\left(q_{x}\right)f\left(q_{y}\right)>f\left(x\right)f\left(y\right)\)</span></p>
+<p>וזו סתירה ל-<span class="math">\(f\left(p\right)<f\left(x\right)f\left(y\right)\)</span>.</p>
+<p>נשאר רק למצוא את <span class="math">\(q_{x},q_{y}\)</span> הללו. <span class="math">\(xy<p\)</span> ולכן <span class="math">\(x<\frac{p}{y}\)</span> - אבל שימו לב שכאן נזקקתי להנחה ש-<span class="math">\(0<y\)</span> אחרת זה לא היה עובד (הנחה שלא הייתי צריך במקרה של חיבור, כשאמרתי ש-<span class="math">\(x<p-y\)</span>). עכשיו אפשר רציונלי <span class="math">\(q_{x}\)</span> כך ש-<span class="math">\(x<q_{x}<\frac{p}{y}\)</span> ואגדיר <span class="math">\(q_{y}=\frac{p}{q_{x}}\)</span> (ושוב, בלי <span class="math">\(0<x\)</span> הייתי מסתכן כאן בחלוקה באפס). עם ההגדרה הזו, <span class="math">\(q_{x}q_{y}=p\)</span> וכמו כן <span class="math">\(q_{y}\)</span> רציונלי כי הוא מנה של שני רציונליים. אנחנו יודעים ש-<span class="math">\(x<q_{x}\)</span> על פי האופן שבו <span class="math">\(q_{x}\)</span> נבחר. בנוסף, מכיוון ש-<span class="math">\(q_{x}<\frac{p}{y}\)</span> ושני המספרים הללו חיוביים, אנחנו מקבלים <span class="math">\(\frac{1}{q_{x}}>\frac{y}{p}\)</span> ולכן <span class="math">\(q_{y}=\frac{p}{q_{x}}>p\cdot\frac{y}{p}=y\)</span> וקיבלנו גם את <span class="math">\(q_{y}>y\)</span> שהיינו צריכים.</p>
+<p>הראינו את <span class="math">\(f\left(xy\right)=f\left(x\right)f\left(y\right)\)</span> למקרה שבו <span class="math">\(0<x,y\)</span>, אבל מה עם המקרים האחרים? ראשית, אם <span class="math">\(x=0\)</span> אז קל לראות ש-<span class="math">\(f\left(0\right)=0\)</span>, פשוט כי <span class="math">\(f\left(0\right)=f\left(0+0\right)=f\left(0\right)+f\left(0\right)\)</span>, אז השוויון בוודאי יתקיים כי</p>
+<p><span class="math">\(f\left(xy\right)=f\left(0\cdot y\right)=f\left(0\right)=0=0\cdot f\left(y\right)=f\left(0\right)\cdot f\left(y\right)=f\left(x\right)f\left(y\right)\)</span></p>
+<p>ובדומה גם אם <span class="math">\(y=0\)</span>. שימו לב שכאן לא השתמשנו במה שהוכחנו כבר על כפל, אבל כן במה שהוכחנו כבר על חיבור (טוב, ליתר דיוק רק על <span class="math">\(f\left(0+0\right)=f\left(0\right)+f\left(0\right)\)</span> שנבע מכך ש-<span class="math">\(f\)</span> המקורית על הרציונליים הייתה איזומורפיזם).</p>
+<p>עכשיו, מה אם <span class="math">\(x<0\)</span> אבל <span class="math">\(y>0\)</span>? במקרה הזה <span class="math">\(-x>0\)</span> אז אפשר להשתמש עליו במה שכבר הוכחנו. לפני כן, בואו נראה שמתקיים הדבר המתבקש <span class="math">\(f\left(-x\right)=-f\left(x\right)\)</span>, מה שמזמין שוב שימוש במה שהוכחנו על חיבור:</p>
+<p><span class="math">\(f\left(-x\right)+f\left(x\right)=f\left(-x+x\right)=f\left(0\right)=0\)</span></p>
+<p>ולכן אחרי העברת אגפים נקבל <span class="math">\(f\left(-x\right)=-f\left(x\right)\)</span>. ועכשיו אפשר לחזור אל הכפל:</p>
+<p><span class="math">\(f\left(xy\right)=-f\left(-xy\right)=-f\left(-x\right)f\left(y\right)=f\left(x\right)f\left(y\right)\)</span></p>
+<p>ובאופן דומה מטפלים במקרה שבו <span class="math">\(x>0\)</span> ו-<span class="math">\(y<0\)</span>. ואם <span class="math">\(x,y<0\)</span> שניהם? זה הכי קל:</p>
+<p><span class="math">\(f\left(xy\right)=f\left(\left(-x\right)\left(-y\right)\right)=f\left(-x\right)f\left(-y\right)=\left(-1\right)^{2}f\left(x\right)f\left(y\right)=f\left(x\right)f\left(y\right)\)</span></p>
+<p>וסיימנו את כל ההוכחה!</p>
+<h2>סיכום זריז</h2>
+
+<p>זה היה פוסט ארוך במיוחד ומחולק להרבה חלקים כי רציתי שכל הדברים הרלוונטיים זה לזה ישבו באותו מקום. יש משהו קצת אירוני שעבור ההגדרה המאוד פשוטה "הממשיים הם השדה הסדור השלם" הייתי צריך לכתוב כל כך הרבה, ועוד יותר אירוני שבעצם לא בנינו את הממשיים בכלל כאן. קיבלנו מושג מאוד ברור של מה הממשיים <strong>אמורים להיות</strong>: מה זה שדה, מה זה סדור, מה זה שלם. ראינו גם ש<strong>אם</strong> בכלל קיימת קבוצה שמקיימת את התכונות הללו שאנחנו דורשים מהממשיים, אז היא יחידה במובן זה שכל קבוצה אחרת שמקיימת את התכונות הללו איזומורפית אליה. אבל עדיין לא בניתי שום קבוצה כזו - את זה אני אעשה בהמשך, עם שתי הבניות הסטנדרטיות של הממשיים: זו שמשתמשת ב<strong>חתכי דדקינד</strong> וזו שמשתמשת ב<strong>סדרות קושי</strong>. ההגדרה של חתכי דדקינד מגיעה באופן כמעט ישיר מאקסיומת השלמות שדיברנו עליה בפוסט הזה; אבל ההגדרה עם סדרות קושי (שאני אישית אוהב טיפה יותר למרות ששתי ההגדרות נהדרות) תדרוש עוד קצת עבודת הכנה תיאורטית, שבה יעסוק הפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2024/10/12/real_numbers_two_completness/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אז מה זה בעצם המספרים הממשיים? (חלק ג&#39;: על שתי שלמויות)</span>
+            </a>
+            
+            
+            
+            <a href="/2024/08/11/real_numbers_decimal_notation/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז מה זה בעצם המספרים הממשיים? (חלק א&#39;: השיטה העשרונית)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נוסחת אוילר, ואיך היא קשורה למתנד הרמוני - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>נוסחת אוילר, ואיך היא קשורה למתנד הרמוני</h1>
+            <div class="post-meta">
+                <span class="date">2010-04-06</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/משוואות דיפרנציאליות.html">משוואות דיפרנציאליות</a>
+                    
+                    <a href="/tags/מתנד הרמוני.html">מתנד הרמוני</a>
+                    
+                    <a href="/tags/נוסחת אוילר.html">נוסחת אוילר</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>הנוסחה <span class="math">\(e^{i\pi}+1=0\)</span> זכתה לפופולריות רבה בתור "<a href="http://www.haaretz.co.il/hasite/pages/ShArtPE.jhtml?itemNo=487043&contrassID=2&subContrassID=2&sbSubContrassID=0">הנוסחה היפה ביותר במתמטיקה</a>", ואני נוטה להסכים - יש משהו מאוד אלגנטי ונאה בנוסחה הזו (אמנם, אני חושב שבמתמטיקה מגיעים מתישהו לשלב שבו היופי האמיתי לא נמצא בנוסחאות, אלא ברעיונות מורכבים יותר - וכשמגיעים לשם, נוסחת אוילר מחווירה לעומת חלק מהדברים שאפשר לגלות). מה שמרשים בה הוא האופן שבו היא קושרת את חמשת הקבועים ה"בסיסיים" במתמטיקה - <span class="math">\(0,1,e,\pi,i\)</span>. בפוסט הזה אני מקווה להסביר מעט על האופן שבו הנוסחה הזו צצה ומדוע היא אינה עד כדי כך בלתי צפויה - במילים אחרות, מדוע סביר שיהיה קשר בין ערכים אלו דווקא. אני מקווה שאחרי היכרות קצרה עם מאחורי הקלעים של הנוסחה הזו, היא תהיה רק יפה יותר.</p>
+<p>נתחיל מתיאור קצר של מרכיבי הנוסחה, שיושפע מהפוסטים שכתבתי לא מזמן על פונקצית האקספוננט ופונקציות הסינוס והקוסינוס. את <span class="math">\(1\)</span> אין צורך להכיר לאף אחד - הוא היה קיים משחר ההיסטוריה, ומהווה את הצעד הראשון בדרך לבניית המספרים הטבעיים. לעומתו, <span class="math">\(0\)</span> היה שנוי במחלוקת אלפי שנים והפך לחלק מהסטנדרט רק בסוף המאה ה-19. שניהם חשובים בהיותם מספרים "נייטרלים" ביחס לאחת מפעולות האריתמטיקה: <span class="math">\(0+x=x\)</span> ו-<span class="math">\(1\cdot x=x\)</span>. במבנים אלגבריים שמנסים להכליל את השלמים תמיד יהיה מצוי איבר שמתפקד כ-<span class="math">\(0\)</span> ואיבר שמתפקד כ-<span class="math">\(1\)</span>. בפרט, בהגדרה של <a href="http://he.wikipedia.org/wiki/%D7%A9%D7%93%D7%94_%28%D7%9E%D7%91%D7%A0%D7%94_%D7%90%D7%9C%D7%92%D7%91%D7%A8%D7%99%29">שדה</a> תמיד נדרש קיומם של <span class="math">\(0,1\)</span> ושיהיו שונים אלו מאלו - לא נדרשים שום איברים אחרים, ובפרט גם הקבוצה <span class="math">\(\left\{ 0,1\right\} \)</span> מהווה בעצמה שדה. מכאן ש-<span class="math">\(0,1\)</span> הם אכן "טבעיים" ולא סתם מספרים שנבחרו שרירותית לנוסחה הזו.</p>
+<p>המספר <span class="math">\(e\)</span> הוצג <a href="http://www.gadial.net/2010/03/27/exponent/">בפוסט שעסק באקספוננט</a>: כזכור, אקספוננט (<span class="math">\(\exp\left(x\right)\)</span>) היא הפונקציה היחידה שנגזרתה שווה לעצמה וערכה ב-<span class="math">\(0\)</span> (אחד מהמספרים ה"טבעיים" שדיברנו עליהם) הוא <span class="math">\(1\)</span> (המספר ה"מעניין" השני). הראיתי בפוסט ההוא שניתן לחשוב על הפונקציה הזו כעל העלאה בחזקה של מספר מסויים: <span class="math">\(e\)</span>. כלומר, <span class="math">\(\exp\left(x\right)=e^{x}\)</span> (ולכן <span class="math">\(e=\exp\left(1\right)\)</span>).</p>
+<p>המספר <span class="math">\(\pi\)</span> כמעט ולא זקוק להצגה - הוא מוכר ביותר בתור היחס שבין היקף מעגל לקוטרו (בגאומטריה אוקלידית). בפוסטים שבהם הצגתי את הפונקציות הטריגונומטריות - סינוסים וקוסינוסים - הוא צץ באופן חצי-טבעי, תרתי משמע: הראיתי שהפונקציות הללו הן מחזוריות, עם מחזור של <span class="math">\(2\pi\)</span>. אם כן, מדוע הסימן המיוחד הוענק דווקא ל-<span class="math">\(\pi\)</span> ולא ל-<span class="math">\(2\pi\)</span> (למשל, היה אפשר לתת סימון מיוחד ליחס בין היקף מעגל ל<strong>רדיוסו</strong>)? נימוק מעניין אחד הוא ש<strong>שטח</strong> עיגול היחידה הוא <span class="math">\(\pi\)</span> (ואכן, לפעמים נהוג להגדיר קבוע זה באמצעות שטח עיגול היחידה). נימוק מטופש אחר - אם נותנים את הסימון ל-<span class="math">\(\pi\)</span>, נוסחת אוילר יוצאת יפה יותר.</p>
+<p><span class="math">\(i\)</span> <a href="http://www.gadial.net/2007/04/29/i_fail/">הוא בכלל יצור מוזר בתכלית</a>... אה, רגע, לא. <span class="math">\(i\)</span> הוא מספר מרוכב המקיים <span class="math">\(i^{2}=-1\)</span>. כבר עסקתי באופן שבו המרוכבים נבנים באופן "טבעי" מהממשיים, כך שאיני הולך לחזור על הדיון הזה כעת. שאלה קצת יותר מעניינת היא מדוע הנציג ה"טבעי" ביותר של המספרים המרוכבים הוא דווקא שורש <span class="math">\(-1\)</span>; למה לא לקחת, למשל, שורש יחידה מסדר 3? יש שני מספרים מרוכבים לא ממשיים שכשמעלים אותם בחזקת 3 מקבלים 1: <span class="math">\(\omega=\frac{-1+\sqrt{-3}}{2}\)</span> ו-<span class="math">\(\omega^{2}=\frac{-1-\sqrt{-3}}{2}\)</span>. המספרים הללו מעט <strong>יותר</strong> מסורבלים מאשר <span class="math">\(i\)</span>, שכן העלאה שלהם בריבוע לא נותנת מספר ממשי, ובכלל - הם דורשים הוצאת שורש למספר ממשי שאין לו שורש שלם (<span class="math">\(\sqrt{3}\)</span>) וגועל נפש. לכן ככל הנראה יותר טבעי לבנות את המרוכבים בעזרת <span class="math">\(i\)</span>, שהוא שורש יחידה מסדר 4.</p>
+<p>אם כן, אלו כל מרכיבי הנוסחה. איך מתרחש הפלא שכולם מתחברים יחד? שורש העניין נעוץ בשאלה מה בכלל המשמעות של העלאת <span class="math">\(e\)</span> בחזקת מספר דמיוני - <span class="math">\(i\)</span> כפול משהו. על העלאה בחזקה ממשית דיברתי די הרבה, אבל איך המרוכבים יכולים בכלל להיכנס לסיפור? זו נשמעת כמו רמאות. אני מכיר רק דרך אחת להסביר את העניין ולכן אשתמש בה, למרות שהיא מעט טכנית ועלולה להבהיל אנשים - הגרסה המלאה של נוסחת אוילר, <span class="math">\(e^{i\theta}=\cos\theta+i\sin\theta\)</span>. זו נוסחה שחושפת את הקשר העמוק שבין אקספוננט ובין הפונקציות הטריגונומטריות, וגם תסגור לנו פינה שנותרה פתוחה עד כה: הפתרון הכללי של משוואה דיפרנציאלית מסדר שני במקדמים קבועים (כשאין שורש מרובה - זה מקרה מסובך לכשעצמו שאין טעם לדבר עליו כעת).</p>
+<p>נתחיל בהוכחה "יבשה" (שהיא לדעתי יפהפיה) לנוסחה הזו, ואז ננסה לתת אינטואיציה. כזכור, אנחנו עדיין תקועים עמוק בשלב שבו אנו מחפשים <strong>הגדרה</strong> בעלת משמעות ל-<span class="math">\(e^{i\theta}\)</span>. כזכור, ראינו כי ניתן לתאר את <span class="math">\(e^{x}\)</span> באמצעות טור חזקות אינסופי: <span class="math">\(e^{x}=1+x+\frac{x^{2}}{2}+\frac{x^{3}}{3!}+\frac{x^{4}}{4!}+\dots\)</span>. מכיוון שקל מאוד לדבר על טורי חזקות גם בהקשר של מספרים מרוכבים, והתיאוריה עובדת גם שם פחות או יותר בשלמותה (למעשה, במובן מסויים התיאוריה <strong>יותר</strong> שלמה עבור מרוכבים, אך לא אכנס לכך כעת ברצינות - דוגמה היא התכנסות הטור של <span class="math">\(\frac{1}{1+x^{2}}\)</span>, שרדיוס התכנסותו הוא 1 אך בלי לדעת על קיומם של מרוכבים לא ברור מדוע), מתבקש להגדיר את <span class="math">\(e^{i\theta}\)</span> גם כן באמצעות טורי חזקות - פשוט נציב <span class="math">\(i\theta\)</span> במקום <span class="math">\(x\)</span> ונראה מה נקבל. התוצאה היא טור שעדיין מתכנס, אבל כעת נראה שונה למדי מהטור ה"רגיל" - פתאום מתחילים לצוץ בו מינוסים, ומופעים של <span class="math">\(i\)</span>. אנחנו מקבלים: <span class="math">\(e^{i\theta}=1+i\theta-\frac{\theta^{2}}{2!}-i\frac{\theta^{3}}{3!}+\frac{\theta^{4}}{4!}+\dots\)</span>. כעת אפשר לבצע מניפולציות לטור ולפרק אותו לשני טורים. צריך לומר כאן אזהרה כלשהי - לא ניתן לעשות זאת לכל טור מתכנס. <a href="http://en.wikipedia.org/wiki/Riemann_series_theorem">משפט מפורסם של רימן</a> מראה שאם יש טור שמתכנס אך אינו מתכנס בהחלט (כלומר, <span class="math">\(\sum a_{n}\)</span> מתכנס אך <span class="math">\(\sum\left|a_{n}\right|\)</span> אינו מתכנס) אז אפשר, על ידי שינוי של סדר הסכימה של הטור, לקבל איזה סכום שרק נרצה, וגם להראות שסכום הטור שואף לאינסוף או "מזפזפ". המשפט המטורלל הזה ראוי לפוסט משל עצמו ואני מקווה לכתוב כזה בקרוב, אך עבור הטור "שלנו" זה לא תקף. וכך נוכל לקבל את הנוסחה הבאה: <span class="math">\(e^{i\theta}=\left(1-\frac{\theta^{2}}{2!}+\frac{\theta^{4}}{4!}-\dots\right)+i\left(\theta-\frac{\theta^{3}}{3!}+\frac{\theta^{5}}{5!}-\dots\right)\)</span>. מי שזוכר את <a href="http://www.gadial.net/2010/03/31/sine_and_cosine_via_ode/">הפוסט על הפונקציות הטריגונומטריות</a> ודאי זוכר שהראיתי כי הטור שבסוגריים השמאליים הוא הטור של <span class="math">\(\cos\theta\)</span>, והטור בסוגריים הימנים הוא הטור של <span class="math">\(\sin\theta\)</span>, וזהו סוף הסיפור.</p>
+<p>מכאן שההגדרה ה"טבעית" ל-<span class="math">\(e^{i\theta}\)</span> מניבה את נוסחת אוילר. בנוסחה הזו יש לנו לעת עתה רק שני קבועים "חשובים" - <span class="math">\(e\)</span> ו-<span class="math">\(i\)</span>. אם כן, הכל מתחיל מכך שאנו בוחרים להשתמש ב-<span class="math">\(e\)</span> בתור הבסיס שלנו - אפשר היה אמנם לבחור בסיס אחר, אך כבר הסברתי מדוע הגיוני לבחור דווקא ב-<span class="math">\(e\)</span>. כעת, אלמלא <span class="math">\(i\)</span> היה השורש של <span class="math">\(-1\)</span>, הנוסחה הייתה הולכת לאבדון - הפירוק המקסים של הטור של <span class="math">\(e^{i\theta}\)</span> לשני טורים היה משתבש לגמרי. שימו לב מה היה הכרחי לעשות כדי לקבל מהטור של <span class="math">\(e^{x}\)</span> את הטורים של <span class="math">\(\cos\)</span> ו-<span class="math">\(\sin\)</span>: היינו צריכים להשאיר איבר אחד כמות שהוא, את הבא אחריו לכפול במספר מרוכב כלשהו <span class="math">\(z\)</span>, את הבא אחריו לכפול ב-<span class="math">\(-1\)</span> אבל לא בשום דבר אחר, ואת הבא אחריו לכפול ב-<span class="math">\(-z\)</span>, ואז חוזר חלילה להתחלה. יש רק שני מספרים מרוכבים שמקיימים את התכונה הזו, שבעצם שקולה ל-<span class="math">\(z^{2}=-1\)</span>, והם <span class="math">\(i\)</span> ו-<span class="math">\(-i\)</span> (ואכן, אפשר היה באותו אופן להוכיח "נוסחת אוילר" עבור <span class="math">\(-i\)</span>; היינו מקבלים <span class="math">\(e^{-i\theta}=\cos\theta-i\sin\theta\)</span>, אבל זה לא שונה מהותית מהנוסחה שכבר יש לנו, ומכל אחת ניתן לגזור את השניה).</p>
+<p>כעת נעבור לקצת אינטואיציה גאומטרית. על המספרים המרוכבים אפשר לחשוב באופן גאומטרי כמישור - המספר <span class="math">\(a+bi\)</span> מייצג את הנקודה <span class="math">\(\left(a,b\right)\)</span> במישור. המרחק של נקודה מראשית הצירים, אם מודדים מרחק באופן האוקלידי הרגיל, הוא <span class="math">\(\sqrt{a^{2}+b^{2}}\)</span>, ועל כן אפשר להגדיר את מעגל היחידה במישור המרוכב בתור כל המספרים <span class="math">\(a+bi\)</span> כך ש-<span class="math">\(a^{2}+b^{2}=1\)</span>. כעת, הפלא ופלא: נתבונן במספר המרוכב שמוגדר על ידי <span class="math">\(a=\cos\theta\)</span>, <span class="math">\(b=\sin\theta\)</span> עבור <span class="math">\(\theta\)</span> כלשהו - כלומר, על <span class="math">\(e^{i\theta}\)</span>. המספר הזה מקיים <span class="math">\(a^{2}+b^{2}=\cos^{2}\theta+\sin^{2}\theta=1\)</span> (זוהי אחת מהנוסחאות הבסיסיות ביותר הנוגעות לסינוס וקוסינוס, והוכחתי אותה באופן לא-גאומטרי "טהור" בפוסט שעסק בהם). מכאן ש-<span class="math">\(e^{i\theta}\)</span> נמצא על מעגל היחידה, לכל <span class="math">\(\theta\)</span>. יותר מכך - לא קשה להשתמש ברציפות של <span class="math">\(\sin,\cos\)</span> כדי להראות ש<strong>כל</strong> נקודה על מעגל היחידה ניתנת להצגה בתור <span class="math">\(e^{i\theta}\)</span> שכזה. יותר מכך - אם אנחנו כבר מוכנים לקבל גם את המשמעות ה"גאומטרית" של <span class="math">\(\sin,\cos\)</span>, אפשר להראות ש-<span class="math">\(e^{i\theta}\)</span> הוא הנקודה שנמצאת על מעגל היחידה והזווית שיוצרים הישר שמחבר אותה עם הראשית והישר שמהווה ציר <span class="math">\(x\)</span> היא בדיוק <span class="math">\(\theta\)</span> (יש שתי זוויות כאלו, בעצם; אני מדבר על הזווית שמהווה את "כמות הסיבוב" שנדרש כדי להביא את ציר <span class="math">\(x\)</span> לנוח על הקטע שמחבר את הראשית עם <span class="math">\(e^{i\theta}\)</span>).</p>
+<p>זה פותח פתח לתיאור של מספר מרוכב באופן כללי באמצעות אקספוננט: המספר <span class="math">\(re^{i\theta}\)</span>, כאשר <span class="math">\(r\ge0\)</span> ממשי, מייצג את המספר המרוכב שמרחקו מהראשית הוא <span class="math">\(r\)</span> (דהיינו, <span class="math">\(r=\sqrt{a^{2}+b^{2}}\)</span>) והזווית שלו ביחס לציר <span class="math">\(x\)</span> היא <span class="math">\(\theta\)</span>. דרך הצגה זו מכונה "ההצגה הקוטבית" (או ההצגה הטריגונומטרית) של מספרים מרוכבים, ולעתים קרובות היא נוחה יותר מן ההצגה ה"רגילה" של <span class="math">\(a+bi\)</span> (למשל, לצורך העלאה בחזקה). באופן כללי במתמטיקה נוח לעתים לעבור למערכת קוארדינטות קוטבית שכזו, שבה נקודה נמדדת על ידי מרחק מהראשית וזווית ולא על ידי מרחק בשני צירים מאונכים זה לזה, כך שזוהי אינה הצגה בלעדית למספרים מרוכבים. אגב, בבית הספר לעתים קרובות משתמשים בקיצור <span class="math">\(cis\theta\)</span> כדי לתאר את <span class="math">\(\cos\theta+i\sin\theta\)</span> במקום <span class="math">\(e^{i\theta}\)</span>; החסרון של דרך הצגה זו היא שבהצגת האקספוננט אפשר להמשיך ולבצע את כל פעולות חשבון החזקות הרגילות; כך למשל <span class="math">\(e^{i\theta}\cdot e^{i\tau}=e^{i\left(\theta+\tau\right)}\)</span> (כמובן, יש להוכיח זאת; אך אם תעיפו מבט בהוכחה לכך שנתתי בפוסט העוסק באקספוננט תראו שהיא עובדת ככתבה וכלשונה גם כאן - ולמעשה, היא יותר כללית אפילו מאשר עבור "רק" מספרים מרוכבים; מה קורה אם ה-<span class="math">\(x\)</span> של האקספוננט הוא מטריצה?).</p>
+<p>שימו לב שההגדרה שלי של <span class="math">\(e^{i\theta}\)</span> "עובדת" גם אם אני לא יודע מהם סינוסים וקוסינוסים - נוסחת אוילר היא <strong>משפט</strong>, ולא סתם הגדרה (אף כי בספרים רבים מעדיפים דווקא כן להגדיר את <span class="math">\(e^{i\theta}\)</span> באמצעות הנוסחה). מכאן עולה דרך נוספת ומעניינת <strong>להגדיר</strong> את סינוס וקוסינוס: אלו הפונקציות שמתארות את ה<strong>היטל</strong> של <span class="math">\(e^{i\theta}\)</span> על הציר הממשי והציר המדומה. כלומר, אפשר לחשוב על סינוס וקוסינוס (שהן פונקציות ממשיות) כנובעות לא מגאומטריה ולא ממשוואות דיפרנציאליות, אלא מאנליזה מרוכבת! למעשה, זוהי אפילו הגדרה לא רעה בכלל - בעזרת נוסחת אוילר מיידית מקבלים את טורי הטיילור של סינוס וקוסינוס, ומכאן נוסחאות הגזירה שלהם נובעות מיידית, ומכאן שאר התכונות מתקבלות במהירות. יותר מכך - ניתן להשתמש בתכונות של <span class="math">\(e^{i\theta}\)</span> כדי לגזור תכונות של סינוס וקוסינוס. הנה דרך חדשה להוכיח את נוסחת הסכום: מכיוון ש-<span class="math">\(e^{i\left(\theta+\tau\right)}=e^{i\theta}\cdot e^{i\tau}\)</span>, אפשר לכתוב את הנוסחה הזו גם בעזרת סינוסים וקוסינוסים, ומקבלים:</p>
+<p><span class="math">\(\cos\left(\theta+\tau\right)+i\sin\left(\theta+\tau\right)=\left(\cos\theta+i\sin\theta\right)\left(\cos\tau+i\sin\tau\right)=\left(\cos\theta\cos\tau-\sin\theta\sin\tau\right)+i\left(\sin\theta\cos\tau+\cos\theta\sin\tau\right)\)</span></p>
+<p>והשוואת המקדמים הממשי והמדומה של שני האגפים נותנת את נוסחאות הסכום ה"רגילות". זו הוכחה נחמדה למדי כי בה קל מאוד לזכור איך קורה שהסכום עבור קוסינוס מורכב ממכפלות "הומוגניות" ויש בו מינוס, ואילו עבור סינוס הסכום הוא "מעורבב" (כמובן, בתנאי שזוכרים איך מתנהג כפל מרוכבים).</p>
+<p>ובכן, נוסחת אוילר הכללית, <span class="math">\(e^{i\theta}=\cos\theta+i\sin\theta\)</span> היא מרתקת ומעניינת ויפה - אעז לומר שאפילו יותר יפה מהנוסחה ה"פרטית" של <span class="math">\(e^{i\pi}+1=0\)</span>, בדיוק בגלל שיש יותר דברים מעניינים שמתקשרים אליה, אבל כעת הגיע הזמן לחזור לנוסחה ה"פרטית" ולהבין איך הקבוע שנותר בחוץ עד כה - <span class="math">\(\pi\)</span> - נכנס לעסק.</p>
+<p>ובכן, כפי שכבר אמרתי, <span class="math">\(\pi\)</span> קשור בקשר הדוק לסינוס וקוסינוס, שכפי שראינו, צצים באופן טבעי כשעוסקים באקספוננט מרוכב, וכפי שראינו - הם קשורים בקשר עמוק למעגלים, כך שאין פה הפתעה של ממש. <span class="math">\(e^{i\pi}\)</span> היא הנקודה שמתקבלת כשהולכים בדיוק <strong>חצי</strong> מעגל (כי מחזור שלם של סינוס וקוסינוס, שמציין חזרה לנקודת ההתחלה, הוא <span class="math">\(2\pi\)</span>) ומכיוון שהטיול מתחיל ב-<span class="math">\(\left(1,0\right)\)</span>, אחרי הליכה של <span class="math">\(\pi\)</span> "צעדים" נגיע לקצה השני של המעגל, <span class="math">\(\left(-1,0\right)\)</span>. על כן <span class="math">\(e^{i\pi}=-1\)</span>. לעתים מסתפקים בהצגת הנוסחה הזו בתור "נוסחת אוילר היפה", אבל שיפור קוסמטי מתקבל על ידי חיבור 1 לשני האגפים וקבלת <span class="math">\(e^{i\pi}+1=0\)</span>, ובכך השגנו שתי ציפורים במכה אחת - עברנו מ-<span class="math">\(-1\)</span> ה"לא טבעי" ל-<span class="math">\(0,1\)</span> ה"טבעיים"שקשקשתי כל כך הרבה על למה הם טבעיים בתחילת הפוסט. כלומר, יש משהו מלאכותי בהעברת הנוסחה לצורה ה"יפה" שלה. שימו לב ש-<span class="math">\(e^{i2\pi}=1\)</span>, כך שאם היינו משתמשים בסימון מיוחד לא עבור <span class="math">\(\pi\)</span> אלא עבור <span class="math">\(2\pi\)</span> היינו מקבלים נוסחה דומה ובמובנים מסויימים יפה יותר, כי אין בה את העברת האגפים ה"מלאכותית".</p>
+<p>כעת לסגירת החוב שלי בנוגע למשוואות דיפרנציאליות. כזכור, <a href="http://www.gadial.net/2010/03/29/from_exponent_to_trigo_via_ode/">עסקתי</a> במשוואות מהצורה <span class="math">\(af^{\prime\prime}+bf^{\prime}+f=0\)</span> (כש-<span class="math">\(a,b,c\)</span> מקדמים ממשיים קבועים), וטענתי שהפונקציה <span class="math">\(e^{\lambda x}\)</span> מהווה פתרון למשוואה זו, כאשר <span class="math">\(\lambda\)</span> הוא שורש של המשוואה הריבועית <span class="math">\(ax^{2}+bx+c=0\)</span>, וכל עוד יש למשוואה זו שני פתרונות שונים זה מזה, הכל אחלה כי אנחנו מקבלים שני פתרונות שונים מהותית למשוואה הדיפרנציאלית, שבאמצעותם ניתן לבנות כל פתרון אחר. הבעיה צצה כשלמשוואה <span class="math">\(ax^{2}+bx+c=0\)</span> לא היה פתרון ממשי כלל - למשל, המשוואה <span class="math">\(x^{2}+1=0\)</span>. במקרה זה, כמו שאמרתי קודם, יהיו למשוואה בהכרח שני פתרונות מרוכבים שונים זה מזה, כך שהאחד הוא הצמוד של השני. כאן "נתקעתי" כי לא היה לי מושג מהו <span class="math">\(e^{\lambda x}\)</span> במקרה זה, ובכל מקרה לא הייתה לי סיבה להניח שהפונקציה הזו עדיין תקיים את המשוואה.</p>
+<p>למרבה המזל, עכשיו אנחנו חכמים יותר. חקרנו את המשוואה <span class="math">\(f^{\prime\prime}+f=0\)</span> (שמתאימה ל-<span class="math">\(x^{2}+1=0\)</span>) באופן עצמאי וגילינו באופן זה את קיום הפונקציות <span class="math">\(\cos,\sin\)</span> שפותרות אותה. נוסחת אוילר השלימה את החקירה הזו, כשקשרה את הפונקציות הללו שמצאנו לפונקציית האקספוננט שפתרה לנו את המשוואה במקרה הממשי. לכן משתלם לנו להגדיר את <span class="math">\(e^{\lambda x}\)</span> באמצעות נוסחת אוילר: דהיינו, אם <span class="math">\(\lambda=r+i\theta\)</span>, אז <span class="math">\(e^{\lambda x}=e^{rx}\cdot e^{i\theta x}=e^{rx}\left(\cos\theta+i\sin\theta\right)\)</span>. אם תנסו לגזור את היצור הזה על פי כללי הגזירה הרגילים של פונקציות ממשיות תגלו כי אכן <span class="math">\(\left(e^{\lambda x}\right)^{\prime}=\lambda e^{\lambda x}\)</span>, כפי שאנו מצפים מאקספוננט (קודם כל גזרו את <span class="math">\(e^{ix}\)</span> ותראו שאכן מקבלים <span class="math">\(ie^{ix}\)</span>; מכאן זה עניין של חוקי האריתמטיקה הרגילים של נגזרות). לכן כשמציבים את <span class="math">\(e^{\lambda x}\)</span> בנוסחה מקבלים <span class="math">\(\left(a\lambda^{2}+b\lambda+c\right)e^{\lambda x}\)</span> שאכן שווה ל-<span class="math">\(0\)</span>, כנדרש.</p>
+<p>הבעיה עם <span class="math">\(e^{\lambda x}\)</span> בתור פתרון הוא שאין מדובר על פתרון ממשי - הרי זוהי פונקציה מרוכבת. זה אמנם לגיטימי לכשעצמו ואפילו מעניין - הנה צצים פתרונות מרוכבים במקומות שבהם לא ציפינו להם - אבל אנחנו מעדיפים פתרונות ממשיים. הפאנץ' הוא שאפשר "לשלוף" את סינוס וקוסינוס מתוך הפתרונות <span class="math">\(e^{\lambda x}\)</span> שמצאנו - גם הם מהווים צירוף לינארי כלשהו שלהם (כשמרשים מקדמים מרוכבים). לשם כך, ראשית כל שימו לב לכך ש-<span class="math">\(e^{-i\theta}=\cos\theta-i\sin\theta\)</span> (לא קשה לראות זאת) ועל כן <span class="math">\(e^{i\theta}+e^{-i\theta}=2\cos\theta\)</span>, כלומר <span class="math">\(\cos\theta=\frac{e^{i\theta}+e^{-i\theta}}{2}\)</span>, ובדומה <span class="math">\(\sin\theta=\frac{e^{i\theta}-e^{-i\theta}}{2i}\)</span>. אם תרצו, אלו הנוסחאות ה"הפוכות" לנוסחת אוילר, והן יפות בפני עצמן; כשאני מדבר על הגדרה של סינוס וקוסינוס באמצעות האקספוננט המרוכב, זו השורה התחתונה שאני מדבר עליה - להגדיר את הפונקציות הללו באמצעות המשוואות הללו (וזו אכן דרך נפוצה למדי להגדיר אותן). הנוסחאות כמובן תקפות גם אם נכפול את שני האגפים שלהם במספר ממשי כלשהו, ומכאן נובעת הנוסחה הכללית: אם <span class="math">\(\lambda=r+i\theta\)</span> אז <span class="math">\(e^{rx}\cos\left(\theta x\right)=\frac{e^{\lambda x}+e^{\overline{\lambda}x}}{2}\)</span>, ובדומה עבור סינוס, <span class="math">\(e^{rx}\sin\left(\theta x\right)=\frac{e^{\lambda x}-e^{\overline{\lambda}x}}{2}\)</span>. מכיוון ששתי הפונקציות הללו התקבלו כצירוף לינארי של שני פתרונות למשוואה הדיפרנציאלית המקורית, גם הם מהווים פתרון - אבל פתרון ממשי, ולא קשה להראות שהם "בלתי תלויים" במובן זה שכל פתרון אחר ניתן לכתיבה באמצעות צירוף לינארי שלהם (כמובן שפתרון מרוכב ידרוש צירוף לינארי עם מקדמים מרוכבים).</p>
+<p>כאן הבה וניישם את מה שלמדנו למקרה שהבאתי כמוטיבציה לכל זה - תנועה הרמונית פשוטה.</p>
+<p>כזכור, עבור תנועה הרמונית פשוטה הגענו למשוואה <span class="math">\(f^{\prime\prime}=-\frac{k}{m}f\)</span>, כאשר <span class="math">\(f\)</span> הייתה פונקציה שמתארת את מיקום האובייקט שנע בתנועה הרמונית פשוטה, <span class="math">\(k\)</span> תיאר את "קבוע הקפיץ" שמושך אותו - ככל שהוא יותר גדול, על הגוף מופעל יותר כוח - ו-<span class="math">\(m\)</span> תיאר את מסת הגוף, כלומר את התנגדותו להאצה, אבל אפשר לחשוב על המערכת גם במובנים יותר מופשטים, לכל <span class="math">\(f\)</span> (לא רק של מרחק) שמקיימת משוואה כזו. לכן נוח לכרוך את <span class="math">\(k,m\)</span> לפרמטר אחד שמאפיין את המערכת, ועם קצת ראיית הנולד הכי טוב להגדיר <span class="math">\(\omega^{2}=\frac{k}{m}\)</span> ולקבל את המשוואה <span class="math">\(f^{\prime\prime}=-\omega^{2}f\)</span>. מדוע ריבוע? שכן המשוואה האופיינית שמתקבלת מהמשוואה הדיפרנציאלית הזו היא <span class="math">\(x^{2}=-\omega^{2}\)</span>, ופתרונותיה הם <span class="math">\(\lambda=\pm i\omega\)</span>, וכך חמקנו מלהכניס שורשים לתמונה. מכיוון שפתרונות המשוואה האופיינית הם מדומים טהורים, אקספוננט ממשי הוא לא חלק מהפתרון; קיבלנו פתרונות פרטיים של <span class="math">\(\cos\left(\omega x\right)\)</span> ו-<span class="math">\(\sin\left(\omega x\right)\)</span>. לכן הפתרון הכללי למשוואה הוא <span class="math">\(a\sin\left(\omega x\right)+b\cos\left(\omega x\right)\)</span>, וסיימנו.</p>
+<p>אלא שעוד לא סיימנו, כי הפתרון הזה לא "יפה" מספיק - הוא סכום של שתי פונקציות, וקשה לנו לצייר את האופן שבו התנועה הזו מתנהגת בראש אם היא שני גלים שנלחמים אחד נגד השני. לכן גם כאן הכי נוח לעבור להצגה קוטבית. חשבו שנייה על הנקודה במישור <span class="math">\(\left(a,b\right)\)</span>; אפשר לחשוב עליה כעל נקודה שנמצאת במרחק <span class="math">\(A\)</span> מראשית הצירים ויוצרת זווית <span class="math">\(\phi\)</span>עם ציר <span class="math">\(x\)</span>, ממש כמו שהיה עבור מספרים מרוכבים. במקרה זה מתקיים <span class="math">\(a=A\cos\phi\)</span> ו-<span class="math">\(b=A\sin\phi\)</span>, ולכן אנחנו מקבלים דרך אחרת לכתוב את הפתרון הכללי למשוואה: <span class="math">\(A\cos\phi\sin\left(\omega x\right)+A\sin\phi\cos\left(\omega x\right)\)</span>. זה כבר נראה דומה באופן חשוד לנוסחת הסכום של סינוסים, ואכן - זה שווה ל-<span class="math">\(A\sin\left(\omega x+\phi\right)\)</span>, וזהו הפתרון הכללי שבדרך כלל אוהבים לתת. הסכום של סינוס וקוסינוס הפך לגל סינוס בודד, שמתאפיין על ידי שלושה פרמטרים: <span class="math">\(\omega\)</span>, שמגדיר את ה<strong>תדירות</strong> של התנודה, כלומר כמה מהר היא מתחילה לחזור על עצמה; <span class="math">\(A\)</span>, שמגדיר את ה<strong>משרעת</strong> של התנודה, כלומר מה הגדלים המקסימלים שאליהם היא עשויה להגיע (כמה רחוק העצם עשוי להגיע מנקודת שיווי המשקל), ו-<span class="math">\(\phi\)</span> שמתאר את ה<strong>פאזה</strong> של המערכת - מדד כלשהו ל"כמה עמוק בתוך התנודה" המערכת הייתה כשהתחלנו למדוד את הזמן. שימו לב למשהו שעשוי לבלבל כאן - אני משתמש באות <span class="math">\(x\)</span> לסימון המשתנה של הפונקציה, אך חשוב להבין שמשתנה זה מתאר את <strong>הזמן</strong> - מלכתחילה הפונקציה שרצינו היא פונקציה שמתארת את מיקום האובייקט כתלות בזמן. לכן יותר ברור לכתוב <span class="math">\(A\sin\left(\omega t+\phi\right)\)</span> בתור הפונקציה שלנו.</p>
+<p>מה שעשינו עד כה היה לכתוב פתרון כללי למשוואה. כדי למצוא פתרון פרטי צריך למצוא את הפרמטרים <span class="math">\(A,\phi\)</span> שמתאימים למקרה שאנחנו ממדלים; שימו לב ש-<span class="math">\(\omega\)</span> כבר ידוע מראש. לצורך כך אפשר למדוד את מצב המערכת בזמן <span class="math">\(t=0\)</span>. כזכור, אנחנו רוצים לדעת הן את ערך הפונקציה עצמה ב-<span class="math">\(t=0\)</span>, והן את ערך הנגזרת הראשונה שלה ב-<span class="math">\(t=0\)</span>, כלומר מצב המערכת נקבע על ידי מיקום ומהירות האובייקט בזמן <span class="math">\(t=0\)</span>. המיקום הוא <span class="math">\(A\sin\left(\phi\right)\)</span>, והמהירות היא <span class="math">\(\omega A\cos\left(\phi\right)\)</span>. שימו לב למשהו מעניין שנובע מהמשוואות הללו - <span class="math">\(\omega\)</span> אינו תלוי לא במיקום ההתחלתי של המערכת, ולא במהירות ההתחלתית שלה; הוא מושפע רק מקבועים "פנימיים" שלה. זו למשל הסיבה מדוע שעון מטוטלת הוא מדוייק: <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%98%D7%95%D7%98%D7%9C%D7%AA_%D7%9E%D7%AA%D7%9E%D7%98%D7%99%D7%AA">מטוטלת</a> מתנהגת כמו מתנד הרמוני (לא באופן מושלם כי העולם האמיתי לא מושלם, אבל מספיק טוב - כל עוד אפשר להזניח את החיכוך עם האוויר וכל עוד גודל הזווית שיוצרת המטוטלת קטן דיו), ולכן אין זה משנה כמה נרים אותה לפני שניתן לה להתנדנד, או מה המהירות שבה נדחוף אותה - קצב ההתנדנדות שלה יהיה תלוי רק בקבועים "פנימיים" (במקרה הזה, הוא תלוי באורך החוט של המטוטלת ובכוח המשיכה של כדור הארץ; דבר נאה נוסף שעולה ממשוואות המטוטלת הוא ש<strong>למסת</strong> המטוטלת אין השפעה על קצב התנודה). מהו קצב התנודה? ובכן, מכיוון שהמחזור של <span class="math">\(\sin\)</span> הוא <span class="math">\(2\pi\)</span>, ומכיוון ש-<span class="math">\(t\)</span> מוכפל ב-<span class="math">\(\omega\)</span>, הרי שנשלים מחזור בכל פעם שבה <span class="math">\(\omega t\)</span> יהיה כפולה של <span class="math">\(2\pi\)</span>, כלומר המחזור הוא <span class="math">\(T=\frac{2\pi}{\omega}\)</span>. הנה צץ לו פאי שוב, במערכת שאין לה שום קשר לגאומטריה של המישור (הרי המתנד ההרמוני המקורי שהבאתי כדוגמה - הגוף המחובר לקפיץ - היה חד ממדי).</p>
+<p>ובכן, הגענו לסיומה של סאגת פאי-אקספוננט-סינוס-קוסינוס. אני מקווה שהצלחתי לשכנע לפחות חלק מהקוראים שפאי איננו יצור גאומטרי בלבד - וחשוב מכך, שהצלחתי להראות לקוראים שוב עד כמה המתמטיקה עוסקת בקשרים בין דברים שנראים שונים ולא קשורים זה לזה, אך בפועל הקשר ביניהם חזק והדוק מאוד: "האמנות של קריאה באותו שם לדברים שונים, ובשמות שונים לאותו הדבר".</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/04/10/riemann_series_theorem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מי הזיז את הטור שלי?</span>
+            </a>
+            
+            
+            
+            <a href="/2010/04/01/math_and_values/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חינוך לערכים במתמטיקה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

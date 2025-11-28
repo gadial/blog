@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אנליזה וקטורית - נגזרת ונגזרת חלקית - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אנליזה וקטורית - נגזרת ונגזרת חלקית</h1>
+            <div class="post-meta">
+                <span class="date">2015-07-05</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/נגזרת.html">נגזרת</a>
+                    
+                    <a href="/tags/נגזרת חלקית.html">נגזרת חלקית</a>
+                    
+                    <a href="/tags/נגזרת מכוונת.html">נגזרת מכוונת</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אחרי <a href="http://www.gadial.net/2015/07/02/vector_analysis_intro/">פוסט המבוא</a> שבו הבטחתי גדולות ונצורות, בואו נעבור לאקשן. כאמור, אני מניח ידע קודם אצל הקוראים, הן <a href="http://www.gadial.net/2010/09/05/calculus_intro/">באינפי של פונקציות ממשיות</a> והן ב<a href="http://www.gadial.net/2011/09/21/linear_algebra_overview/">אלגברה לינארית</a> (עד וכולל <a href="http://www.gadial.net/2012/02/06/inner_products_intro/">מכפלות פנימיות</a>) כך שלא אציג מחדש את המושגים הללו. אלא אם יש ערך מוסף כלשהו בלהציג אותם מחדש. כמו למשל עכשיו! אני רוצה שנדבר שוב על מהי נגזרת של פונקציה ממשית.</p>
+<p>האינטואיציה הסטנדרטית מאחורי נגזרת של פונקציה <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span> היא למצוא את "קצב השינוי הרגעי" של פונקציה בנקודה מסויימת <span class="math">\(a\in\mathbb{R}\)</span>. אינטואיציה סטנדרטית נוספת היא למצוא את <strong>המשיק</strong> לגרף הפונקציה באותה נקודה - קו ישר שבנקודה הזו הכיוון שלו הוא כמו הכיוון של הפונקציה. את "קצב השינוי הרגעי" לוקחים על ידי חישוב של קצב השינוי הממוצע לאורך פרק זמן, ואז מקטינים את פרק הזמן כך שהוא שואף לאפס; את המשיק מוצאים על ידי כך שמחשבים את המיתר בין גרף הפונקציה ב-<span class="math">\(a\)</span> ונקודה נוספת <span class="math">\(b\)</span>, קרובה אליה, ואז אנחנו משאיפים את <span class="math">\(b\)</span> אל <span class="math">\(a\)</span>. עבור האינטואיציה הראשונה, מה שאנחנו מוצאים הוא <strong>מספר ממשי</strong>; עבור האינטואיציה השניה מה שאנחנו מוצאים הוא <strong>פונקציה לינארית</strong> (קו ישר). הקשר בין השניים מיידי: המספר הממשי (<strong>המספר הנגזר</strong>) הוא השיפוע של הפונקציה הלינארית, שבתורה מכונה <strong>הדיפרנציאל</strong> של הפונקציה.</p>
+<p>הפורמליזם של האינטואיציה הראשונה הוא זה:</p>
+<p><span class="math">\(f^{\prime}\left(a\right)=\lim_{h\to0}\frac{f\left(a+h\right)-f\left(a\right)}{h}\)</span></p>
+<p>הביטוי <span class="math">\(\frac{f\left(a+h\right)-f\left(a\right)}{h}\)</span> הוא בדיוק השינוי הממוצע בין ערך הפונקציה ב-<span class="math">\(a\)</span> וערכה בנקודה אחרת <span class="math">\(b\)</span>, רק שבמקום לכתוב <span class="math">\(\frac{f\left(b\right)-f\left(a\right)}{b-a}\)</span> יותר קל לסמן <span class="math">\(b=a+h\)</span> ולהמשיך משם.</p>
+<p>את הביטוי הזה באופן די ברור אי אפשר להכליל כמו שהוא. בואו ניקח פונקציה <span class="math">\(F:\mathbb{R}^{n}\to\mathbb{R}^{m}\)</span> וננסה לכתוב את הביטוי הזה עבורה:</p>
+<p><span class="math">\(\lim_{h\to0}\frac{F\left(a+h\right)-F\left(a\right)}{h}\)</span></p>
+<p>מה נשבר כאן? ובכן, <span class="math">\(h\)</span> היא חלק מה<strong>קלט</strong> של <span class="math">\(F\)</span>, ולכן <span class="math">\(h\in\mathbb{R}^{n}\)</span> היא וקטור. במונה אנחנו מקבלים את ה<strong>פלט</strong> של <span class="math">\(F\)</span>, גם כן וקטור, רק שב-<span class="math">\(\mathbb{R}^{m}\)</span>. אנחנו לא יודעים איך לאכול את הביטוי הזה מבחינה מתמטית; אין לנו דרך לחלק וקטורים אלו באלו, למעט במקרה שבו <span class="math">\(n=1\)</span> (וכפי שנראה בהמשך, המקרה שבו <span class="math">\(n=1\)</span> הוא אכן פשוט במיוחד, גם אם <span class="math">\(m&gt;1\)</span>). אגב, כאן אנחנו מתפצלים מהאנליזה המרוכבת; שם מה שקורה הוא שמחלקים במספר מרוכב, שמצד אחד אמנם נראה כמו וקטור דו ממדי של מספרים ממשיים, ומצד שני במרוכבים <strong>כן</strong> ידוע לנו איך לבצע את החלוקה.</p>
+<p>דרך אפשרית להתמודד עם הבעיה הזו היא לא לחלק ב-<span class="math">\(h\)</span> אלא ב<strong>נורמה</strong> של <span class="math">\(h\)</span>, כלומר ב-<span class="math">\(\left|h\right|\)</span>. בדרך הזו נקבל "נגזרת" שהיא וקטור ב-<span class="math">\(\mathbb{R}^{m}\)</span> ולא לגמרי ברור מה היא אומרת - חסרה לנו אינטואיציה.</p>
+<p>אז בואו נעבור להגדרה השניה, עם המשיק. אמרנו ש-<span class="math">\(f^{\prime}\left(a\right)\)</span> הוא השיפוע של המשיק, כלומר המשיק הוא הפונקציה <span class="math">\(f^{\prime}\left(a\right)\left(x-a\right)+f\left(a\right)\)</span> (זו גאומטריה אנליטית: אם יש לנו ישר עם שיפוע <span class="math">\(m\)</span> שעובר דרך <span class="math">\(\left(a,b\right)\)</span> אז משוואותו היא <span class="math">\(y=m\left(x-a\right)+b\)</span>). החלק שמעניין אותנו במשיק הוא הפונקציה <span class="math">\(T\left(x\right)=f^{\prime}\left(a\right)x\)</span> - זו טרנספורמציה לינארית (המשיק עצמו איננו טרנספורמציה לינארית באופן כללי כי הוא לא עובר דרך ראשית הצירים). לחלק הזה אנחנו קוראים <strong>הדיפרנציאל</strong> של <span class="math">\(f\)</span> בנקודה <span class="math">\(a\)</span>. כדי לראות למה הוא מעניין, בואו נחזור אל הנוסחה:</p>
+<p><span class="math">\(f^{\prime}\left(a\right)=\lim_{h\to0}\frac{f\left(a+h\right)-f\left(a\right)}{h}\)</span></p>
+<p>נעביר אגפים:</p>
+<p><span class="math">\(\lim_{h\to0}\frac{f\left(a+h\right)-f\left(a\right)}{h}-f^{\prime}\left(a\right)=0\)</span></p>
+<p>נעלה למונה:</p>
+<p><span class="math">\(\lim_{h\to0}\frac{f\left(a+h\right)-f\left(a\right)-f^{\prime}\left(a\right)h}{h}=0\)</span></p>
+<p>וקיבלנו:</p>
+<p><span class="math">\(\lim_{h\to0}\frac{f\left(a+h\right)-f\left(a\right)-T\left(h\right)}{h}=0\)</span></p>
+<p>אז הנה הגדרה אלטרנטיבית: הדיפרנציאל של <span class="math">\(f\)</span> הוא הטרנספורמציה הלינארית <span class="math">\(T\)</span> שעבורה הגבול לעיל שווה לאפס. אפשר עם קצת עבודה להוכיח שאם קיימת טרנספורמציה לינארית כזו, אז היא יחידה, כך שההגדרה הגיונית.</p>
+<p>את ההגדרה הזו אפשר להכליל בצורה פשוטה לפונקציות כלליות: אם <span class="math">\(F:\mathbb{R}^{n}\to\mathbb{R}^{m}\)</span> אז הדיפרנציאל של <span class="math">\(F\)</span> בנקודה <span class="math">\(a\)</span>, אם הוא קיים, הוא הטרנספורמציה הלינארית היחידה שמקיימת</p>
+<p><span class="math">\(\lim_{h\to0}\frac{f\left(a+h\right)-f\left(a\right)-T\left(h\right)}{\left|h\right|}=0\)</span></p>
+<p>אם הדיפרנציאל קיים, אז אומרים ש-<span class="math">\(f\)</span> <strong>גזירה</strong> בנקודה <span class="math">\(a\)</span>. במילה <strong>נגזרת</strong> משתמשים כדי לתאר או את <span class="math">\(T\)</span> או את המטריצה המייצגת שלה; זה לא כל כך משנה כי ברור לנו שבמובנים המהותיים זה בדיוק אותו דבר. אם כן, עבור פונקציות ממשיות רגילות, הנגזרת היא בעצם מטריצה <span class="math">\(1\times1\)</span>!</p>
+<p>הסימון המקובל לנגזרת של <span class="math">\(f\)</span> בהקשר הזה הוא <span class="math">\(Df\left(a\right)\)</span> (אם רוצים, אפשר לחשוב על <span class="math">\(D\)</span> בתור אופרטור שלוקח את <span class="math">\(f\)</span> ומחזיר פונקציה שלכל <span class="math">\(a\)</span> מחזירה מטריצה/טרנספורמציה). שימו לב לאופן שבו כללי המשחק השתנו קצת ממה שהיה עם פונקציות ממשיות: בפונקציות ממשיות, <span class="math">\(Df\)</span> הוא פונקציה ממשית (שמקבלת <span class="math">\(a\)</span> ומחזירה את המטריצה <span class="math">\(1\times1\)</span> שדיברתי עליה, שגם היא מספר ממשי) ולכן אפשר היה לגזור שוב ושוב ושוב. כאן בבירור זה לא עובד ואין משמעות לסימון <span class="math">\(DDf\)</span>, מה שאולי מעלה אצלכם את התהיה אם אי אפשר להגדיר גם נגזרות "רגילות" על פונקציות שכאלו.</p>
+<p>אז בואו נתחיל עם דוגמה פשוטה ככל הניתן. פונקציה סקלרית (שמחזירה סקלר, כלומר הטווח שלה הוא ממימד 1) על המישור, <span class="math">\(f:\mathbb{R}^{2}\to\mathbb{R}\)</span>. למשל, <span class="math">\(f\left(x,y\right)=x\sin y\)</span>. אין לנו מושג כרגע איך למצוא לה את הנגזרת, אבל כל אחד מאיתנו שמיומן בגזירה כן יודע להתעלל בביטוי <span class="math">\(x\sin y\)</span>: אם נחשוב לרגע על <span class="math">\(y\)</span> כפרמטר ועל <span class="math">\(x\)</span> בתור משתנה, ברור לנו איך אפשר לגזור את הביטוי הזה. פורמלית, אם אני אסמן <span class="math">\(f_{y}\left(x\right)=x\sin y\)</span> אז קל לי לחשב את <span class="math">\(f_{y}^{\prime}\left(x\right)=\sin y\)</span>. קל גם לחשב את <span class="math">\(f_{x}^{\prime}\left(y\right)=x\cos y\)</span>. הנגזרות הללו נקראות <strong>נגזרות חלקיות</strong> של <span class="math">\(f\)</span>, כי במובן מסויים אנחנו גוזרים רק חלק מ-<span class="math">\(f\)</span>. עבור פונקציות במספר קטן של משתנים, נהוג להשתמש בסימן <span class="math">\(\partial\)</span> לתיאור נגזרת חלקית, כמו שמשתמשים ב-<span class="math">\(d\)</span> לתיאור נגזרת של פונקציה ממשית: דהיינו, אם מסמנים <span class="math">\(\frac{df}{dx}\)</span> בתור הנגזרת של הפונקציה <span class="math">\(f\left(x\right)\)</span>, אז מסמנים <span class="math">\(\frac{\partial f}{\partial x},\frac{\partial f}{\partial y}\)</span> לתיאור שתי הנגזרות החלקיות של <span class="math">\(f\left(x,y\right)\)</span>. זה סימון מאוד ידוע ופופולרי, אבל אני בקושי אשתמש בו, כי עבור פונקציות בעלות מספר שרירותי הוא הופך למסורבל. נאמר ש-<span class="math">\(F\left(x_{1},\dots,x_{n}\right)\)</span> היא פונקציה סקלרית . אז במקום לכתוב <span class="math">\(\frac{\partial F}{\partial x_{i}}\)</span> כבר יותר קל לכתוב <span class="math">\(D_{i}F\)</span> וחסל.</p>
+<p>אז בואו נדבר על נגזרות חלקיות של פונקציה כללית, אבל לא כללית עד הסוף - אני אמשיך לדבר על פונקציות סקלריות, שהטווח שלהן הוא ממימד אחד. באופן כללי, אם <span class="math">\(F:\mathbb{R}^{n}\to\mathbb{R}^{m}\)</span>, אז נהוג לפרק אותה לרכיבים: לסמן <span class="math">\(F=\left(f_{1},\dots,f_{m}\right)\)</span> כך ש-<span class="math">\(f_{i}:\mathbb{R}^{n}\to\mathbb{R}\)</span> היא פונקציה סקלרית. את רוב התוצאות שנדבר עליהן אפשר לתאר עבור פונקציה סקלרית, ודי מובן מאליו איך "להרכיב" אותן עבור פונקציה כללית - עוד נעשה את זה, אבל כאמור, בואו נדבר רק על פונקציות סקלריות לרגע.</p>
+<p>מצד אחד, אין דבר טבעי יותר מנגזרת חלקית עבור פונקציה בכמה משתנים. מצד שני, זו הגדרה שנראית צרה באופן כמעט שרירותי. הרי נגזרת חלקית היא מה שמקבלים כאשר מסתכלים על הפונקציה במקום על כל המרחב שבו היא מוגדרת, רק על ישר אחד, שבו היא נראית כמו פונקציה במשתנה יחיד עם פרמטרים - או ציר <span class="math">\(x\)</span>, או ציר <span class="math">\(y\)</span> וכדומה. אבל אפשר להסתכל עליה גם על כל ישר אחר. זה מוביל אותנו להגדרה של <strong>נגזרת מכוונת</strong>: אם <span class="math">\(0\ne u\in\mathbb{R}^{n}\)</span> הוא וקטור כלשהו שונה מאפס ב-<span class="math">\(\mathbb{R}^{n}\)</span> ו-<span class="math">\(F:\mathbb{R}^{n}\to\mathbb{R}\)</span> היא פונקציה, אז אפשר להגדיר את הנגזרת המכוונת של <span class="math">\(F\)</span> עבור <span class="math">\(u\)</span> בנקודה <span class="math">\(a\)</span> בתור</p>
+<p><span class="math">\(\lim_{h\to0}\frac{F\left(a+hu\right)-F\left(a\right)}{h}\)</span></p>
+<p>כאשר כאן <span class="math">\(h\in\mathbb{R}\)</span> הוא סקלר. הנגזרות החלקיות הן מקרה פרטי של נגזרות מכוונות, עבור וקטורי הבסיס <span class="math">\(e_{i}=\left(0,\dots,1,\dots,0\right)\)</span> של המרחב <span class="math">\(\mathbb{R}^{n}\)</span> (שימו לב ש-<span class="math">\(u\)</span> הוא חשוב, ולא רק הכיוון שלו; הכפלה של <span class="math">\(u\)</span> בסקלר כלשהו תשפיע גם על הנגזרת המכוונת שהוא מגדיר. לכן לפעמים דורשים ש-<span class="math">\(u\)</span> יהיה מנורמה 1).</p>
+<p>עכשיו אפשר לחבר את כל המושגים הללו ביחד. ניקח <span class="math">\(F:\mathbb{R}^{n}\to\mathbb{R}\)</span>. אם <span class="math">\(F\)</span> גזירה, אז כל הנגזרות המכוונות שלה קיימות, וקל מאוד לקבל אותן - הנגזרת המכוונת בכיוון <span class="math">\(u\)</span> בנקודה <span class="math">\(a\)</span> היא בדיוק <span class="math">\(DF\left(a\right)\cdot u\)</span> - כלומר, לוקחים את המטריצה שמייצגת את <span class="math">\(DF\)</span> בנקודה <span class="math">\(a\)</span> ומכפילים סקלרית ב-<span class="math">\(u\)</span> (מטילים על <span class="math">\(u\)</span>). כלומר, <span class="math">\(DF\)</span> מקודדת איכשהו את המידע על <strong>כל</strong> הנגזרות המכוונות של <span class="math">\(F\)</span>. מצד שני, זה אומר שעכשיו ברור לגמרי איך לחשב את <span class="math">\(DF\)</span>: אנחנו יודעים ש-<span class="math">\(DF\left(a\right)\)</span> הוא וקטור ב-<span class="math">\(\mathbb{R}^{n}\)</span> (מטריצה <span class="math">\(1\times n\)</span>) ולכן ניתן להצגה כצירוף לינארי <span class="math">\(\sum_{i=1}^{n}\lambda_{i}e_{i}\)</span>, כאשר המקדמים נתונים בדיוק על ידי <span class="math">\(\left(a\right)\cdot e_{i}\)</span><span class="math">\(\lambda_{i}=DF\)</span>. מסקנה: <span class="math">\(DF\left(a\right)=\left(D_{1}F\left(a\right),\dots,D_{n}F\left(a\right)\right)\)</span>. הוקטור הזה כל כך חשוב שנותנים לו <strong>עוד</strong> סימון ושם: הוא נקרא <strong>הגרדיאנט</strong> של <span class="math">\(F\)</span> ומסומן <span class="math">\(\nabla F\)</span> (למשולש הזה קוראים <strong>נבלה</strong>, אם רציתם לדעת).</p>
+<p>ההוכחה של הטענה הזו היא קלה למדי ומראה כמה היא מתבקשת. נניח ש-<span class="math">\(F\)</span> גזירה ויהא <span class="math">\(u\)</span> וקטור שונה מאפס כלשהו. אנחנו רוצים להראות ש-<span class="math">\(\lim_{h\to0}\frac{F\left(a+hu\right)-F\left(a\right)}{h}=DF\left(a\right)\cdot u\)</span>. כזכור, על פי הגדרת הנגזרת, <span class="math">\(\lim_{t\to0}\frac{F\left(a+t\right)-F\left(a\right)-DF\left(a\right)\cdot t}{\left|t\right|}=0\)</span> (בהוכחה הזו <span class="math">\(h\)</span> הוא סקלר ו-<span class="math">\(t\)</span> הוא וקטור). מכיוון שהגבול הזה נכון עבור השאפה של <span class="math">\(t\)</span> כללי לאפס, הוא נכון גם אם משאיפים את <span class="math">\(t\)</span> לאפס רק לאורך ציר מסויים, הציר שמגדיר <span class="math">\(u\)</span> (למי שלא מאמין, פשוט תפתחו את הגדרת האפסילון-דלתא ותראו). כלומר, אנחנו מקבלים את הגבול</p>
+<p><span class="math">\(\lim_{h\to0}\frac{F\left(a+hu\right)-F\left(a\right)-DF\left(a\right)\cdot\left(hu\right)}{\left|hu\right|}=0\)</span></p>
+<p>נכפול את שני האגפים בקבוע <span class="math">\(\left|u\right|\)</span>, נשתמש בהומוגניות של מכפלה סקלרית ושל נורמה, ונקבל</p>
+<p><span class="math">\(\lim_{h\to0}\frac{F\left(a+hu\right)-F\left(a\right)}{\left|h\right|}-\frac{h}{\left|h\right|}DF\left(a\right)\cdot u=0\)</span></p>
+<p>אם <span class="math">\(h\)</span> שואף לאפס מימין, אנחנו מקבלים בדיוק את מה שרצינו: <span class="math">\(\lim_{h\to0^{+}}\frac{F\left(a+hu\right)-F\left(a\right)}{h}-DF\left(a\right)\cdot u=0\)</span>; אחרת, נכפול במינוס 1 ונקבל <span class="math">\(\lim_{h\to0^{-}}\frac{F\left(a+hu\right)-F\left(a\right)}{h}-DF\left(a\right)\cdot u=0\)</span>. המסקנה הסופית היא שאכן מתקיים <span class="math">\(\lim_{h\to0}\frac{F\left(a+hu\right)-F\left(a\right)}{\left|h\right|}=DF\left(a\right)\cdot u\)</span>.</p>
+<p>אם כן, <strong>אם</strong> <span class="math">\(F\)</span> היא גזירה, אז הנגזרת שלה נתונה בדיוק באמצעות הנגזרות החלקיות, מה שאומר שיש לנו עכשיו טכניקה פרקטית לחישוב נגזרת כללית על ידי רדוקציה לבעיה של חישוב נגזרת רגילה. מה שמפתיע הוא שההפך אינו נכון - ייתכן שכל הנגזרות החלקיות יהיו קיימות (או אפילו יותר מכך, כל הנגזרות המכוונות יהיו קיימות) ועדיין <span class="math">\(F\)</span> לא תהיה גזירה. הגרדיאנט עדיין יהיה קיים, כמובן, אבל הוא לא יגדיר טרנספורמציה לינארית שמקרבת את <span class="math">\(F\)</span> בצורה מוצלחת. הפתולוגיה הזו היא בדיוק הסיבה שבגללה הגדרנו נגזרת בצורה מוזרה שכזו במקום להתחיל מנגזרות חלקיות - התנאי של גזירות יותר חזק מהתנאי של קיום הנגזרות החלקיות. ההכללה לפונקציה <span class="math">\(F:\mathbb{R}^{n}\to\mathbb{R}^{m}\)</span> קלה: <span class="math">\(F\)</span> גזירה אם ורק אם כל הרכיבים שלה גזירים, ואם היא גזירה אז הנגזרת שלה היא המטריצה <span class="math">\(m\times n\)</span> שהשורות שלה הן הגרדיאנטים של הרכיבים.</p>
+<p>בואו נראה דוגמה לפונקציה <span class="math">\(f:\mathbb{R}^{2}\to\mathbb{R}\)</span> שהגרדיאנט שלה קיים אבל היא לא גזירה:</p>
+<p><span class="math">\(f\left(x,y\right)=\begin{cases}0 & x=y=0\\\frac{x^{2}y}{x^{4}+y^{2}} & \mbox{else}\end{cases}\)</span></p>
+<p>הרעיון כאן הוא ש-0 היא נקודה בעייתית עבור הפונקציה - הגדרנו את ערכה להיות 0 שם כי אם נקפיא את <span class="math">\(x\)</span> או את <span class="math">\(y\)</span> להיות 0 ונלך על הציר של המשתנה השני נקבל כל הזמן את הערך 0; אבל באותה מידה יכלנו להגדיר אותו להיות חצי, כי לאורך העקום <span class="math">\(\left(t,t^{2}\right)\)</span> הערך של הפונקציה הוא <span class="math">\(\frac{1}{2}\)</span>. כלומר, אין דרך טובה להגדיר את <span class="math">\(f\)</span> כך שתהיה רציפה בראשית הצירים, ולא קשה לראות שכמו עבור פונקציות ממשיות, גם במקרה שלנו גזירות של פונקציה בנקודה גוררת רציפות שלה בנקודה.</p>
+<p>מצד שני, אפשר לחשב כל נגזרת מכוונת ב-<span class="math">\(\left(0,0\right)\)</span> בלי קושי של ממש. בואו נעשה את זה לפי הגדרה. ניקח <span class="math">\(u=\left(a,b\right)\)</span>, ונחשב:</p>
+<p><span class="math">\(\lim_{h\to0}\frac{f\left(0+hu\right)-f\left(0\right)}{h}=\lim_{h\to0}\frac{\left(ha\right)^{2}\left(hb\right)}{\left(ha\right)^{4}+\left(hb\right)^{2}}\frac{1}{h}=\lim_{h\to0}\frac{a^{2}b}{h^{2}a^{4}+b^{2}}=\frac{a^{2}}{b}\)</span></p>
+<p>כמובן, בהנחה ש-<span class="math">\(b\ne0\)</span>, אחרת נקבל <span class="math">\(0\)</span>. בפרט ברור שהנגזרות החלקיות בנקודה הזו הן 0. אז על פניו טרנספורמציית האפס <strong>אמורה</strong> להיות הנגזרת של הפונקציה; אבל מן הסתם היא לא עובדת, ולכן הפונקציה לא גזירה למרות שהנגזרות החלקיות קיימות. הלקח כאן הוא שהסתכלות "חד ממדית" על הפונקציה מפספסת אינפורמציה חשובה - אפשר לקחת פונקציה שהיא כמו הפיל בסיפור על הפיל והעיוורים; שאם נסתכל עליה מכיוון מסויים, נראה משהו אחד, אבל אם נסתכל עליה מכיוון אחר נראה משהו שונה לחלוטין, וכך גם עבור כל כיוון הסתכלות חד ממדי אפשרי. חייבים להסתכל על הכל "בבת אחת" כדי לא לפספס.</p>
+<p>חישבתי את הנגזרות החלקיות בנקודה 0, אבל עבור נקודות אחרות אני יכול לחשב אותן על פי חוקי הגזירה של פונקציות ממשיות: נאמר, כדי לגזור את <span class="math">\(\frac{x^{2}y}{x^{4}+y^{2}}\)</span> לפי <span class="math">\(x\)</span> אני חושב על <span class="math">\(y\)</span> בתור קבוע ומשתמש בכללי הגזירה של מנת פונקציות. אני מקבל <span class="math">\(\frac{2xy\left(x^{4}+y^{2}\right)-x^{2}y\left(4x^{3}\right)}{\left(x^{4}+y^{2}\right)^{2}}=\frac{2x^{5}y+2xy^{3}-4x^{5}y}{\left(x^{4}+y^{2}\right)^{2}}=\frac{2xy^{3}-2x^{5}y}{\left(x^{4}+y^{2}\right)^{2}}=\frac{2xy\left(y^{2}-x^{4}\right)}{\left(x^{4}+y^{2}\right)^{2}}\)</span>.</p>
+<p>כששואפים ל-0 על צירי <span class="math">\(x,y\)</span> מקבלים 0, אבל על הציר <span class="math">\(\left(2t,t^{2}\right)\)</span> נקבל <span class="math">\(\frac{4t^{3}\left(t^{4}-16t^{4}\right)}{\left(3t^{4}\right)^{2}}=-5\frac{t^{7}}{t^{8}}=-\frac{5}{t}\)</span></p>
+<p>והיצור הזה מתפוצץ כש-<span class="math">\(t\)</span> שואף לאפס, כך שקיבלנו נגזרת חלקית לא רציפה. זה מרמז לנו מה בעייתי פה - נגזרות לא רציפות הן יצורים שמתנהגים בצורה מעצבנת. ואכן, מסתבר שתנאי מספיק לגזירות של פונקציה הוא שהנגזרות החלקיות שלה יהיו קיימות <strong>ורציפות</strong>. פונקציה כזו נקראת "גזירה ברציפות", ואומרים שהיא שייכת למחלקה <span class="math">\(C^{1}\)</span> (באופן כללי, <span class="math">\(C^{k}\)</span> היא מחלקת הפונקציות שגזירות <span class="math">\(k\)</span> פעמים והנגזרות רציפות; ו-<span class="math">\(C^{\infty}\)</span> היא מחלקת הפונקציות שגזירות מספר כלשהו של פעמים והנגזרות, מן הסתם, רציפות). לעתים קרובות נוח לנו מראש להגביל את הדיון רק לפונקציות שהן <span class="math">\(C^{1}\)</span> ואז הכל מתנהג נחמד; אבל באופן כללי קיימים מקרים פתולוגיים שצריך להיות מודעים אליהם.</p>
+<p>אז אם לסכם: אם <span class="math">\(F\)</span> גזירה, אז נובע שכל הנגזרות החלקיות שלה קיימות - <strong>אבל</strong> זה לא אומר שהן רציפות. אם לעומת זאת כל הנגזרות החלקיות קיימות ורציפות, אז מובטח ש-<span class="math">\(F\)</span> גזירה, <strong>אבל</strong> רק קיום הנגזרות החלקיות לא גורר רציפות. אם כן, הכרנו את הגיבורים של החלק הדיפרנציאלי של אנליזה וקטורית - הנגזרת והנגזרות החלקיות והמכוונות; וזמן טוב לעצור את הפוסט הזה הוא בדיוק אחרי ההוכחה שקיום נגזרות חלקיות רציפות גורר גזירות, כי זו לא הוכחה טריוויאלית.</p>
+<p>פורמלית, הטענה שאני אוכיח היא זו: אם <span class="math">\(A\subseteq\mathbb{R}^{n}\)</span> היא קבוצה פתוחה כך שלכל <span class="math">\(a\in A\)</span> הנגזרות החלקיות של <span class="math">\(F\)</span> קיימות ב-<span class="math">\(a\)</span> ורציפות בה, אז <span class="math">\(F\)</span> גזירה בכל נקודה של <span class="math">\(A\)</span>. "קבוצה פתוחה" היא קבוצה <span class="math">\(A\)</span> כך שלכל <span class="math">\(a\in A\)</span> קיים "כדור פתוח" סביב <span class="math">\(a\)</span> שמוכל כולו ב-<span class="math">\(A\)</span>, כלומר יש <span class="math">\(\varepsilon&gt;0\)</span> כך ש<span class="math">\(\left|x-a\right|&lt;\varepsilon\)</span> גורר ש-<span class="math">\(x\in A\)</span>.</p>
+<p>הרעיון הבסיסי פשוט: אם כל הנגזרות החלקיות של <span class="math">\(F\)</span> קיימות, אנחנו יודעים בדיוק איך <span class="math">\(DF\left(a\right)\)</span> אמור להיראות: <span class="math">\(DF\left(a\right)=\left(D_{1}F\left(a\right),\dots,D_{n}F\left(a\right)\right)\)</span>. לכן, בהינתן <span class="math">\(h\in\mathbb{R}^{n}\)</span> כלשהו, <span class="math">\(DF\left(a\right)\cdot h=\sum D_{i}F\left(a\right)h_{i}\)</span>. היעד שלנו הוא להוכיח שמתקיים <span class="math">\(\lim_{h\to0}\frac{F\left(a+h\right)-F\left(a\right)-\sum D_{i}F\left(a\right)h_{i}}{\left|h\right|}=0\)</span>. אנחנו לא חייבים לטפל בכל <span class="math">\(h\)</span> - מספיק לטפל בכל <span class="math">\(h\)</span> שהוא קטן דיו כך שהכדור הפתוח ברדיוס <span class="math">\(h\)</span> סביב <span class="math">\(a\)</span> מוכל כולו ב-<span class="math">\(A\)</span>.</p>
+<p>לשם כך אני ארצה לקבל תיאור אחר של <span class="math">\(F\left(a+h\right)-F\left(a\right)\)</span>, כזה שמשתמש בנגזרות החלקיות. האם זה מזכיר לכם משהו? זו סיטואציה דומה לזו של אחד מהמשפטים החשובים ביותר באינפי - משפט הערך הממוצע של לגראנז'. מכיוון שאני הולך להשתמש בו בהמשך, בואו נזכיר אותו. יש לנו פונקציה <span class="math">\(f:\left[a,b\right]\to\mathbb{R}\)</span> שהיא גזירה לכל הפחות ב-<span class="math">\(\left(a,b\right)\)</span> ורציפה על כל <span class="math">\(\left[a,b\right]\)</span>. השינוי הממוצע של <span class="math">\(f\)</span> בכל הקטע הזה שווה בדיוק ל-<span class="math">\(\frac{f\left(b\right)-f\left(a\right)}{b-a}\)</span>. נגזרת, כזכור, היא תיאור של שינוי <strong>רגעי</strong>, ולכן כל עוד <span class="math">\(a,b\)</span> מרוחקים זה מזה, לא מובטח שהנגזרת בנקודות הללו (אם היא בכלל קיימת) תתאר את השינוי הממוצע הזה. הקסם (ובעיני זה באמת קסם) הוא ש<strong>קיימת</strong> בקטע נקודה שעבורה זה כן עובד: קיימת נקודה <span class="math">\(c\in\left(a,b\right)\)</span> כך ש-<span class="math">\(\frac{f\left(b\right)-f\left(a\right)}{b-a}=f^{\prime}\left(c\right)\)</span>. דרך אחרת לחשוב על כך היא זו:<span class="math">\(f\left(b\right)-f\left(a\right)=\left(b-a\right)f^{\prime}\left(c\right)\)</span>, כלומר גודל השינוי של הפונקציה בקטע כולו יכול להיגזר מהשינוי הרגעי שלה ברגע נתון אחד - אבל כמובן, צריך לדעת איזה רגע.</p>
+<p>הבעיה היא ש-<span class="math">\(F\left(a+h\right)-F\left(a\right)\)</span> הוא לא ביטוי שאפשר להפעיל עליו ישירות את לגראנז', כי אנחנו לא ב-<span class="math">\(\mathbb{R}\)</span> אלא ב-<span class="math">\(\mathbb{R}^{n}\)</span>. אבל כרגיל, אפשר לבצע מעין <strong>רדוקציה</strong> ל-<span class="math">\(\mathbb{R}\)</span> על ידי פירוק הביטוי הזה ל<strong>טור טלסקופי</strong> של איברים שכל אחד מהם יהיה חד-ממדי באופיו (טור טלסקופי הוא טור שכל האיברים בו מצמצמים זה את זה למעט הראשון והאחרון; למשל, אם נפתח את המכפלה <span class="math">\(\left(1+q+q^{2}+\dots q^{n}\right)\left(q-1\right)\)</span> נקבל טור טלסקופי שאחרי צמצום יישאר ממנו רק <span class="math">\(q^{n+1}-1\)</span>, והופס קיבלנו את הנוסחה <span class="math">\(1+q+\dots+q^{n}=\frac{q^{n+1}-1}{q-1}\)</span> לטור הנדסי).</p>
+<p>בואו נכתוב את <span class="math">\(h\)</span> במפורש רגע: <span class="math">\(h=\left(h_{1},h_{2},\dots,h_{n}\right)\)</span>. אפשר לתאר את <span class="math">\(h\)</span> כסכום לפי הבסיס הסטנדרטי: <span class="math">\(h=\sum_{i=1}^{n}h_{i}e_{i}\)</span>. יהיה נוח לסמן "סכומים חלקיים" של <span class="math">\(a+h\)</span> באופן הבא: <span class="math">\(p_{i}=a+\sum_{j=1}^{i}h_{j}e_{j}\)</span> (כאשר <span class="math">\(p_{0}=a\)</span>, עם המוסכמה שלפיה הסכום הוא "ריק" אם האינדקס למעלה גדול מהערך ההתחלתי למטה). עכשיו קל לראות שמתקיים</p>
+<p><span class="math">\(F\left(a+h\right)-F\left(a\right)=F\left(p_{n}\right)-F\left(p_{n-1}\right)+F\left(p_{n-1}\right)-\dots-F\left(p_{1}\right)+F\left(p_{1}\right)-F\left(p_{0}\right)\)</span></p>
+<p>זה טור טלסקופי שבו כל זוג של מחובר חיובי ואז שלילי, כלומר משהו מהצורה <span class="math">\(F\left(p_{i}\right)-F\left(p_{i-1}\right)\)</span> מתאים לשני וקטורים שהם זהים, פרט לכך שקואורדינטה אחת במחובר החיובי היא <span class="math">\(h_{i}\)</span> בעוד שמקבילתה במחובר השלילי היא 0; חשבו על כך כאילו אנחנו הולכים מהנקודה <span class="math">\(h\)</span> אל הנקודה <span class="math">\(0\)</span> "ציר אחד בכל פעם". אם אתם לא רואים את זה, ציירו את הנקודות <span class="math">\(\left(1,1,1\right),\left(0,1,1\right),\left(0,0,1\right),\left(0,0,0\right)\)</span> והסתכלו על המסלול שעובר דרכן בסדר זה: תראו שקיבלנו קוביה שאנחנו הולכים על צלעות שלה. בואו נכתוב את הטור שוב, בסימון מקוצר:</p>
+<p>אני הולך להשתמש בלגראנז' על <span class="math">\(F\left(p_{i}\right)-F\left(p_{i-1}\right)\)</span>, אבל מכיוון שהסימון אולי עדיין מבלבל, אני אכתוב את הכל במפורש בתור פונקציות ממשיות. נשתמש ב-<span class="math">\(t\)</span> בתור משתנה שמייצג מספר ממשי. נגדיר <span class="math">\(f_{i}\left(t\right)=F\left(p_{i-1}+te_{i}\right)\)</span> (כלומר, הרכיב ה-<span class="math">\(i\)</span>-י הוא <span class="math">\(t\)</span>). נסתכל על הקטע <span class="math">\(\left[0,h_{i}\right]\)</span> (אם <span class="math">\(h_{i}\)</span> שלילי אז צריך לכתוב את הקטע <span class="math">\(\left[h_{i},0\right]\)</span>, אבל זה לא באמת משנה). בגלל שבחרנו את <span class="math">\(h\)</span> להיות קטן מספיק כך שהסביבה של <span class="math">\(a\)</span> ברדיוס <span class="math">\(h\)</span> מוכלת ב-<span class="math">\(A\)</span>, נקבל ש-<span class="math">\(F\left(p_{i-1}+te_{i}\right)\)</span> מוגדרת לכל <span class="math">\(t\in\left[0,h_{i}\right]\)</span>, ומהנתון לגבי הנגזרות החלקיות, <span class="math">\(f_{i}\)</span> היא גם גזירה ברציפות שם - כאן זה קריטי לחלוטין ש-<span class="math">\(f_{i}\)</span> מקפיאה את כל הרכיבים למעט אחד.</p>
+<p>עכשיו אפשר להשתמש בלגראנז' על <span class="math">\(f_{i}\)</span> ולקבל שקיימת נקודה <span class="math">\(c_{i}\in\left[0,h_{i}\right]\)</span> כך ש-<span class="math">\(f_{i}\left(h_{i}\right)-f_{i}\left(0\right)=h_{i}f_{i}^{\prime}\left(c_{i}\right)\)</span>. בואו נסמן ב-<span class="math">\(q_{i}\)</span> את הנקודה המתאימה עבור <span class="math">\(F\)</span>, כלומר <span class="math">\(q_{i}=p_{i-1}+c_{i}e_{i}\)</span>. אז נקבל ש-<span class="math">\(F\left(p_{i}\right)-F\left(p_{i-1}\right)=D_{i}F\left(q_{i}\right)h_{i}\)</span>. הנה קיבלנו את הלגראנז' שלנו. אם נחזור אל הטור הטלסקופי ממקודם, קיבלנו ש-</p>
+<p><span class="math">\(F\left(a+h\right)-F\left(a\right)=\sum_{i=1}^{n}F\left(p_{i}\right)-F\left(p_{-1}\right)=\sum_{i=1}^{n}D_{i}F\left(q_{i}\right)h_{i}\)</span></p>
+<p>נחזור עכשיו אל הגבול שאנחנו רוצים להוכיח:</p>
+<p><span class="math">\(\lim_{h\to0}\frac{F\left(a+h\right)-F\left(a\right)-\sum D_{i}F\left(a\right)h_{i}}{\left|h\right|}=0\)</span></p>
+<p>נציב בו את מה שקיבלנו, ונקבל:</p>
+<p><span class="math">\(\lim_{h\to0}\frac{\sum D_{i}F\left(q_{i}\right)h_{i}-\sum D_{i}F\left(a\right)h_{i}}{\left|h\right|}=0\)</span></p>
+<p>או, יותר פשוט</p>
+<p><span class="math">\(\lim_{h\to0}\sum\left(D_{i}F\left(q_{i}\right)-D_{i}F\left(a\right)\right)\frac{h_{i}}{\left|h\right|}=0\)</span></p>
+<p>הנקודות <span class="math">\(q_{i}\)</span> תלויות ב-<span class="math">\(h\)</span>; כאשר <span class="math">\(h\)</span> שואף לאפס, הנקודות הללו שואפות ל-<span class="math">\(a\)</span> (הוכיחו!). ומכיוון ש-<span class="math">\(D_{i}F\)</span> רציפה, אז <span class="math">\(\lim_{q_{i}\to a}D_{i}F\left(q_{i}\right)=D_{i}F\left(a\right)\)</span>, כלומר הביטוי <span class="math">\(D_{i}F\left(q_{i}\right)-D_{i}F\left(a\right)\)</span> שואף לאפס. הוא מוכפל בביטוי <span class="math">\(\frac{h_{i}}{\left|h\right|}\)</span>, שהוא כמובן חסום בערכו המוחלט על ידי <span class="math">\(1\)</span> (כי <span class="math">\(\left|h\right|\)</span> גדול מהערך המוחלט של כל אחד מהרכיבים של <span class="math">\(h\)</span>). לכן קיבלנו שהגבול הוא אכן אפס, וזה מה שרצינו.</p>
+<p>לסיכום, הכרנו את הנגזרת, ולמדנו איך לבדוק שהיא קיימת ולחשב אותה בצורה פשוטה יחסית, עבור מחלקה גדולה ויפה של פונקציות (<span class="math">\(C_{1}\)</span>). בפוסט הבא נראה עוד דברים מגניבים שקשורים אליה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2015/07/09/the_boy_and_the_museum/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">התעלומה המסתורית של הנער המבריק, יחס הזהב והנוסחה השגויה במוזיאון</span>
+            </a>
+            
+            
+            
+            <a href="/2015/07/02/vector_analysis_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אנליזה וקטורית - מבוא</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

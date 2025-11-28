@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי בגישה מתמטית, חלק א&#39; - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי בגישה מתמטית, חלק א&#39;</h1>
+            <div class="post-meta">
+                <span class="date">2022-07-28</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>כבר כתבתי בעבר <a href="https://gadial.net/2014/07/17/quantum_computing_intro/">סדרת פוסטים</a> על חישוב קוונטי, אבל מאז עבר קצת זמן והתחלתי להתעסק באופן אישי בצורה טכנית יותר, וזו הזדמנות טובה לחזור אל הנושא ולהתעמק יותר באספקטים המתמטיים שלו. אני לא אחזור יותר מדי על המוטביציות וההסברים שהיו בסדרת הפוסטים ההיא כי הם בסדר גמור לטעמי, ובפוסטים כאן אני אגש יותר מהר אל התכל'ס. עוד דבר שהכתיב את אופי סדרת הפוסטים ההיא היה דגש על אלגוריתמים קוונטיים - היעד היה להגיע אל האלגוריתם של שור. בסדרה הנוכחית אני כנראה אחזור אליו לביקור, אבל יש הרבה דברים אחרים שאני רוצה להציג.</p>
+<p>נתחיל בכל זאת מהסבר כללי מה זה בעצם חישוב קוונטי. בחישוב רגיל (מה שאני אכנה מעכשיו "קלאסי") אבן הבניין הבסיסית שלנו היא משהו שנקרא <strong>ביט</strong>. ביט יכול להיות או 0 או 1, ואנחנו יודעים לעשות מניפולציות על ביטים שנקראות <strong>פעולות לוגיות</strong>, למשל פעולת AND שמקבלת שני ביטים כקלט ומוציאה ביט בודד כפלט, כך שהיא מחזירה 1 רק אם שני הקלטים היו 1 ואחרת היא מחזירה 0. מה שמדהים במדעי המחשב הוא שכל אלגוריתם שרץ בפועל על מחשב ניתן לתרגום אל זה - פעולות לוגיות על מספר קטן של ביטים. זה ממש פשוט. ממש <strong>ממש</strong> פשוט.</p>
+<p>חישוב קוונטי שואל את השאלה: אוקיי, האם ייתכן שזה פשוט <strong>מדי</strong>? אולי אפשר לעבור להשתמש באבן בניין בסיסית שתאפשר לנו לעשות קסמים יותר מורכבים? והתשובה היא "כן ולא".</p>
+<p>כמובן, חישוב רגיל הוא קצת יותר מסובך מסתם מניפולציות על ביטים. ראשית, כי מעבדים מודרניים יכולים לעשות פעולות מורכבות יחסית שמערבים מספר גדול של ביטים בבת אחת, לרוב תוך שימוש במעגלים מתוחכמים למדי (למשל, פעולת חילוק של מספרים גדולים יחסית). שנית, ורלוונטי יותר לנו, כי בטבע אין ביטים שמתרוצצים אנה ואנה ומחכים שנפעל עליהם. כדי שיהיו לנו ביטים ונבצע עליהם מניפולציות, אנחנו צריכים <strong>לממש</strong> אותם איכשהו. במעבדים מודרניים זה מתבצע באמצעות מניפולציה של חשמל; ביטים ממומשים בעזרת מתח חשמלי, כשהערכים 0 ו-1 מיוצגים על ידי רמות שונות של מתח כזה, ואנחנו משתמשים ברכיבים אלקטרוניים שנקראים טרנזיסטורים כדי לבצע את הפעולות הלוגיות. מה שמעניין פה הוא הרדוקציה הזו של הפיזיקה המורכבת של הטבע, שבעזרת הנדסת חשמל הופכת למשהו מאוד פשוט - 0 ו-1 ופעולות לוגיות, וזהו.</p>
+<p>בחישוב קוונטי עדיין מנסים לעשות רדוקציה למורכבות של הטבע אל דבר שהוא יחסית פשוט מבחינה מתמטית. אבל מנסים לשמר קצת יותר מהמורכבות של התופעה שעליה מתבססים - תופעה שבתורת הקוונטים נקראת <strong>סופרפוזיציה</strong> והיא משונה מאוד וממש לא תואמת את החוויה היומיומית שלנו, אבל נוכחנו לדעת שהיא מתארת במדויק את מה שקורה בפיזיקה של סדרי גודל קטנים. השאלה אילו תופעות טבע בדיוק מגוייסות לצורך מימוש של חישוב קוונטי ואיך זה עובד היא מרתקת ואפשר לכתוב פוסטים רבים על שיטות המימוש השונות והמשונות ושלל הבעיות, האתגרים והקירובים שכל שיטה כזו מצריכה, אבל אני במוצהר מתעלם מכל זה ומתחיל מיחידת הבסיסי של חישוב קוונטי: <strong>קיוביט</strong>.</p>
+<h2>התיאור המתמטי של קיוביט</h2>
+
+<p>ביט רגיל היה דרך לקחת מערכת פיזיקלית מסובכת ואיכשהו לקבל ממנה מערכת שיש לה רק שני מצבים מובחנים, 0 ו-1. קיוביט הוא דרך לקחת מערכת פיזיקלית מסובכת ואיכשהו לקבל ממנה מערכת שכל המצבים שלה הם <strong>סופרפוזיציה</strong> של שני מצבים מובחנים, שמסמנים <span class="math">\(\left|0\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \)</span>. מה זו סופרפוזיציה? ובכן, הדרך הטובה ביותר לתאר את זה היא פשוט באמצעות מתמטיקה. ספציפית, אלגברה לינארית (שאני מניח שאתן מכירות).</p>
+<p>הסימון <span class="math">\(\mathbb{C}^{2}\)</span> מתאר <strong>מרחב וקטורי</strong> ממימד 2 מעל המרוכבים, שאנחנו מסמנים את מצביו בדרך כלל בתור וקטורי עמודה <span class="math">\(\left(\begin{array}{c} a\\ b \end{array}\right)\)</span> כך ש-<span class="math">\(a,b\in\mathbb{C}\)</span>. על המרחב הזה מוגדרת <strong>מכפלה פנימית</strong> סטנדרטית, <span class="math">\(\left\langle v|u\right\rangle \triangleq\overline{a_{v}}a_{u}+\overline{b_{v}}b_{u}\)</span> והמרחב שמתקבל נקרא <strong>מרחב מכפלה פנימית</strong>. רוב מה שאגיד עכשיו נכון למרחבי מכפלה פנימית באופן כללי, אבל כדאי שיהיה לנו בראש את המקרה הקונקרטי של <span class="math">\(\mathbb{C}^{2}\)</span> שממנו מתחילים, ועוד נראה בהמשך איך מתקדמים משם.</p>
+<p>עכשיו שווה להציג את שיטת הסימון של איברים שבה ננקוט מכאן והלאה, שנקראת <strong>הסימון של דיראק</strong>. לוקח קצת זמן להתרגל אליה, אבל היא מפשטת מאוד את האינטואיציה כשיש חישובים טכניים ולכן אני בעדה. אינטואיטיבית, אנחנו מסתכלים על הסימון <span class="math">\(\left\langle v|u\right\rangle \)</span> שמתאר מכפלה פנימית של שני איברים, ו"מפרקים" אותו לשניים: <span class="math">\(\left|u\right\rangle \)</span> ו-<span class="math">\(\left\langle v\right|\)</span>. הסימן <span class="math">\(\left|u\right\rangle \)</span> מתאר פשוט וקטור - איבר רגיל של <span class="math">\(\mathbb{C}^{2}\)</span>, בזמן ש-<span class="math">\(\left\langle v\right|\)</span> מתאר את מה שאפשר לקבל מהוקטור <span class="math">\(\left|v\right\rangle \)</span> אם ניקח את מה שנקרא <strong>הצמוד ההרמיטי</strong> שלו - מה שמתקבל משחלוף של הוקטור ואז הצמדה של הכניסות שלו ("שחלוף", transpose באנגלית, נשמע כמו משהו מוכר? אם לא, זו אינדיקציה שאולי כדאי לחזור טיפה על אלגברה לינארית). במילים אחרות, אם <span class="math">\(\left|v\right\rangle =\left(\begin{array}{c} a\\ b \end{array}\right)\)</span> אז <span class="math">\(\left\langle v\right|=\left(\left|v\right\rangle \right)^{*}=\left(\begin{array}{cc} \overline{a} & \overline{b}\end{array}\right)\)</span>. כעת, אם נזכור כיצד מוגדר כפל של מטריצות, קל לראות ש-<span class="math">\(\left\langle v\right|\cdot\left|u\right\rangle \)</span>, כשכופלים אותם כמו מטריצות (מטריצה <span class="math">\(1\times2\)</span> כפול מטריצה <span class="math">\(2\times1\)</span>) מקבלים בדיוק את המכפלה הפנימית, <span class="math">\(\left\langle v|u\right\rangle \)</span> - הסימון <span class="math">\(\left\langle v|u\right\rangle \)</span> "מסכים" עם הפירוק שלנו <span class="math">\(\left\langle v\right|\left|u\right\rangle \)</span>.</p>
+<p>אפשר לחשוב על הסימון הזה גם בצורה יותר מופשטת. מרגע שיש לנו מרחב מכפלה פנימית <strong>כלשהו</strong> <span class="math">\(V\)</span> מעל <span class="math">\(\mathbb{C}\)</span> (או <span class="math">\(\mathbb{R}\)</span>, אבל בהקשר של חישוב קוונטי אנחנו תמיד מעל <span class="math">\(\mathbb{C}\)</span>), אנחנו מסוגלים לחשוב על וקטורים <span class="math">\(v\in V\)</span> כאילו הם מגדירים <strong>פונקציונל לינארי</strong>, כלומר טרנספורמציה לינארית <span class="math">\(f_{v}:V\to\mathbb{C}\)</span>, שמוגדרת על ידי <span class="math">\(f_{v}\left(u\right)=\left\langle v|u\right\rangle \)</span>. אם כן, אפשר לחשוב על <span class="math">\(\left\langle v\right|\)</span> גם בתור פונקציונל לינארי, שהפעולה שלו על <span class="math">\(\left|u\right\rangle \)</span> היא בדיוק מה שתיארנו כרגע. כמובן, בפועל זה בדיוק אותו דבר כמו מה שתיארתי קודם - התיאור עם וקטור שורה הוא פשוט המטריצה המייצגת של <span class="math">\(f_{v}\)</span>. אבל זה לא אומר ששתי דרכי התיאור הקצת שונות הללו לא מסייעות, כל אחת בדרכה, להבין מה הולך פה.</p>
+<p>בואו נמשיך עם ההגדרות: במרחב מכפלה פנימית לכל איבר יש <strong>נורמה</strong>, שאפשר לחשוב עליה בתור הגודל שלו: <span class="math">\(\|v\|\triangleq\sqrt{\left\langle v|v\right\rangle }\)</span> . אצלנו ב-<span class="math">\(\mathbb{C}^{2}\)</span> מקבלים <span class="math">\(\|v\|=\sqrt{\left|a\right|^{2}+\left|b\right|^{2}}\)</span>. מה שבדרך כלל אוהבים במתמטיקה הוא איברים מנורמה 1 (שלפעמים נקראים "מנורמלים"), וזה מה שקורה גם בחישוב קוונטי: הערכים שקיוביט יכול לקבל הם <strong>בדיוק</strong> האיברים מנורמה 1 של <span class="math">\(\mathbb{C}^{2}\)</span>. זה נשמע שרירותי, אבל בהמשך נראה שזה נובע מטיעון שקשור להסתברות - ה-1 הזה יהיה סכום של הסתברויות שקשורות לקיוביט (במרחב הסתברות הסכום הכולל של כל ההסתברויות של אירועים מסוימים צריך להיות 1).</p>
+<p>במרחב <span class="math">\(\mathbb{C}^{n}\)</span> יש לנו בסיס פשוט במיוחד: <strong>הבסיס הסטנדרטי</strong>, שכולל את כל הוקטורים שהם 1 בכניסה אחת ו-0 באחרות. ב-<span class="math">\(\mathbb{C}^{2}\)</span> אני נותן לו סימון דיראקי פשוט:</p>
+<p><span class="math">\(\left|0\right\rangle \triangleq\left(\begin{array}{c} 1\\ 0 \end{array}\right)\)</span> ו-<span class="math">\(\left|1\right\rangle \triangleq\left(\begin{array}{c} 0\\ 1 \end{array}\right)\)</span></p>
+<p>לא צריך לייחס ל-0 וה-1 הזה שבתוך הסוגריים יותר מדי משמעות, היה אפשר לשים שם באותה מידה ציור של חתול שמח וחתול כועס. אלו פשוט סימונים סטנדרטיים, ויש גם וקטורים שמסומנים בצורה לא מספרית, למשל <span class="math">\(\left|+\right\rangle \triangleq\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span> . כשמסתכלים על הוקטור המוזר הזה מייד קופץ לעיניים ה-<span class="math">\(\sqrt{2}\)</span>, למה הוא שם? ובכן, כדי <strong>לנרמל</strong> אותו: אם אני לוקח את הסכום <span class="math">\(\left|0\right\rangle +\left|1\right\rangle \)</span>, מה תהיה הנורמה שלו? זו הזדמנות לעשות חישוב טכני קליל ולראות איך הסימון של דיראק עוזר לנו: אנחנו צריכים לחשב את המכפלה הפנימית של <span class="math">\(\left|0\right\rangle +\left|1\right\rangle \)</span> עם עצמו, ועל פי הסימון של דיראק זה פשוט</p>
+<p><span class="math">\(\left(\left\langle 0\right|+\left\langle 1\right|\right)\left(\left|0\right\rangle +\left|1\right\rangle \right)\)</span></p>
+<p>למה? ובכן, כי הפעולה של שחלוף + הצמדה היא <strong>לינארית</strong>, כלומר <span class="math">\(\left(v+u\right)^{*}=v^{*}+u^{*}\)</span> וגם <span class="math">\(\left(\lambda v\right)^{*}=\overline{\lambda}v^{*}\)</span>. לכן הסכום <span class="math">\(\left|0\right\rangle +\left|1\right\rangle \)</span> הופך לסכום <span class="math">\(\left\langle 0\right|+\left\langle 1\right|\)</span>, וגם סקלרים יתהפכו בצורה נחמדה (אבל לא לשכוח להצמיד אותם! אני שכחתי עשרות פעמים וכל פעם זה נקם בי).</p>
+<p>עכשיו, את הביטוי <span class="math">\(\left(\left\langle 0\right|+\left\langle 1\right|\right)\left(\left|0\right\rangle +\left|1\right\rangle \right)\)</span> אפשר לקרוא בתור הפעלה של אופרטור לינארי על <span class="math">\(\left(\left|0\right\rangle +\left|1\right\rangle \right)\)</span> ומכיוון שאופרטור לינארי הוא לינארי הוא מתפרק יפה על פי חוקי הפילוג הרגילים, ואנחנו מקבלים:</p>
+<p><span class="math">\(\left(\left\langle 0\right|+\left\langle 1\right|\right)\left(\left|0\right\rangle +\left|1\right\rangle \right)=\left\langle 0|0\right\rangle +\left\langle 0|1\right\rangle +\left\langle 1|0\right\rangle +\left\langle 1|1\right\rangle \)</span></p>
+<p>זו הסיבה שאנחנו כל כך אוהבים אלגברה לינארית - הכל פשוט מסתדר בה כמו בחשבון פשוט. עכשיו, מה זה <span class="math">\(\left\langle 0|0\right\rangle \)</span>? קל לראות עם חישוב ישיר שזה 1, וש-<span class="math">\(\left\langle 0|1\right\rangle =\left\langle 1|0\right\rangle =0\)</span> וש-<span class="math">\(\left\langle 1|1\right\rangle =1\)</span> גם כן. במילים אחרות, <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> הם בסיס של <span class="math">\(\mathbb{C}^{2}\)</span> שבו כל איבר הוא מנורמה 1, וכל שני איברים שונים הם בעלי מכפלה פנימית 0 ("אורתוגונליים"). לבסיס כזה קוראים <strong>בסיס אורתונורמלי</strong> ואנחנו מאוד אוהבים אותו כי כשעובדים בבסיס אורתונורמלי הכל פתאום פשוט יותר.</p>
+<p>ובכן, קיבלנו ש-<span class="math">\(\left(\left\langle 0\right|+\left\langle 1\right|\right)\left(\left|0\right\rangle +\left|1\right\rangle \right)=2\)</span>, כלומר הנורמה של <span class="math">\(\left|0\right\rangle +\left|1\right\rangle \)</span> היא <span class="math">\(\sqrt{2}\)</span>, ולכן אנחנו מחלקים ב-<span class="math">\(\sqrt{2}\)</span> כדי לקבל את האיבר מנורמה 1 שהצגתי קודם, <span class="math">\(\left|+\right\rangle \)</span>. באופן דומה אנחנו מסמנים <span class="math">\(\left|-\right\rangle =\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\)</span>, ו... זהו, עכשיו אנחנו כבר יודעים די הרבה על חישוב קוונטי!</p>
+<p>...למרות שבעצם עוד לא הסברתי כלום.</p>
+<h2>מה קורה בחישוב קוונטי?</h2>
+
+<p>בגדול, אפשר לתאר את מה שקורה בחישוב קוונטי בתור תהליך עם שלושה שלבים:</p>
+<ol> <li>מאתחלים קיוביט לערך <span class="math">\(\left|0\right\rangle \)</span>.</li>
+
+
+<li>מפעילים על הקיוביט סדרה של טרנספורמציות לינאריות.</li>
+
+
+<li>מודדים את הקיוביט והפלט הוא תוצאת המדידה.</li>
+
+</ol>
+
+<p>חישוב קוונטי אמיתי הוא מסובך יותר כי אפשר לדבר על אתחולים לערכים שונים, על מדידות שהן לאו דווקא בסיום, וכמובן - על דברים שמערבים יותר מקיוביט אחד, כי רק כשיש הרבה קיוביטים שמעורבים בחישוב פתאום מתחילים לקרות דברים מופלאים. אבל זו נקודת התחלה לא רעה. את המשמעות של 1 אנחנו כבר יכולים להבין, אבל צריך לדבר עוד על מה קורה ב-2 ו-3.</p>
+<p>נתחיל עם 2. מה זו טרנספורמציה לינארית אנחנו כבר יודעים, אבל לא <strong>כל</strong> טרנספורמציה לינארית היא חוקית בהקשר הזה; אמרתי שהערכים שקיוביט יכול לקבל הם רק כאלו מנורמה 1, ולכן אם אני מפעיל טרנספורמציה על קיוביט, היא צריכה להיות כזו שמעבירה וקטור מנורמה 1 לוקטור מנורמה 1. טרנספורמציות כאלו נקראות <strong>אוניטריות</strong>. באופן כללי, טרנספורמציה <span class="math">\(T:V\to V\)</span> היא אוניטרית אם <span class="math">\(TT^{\dagger}=T^{\dagger}T=I\)</span> , כשהסימון <span class="math">\(T^{\dagger}\)</span> מייצג את הצמוד ההרמיטי - השחלוף והצמדה של <span class="math">\(T\)</span> (במתמטיקה בדרך כלל מייצגים זאת בתור <span class="math">\(T^{*}\)</span> אבל אני משתמש בסימון הפיזיקלי שמקובל בחישוב קוונטי). </p>
+<p>למה התכונה הזו מוכיחה שהנורמה משתמרת? ובכן, התכונה הבסיסית (שלא אוכיח) של צמוד הרמיטי של אופרטור כלשהו היא ש-<span class="math">\(\left\langle Tv|u\right\rangle =\left\langle v|T^{\dagger}u\right\rangle \)</span> - אפשר "להעביר צד" את <span class="math">\(T\)</span> כשהיא בתוך מכפלה פנימית, במחיר מעבר לצמוד ההרמיטי. עכשיו נעשה את זה על נורמה:</p>
+<p><span class="math">\(\|Tv\|=\sqrt{\left\langle Tv,Tv\right\rangle }=\sqrt{\left\langle T^{\dagger}Tv,v\right\rangle }=\sqrt{\left\langle v,v\right\rangle }=\|v\|\)</span></p>
+<p>יופי, אז ברור לנו אילו טרנספורמציות <strong>מותר</strong> להפעיל בשלב 2. אבל מה <strong>אפשר בפועל</strong> להפעיל? זה תלוי מאוד בשאלה איך המחשב הקוונטי ממומש - אנחנו לא תופסים טרנספורמציות לינאריות מהאוויר, אלא כל פעולה שאנחנו רוצים להפעיל על קיוביט דורשת הנדסה ותכנון מורכבים, שאני כמובן לא נכנס אליהם כאן. בפועל זה אומר שיש סט של טרנספורמציות "סטנדרטיות" שמזכירים בהקשר הזה, למרות שמחשבים קוונטיים יכולים לבצע גם דברים נוספים אם רוצים. אבל בואו נראה חלק מהדברים הסטנדרטיים (לא את כולם).</p>
+<p>קודם ראינו סימונים מיוחדים לשני מצבים קוונטיים: <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span>. ה-<span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> הללו היו בסיס ולכן מספיק להגדיר את הפעולה של טרנספורמציה לינארית על שניהם כדי שנדע איך היא פועלת על כל איבר במרחב. אז הנה פעולה פשוטה אחת, שנסמן <span class="math">\(X\)</span>:</p>
+<p><span class="math">\(X\left|0\right\rangle =\left|1\right\rangle \)</span></p>
+<p><span class="math">\(X\left|1\right\rangle =\left|0\right\rangle \)</span></p>
+<p>זו בעצם פעולת ה-NOT שמוכרת לנו מחישוב קלאסי; אחת משתי הפעולות היחידות שאפשר לבצע על ביט בודד בחישוב רגיל, כשהשניה היא הזהות, לא לעשות כלום. כלומר - מכאן והלאה שאר הפעולות שנראה יהיו משהו "מיוחד", שמתאים להקשר של חישוב קוונטי שבו לא פועלים על ביט אלא על קיוביט; על <strong>סופרפוזיציה</strong>.</p>
+<p>קל לחשוב את המטריצה של <span class="math">\(X\)</span>:</p>
+<p><span class="math">\(X=\left(\begin{array}{cc} 0 & 1\\ 1 & 0 \end{array}\right)\)</span></p>
+<p>חישוב ישיר גם יראה ש-<span class="math">\(X\)</span> היא אוניטרית, אבל לא צריך חישוב כזה; טרנספורמציה שמעבירה בסיס אורתונורמלי לבסיס אורתונורמלי היא תמיד אוניטרית.</p>
+<p>הנה פעולה נוספת שנקראת <span class="math">\(Z\)</span>, שמכניסה לתמונה דבר שלא קיים בחישוב קלאסי - שלוקטורים יכולים להיות <strong>מקדמים</strong>:</p>
+<p><span class="math">\(Z\left|0\right\rangle =\left|0\right\rangle \)</span></p>
+<p><span class="math">\(Z\left|1\right\rangle =-\left|1\right\rangle \)</span></p>
+<p><span class="math">\(Z=\left(\begin{array}{cc} 1 & 0\\ 0 & -1 \end{array}\right)\)</span></p>
+<p>הפעולה הזו מותירה את <span class="math">\(\left|0\right\rangle \)</span> ללא שינוי, אבל היא הופכת את המקדם של <span class="math">\(\left|1\right\rangle \)</span> לשלילי; המקדם של איבר בהקשר הזה נקרא <strong>הפאזה</strong> שלו (מטעמים פיזיקליים שלא אכנס אליהם), אז בזמן שעל <span class="math">\(X\)</span> אפשר לחשוב בתור "היפוך ביט" על <span class="math">\(Z\)</span> אפשר לחשוב בתור "היפוך פאזה".</p>
+<p>קצת קשה לקבל תחושה טובה לגבי איך <span class="math">\(X,Z\)</span> מתנהגים בעולם החדש המופלא שנכנסנו אליו בלי לראות דוגמא קצת יותר רצינית, אז בואו נזכיר שני מצבים קוונטיים אחרים שראינו: <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span>. כזכור, ההגדרה שלהם הייתה</p>
+<p><span class="math">\(\left|+\right\rangle =\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span></p>
+<p><span class="math">\(\left|-\right\rangle =\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\)</span></p>
+<p>מה קורה כשאני מפעיל את <span class="math">\(X\)</span> על <span class="math">\(\left|+\right\rangle \)</span>? פשוט מאוד, נשתמש בלינאריות של הטרנספורמציה ונקבל</p>
+<p><span class="math">\(X\left|+\right\rangle =X\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)=\frac{X\left|0\right\rangle +X\left|1\right\rangle }{\sqrt{2}}=\frac{\left|1\right\rangle +\left|0\right\rangle }{\sqrt{2}}=\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}=\left|+\right\rangle \)</span></p>
+<p>ובמילים אחרות - כלום! לא קורה כלום! ומה אם מפעילים אותו על <span class="math">\(\left|-\right\rangle \)</span>?</p>
+<p><span class="math">\(X\left|-\right\rangle =X\left(\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\right)=\frac{X\left|0\right\rangle -X\left|1\right\rangle }{\sqrt{2}}=\frac{\left|1\right\rangle -\left|0\right\rangle }{\sqrt{2}}=-\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}=-\left|-\right\rangle \)</span></p>
+<p>כלומר, את <span class="math">\(\left|-\right\rangle \)</span> הוא כופל ב-<span class="math">\(-1\)</span>. או במילים אחרות, על <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span> האופרטור <span class="math">\(X\)</span> מתנהג כמו ש-<span class="math">\(Z\)</span> התנהג על <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span>. אז איך <span class="math">\(Z\)</span> יתנהג על <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span>? כבר אפשר לנחש שכמו ש-<span class="math">\(X\)</span> התנהג על <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span>, כלומר יחליף ביניהם. ואכן:</p>
+<p><span class="math">\(Z\left|+\right\rangle =Z\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)=\frac{Z\left|0\right\rangle +Z\left|1\right\rangle }{\sqrt{2}}=\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}=\left|-\right\rangle \)</span></p>
+<p><span class="math">\(Z\left|-\right\rangle =Z\left(\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\right)=\frac{Z\left|0\right\rangle -Z\left|1\right\rangle }{\sqrt{2}}=\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}=\left|+\right\rangle \)</span></p>
+<p>עכשיו, אחרי שנהננו קצת עם <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span> בואו נשים לב לכך שהם בעצמם בסיס אורתונורמלי (זה חישוב קצר למדי), אז האופרטור שיעביר את הבסיס <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> לבסיס <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span> יהיה אוניטרי. האופרטור הזה חשוב בצורה בלתי רגילה - אולי האופרטור השימושי ביותר בחישוב קוונטי. הוא מסומן ב-<span class="math">\(H\)</span> מלשון "הדאמר" (Hadamard) על שם המתמטיקאי הרלוונטי, ומוגדר כאמור על ידי</p>
+<p><span class="math">\(H\left|0\right\rangle =\left|+\right\rangle \)</span></p>
+<p><span class="math">\(H\left|1\right\rangle =\left|-\right\rangle \)</span></p>
+<p>או בכתיב יותר מפורש:</p>
+<p><span class="math">\(H=\frac{1}{\sqrt{2}}\left(\begin{array}{cc} 1 & 1\\ 1 & -1 \end{array}\right)\)</span></p>
+<p>שימו לב לכך ש-<span class="math">\(H^{\dagger}=H\)</span>, וגם <span class="math">\(X^{\dagger}=X,Z^{\dagger}=Z\)</span>; עוד מעט נראה אופרטור שבו זה לא המצב.</p>
+<p>בהערת אגב, התופעה הזו שראינו ש-<span class="math">\(X,Z\)</span> "מחליפים תפקידים" כשעוברים מהבסיס <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> לבסיס <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span> מלמדת אותנו ש-<span class="math">\(HZH^{\dagger}=X\)</span> ו-<span class="math">\(HXH^{\dagger}=Z\)</span>. למה? כי <span class="math">\(HXH^{\dagger}\)</span> הוא שילוב הפעולות "תעבור מהבסיס הראשון לשני, תפעיל את <span class="math">\(X\)</span> על הבסיס השני (עם אותו אפקט של <span class="math">\(Z\)</span>, של השארת איבר בסיס אחד ללא שינוי והכפלת השני במינוס 1) ואז תחזור לבסיס המקורי. נסו לחשב ותראו מה קורה. השוויון הזה לא חשוב לנו עכשיו אבל הוא הולך לחזור בהמשך; מילולית אני קורא לפעולה של כפל משמאל באופרטור ומימין בצמוד ההרמיטי שלו בשם <strong>הצמדה</strong>: <span class="math">\(HXH^{\dagger}\)</span> זו ההצמדה של <span class="math">\(X\)</span> על ידי <span class="math">\(H\)</span> (גם פה אני קצת חורג מהקונבנציה המתמטית, שבה הצמוד ההרמיטי יהיה דווקא משמאל ולא מימין).</p>
+<p>בואו נראה עוד כמה אופרטורים נפוצים ומועילים. ראשית, <span class="math">\(Z\)</span> בבסיס הסטנדרטי מיוצג על ידי מטריצה <strong>אלכסונית</strong>. מה שנחמד במטריצות כאלו הוא שקל להוציא להן שורש - מוציאים שורש לכל איבר על האלכסון. כלומר, אפשר לכתוב</p>
+<p><span class="math">\(\sqrt{Z}=\left(\begin{array}{cc} 1 & 0\\ 0 & \pm i \end{array}\right)\)</span></p>
+<p>נבחר את אחד מהשורשים הללו באופן שרירותי וניתן לו אות משלו:</p>
+<p><span class="math">\(S=\left(\begin{array}{cc} 1 & 0\\ 0 & i \end{array}\right)\)</span></p>
+<p>עכשיו מתקיים <span class="math">\(S^{2}=Z\)</span>, וגם קל לראות שהשורש השני הוא פשוט <span class="math">\(S^{3}\)</span>, שהוא גם <span class="math">\(S^{\dagger}\)</span>. קיבלנו עוד אחד מהאופרטורים המרכזיים שלנו.</p>
+<p>מה קורה כשמצמידים את <span class="math">\(X,Z\)</span> שלנו בעזרת <span class="math">\(S\)</span>? ובכן, <span class="math">\(Z\)</span> הוא חזקה של <span class="math">\(S\)</span> ולכן מתחלף איתו בכפל, כך שהצמדה לא עושה כלום: <span class="math">\(SZS^{\dagger}=Z\)</span>. אבל לעומת זאת, אם נחשב את <span class="math">\(SXS^{\dagger}\)</span>, נקבל מטריצה שטרם ראינו, ויש לה סימון משל עצמה - <span class="math">\(Y\)</span>:</p>
+<p><span class="math">\(Y=\left(\begin{array}{cc} 0 & -i\\ i & 0 \end{array}\right)\)</span></p>
+<p><span class="math">\(Y\)</span> הוא מין שילוב של הפעולות של <span class="math">\(X\)</span> (מחליף בין <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span>) ושל <span class="math">\(Z\)</span> (כופל ב-<span class="math">\(-1\)</span> את <span class="math">\(\left|1\right\rangle \)</span> לפני ההחלפה), ובתור בונוס הוא גם מכפיל הכל ב-<span class="math">\(i\)</span>. הוא גם הדוגמא האחרונה שרציתי להראות בינתיים. ראינו את האופרטורים <span class="math">\(X,Y,Z,H,S\)</span> שהם התחלה יפה אם כי אני מזהיר מראש שהם לא מספרים את כל הסיפור אפילו עבור קיוביט בודד.</p>
+<h2>מדידות</h2>
+
+<p>נעבור עכשיו לשלב 3: מדידה. כדי להסביר מה הולך בשלב הזה צריך לעזוב לרגע את האבסטרקציה ולחזור אל מה שקורה בפיזיקה. כשיש לנו מצב קוונטי בסופרפוזיציה, <span class="math">\(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span>, אנחנו לא יודעים "לקרוא" מתוכו את הערכים <span class="math">\(\alpha,\beta\)</span>. זאת בניגוד לביט רגיל, שאנחנו יכולים לבדוק אם ערכו הוא 0 או 1. מה שכן אפשר לעשות עם המצב הקוונטי <span class="math">\(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span>, מלבד הפעלת טרנספורמציה לינארית שתשנה את המצב הזה למצב אחר אבל לא תיתן לנו אינפורמציה "החוצה", הוא לבצע איתו אינטראקציה שנקראת <strong>מדידה</strong> שעושה שני דברים:</p>
+<ol> <li>מחזירה ערך שהוא או 0 או 1 באופן הסתברותי: <span class="math">\(0\)</span> בהסתברות <span class="math">\(\left|\alpha\right|^{2}\)</span> ו-<span class="math">\(1\)</span> בהסתברות <span class="math">\(\left|\beta\right|^{2}\)</span>.</li>
+
+
+<li>אם הערך שהוחזר היה 0, מעבירה את המצב הקוונטי למצב <span class="math">\(\left|0\right\rangle \)</span>, ואם הערך שהוחזר היה 1 מעבירה אותו למצב <span class="math">\(\left|1\right\rangle \)</span>.</li>
+
+</ol>
+
+<p>שימו לב שהפעולה הזו <strong>אינה</strong> טרנספורמציה אוניטרית, לכן היא לא עוד מקרה של הפעולות משלב 2. בפרט, זו לא פעולה <strong>הפיכה</strong>; אם ביצענו מדידה ועברנו ל-<span class="math">\(\left|0\right\rangle \)</span> או <span class="math">\(\left|1\right\rangle \)</span>, אין לנו דרך לחזור למצב <span class="math">\(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span> המקורי; המקדמים <span class="math">\(\alpha,\beta\)</span> "נהרסו" ואבדו. כל האפקט שלהם התבטא ב<strong>הסתברות</strong> שנקבל 0 או 1. הקושי הזה לקבל החוצה מידע מועיל מתוך הסופרפוזיציה שהגענו אליה הוא המכשול העיקרי שעומד בפני חישוב קוונטי: מצד אחד עוד נראה שאפשר לעשות ניסים ונפלאות בחישוב קוונטי, אבל אחרי שהניסים והנפלאות הללו התרחשו קשה לנו מאוד לחלץ מהם אינפורמציה מועילה, ואלגוריתמים קוונטיים בנויים לרוב מתוך מטרה להגדיל את הסיכוי לקבל את האינפורמציה המועילה הזו בשלב המדידה (וזה כמובן שונה מאוד מהאינטואיציה הרגילה שלנו לגבי איך פועלים חישובים, כי בחישובים שאנחנו מכירים פשוט קוראים את הביטים ורואים מה יש בהם).</p>
+<p>בואו נראה דוגמאות. ראשית, אם מודדים את <span class="math">\(\left|0\right\rangle \)</span> נקבל את התוצאה 0 בהסתברות 1, כי אם אני כותב את <span class="math">\(\left|0\right\rangle \)</span> באופן כללי בתור <span class="math">\(\left|0\right\rangle =\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span> אז <span class="math">\(\alpha=1,\beta=0\)</span> ולכן ההסתברות לקבל 0 היא <span class="math">\(\left|1\right|^{2}=1\)</span>. בדומה מדידה של <span class="math">\(\left|1\right\rangle \)</span> תחזיר 1 בהסתברות 1.</p>
+<p>לעומת זאת, מדידה של <span class="math">\(\left|+\right\rangle =\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span> היא קצת יותר מעניינת: אם נכתוב <span class="math">\(\left|+\right\rangle =\frac{1}{\sqrt{2}}\left|0\right\rangle +\frac{1}{\sqrt{2}}\left|1\right\rangle \)</span> יהיה לנו קצת יותר קל לראות שכאן <span class="math">\(\alpha=\beta=\frac{1}{\sqrt{2}}\)</span> ולכן <span class="math">\(\left|\alpha\right|^{2}=\left|\beta\right|^{2}=\frac{1}{2}\)</span>, כלומר זה מצב שכשמודדים אותו מקבלים 0 בהסתברות חצי ו-1 בהסתברות חצי. עבור <span class="math">\(\left|-\right\rangle \)</span> קורה אותו דבר בדיוק, כי <span class="math">\(\left|-\right\rangle =\frac{1}{\sqrt{2}}\left|0\right\rangle -\frac{1}{\sqrt{2}}\left|1\right\rangle \)</span> ולכן כאן <span class="math">\(\alpha=\frac{1}{\sqrt{2}},\beta=-\frac{1}{\sqrt{2}}\)</span>, והסימן השונה הולך לאיבוד כשלוקחים ערך מוחלט ומעלים בריבוע ומקבלים שוב <span class="math">\(\left|\alpha\right|^{2}=\left|\beta\right|^{2}=\frac{1}{2}\)</span>.</p>
+<p>כבר עכשיו ראינו מספיק כדי לשבור מיסקונספציה נפוצה שעלולה לצוץ בתיאורים פופולריים של חישוב קוונטי. לפעמים מתארים מצב קוונטי בתור משהו שמערב הסתברויות ותו לא. חיפוש מהר בגוגל העלה (לא משנה מאיזה אתר) את הטקסט הבא על קיוביט: "על מנת לממש אותו יש צורך למצוא מערכת פיזיקלית שאפשר לשלוט ביעילות במצב הקוונטי שלה ולהקנות לה ערך מסוים של 0 או 1, או הסתברות כלשהי למדוד אותה באחד מהם." אף אחד לא יקרא את התיאורים הפופולריים הללו ונפשו הרכה תינזק או שיכולתו להבין חישוב קוונטי תיפגע לצמיתות, אבל הם לא מספרים את הסיפור האמיתי; בשביל "סתם" הסתברויות לא צריך חישוב קוונטי, מספיק חישוב הסתברותי רגיל, אבל חישוב קוונטי מוסיף לנו רמה של תחכום מתמטי שפשוט לא ניתן לקבל בחישוב הסתברותי רגיל.</p>
+<p>הנה ההמחשה הפשוטה לכך: נניח שיש לנו מערכת שהיא או במצב <span class="math">\(\left|+\right\rangle \)</span> או במצב <span class="math">\(\left|-\right\rangle \)</span>, אנחנו לא יודעים איזה. אם נמדוד אותה, נקבל <span class="math">\(0\)</span> או 1 בהסתברות חצי-חצי. אם יש לנו 1,000 עותקים של המערכת הזו נוכל למדוד אותה 1,000 פעמים ולקבל התפלגות תוצאות שהיא בערך חצי-חצי, כך שנוכל להסיק שההסתברויות הן חצי-חצי. האם זה מספר לנו את כל הסיפור על המערכת? לחלוטין לא. כי אם ניקח את המערכת ולפני שנמדוד אותה נפעיל עליה <span class="math">\(H\)</span>, הסיטואציה תשתנה דרסטית; או שתמיד נמדוד 0, אם המצב המקורי היה <span class="math">\(\left|+\right\rangle \)</span>, או שתמיד נמדוד 1 אם המצב המקורי היה <span class="math">\(\left|-\right\rangle \)</span>. כלומר, המצב הקוונטי הוא יותר מ"סתם" הסתברויות - יש למקדמים חשיבות, וגם אם החשיבות הזו לא באה לידי ביטוי באופן ישיר במדידה, היא יכולה לבוא לידי ביטוי אם נבצע עוד פעולות על המצב הקוונטי לפני המדידה.</p>
+<p>מושג ה"מדידה" שהצגתי כאן הוא מקרה פרטי של כל המדידות שאפשר לבצע; אני לא אציג עדיין את ההגדרה המלאה (אבל היא תבוא), אבל הנה קצת גיוון: מכיוון ש-<span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span> גם הוא בסיס אורתונורמלי, בהינתן מצב קוונטי כללי, שאני מסמן <span class="math">\(\left|\psi\right\rangle \)</span>, אפשר לכתוב גם <span class="math">\(\left|\psi\right\rangle =\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span> אבל גם לכתוב <span class="math">\(\left|\psi\right\rangle =\gamma\left|+\right\rangle +\delta\left|-\right\rangle \)</span>. עכשיו, מכיוון ש-<span class="math">\(\left|\psi\right\rangle \)</span> הוא מצב קוונטי הוא מנורמה 1, כלומר מתקיים <span class="math">\(\left|\alpha\right|^{2}+\left|\beta\right|^{2}=1\)</span> וגם מתקיים <span class="math">\(\left|\gamma\right|^{2}+\left|\delta\right|^{2}=1\)</span>, כלומר אפשר לחשוב על <span class="math">\(\left|\alpha\right|^{2},\left|\beta\right|^{2}\)</span> כמייצגים הסתברות - ההסתברות שמדידה תניב לנו 0 או 1 - ואפשר גם לחשוב על <span class="math">\(\left|\gamma\right|^{2},\left|\delta\right|^{2}\)</span> כמייצגים הסתברות, של מדידה <strong>שונה</strong>, מדידה על פי הבסיס <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span>. מדידה כזו תחזיר ערך <span class="math">\(+\)</span> בהסתברות <span class="math">\(\left|\gamma\right|^{2}\)</span> וערך <span class="math">\(-\)</span> בהסתברות <span class="math">\(\left|\delta\right|^{2}\)</span> ותעביר את המערכת למצב המתאים, <span class="math">\(\left|+\right\rangle \)</span> או <span class="math">\(\left|-\right\rangle \)</span>.</p>
+<p>זה נשמע קצת מוזר. מה זה אומר "להחזיר <span class="math">\(+\)</span>"? ובכן, הרעיון במדידה הוא לא בהכרח הערך המספרי הקונקרטי שאני מקבל, אלא מה שהוא <strong>מייצג</strong>. כאן אני משתמש בסימן <span class="math">\(+\)</span> כדי לתאר "תוצאת המדידה שמתאימה לכך שהמצב <span class="math">\(\left|+\right\rangle \)</span> 'ניצח' בהגרלה". איך זה בא לידי ביטוי במציאות? זה תלוי באופן המדויק שבו מבצעים מדידה, אבל שווה לזכור שזה כך כבר כשמדברים על ביטים רגילים: כשאני "מודד" ביט רגיל אני מגלה שהוא נמצא ברמת מתח כלשהי, נאמר 563 (אני לא מכניס יחידות בכוונה, מה אני מבין בזה בכלל?) ובמדידה אחרת הוא בכלל ברמת מתח 13. אני קובע, מתוך ידיעה עם איך שההתקן הפיזי עובד, שכל מדידה שמחזירה רמת מתח בין 10 ל-100 היא "0" וכל מדידה שמחזירה משהו בין 500 ל-600 היא "1"; ביצעתי כאן אבסטרקציה של הערך הפיזי שמדדתי. זה מה שקורה גם בחישוב קוונטי, אם כי יש פורמליזם מתמטי יפה שגורם לתוצאות המדידה להיראות קצת פחות שרירותיות ואראה אותו בהמשך (בפורמליזם הזה גם מדידה בבסיס <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> וגם מדידה בבסיס <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span> מחזירות את הערכים <span class="math">\(\pm1\)</span>).</p>
+<h2>סיכום ביניים קצר</h2>
+
+<p>יפה, אז מה ראינו? ראינו שיחידת המידע הבסיסית בחישוב קוונטי היא קיוביט, ושהערך שלו מיוצג על ידי איבר של <span class="math">\(\mathbb{C}^{2}\)</span> מנורמה 1; ראינו שאפשר לפעול על קיוביט על ידי הפעלה של אופרטור אוניטרי ושדוגמאות פופולריות לאופרטורים כאלו הן <span class="math">\(X,Y,Z,H,S\)</span>; וראינו שאפשר למדוד קיוביט בצורה שנותנת לנו אינפורמציה ומשנה את מצב הקיוביט בהתאם לתוצאת המדידה. אלו הרכיבים הבסיסיים של חישוב קוונטי, אבל בשלב הזה ייתכן שיש לכם הרגשה שמשהו חסר, ובצדק.</p>
+<p>כי מה היה לנו עד כה? כדי לתאר מצב קוונטי כללי <span class="math">\(\left|\psi\right\rangle =\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span> אני בסך הכל צריך וקטור מאורך 2 של מספרים מרוכבים, <span class="math">\(\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)\)</span>. להפעיל אופרטור אוניטרי על וקטור כזה הוא בסך הכל כפל במטריצה <span class="math">\(2\times2\)</span>, וביצוע מדידה הוא בסך הכל חישוב <span class="math">\(\left|\alpha\right|^{2},\left|\beta\right|^{2}\)</span> והגרלת מספר בין 0 ו-1. את כל הדברים הללו <strong>קל מאוד </strong>לבצע במחשב רגיל; אין סיבה לבנות מחשב קוונטי במיוחד בשביל זה.</p>
+<p>הכוח האמיתי של חישוב קוונטי מגיע רק כאשר אנחנו עובדים עם מערכות שמורכבות מיותר מקיוביט אחד. כבר כשיש לנו 50 קיוביטים בערך אנחנו מתקרבים לקצה גבול היכולת של מה שמחשבים רגילים יכולים "לסמלץ" בצורה מלאה, ועל 100 קיוביטים אין מה לדבר. לכן זה הדבר הבא שאני צריך להציג: איך אני מתאר מבחינה מתמטית מערכות שמורכבות ממספר גדול מ-1 של קיוביטים, ואיך נראים חישובים בהן? את זה אעשה בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2022/07/31/quantum_computing_math_2/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חישוב קוונטי בגישה מתמטית, חלק ב&#39;</span>
+            </a>
+            
+            
+            
+            <a href="/2022/05/04/asymptotes2/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אסימפטוטות, חלק ב&#39;: הדברים שמתקרבים להיות קשים ואולי גם מגיעים לשם</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

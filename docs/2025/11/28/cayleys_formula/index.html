@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נוסחת קיילי לספירת עצים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>נוסחת קיילי לספירת עצים</h1>
+            <div class="post-meta">
+                <span class="date">2025-11-28</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הגרפים.html">תורת הגרפים</a>
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/עצים.html">עצים</a>
+                    
+                    <a href="/tags/נוסחת קיילי.html">נוסחת קיילי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>הפוסט הזה בא לסגור חור שגילתי להפתעתי שקיים בבלוג: אין לי אף פוסט על אחת מהתוצאות החביבות עלי בקומבינטוריקה בסיסית - נוסחת קיילי לספירת עצים. הנוסחה אומרת שמספר העצים על קבוצה של <span class="math">\(n\)</span> צמתים מסומנים היא <span class="math">\(n^{n-2}\)</span>, כך שקל לתאר אותה - אבל מה זה "עץ על קבוצה של צמתים מסומנים"? את זה יהיה קל להסביר. יותר מעניין להראות <strong>הוכחה</strong> לטענה הזו, והוכחה כזו כבר <a href="https://gadial.net/2011/08/13/generating_functions_hardcore_2/">מתחבאת בשוליים של אחד הפוסטים שלי</a>, אבל אני רוצה להראות הוכחה שונה מהותית שאני מאוד אוהב וממחישה טובה "מה הולך פה".</p>
+<p>אז בואו נדבר על מה הולך פה.</p>
+<p>ראשית, גרפים. <strong>גרף</strong> <span class="math">\(G\)</span> במובן שעליו אנחנו מדברים כאן מורכב מקבוצה <span class="math">\(V\)</span> שלאיברים שלה קוראים <strong>צמתים</strong> וקבוצה <span class="math">\(E\)</span> של זוגות של צמתים שנקראת <strong>קשתות</strong>. יש הרבה סוגים של גרפים, ובפוסט הזה אני אתעסק עם סוג פשוט למדי - לקשתות אין כיוון, ואין קשת מצומת לעצמו, ואין יותר מקשת אחת בין זוג צמתים. אפשר לחשוב על הקשתות בתור דרך לתאר קשר שיש או בין כל שני איברים שונים של הגרף.</p>
+<p>גרפים הם משהו מאוד שימושי. שתי דוגמאות פשוטות: אנחנו יכולים למדל מפה באמצעות גרף - כל צומת הוא מיקום מעניין, וקשת אומרת שיש דרך ישירה לעבור בין שני מיקומים. או שאפשר לתאר רשת חברתית באמצעות גרף - כל משתתף ברשת הוא צומת, ויש קשת בין שני משתמשים שהם חברים (יש רשתות שבהן אפשר לעקוב אחרי מישהו שלא עוקב אחרייך; זה מתאים למושג של <strong>גרף מכוון</strong> שאני לא מדבר עליו כאן). עכשיו, אם יש לנו גרף אפשר "לטייל" עליו - להתחיל בצומת אחד וללכת לאורך קשתות כדי להגיע לצמתים אחרים. אם אני יכול להגיע מכל צומת לכל צומת בגרף, אומרים שהוא <strong>קשיר</strong>. זה מוביל אותי למושג של <strong>עץ</strong>, שאני אגדיר פה בצורה שנוחה לי - עץ הוא גרף קשיר שהוא <strong>מינימלי</strong> במובן זה שכל קשת שנסיר ממנו, תהפוך אותו לבלתי-קשיר. אפשר לחשוב על זה גם כך - אין בגרף "מעגלים", אבל אני לא אגדיר פורמלית מה זה מעגל. הנה דוגמא לאיך זה נראה:</p>
+<p><img src="/img/2025/CayleyFormula.png" alt=""/></p>
+<p>עכשיו, כשאני אומר שהצמתים הם <strong>מסומנים</strong> אני אומר שאני יכול להבדיל בין שני צמתים שונים. זה נשמע כמעט טריוויאלי, אז בואו נראה דוגמא:</p>
+<p><img src="/img/2025/CayleyFormula2.png" alt=""/></p>
+<p>יש לנו כאן איור של עץ פשוט במיוחד (למעשה, הוא "שרוך") אבל כשיש לנו סימונים לצמתים, אנחנו רואים שבעצם יש כאן שלושה עצים שונים, כתלות בשאלה מי הצומת שנמצא באמצע. זו סיטואציה שיותר קל לספור מאשר הסיטואציה שבה אין לנו סימנים על הצמתים ולא אדבר עליה בכלל בפוסט.</p>
+<p>שלושת העצים שראינו פה הם המקרה של נוסחת קיילי עבור <span class="math">\(n=3\)</span>. עבור <span class="math">\(n=4\)</span> הנוסחה אומרת לנו שכבר צפויים <span class="math">\(4^{2}=16\)</span> עצים, אבל זו כבר תהיה מהומה לצייר את כולם, ומבט חטוף בהם לא מראה סדר כל כך ברור שאפשר לנצל. אז איך בדיוק להוכיח את הנוסחה? יש כמה גישות שונות להוכחה אבל זו שאני אוהב משתמשת במה שנקרא סדרות Prüfer. הרעיון פה הוא שאפשר לקודד כל עץ על קבוצת הצמתים <span class="math">\(V\)</span> כך ש-<span class="math">\(\left|V\right|=n\)</span> באמצעות סדרה מאורך <span class="math">\(n-2\)</span> של איברים מ-<span class="math">\(V\)</span>, או כמו שאוהבים לסמן לפעמים כשחושבים על האיברים של <span class="math">\(V\)</span> בתור "אותיות" ועל הסדרה בתור "מילה", באמצעות סדרה ב-<span class="math">\(V^{n-2}\)</span>. הרעיון הוא זה: ככל שאיבר מופיע יותר פעמים בסדרה, כך יש לו יותר שכנים, וכל פעם שבה הוא מופיע בסדרה אומרת "אוקיי, אחד מהשכנים של הצומת הזה כבר לא יהיה רלוונטי להמשך אז אפשר לשכוח ממנו". זה קצת אמורפי אז הנה מה שעושים באופן כללי כדי לבנות מילה ב-<span class="math">\(V^{n-2}\)</span> מתוך העץ <span class="math">\(G=\left(V,E\right)\)</span>.</p>
+<p>ראשית, בואו נקבע <strong>סדר</strong> כלשהו על הצמתים של <span class="math">\(V\)</span>, נאמר <span class="math">\(V=\left\{ v_{1},v_{2},\ldots,v_{n}\right\} \)</span>. לסדר יש חשיבות; אם נסדר את אברי הקבוצה בצורה שונה, אז אותו עץ יניב מילים שונות. אז נתייחס לסדר בתור משהו נתון.</p>
+<p>עכשיו, אם <span class="math">\(\left|V\right|=2\)</span> אין לנו בכלל מה לעשות - יש עץ יחיד על שני צמתים, שמורכב משניהם מחוברים בקשת (הם חייבים להיות מחוברים או שהגרף לא יהיה קשיר ולכן לא עץ). אז במקרה הזה, המילה שלנו (שאמורה להיות מאורך <span class="math">\(n-2=0\)</span>) היא מה שמכונה "המילה הריקה", מילה בלי אותיות בכלל שמסומנת ב-<span class="math">\(\varepsilon\)</span>.</p>
+<p>כשיש יותר משני צמתים, נרצה למצוא צומת שהסרה שלו מהעץ עדיין תשאיר עץ, ולהסיר אותו. בשביל שהסרה של צומת לא תקלקל את העציות של העץ, הצומת הזה צריך להיות מבוי סתום, נקודת קצה של העץ - כלומר, להיות מחובר רק לצומת יחיד. אנחנו אומרים <strong>שהדרגה</strong> של צומת היא מספר הקשתות שמחוברות אליו, אז מה שאנחנו מחפשים הוא צומת מדרגה 1. לצמתים כאלו יש שם מיוחד: <strong>עלה</strong> (כי עלה הוא "נקודת קצה" של עץ). יכולים להיות כמה עלים בגרף - אז נבחר מתוכם את הקטן ביותר, על פי הסדר שיש על הצמתים. השאלה האמיתית, כמובן, היא למה תמיד קיים עלה; אני אראה את זה בהמשך.</p>
+<p>עכשיו, אחרי שבחרנו את העלה הקטן ביותר אנחנו מסירים אותו מהעץ ומוסיפים למילה שאנחנו בונים - לא את הסימון של העלה שהסרנו, אלא דווקא את הסימון של <strong>השכן היחיד</strong> שלו. למה? כי כשנשחזר את העץ מתוך המילה נוכל לדעת בודאות מי העלה שהוסר בשלב הזה בזכות הקטע הזה של "הקטן ביותר" - המידע החסר דווקא יהיה מי השכן שלו, וזה מה שהמילה תגיד לנו.</p>
+<p>וזהו, זה כל מה שעושים; חוזרים על זה <span class="math">\(\left|V\right|-2\)</span> פעמים עד שנשארים עם שני צמתים ובסיטואציה הזו כפי שכבר ראינו לא צריך לטפל. אז האלגוריתם, על קלט <span class="math">\(G=\left(V,E\right)\)</span>, הוא:</p>
+<ol> <li>אתחלו <span class="math">\(w=\varepsilon\)</span>.</li>
+
+
+<li>אם <span class="math">\(\left|V\right|=2\)</span> סיימו והוציאו את <span class="math">\(w\)</span> כפלט.</li>
+
+
+<li>מצאו מבין כל העלים של <span class="math">\(G\)</span> את הצומת המינימלי. סמנו אותו ב-<span class="math">\(v\)</span> ואת הקשת היחידה שמחוברת אליו ב-<span class="math">\(\left(v,u\right)\)</span>.</li>
+
+
+<li>הוסיפו את <span class="math">\(u\)</span> ל-<span class="math">\(w\)</span>: <span class="math">\(w\leftarrow w\cdot u\)</span>.</li>
+
+
+<li>הסירו מ-<span class="math">\(G\)</span> את <span class="math">\(v\)</span> ואת הקשת <span class="math">\(\left(v,u\right)\)</span>.</li>
+
+
+<li>חזרו לשלב 2.</li>
+
+</ol>
+
+<p>בואו נראה איך זה יעבוד על העץ שהראיתי קודם, זה:</p>
+<p><img src="/img/2025/CayleyFormula.png" alt=""/></p>
+<p>בתחילת הריצה, העלים הם <span class="math">\(\left\{ 3,4,5\right\} \)</span> ומביניהם המינימלי הוא 3, לכן נתחיל בלהסיר אותו מהעץ ולכתוב <span class="math">\(1\)</span> במילה. עכשיו, גם אחרי שהסרנו את 3 מהעץ, 1 עדיין לא הפך לעלה בעצמו, לכן קבוצת העלים שלנו עכשיו היא <span class="math">\(\left\{ 4,5\right\} \)</span> ולכן אנחנו מסירים את 4 מהעץ וכותבים <span class="math">\(6\)</span> במילה שלנו, שכרגע נראית ככה: <span class="math">\(16\)</span>. עכשיו, הסרת 4 הפכה את <span class="math">\(6\)</span> לעלה בעצמו אז הקבוצה שלנו היא <span class="math">\(\left\{ 5,6\right\} \)</span> אבל על פי הכללים שלנו, אנחנו מסירים קודם כל את <span class="math">\(5\)</span> מהעץ ולכן מוסיפים למילה את <span class="math">\(2\)</span> ומקבלים <span class="math">\(162\)</span>. זה הופך את <span class="math">\(2\)</span> לעלה, כלומר קבוצת העלים שלנו כרגע היא <span class="math">\(\left\{ 6,2\right\} \)</span> ומכיוון ש-<span class="math">\(2\)</span> הוא הקטן יותר אנחנו מסירים אותו, כותבים <span class="math">\(1\)</span> במילה ומסיימים - נשארנו רק עם הצמתים <span class="math">\(1,6\)</span> וקיבלנו את המילה <span class="math">\(1621\)</span>.</p>
+<p>זה היה מאוד נחמד - אנחנו מבינים איך האלגוריתם עובד, אבל עדיין צריך להראות שהוא <strong>עובד</strong>, כלומר שהוא נותן לנו התאמה חח"ע ועל בין עצים עם <span class="math">\(n\)</span> צמתים ובין מילים מאורך <span class="math">\(n-2\)</span> מעל אלפבית מגודל <span class="math">\(n\)</span>. בשביל זה אני צריך להוכיח את הטענה הבאה: שלכל מילה <span class="math">\(w\)</span> קיים עץ <strong>יחיד</strong> שהאלגוריתם מייצר את <span class="math">\(w\)</span> ממנו. אבל לפני שאני אנסח את זה פורמלית ואוכיח את זה, בואו ננסה לקבל תחושה של מה קורה כאן על ידי זה שנסתכל על ה-1621 שקיבלנו ונשאל את עצמנו איך אפשר "לשחזר" את העץ המקורי ממנו. כלומר, נחשוב באופן לא פורמלי איך יעבוד אלגוריתם בכיוון <strong>ההפוך</strong> לזה שכבר ראינו.</p>
+<p>מה שהאלגוריתם מקבל כקלט הוא את המילה <span class="math">\(w=1621\)</span> אבל גם את הקבוצה <span class="math">\(V=\left\{ 1,2,3,4,5,6\right\} \)</span> של הצמתים של הגרף, יחד עם הסדר עליהם - הרי מהמילה בלבד הוא לא יכול להיות בטוח לגבי הסדר, ולא כל הצמתים בעץ בהכרח יופיעו במילה, אז צריך לספר לו את המידע הזה במפורש.</p>
+<p>האלגוריתם מתחיל בלהסתכל על ה-1 השמאלי של <span class="math">\(1621\)</span> ואומר לעצמו "הממ... אני יודע שהצומת הראשון שהסירו מהגרף היה שכן של 1, אבל מי הוא עצמו היה? הוא היה העלה בעל המספר המינימלי בשלב הזה, אבל מי היו העלים בהתחלה?"</p>
+<p>זו שאלה טריקית, עד ששמים לב לעובדה הקריטית הבאה: במילה <span class="math">\(1621\)</span> <strong>לא מופיעים עלים</strong>. שלושת הצמתים שמופיעים פה: <span class="math">\(1,2,6\)</span>, כולם היו מדרגה גבוהה מ-1. <span class="math">\(2,6\)</span> היו מדרגה 2 ו-<span class="math">\(1\)</span> היה מדרגה 3 ו... שימו לב שבמילה <span class="math">\(1\)</span> מופיע פעמיים ואילו <span class="math">\(2,6\)</span> מופיעים פעם אחת. אם נסתכל על עוד דוגמאות דומות, מהר מאוד נוכל להעלות השערה כללית: שמספר הפעמים שבהן צומת <span class="math">\(v\)</span> מופיע במילה שווה לדרגה שלו פחות 1, <span class="math">\(d\left(v\right)-1\)</span>. בפרט עלים לא מופיעים בכלל.</p>
+<p>למה זה קורה? זה די פשוט, האמת. בכל פעם שבה צומת מופיע במילה, זה אומר שזה עתה הורדנו מהגרף את אחד מהשכנים שלו, כלומר הקטנו את הדרגה שלו ב-1. הפעם היחידה שבה אנחנו מקטינים את הדרגה של צומת ב-1 אבל לא מוסיפים אותו למילה היא כשהוא עצמו הצומת שמוסר מהגרף. מצד שני, בסיום ריצת האלגוריתם <strong>כל</strong> צומת הוסר מהגרף (ואז הוא נכתב <span class="math">\(d\left(v\right)-1\)</span> פעמים), או (במקרה של שני הצמתים האחרונים שנשארו) הפך להיות מדרגה 1, כלומר הדרגה שלו הוקטנה <span class="math">\(d\left(v\right)-1\)</span> פעמים ולכן הוא נכתב במילה <span class="math">\(d\left(v\right)-1\)</span> פעמים.</p>
+<p>מה המסקנה? ראשית, שעל ידי הסתכלות ב-<span class="math">\(1621\)</span> אני יודע שהעלים של הגרף הם <span class="math">\(3,4,5\)</span>, ושהם היו עלים במשך כל ריצת האלגוריתם. הקטן מביניהם הוא 3, כך שאני יכול להסיק שבצעד הראשון 3 הוסר מהגרף והשכן שלו היה הצומת הראשון שמופיע ב-<span class="math">\(1621\)</span>. לכן הדבר הראשון שאעשה יהיה להוסיף לגרף את הקשת <span class="math">\(\left(1,3\right)\)</span> ואסמן לעצמי שכבר טיפלתי בצומת <span class="math">\(3\)</span>.</p>
+<p>מכיוון שקראתי את האות הראשונה ב-<span class="math">\(1621\)</span> אפשר להסיר אותה, להישאר עם המילה <span class="math">\(621\)</span> ולחזור על מה שעשינו גם איתה. אותו הגיון יעבוד עכשיו גם עם 4, ולכן אני אסמן לעצמי שיש בגרף את <span class="math">\(\left(4,6\right)\)</span> ואוריד את 4 מרשימת הצמתים שצריך לטפל בהם. אבל עכשיו קורה משהו מעניין - אני נשאר עם המילה <span class="math">\(21\)</span> שבה <span class="math">\(6\)</span> לא מופיע יותר. זה מספר לי <strong>שבשלב הזה של האלגוריתם</strong> המקורי, 6 היה עלה. לכן אני מוסיף אותו לקבוצת העלים הפוטנציאליים שלי, שכוללת עכשיו את <span class="math">\(5,6\)</span>. מכיוון ש-5 הוא עם האינדקס הקטן יותר, אני אחבר אותו ל-2 שבתחילת המילה. אחר כך אני נשאר עם המילה <span class="math">\(1\)</span> שבה גם <span class="math">\(2\)</span> לא מופיע, אז אוסיף <strong>גם אותו</strong> לרשימת הצמתים שצריך לבדוק, ומכיוון שהוא קטן מ-2 הוא יהיה הצומת שאני מחבר ל-1.</p>
+<p>בשלב הזה נגמרה לי המילה, ונשארו רק שני צמתים שלא טיפלתי בהם: <span class="math">\(1,6\)</span>. אז אני מוסיף קשת גם להם ומסיים את הסיפור. </p>
+<p>יופי, זה היה תיאור לא פורמלי של איך עובד האלגוריתם שמשחזר את העץ מתוך <span class="math">\(w\)</span>. עוד מעט אני אכתוב אותו בצורה פורמלית, אבל לפני כן בואו ננסה להבין איך מוכיחים את הטענה שרציתי להראות על כך שבהינתן <span class="math">\(w\)</span> קיים עץ יחיד שנותן את <span class="math">\(w\)</span>. הניסוח הפורמלי של הטענה צריך להיות קצת יותר זהיר - כפי שראינו, אני חייב להתחיל מקבוצה <span class="math">\(V\)</span> קונקרטית. נסמן <span class="math">\(\left|V\right|=n\)</span> ועכשיו ניקח מילה <span class="math">\(w\in V^{n-2}\)</span> והטענה היא שקיים ויחיד עץ עם קבוצת הצמתים <span class="math">\(V\)</span> שנותן את <span class="math">\(w\)</span>.</p>
+<p>אני אוכיח את הטענה <strong>באינדוקציה</strong> על <span class="math">\(n\)</span>, כשהבסיס הוא <span class="math">\(n=2\)</span>. במקרה הזה, <span class="math">\(w\in V^{0}\)</span> חייבת להיות המילה הריקה <span class="math">\(\varepsilon\)</span>, ואילו <span class="math">\(V\)</span> היא קבוצה בת שני צמתים. יש בדיוק שני גרפים על שני צמתים: הגרף שבו הם לא מחוברים בקשת <strong>שאינו עץ</strong> ולכן אינו רלוונטי לדיון; והגרף שבו הם כן מחוברים והוא כן עץ והוא אכן מחזיר <span class="math">\(\varepsilon\)</span> על פי האלגוריתם שראינו קודם. אז את הבסיס יש לנו.</p>
+<p>בשביל הצעד, ניקח את <span class="math">\(w\)</span> ונפרק אותה לאות הראשונה וכל היתר: <span class="math">\(w=\sigma w^{\prime}\)</span> כך ש-<span class="math">\(w^{\prime}\in V^{n-3}\)</span>. ה-<span class="math">\(\sigma\)</span> הזה הוא הצומת <strong>הפנימי</strong> של הגרף שאליו מחובר העלה שאנחנו רוצים "לשחזר" בשלב הזה, אבל מי זה העלה הזה? זו הנקודה שדיברתי עליה, שבה אפשר לגלות את העלה גם בלי שהוא יהיה כתוב לנו במפורש: נשים לב שב-<span class="math">\(V\)</span> יש יותר צמתים מאשר יש אותיות ב-<span class="math">\(w\)</span> אז בהכרח קיימים צמתים ב-<span class="math">\(V\)</span> שלא מופיעים ב-<span class="math">\(w\)</span> בכלל, ולכן הם עלים <strong>בכל עץ</strong> שנותן את <span class="math">\(w\)</span>, כפי שראינו, ונסמן את המינימלי מביניהם ב-<span class="math">\(u\)</span>. מה שקרה פה הוא <strong>שבכל עץ</strong> שנותן את <span class="math">\(w\)</span>, בהכרח <span class="math">\(u\)</span> מחובר אל <span class="math">\(\sigma\)</span>, כי בשלב הראשון של האלגוריתם <span class="math">\(u\)</span> בהכרח היה מוסר (הוא המינימלי מבין העלים של <strong>כל עץ</strong> שנותן את <span class="math">\(w\)</span>) והוא בהכרח מחובר אל <span class="math">\(\sigma\)</span> בכל עץ שמחזיר את <span class="math">\(w\)</span> כי האות הראשונה ב-<span class="math">\(w\)</span> היא <span class="math">\(\sigma\)</span>.</p>
+<p>עכשיו אפשר להשתמש בהנחת האינדוקציה. נגדיר <span class="math">\(V^{\prime}=V\backslash\left\{ u\right\} \)</span>, כלומר הסרנו את <span class="math">\(u\)</span> מתוך <span class="math">\(V\)</span>, וקיבלנו קבוצה מגודל <span class="math">\(n-1\)</span> ומילה <span class="math">\(w^{\prime}\in V^{\prime\left(n-1\right)-2}\)</span> (אנחנו יודעים ש-<span class="math">\(w^{\prime}\)</span> אכן מורכבת רק מאיברים של <span class="math">\(V^{\prime}\)</span> כי <span class="math">\(w\)</span> הורכבה מאיברים של <span class="math">\(V\)</span>, והסרנו מ-<span class="math">\(V\)</span> רק איבר <strong>שלא הופיע</strong> ב-<span class="math">\(w\)</span>). על פי הנחת האינדוקציה קיים עץ יחיד שנותן את <span class="math">\(w^{\prime}\)</span> הזו, ואחרי שנצרף אליו את הקשת <span class="math">\(\left(u,\sigma\right)\)</span> שחייבת להיות <strong>בכל</strong> עץ שנותן את <span class="math">\(w\)</span> נקבל עץ יחיד שנותן את <span class="math">\(w\)</span>.</p>
+<p>בואו נכתוב את מה שעשינו בתור אלגוריתם מסודר. על קלט של קבוצה <span class="math">\(V\)</span> ומילה <span class="math">\(w\in V^{\left|V\right|-2}\)</span>, האלגוריתם פועל כך:</p>
+<ol> <li>מאתחל קבוצת קשתות <span class="math">\(E\leftarrow\emptyset\)</span> וקבוצת "צמתים לטיפול" <span class="math">\(S\leftarrow V\)</span> ומפרק את המילה לאותיות <span class="math">\(w=\sigma_{1}\ldots\sigma_{n-2}\)</span>.</li>
+
+
+<li>לכל <span class="math">\(i=1,2,\ldots,n-2\)</span>: </li>
+<ol>
+
+
+<li>מוצא את האיבר הקטן ביותר של <span class="math">\(S\)</span> שלא מופיע ב-<span class="math">\(\sigma_{i}\ldots\sigma_{n-2}\)</span> ומסמן אותו ב-<span class="math">\(u\)</span>.</li>
+
+
+<li><span class="math">\(E\leftarrow E\cup\left\{ \left(u,\sigma_{i}\right)\right\} \)</span></li>
+
+
+<li><span class="math">\(S\leftarrow S\backslash\left\{ u\right\} \)</span></li>
+
+</ol>
+
+
+<li>בשלב הזה <span class="math">\(S=\left\{ u,v\right\} \)</span>. מבצע: <span class="math">\(E\leftarrow E\cup\left\{ \left(u,v\right)\right\} \)</span></li>
+
+
+<li>מחזיר את <span class="math">\(E\)</span>.</li>
+</ol>
+
+<p>זה הכל! מה שחמוד פה הוא שההתאמה למילות פרופר היא שימושית קצת יותר מאשר רק הוכחת המשפט הזה. למשל, אם אני רוצה לבנות עץ עם מבנה ספציפי, שבו יש צומת אחד מדרגה 7 וארבעה מדרגה 3 והיתר עלים, אני יודע בדיוק מה לעשות - מילה עם אות אחת שחוזרת על עצמה 6 פעמים ועוד ארבע אותיות שכל אחת חוזרת על עצמה פעמיים. אני יכול להגריל מילים תחת האילוצים הללו (זה קל, זו בסך הכל פרמוטציה אקראית של סימובלים) ולקבל עץ אקראי שעונה לדרישה המקורית שלי. זה ממש נחמד! הרבה יותר שווה מסתם לדעת את <span class="math">\(n^{n-2}\)</span>.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <div></div>
+            
+            
+            
+            <a href="/2025/10/03/cake_cutting_riddle/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">עוגה עוגה עוגה (נתהפכה כל היום עד אשר נמצא מקום)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

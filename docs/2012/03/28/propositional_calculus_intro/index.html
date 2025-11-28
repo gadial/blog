@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תחשיב הפסוקים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תחשיב הפסוקים</h1>
+            <div class="post-meta">
+                <span class="date">2012-03-28</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/לוגיקה.html">לוגיקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/תחשיב הפסוקים.html">תחשיב הפסוקים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>כשמדברים על לוגיקה מתמטית, צריך להבין שיש כמה סוגים שונים של "לוגיקות". כל לוגיקה מנסה למדל בצורה מתמטית-פורמלית את האופן האינטואיטיבי שבו אנחנו מבינים, ובכן, לוגיקה. לוגיקות שונות נבדלות אלו מאלו בסוגי הסימנים שיש בהן וכוח ההבעה שלהן, והדרך הכי טובה להבין על מה אני מדבר היא כנראה לראות דוגמאות. אני מתכנן להציג שני סוגים ספציפיים של לוגיקה, שהם אלו שבדרך כלל מציגים במבוא לנושא הזה: תחשיב הפסוקים, ותחשיב היחסים. בעוד תחשיב היחסים היא לוגיקה עם כושר הבעה רחב למדי, ואפשר להשתמש בה כדי לדבר (בערך) על כל המתמטיקה, תחשיב הפסוקים מוגבל בהרבה. אז למה בכלל לדבר על תחשיב הפסוקים? ובכן, ראשית בגלל שהוא דוגמת צעצוע טובה - קל להגדיר אותו, קל להבין אותו וקל להוכיח עליו תוצאות חשובות; ושנית, בגלל שאחרי שמבינים את תחשיב הפסוקים, אפשר לחשוב על תחשיב היחסים כעל הרחבה (חזקה למדי) של תחשיב הפסוקים ובמקום ללמוד את תחשיב היחסים מאפס, לראות איך מושגים מתחשיב הפסוקים צריכים להשתנות.</p>
+<p>בואו נתחיל עם אמירה של חזאים: "מחר ירד גשם או שמחר לא ירד גשם". זו אמירה מעצבנת, כי היא לא באמת אומרת לנו כלום, ועם זאת ברור לנו שהיא נכונה תמיד. לאמירות כאלו, שהן נכונות תמיד ולא משנה מה, קוראים <strong>טאוטולוגיות</strong> (יש למילה משמעות דומה בשפת היום יום ובספרות, אבל לא זהה; טאוטולוגיה "ספרותית" היא להגיד כמה פעמים את אותו הדבר, כמו למשל "החוק הראשון של מועדון הטאוטולוגיה הוא החוק הראשון של מועדון הטאוטולוגיה" של <a href="http://xkcd.com/703/">xkcd</a> - אמירה שהיא מטבעה גם טאוטולוגיה מתמטית). הבה ונתבונן בטאוטולוגיה מתחום הספורט דווקא: "או שננצח במשחק או שלא ננצח בו" הוא ביטוי שגור בקרב מאמנים מסויימים. ואילו המתמטיקאי יכול להגיד "או ש-<span class="math">\(p\)</span> ראשוני, או ש-<span class="math">\(p\)</span> איננו ראשוני". בכל המקרים הללו הטאוטולוגיה היא בעצם <strong>אותה</strong> הטאוטולוגיה: זו טענה מהצורה "או שמשהו, או שלא משהו", כש"משהו" יכול להיות כל מה שנרצה. למעשה, זה בכלל לא משנה מהו אותו ה"משהו" - הנכונות של הטאוטולוגיה נובעת מהמבנה של המשפט, ולא מהתוכן שאנחנו יוצקים בו. בכתיבה מתמטית פורמלית, המשפט הזה יכתב בתור <span class="math">\(X\vee\neg X\)</span>: כאן <span class="math">\(X\)</span> הוא <strong>משתנה</strong> שיכול לקבל ערך של "אמת" או "שקר", ו-<span class="math">\(\vee\)</span> מייצג את "או", ו-<span class="math">\(\neg\)</span> מייצג את "לא". קראו את הפסוק הזה בתור "איקס או לא איקס". הנה לנו דוגמה לפסוק בתחשיב הפסוקים.</p>
+<p>הבה ונישאר בדוגמאות מתחום הספורט. "אם נבקיע יותר שערים מהקבוצה השניה, אז ננצח" הוא עוד פסוק לגיטימי: במתמטית כותבים אותו בתור <span class="math">\(X\to Y\)</span>, כלומר "איקס גורר וואי". דוגמה אחרת לאותו פסוק אבל מתחום אחר היא אמרתו של פסקל כי "אם היה אפה של קליאופטרה קצר יותר ההיסטוריה היתה כולה אחרת". כאן <span class="math">\(X\)</span> הוא "אפה של קליאופטרה היה קצר יותר" ו-<span class="math">\(Y\)</span> הוא "ההיסטוריה היתה כולה אחרת". כעת, כשמדובר על המשפט של ה"אם נבקיע יותר שערים" ברור לנו שהוא נכון; אבל בקשר למשפט של פסקל לא ממש ברור אם הוא נכון. אנחנו נזקקים לידע <strong>חיצוני</strong> כלשהו כדי לדעת את זה - האם באמת לאף של קליאופטרה הייתה השפעה קריטית על מרקוס אנטוניוס? למעשה, אין לנו ממש דרך לדעת. מכאן כבר ברור לנו ש-<span class="math">\(X\to Y\)</span> הוא כנראה לא טאוטולוגיה: קיימת האפשרות שהפסוק הזה יהיה נכון או לא נכון, בהתאם למשמעות של <span class="math">\(X,Y\)</span>. זה קיים גם בדוגמת הכדורגל; אם חוקי הכדורגל היו שונים כך שמי שמבקיע יותר דווקא מפסיד, אז "אם נבקיע יותר שערים מהקבוצה השניה, אז ננצח" היה משפט שגוי. ברור לנו, אם כן, שהנכונות של <span class="math">\(X\to Y\)</span> היא לא צורנית בלבד.</p>
+<p>הפסוקים שתחשיב הפסוקים עוסק בהם הם בדיוק אמירות פשוטות מהצורה שהצגתי כאן - כאלו שמערבות "משהו"-ים שיכולים להיות נכונים או לא נכונים, ומחוברים זה לזה באמצעות <strong>קשרים לוגיים</strong> של "או" (<span class="math">\(\vee\)</span>), "וגם" (<span class="math">\(\wedge\)</span>), "אז" (<span class="math">\(\to\)</span>) ו"לא" (<span class="math">\(\neg\)</span>). פסוק בנוי בערך כמו ביטוי חשבוני עם נעלמים: בשביל להבין מי בא קודם משתמשים בסוגריים, כלומר <span class="math">\(\left(X\to Y\right)\vee\left(Y\to Z\right)\)</span> הוא יצור שונה מ-<span class="math">\(X\to\left(Y\vee\left(Y\to Z\right)\right)\)</span>.</p>
+<p>כמו בביטוי חשבוני רגיל עם נעלמים, אפשר להציב ערכים בנעלמים; במקרה שלנו הערכים הם "אמת" או "שקר", <span class="math">\(T\)</span> או <span class="math">\(F\)</span>. מרגע שהצבנו ערכים במשתנים, אפשר לחשב את הערך של הפסוק - שוב, כמו שמחשבים את ערכו של ביטוי חשבוני. כך למשל <span class="math">\(X\vee Y\)</span> מקבל ערך <span class="math">\(T\)</span> אם לפחות אחד מהמשתנים קיבל ערך <span class="math">\(T\)</span>; <span class="math">\(X\wedge Y\)</span> מקבל <span class="math">\(T\)</span> רק אם שניהם קיבלו <span class="math">\(T\)</span>; ו-<span class="math">\(X\to Y\)</span> מקבל <span class="math">\(T\)</span> אלא אם <span class="math">\(X\)</span> קיבל <span class="math">\(T\)</span> ו-<span class="math">\(Y\)</span> קיבל <span class="math">\(F\)</span>. מכיוון שלכל משתנה יש רק שני ערכים אפשריים, אפשר להגדיר קשר בקלות פשוט על ידי כתיבת הערך שהוא מחזיר עבור כל זוג קלטים אפשרי - לדבר כזה קוראים <strong>טבלת האמת</strong> של הקשר. קצת קומבינטוריקה: אם יש לנו קשר שפועל על שני משתנים, אז יש לו <span class="math">\(2^{2}\)</span> קלטים אפשריים (<span class="math">\(\left(F,F\right),\left(T,F\right),\left(F,T\right),\left(T,T\right)\)</span>) ולכן יש רק <span class="math">\(2^{\left(2^{2}\right)}=16\)</span> קשרים שונים שפועלים על שני משתנים (קשר מוגדר באופן מוחלט על ידי ערכי האמת שהוא מחזיר לכל קלט אפשרי; יש 4 קלטים אפשריים ולכל אחד בוחרים אחד משני פלטים אפשריים ולכן יש <span class="math">\(2^{4}\)</span> אפשרויות). זה לא כל כך הרבה; אפשר לשבת ולכתוב את כולם אם יש לכם מספיק זמן. הסיבה שבגללה מכל הקשרים הללו בחרנו לדבר דווקא על <span class="math">\(\vee,\wedge,\to\)</span> היא לא מקרית; אלו כנראה הקשרים הכי נוחים להבנה והכי פשוטים לתיאור מילולי.</p>
+<p>שאלה אחת שכדאי לטפל בה מראש היא - האם הקשרים הללו <strong>מגבילים</strong> את יכולת ההבעה שלנו? האם יש משפטים שלא ניתן למדל אם אין לנו אותם? למשל, משפט כמו "בגרף סופי וקשיר יש מעגל אוילרי אם ורק אם דרגת כל צומת זוגית" הוא בבסיסו טענת <span class="math">\(A\leftrightarrow B\)</span>, שמקבלת ערך "אמת" כל עוד הערכים של <span class="math">\(A,B\)</span> זהים ואחרת מקבלת "שקר"; אבל אפשר לבנות אותה גם באופן שונה מהקשרים שכבר יש לנו: <span class="math">\(\left(A\to B\right)\wedge\left(B\to A\right)\)</span>. די קל לראות, על ידי בדיקה של כל המקרים, שגם זה פסוק שמקבל ערך "אמת" רק כאשר ערכי האמת של <span class="math">\(A,B\)</span> שווים.</p>
+<p>באופן כללי, בעזרת <span class="math">\(\wedge,\vee,\neg\)</span> אפשר לכתוב פסוק עבור <strong>כל</strong> פונקציה <span class="math">\(f:\left\{ F,T\right\} ^{n}\to\left\{ F,T\right\} \)</span>, לא משנה על כמה משתנים היא. זה כבר די קסם - בעזרת כמה קשרים פשוטים על שני משתנים, אפשר לכתוב ביטוי עבור כל פונקציה על משתנים לוגיים, לא משנה כמה מסובכת. נסו להשוות את זה לעובדה שבעזרת ארבע פעולות החשבון הבסיסיות ממש <strong>אי אפשר</strong> לכתוב את רוב הפונקציות האפשריות מהרציונליים לעצמם (למה? ובכן, למי שמכיר עוצמות - יש <span class="math">\(2^{\aleph_{0}}\)</span> פונקציות כאלו אבל רק <span class="math">\(\aleph_{0}\)</span> נוסחאות שאפשר לכתוב עם פעולות החשבון, כל עוד דורשים שהן יהיו סופיות).</p>
+<p>ובכן, איך הקסם עובד? אפשר לחשוב על <span class="math">\(f\)</span> כעל אוסף של <span class="math">\(n\)</span>-יות של ערכים לוגיים שבדיוק עליהם היא מקבלת ערך <span class="math">\(T\)</span> (אם <span class="math">\(f\)</span> מחזירה <span class="math">\(F\)</span> לכל דבר, אז <span class="math">\(X\wedge\neg X\)</span> הוא פסוק שמחשב אותה). בואו נניח ש-<span class="math">\(\left(a_{1},\dots,a_{n}\right)\)</span> היא <span class="math">\(n\)</span>-יה כזו של ערכים לוגיים (כלומר, <span class="math">\(a_{i}\in\left\{ T,F\right\} \)</span>) ונגדיר פסוק <span class="math">\(\left(l_{1}\wedge\dots\wedge l_{n}\right)\)</span> כך ש-<span class="math">\(l_{i}=X_{i}\)</span> אם <span class="math">\(a_{i}=T\)</span>, ו-<span class="math">\(l_{i}=\neg X_{i}\)</span> אם <span class="math">\(a_{i}=F\)</span>. קל לראות שהפסוק הזה מקבל ערך <span class="math">\(T\)</span> אך ורק על ההשמה <span class="math">\(\left(a_{1},\dots,a_{n}\right)\)</span> למשתנים <span class="math">\(X_{1},\dots,X_{n}\)</span>; וכעת נוסחה עבור <span class="math">\(f\)</span> נקבל על ידי ביצוע <span class="math">\(\vee\)</span> לכל הפסוקים הללו. למשל, עבור <span class="math">\(f\left(X_{1},X_{2},X_{3}\right)\)</span> שמחזירה <span class="math">\(T\)</span> אם בדיוק שניים מתוך שלושת המשתנים קיבלו <span class="math">\(T\)</span> נקבל את הנוסחה <span class="math">\(\left(X_{1}\wedge X_{2}\wedge\neg X_{3}\right)\vee\left(X_{1}\wedge\neg X_{2}\wedge X_{3}\right)\vee\left(\neg X_{1}\wedge X_{2}\wedge X_{3}\right)\)</span>. נוסחה בצורה הזו (<span class="math">\(\mbox{\vee}\)</span> של תת-פסוקים - "פסוקיות" - שכל אחד מהם הוא <span class="math">\(\wedge\)</span> של משתנה או של <span class="math">\(\neg\)</span> של משתנה) נקראת נוסחת DNF (מלשון Disjunctive normal form). מה שראינו הוא שלכל פונקציה לוגית יש DNF ולכן די בשלושת הקשרים שמשתתפים ב-DNF כדי לכתוב פסוק שמבטא כל פונקציה לוגית אפשרית. מכיוון שאפשר לקבל את <span class="math">\(\vee\)</span> ואת <span class="math">\(\wedge\)</span> באמצעות הקשרים <span class="math">\(\neg\)</span> ו-<span class="math">\(\to\)</span>, אפשר להסתפק רק בשני קשרים אלו כדי לקבל כל פונקציה (ולעתים קרובות זה מה שעושים בספרי לוגיקה, כי יותר קל להוכיח משפטים כשיש פחות קשרים שצריך לדבר עליהם). למעשה, יש גם קשרים לוגיים שאיתם לבד אפשר לכתוב כל נוסחה: הקשר הידוע ביותר הוא NAND, שמסומן ב-<span class="math">\(\uparrow\)</span> ומוגדר בתור <span class="math">\(\neg\left(X_{1}\wedge X_{2}\right)\)</span> (כלומר, מקבל <span class="math">\(F\)</span> רק כאשר <span class="math">\(X_{1}=X_{2}=T\)</span>). זה תרגיל נחמד להוכיח שאכן אפשר לקבל ממנו את <span class="math">\(\neg\)</span> ואת (למשל) <span class="math">\(\to\)</span> ולכן די להשתמש רק בו. אז למה לא עושים את זה בדרך כלל? כי עדיין יותר פשוט להבין נוסחאות שכתובות עם <span class="math">\(\to,\neg\)</span>.</p>
+<p>אם כבר הצגתי את DNF, כדאי להציג גם צורה נורמלית נוספת של פסוקים שדואלית לה - CNF (Conjunctive normal form). זו נוסחה שמורכבת מ-<span class="math">\(\wedge\)</span> של פסוקיות שכל אחת מהן כוללת <span class="math">\(\vee\)</span> של משתנים ושלילות של משתנים ("משתנה או שלילה של משתנה" נקרא בדרך כלל "ליטרל" כדי לפשט עניינים). לכל טבלת אמת קיים פסוק בצורת CNF שמממש אותה; אבל זה כבר לא מובן מאליו כמו DNF. נסו שניה לחשוב למה ותראו שזה בעייתי. הפתרון הוא תעלול קטן ונחמד: אם אנחנו רוצים לבנות פסוק עבור טבלת אמת כלשהי, נתחיל מפסוק <span class="math">\(\varphi\)</span> בצורת DNF עבור טבלת האמת <strong>ההפוכה</strong>; עכשיו פסוק ה-CNF המתאים יהיה מה שמתקבל מ-<span class="math">\(\neg\varphi\)</span> כשמפעילים עליו את כללי דה מורגן, שאציג כרגע.</p>
+<p>יש שני כללי דה-מורגן: האחד הוא ש-<span class="math">\(\neg\left(X\vee Y\right)=\neg X\wedge\neg Y\)</span> והשני הוא ש-<span class="math">\(\neg\left(X\wedge Y\right)=\neg X\vee\neg Y\)</span> (כאן שוויון פירושו שקילות). למה זה נכון? ובכן, אפשר לבדוק את הנוסחאות הללו באופן ישיר על ידי הצבה של כל הערכים האפשריים ב-<span class="math">\(X,Y\)</span>, ואפשר גם לחשוב בהגיון שניה - להגיד "זה לא נכון שמתמטיקה היא גם משעממת וגם פדנטית" זה כמו להגיד "או שהמתמטיקה לא משעממת או שהמתמטיקה לא פדנטית. אולי שניהם".</p>
+<p>פסוק DNF נראה כך: <span class="math">\(C_{1}\vee C_{2}\vee\dots\vee C_{n}\)</span> כשכל <span class="math">\(C_{i}\)</span> הוא מהצורה <span class="math">\(\left(l_{1}\wedge l_{2}\wedge\dots\wedge l_{k}\right)\)</span>. אחרי שנפעיל <span class="math">\(\neg\)</span> עליו נקבל <span class="math">\(\neg C_{1}\wedge\dots\wedge\neg C_{n}\)</span>, ואחרי שנכניס את ה-<span class="math">\(\neg\)</span> לתוך כל אחד מהסוגריים נקבל בהם <span class="math">\(\left(\neg l_{1}\vee\dots\vee\neg l_{k}\right)\)</span>. ייתכן שנקבל כך דברים כמו <span class="math">\(\neg\neg X\)</span> שאותם אפשר כמובן להחליף ב-<span class="math">\(X\)</span>; סוף הסיפור. אם כן, כלל האצבע פשוט: רוצים CNF? קודם תמצאו DNF של ההפך, ואז תהפכו.</p>
+<p>זה מסיים את הדיון בתחביר - באופן שבו ניתן לבנות סדרות של סימנים שתהיה להן משמעות עבורנו; בפרט, שה<strong>מבנה</strong> שלהן יהיה ברור לנו באופן חד משמעי. לנוסחאות כאלו קוראים Well-formed formulas, או WFF-ים; אני אקרא להן פשוט "פסוקים" או "נוסחאות" ואתייחס לסדרות אחרות של סימנים כאל ג'יבריש חסר חשיבות. נקודה חשובה אחת שקודם רפרפתי מעליה היא שבהינתן נוסחה, יש לה "קריאה יחידה" - דרך אחת בלבד לתאר אותה בתור עץ שבו העלים הם משתנים והצמתים הם הפעולות הלוגיות - כמו בביטוי חשבוני רגיל, שגם לו יש קריאה יחידה אם שמים סוגריים בצורה נבונה. די הופתעתי לגלות שיש ספרי לוגיקה רציניים (מנדלסון...) שפשוט מתעלמים מהעניין הזה לחלוטין. לתשומת לב כל מי שטוען שלוגיקאים הם פדנטיים.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2012/04/04/propositional_caclulus_proofs/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תחשיב הפסוקים - על נביעה לוגית והוכחות</span>
+            </a>
+            
+            
+            
+            <a href="/2012/03/12/mathematical_logic_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז מה זו לוגיקה מתמטית?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

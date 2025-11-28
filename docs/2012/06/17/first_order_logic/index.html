@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לוגיקה מסדר ראשון - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>לוגיקה מסדר ראשון</h1>
+            <div class="post-meta">
+                <span class="date">2012-06-17</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/לוגיקה.html">לוגיקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/לוגיקה מסדר ראשון.html">לוגיקה מסדר ראשון</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אם נרצה לייחס את המצאת הלוגיקה המתמטית המודרנית לאדם יחיד, זה בוודאי יהיה המתמטיקאי הגרמני גוטלוב פרגה, ובפרט לספרו מ-1879, "Begriffsschrift" (אפילו לא אנסה להעמיד פנים שאני יכול לתרגם). בספר הזה פרגה המציא את מה שבימינו הוא הלחם והחמאה של הלוגיקה - סימונים פורמליים למושגים כמו "וגם", "לכל", "שקול" וכדומה, והסקת מסקנות על ידי מניפולציות סימבוליות של אותם סימונים פורמליים. ההשפעה של הספר על המשך התפתחותה של הלוגיקה המתמטית אינה מוטלת בספק. עם זאת, אני ממש לא הולך להציג שום דבר מתוך הספר כאן.</p>
+<p>זו הבעיה באופן כללי במתמטיקה: אנחנו בדרך כלל רואים רק את התוצר הסופי. אם ננסה להבין את כל שלבי הביניים זה ידרוש מאיתנו מאמץ גדול פי כמה וכמה, ולעתים קרובות נצטרך להסתגל לטרמינולוגיות שונות מהותית מאלו שהתרגלו אליהן (אפילו הפוכות!) ולרעיונות פילוסופיים מנחים שבימינו עשויים להיראות מוזרים. זה הופך את ההיסטוריה של המתמטיקה לתחום מאתגר מאין כמותו, שאני לרוב נמנע ממנו. כך גם עם פרגה - שיטות הסימון שלו היו שונות משלנו כיום, והיו עוד כמה הבדלים רעיוניים בין מה שהוא עשה ומה שאני הולך להציג כרגע. חשבו על מה שאני מציג בתור זיקוק הרעיונות של פרגה ומתמטיקאים רבים אחרים; וזכרו שזו בפירוש לא הדרך <strong>היחידה</strong> לבנות לוגיקה פורמלית אלא פשוט זו שהשתרשה בסופו של דבר במרבית ספרי הלימוד ובעיסוק המתמטי הכללי, בגלל שהיא הייתה הנוחה ביותר. למה שאני אציג קוראים "לוגיקה מסדר ראשון" (First Order Logic).</p>
+<p>לוגיקה מסדר ראשון מנסה לתאר את <strong>רוב</strong> המתמטיקה. כדי להסביר מה בכלל המשמעות של "תיאור" שכזה ולמה לא את <strong>כל</strong> המתמטיקה אני חושב שכדאי קודם כל להכיר את הפרטים הקטנים של מה זה בכלל אומר, לוגיקה מסדר ראשון. גם פשר השם ("סדר ראשון"? מה זו "לוגיקה מסדר שני", אם כן?) תלוי בפרטים. לכן הפוסט הזה הולך להיות טכני והגדרתי יחסית. זה לא יהיה נעים לקוראים שמקווים למבוא מלטף, אבל אומר לכם בכנות - בכל הנוגע ללוגיקה, אני לא חושב שיש כזה, או אפילו שנכון לעשות את זה. לוגיקה היא האמנות של תיאור <strong>פורמלי ומדויק</strong> של דברים שאחרת הם בגדר נפנופי ידיים; לב-לבו של העניין הוא בכך שהבנה של הפורמליזם הזה מאפשרת לנו להבין את נפנופי הידיים ברמה גבוהה יותר מאשר היינו מבינים אותם אם היינו נשארים ברמת נפנופי הידיים. אם לסטות לאנגלית לרגע, Details Matter. אני לא חושב שזה מקרה שספר המדע הפופולרי היחיד שקראתי ולדעתי עושה צדק ללוגיקה - "גדל, אשר, באך" - מלכלך את הידיים שלו בפרטים טכניים כבר מההתחלה.</p>
+<p>רק למען הסר ספק, לנפשות התועות שנקלעו לפה בטעות - לוגיקה מתמטית <strong>אינה</strong> התחום שעוסק ב"איך לחשוב נכון" או "איך לבנות טענות בויכוח בצורה נכונה כך שלא ניתן יהיה לסתור אותן" או משהו דומה. בשביל זה צריך Common Sense (מה הקטע עם האנגלית היום?) שאותו צריך באופן כללי בתחומים רבים בחיים (ובפרט, במתמטיקה באופן כללי). לוגיקה מתמטית מתעסקת ב<strong>איך לפרמל את מה שהמתמטיקאים עושים</strong>. כבר הסברתי זאת בפוסט קודם שהיה מבוא כללי ל<a href="http://www.gadial.net/2012/03/12/mathematical_logic_intro/">לוגיקה מתמטית</a>.</p>
+<p>אם כן, בואו ונעבור לפרטים. מי מכם שקרא את הפוסטים על <a href="http://www.gadial.net/2012/03/28/propositional_calculus_intro/">תחשיב הפסוקים</a> כבר יודע למה בערך צריך לצפות - תיאור של לוגיקה מסויימת מורכב מתיאור של <strong>תחביר</strong> - האופן שבו בונים פסוקים שמטרתם "לתאר משהו", ו<strong>סמנטיקה</strong>, האופן שבו נותנים משמעות לרכיבים של הפסוקים, ובמקרה שלנו - המשמעות הזו נותנת בסופו של דבר לפסוקים ערכי אמת - "אמת/שקר", או <span class="math">\(\mbox{T,F}\)</span>.</p>
+<p>בתחשיב הפסוקים בנינו את הפסוקים מתוך "אטומים" שהיו משתנים שיכלו לקבל ערכי <span class="math">\(\mbox{T,F}\)</span> בלבד, וחיברנו אותם זה לזה עם "וגם/או/לא/גורר", וזהו זה. כוח ההבעה שלנו היה מוגבל למדי. הבה ונמחיש זאת עם שתי דוגמאות. הראשונה היא קלאסית, ונוגעת לשרשרת המשפטים הבאה שמשוייכת לאריסטו:</p>
+<ol>
+    <li>כל בני האדם הם בני תמותה.</li>
+    <li>סוקרטס הוא בן אדם.</li>
+    <li>מכאן שסוקרטס הוא בן תמותה.</li>
+</ol>
+<p>אינטואיטיבית ברור לנו שההיסק פה "נכון". איך מפרמלים אותו בתחשיב הפסוקים? הרי בתחשיב הפסוקים אין לנו דרך לדבר על "כל" ועל תכונות כמו "מישהו הוא בן אדם/בן תמותה". אפשר היה אולי לחשוב שטענה 1 היא מהצורה <span class="math">\(A\to B\)</span> כאשר <span class="math">\(A\)</span> הוא "בן אדם" ו-<span class="math">\(B\)</span> הוא "בן תמותה", אבל איך זה מתחבר אל סוקרטס? האם טענה 2 היא <span class="math">\(A\)</span>? לא, שהרי <span class="math">\(A\)</span> היא הטענה "בן אדם". היא לא הטענה "סוקרטס הוא בן אדם". אולי צריך להוסיף עוד משתנה עבור "סוקרטס"? ואז טענה 2 היא <span class="math">\(C\to A\)</span>? ואז נסיק איכשהו מצמד הפסוקים <span class="math">\(A\to B\)</span> ו-<span class="math">\(C\to A\)</span> ש-<span class="math">\(C\to B\)</span>. זה נשמע לא רע במיוחד, אבל זה אומר שצריך להתאים משתנה מיוחד לכל בן אדם אפשרי. ומה עם זאפוד ביבלברוקס? הוא לא בן אדם. בואו נתאים לו משתנה <span class="math">\(Z\)</span>. האם אנחנו צריכים פסוק <span class="math">\(\neg\left(Z\to A\right)\)</span> עבור זאפוד? ומה יקרה אם זאפוד וסוקרטס יופיעו באותו משפט? מה המשמעות של <span class="math">\(\left(C\to A\right)\wedge\neg\left(Z\to A\right)\)</span>? היינו רוצים לומר שהמשפט הזה אומר "סוקרטס הוא בן אדם וזאפוד לא" אבל לשם כך המשתנה <span class="math">\(A\)</span> צריך לקבל גם <span class="math">\(\mbox{T}\)</span> וגם <span class="math">\(\mbox{F}\)</span> בו זמנית (<span class="math">\(\mbox{T}\)</span> לחלק השמאלי של המשפט ו-<span class="math">\(\mbox{F}\)</span> לימני). או לחילופין, צריך יהיה להציב <span class="math">\(\mbox{F}\)</span> או בסוקרטס או בזאפוד, אבל...</p>
+<p>טוב, זה די מיש-מש. למרות שאולי אפשר לחלץ מזה משהו, זה כאב ראש לחשוב איך לנסח אפילו משפטים פשוטים בצורה הזו. בואו נעבור עכשיו למשפט קצת יותר מורכב - הגדרת הגבול בחדו"א. אומרים ש-<span class="math">\(\lim_{x\to x_{0}}f\left(x\right)=L\)</span> אם לכל <span class="math">\(\varepsilon&gt;0\)</span> קיים <span class="math">\(\delta&gt;0\)</span> כך שלכל <span class="math">\(x\)</span>, אם <span class="math">\(\left|x-x_{0}\right|&lt;\delta\)</span> אז <span class="math">\(\left|f\left(x\right)-L\right|&lt;\varepsilon\)</span>. איך אפשר לנסח את שרשרת ה"לכל-קיים-לכל" בעזרת תחשיב הפסוקים? אין לי מושג. ואיך אפשר לנסח את ההפעלה של ערך מוחלט בתוך ההגדרה? לא יודע. ואיך אפשר לנסח את "קטן מ-"? האם צריך שני משתנים שונים, אחד עבור <span class="math">\(\left|x-x_{0}\right|&lt;\delta\)</span> ואחד עבור <span class="math">\(\left|f\left(x\right)-L\right|&lt;\varepsilon\)</span>? הרי התחושה שלנו היא שהמופע של הערך המוחלט, והמופע של ה-<span class="math">\(&lt;\)</span> בשני המקרים הוא מופע של אותו דבר. אנחנו רוצים לחלץ את הרכיבים הדומים, לא להסתיר אותם מאחורי משתנים שונים.</p>
+<p>בקיצור, אנחנו עוברים לדבר על לוגיקה מסדר ראשון כדי לשפר את <strong>יכולת ההבעה</strong> שלנו. לצורך כך אנחנו מרחיבים את התחביר באופן משמעותי. יש לנו, כמקודם, משתנים: <span class="math">\(x_{1},x_{2},x_{3},\dots\)</span>. יש לנו את הסימנים הלוגיים של תחשיב הפסוקים, כלומר <span class="math">\(\to,\neg,\wedge,\vee\)</span>, ואפשר גם להוסיף <span class="math">\(\leftrightarrow\)</span> כדי לשפר את הקריאות. צריך גם סוגריים ופסיק, כלומר הסימנים <span class="math">\()\)</span> ו-<span class="math">\((\)</span> ו-<span class="math">\(,\)</span> (למה פסיק? עוד מעט נגיע לזה). אבל שני השחקנים החדשים שמקבלים מקום של כבוד הם הסימנים עבור "לכל" ו"קיים": <span class="math">\(\forall\)</span> ו-<span class="math">\(\exists\)</span>, שהם מעין A הפוכה (עבור All, "לכל") ו-E הפוכה (עבור Exists, "קיים").</p>
+<p>אילו עוד דברים אנחנו צריכים? ובכן, אם ננסה לדבר על תורת הקבוצות נצטרך כנראה סימן עבור יחס השייכות <span class="math">\(\in\)</span> ועבור הקבוצה הריקה <span class="math">\(\emptyset\)</span>; אם נדבר על תורת החבורות נצטרך סימן עבור הפעולה הבינארית של החבורה <span class="math">\(\cdot\)</span> ועבור האיבר האדיש לכפל <span class="math">\(e\)</span>. אם נדבר על המספרים הטבעיים נצטרך סימן ל-<span class="math">\(0\)</span> וסימן ל"עוקב של מספר", נאמר <span class="math">\(S\)</span> (כך ש-<span class="math">\(S\left(0\right)\)</span> הוא בעצם 1 וכדומה), וכמובן שאת יחס הסדר <span class="math">\(&lt;\)</span> ואת פעולות החיבור <span class="math">\(+\)</span> והכפל <span class="math">\(\times\)</span>. ואם נרצה לדבר על גרפים נצטרך עוד סימן יחס שמתאר שיש קשת בין שני צמתים - למשל, <span class="math">\(E\left(v,u\right)\)</span> מתאר זאת. וכו' וכו' וכו'. אנחנו רואים שאנחנו צריכים <strong>המון</strong> סימנים, אבל שהסימנים הללו הם <strong>תלויי שימוש</strong>; אנחנו לא חייבים את <span class="math">\(\in\)</span> תמיד אלא רק כשאנחנו רוצים לתאר קבוצות; ואין צורך בסימן <span class="math">\(+\)</span> בתורת החבורות, וכו' וכו'. לכן מטעמי חסכנות אנחנו מרשים להשתמש רק בתת-קבוצה של הסימנים האפשריים. פורמלית, אנחנו מגדירים <strong>מילון</strong> שהוא אוסף של סימנים שבאים לתאר <strong>קבועים, יחסים ופונקציות</strong>, כך שכל מילון מגדיר שפה <strong>אחרת</strong> מסדר ראשון. יש את השפה של תורת החבורות, שהמילון שלה הוא <span class="math">\(\left\langle e,\cdot\right\rangle \)</span>; השפה של המספרים הטבעיים עם המילון <span class="math">\(\left\langle 0,S,+,\times\right\rangle \)</span>; השפה של תורת הקבוצות עם <span class="math">\(\left\langle \emptyset,\in\right\rangle \)</span> וכן הלאה. כאן <span class="math">\(0,\emptyset\)</span> הם דוגמאות ל<strong>קבועים</strong>, בעוד ש-<span class="math">\(\in\)</span> הוא דוגמא ל<strong>יחס</strong> ו-<span class="math">\(S,+,\times\)</span> הם דוגמאות ל<strong>פונקציות</strong>.</p>
+<p>רק כדי לוודא שהנקודה הזו ברורה: איברי המילון <strong>אינם</strong> קבועים, יחסים או פונקציות; הם <strong>סימני</strong> קבועים, סימני יחסים וסימני פונקציות. כלומר, הם סימבולים מסויימים שהמשמעות שעוד מעט נתאים להם תהיה של קבועים, יחסים ופונקציות, אבל הם אינם כאלו בעצמם. מבלבל? כן! זה ההבדל שבין התחביר ובין הסמנטיקה שכבר הזכרתי.</p>
+<p>יש סימן יחס מיוחד שטרם דיברתי עליו - שוויון, <span class="math">\(=\)</span>. יש ספרים שלא מכניסים אותו אוטומטית לשפות, ויש ספרים שכן. אני מעדיף את הגישה שמכניסה אותו אוטומטית למרות שהיא טיפה מגבילה אותנו. אם כן, <span class="math">\(=\)</span> יהיה שייך לקבוצת הסימנים ש<strong>תמיד</strong> יכולים לשמש כחלק מהרכבת פסוקים בשפה - הקבוצה <span class="math">\(\left\{ \to,\neg,\wedge,\vee,\leftrightarrow,),(,,,\exists,\forall,=\right\} \)</span>. לסימנים הללו קוראים <strong>סימנים לוגיים</strong>.</p>
+<p>באופן כללי מסמנים פונקציות כמשהו כזה: <span class="math">\(f\left(x_{1},x_{2}\right)\)</span> הוא דוגמה לסימן פונקציה ש"מופעלת" על שני משתנים, <span class="math">\(x_{1},x_{2}\)</span>. גם יחסים מתוארים כך -<span class="math">\(R\left(x_{1},x_{2}\right)\)</span> הוא דוגמה. שימו לב מה יש לנו כאן: קודם כל את סימן הפונקציה/יחס; אחר כך סוגר שמאלי (הסוגר הזה הוא חלק מהסימנים הלוגיים!), אחר כך שם של משתנה, אחר כך הסימן "פסיק", אז עוד משתנה, ואז סוגר ימני.</p>
+<p>כשבונים פסוקים בתחשיב הפסוקים, יש שני סוגים של "אבני בניין" שעובדים איתם. ראשית, יש ביטויים שהמשמעות שנייחס להם - אחרי שנתחיל לייחס משמעות לדברים - היא של איברים מה"עולם" (מה זה? בהמשך). שנית, יש ביטויים שהמשמעות שנייחס להם היא משמעות לוגית - <span class="math">\(\mbox{T}\)</span> או <span class="math">\(\mbox{F}\)</span>. לביטויים מהסוג הראשון נקרא <strong>שמות עצם</strong>, ולביטויים מהסוג השני - <strong>נוסחאות</strong>. שימו לב ששם עצם לבדו הוא לא נוסחה חוקית!</p>
+<p>שם עצם מוגדר בתור סימן של משתנה (למשל, <span class="math">\(x\)</span>) או סימן של קבוע (למשל, <span class="math">\(c\)</span>) או "הפעלה" של סימן פונקציה על שמות עצם, למשל <span class="math">\(f\left(x,c\right)\)</span> או <span class="math">\(g\left(f\left(x,x,x\right),g\left(c_{1},c_{2}\right)\right)\)</span>.</p>
+<p>נוסחאות מוגדרות בצורה טיפה יותר מורכבת - ראשית יש נוסחאות אטומיות, שהן תמיד "הפעלה" של סימן יחס כלשהו על שמות עצם כלשהם, למשל <span class="math">\(R\left(f\left(x_{1},x_{2}\right),c\right)\)</span> או <span class="math">\(x_{1}=g\left(x_{2}\right)\)</span> וכדומה. שנית, אם <span class="math">\(\varphi,\psi\)</span> הן נוסחאות, כך גם <span class="math">\(\neg\varphi\)</span> ו-<span class="math">\(\left(\varphi\to\psi\right)\)</span> ו-<span class="math">\(\left(\varphi\leftrightarrow\psi\right)\)</span> ו-<span class="math">\(\left(\varphi\wedge\psi\right)\)</span> ו-<span class="math">\(\left(\varphi\vee\psi\right)\)</span> (זה דומה לתחשיב הפסוקים, עם נוסחאות אטומיות במקום משתנים). לבסוף, לכל משתנה <span class="math">\(x\)</span> ונוסחה <span class="math">\(\varphi\)</span>, גם <span class="math">\(\forall x\left(\varphi\right)\)</span> ו-<span class="math">\(\exists v\left(\varphi\right)\)</span> היא נוסחה. זה משלים את הגדרת התחביר (אבל ברצינות, אם אתם רוצים ללמוד את העניין עד הסוף, תצטרכו ספר אמיתי בשביל זה).</p>
+<p>אני חושב שעכשיו זה זמן טוב לעצור ולתת דוגמה לאיך פסוקים נראים בפועל. אשתמש בתורת החבורות, פשוט כי היא דוגמה כל כך טובה: השפה תורת החבורות כוללת, כאמור, את סימן הקבוע <span class="math">\(e\)</span> ואת סימן הפונקציה <span class="math">\(\cdot\)</span>. מה שנקרא "תורת החבורות" עצמה כולל את שלושת הפסוקים הבאים:</p>
+<ol>
+    <li><span class="math">\(\forall x\forall y\forall z\left(\left(x\cdot y\right)\cdot z=x\cdot\left(y\cdot z\right)\right)\)</span> ("אסוציאטיביות").</li>
+    <li><span class="math">\(\forall x\left(x\cdot e=e\cdot x=x\right)\)</span> ("אדיש כפלי").</li>
+    <li><span class="math">\(\forall x\exists y\left(x\cdot y=y\cdot x=e\right)\)</span> ("הופכי כפלי").</li>
+</ol>
+<p>הפסוקים הללו מוצגים בצורה רשלנית משהו שעמוסה בקיצורי דרך; הם לא תקינים מבחינה תחבירית, אבל די ברור (לדעתי) איך אפשר להמיר אותם לפסוקים שיהיו תקינים תחבירית ויגידו אותו דבר, אבל לא ממש יהיו קריאים, אז אני מוותר על התענוג. העיקר כאן הוא לראות את רכיבי המשפט - סימני היחס, הפונקציה, הקבועים, הכמתים - ואת ההגיון שאפשר להביע באמצעותם.</p>
+<p>עכשיו בואו נעבור לסמנטיקה.</p>
+<p>הסמנטיקה של תחשיב הפסוקים היא פשוטה ביותר - יש משתנים, בכל אחד מציבים <span class="math">\(\mbox{T}\)</span> או <span class="math">\(\mbox{F}\)</span>, "מחשבים" את הערך של פסוק שנובע מתוך ההצבה הזו, וסיימנו. בתחשיב היחסים הסיפור מסובך באופן משמעותי. אנחנו מתחילים משפה מסדר ראשון נתונה, עם איזה שהוא מילון נתון (מילון, כזכור, הוא אוסף סימני הקבועים, היחסים והפונקציות שיכולים להופיע בנוסחאות השפה). הדבר הראשון שעושים, עוד לפני שמתחילים עם השמות של ערכים למשתנים, הוא לקבוע את "זירת המשחק" שלנו, שכוללת את <strong>העולם</strong> שממנו ילקחו הערכים שמשתנים יכולים לקבל, ואת <strong>הפרשנות</strong> שניתנת בעולם הזה לסימני הקבועים, היחסים והפונקציות. המפלצת שכוללת את כל המידע הזה בתוכה נקראת <strong>מבנה</strong> ומסומנת אצלי ב-<span class="math">\(\mathcal{M}\)</span>.</p>
+<p>מבנה <span class="math">\(\mathcal{M}\)</span>, אם כן, כולל:</p>
+<ol>
+    <li>קבוצה לא ריקה <span class="math">\(D^{\mathcal{M}}\)</span> - זה "העולם" שממנו ילקחו הערכים שהמשתנים יכולים לקבל.</li>
+    <li>לכל סימן קבוע <span class="math">\(c\)</span> במילון, איבר <span class="math">\(c^{\mathcal{M}}\in D^{\mathcal{M}}\)</span> - ה<strong>פרשנות</strong> ש-<span class="math">\(c\)</span> מקבל במודל <span class="math">\(\mathcal{M}\)</span>.</li>
+    <li>לכל סימן יחס <span class="math">\(R\)</span> במילון על <span class="math">\(n\)</span> מקומות, יחס <span class="math">\(R^{\mathcal{M}}\subseteq\left(D^{\mathcal{M}}\right)^{n}\)</span>.</li>
+    <li>לכל סימן פונקציה <span class="math">\(f\)</span> במילון על <span class="math">\(n\)</span> מקומות, פונקציה <span class="math">\(f^{\mathcal{M}}:\left(D^{\mathcal{M}}\right)^{n}\to D^{\mathcal{M}}\)</span>.</li>
+</ol>
+<p>ושוב, אדגיש את ההבדל שיש פה בין הסמנטיקה והתחביר. <span class="math">\(c,R,f\)</span> הם <strong>סימנים</strong> - אותיות ותו לא, חסרי פשר לכשעצמם ונתונים לפרשנויות רבות; לעומת זאת, <span class="math">\(c^{\mathcal{M}}\)</span> הוא <strong>איבר של קבוצה</strong>, ו-<span class="math">\(R^{\mathcal{M}}\)</span> הוא <strong>יחס על קבוצה</strong> ו-<span class="math">\(f^{\mathcal{M}}\)</span> היא <strong>פונקציה על קבוצה</strong>. יש להם משמעות עמוקה יותר מאשר אוסף פיקסלים.</p>
+<p>בואו נחזור אל תורת החבורות שלנו וניתן דוגמאות לשני מבנים אפשריים עבורה. מבנה אחד הוא זה: <span class="math">\(\mathcal{M}=\left(\mathbb{Z},0,+\right)\)</span>. כלומר, <span class="math">\(D^{\mathcal{M}}=\mathbb{Z}\)</span> - המספרים השלמים; <span class="math">\(e^{\mathcal{M}}=0\)</span> - כלומר, הפרשנות שלנו לסימן הקבוע <span class="math">\(e\)</span> הוא המספר <span class="math">\(0\in\mathbb{Z}\)</span>, ו-<span class="math">\(\cdot^{\mathcal{M}}=+\)</span>, כלומר הפרשנות שלנו לסימן הפונקציה <span class="math">\(\cdot\)</span> הוא פעולת החיבור.</p>
+<p>מבנה אחר לגמרי הוא זה שבו <span class="math">\(D^{\mathcal{M}}=\mbox{GL}_{n}\left(\mathbb{C}\right)\)</span> - אוסף המטריצות מסדר <span class="math">\(n\times n\)</span> מעל המרוכבים שהדטרמיננטה שלהן שונה מאפס. במבנה הזה <span class="math">\(\cdot\)</span> הוא הפעולה של כפל מטריצות, ו-<span class="math">\(e\)</span> היא מטריצת היחידה (המטריצה שכולה אפסים פרט לאלכסון הראשי שכולו 1). אם אתם לא מכירים את הדוגמה הזו, לא נורא; זה לא קריטי להמשך.</p>
+<p>עכשיו, אחרי שהגדרנו מבנה, אפשר להגדיר גם השמה - זו פשוט פונקציה <span class="math">\(s:\left\{ x_{1},x_{2},x_{3},\dots\right\} \to D^{\mathcal{M}}\)</span> שמתאימה לכל משתנה <span class="math">\(x\)</span> איבר כלשהו מתוך <span class="math">\(D^{\mathcal{M}}\)</span>. ברגע שבו הגדרנו השמה <span class="math">\(s\)</span>, ערך האמת של כל נוסחה נקבע, באופן הבא:</p>
+<ol>
+    <li>ראשית, אפשר לחשב לכל <strong>שם עצם</strong> את האיבר שהוא מתאים לו.</li>
+    <li>שנית, לכל <strong>נוסחה אטומית</strong> אפשר לחשב אם ערכה הוא <span class="math">\(\mbox{T}\)</span> או <span class="math">\(\mbox{F}\)</span>.</li>
+    <li>כעת קל לחשב מתוך ערכי ה-<span class="math">\(\mbox{T}\)</span> וה-<span class="math">\(\mbox{F}\)</span> הללו ערך אמת לכל הנוסחה כמו בתחשיב הפסוקים.</li>
+    <li>...למעט במקרה שבו יש לנו כמתים, ואז יש לנו רמה נוספת של סיבוך.</li>
+</ol>
+<p>בואו נעבור על זה שלב שלב. ראשית, מרגע שהגדרנו את <span class="math">\(s\)</span> על המשתנים, אפשר להגדיר פונקציה <span class="math">\(\overline{s}\)</span> שהיא הרחבה של <span class="math">\(s\)</span> על כל שמות העצם, באופן הבא: <span class="math">\(\overline{s}\left(x\right)=s\left(x\right)\)</span> לכל משתנה; <span class="math">\(\overline{s}\left(c\right)=c^{\mathcal{M}}\)</span> לכל סימן קבוע <span class="math">\(c\)</span>; ו-<span class="math">\(\overline{s}\left(f\left(t_{1},\dots,t_{n}\right)\right)=f^{\mathcal{M}}\left(\overline{s}\left(t_{1}\right),\dots,\overline{s}\left(t_{n}\right)\right)\)</span> לכל סימן פונקציה <span class="math">\(f\)</span>.</p>
+<p>כאן כדאי לעצור ולוודא שמבינים את הגדרה למעלה. למשל, באגף שמאל של השוויון האחרון יש לנו את הפונקציה <span class="math">\(\overline{s}\)</span> שמופעלת על <strong>שם עצם</strong> יחיד - <span class="math">\(f\left(t_{1},\dots,t_{n}\right)\)</span>. האופן שבו היא פועלת הוא קודם כל לחשב, באופן רקורסיבי, מה ההשמה המורחבת נותנת לכל אחד משמות העצם <span class="math">\(t_{1},\dots,t_{n}\)</span> שהם הרכיבים של שם העצם הזה; לאחר מכן היא לוקחת את הפונקציה <span class="math">\(f^{\mathcal{M}}\)</span> - ה<strong>פרשנות</strong> של סימן הפונקציה <span class="math">\(f\)</span> במבנה <span class="math">\(\mathcal{M}\)</span> - ומפעילה אותה על הערכים שהיא כבר חישבה. התוצאה היא איבר ב-<span class="math">\(D^{\mathcal{M}}\)</span>, וזה הערך ש-<span class="math">\(\overline{s}\)</span> נותנת לשם העצם.</p>
+<p>למשל, נתבונן בשם העצם <span class="math">\(\left(x\cdot y\right)\cdot e\)</span> שמנוסחת בשפה של תורת החבורות. נניח שהמודל שלנו הוא <span class="math">\(\mathcal{M}=\left(\mathbb{Z},0,+\right)\)</span> שכבר הזכרתי; מה יהיה <span class="math">\(\overline{s}\left(\left(x\cdot y\right)\cdot e\right)\)</span>? מההגדרה שלי ניתן לראות שהוא יהיה <span class="math">\(s\left(x\right)+s\left(y\right)+0\)</span>, ולכן אם למשל <span class="math">\(s\left(x\right)=2\)</span> ו-<span class="math">\(s\left(y\right)=3\)</span> נקבל <span class="math">\(\overline{s}\left(\left(x\cdot y\right)\cdot e\right)=5\)</span>.</p>
+<p>השלב הבא הוא לטפל בנוסחאות האטומיות. נוסחה אטומית כללית נראית כך: <span class="math">\(R\left(t_{1},\dots,t_{n}\right)\)</span> כאשר <span class="math">\(R\)</span> הוא סימן יחס כלשהו. לנוסחה הזו ניתן ערך <span class="math">\(\mbox{T}\)</span> אם מתקיים <span class="math">\(R^{\mathcal{M}}\left(\overline{s}\left(t_{1}\right),\dots,\overline{s}\left(t_{n}\right)\right)\)</span>, כלומר אם ביחס <span class="math">\(R^{\mathcal{M}}\)</span>, שהוא הפרשנות של סימן היחס <span class="math">\(R\)</span> במבנה <span class="math">\(\mathcal{M}\)</span>, האיברים <span class="math">\(\overline{s}\left(t_{1}\right),\dots,\overline{s}\left(t_{n}\right)\)</span> של <span class="math">\(D^{\mathcal{M}}\)</span> אכן נמצאים זה עם זה. שימו לב שזה תלוי הן בערך ש-<span class="math">\(\overline{s}\)</span> מעניקה לשמות העצם, והן בפרשנות של <span class="math">\(R\)</span> ב-<span class="math">\(\mathcal{M}\)</span>. היוצא מן הכלל היחיד הוא יחס השוויון, שבו אין "פרשנות" - הוא תמיד מייצג שוויון, כלומר <span class="math">\(t_{1}=t_{2}\)</span> מקבל ערך <span class="math">\(\mbox{T}\)</span> אם ורק אם <span class="math">\(\overline{s}\left(t_{1}\right)=\overline{s}\left(t_{2}\right)\)</span>. כאמור, הדרישה הזו מגבילה אותנו במובן מסויים אבל זה לא קריטי כרגע.</p>
+<p>כיצד מחשבים ערך אמת כעת עבור פסוקים שבנוים מקשרים אני מקווה שאתם כבר יודעים. למשל, <span class="math">\(\varphi\wedge\psi\)</span> מקבל <span class="math">\(\mbox{T}\)</span> רק אם שני רכיביו קיבלו <span class="math">\(\mbox{T}\)</span> וכדומה.</p>
+<p>הסימון הפורמלי לכל זה הוא הסימון הבא: <span class="math">\(\mathcal{M}\models_{s}\varphi\)</span> פירושו "בפרשנות של השפה שנותן המבנה <span class="math">\(\mathcal{M}\)</span>, ובהשמה <span class="math">\(s\)</span>, הפסוק <span class="math">\(\varphi\)</span> מקבל ערך <span class="math">\(\mbox{T}\)</span>". הסימון הזה הכרחי כדי שיהיה נוח להסביר איך נותנים ערכי אמת עבור פסוקים שמכילים כמתים; לפני כן אצטרך להציג עוד סימון. נניח ש-<span class="math">\(x\)</span> הוא משתנה כלשהו ו-<span class="math">\(a\in D^{\mathcal{M}}\)</span> איבר כלשהו במבנה, וש-<span class="math">\(s\)</span> היא השמה למשתנים. אז אפשר להגדיר השמה אחרת, שאסמן <span class="math">\(s\left[x\leftarrow a\right]\)</span>, שהיא זהה ל-<span class="math">\(s\)</span> על כל משתנה אפשרי פרט ל-<span class="math">\(x\)</span>, ועל המשתנה הזה היא מחזירה <span class="math">\(a\)</span>.</p>
+<p>כעת: <span class="math">\(\mathcal{M}\models_{s}\forall x\left(\varphi\right)\)</span> אם לכל <span class="math">\(a\in D^{\mathcal{M}}\)</span> מתקיים <span class="math">\(\mathcal{M}\models_{s\left[x\leftarrow a\right]}\varphi\)</span>; ו-<span class="math">\(\mathcal{M}\models_{s}\exists x\left(\varphi\right)\)</span> אם קיים <span class="math">\(a\in D^{\mathcal{M}}\)</span> כך ש-<span class="math">\(\mathcal{M}\models_{s\left[x\leftarrow a\right]}\varphi\)</span>. זו ההגדרה הכי קשה כאן; עצרו ונסו לוודא שאתם מבינים מה הולך פה. שימו לב לכך שחישוב ערך האמת של <span class="math">\(\forall x\left(\varphi\right)\)</span> ו-<span class="math">\(\exists x\left(\varphi\right)\)</span> תחת ההשמה <span class="math">\(s\)</span> בעצם <strong>מתעלם</strong> מהערך ש-<span class="math">\(s\)</span> נותנת ל-<span class="math">\(x\)</span>; תחת זאת הוא משחק עם כל ערך אפשרי ורואה מה קורה. זה לא אומר ש-<span class="math">\(s\)</span> לא חשובה; רק שהערך הספציפי שהיא נותנת ל-<span class="math">\(x\)</span> לא רלוונטי.</p>
+<p>עם ההגדרה הזו, סיימנו; אנחנו מבינים איך בהינתן מודל והשמה נותנים ערך אמת לכל הנוסחאות. עם זאת, לרוב הנוסחאות שיעניינו אותנו הן נוסחאות שאפשר לדעת מה יהיה ערך האמת שלהן ישר מתוך <span class="math">\(\mathcal{M}\)</span>, בלי שהוא יהיה תלוי בהשמה זו או אחרת. לצורך כך אני נזקק להגדרה אחת אחרונה: משתנה בנוסחה כלשהי הוא <strong>קשור</strong> אם הוא מופיע בטווח של כמת שמתאים לו. למשל, <span class="math">\(\forall x\left(x=y\right)\)</span> היא דוגמה לנוסחה שבה המשתנה <span class="math">\(x\)</span> הוא קשור (כי הוא נופל בתוך הטווח של הכמת <span class="math">\(\forall x\)</span> - בתוך הסוגריים שמייד אחריו). לעומת זאת <span class="math">\(y\)</span> אינו קשור; למשתנה שכזה קוראים <strong>חופשי</strong>.</p>
+<p>נוסחה שאין בה משתנים חופשיים בכלל נקראת <strong>פסוק</strong>. אם אין משתנים חופשיים בכלל, זה אומר שכל משתנה נמצא תמיד בטווח של כמת כלשהו, ולכן, אם תחשבו על זה רגע, ערך האמת של הפסוק <strong>לא יכול</strong> להיות תלוי באף השמה ספציפית כלשהי! זה בגלל שחישוב ערך האמת של הפסוק מתוך השמה תמיד יכלול את השלב שבו "זורקים לפח" את הערך שההשמה נתנה למשתנה, ובמקום זה מנסים את כל הערכים האפשריים. כן, זה מבלבל למדי; כשמוכיחים את זה פורמלית הראש כואב טיפה פחות.</p>
+<p>זה מוביל אותנו להגדרה המרכזית בכל העניין הזה: אם <span class="math">\(\varphi\)</span> הוא פסוק ו-<span class="math">\(\mathcal{M}\)</span> הוא מבנה שמתאים לשפה, אז מסמנים <span class="math">\(\mathcal{M}\models\varphi\)</span> אם <span class="math">\(\mathcal{M}\models_{s}\varphi\)</span> עבור השמה <span class="math">\(s\)</span> <strong>כלשהי</strong> (אם זה קורה להשמה כלשהי, זה קורה לכל ההשמות). במקרה הזה אומרים ש-<span class="math">\(\mathcal{M}\)</span> היא <strong>מודל</strong> של <span class="math">\(\varphi\)</span>. מכאן קצרה הדרך לאוסף של נוסחאות: <span class="math">\(\mathcal{M}\models\Phi\)</span> אם היא מודל של כל נוסחה ב-<span class="math">\(\Phi\)</span>. זה גם בדיוק מה שהלך בתחשיב הפסוקים, רק ששם "מודל" היה פשוט השמה, וכאן מודל הוא עולם ומלואו, תרתי משמע.</p>
+<p>כעת, שימו לב לכך שהמבנה <span class="math">\(\mathcal{M}=\left(\mathbb{Z},0,+\right)\)</span> הוא מודל של תורת החבורות, כלומר של קבוצת שלושת הפסוקים שקראתי לה "תורת החבורות". לעומת זאת, <span class="math">\(\mathcal{M}=\left(\mathbb{Z},1,+\right)\)</span> הוא אמנם מבנה חוקי למהדרין, אבל הוא איננו מודל של תורת החבורות שכן הוא לא מספק את הפסוק <span class="math">\(\forall x\left(x\cdot e=e\cdot x=x\right)\)</span> (בדקו זאת!). זה מתאים לידע שלנו, לפיו <span class="math">\(\left(\mathbb{Z},1,+\right)\)</span> אינה חבורה. למעשה, די ברור שהמודלים של "תורת החבורות" שלנו הם בדיוק המבנים שאנחנו קוראים להם "חבורות"!</p>
+<p>הפורמליזציה הושלמה, סוף כל סוף. כעת יש לנו נתיב ישיר בין סדרות של סימבולים ובין חלקים נכבדים ביותר של המתמטיקה. בפוסטים הבאים על לוגיקה נוכל להראות את הדברים הכיפיים הבסיסיים שנובעים מכך.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2012/06/21/one-plus-one-equals-what/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">2=1+1</span>
+            </a>
+            
+            
+            
+            <a href="/2012/06/04/choice_order_zorn/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אקסיומת הבחירה, עקרון הסדר הטוב, הלמה של צורן - מי יודע?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

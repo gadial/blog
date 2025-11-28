@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז למה 1=...0.999? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז למה 1=...0.999?</h1>
+            <div class="post-meta">
+                <span class="date">2025-03-15</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/כללי.html">כללי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מספרים ממשיים.html">מספרים ממשיים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>פרק א', ובו אני מנסה להשתמש בשוויון מוזר כדי לשכנע שיש על מה לדבר פה</h2>
+
+<p>בראשית ימי הבלוג היה לי <a href="https://gadial.net/2008/06/07/almost_1_is_one/">פוסט</a> על הויכוח המפואר סביב השוויון <span class="math">\(0.999\ldots=1\)</span>. באותם ימים עוד ניסיתי לקצר ולכן הפוסט לא עמד בפני עצמו אלא היה תלוי ב<a href="https://gadial.net/2008/06/17/infinite_series/">פוסט ההמשך</a> שלו ואיכשהו יצא שאני לא הכי מרוצה משניהם ולכן בואו נדבר שוב על השוויון המוזר הזה, בתקווה ברמת העמקה גדולה יותר מאשר אז.</p>
+<p>מבחינה מתמטית <span class="math">\(0.999\ldots=1\)</span> הוא שוויון פשוט, כמעט טריוויאלי, אבל איכשהו יוצא שכל כמה זמן אני נתקל בעוד דיון סביבו שבו נזרקים לחלל האוויר הרבה טיעונים למה השוויון הזה לא נכון, חלקם יפים מאוד, שאף אחד מהם לא באמת יכול לעבוד כי כולם מפספסים את ההגדרות שבבסיס הדיון - וחלק מהעניין הוא שאלו אכן הגדרות לא טריוויאליות שאין סיבה שאנשים לא מתמטיים לא יכירו (אבל! למה שלאנשים לא מתמטיים תהיה דעה מוצקה על <span class="math">\(0.999\ldots=1\)</span>?).</p>
+<p>אוהבים לומר, למשל, ש-<span class="math">\(0.999\ldots\)</span> הוא "המספר הכי קרוב ל-1 שאינו 1", או ש-<span class="math">\(0.999\ldots\)</span> הוא "תהליך" אבל לא מספר, וכו'. אלו, כאמור, רעיונות יפים - אולי אפילו יפים <strong>מדי</strong> כי הם מכניסים למתמטיקה עוד תוכן שלא באמת יש בה. בפועל <span class="math">\(0.999\ldots\)</span> הוא לא תהליך אלא מספר ממשי תמים, שמיוצג בייצוג עשרוני כמו כל המספרים הממשיים, ופשוט בגלל איזה צ'ופצ'יק מוזר של שיטת הייצוג העשרוני של מספרים יוצא שלחלק מהמספרים (להמון, כפי שעוד נראה) יש שני ייצוגים שונים.</p>
+<p>ובכן, הדרך להסביר מדוע השוויון נכון היא לצלול לנבכי הייצוג העשרו... רגע, רגע, רגע, אני לא בטוח שלהפיל עלינו הגדרות שהן לא לגמרי טריוויאליות זה הדבר הנכון לעשות. בואו קודם נתחיל מההוכחה ה"קלאסית" שאוהבים להראות לטענה הזו.</p>
+<p>הרעיון הוא זה: ראשית נסמן <span class="math">\(x=0.999\ldots\)</span> ואז נעשה על המשוואה הזו סדרה של מניפולציות די פשוטות, שמוכרות לכל מי שהיה צריך לפתור משוואות בבית הספר:</p>
+<ol> <li><span class="math">\(x=0.999\ldots\)</span></li>
+
+
+<li><span class="math">\(10x=9.999\ldots\)</span> (כפלנו ב-10 את שני האגפים)</li>
+
+
+<li><span class="math">\(10x-x=9.999\ldots-0.999\ldots\)</span> (החסרנו <span class="math">\(0.999\ldots\)</span> משני האגפים)</li>
+
+
+<li><span class="math">\(9x=9\)</span> (חישבנו את תוצאת פעולת החיסור באגפים ימין ושמאל)</li>
+
+
+<li><span class="math">\(x=1\)</span> (חילקנו את שני האגפים ב-9)</li>
+
+</ol>
+
+<p>ההוכחה הזו פחות מעניינת אותי בתור משהו שבאמת ישכנע אנשים ש-<span class="math">\(0.999\ldots=1\)</span> (למרות שאני מניח שיש כאלו שמשתכנעים) ויותר בגלל שלל הסיבות שבעטיין היא <strong>לא</strong> תשכנע אנשים. ראשית, כל העסק קצת מרגיש כמו רמאות או הוכחה מעגלית כי מתחילים עם <span class="math">\(x\)</span> שווה משהו ומסיימים עם <span class="math">\(x\)</span> שווה משהו אחר (לכאורה) ולכן האינטואיציה שלנו זועקת שרימו אותנו איפה שהוא. אבל איפה? הפעולות של לכפול את שני האגפים של משוואה באותו מספר, או לחבר לשני האגפים אותו מספר אכן משמרות את המשוואה לשני הכיוונים בדרך כלל. כלומר, אם <span class="math">\(A,B\)</span> הם ביטויים כלשהם ו-<span class="math">\(a\)</span> הוא מספר כלשהו, אז אני יכול לומר ש-</p>
+<ul> <li><span class="math">\(A=B\)</span> אם ורק אם <span class="math">\(A+a=B+a\)</span></li>
+
+</ul>
+
+<p>ואם <span class="math">\(a\ne0\)</span> אפשר גם לומר ש-</p>
+<ul> <li><span class="math">\(A=B\)</span> אם ורק אם <span class="math">\(aA=aB\)</span>.</li>
+
+</ul>
+
+<p>עבור <span class="math">\(a=0\)</span> זה נשבר, כי בהחלט ייתכן ש-<span class="math">\(A\ne B\)</span> אבל <span class="math">\(aA=aB\)</span>, למשל <span class="math">\(3\ne5\)</span> אבל <span class="math">\(0\cdot3=0=0\cdot5\)</span>. עם זאת, בהוכחה שהצגתי לא היה שום דבר כזה - כפלנו ב-10 וחילקנו ב-9, כש"לחלק ב-9" בעצם אומר לכפול ב-<span class="math">\(\frac{1}{9}\)</span>. אז מהבחינה הזו ההוכחה תקינה. המקומות שבהם היא קצת יותר חשודה הן כשאנחנו מניחים איך פעולות החשבון מתנהגות על <span class="math">\(0.999\ldots\)</span>, כלומר כשאני עושה</p>
+<ul> <li><span class="math">\(10\cdot0.999\ldots=9.999\ldots\)</span></li>
+
+
+<li><span class="math">\(9.999\ldots-0.999\ldots=9\)</span></li>
+
+</ul>
+
+<p>עכשיו, חשוב לי להדגיש ששני אלו <strong>נכונים</strong>, והם גם אינטואיטיביים למדי כי אני עושה כאן דברים שמוכרים לכל מי שעושה חשבון עם מספרים בייצוג עשרוני. אבל <strong>למה</strong> הם נכונים? כדי לראות את זה כן צריך להיכנס אל מה זו ההגדרה של ייצוג עשרוני בכלל. אבל לפני שנדבר על מה זה כן ייצוג עשרוני, בואו נדבר על מה זה לא. דרך נפוצה לנסות לשכנע ש-<span class="math">\(0.999\ldots=1\)</span> היא להסתכל על ההפרש, <span class="math">\(1-0.999\ldots\)</span>, ולשאול מה הוא יוצא - איך אפשר לקבל כאן משהו גדול מ-0? ותשובה נפוצה לזה היא שההפרש שווה <span class="math">\(0.000\ldots1\)</span>. כלומר - סדרה אינסופית של אפסים עם 1 בסוף שלה.</p>
+<p>זה רעיון ממש ממש נחמד, ובאופן כללי הקטע הזה של "לאינסוף... ומעבר לו!" הוא בעל מקום של כבוד במתמטיקה מאז ימי קנטור <a href="https://gadial.net/2011/05/25/ordinals_overview/">ויש לי פוסט על זה</a>. רק מה, בהקשר הספציפי שעליו אנחנו מדברים כאן - המספרים הממשיים והייצוגים העשרוניים שלהם - זה פשוט לא רלוונטי. אין מספר ממשי כזה, <span class="math">\(0.000\ldots1\)</span>. הרעיון בייצוג עשרוני הוא שיש לנו אינסוף ספרות אחרי הנקודה בלי שיבואו עוד ספרות "אחרי זה". אנחנו פשוט לא יודעים מה תהיה המשמעות של מספר כזה.</p>
+<p>כדי שזה לא יישמע כמו סתם איסור שרירותי, צריך לענות על השאלה הבסיסית - מה זה ייצוג עשרוני בכלל?</p>
+<h2>פרק ב', ובו אני מנסה להשתמש בחזון יוחנן כדי לשכנע שהשיטה העשרונית היא סבבה</h2>
+
+<p>אחד הקטעים ההזויים בחזון יוחנן בברית החדשה מדבר על משהו שנקרא "החיה" שהיא או מטאפורה מחוכמת לרומא של נירון קיסר או תוצר של דמיון פעיל יותר מדי, ואחד מהדברים שנאמרים שם על "החיה" הוא שמספרה הוא 666. כתוצאה מכך חזרה של שלוש פעמים על הספרה 6 נכנסה לתרבות שלנו בתור ייצוג פופולרי של דברים שטניים - והאמת, אני יכול להבין למה. יש אסתטיקה גדולה מאוד בחזרה הזו על 6 שלוש פעמים, ביחד עם המקור המיסטי של המספר. העניין הוא שאם נפתח את חזון יוחנן כדי לראות מה הלך שם במקור לא נמצא את 666 בשום מקום. חזון יוחנן נכתב במקור ביוונית במאה הראשונה לספירה, עוד לפני שהספרה 6 הייתה קיימת בכלל - ועוד יותר מכך, לפני שהשיטה שמשתמשת בספרה 6 - השיטה ההודית-ערבית - הייתה קיימת בכלל. מה שמופיע בחזון יוחנן הוא המספר <strong>שש מאות שישים ושש</strong> שנכתב בשיטה היוונית (שדומה לשיטה העברית - אותיות שונות מייצגות מספרים שונים, כולל עשרות ומאות) בתור χξϛ. זה... די מאכזב! כל האסתטיקה היפה של חזרתיות על 6 הלכה לאיבוד, וזה די מרתק להבין שהאסתטיקה הזו פשוט נוצרה במקרה, באופן ממוזל.</p>
+<p>כשאנחנו כותבים 666, לכל אחת מהספרות יש משמעות שונה. ה-6 השמאלית ביותר אומרת "שש מאות". ה-6 האמצעית אומרת "שישים" וה-6 הימנית אומרת "שש". בשיטה היוונית χ הוא "שש מאות", ξ הוא "שישים" ו--ϛ הוא "שש". כלומר, בשיטה העשרונית קורה איזה שהוא קסם שמאפשר לנו לחסוך בסימונים - אותו סימון בדיוק, 6, מאפשר לנו לתאר שלושה מספרים שונים שבשיטה היוונית נזקקו לשלוש אותיות שונות בשבילם. הקסם הזה נובע מכך שבשיטה העשרונית המשמעות של ספרה נובעת <strong>מהמיקום</strong> שלה בתוך המספר. זה רעיון יפהפה ומועיל, שאנחנו רגילים אליו עוד מילדות ולכן מפספסים לפעמים את זה שהוא לא טריוויאלי (אבל זה לא רעיון <strong>חדש</strong>; כבר הבבלים לפני 4,000 שנים השתמשו בשיטת ספירה דומה, אם כי לא עשרונית).</p>
+<p>בואו נעזוב את 666 ונעבור למספר עם ספרות שונות: 42, "ארבעים ושתיים". כאן 4 היא ספרת <strong>העשרות</strong> ואילו 2 היא ספרת <strong>האחדות</strong>. כלומר, מה שאנחנו רואים פה הוא שהספרה הימנית ביותר אומרת כמה אחדות (1) אנחנו לוקחים והספרה השניה אומרת כמה עשרות (10) אנחנו לוקחים. אם נוסיף עוד ספרות מצד שמאל, הם יתאימו למאות (100) ולאלפים (1000) וכן הלאה - למספרים שהם <strong>חזקות של </strong><strong>10</strong>. החשיבות של 10 כאן היא שנותנת לשיטה ה<strong>עשר</strong>ונית את שמה; בתיאוריה היה אפשר לעשות את אותו דבר גם עם חזקות של 2, או של 16, או של 60, אבל זה היה מרגיש לנו פחות טבעי (כל השיטות הללו קיימות בפועל). אז למשל, מספר כמו 473 מייצג את התרגיל החשבוני "ארבע כפול מאה ועוד שבע כפול עשר ועוד 3 כפול אחד", כלומר</p>
+<p><span class="math">\(473=4\times100+7\times10+3\times1\)</span></p>
+<p>או, אם רוצים להדגיש שכופלים בחזקות של 10, אפשר לכתוב</p>
+<p><span class="math">\(473=4\times10^{2}+7\times10^{1}+3\times10^{0}\)</span></p>
+<p>(<a href="https://gadial.net/2018/01/01/zero_power_equals_one/">יש לי פוסט</a> שמסביר למה דברים בחזקת 0 הם 1, כלומר למה כאן <span class="math">\(10^{0}\)</span> מתאר את 1).</p>
+<p>עד כאן אני מקווה שהכל פשוט. מתי הסיפור מסתבך? כשרוצים לתאר ככה גם <strong>שברים</strong>. כאן פתאום כותבים נקודה ("הנקודה העשרונית") וכותבים ספרות מצד ימין שלה. למשל, "שמונה וחצי" נכתב כך: <span class="math">\(8.5\)</span>. למה? את ה-8 אני מבין, אבל למה "חצי" נכתב על ידי 5? ובכן, זה אותו עיקרון בדיוק של "כפל בחזקות של 10", רק שהפעם אנחנו עוברים לכפול בחזקות <strong>שליליות</strong>.</p>
+<p>מה זה אומר, חזקה שלילית? למשל, <span class="math">\(10^{-1}=\frac{1}{10}\)</span> ו-<span class="math">\(10^{-3}=\frac{1}{10^{3}}=\frac{1}{1000}\)</span> וכן הלאה. בצורה הכללית ביותר, <span class="math">\(a^{-n}=\frac{1}{a^{n}}\)</span>, כלומר חזקה שלילית זה פשוט לחלק את 1 בחזקה הרגילה של אותו המספר. אז ב-<span class="math">\(8.5\)</span> יש לנו את 8 כפול <span class="math">\(10^{0}\)</span> ואז את 5 כפול <span class="math">\(10^{-1}\)</span>, כלומר <span class="math">\(5\times10^{-1}=\frac{5}{10}=\frac{1}{2}\)</span>. במילים אחרות, 5 מימין לנקודה העשרונית מתאר "חצי" כי 5 הוא חצי מ-10. באופן דומה <span class="math">\(0.25\)</span> הוא "רבע" כי <span class="math">\(25\)</span> הוא רבע מ-100; התרגיל המדויק שמבצעים כאן הוא</p>
+<p><span class="math">\(0.25=2\times\frac{1}{10}+5\times\frac{1}{100}=\frac{2}{10}+\frac{5}{100}=\frac{20+5}{100}=\frac{25}{100}=\frac{1}{4}\)</span></p>
+<p>טוב ויפה, ראינו איך מייצגים את חצי ואת רבע. מה עם מי שביניהם, כלומר שליש? זה מספר פשוט, ויש לו תיאור פשוט בתור שבר: <span class="math">\(\frac{1}{3}\)</span>. איך מתארים אותו בייצוג עשרוני? ובכן, אה... הנה הבשורות הלא נעימות. מייצגים אותו ככה:</p>
+<p><span class="math">\(\frac{1}{3}=0.333\ldots\)</span></p>
+<p>כלומר, הספרה 3 חוזרת על עצמה שוב ושוב עד אינסוף. <strong>אינסוף</strong>. אנחנו צריכים אינסוף ספרות כדי לייצג משהו פשוט כמו <span class="math">\(\frac{1}{3}\)</span>. לא, נאמר, מספר משוגע כמו <span class="math">\(\pi\)</span> שאומרים עליו שהוא "אי רציונלי" ו"טרנסנדנטי" ויש פרויקטים שלמים כדי לחשב את הספרות שלו אחרי הנקודה. לא, גם עבור <span class="math">\(\frac{1}{3}\)</span> אנחנו צריכים אינסוף ספרות - אם כי במקרה שלו זה מאוד קל לדעת מהן; הן פשוט הספרה 3 שחוזרת על עצמה שוב ושוב עד אינסוף.</p>
+<p>אני רוצה להוכיח לעצמנו שזה חייב להיות ככה. שאי אפשר להסתפק במספר סופי של ספרות. זו תהיה הוכחה קצרה אז אם היא מבלבלת אפשר פשוט לדלג עליה. הרעיון הוא זה: אם, למשל, היו מספיקות לנו שתי ספרות אחרי הנקודה כדי לייצג את שליש, זה אומר שהיינו מקבלים <span class="math">\(\frac{1}{3}=\frac{x}{100}\)</span>כש-<span class="math">\(x\)</span> הוא מספר טבעי כלשהו בין 0 ל-99 (כמו שעבור רבע ראינו ש-<span class="math">\(x=25\)</span> עושה את העבודה). עכשיו, אם נכפול את שני האגפים ב-100 נקבל <span class="math">\(x=\frac{100}{3}\)</span>, אבל זו הבעיה - 100 לא מתחלק ב-3. וגם 1000 לא מתחלק ב-3 אז לא יעזרו לנו לקחת 3 ספרות במקום 2, ובאופן כללי אף מספר מהצורה <span class="math">\(100\ldots0\)</span> לא מתחלק ב-3 (דרך פשוטה לראות את זה: סכום הספרות שלהם הוא 1, שלא מתחלק ב-3). וזה לא רק עניין של 3, זה עניין של רוב המספרים: עבור שבר כללי, <span class="math">\(\frac{a}{b}\)</span>, אם <span class="math">\(\frac{a}{b}=\frac{x}{10^{n}}\)</span> אז זה אומר ש-<span class="math">\(x=\frac{10^{n}}{b}a\)</span>. עכשיו, אם נבחר להציג את השבר בצורה כזו ש-<span class="math">\(a,b\)</span> הם <strong>זרים</strong> (אין להם גורם משותף) - מה שנקרא "שבר מצומצם", אז הדרך היחידה שבה <span class="math">\(x\)</span> יהיה מספר שלם היא אם <span class="math">\(\frac{10^{n}}{b}\)</span> הוא שלם, כלומר <span class="math">\(b\)</span> חייב לחלק את <span class="math">\(10^{n}\)</span>. אבל מי בכלל יכול לחלק את <span class="math">\(10^{n}\)</span>? מכיוון שהפירוק לראשוניים של 10 הוא <span class="math">\(10=2\cdot5\)</span> אז כדי שמישהו יחלק חזקה של 10 הוא חייב שגם הגורמים הראשוניים שלו יהיו או 2 או 5 או שילוב שלהם. כל גורם ראשוני אחר יהרוס לנו.</p>
+<p>גם אם לא עקבתם אחרי כל זה, המסקנה היא פשוטה: שברים שיש להם ייצוג עשרוני <strong>סופי</strong> כמו <span class="math">\(\frac{1}{2}=0.5\)</span> או <span class="math">\(\frac{1}{4}=0.25\)</span> או <span class="math">\(\frac{1}{5}=0.2\)</span> או <span class="math">\(\frac{1}{8}=0.125\)</span> הם המקרה <strong>הנדיר</strong>. כל שבר מהצורה <span class="math">\(\frac{1}{n}\)</span> כש-<span class="math">\(n\)</span> מתחלק במשהו שהוא לא 2 או 5 יהיה בהכרח אינסופי. כלומר, הקטע הזה של שימוש באינסוף ספרות לא נולד כי בא לנו להריץ קטעים מוזרים עם אינסוף, אלא כי אנחנו <strong>חייבים.</strong> כי בלי זה אין לנו שיטה עשרונית לייצוג שברים.</p>
+<h2>פרק ג', ובו אני מנסה להשתמש באכילס כדי לשכנע שכדאי להסתכל על הסכום ולא רק על מה שיש בו</h2>
+
+<p>אני רוצה שנבין למה <span class="math">\(0.333\ldots=\frac{1}{3}\)</span>. זו דוגמא יותר טובה מ-<span class="math">\(0.999\ldots\)</span> כי בניגוד ל-1 שיש לנו ייצוג עשרוני פשוט שלו ואנחנו <strong>לא צריכים</strong> את <span class="math">\(0.999\ldots\)</span>, ל-<span class="math">\(\frac{1}{3}\)</span> כאמור אין כזה. וכמו כן, אם השתכנענו ש-<span class="math">\(0.333\ldots=\frac{1}{3}\)</span> אז בואו פשוט נכפול את שני האגפים ב-3 ונקבל <span class="math">\(0.999\ldots=1\)</span> וסיימנו! (זה עדיין לא מספיק טוב, כי צריך להסביר למה <span class="math">\(0.333\ldots\)</span> כפול 3 הוא <span class="math">\(0.999\ldots\)</span>).</p>
+<p>מבחינת הגדרה יבשה, כבר ראינו שייצוג עשרוני הוא סכום של חזקות של 10 כשהן מוכפלות בערכים של הספרות. ההבדל היחיד הוא שעכשיו יש לנו אינסוף ספרות ולכן סכום אינסופי - הסכום הבא:</p>
+<p><span class="math">\(0.333\ldots=\frac{3}{10}+\frac{3}{100}+\frac{3}{1000}+\ldots\)</span></p>
+<p>אנחנו לא יודעים מה זה אומר, לחבר אינסוף איברים. חיבור זה משהו שאנחנו מכירים בתור פעולה <strong>בינארית</strong> שמפעילים על שני מספרים. מכאן אפשר להכליל: חיבור של שלושה מספרים הוא מה שמקבלים כשמחברים את שני המספרים הראשונים, ומחברים את השלישי לתוצאת החיבור של שני הראשונים. וחיבור של ארבעה הוא לחבר את הרביעי לתוצאה של חיבור שלושת הראשונים וכן הלאה וכן הלאה - אבל זה רק אומר לנו איך לחבר <strong>מספר סופי</strong> כלשהו של איברים, לא אינסוף.</p>
+<p>עם זאת, זו התחלה טובה. אם אנחנו יודעים לחבר מספר סופי כלשהו של איברים, אז כשיש לנו סכום אינסופי נוכל להסתכל מה מקבלים מכך שמחברים רק את האיבר הראשון, רק את שני הראשונים, רק את שלושת הראשונים וכן הלאה - מקבלים <strong>סדרה</strong> אינסופית, שנקראת "סדרת הסכומים החלקיים" של הסכום האינסופי (סכום חלקי, כי חיברנו רק חלק מהאיברים). עבור <span class="math">\(\frac{3}{10}+\frac{3}{100}+\frac{3}{1000}+\ldots\)</span> נקבל את הסדרה הבאה:</p>
+<p><span class="math">\(\frac{3}{10},\frac{33}{100},\frac{333}{1000},\ldots\)</span></p>
+<p>זו עדיין סדרה אינסופית אבל הסיטואציה הזו פשוטה קצת יותר כי אין לנו עכשיו חיבור של המון איברים. השאלה היא מה עושים עם הסדרה שקיבלנו, והתשובה של המתמטיקאים היא - בודקים אם יש לסדרה הזו <strong>גבול</strong>, והכוונה היא לא ל"גבול" יומיומי אלא למושג מתמטי ספציפי, טכני ומרכזי מאוד, שדומה למושג האינטואיבי אבל מורכב יותר ממנו.</p>
+<p>בשביל המושג הזה, בואו נסתכל על עוד דוגמא מפורסמת - מה שנקרא <strong>פרדוקס הדיכוטומיה</strong> מבין הפרדוקסים של זנון. אני אציג גרסה של הפרדוקס שטיפה שונה מאיך שהוא מופיע, נאמר, אצל אריסטו - נניח שהגיבור היווני אכילס ניצב בתחילת מסלול ריצה של קילומטר אחד ומתחיל לרוץ - מתי הוא יגיע לצד השני? על פי זנון יש פה בעיה: לפני שהוא מגיע לצד השני, כלומר אל הנקודה <span class="math">\(1\)</span>, הוא אמור להגיע לחצי מהדרך. אוקיי, יופי, אז הוא הגיע אל הנקודה <span class="math">\(\frac{1}{2}\)</span>, מה עכשיו? לפני שיגיע לצד השני הוא עדיין צריך לעבור חצי מהדרך <strong>שנשארה</strong>, כלומר להגיע אל הנקודה <span class="math">\(\frac{1}{2}+\frac{1}{4}=\frac{3}{4}\)</span>. גם זה לוקח לו זמן. אוקיי, יופי, הגיע אל <span class="math">\(\frac{3}{4}\)</span>. עכשיו כדי להגיע לצד השני הוא צריך לעבור חצי מהדרך שנשארה, כלומר <span class="math">\(\frac{3}{4}+\frac{1}{8}=\frac{7}{8}\)</span>, וכן הלאה וכן הלאה. כלומר, אם אנחנו מנסים להבין מה המרחק שאכילס חייב לעבור כדי להגיע אל הצד השני אנחנו רואים שזה הסכום <span class="math">\(\frac{1}{2}+\frac{1}{4}+\frac{1}{8}+\frac{1}{16}+\ldots\)</span> (בניסוח המקורי של הפרדוקס מנסים להפעיל את טיעון ה"חצי" הזה על תחילת המסלול כדי לטעון שאכילס לא יכול להתחיל לרוץ בכלל, אבל אז לא מקבלים סכום אינסופי נחמד כמו פה).</p>
+<p>במקור, פרדוקס הדיכוטומיה ניסה להדגים שתנועה היא <strong>בלתי אפשרית</strong> על ידי הטרלה של הקונספט, אבל אפשר לנצל אותו בשביל הדבר ההפוך. הרי אנחנו יודעים שאכילס <strong>כן יגיע</strong> לקצה המסלול, כלומר הוא כן יעבור מרחק של 1, והוא יעשה את זה אפילו אם אני אציג בצורה חכמה את המרחק שהוא צריך לעבור בתור סכום אינסופי <span class="math">\(\frac{1}{2}+\frac{1}{4}+\frac{1}{8}+\frac{1}{16}+\ldots\)</span>, ולכן האינטואיציה שלי היא שצריך להיות קיים מובן מתמטי שבו <span class="math">\(\frac{1}{2}+\frac{1}{4}+\frac{1}{8}+\frac{1}{16}+\ldots=1\)</span>, ובאמת יש למתמטיקאים מובן כזה. בשבילו הם מסתכלים על מה שקראתי לו "סדרת הסכומים החלקיים" של הסכום הזה: ראינו קודם שזו סדרה שמתחילה עם <span class="math">\(\frac{1}{2}\)</span> ואחר כך <span class="math">\(\frac{3}{4}\)</span> ואחר כך <span class="math">\(\frac{7}{8}\)</span> וכן הלאה. מצליחים לראות את החוקיות? בכל פעם יש במכנה חזקה של 2, ובמונה יש את אותה החזקה פחות 1, כלומר הסכום החלקי ה"כללי" הוא <span class="math">\(\frac{2^{n}-1}{2^{n}}\)</span>, או בניסוח אחר:</p>
+<p><span class="math">\(\frac{2^{n}-1}{2^{n}}=\frac{2^{n}}{2^{n}}-\frac{1}{2^{n}}=1-\frac{1}{2^{n}}\)</span></p>
+<p>בשלב ה-<span class="math">\(n\)</span> אכילס <strong>כמעט</strong> הגיע אל <span class="math">\(1\)</span>, נשאר לו רק מרחק זעום של <span class="math">\(\frac{1}{2^{n}}\)</span> לעבור, והמרחק הזה רק הולך וקטן עוד ועוד. זה מוביל את המתמטיקאים להגיד ש-1 הוא <strong>הגבול</strong> של הסדרה <span class="math">\(a_{n}=1-\frac{1}{2^{n}}\)</span>. ההגדרה הכללית של "גבול" היא לא פשוטה כי היא מנסה (ומצליחה) לכסות כל מני מקרים מטרילים הרבה יותר מהנוכחי, אבל בגרסה פשוטה שלה שמתאימה למקרה הזה, היא אומרת את הדבר הבא: 1 הוא הגבול של הסדרה <span class="math">\(1-\frac{1}{2^{n}}\)</span> אם ההפרש שלהן (שהוא <span class="math">\(\frac{1}{2^{n}}\)</span> כאמור) <strong>שואף לאפס</strong> כש"שואף לאפס" פה אומר שלא משנה כמה קטן ההפרש צריך להיות, אם נתקדם מספיק בסדרה מתישהו הוא יהפוך לקטן כזה. קצת יותר פורמלית: אם <span class="math">\(\varepsilon>0\)</span> הוא מספר ממשי כלשהו, אז קיים בסדרה <span class="math">\(n\)</span> כך ש-<span class="math">\(a_{n}<\varepsilon\)</span>, כלומר <span class="math">\(\frac{1}{2^{n}}<\varepsilon\)</span>.</p>
+<p>איך מוכיחים את זה? חשבון טכני שהוא לא מסובך במיוחד: במשוואה <span class="math">\(\frac{1}{2^{n}}<\varepsilon\)</span> המשתנה שאנחנו רוצים לבודד הוא <span class="math">\(n\)</span>, אז קודם כל נכפול את המשוואה ב-<span class="math">\(2^{n}\)</span> ונחלק אותה ב-<span class="math">\(\varepsilon\)</span> ונקבל שצריך להתקיים <span class="math">\(2^{n}>\frac{1}{\varepsilon}\)</span>. אחר כך, כדי להוריד את <span class="math">\(n\)</span> מהמעריך של החזקה, מפעילים <strong>לוגריתם</strong> על שני האגפים - במקרה הזה, לוגריתם על בסיס 2, מה שאוהבים לסמן בתור <span class="math">\(\lg\)</span>. הרעיון בלוגריתם כזה הוא שמתקיים <span class="math">\(\lg\left(2^{n}\right)=n\)</span> - זו ממש ההגדרה - ומצד שני שלוגריתם הוא פונקציה "נחמדה" שאם מפעילים אותה על אי שוויון משמרת אותו, כך שאנחנו מקבלים שצריך להתקיים <span class="math">\(n>\lg\left(\frac{1}{\varepsilon}\right)\)</span>. כאשר <span class="math">\(\varepsilon\)</span> הוא קטן מאוד אז <span class="math">\(\frac{1}{\varepsilon}\)</span> הוא גדול מאוד ולכן <span class="math">\(\lg\left(\frac{1}{\varepsilon}\right)\)</span> הוא גדול מאוד - אבל עדיין קיים מספר טבעי <span class="math">\(n\)</span> שגדול מהם, כי לכל מספר ממשי אפשרי יש מספר טבעי שגדול ממנו - זה נקרא <strong>התכונה הארכימדית</strong> של המספרים הממשיים והיא אחד מהדברים שבזכותם יש לנו מתמטיקה מתפקדת. אז יש לנו נימוקים מתמטיים פורמליים לטענה שנראית כמעט מובנת מאליה - שוואלה, אם אנחנו מגדילים את <span class="math">\(n\)</span> אז <span class="math">\(\frac{1}{2^{n}}\)</span> נהיה ממש קטן.</p>
+<p>אז בואו נעשה עצירת ביניים. ראינו שלושה אובייקטים שונים:</p>
+<ol> <li><strong>סכום אינסופי</strong>, <span class="math">\(\frac{1}{2}+\frac{1}{4}+\frac{1}{8}+\frac{1}{16}+\ldots\)</span></li>
+
+
+<li><strong>סדרה אינסופית</strong> של מספרים שהוסקה איכשהו מהסכום האינסופי ונקראה <strong>סדרת הסכומים החלקיים</strong> שלו, <span class="math">\(a_{n}=1-\frac{1}{2^{n}}\)</span></li>
+
+
+<li><strong>מספר ממשי</strong> שהוסק איכשהו מהסדרה האינסופית ונקרא <strong>הגבול</strong> שלה, 1.</li>
+
+</ol>
+
+<p>אפשר לחשוב על הסכום האינסופי בתור משהו שמייצג תהליך אינסופי שלעולם לא יסתיים - "מה שעובר לזנון בראש כשהוא מדמיין את אכילס מנסה לעבור מסלול ריצה". על הגבול, 1, אפשר לחשוב בתור "מה שיקרה עם אכילס בעולם האמיתי". ההתאמה הזו של גבול עבור הסכום האינסופי הוא הדרך שבה המתמטיקה לוקחת אובייקט שיש מידע שמיוצג בו בצורה <strong>מובלעת</strong>, וחושפת את המידע הזה בצורה <strong>מפורשת</strong>.</p>
+<p>אותו דבר בדיוק קורה עם ייצוג עשרוני של מספרים.</p>
+<h2>פרק ד', ובו אני מנסה להשתמש במתמטיקה כדי לשכנע שייצוג עשרוני מחזורי הוא שבר</h2>
+
+<p>אחרי כל הדיבורים שלי, עדיין לא הסברתי - למה <span class="math">\(0.333\ldots=\frac{1}{3}\)</span>? כאן יש לנו בעצם ארבעה אובייקטים שונים:</p>
+<ol> <li><strong>ייצוג עשרוני</strong> של מספר שהוא הביטוי <span class="math">\(0.333\ldots\)</span>.</li>
+
+
+<li><strong>סכום אינסופי</strong> <span class="math">\(\frac{3}{10}+\frac{3}{100}+\frac{3}{1000}+\ldots\)</span> שהסקנו איכשהו מהייצוג העשרוני.</li>
+
+
+<li><strong>סדרה אינסופית</strong> <span class="math">\(\frac{}{}\)</span><span class="math">\(\frac{3}{10},\frac{33}{100},\frac{333}{1000},\ldots\)</span> שהסקנו מהסכום האינסופי.</li>
+
+
+<li><strong>גבול</strong> שאני טוען שהוא <span class="math">\(\frac{1}{3}\)</span> אבל לא הוכחתי את זה.</li>
+
+</ol>
+
+<p>איך מוכיחים את זה? מה, לחשב <span class="math">\(\frac{1}{3}-\frac{333}{1000}\)</span>? זה נראה לי קצת כואב. זו אחת מהסיטואציות במתמטיקה שבהן אני חושב ש<strong>אבסטרקציה</strong> יכולה לעזור לנו. במקום לפתור את המקרה הקונקרטי הזה ולהסתבך עם מספרים שיבלבלו אותי, לפתור מקרה כללי יותר. ראשית, בואו נשים לב שאת הסכום <span class="math">\(\frac{3}{10}+\frac{3}{100}+\frac{3}{1000}+\ldots\)</span> אפשר לכתוב גם בתור <span class="math">\(3\left(\frac{1}{10^{1}}+\frac{1}{10^{2}}+\frac{1}{10^{3}}+\ldots\right)\)</span>, כלומר מספיק לי להבין מה קורה בסוגריים. אם אני אסמן <span class="math">\(q=\frac{1}{10}\)</span>, אז בעצם השאלה היא מהו הסכום <span class="math">\(q+q^{2}+q^{3}+\ldots\)</span> באופן כללי. לדבר כזה קוראים <strong>טור הנדסי</strong> אינסופי ולמרבה השמחה יש טריקים מתמטיים נחמדים כדי לחשב אותו. ראשית, מה הסכום החלקי, <span class="math">\(q+q^{2}+\ldots+q^{n}\)</span>? הטריק פה הוא לכפול את הסכום הזה ב-<span class="math">\(\left(q-1\right)\)</span> ולראות מה מקבלים. כשאני כופל את כל הסכום החלקי ב-<span class="math">\(q\)</span> אני מקבל</p>
+<p><span class="math">\(q^{2}+q^{3}+\ldots+q^{n+1}\)</span></p>
+<p>כלומר, המעריך של כל ה-<span class="math">\(q\)</span> בסכום גדל ב-1. עכשיו, כשאני כופל את כל הסכום החלקי ב-<span class="math">\(-1\)</span> אני מקבל</p>
+<p><span class="math">\(-q-q^{2}-\ldots-q^{n}\)</span></p>
+<p>המעריך נשאר אותו דבר, אבל עכשיו יש לנו מינוס במקום פלוס. לכן כשנחבר את הסכום העליון לתחתון, כמעט כל החזקות של <span class="math">\(q\)</span> ייעלמו; הדברים היחידים שלא מופיעים גם למעלה וגם למטה הם <span class="math">\(q^{n+1}\)</span> ו-<span class="math">\(-q\)</span>, אז אנחנו מקבלים</p>
+<p><span class="math">\(\left(q+q^{2}+\ldots+q^{n}\right)\left(q-1\right)=\left(q^{n+1}-q\right)\)</span></p>
+<p>עכשיו נחלק את שני האגפים ב-<span class="math">\(q-1\)</span> ונקבל את הנוסחה</p>
+<p><span class="math">\(q+q^{2}+\ldots+q^{n}=q\frac{q^{n}-1}{q-1}\)</span>.</p>
+<p>מה קורה כש-<span class="math">\(n\)</span> הולך וגדל? כאן יש חשיבות לשאלה מהו <span class="math">\(q\)</span>. אם למשל <span class="math">\(q=2\)</span> אז <span class="math">\(q^{n}\)</span> גדל וגדל עד אין קץ ונקבל שהסכום החלקי שואף לאינסוף - אין פה גבול במובן שדיברתי עליו קודם. אבל אם <span class="math">\(q<1\)</span>, למשל <span class="math">\(q=\frac{1}{10}\)</span>, אז <span class="math">\(q^{n}\)</span> הולך <strong>לשאוף לאפס</strong> באותו מובן שדיברתי עליו קודם, ועם אותה הוכחה (לוגריתמים וכאלה). לכן אפשר להראות שהגבול של הסדרה <span class="math">\(q\frac{q^{n}-1}{q-1}\)</span> הוא מה שמתקבל כשמחליפים את <span class="math">\(q^{n}\)</span> ב-0, כלומר</p>
+<p><span class="math">\(q\frac{0-1}{q-1}=\frac{q}{1-q}\)</span></p>
+<p>אם נציב <span class="math">\(q=\frac{1}{10}\)</span>, נקבל</p>
+<p><span class="math">\(\frac{q}{1-q}=\frac{1}{10}\cdot\frac{1}{1-\frac{1}{10}}=\frac{1}{10}\frac{1}{\frac{9}{10}}=\frac{10}{10\cdot9}=\frac{1}{9}\)</span></p>
+<p>ועכשיו אפשר לחזור לטור המקורי: <span class="math">\(\frac{3}{10}+\frac{3}{100}+\frac{3}{1000}+\ldots=3\left(\frac{1}{10^{1}}+\frac{1}{10^{2}}+\frac{1}{10^{3}}+\ldots\right)=3\cdot\frac{1}{9}=\frac{1}{3}\)</span>. זה מסיים לנו את ההוכחה במקרה של שלישי.</p>
+<p>מה עם <span class="math">\(0.999\ldots\)</span>? זה אותו דבר בדיוק: </p>
+<p><span class="math">\(0.999\ldots=9\left(\frac{1}{10^{1}}+\frac{1}{10^{2}}+\frac{1}{10^{3}}+\ldots\right)=9\cdot\frac{1}{9}=1\)</span></p>
+<p>זו ההוכחה הפורמלית של השוויון הזה, ואני אחזור לזה עוד רגע, אבל אני לא רוצה שנעצור פה כי מה שעשינו כאן הוא בעצם הרבה יותר כללי מזה. </p>
+<p>אם נפתח מחשבון ונכתוב <span class="math">\(1\div7\)</span> נקבל את המספר הזה או לפחות את ההתחלה שלו: <span class="math">\(0.142857142857\ldots\)</span>. איך מגיעים לזה? אני מדגים טכנית בדיוק את החישוב שמוביל לייצוג העשרוני הזה <a href="https://gadial.net/2021/03/24/how_to_division/">בפוסט שלי על חילוק</a>, וכאן אני מתעניין בדיוק בכיוון ההפוך - איך בעצם מהספרות <span class="math">\(0.142857142857\ldots\)</span> אני יכול להגיע חזרה אל <span class="math">\(\frac{1}{7}\)</span>? סתם לכפול ב-<span class="math">\(\frac{1}{9}\)</span> כמו קודם מן הסתם לא יעזור.</p>
+<p>ראשית, הנקודה הקריטית פה היא ש-<span class="math">\(0.142857142857\ldots\)</span> אולי נראה כמו ממבו-ג'מבו מפחיד של ספרות אבל יש בו חוקיות <strong>מחזורית</strong> פשוטה: יש את הספרות <span class="math">\(142857\)</span> שחוזרות על עצמן שוב, ושוב, ושוב (בפוסט על החילוק אנחנו רואים בדיוק למה אנחנו יודעים את זה בודאות וזו לא סיטואציה של "פתאום בספרה ה-312,438 אחרי הנקודה התבנית נשברת"). זה אומר שאני יכול לכתוב את הייצוג העשרוני הזה בתור</p>
+<p><span class="math">\(\frac{142857}{1000000}+\frac{142857}{1000000^{2}}+\frac{142857}{1000000^{3}}+\ldots\)</span></p>
+<p>רגע, מה? איך? אולי כדאי שאסביר את זה יותר אם זה לא ברור. בוא נתחיל מלהסתכל על <span class="math">\(0.142857\)</span>, בלי שלוש נקודות והכל, רק השבר הזה. על פי ההגדרה הפורמלית הוא שווה ל-</p>
+<p><span class="math">\(\frac{1}{10}+\frac{4}{100}+\frac{2}{1000}+\frac{8}{10000}+\frac{5}{100000}+\frac{7}{1000000}\)</span></p>
+<p>כשרוצים לחבר את כל אלו עושים מכנה משותף. לכן ה-<span class="math">\(1\)</span> מוכפל ב-10000 וה-4 מוכפל ב-1000 וכן הלאה. מה שמקבלים הוא בדיוק את <span class="math">\(\frac{142857}{1000000}\)</span>.</p>
+<p>עכשיו, את <span class="math">\(0.142857142857\)</span> (עדיין בלי שלוש נקודות, רק שתי חזרות על <span class="math">\(142857\)</span>) אפשר לכתוב בתור <span class="math">\(0.142857+0.000000142857\)</span>. ראינו שהמספר השמאלי הוא <span class="math">\(\frac{142857}{1000000}\)</span>. אם נכפול את המספר הימני <span class="math">\(0.000000142857\)</span> ב-1000000, התוצאה תהיה "הזזה של הספרות" שישה מקומות שמאלה (כי כפל ב-10 הוא הזזה של הספרות צעד אחד שמאלה. אז נקבל שוב את <span class="math">\(0.142857\)</span>, והמסקנה היא ש-<span class="math">\(10^{6}\cdot0.000000142857=\frac{142857}{10^{6}}\)</span>, כלומר אם נחלק ב-<span class="math">\(10^{6}\)</span> את שני האגפים נקבל <span class="math">\(0.000000142857=\frac{142857}{\left(10^{6}\right)^{2}}\)</span> וככה זה נמשיך עוד ועוד. לכן גם <span class="math">\(0.142857\ldots\)</span> הוא בבסיסו מספר כפול טור הנדסי - הפעם המספר הוא <span class="math">\(142857\)</span> והטור ההנדסי הוא עם <span class="math">\(q=\frac{1}{10^{6}}\)</span>. אפשר להציב את <span class="math">\(q\)</span> בתוך הנוסחה הכללית לסכום שראינו קודם, <span class="math">\(\frac{q}{1-q}\)</span> ולקבל</p>
+<p><span class="math">\(\frac{1}{10^{6}}\frac{1}{\frac{9999999}{10^{6}}}=\frac{1}{999999}\)</span></p>
+<p>אם נפתח מחשבון ונחשב את <span class="math">\(999999\div142857\)</span> נקבל בדיוק 7, ולכן באמת קיבלנו <span class="math">\(\frac{1}{7}=\frac{142857}{999999}\)</span>. אותי זה מכה בהלם - איך ייתכן שמספר כל כך מסודר כמו 999999 יתחלק יפה בבלאגן כמו 142857? אבל זה קורה, וזה <strong>חייב לקרות</strong> עבור כמעט כל מספר שהוא שבר מהצורה <span class="math">\(\frac{1}{d}\)</span>: מתישהו יהיה מספר מתוסבך שכשמחלקים את <span class="math">\(9999\ldots9\)</span> בו מקבלים בדיוק <span class="math">\(d\)</span> - או בניסוח אחר - אם נסתכל על כל המספרים מהצורה <span class="math">\(9,99,999,9999,\ldots\)</span> מתישהו אחד מהם יתחלק ב-<span class="math">\(d\)</span> בלי שארית. החריגים היחיד הם המקרים המקרה שבהם <span class="math">\(d\)</span> מתחלק ב-2 או ב-5; ראינו כבר שאם <span class="math">\(d\)</span> מתחלק <strong>רק</strong> ב-2 או ב-5 אז יש לו ייצוג עשרוני <strong>סופי</strong>, ועוד מעט נראה מה קורה במקרה הכללי.</p>
+<p>בואו נוכיח את הטענה הזו על ה-9-ים וההתחלקות כי ההוכחה ממש חמודה ומאפשרת להציג עוד רעיון מתמטי נחמד (אבל אפשר גם לדלג עליה). ראשית, במקום לכתוב <span class="math">\(99999\)</span> וכו' יותר נוח לכתוב <span class="math">\(10^{n}-1\)</span>, אז אנחנו מסתכלים על הסדרה של כל המספרים מהצורה <span class="math">\(10^{n}-1\)</span> ורוצים להוכיח שאיבר כלשהו שלה מתחלק ב-<span class="math">\(d\)</span>. עכשיו, כשמחלקים איבר כזה ב-<span class="math">\(d\)</span> <strong>עם שארית</strong> השארית יכולה לצאת כל מספר מ-0 עד <span class="math">\(d-1\)</span>, בסך הכל יש <span class="math">\(d\)</span> אפשרויות. זה אומר שאם אני אסתכל על כל המספרים <span class="math">\(10^{1}-1,10^{2}-1,\ldots,10^{d+1}-1\)</span> יהיו לי <span class="math">\(d+1\)</span> מספרים, שכשאני מחלק אותם ב-<span class="math">\(d\)</span> אני מקבל אחת מבין <span class="math">\(d\)</span> שאריות אפשריות, ובגלל שיש <span class="math">\(d+1\)</span> מספרים בהכרח תהיה שארית שתופיע <strong>פעמיים</strong> - זה יישום של עקרון כללי שנקרא <strong>עקרון שובך היונים</strong>.</p>
+<p>נניח שהשארית שמופיעה פעמיים, מופיעה במספרים <span class="math">\(10^{m}-1\)</span> ו-<span class="math">\(10^{k}-1\)</span>, עבור <span class="math">\(m>k\)</span>. עכשיו בואו נסתכל על המספר</p>
+<p><span class="math">\(\left(10^{m}-1\right)-\left(10^{k}-1\right)\)</span></p>
+<p>אם אני אחלק את המספר <strong>הזה</strong> ב-<span class="math">\(d\)</span>, אני אקבל שארית אפס, כי השארית מחלוקת <span class="math">\(\left(10^{m}-1\right)\)</span> ב-<span class="math">\(d\)</span> תתקזז עם השארית מחלוקת <span class="math">\(\left(10^{k}-1\right)\)</span> ב-<span class="math">\(d\)</span>. בנוסף, אני יכול לכתוב את המספר הזה בצורה נחמדה יותר:</p>
+<p><span class="math">\(\left(10^{m}-1\right)-\left(10^{k}-1\right)=10^{m}-10^{k}=10^{k}\left(10^{m-k}-1\right)\)</span></p>
+<p>עכשיו, אני מניח ש-<span class="math">\(d\)</span> לא מתחלק ב-2 או ב-5. במילים אחרות, אין לו <strong>בכלל</strong> מחלקים משותפים עם <span class="math">\(10^{k}\)</span> - על זה אומרים במתמטית ש-<span class="math">\(d\)</span> ו-<span class="math">\(10^{k}\)</span> הם <strong>זרים</strong>. זה אומר שאם אני יודע ש-<span class="math">\(d\)</span> מחלק את כל <span class="math">\(10^{k}\left(10^{m-k}-1\right)\)</span> אז בהכרח <span class="math">\(d\)</span> מחלק את <span class="math">\(10^{m-k}-1\)</span>, כי במספר השני במכפלה אין אף גורם שמופיע ב-<span class="math">\(d\)</span>. זה מסיים את ההוכחה: קיבלנו מספר מהצורה <span class="math">\(999\ldots9\)</span> שמתחלק על ידי <span class="math">\(d\)</span>.</p>
+<p>מה קורה במקרה הכי כללי? כשיש לנו <span class="math">\(d\)</span> שמצד אחד מתחלק או ב-2 או ב-5 ומצד שני לא מתחלק <strong>רק</strong> בהם? המקרה הקלאסי הוא <span class="math">\(\frac{1}{6}\)</span>, כי <span class="math">\(6=2\cdot3\)</span>. אם נפתח מחשבון נגלה ש-<span class="math">\(\frac{1}{6}=0.1666\ldots\)</span>, כלומר יש פה בייצוג העשרוני שילוב של שני חלקים - חלק בהתחלה שלא חוזר על עצמו, וחלק בהמשך שכן חוזר על עצמו. את זה כבר ראינו איך לחשב:</p>
+<p><span class="math">\(0.1666=0.1+0.0666\ldots=\frac{1}{10}+\frac{1}{10}\cdot\frac{2}{3}=\frac{3+2}{30}=\frac{5}{30}=\frac{1}{6}\)</span></p>
+<p>זו גם הצורה הכללית של ייצוג עשרוני של מספר שהוא שבר: מספר שהספרות שלו אחרי הנקודה הופכת להיות מחזוריות החל משלב מסוים, לאו דווקא מהספרה הראשונה. יש הרבה מספרים שלא מקיים את החוקיות הזו, למשל <span class="math">\(\pi=3.1415\ldots\)</span> שאי אפשר לייצג בתור שבר (הוא <strong>אי-רציונלי</strong>) אבל זה סיפור לפעם אחרת.</p>
+<h2>פרק ה' ואחרון, ובו אני מנסה להשתמש במה שראינו כאן כדי לשכנע שזה לא סיפור של צודקים וטועים</h2>
+
+<p>בואו נסכם את מה שראינו. כפי שאמרתי קודם, כשמדברים על ייצוג עשרוני מדברים בעצם במובלע על ארבעה אובייקטים שונים:</p>
+<ol> <li><strong>ייצוג עשרוני</strong> של מספר.</li>
+
+
+<li><strong>סכום אינסופי</strong> שהסקנו איכשהו מהייצוג העשרוני.</li>
+
+
+<li><strong>סדרה אינסופית</strong> שהסקנו מהסכום האינסופי.</li>
+
+
+<li><strong>גבול</strong> שהסקנו מהסדרה האינסופית.</li>
+
+</ol>
+
+<p>הרעיון בייצוג עשרוני הוא שהגבול שמקבלים בשלב 4 יהיה שווה למספר שאנחנו מעוניינים לייצג עשרונית. אם המספר הזה הוא מספר רציונלי ("שבר") קל לראות שזה באמת עובד והראיתי את זה למעלה - עבור מספרים אי רציונליים הטיעון עשוי להיות מסובך יותר. בפרט עבור <span class="math">\(0.999\ldots\)</span> מקבלים די בקלות שהגבול הוא 1, ולכן כותבים <span class="math">\(0.999\ldots=1\)</span>. מזה נובע שגם באופן כללי יותר, בכל פעם שבה מספר מסתיים בסדרה אינסופית של 999, בעצם יש לנו שני ייצוגים שונים לאותו מספר. למשל <span class="math">\(0.3999\ldots\)</span> הוא ייצוג שונה של <span class="math">\(0.4\)</span>, וכן הלאה; זה לא שיש משהו מיוחד ספציפית ב-<span class="math">\(0.999\ldots\)</span> עצמו. זו אפילו לא אנומליה שקשורה לכך שאנחנו סופרים בבסיס 10; אם היינו סופרים בבסיס 60, אז ייצוג שמסתיים בסדרה אינסופית של הסימבול עבור 59 היה מקיים את אותה כפילות בדיוק. זה פשוט האופן שבו ייצוגים כאלו של מספרים ממשיים עובדים.</p>
+<p>התחושה שלי היא שרוב אלו שלא מסכימים שהשוויון נכון בעצם מזהים את <span class="math">\(0.999\ldots\)</span> עם אחד מהאובייקטים משלב 2 או 3, ולא עם האובייקט משלב 4 שהוא היעד של ההגדרה והתוצאה הסופית שלה. במובן הזה הם לא "טועים"; ההפך, הם מתארים <strong>נכון</strong> חלק מההגדרה, פשוט לא את הכל. הם נעצרים מוקדם מדי. למשל אצל מי שאומרים ש-<span class="math">\(0.999\ldots\)</span> הוא "תהליך" (הם אי שם בשלב 2). שווה להתייחס במיוחד אל מי שאומרים שההפרש בין <span class="math">\(1\)</span> ו-<span class="math">\(0.999\ldots\)</span> הוא <span class="math">\(0.000\ldots1\)</span>: הם בעצם מסתכלים על סדרת ההפרשים <span class="math">\(0.1,0.01,0.001,\ldots\)</span> שמופיעה במובלע בשלב 3, ואז מסיקים שה"גבול" שלה הוא <span class="math">\(0.000\ldots1\)</span> במקום סתם 0. זה קורה כי הם לא <strong>מחשבים</strong> את הגבול (הזוועה עם הלוגריתמים שעשיתי קודם) אלא כי הם עושים איזה להטוט סינטקטי, כלומר כזה שמתייחס ל<strong>צורה</strong> ולא ל<strong>תוכן</strong> של המספרים שהם עובדים איתם. אם מסתכלים על <span class="math">\(0.1,0.01,0.001,\ldots\)</span> בתור "הסימבול 0 ואז הסימבול נקודה ואז סדרה <strong>סופית</strong> של הסימבולים 0 ואז הסימבול 1 לסיום" אפשר לחשוב על החוקיות שבה לוקחים את הייצוג הסינטקטי הזה לאינסוף ומחליפים את ה<strong>סופית</strong> שהופיעה קודם ב<strong>אינסופית</strong>. עכשיו, שיהיה ברור, זה רעיון <strong>ממש נחמד</strong> ואפשר לפתח אותו מתמטית ולעשות איתו כל מני דברים - אבל הוא פשוט לא רלוונטי למה שאנחנו עושים כאן, כי זה לא מייצג את האופן שבו במתמטיקה אנחנו מבצעים חישובים במספרים ממשיים.</p>
+<p>לסיום, אני רוצה לחזור להוכחה שהצגתי בהתחלה:</p>
+<ol> <li><span class="math">\(x=0.999\ldots\)</span></li>
+
+
+<li><span class="math">\(10x=9.999\ldots\)</span> (כפלנו ב-10 את שני האגפים)</li>
+
+
+<li><span class="math">\(10x-x=9.999\ldots-0.999\ldots\)</span> (החסרנו <span class="math">\(0.999\ldots\)</span> משני האגפים)</li>
+
+
+<li><span class="math">\(9x=9\)</span> (חישבנו את תוצאת פעולת החיסור באגפים ימין ושמאל)</li>
+
+
+<li><span class="math">\(x=1\)</span> (חילקנו את שני האגפים ב-9)</li>
+
+</ol>
+
+<p>ההוכחה הזו תמיד צצה בדיונים על הנושא וכאמור אני חושב שהיא בהחלט מסוגלת לשכנע חלק מהמתדיינים (בשום פנים ואופן לא את כולם). אפשר אולי לטעון שההוכחה הזו מסתירה את העומק האמיתי של ההגדרות ועם זה אני לא מנסה להתווכח, אבל אני כן רוצה שנראה שזו הוכחה תקינה לגמרי. השלבים ה"מסוכנים" הם 2 ו-3; בואו נבין למה אפשר לעשות אותם.</p>
+<p>בשלב 2 אני אומר שאם כופלים את <span class="math">\(0.999\ldots\)</span> ב-10 מקבלים <span class="math">\(9.999\ldots\)</span>. בואו קודם כל נפתח את ההגדרות של שני המספרים הללו:</p>
+<ul> <li><span class="math">\(0.999\ldots=\frac{9}{10}+\frac{9}{100}+\frac{9}{1000}+\ldots\)</span></li>
+
+
+<li><span class="math">\(9.999\ldots=9+\frac{9}{10}+\frac{9}{100}+\frac{9}{1000}+\ldots\)</span></li>
+
+</ul>
+
+<p>אם ניקח את הטור העליון ונכפול אותו "איבר-איבר" ב-10, נקבל את הטור השני. לכן מה שאנחנו מתבססים עליו כאן הוא הטענה שאפשר לכפול טורים "איבר-איבר". ברשותכם, אני אכניס את הסימן <span class="math">\(\Sigma\)</span> לתיאור סכום כדי לפשט עניינים. פורמלית, המשפט הוא שאם <span class="math">\(\sum_{n=0}^{\infty}a_{n}\)</span> הוא טור <strong>מתכנס</strong>, כלומר קיים <span class="math">\(A\)</span> כך ש-<span class="math">\(\sum_{n=0}^{\infty}a_{n}=A\)</span> (עם ההגדרה של הגבול של סדרת הסכומים החלקיים שהזכרתי קודם), ואם <span class="math">\(B\)</span> הוא מספר כלשהו, אז מתקיים <span class="math">\(\sum_{n=0}^{\infty}Ba_{n}=B\left(\sum_{n=0}^{\infty}a_{n}\right)=BA\)</span>. ההוכחה היא די פשוטה: אם כופלים את הטור ב-<span class="math">\(B\)</span> יוצא שזה כמו לכפול את סדרת הסכומים החלקיים ב-<span class="math">\(B\)</span> ואנחנו עוברים לטיעון שאם יש לנו סדרה מתכנסת ואנחנו כופלים אותה ב-<span class="math">\(B\)</span> אז הגבול שלה מוכפל ב-<span class="math">\(B\)</span> מה שנובע יחסית בקלות מההגדרה של הגבול (שלא הצגתי כאן במלואה אז אני לא אוכיח פה פורמלית).</p>
+<p>באופן דומה בשלב 3 בעצם יש לנו טיעון על <strong>הפרש</strong> של שני טורים ששניהם מתכנסים: ש-</p>
+<p><span class="math">\(\sum_{n=0}^{\infty}a_{n}-\sum_{n=0}^{\infty}b_{n}=\sum_{n=0}^{\infty}\left(a_{n}-b_{n}\right)\)</span></p>
+<p>גם פה ההוכחה היא אותו דבר - מעבר מהטורים אל סדרות, ושימוש בכך שהגבול של סדרת הפרשים <span class="math">\(\left(a_{n}-b_{n}\right)\)</span> שווה להפרש הגבולות של הסדרות <span class="math">\(a_{n},b_{n}\)</span> בנפרד. אלו טענות פשוטות למדי שנתקלים בהן בלימודי חשבון אינפיניטסימלי בסיסיים - אבל זה העניין, שבשביל לראות את זה פורמלית צריך להגיע ללימודי חשבון אינפיניטסימלי בסיסיים ורוב גדול של האנשים לא יעשו את זה. מצד שני, אני חושד שרוב האנשים שלא למדו חשבון אינפיניטסימלי גם ייטו לקבל אינטואיטיבית את זה שמעברים 2 ו-3 הם נכונים (אלא אם הם ממש רוצים לחפש בכוח בעיות בהוכחה) - פשוט כי חשבון אינפיניטסימלי הוא הזדמנות לראות את הדרכים השונות שבהן תוצאות "אינטואיטיביות" דומות קורסות ומתרסקות ברעש עצום. מכירים את הקטע הזה שאם יש לנו סכום אינסופי שבניגוד למה שראינו בפוסט הזה יש בו גם איברים חיוביים וגם שליליים, אז ייתכן שעל ידי סידור מחדש של האיברים שלו נוכל להגיע לכל מספר אפשרי? <a href="https://gadial.net/2010/04/10/riemann_series_theorem/">יש לי פוסט על זה</a>.</p>
+<p>פתחתי בלומר ש-<span class="math">\(0.999\ldots=1\)</span> הוא שוויון פשוט, כמעט טריוויאלי. זה כמובן נכון, אבל עדיין יצא לי פוסט לא קטן עליו. זה בגלל שהשוויון הקטן והמוזר הזה הוא לשמחתי הרבה <strong>מעניין</strong>. הוא נותן תירוץ לדבר על שלל דברים נחמדים במתמטיקה. קצת חבל לי על כל המקרים שבהם אנשים מתחילים לריב על השוויון ובמקום לנצל את זה כדי לדבר על דברים מגניבים פשוט ממשיכים... לריב. כדי לראות "מי צודק". אנחנו יכולים להיות טובים יותר מזה, לא סתם לשאוף לשם.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2025/05/31/catalan_numbers/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מספרי קטלן</span>
+            </a>
+            
+            
+            
+            <a href="/2025/02/07/normal_distribution_4/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מה הקטע עם התפלגות נורמלית? (חלק ד&#39; ואחרון: משפט הגבול המרכזי)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

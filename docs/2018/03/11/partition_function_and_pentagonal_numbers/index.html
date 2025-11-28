@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>כמה חלוקות יש, ואיך זה קשור לאוילר ולמספרים מחומשים? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>כמה חלוקות יש, ואיך זה קשור לאוילר ולמספרים מחומשים?</h1>
+            <div class="post-meta">
+                <span class="date">2018-03-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/משפט המספרים המחומשים.html">משפט המספרים המחומשים</a>
+                    
+                    <a href="/tags/פונקציות יוצרות.html">פונקציות יוצרות</a>
+                    
+                    <a href="/tags/פונקציית החלוקה.html">פונקציית החלוקה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>פרק ראשון, ובו מככבים בעיה קומבינטורית מסתורית, פתרון מסתורי עוד יותר ונוסחאות מסתוריות יותר מדי</h2>
+<p>אני רוצה לדבר הפעם על מה שלטעמי היא הבעיה היפה והמעניינת ביותר בקומבינטוריקה בסיסית - בעיית הספירה של <strong>חלוקות</strong> של מספרים טבעיים. מה זו חלוקה של מספר <span class="math">\(n\)</span>? זו דרך לכתוב את <span class="math">\(n\)</span> כסכום של מספרים טבעיים חיוביים, כשאין חשיבות לסדר של המחוברים. למשל, <span class="math">\(3=1+2\)</span> היא חלוקה של <span class="math">\(3\)</span>, והיא זהה ל-<span class="math">\(2+1\)</span>. עוד חלוקות אפשריות של 3 הן פשוט 3 עצמה, ו-<span class="math">\(1+1+1\)</span>. אם כן, ל-3 יש <span class="math">\(3\)</span> חלוקות. קל לראות של-1 יש חלוקה אחת, ול-2 יש שתי חלוקות. האם ל-4 יהיו, אם כן, 4 חלוקות? ובכן, לא, יש 5:</p>
+<ol>
+    <li>4</li>
+    <li><span class="math">\(1+3\)</span></li>
+    <li><span class="math">\(2+2\)</span></li>
+    <li><span class="math">\(1+1+2\)</span></li>
+    <li><span class="math">\(1+1+1+1\)</span></li>
+</ol>
+<p>אפשר להגדיר כך פונקציה: <span class="math">\(p\left(n\right)\)</span> היא מספר החלוקות של המספר הטבעי <span class="math">\(n\)</span> (ל-0 יש חלוקה יחידה, "ריקה"). הסדרה <span class="math">\(p\left(0\right),p\left(1\right),p\left(2\right),\dots\)</span> מתחילה כך:</p>
+<p><span class="math">\(1,1,2,3,5,7,11,15,22,30,42,56,77,\dots\)</span></p>
+<p>ונשאלת השאלה - האם יש דרך חישוב פשוטה עבור <span class="math">\(p\left(n\right)\)</span>?</p>
+<p>כדי לראות מה זו "דרך חישוב פשוטה", בואו נסתכל לרגע על בעיה דומה: יש לנו <span class="math">\(n\)</span> כדורים שנמצאים ב-<span class="math">\(k\)</span> תאים הממוספרים ב-<span class="math">\(1,2,\dots,k\)</span>, (כשאפשר תאים ריקים ואפשר יותר מכדור אחד בתא). כמה סיטואציות אפשריות כאלו יש? ובכן, זה מה שנקרא בקומבינטוריקה <strong>בחירה עם החזרה וללא חשיבות לסדר</strong>: בחירה - לכל כדור בוחרים תא; עם החזרה - אפשר לבחור את אותו תא יותר מפעם אחת; ללא חשיבות לסדר - מה שמתעניינים בו הוא רק כמה כדורים יש בכל תא בסוף התהליך, לא כמה תהליכי חלוקה קיימים. <a href="http://gadial.net/2010/07/08/combinatorics_choices/">יש לי פוסט</a> שבו אני פותר את הבעיה הזו, והפתרון (שלא חשוב לפוסט הזה) הוא מה שמסומן ב-<span class="math">\({n+k-1 \choose k}\)</span> והוא סימון מקוצר ל-<span class="math">\(\frac{\left(n+k-1\right)!}{k!\left(n-1\right)!}\)</span>. זו נוסחה סגורה פשוטה שאפשר לחשב ממנה ערכים מספריים בקלות רבה יחסית.</p>
+<p>אם ננסה לעשות ניתוח דומה עבור פונקציית החלוקה, מהר מאוד ניתקל בקשיים ונראה שהבעיה הזו חמקמקה הרבה משנראה במבט ראשון. עיקר הקושי הוא שקל לבצע בטעות <strong>ספירה כפולה</strong> כשמנסים לעשות הפרדה למקרים. הנה דוגמא עבור ניתוח שגוי של מספר החלוקות של 4: אני אומר, בואו ניקח מספר <span class="math">\(1\le n\le4\)</span>, ניקח את <span class="math">\(4-n\)</span> ונחשב את <strong>כל</strong> החלוקות שלו, נוסיף לכל אחת מהן את <span class="math">\(n\)</span> והופס - קיבלנו חלוקה של 4 ואפשר להוסיף אותה לספירה. כל מה שנשאר לעשות הוא לעבור על כל הערכים האפשריים של <span class="math">\(n\)</span>.</p>
+<p>במילים אחרות, אני מציע לבצע את החישוב הבא: <span class="math">\(p\left(4\right)=p\left(3\right)+p\left(2\right)+p\left(1\right)+p\left(0\right)=3+2+1+1=7\)</span>. קיבלתי תוצאה גדולה מדי - ספרתי שתי חלוקות פעמיים. את מי? ובכן, אם <span class="math">\(n=2\)</span> אז אני בונה את החלוקה <span class="math">\(2+\left(1+1\right)\)</span> (החלק בסוגריים הוא חלוקה של <span class="math">\(2=4-n\)</span> במקרה הזה). אם לעומת זאת <span class="math">\(n=1\)</span> אז אני בונה את החלוקה <span class="math">\(1+\left(2+1\right)\)</span> (כאן הסוגריים הם חלוקה של <span class="math">\(3=4-n\)</span>). שתי החלוקות הללו הן <strong>אותו דבר</strong>. הסדר של האיברים בסכום שונה, אבל אמרנו שזה לא משנה לנו, ומכאן הספירה הכפולה.</p>
+<p>אם השיטה שלי הייתה עובדת והיינו מקבלים ש-<span class="math">\(p\left(n\right)\)</span> שווה לסכום כל ה-<span class="math">\(p\left(k\right)\)</span>-ים עבור <span class="math">\(k&lt;n\)</span>, האם הייתם מסכימים שזו דרך חישוב פשוטה? מצד אחד, זה אומר שכדי לחשב את <span class="math">\(p\left(n\right)\)</span> צריך לחשב את <strong>כל</strong> האיברים שלפניו בסדרה; מצד שני, החישוב עצמו הוא מאוד פשוט. חשבו לרגע על סדרת פיבונאצ'י שמוגדרת באמצעות הכלל <span class="math">\(F\left(0\right)=0,F\left(1\right)=1\)</span> ו-<span class="math">\(F\left(n\right)=F\left(n-1\right)+F\left(n-2\right)\)</span> לכל <span class="math">\(n\ge2\)</span>; גם בשביל לחשב את <span class="math">\(F\left(100\right)\)</span> צריך לחשב קודם כל את כל האיברים הקודמים, ועדיין החישוב הוא פשוט יחסית (יש גם נוסחה סגורה לפיבונאצ'י, אבל זה לא אומר שיותר קל להשתמש בה בחישובים).</p>
+<p>ובכן, מה אם אספר לכם ש<strong>אפשר</strong> לחשב את פונקציית החלוקה באופן רקורסיבי שכזה, אבל במקום לחבר את <strong>כל</strong> ה-<span class="math">\(p\left(k\right)\)</span>-ים עבור <span class="math">\(k&lt;n\)</span>, צריך לחבר (או לחסר) רק <strong>חלק מהם</strong>? למשל, <span class="math">\(p\left(4\right)=p\left(3\right)+p\left(2\right)\)</span>; ואם תבדקו בעזרת הרשימה שנתתי לעיל תוכלו גם לראות ש-</p>
+<p><span class="math">\(p\left(5\right)=p\left(4\right)+p\left(3\right)-p\left(0\right)\)</span></p>
+<p><span class="math">\(p\left(6\right)=p\left(5\right)+p\left(4\right)-p\left(1\right)\)</span></p>
+<p>וכך זה נמשך אבל הולך ומסתבך מבחינת "את מי לחבר/לחסר". למשל:</p>
+<p><span class="math">\(p\left(17\right)=p\left(16\right)+p\left(15\right)-p\left(12\right)-p\left(10\right)+p\left(5\right)\)</span></p>
+<p>מה החוקיות הכללית פה? כאן נכנס לתמונה מי שנקראים <strong>מספרים מחומשים</strong>. מספר מחומש <span class="math">\(t\left(k\right)\)</span> הוא מספר מהצורה <span class="math">\(t\left(k\right)=\frac{k\left(3k-1\right)}{2}\)</span> עבור <span class="math">\(k\)</span> שלם ששונה מאפס - חיובי או שלילי (האות <span class="math">\(t\)</span> היא לא סימון סטנדרטי; אני משתמש בה כי הסימון הסטנדרטי משתמש ב-<span class="math">\(p\)</span> שכבר תפוס לתיאור חלוקות). הרעיון הוא שכדי לחשב את <span class="math">\(p\left(n\right)\)</span> סוכמים את כל האיברים מהצורה <span class="math">\(p\left(n-t\right)\)</span> כאשר <span class="math">\(t\)</span> הוא מספר מחומש שקטן מ-<span class="math">\(n\)</span>; השאלה האם לחבר או לחסר את <span class="math">\(p\left(n-t\right)\)</span> תלויה בזוגיות של ה-<span class="math">\(k\)</span> שהניב אותו: אם הוא אי-זוגי, אז מחברים, ואם הוא זוגי אז מחסרים. אם נשב לכתוב את סדרת המספרים המחומשים נראה שהיא שווה ל</p>
+<p><span class="math">\(1,2,5,7,12,15,22,26,\dots\)</span></p>
+<p>ולכן הנוסחה הכללית לחישוב מספר החלוקות היא</p>
+<p><span class="math">\(p\left(n\right)=p\left(n-1\right)+p\left(n-2\right)-p\left(n-5\right)-p\left(n-7\right)+p\left(n-12\right)+p\left(n-15\right)-p\left(n-22\right)-p\left(n-26\right)+\dots\)</span></p>
+<p>וכן הלאה וכן הלאה. זו תוצאה מרהיבה ממש לטעמי (בפרט קל להעריך אותה אם מנסים לחשב מספרית את <span class="math">\(p\left(n\right)\)</span> בדרכים אחרות ורואים עד כמה זה מעיק), אבל היא נראית גם הזויה לחלוטין - מה המשמעות הקומבינטורית של נוסחת הנסיגה הזו? למה מחברים או <strong>מחסרים</strong>? למה דווקא המספרים ה"מחומשים" הללו? ובכן, הפוסט הזה ינסה לענות על השאלות הללו ברמה כלשהי, אם כי אני מזהיר מראש שאין לי אינטואיציה קומבינטורית לגבי "למה הנוסחה עובדת"; אני הולך להוכיח אותה בעזרת כלי קומבינטורי חזק מאוד שנקרא <strong>פונקציות יוצרות</strong>. הכלי הזה נותן לי תחושה חזקה מאוד של "למה זה נכון", ועם זאת לא נותן לי שום רמז לגבי משמעות קומבינטורית אפשרית של נוסחת הנסיגה. זה פחות מפריע לי כי אני חושב שהבעיה הספציפית הזו של חלוקות היא הזדמנות מושלמת להראות מה הן פונקציות יוצרות ומה הכוח שלהן.</p>
+<p>את הסיפור של פונקציית החלוקה שאני רוצה לספר אפשר לתמצת לשתי משוואות שבמבט ראשון יכולות להיראות חסרות פשר, אפילו שגויות, וננסה להבין אותן כאן:</p>
+<ul>
+    <li><span class="math">\(\sum_{n=0}^{\infty}p\left(n\right)x^{n}=\prod_{n=1}^{\infty}\frac{1}{\left(1-x^{n}\right)}\)</span></li>
+    <li><span class="math">\(\prod_{n=1}^{\infty}\left(1-x^{n}\right)=\sum_{k=-\infty}^{\infty}\left(-1\right)^{k+1}x^{t\left(k\right)}\)</span></li>
+</ul>
+<p>הנוסחה הראשונה עוסקת בפונקציה היוצרת של הפונקציה <span class="math">\(p\)</span> של מספר החלוקות, והשניה איכשהו מכניסה פנימה את הפונקציה <span class="math">\(t\left(k\right)\)</span> של המספרים המחומשים. הקישור של שתיהן יחד נותן לנו את נוסחת הנסיגה שראינו קודם. אנחנו נרצה לעשות שלושה דברים:</p>
+<ol>
+    <li>להבין למה הנוסחה הראשונה נכונה - זה יהיה קל יחסית, אחרי שנבין מהן פונקציות יוצרות.</li>
+    <li>להבין למה הנוסחה השניה נכונה - אני הולך להראות הוכחה קומבינטורית מקסימה לדבר הזה.</li>
+    <li>להבין איך הקשר בין שתי הנוסחאות נותן לנו את נוסחת הנסיגה.</li>
+</ol>
+<p>הנוסחאות הללו התגלו לראשונה ככל הנראה בידי לאונרד אוילר, בשנת 1741. האזכור הכתוב הראשון שיש לנו להן הוא במכתב מאותה שנה ששלח דניאל ברנולי לאוילר ומתייחס אליהן, ככל הנראה בתגובה למכתב של אוילר (שלא נמצא) שתיאר אותן. אוילר הציג באותה שנה מאמר שמתאר את הנוסחאות הללו ושימושיהן, אבל ההוכחה שאני הולך להראות לנוסחה השניה היא מ-1881, של מתמטיקאי אמריקאי בשם פרנקלין שלא הצלחתי למצוא עליו שום מידע. אפשר להבין את ההוכחה של פרנקלין גם בלי להבין מה הולך עם הפורמליסטיקה של הנוסחאות, והיא מאוד יפה לכשעצמה, כך שאציג אותה בפוסט נפרד; גם אם הלכתם לאיבוד פה אתם יכולים לדלג אל הפוסט הבא בשבילה.</p>
+<h2>פרק שני, ובו בהחלט לא נעסוק בחדו"א בשום צורה</h2>
+<p>בואו נתחיל עם להבין מה בכלל המשמעות של הנוסחאות של אוילר. נסתכל באגף שמאל של הנוסחה הראשונה:</p>
+<p><span class="math">\(\sum_{n=0}^{\infty}p\left(n\right)x^{n}=\prod_{n=1}^{\infty}\frac{1}{\left(1-x^{n}\right)}\)</span></p>
+<p>מה זה <span class="math">\(\sum_{n=0}^{\infty}p\left(n\right)x^{n}\)</span>? יש כאן <strong>סכום אינסופי</strong>, יצור שאנחנו רגילים אליו מחדו"א. בחדו"א מדברים על <strong>טורי מספרים</strong>, למשל הטור <span class="math">\(\sum_{n=1}^{\infty}\frac{1}{2^{n}}\)</span>. יש הגדרות מקובלות שמתבססות על מושג <strong>הגבול</strong> שאומרות מתי סביר להתאים ערך של "סכום" לטור כזה ומתי לא - בהגדרות הללו יוצא, למשל, ש-<span class="math">\(\sum_{n=1}^{\infty}\frac{1}{2^{n}}=1\)</span>. מכירים את זה? מצויין. אז אני מבקש מכם <strong>לשכוח את זה לגמרי</strong> בפוסט הזה. לא נדבר על מושג הגבול ולא נזדקק לו ולא נזדקק לחדו"א. לא על זה מדובר פה.</p>
+<p>טוב, אני משקר. זה <strong>קצת</strong> קשור למה שמדובר עליו פה. <strong>אפשר</strong> להכניס חדו"א לתמונה כשמתעסקים עם פונקציות יוצרות, אבל למטרות ניתוחים שלא יהיו רלוונטיים לנו כאן כלל. בנוסף, אין ספק שעבור אוילר, החדו"א הייתה ההצדקה לכך שאפשר להשתמש בכלל בנוסחאות הללו. אוילר חי בתקופה שבה החדו"א בפרט והמתמטיקה בכלל לא פורמלו עד הסוף, ומושג הגבול בכלל לא הומצא, ומתמטיקאים עשו מניפולציות של ביטויים כמו זה שלעיל באופן די חופשי, כשהם מסתמכים על האינטואיציה שלהם ועל זה שדברים עובדים בסוף. שלא יהיה ספק, כשעשה את זה מתמטיקאי פנטסטי כמו אוילר, זה באמת עבד; הנה <a href="http://gadial.net/2009/05/17/euler_proof_infinity_of_primes/">עוד דוגמא</a> נאה לזה, שמערבת את פונקציית הזטא של רימן. עם זאת, אני באמת הולך להתעלם מכל זה ולהציג את הנושא בגישה הפורמליסטית והמודרנית יותר, שאני מקווה שתרגיע גם את הסקפטיים ביותר מביניכם שמרגישים שמשהו לא מוגדר פה טוב בכלל.</p>
+<p>בואו ניתן עוד מבט בסכום:</p>
+<p><span class="math">\(\sum_{n=0}^{\infty}p\left(n\right)x^{n}\)</span></p>
+<p>כאן סוכמים לא רק מספרים, אלא גם חזקות של ה<strong>משתנה</strong> <span class="math">\(x\)</span>. זה מזכיר את המושג של <strong>טור חזקות</strong> מחדו"א, ואני אכן קורא ליצור הזה <strong>טור חזקות פורמלי</strong>, אלא שאני שוב רוצה להסתייג - הרעיון בטורי חזקות הוא שאפשר להציב ערכים שונים ומשונים בתוך <span class="math">\(x\)</span>, לקבל טור מספרים רגיל ואז לראות האם הוא מתכנס, ואל מה. אני לא הולך לעשות את זה - בשום מקום בהמשך לא נציב משהו בתוך <span class="math">\(x\)</span>. אז רגע - אם לא מציבים כלום בתוך <span class="math">\(x\)</span>, בשביל מה הוא כאן? האם זה סתם סימון? דרך מסובכת לכתוב את הסדרה <span class="math">\(\left(p\left(0\right),p\left(1\right),p\left(2\right),\dots\right)\)</span>? ובכן, זו אכן רק דרך לכתוב את הסדרה הזו, אבל אני טוען שלא דרך מסובכת אלא ההפך - דרך יותר <strong>פשוטה</strong>.</p>
+<p>בואו ניזכר לרגע בפולינומים. את הפולינום <span class="math">\(x^{3}+2x^{2}+4\)</span> אפשר גם לכתוב בתור סדרה: <span class="math">\(\left(4,0,2,1\right)\)</span>. אפשר לראות שאם אחד המקדמים הוא 0, אז הפולינום "חסכוני" יותר בכך שלא חייבים לכתוב את האיבר שמתאים לו, אבל זה לא כזה קריטי. החלק המעניין מתחיל אם אני רוצה לכפול את הפולינום הזה בפולינום אחר. למשל:</p>
+<p><span class="math">\(\left(x^{3}+2x^{2}+4\right)\left(x^{2}+1\right)=\left(x^{5}+2x^{4}+4x^{2}\right)+\left(x^{3}+2x^{2}+4\right)=\)</span></p>
+<p><span class="math">\(=x^{5}+2x^{4}+x^{3}+6x^{2}+4\)</span></p>
+<p>כאן הכפל קל יחסית כשפותחים סוגריים ומשתמשים בכלל החזקות <span class="math">\(x^{a}\cdot x^{b}=x^{a+b}\)</span>, שהוא מבחינתנו כאן הגדרה ולא משהו שיש להוכיח. בואו נסתכל עכשיו איך זה נראה בתור "כפל סדרות":</p>
+<p><span class="math">\(\left(4,0,2,1\right)\times\left(1,0,1\right)=\left(4,0,6,1,2,5\right)\)</span></p>
+<p>לא לגמרי ברור פה איך אגף ימין התקבל מאגף שמאל. הכלל שעל פיו החישוב מתבצע נקרא <strong>קונבולוציה</strong>, וזה הולך כך: אם <span class="math">\(\left(a_{1},a_{2},\dots,a_{n}\right)\)</span> ו-<span class="math">\(\left(b_{1},\dots,b_{m}\right)\)</span> הן סדרות אז נגדיר את הקונבולוציה שלהן</p>
+<p><span class="math">\(\left(a_{1},\dots,a_{n}\right)*\left(b_{1},\dots,b_{m}\right)=\left(c_{1},\dots,c_{n+m}\right)\)</span></p>
+<p>על ידי הכלל <span class="math">\(c_{k}=\sum_{i=1}^{k}a_{i}b_{m-i}\)</span> (תוך המוסכמה ש-<span class="math">\(b_{i}=0\)</span> עבור <span class="math">\(i\le0\)</span>). נראה מבלבל? בהחלט, אבל זו בסך הכל דרך "נטולת <span class="math">\(x\)</span>" לתאר את פעולת הכפל הרגילה של פולינומים. כך שהייצוג ה"מיותר" של הפולינום הוא דווקא מועיל בכך שהוא נותן לנו אינטואיציה יותר טובה לפעולת הכפל.</p>
+<p>עכשיו בואו נדבר על כפל של שני טורים <strong>אינסופיים</strong>, <span class="math">\(\sum_{n=0}^{\infty}a\left(n\right)x^{n}\)</span> ו-<span class="math">\(\sum_{n=0}^{\infty}b\left(n\right)x^{n}\)</span>. על פניו אפשר לחשוש שאם הטורים לא "מתכנסים" אז אסור להכפיל אותם או משהו דומה לכך, אבל אם שמים את זה בצד ופשוט כופלים אותם כמו כפל פולינומים רגיל, מגלים שהתוצאה היא טור <span class="math">\(\sum_{n=0}^{\infty}c\left(n\right)x^{n}\)</span> שכל איבר בו מוגדר על ידי המשוואה</p>
+<p><span class="math">\(c\left(n\right)=\sum_{k=0}^{n}a\left(k\right)b\left(n-k\right)\)</span></p>
+<p>(שוב, תחת המוסכמה ש-<span class="math">\(b\left(t\right)=0\)</span> אם <span class="math">\(t&lt;0\)</span>).</p>
+<p>כלומר, כדי לחשב את <strong>המקדמים</strong> בטור החזקות של המכפלה אנחנו צריכים, לכל מקדם, לחשב סכום <strong>סופי</strong> של מספרים. סכום סופי שכזה תמיד קיים, כך שהמכפלה של שני טורי חזקות היא מוגדרת היטב גם בלי להיכנס לשאלות של התכנסות. זה עונה לשאלה האם <strong>אפשר</strong> לעבוד ככה עם טורי חזקות פורמליים. נשאר רק לענות לשאלה למה <strong>כדאי</strong> לעשות את זה.</p>
+<p>כדי לתרגל לרגע את הכפל, בואו נסתכל על טור החזקות הפורמלי <span class="math">\(\sum_{n=0}^{\infty}a\left(n\right)x^{n}\)</span> שבו <span class="math">\(a\left(n\right)=1\)</span> לכל <span class="math">\(n\)</span>, ועל הטור <span class="math">\(\sum_{n=0}^{\infty}b\left(n\right)x^{n}\)</span> שבו <span class="math">\(b\left(0\right)=1\)</span> ו-<span class="math">\(b\left(1\right)=-1\)</span> ו-<span class="math">\(b\left(n\right)=0\)</span> לכל <span class="math">\(n&gt;1\)</span>. אפשר לכתוב אותם בצורה מקוצרת כך: <span class="math">\(\left(1+x+x^{2}+\dots\right)\)</span> לטור הראשון ו-<span class="math">\(1-x\)</span> לטור השני. אם נכפול את שניהם, קל לראות שנקבל לכל <span class="math">\(n&gt;0\)</span> את האיבר הכללי:</p>
+<p><span class="math">\(c\left(n\right)=\sum_{k=0}^{n}a\left(k\right)b\left(n-k\right)=a\left(n-1\right)b\left(1\right)+a\left(n\right)b\left(0\right)=-1+1=0\)</span></p>
+<p>ואילו עבור <span class="math">\(n=0\)</span> נקבל איבר כללי <span class="math">\(c\left(n\right)=1\)</span>. אפשר לכתוב את זה כך:</p>
+<p><span class="math">\(\left(1+x+x^{2}+\dots\right)\left(1-x\right)=1\)</span></p>
+<p>וזה מוביל לעוד מוסכמת כתיבה שאני מבקש שתהיו סלחניים אליה:</p>
+<p><span class="math">\(\left(1+x+x^{2}+\dots\right)=\frac{1}{1-x}\)</span></p>
+<p>אתם אולי מכירים את השוויון הזה בתור "סכום טור הנדסי אינסופי מתכנס", אבל <strong>שוב</strong> אני רוצה להזהיר שאני לא מדבר פה על התכנסויות במובן של חדו"א! אגף ימין כאן הוא סימון מקוצר; זו דרך להגיד "טור החזקות הפורמלי שכאשר כופלים אותו ב-<span class="math">\(\left(1-x\right)\)</span> מקבלים 1". באופן כללי אם</p>
+<p><span class="math">\(\sum a\left(n\right)x^{n}\cdot\sum b\left(n\right)x^{n}=\sum c\left(n\right)x^{n}\)</span></p>
+<p>אפשר יהיה לכתוב את זה גם בתור</p>
+<p><span class="math">\(\sum a\left(n\right)x^{n}=\frac{\sum c\left(n\right)x^{n}}{\sum b\left(n\right)x^{n}}\)</span></p>
+<p>ועוד נראה כמה שיטת הייצוג הזו מועילה לנו בהמשך. לבינתיים, בואו נכליל את ה"טור הנדסי" שראינו קודם - קל לבדוק בדיוק באותה שיטה שמתקיים גם</p>
+<p><span class="math">\(\left(1+x^{n}+x^{2n}+x^{3n}+\dots\right)=\frac{1}{1-x^{n}}\)</span></p>
+<p>לכל <span class="math">\(n\)</span> טבעי. למשל</p>
+<p><span class="math">\(\left(1+x^{2}+x^{4}+\dots\right)=\frac{1}{1-x^{2}}\)</span></p>
+<p><span class="math">\(\left(1+x^{3}+x^{6}+\dots\right)=\frac{1}{1-x^{3}}\)</span></p>
+<p>אפשר עכשיו <strong>לכפול</strong> את שתי המשוואות, ונקבל:</p>
+<p><span class="math">\(\left(1+x^{2}+\dots\right)\left(1+x^{3}+\dots\right)=\frac{1}{\left(1-x^{2}\right)}\cdot\frac{1}{\left(1-x^{3}\right)}\)</span></p>
+<p>כמובן, צריך לבדוק שזה אכן עובד, פורמלית, אבל זה עובד. ואם זה עובד לשני מוכפלים, זה יעבוד לכל מספר סופי של מוכפלים, אבל אנחנו נהיה שאפתנים אפילו יותר ונעשה את זה עבור <strong>אינסוף</strong> מוכפלים! אבל לפני זה, בואו ננסה להבין מה בעצם המשמעות הקומבינטורית של הכפלה כזו, כי זה בדיוק מה שיתן לנו את השוויון <span class="math">\(\sum_{n=0}^{\infty}p\left(n\right)x^{n}=\prod_{n=1}^{\infty}\frac{1}{\left(1-x^{n}\right)}\)</span> שאנחנו חותרים אליו.</p>
+<p>בדוגמה שלנו, אם נפתח את הסוגריים של המכפלה נקבל את המחוברים הבאים: <span class="math">\(1\cdot1+x^{2}\cdot1+1\cdot x^{3}+x^{2}\cdot x^{3}+x^{4}\cdot1+\dots\)</span>. זה בסך הכל שווה ל-<span class="math">\(1+x^{2}+x^{3}+x^{4}+x^{5}+2x^{6}+\dots\)</span> - רגע רגע רגע, מאיפה הגיע המקדם 2 ל-<span class="math">\(x^{6}\)</span>? ובכן, כי הוא נוצר בעזרת שני מוכפלים כי הוא מופיע בשני זוגות הסוגריים. אפילו יותר מעניין יהיה <span class="math">\(x^{12}\)</span> שיכול להיווצר בדרכים הבאות: <span class="math">\(x^{12}\cdot1,1\cdot x^{12},x^{6}\cdot x^{6}\)</span>, ולכן המקדם שלו יהיה 3, וכן הלאה. אנחנו רואים שהמקדם של <span class="math">\(x^{n}\)</span> סופר את <strong>הדרכים השונות</strong> שבהן ניתן לכתוב את <span class="math">\(n\)</span> בתור סכום מהצורה <span class="math">\(n=2a+3b\)</span>. כל דרך שכזו נותנת לנו איבר מפורש, <span class="math">\(x^{2a}\cdot x^{3b}=x^{n}\)</span> שיתווסף לסכום.</p>
+<p>הנה הפרשנות הקומבינטורית של הסיפור הזה. נניח שיש בעולם שלנו אובייקטים מגדלים שונים ומשונים שהם מספר טבעי, וש-<span class="math">\(\sum a\left(n\right)x^{n}\)</span> סופר חלק מהם - בדיוק <span class="math">\(a\left(n\right)\)</span> אובייקטים מ"גודל" <span class="math">\(n\)</span>. באופן דומה <span class="math">\(\sum b\left(n\right)x^{n}\)</span> סופר קבוצה אחרת של אובייקטים שכאלה. במקרה שלנו האובייקטים הם חלוקות של מספרים טבעיים כשה"גודל" של חלוקה הוא סכום האיברים שלה; <span class="math">\(\sum x^{2n}\)</span> סופר לנו כמה פירוקים לסכום של 2 בלבד יש (או 0 או 1, תלוי אם המספר זוגי) ו-<span class="math">\(\sum x^{3n}\)</span> סופר כמה פירוקים לסכום של 3 בלבד יש (שוב, או 0 או 1, תלוי אם המספר מתחלק ב-3 או לא). למשל <span class="math">\(x^{6}\)</span> במקרה הראשון מציין את הפירוק <span class="math">\(2+2+2\)</span> ובמקרה השני את הפירוק <span class="math">\(3+3\)</span>.</p>
+<p>כעת, <strong>מכפלה</strong> של שתי פונקציות יוצרות מתאימה לבניה הקומבינטורית הבאה: לכל זוג אפשרי של אובייקט מסוג ראשון ואובייקט מסוג שני אנחנו בונים אובייקט חדש ש"מורכב מהם" והגודל שלו הוא סכום הגדלים שלהם. אם אין אובייקט שיכול להתקבל משני זוגות שונים, אז הפונקציה היוצרת של המכפלה סופרת בדיוק כמה אובייקטים יכולים להיווצר ככה. כך למשל אצלנו האיבר <span class="math">\(x^{10}\)</span> במכפלה, שאומר "חלוקה אחת של 10" נוצר מזוג החלוקות <span class="math">\(2+2\)</span> ו-<span class="math">\(3+3\)</span>, שמתאימות לאיברים <span class="math">\(x^{4}\)</span> ו-<span class="math">\(x^{6}\)</span> בפונקציות היוצרות הראשונה והשניה. באופן דומה, המקדם של <span class="math">\(x^{3}\)</span> הוא 1, שמציין את האופן שבו אפשר ליצור את <span class="math">\(3\)</span> מהחלוקות "3" ו-"0" (כלומר, מחברים 3 פעם אחת, ומחברים 2 אפס פעמים).</p>
+<p>אם נכפול עכשיו <strong>שלוש</strong> פונקציות יוצרות, המשמעות תישאר זהה: איברים שאפשר לבנות על ידי לקיחה של שלשה של אובייקטים והרכבה שלהם ביחד. למשל, את <span class="math">\(4\)</span> אפשר להציג בתור החלוקות הבאות:</p>
+<p><span class="math">\(4\)</span></p>
+<p><span class="math">\(2+2\)</span></p>
+<p><span class="math">\(1+3\)</span></p>
+<p><span class="math">\(1+1+2\)</span></p>
+<p>אז אם אני אפתח את המכפלה</p>
+<p><span class="math">\(\left(1+x+x^{2}+\dots\right)\left(1+x^{2}+x^{4}+\dots\right)\left(1+x^{3}+x^{6}+\dots\right)\)</span></p>
+<p>אני אקבל את המקדם <span class="math">\(3x^{4}\)</span>, שמייצג את שלוש החלוקות שבהן משתתפים רק 1,2,3; החלוקה 4 תתקבל רק אם אוסיף למכפלה גם את <span class="math">\(\left(1+x^{4}+x^{8}+\dots\right)\)</span>.</p>
+<p>עכשיו אוילר אומר שני דברים. ראשית, במקום לכתוב סימון ארוך ומסורבל כמו <span class="math">\(\left(1+x^{t}+x^{2t}+\dots\right)\)</span> כל פעם מחדש, בואו נכתוב <span class="math">\(\frac{1}{\left(1-x^{t}\right)}\)</span>; כבר ראינו שזה אותו דבר. שנית, על פי הנימוק שנתנו כאן <span class="math">\(\prod_{t=1}^{k}\frac{1}{\left(1-x^{t}\right)}\)</span> ייתן לנו את הפונקציה היוצרת של מספר הדרכים לחלק כל מספר טבעי לסכום של מספרים מ-1 ועד <span class="math">\(k\)</span>, כלומר את מספר הפתרונות של המשוואה <span class="math">\(1\cdot x_{1}+2\cdot x_{2}+\dots+k\cdot x_{k}=n\)</span>, לכל <span class="math">\(n\)</span> טבעי. יש התאמה חד-חד-ערכית ועל ברורה בין פתרונות כאלו לבין האיברים שמתקבלים מפתיחת המכפלה <span class="math">\(\prod_{t=1}^{k}\left(1+x^{t}+x^{2t}+\dots\right)\)</span>: הפתרון <span class="math">\(x_{1}=a_{1},\dots,x_{k}=a_{k}\)</span> מתאים לאיבר</p>
+<p><span class="math">\(x^{a_{1}\cdot1}\cdot x^{a_{2}\cdot2}\cdots x^{a_{k}\cdot k}=x^{a_{1}\cdot1+\dots+a_{k}\cdot k}=x^{n}\)</span>. אני חוזר על זה במפורש כל כך כי הצעד הבא של אוילר הוא לעבור לדבר על המכפלה <strong>האינסופית</strong> <span class="math">\(\prod_{t=1}^{\infty}\frac{1}{\left(1-x^{t}\right)}\)</span> ולטעון שהיא נותנת את הפונקציה היוצרת של חלוקות כלליות. אני מקווה שזה נשמע לנו אינטואיטיבי בשלב הזה, אבל מה בכלל המשמעות של מכפלה אינסופית שכזו? אי אפשר סתם לומר "כל האיברים שמתקבלים מפתיחת כל הסוגריים" כי דבר כזה יכלול "איברים" כמו <span class="math">\(x\cdot x^{2}\cdot x^{3}\cdots\)</span> שהחזקה שלהם יוצאת בעצמה סכום של מספרים טבעיים שאינו מתכנס (או שמתכנס ל-<span class="math">\(-\frac{1}{12}\)</span> <a href="http://gadial.net/2014/01/18/sum_of_naturals/">אם ממש בא לכם</a>, אבל זה לא מקדם אותנו). האינטואיציה שלנו היא שהאיברים היחידים ש"נחשבים" הם כאלו שכאשר פותחים את הסוגריים, מתקבלים רק ממספר <strong>סופי</strong> של מוכפלים שאינם 1. זה כמובן מה שקורה אצלנו.</p>
+<p>אם זה לא פורמלי מספיק בשבילכם, הנה פסקה טכנית במיוחד שאני מקווה שתספיק לכם. צריך לקבל כאן מוסכמה כלשהי כדי לתת משהו לסימון הזה של מכפלה אינסופית - והמוסכמה היא שההגדרה של כפל תישאר בדיוק מה שהייתה במקרה הסופי. במקרה הסופי, הגדרנו <span class="math">\(\sum a_{n}\cdot\sum b_{n}=\sum c_{n}\)</span> כך ש-<span class="math">\(c_{n}=\sum_{k=0}^{n}a_{n}b_{n-k}\)</span>. אפשר לנסח את זה גם טיפה שונה: <span class="math">\(c_{n}=\sum_{k_{1}+k_{2}=n}a_{k_{1}}b_{k_{2}}\)</span>. כלומר, אנחנו עוברים על כל הפירוקים של <span class="math">\(n\)</span> לסכום שני טבעיים ומחברים את האיברים המתאימים ב-<span class="math">\(\sum a_{n}\)</span> ו-<span class="math">\(\sum b_{n}\)</span> עבורם. את זה קל להכליל לשלושה איברים: <span class="math">\(d_{n}=\sum_{k_{1}+k_{2}+k_{3}=n}a_{k_{1}}b_{k_{2}}c_{k_{3}}\)</span> וכן הלאה. עבור מכפלה אינסופית <span class="math">\(\prod_{k=1}^{\infty}\left(\sum a_{n}^{k}\right)\)</span>, האיבר ה-<span class="math">\(n\)</span> יהיה שווה לסכום של כל האיברים מהצורה <span class="math">\(a_{t_{1}}^{k_{1}}\cdots a_{t_{r}}^{k_{r}}\)</span> כך ש-<span class="math">\(t_{1}+\dots+t_{r}=n\)</span> ואילו <span class="math">\(\left(k_{1},\dots,k_{r}\right)\)</span> היא בחירה שרירותית כלשהי של <span class="math">\(r\)</span> טבעיים, כשהם מסודרים מהקטן לגדול. כל איבר בסכום הזה הוא בהכרח סופי כי הוא מכפלה סופית, אבל כדי שהעסק יהיה בעל משמעות צריך שיהיה רק מספר סופי של איברים בסכום הזה; כלומר, רק מספר סופי של בחירות <span class="math">\(\left(k_{1},\dots,k_{r}\right)\)</span> שעבורן מתקבל <span class="math">\(a_{t_{1}}^{k_{1}}\cdots a_{t_{r}}^{k_{r}}\ne0\)</span>. אם זה לא המצב, אז המכפלה לא מוגדרת.</p>
+<p>נסכם: המכפלה האינסופית סופרת, לכל <span class="math">\(n\)</span>, את מספר הפתרונות של המשוואה <span class="math">\(1\cdot x_{1}+2\cdot x_{2}+3\cdot x_{3}\dots=n\)</span>. פתרונות כאלו מראש מאלצים אותנו לתת 0 לכל המשתנים למעט מספר סופי; זה יתאים למכפלות שמתקבלות מפתיחת הסוגריים <span class="math">\(\left(1+x+x^{2}+\dots\right)\left(1+x^{2}+x^{4}+\dots\right)\)</span> שבהן רק מספר סופי של מוכפלים הם של חזקות שונות מאפס, כלומר בוחרים "1" מכל הסוגריים למעט מספר סופי שלהן. זה מה שנותן לנו את המשוואה <span class="math">\(\sum_{n=0}^{\infty}p\left(n\right)x^{n}=\prod_{n=1}^{\infty}\frac{1}{\left(1-x^{n}\right)}\)</span>. כמובן שאם זה עדיין מרגיש "שגוי", כדאי לבצע את החישוב עצמאית, בעזרת ההגדרות שנתתי פה - זה יספיק.</p>
+<h2>פרק שלישי, שבו אולי יתברר למה השתלם לשרוד את כל הזוועות הטכניות הקודמות</h2>
+<p>עד עכשיו עניתי על השאלה מה זה בכלל פונקציות יוצרות ואיך אפשר למצוא אותן במקרה אחד ספציפי. כעת נשאלת השאלה - מה זה עוזר לנו? ובכן, זה עוזר להרבה דברים, אבל אני אראה רק אחד מהם: אם הפונקציות היוצרות הן פשוטות יחסית וניתנות להצגה בתור <strong>פונקציה רציונלית</strong>, אז אפשר לקבל מהן <strong>נוסחת נסיגה</strong> עבור הסדרה.</p>
+<p>מה זו פונקציה רציונלית? מנה של שני פולינומים, כלומר משהו מהצורה <span class="math">\(\frac{s_{k}x^{k}+\dots+s_{1}x+s_{0}}{r_{t}x^{n}+\dots+r_{1}x+r_{0}}\)</span>. למשל, <span class="math">\(\frac{1}{1-x}\)</span> שראינו קודם היא פונקציה רציונלית. הנה עוד אחת: <span class="math">\(\frac{1}{1-x-x^{2}}\)</span>. מזהים את הסדרה שקשורה אליה? לא? אוקיי, אז בואו נסמן אותה בינתיים בתור <span class="math">\(a_{n}\)</span>, כרגיל; יש לנו את המשוואה <span class="math">\(\sum_{n=0}^{\infty}a_{n}x^{n}=\frac{1}{1-x-x^{2}}\)</span>. עכשיו, מה השוויון הזה אומר, פורמלית? שאם אכפול את אגף שמאל ב-<span class="math">\(1-x-x^{2}\)</span> אקבל 1. כלומר:</p>
+<p><span class="math">\(\left(\sum_{n=0}^{\infty}a_{n}x^{n}\right)\left(1-x-x^{2}\right)=1\)</span></p>
+<p>אם נפתח את הסוגריים ונקבץ איברים, נקבל את הסכום הבא:</p>
+<p><span class="math">\(1\cdot x^{0}+0\cdot x^{1}+0\cdot x^{2}+0\cdot x^{3}+\dots=\left(a_{0}\right)x^{0}+\left(a_{1}-a_{0}\right)x+\left(a_{2}-a_{1}-a_{0}\right)x^{2}+\left(a_{3}-a_{2}-a_{1}\right)x^{3}+\dots\)</span></p>
+<p>בדקו זאת! זה נובע ישירות מההגדרות שכבר ראינו. עכשיו, מה שבעצם קיבלנו הוא אינסוף משוואות, שמתקבלות מהשוואת המקדמים לכל חזקה של <span class="math">\(x\)</span>. כלומר, קיבלנו:</p>
+<ul>
+    <li><span class="math">\(a_{0}=1\)</span></li>
+    <li><span class="math">\(a_{1}-a_{0}=0\)</span></li>
+    <li><span class="math">\(a_{2}-a_{1}-a_{0}=0\)</span></li>
+    <li><span class="math">\(a_{3}-a_{2}-a_{1}=0\)</span></li>
+</ul>
+<p>וכן הלאה. שתי המשוואות הראשונות נותנות לנו <span class="math">\(a_{0}=a_{1}=1\)</span> ואילו האחרות נותנות לנו <span class="math">\(a_{n}=a_{n-1}+a_{n-2}\)</span> באופן כללי. מזהים כעת? זו <strong>כמעט</strong> סדרת פיבונאצ'י: יש לה את נוסחת הנסיגה של פיבונאצ'י אבל תנאי התחלה ששוכחים את האיבר הראשון ה"אמיתי" שהוא <span class="math">\(0\)</span>. האם אפשר איכשהו לתקן את זה? בוודאי. בואו נסתכל על הפונקציה היוצרת <span class="math">\(\frac{x}{1-x-x^{2}}\)</span> שזהה לזו שראינו קודם פרט לכך שכפלנו את <strong>המונה</strong> ב-<span class="math">\(x\)</span>. כעת נקבל משוואות שמתחילות ב-</p>
+<ul>
+    <li><span class="math">\(a_{0}=0\)</span></li>
+    <li><span class="math">\(a_{1}-a_{0}=1\)</span></li>
+    <li><span class="math">\(a_{2}-a_{1}-a_{0}=0\)</span></li>
+</ul>
+<p>וכן הלאה. ההבדל הוא בעצם רק באופן שבו שני האיברים הראשונים הוגדרו, וגם שם - רק במה שהיה באגף ימין.</p>
+<p>בשתי הדוגמאות הללו בעצם מצויה כל התורה כולה: אם יש לנו פונקציה יוצרת רציונלית, המקדמים של <strong>המכנה</strong> מכתיבים לנו את <strong>נוסחת הנסיגה</strong> של הסדרה, בעוד שהמקדמים של <strong>המונה</strong> מכתיבים לנו את <strong>תנאי ההתחלה</strong> של הסדרה. אם המכנה הוא <span class="math">\(r_{t}x^{n}+\dots+r_{1}x+r_{0}\)</span> והמונה הוא <span class="math">\(s_{k}x^{k}+\dots+s_{1}x+s_{0}\)</span>, זה נותן לנו את הנוסחה הכללית</p>
+<p><span class="math">\(r_{0}a_{n}+r_{1}a_{n-1}+\dots+r_{t}a_{n-t}=s_{n}\)</span></p>
+<p>עבור <span class="math">\(n\)</span> גדול מספיק, <span class="math">\(s_{n}=0\)</span> תמיד, אז אנחנו מקבלים:</p>
+<p><span class="math">\(r_{0}a_{n}=-r_{1}a_{n-1}-\dots-r_{t}a_{n-t}\)</span></p>
+<p>זה מסביר את מה שקרה קודם - איך <span class="math">\(1-x-x^{2}\)</span> נתן לנו את נוסחת הנסיגה <span class="math">\(a_{n}=a_{n-1}+a_{n-2}\)</span> שאין בה מינוסים. הסימן של כל המקדמים למעט זה של החזקה הקטנה ביותר מתהפכים כשמבצעים את העברת האגף הזו.</p>
+<p>עוד נקודה שכדאי לשים לב אליה היא שנוסחת הנסיגה הזו עובדת תמיד, לכל <span class="math">\(n\)</span>, גם כאלו קטנים. בואו נחזור לפיבונאצ'י: קודם כתבתי</p>
+<p><span class="math">\(a_{0}=1\)</span></p>
+<p><span class="math">\(a_{1}-a_{0}=0\)</span></p>
+<p>אבל יכלתי באותה מידה בדיוק לכתוב</p>
+<p><span class="math">\(a_{0}-a_{-1}-a_{-2}=1\)</span></p>
+<p><span class="math">\(a_{1}-a_{0}-a_{-1}=0\)</span></p>
+<p>תחת המוסכמה ש-<span class="math">\(a_{-1}=a_{-2}=0\)</span>. זה היה נותן מבנה אחיד לכל אגפי שמאל של המשוואות; ההבדל היחיד הוא באגף ימין, שמוכתב על ידי המונה של הפונקציה היוצרת.</p>
+<p>אני מתעקש כל כך על דרך ההצגה הזו, כי עכשיו אני רוצה לעבור לדבר על המקרה שבו המונה והמכנה הם <strong>אינסופיים</strong>, כלומר אנחנו בסיטואציה הכללית שתיארתי קודם: <span class="math">\(\sum a_{n}x^{n}=\frac{\sum c_{n}x^{n}}{\sum b_{n}x^{n}}\)</span>. גם במקרה הזה הניתוח שעשינו קודם עובד - אני אקבל משוואות, פשוט קצת יותר מסובכות. הנה המשוואה הכללית:</p>
+<p><span class="math">\(b_{0}a_{n}+b_{1}a_{n-1}+\dots+b_{n}a_{0}+b_{n+1}a_{-1}+\dots=c_{n}\)</span></p>
+<p>מכיוון שההנחה היא ש-<span class="math">\(a_{-1}=a_{-2}=\dots=0\)</span>, אפשר למחוק את האיברים הללו מהסכום. אנחנו מקבלים משוואה עם מספר סופי של מחוברים</p>
+<p><span class="math">\(b_{0}a_{n}+b_{1}a_{n-1}+\dots+b_{n}a_{0}=c_{n}\)</span></p>
+<p>קשה לומר שהמשוואה הזו היא מה שאנחנו חושבים עליו בתור נוסחת נסיגה, בגלל שתי בעיות: ראשית, <span class="math">\(a_{n}\)</span> הופך כאן לתלוי <strong>בכל</strong> האיברים שבאים לפניו בסדרה ולא רק בשניים-שלושה קודמים. אבל זה עוד בסדר איכשהו. הבעיה העיקרית היא עם ה-<span class="math">\(c_{n}\)</span>-ים הללו באגף ימין, שקצת מוציאים את העוקץ מכל הסיפור אם הם לא פשוטים מספיק. הרי אם ה-<span class="math">\(c_{n}\)</span>-ים מסובכים, המרנו את הבעיה של לכתוב נוסחה מסודרת לערכים של <span class="math">\(a_{n}\)</span> בבעיה של לכתוב נוסחה מסודרת לערכים של <span class="math">\(c_{n}\)</span> ולא הרווחנו כלום. לכן פחות מעניין אותי המקרה של מונה אינסופי; אבל בהחלט אפשר לדבר על מה קורה כשהמונה סופי (בתקווה, 1) ואילו המכנה אינסופי. זה בדיוק המקרה של נוסחת הנסיגה שלנו עבור פונקציית החלוקה.</p>
+<h2>סיכום ביניים, ובו אני מתפייט על מה שעבורי כרגע היא הנוסחא היפה במתמטיקה</h2>
+<p>בואו נחזור אל שתי הנוסחאות שאיתן פתחנו:</p>
+<ul>
+    <li><span class="math">\(\sum_{n=0}^{\infty}p\left(n\right)x^{n}=\prod_{n=1}^{\infty}\frac{1}{\left(1-x^{n}\right)}\)</span></li>
+    <li><span class="math">\(\prod_{n=1}^{\infty}\left(1-x^{n}\right)=\sum_{k=-\infty}^{\infty}\left(-1\right)^{k+1}x^{t\left(k\right)}\)</span> (כאשר <span class="math">\(t\left(k\right)=\frac{k\left(3k-1\right)}{2}\)</span>)</li>
+</ul>
+<p>הנוסחה השניה היא פשוט ההופכי של אגף ימין של הראשונה, כך שאם נשלב את שתי הנוסחאות ונכתוב את השניה במפורש, נקבל:</p>
+<p><span class="math">\(\sum_{n=0}^{\infty}p\left(n\right)x^{n}=\frac{1}{1-x-x^{2}+x^{5}+x^{7}-x^{12}-\dots}\)</span></p>
+<p>ועכשיו אני מקווה שכבר ברור למה זה נותן לנו את נוסחת הנסיגה שהצגתי בפתיחה:</p>
+<p><span class="math">\(p\left(n\right)=p\left(n-1\right)+p\left(n-2\right)-p\left(n-5\right)-p\left(n-7\right)+p\left(n-12\right)+\dots\)</span></p>
+<p>זה משאיר אותנו רק עם השאלה איך מוכיחים את הנוסחה השניה - זה לב העניין כאן והתוצאה היפה באמת לטעמי. אני אדבר על זה בפוסט הבא, אבל כבר עכשיו אפשר לקבל רעיון כללי לגבי מה בעצם הולך פה. כשפותחים את הביטוי <span class="math">\(\prod_{k=1}^{\infty}\left(1-x^{k}\right)\)</span>, מה מקבלים? על פי שיקולים דומים לאלו שראינו קודם, הגורם <span class="math">\(x^{n}\)</span> מתקבל עבור כל חלוקה של <span class="math">\(n\)</span> למחוברים <strong>שונים</strong>, כשהסימן שלו הוא פלוס או מינוס בהתאם לזוגיות של מספר המחוברים. למשל, <span class="math">\(x^{3}\)</span> מתקבל מ-<span class="math">\(\left(1-x\right)\left(1-x^{2}\right)\left(1-x^{3}\right)\)</span> בדיוק בשתי דרכים: הראשונה, כאשר אנחנו בוחרים משני הסוגריים הראשונים 1 ומהסוגריים האחרונים את <span class="math">\(-x^{3}\)</span>, ואז נקבל סימן שלילי; ואילו אם נבחר מהסוגריים הראשונים את <span class="math">\(-x\)</span> ומהשניים את <span class="math">\(-x^{2}\)</span> ומהאחרונים את <span class="math">\(1\)</span> נקבל <span class="math">\(\left(-x\right)\left(-x^{2}\right)=x^{3}\)</span> והפעם קיבלנו סימן חיובי. מכיוון ששני אלו בעלי סימנים מנוגדים, הם <strong>מבטלים זה את זה</strong> כאשר מחברים אותם, ואנחנו לא מקבלים את <span class="math">\(x^{3}\)</span> בכלל בסכום הסופי.</p>
+<p>מה קורה עם <span class="math">\(x^{5}\)</span>? הנה הפירוקים שלו למספרים שונים: <span class="math">\(5,1+4,2+3\)</span>. כאן יש יתרון לפירוק למספר <strong>זוגי</strong> של מחוברים, ולכן הגורם <span class="math">\(x^{5}\)</span> יוצא חיובי בסכוםּ. לעומת זאת <span class="math">\(6\)</span> לא מופיע בסכום כי יש לו את הפירוקים <span class="math">\(6,1+5,2+4,1+2+3\)</span> - שניים זוגיים, שניים אי זוגיים, הכל מתבטל.</p>
+<p>אם כן, את משפט המספרים המחומשים אפשר גם לנסח באופן הבא: לכל מספר טבעי <span class="math">\(n\)</span>, נסמן ב-<span class="math">\(p_{\text{odd}}\left(n\right)\)</span> את מספר הפירוקים שלו לסכום מספרים <strong>שונים</strong> עם מספר <strong>אי זוגי</strong> של מחוברים, וב-<span class="math">\(p_{\text{even}}\left(n\right)\)</span> את מספר הפירוקים לסכום מספרים <strong>שונים</strong> עם מספר <strong>זוגי</strong> של מחוברים. המשפט אומר שבדרך כלל <span class="math">\(p_{\text{odd}}\left(n\right)=p_{\text{even}}\left(n\right)\)</span>, כשהיוצאים מן הכלל הם המספרים המחומשים, ובמקרה שלהם אחד משני המספרים יהיה גדול בדיוק ב-1 מהשני. במקרה שבו המספר המחומש הוא <span class="math">\(\frac{k\left(3k-1\right)}{2}\)</span> עם <span class="math">\(k\)</span> אי-זוגי אז מי שיהיה גדול יותר הוא <span class="math">\(p_{\text{odd}}\left(n\right)\)</span>, ובמקרה השני זה יהיה <span class="math">\(p_{\text{even}}\left(n\right)\)</span>.</p>
+<p>הנוסחה <span class="math">\(\prod_{n=1}^{\infty}\left(1-x^{n}\right)=\sum_{k=-\infty}^{\infty}\left(-1\right)^{k+1}x^{\frac{k\left(3k-1\right)}{2}}\)</span> מקסימה לטעמי בגלל שהיא תופסת בצורה מאוד קומפקטית את המשפט הזה, על כל הסיבוך של הפירוק לסכום מחוברים, והספירה של כמה מחוברים יש וכן הלאה. אני לא חובב גדול של נוסחאות, אבל לטעמי הנוסחא הזו צריכה להופיע בכל רשימת "הנוסחאות היפות ביותר במתמטיקה" (מה שכמובן לא קורה). נו טוב.</p>
+<p>בפוסט הבא: נוכיח את המשפט הזה סוף סוף! לפני זה קחו כמה דקות ונסו להוכיח את המשפט בעצמכם; אחרי שנתקלים שוב ושוב בקיר, כשרואים את הפתרון הוא גם ברור יותר וגם מלהיב הרבה יותר, כי ברור איך הוא עוקף את הקשיים.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2018/03/27/pentagonal_number_theorem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט המספרים המחומשים</span>
+            </a>
+            
+            
+            
+            <a href="/2018/03/01/euclidean_domains_and_pids/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">תחומים אוקלידיים ותחומים ראשיים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

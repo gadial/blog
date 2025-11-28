@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP=PSPACE - ההוכחה (חלק א&#39;) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>IP=PSPACE - ההוכחה (חלק א&#39;)</h1>
+            <div class="post-meta">
+                <span class="date">2011-05-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/IP.html">IP</a>
+                    
+                    <a href="/tags/IP=PSPACE.html">IP=PSPACE</a>
+                    
+                    <a href="/tags/PSPACE.html">PSPACE</a>
+                    
+                    <a href="/tags/גם טכני זה כיף!.html">גם טכני זה כיף!</a>
+                    
+                    <a href="/tags/הוכחות יפות.html">הוכחות יפות</a>
+                    
+                    <a href="/tags/טכני.html">טכני</a>
+                    
+                    <a href="/tags/פרוייקט &#34;תוצאות מפתיעות בסיבוכיות&#34;.html">פרוייקט &#34;תוצאות מפתיעות בסיבוכיות&#34;</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2011/04/04/what_is_pspace/">בשעה טובה</a> גמרנו להציג את השחקנים בהוכחה של IP=PSPACE ובפוסט הזה ניתן להם להשתולל. ההוכחה מכילה מספר פרטים טכניים ונראית די מפחידה במבט ראשון, אבל הרעיונות שלה אינם כה מסובכים ואני חושב שכל קורא עם ידע בסיסי במתמטיקה יהיה מסוגל להבין אותה (לא בלי השקעה מצדו, כמובן). שיהיה לנו בהצלחה.</p>
+<p>משפט אימרמן שהצגתי לא מזמן הצטמצם בסופו של דבר לפתרון של בעיה אחת - בעיית אי-הישיגות בגרף, שהייתה מה שנקרא <span class="math">\(\mbox{coNL}\)</span>-שלמה. גם הוכחה ש-<span class="math">\(\mbox{IP=PSPACE}\)</span> היא בעיקרה פתרון של בעיה אחת ספציפית - <span class="math">\(\mbox{TQBF}\)</span>, שהוזכרה בפוסט הקודם. אם נציג מערכת הוכחה יעילה עבור בעיה זו, סיימנו, מכיוון שכל בעיה אחרת ב-<span class="math">\(\mbox{PSPACE}\)</span> ניתן לתרגם לבעיית <span class="math">\(\mbox{TQBF}\)</span> ולהסתפק במערכת ההוכחה עבור <span class="math">\(\mbox{TQBF}\)</span> שכבר יש לנו. זה אולי ירגיז את חלקכם שרוצים לראות הוכחה שלמה ככל הניתן ל-<span class="math">\(\mbox{IP=PSPACE}\)</span> ושמו לב שטרם הוכחתי ש-<span class="math">\(\mbox{TQBF}\)</span> היא <span class="math">\(\mbox{PSPACE}\)</span>-שלמה. זה נכון, וזה חוב שאחזיר מתישהו; אבל זה לא העיקר בהוכחה - כשנמצאה ההוכחה ל-<span class="math">\(\mbox{IP=PSPACE}\)</span> הייתה עובדת היותה של <span class="math">\(\mbox{TQBF}\)</span> שפה <span class="math">\(\mbox{PSPACE}\)</span>-שלמה משהו ידוע ומוכר לגמרי.</p>
+<p>עוד דבר שאסתפק בלהעיר עליו שתי מילים וזהו הוא העובדה ש-<span class="math">\(\mbox{IP}\subseteq\mbox{PSPACE}\)</span> זו טענה קלה מאוד להוכחה בשיטת החיפוש הממצה הגס שדיברתי עליה בפוסט הקודם. אפשר לחשוב על מערכת ההוכחה האינטראקטיבית כעל "משחק" שבו הודעות המוכיח הן המהלכים שלו והודעות המוודא הן המהלכים שלו. להבדיל ממשחקים רגילים, כאן מעניינת אותנו <strong>ההסתברות</strong> שהמוכיח ישיג ניצחון, אולם בדיקה של הסתברות זו זהה באופיה לסריקת עץ המשחק ה"רגילה" שמיועדת לגלות למי יש אסטרטגיית נצחון במשחק, כך שלא ארחיב על כך יותר; השורה התחתונה היא שהכוח הגס של <span class="math">\(\mbox{PSPACE}\)</span> ניצח שוב. החלק המאתגר בהוכחה הוא הכיוון השני של ההכלה, שהוא בדיוק מה שמערכת הוכחה אינטראקטיבית עבור <span class="math">\(\mbox{TQBF}\)</span> תיתן לנו.</p>
+<p>כמו שבדרך כלל עושים עם הוכחות מסובכות, מאוד כדאי להתחיל עם הוכחה של טענה חלשה יותר, שעדיין כוללת את הרעיונות המרכזיים של הההוכחה האמיתית ובכך מקלה מאוד על העיכול שלה. במקרה שלנו, נרצה להראות מערכת הוכחה אינטראקטיבית לשפה שהיא <span class="math">\(\mbox{coNP}\)</span>-שלמה - השפה <span class="math">\(\overline{\mbox{3SAT}}\)</span>. שפת כל פסוקי ה-CNF<span class="math">\(3\)</span> שאינם ספיקים (פסוק CNF הוא "וגם" של הרבה פסוקיות, שכל אחת מהן היא "או" של 3 ליטרלים, שכל אחד מהם הוא משתנה או שלילה של משתנה, ופסוק הוא ספיק אם יש השמה למשתנים שנותנת לו ערך אמת). ברור שאם פסוק הוא ספיק אז קל להוכיח זאת - פשוט נותנים למוודא את ההשמה המספקת. אבל אם הוא לא ספיק לא ברור מה אפשר לעשות, ולכן מערכת הוכחה אינטראקטיבית כאן היא מעניינת. השפה 3CNF מזכירה קצת את TQBF בכך ששתיהן עוסקות בפסוקים לוגיים; ב-TQBF הפסוק עצמו גם מכיל כמתים בנוסף לכל הצרות. אבל כבר כעת ברור שאנחנו הולכים לפתור מקרה דומה יחסית.</p>
+<p>הרעיון הראשון בהוכחה הוא להפסיק לדבר על פסוקי CNF ולעבור לדבר על אובייקט אלגברי חביב ואהוב במיוחד - פולינומים. המעבר מפסוק לוגי לפולינום מכונה <strong>אריתמטיזציה</strong>, ובשלב הראשון כנראה ייראה לכם חסר ערך לחלוטין, סתם ניסוח מטופש של אותה בעיה עם עולם מושגים שונה. כמובן שהניסוח השונה לא יהיה סוף הסיפור.</p>
+<p>איך אפשר לתרגם את משתנים לוגיים לפולינום, הרי <span class="math">\(\mbox{T,F}\)</span> הם לא ערכים שבדרך כלל חוקי להציב בפולינום? ובכן, באופן טבעי יחסית נחשוב על 0 כמייצג <span class="math">\(\mbox{F}\)</span> ועל 1 כמייצג <span class="math">\(\mbox{T}\)</span>. אם בפסוק הלוגי יש משתנה <span class="math">\(x_{1}\)</span>, אז בפולינום יהיה משתנה <span class="math">\(X_{1}\)</span> מתאים (המעבר מאות קטנה לגדולה נועד רק כדי להבטיח שיהיה ברור מתי מדברים על פולינום ומתי מדברים על פסוק לוגי). פעולת "וגם" ניתנת לביצוע בידי כפל: <span class="math">\(x_{1}\wedge x_{2}\)</span> הוא <span class="math">\(X_{1}\cdot X_{2}\)</span>, ובאופן כללי אם <span class="math">\(\varphi_{1},\varphi_{2}\)</span> הן שתי פסוקיות שמיוצגות בידי הפולינומים <span class="math">\(P_{\varphi_{1}},P_{\varphi_{2}}\)</span> אז <span class="math">\(\varphi_{1}\wedge\varphi_{2}\)</span> מיוצגת על ידי <span class="math">\(P_{\varphi_{1}}\cdot P_{\varphi_{2}}\)</span>.</p>
+<p>פעולת "לא" ניתנת לביצוע על ידי חיסור: <span class="math">\(\neg x_{1}\)</span> מיוצג על ידי <span class="math">\(1-X_{1}\)</span>, ואם <span class="math">\(P_{\varphi}\)</span> מייצג את <span class="math">\(\varphi\)</span> אז <span class="math">\(1-P_{\varphi}\)</span> מייצג את <span class="math">\(\neg\varphi\)</span>.</p>
+<p>שתי הפעולות הללו מאפשרות ייצוג של כל פסוק שהוא כי אפשר "לסמלץ" איתן את "או" באמצעות כלל דה-מורגן: <span class="math">\(x_{1}\vee x_{2}=\neg\left(\neg x_{1}\wedge\neg x_{2}\right)\)</span>. במילים אחרות, את <span class="math">\(x_{1}\vee x_{2}\)</span> מייצגים על ידי הפולינום <span class="math">\(1-\left(1-X_{1}\right)\left(1-X_{2}\right)\)</span>.</p>
+<p>משלושת אלו נובע שכל נוסחת 3CNF עם <span class="math">\(n\)</span> משתנים, <span class="math">\(\varphi\left(x_{1},\dots,x_{n}\right)\)</span>, ניתן לתרגם לפולינום <span class="math">\(P\left(X_{1},\dots,X_{n}\right)\)</span> ב-<span class="math">\(n\)</span> משתנים. לאלו מכם שאולי מכירים רק פולינומים במשתנה אחד נציין שפולינום מרובה משתנים הוא פשוט סכום של ביטויים מהצורה <span class="math">\(aX_{1}^{k_{1}}X_{2}^{k_{2}}\dots X_{n}^{k_{n}}\)</span> - כלומר, מקדם כלשהו ואז מכפלה של חזקות של המשתנים. כל ביטוי כזה נקרא <strong>מונום</strong>. הדרגה של מונום היא סכום החזקות של כל המשתנים, והדרגה של הפולינום כולו היא הדרגה הגבוהה ביותר של מונום שבו. למשל, <span class="math">\(5xy+7xyz+2y^{2}z^{3}\)</span> הוא פולינום בשלושה משתנים שדרגתו 5.</p>
+<p>נקודה אחת שכדאי לשים לב אליה היא שפסוקית עם 3 ליטרלים מתורגמת לפולינום ממעלה שלישית (בדקו זאת!), ושפסוק 3CNF עם <span class="math">\(k\)</span> פסוקיות בסך הכל מתורגם לפולינום ממעלה <span class="math">\(3k\)</span> לכל היותר. כלומר, הדרגה של הפולינום היא "בערך" כאורך הפסוק; זה חשוב כדי להבטיח שאת מלאכת התרגום של נוסחה לפסוק אפשר יהיה לבצע בזמן פולינומי.</p>
+<p>כעת, אם <span class="math">\(P_{\varphi}\left(X_{1},\dots,X_{n}\right)\)</span> מייצג את הפסוק <span class="math">\(\varphi\left(x_{1},\dots,x_{n}\right)\)</span>, אז מספר ההשמות המספקות של <span class="math">\(\varphi\)</span> נתון על ידי הנוסחה <span class="math">\(\sum_{b_{1}\in\left\{ 0,1\right\} }\sum_{b_{2}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P_{\varphi}\left(b_{1},\dots,b_{n}\right)\)</span>. זה נראה אולי קצת מפחיד במבט ראשון, אבל זה ממש לא נורא: אנחנו בסך הכל סוכמים הרבה מאוד איברים - לכל הצבה אפשרית של ערכי 0 ו-1 למשתנים <span class="math">\(X_{1},\dots,X_{n}\)</span> אנחנו בודקים איזה ערך הפולינום קיבל ומוסיפים לסכום. אם כן, הפכנו את הבעיה שלנו לבעיה מסוג שונה, בעיה אלגברית יותר - בהינתן פולינום <span class="math">\(P\left(X_{1},\dots,X_{n}\right)\)</span> ומספר <span class="math">\(K\)</span>, להוכיח ש-<span class="math">\(\sum_{b_{1}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P\left(b_{1},\dots,b_{n}\right)=K\)</span>. מכאן ואילך נתעסק רק בבעיה הזו.</p>
+<p>עכשיו אתם אולי שואלים את עצמכם מה יצא לנו מכל העסק הזה - עברנו מבעיה פשוטה שמערבת פסוקים לוגיים, לבעיה יותר מסובכת עם פולינומים. הפאנץ' המרכזי כאן הוא זה: <strong>בפולינומים אפשר להציב ערכים נוספים</strong> פרט ל-0 ו-1. הצבה שכזו נראית במבט ראשון כמו ג'יבריש, כי מה קורה כשמציבים משהו שאינו אפס או אחד בפולינום שמנסה לייצג פסוק לוגי? מקבלים תוצאה שאין לה שום משמעות שקשורה לפסוק המקורי! אבל, תזכרו שאנחנו כבר לא מנסים לפתור בעיה שקשורה לפסוקים אלא בעיה כלשהי שקשורה לפולינומים, ולכן המשמעות המקורית ההיא לא חשובה לנו יותר. כפי שנראה בקרוב, היכולת להציב בפולינום ערכים שאינם 0 או 1 היא בדיוק מה שנותן למוודא את הכוח לבחון אינטראקטיבית את המוכיח.</p>
+<p>אולי התכונה החשובה ביותר של פולינומים עם משתנה יחיד, וזו שבה נשתמש בהמשך, היא שהם לא יכולים להתאפס ביותר מדי נקודות: פולינום ממעלה <span class="math">\(n\)</span> שאיננו זהותית אפס (כלומר, כל הצבה בו מניבה אפס) יכול לתת אפס רק בהצבה של לכל היותר <span class="math">\(n\)</span> ערכים (לערכים כאלו קוראים "שורשים" של הפולינום). לפעמים קוראים בטעות לטענה הזו "המשפט היסודי של האלגברה", אבל המשפט היסודי של האלגברה הוא די הפוך - הוא הטענה שבמספרים המרוכבים, לפולינום ממעלה <span class="math">\(n\)</span> יש בדיוק <span class="math">\(n\)</span> שורשים (זה לא ניסוח מדויק; ייתכן שאותו שורש יחזור על עצמו כמה פעמים - אבל זה לא פוסט על המשפט היסודי של האלגברה, <a href="http://www.gadial.net/2009/10/29/fundemental_theorem_of_algebra_algebraic_proof/">כזה כבר היה</a>).</p>
+<p>צריך להיות זהירים כאן - הטענה הזו על פולינומים נכונה רק כשהפולינום מוגדר מעל <strong>שדה</strong>, כמו המספרים הרציונליים או הממשיים. למשל, בקבוצה <span class="math">\(\mathbb{Z}_{16}\)</span> של המספרים השלמים מ-0 עד 15 עם חיבור וכפל מודולו 16 לפולינום <span class="math">\(x^{2}\)</span> ישנם שורשים למכביר: 0, וגם 4, וגם 8. אם כן, אפשר היה לדבר על הפולינום מעל הרציונליים, או הממשיים, אבל אלו שדות גדולים <strong>מדי</strong> לצרכים שלנו - בהמשך הפרוטוקול המוודא יצטרך לבחור באקראי איברים מהם, ומכיוון שהם שדות אינסופיים בחירה שכזו היא בעייתית. לכן עוברים לדבר על הפולינום מעל שדה סופי פשוט - קבוצה מהצורה <span class="math">\(\mathbb{Z}_{p}\)</span> כאשר <span class="math">\(p\)</span> הוא ראשוני (עבור ראשוניים הקבוצה הזו היא אכן שדה - הרי לכם דוגמה אחת לאופן שבו הראשוניים צצים באופן טבעי באלגברה). לכן הפרוטקול נפתח בבחירה של <span class="math">\(p\)</span> גדול - כמה גדול? נדבר על זה אחר כך - על ידי המוכיח, שליחה למוודא, ובדיקה של המוודא שאותו <span class="math">\(p\)</span> הוא אכן ראשוני בעזרת אלגוריתם כלשהו לבדיקת ראשוניות (מילר-רבין <a href="http://www.gadial.net/2009/08/09/miller_rabin/">שהזכרתי בבלוג בעבר</a> מספיק טוב כאן; הוא אמנם הסתברותי אבל כל מערכת ההוכחה האינטראקטיבית היא הסתברותית).</p>
+<p>ועכשיו הטריק הוא זה: בואו נגדיר פולינום <span class="math">\(g\left(X\right)\)</span> על ידי כך שניקח את הסכום של <span class="math">\(P\)</span> שלעיל ונותיר בו את המשתנה הראשון בלי ידוע. כלומר:</p>
+<p><span class="math">\(g\left(X\right)=\sum_{b_{2}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P\left(X,b_{2},\dots,b_{n}\right)\)</span> - שימו לב שהסכומים התחילו מ-<span class="math">\(b_{2}\)</span>. אם למוודא היה ביד את הפולינום הזה, הוא היה יכול לבדוק בקלות האם הסכום המקורי יוצא <span class="math">\(K\)</span> - הוא פשוט היה מחשב את <span class="math">\(g\left(0\right)+g\left(1\right)\)</span> ובודק את התוצאה (למה זה עובד?). רק מה, חישוב של <span class="math">\(g\left(X\right)\)</span> הוא בעייתי כמעט כמו חישוב של כל הסכומים, אם כי הוא <strong>טיפה</strong> פחות בעייתי שכן יש משתנה אחד פחות שמעורב במשחק. אז במקום לחשב את הפולינום בעצמו, המוודא יבקש מהמוכיח לשלוח לו אותו - כלומר, לשלוח למוודא את סדרת המקדמים של הפולינום. מעלת הפולינום היא אותה מעלה כשל <span class="math">\(P\)</span> שכבר הסברנו שאינה גדולה, כך שמספר המקדמים שהמוכיח שולח אינו גדול. אחרי שהמוודא קיבל מהמוכיח את <span class="math">\(g\)</span> הוא יכול לחשב את <span class="math">\(g\left(0\right)+g\left(1\right)\)</span>, ואם קיבל משהו שונה מ-<span class="math">\(K\)</span>, לדחות מייד. אבל אם הוא קיבל, כצפוי, <span class="math">\(K\)</span>, מה עכשיו? הוא לא יכול לקבל, מהטעם הפשוט שהוא לא סומך על המוכיח! מה אם המוכיח שלח לו סתם פולינום שלא קשור ל-<span class="math">\(P\)</span> בשום צורה (והינדס את הפולינום כדי שכן יקיים <span class="math">\(g\left(0\right)+g\left(1\right)=K\)</span>)?</p>
+<p>אם כן, המוודא עושה את המשחק הבא: הוא אומר למוכיח "אוקיי, אני סומך עלייך שאם <span class="math">\(g\)</span> הוא אכן הפולינום שהיית אמור לשלוח לי, אז הסכום המקורי יצא <span class="math">\(K\)</span> ואפשר לשכוח ממנו. עכשיו בוא תוכיח לי ש-<span class="math">\(g\)</span> הוא אכן הפולינום שהיית אמור לשלוח לי". אבל איך המוכיח יכול להוכיח את זה?</p>
+<p>כאן מגיע הפאנץ' המובטח. המוודא יגריל מספר <strong>כלשהו</strong> <span class="math">\(a\)</span> מתוך השדה, יציב אותו ב-<span class="math">\(g\)</span> ויקבל מספר, <span class="math">\(g\left(a\right)\)</span>. כעת הוא יפנה למוכיח את האתגר הבא: הוכח נא עבורי שמתקיים <span class="math">\(\sum_{b_{2}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P\left(a,b_{2},\dots,b_{n}\right)=g\left(a\right)\)</span>. אבל מה זה האתגר הזה? זה בדיוק אותו דבר שהתחלנו ממנו - המוכיח מנסה להוכיח למוודא שאם לוקחים פולינום, מציבים במשתנים שלו את כל הקומבינציות האפשריות של 0 ו-1 וסוכמים, מקבלים מספר מסויים. ההבדל היחיד הוא שהפולינום החדש הוא בעל <strong>פחות משתנים</strong>, כי "חיסלנו" את אחד המשתנים על ידי כך שהצבנו בו <span class="math">\(a\)</span>.</p>
+<p>אם כן, המוכיח והמוודא יחזרו שוב על פרוטוקול ההוכחה, ובסוף יווצר אתגר חדש ששוב יהיה בו משתנה אחד פחות, וכן הלאה וכן הלאה עד שלבסוף המוודא יוותר עם פולינום בעל משתנה אחד בלבד - ועליו אפשר לבדוק בצורה ישירה אם הוא מקיים את הדרישה - פשוט מחשבים את ערכיו על 0 ו-1 וסוכמים.</p>
+<p>הדרך היחידה שבה המוכיח יוכל לעבוד על המוודא כאן תהיה אם הוא יגריל פולינום <span class="math">\(g\)</span> כך שבאורח קסום מתקיים <span class="math">\(\sum_{b_{2}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P\left(a,b_{2},\dots,b_{n}\right)=g\left(a\right)\)</span> וזאת למרות ש-<span class="math">\(g\)</span> איננו הפולינום שמוגדר על ידי המשוואה <span class="math">\(\sum_{b_{2}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P\left(X,b_{2},\dots,b_{n}\right)\)</span>. מה הסיכוי שזה יקרה?</p>
+<p>באופן כללי אם <span class="math">\(p,q\)</span> הם שני פולינומים במשתנה יחיד, מה ההסתברות ש-<span class="math">\(p\left(a\right)=q\left(a\right)\)</span> עבור <span class="math">\(a\)</span> שנבחר באקראי? ובכן, זו ההסתברות ש-<span class="math">\(a\)</span> יהיה שורש של הפולינום <span class="math">\(p\left(a\right)-q\left(a\right)\)</span> - פולינום שאינו זהותית אפס, ולכן מספר שורשיו הוא לכל היותר כדרגת פולינום ההפרש - נאמר שהיא <span class="math">\(d\)</span>. אז ההסתברות להצלחה היא <span class="math">\(\frac{d}{p}\)</span>, וכאן צריך לחשוב על <span class="math">\(d\)</span> כקטן יחסית ועל <span class="math">\(p\)</span> כגדול. מכאן שההסתברות שהמוכיח <strong>לא</strong> יצליח לעבוד על המוודא בסיבוב מסויים היא <span class="math">\(\left(1-\frac{d}{p}\right)\)</span>, ואם יש <span class="math">\(n\)</span> סיבובים סך הכל בפרוטוקול, ההסתברות שהמוכיח לא יצליח לעבוד על המוודא באף אחד מהם היא <span class="math">\(\left(1-\frac{d}{p}\right)^{n}\)</span>, ולא קשה לראות שזה מספר גדול מספיק כדי שהפרוטוקול יהיה מוצלח.</p>
+<p>האם סיימנו? חס ושלום, לא. הראינו ש-<span class="math">\(\overline{3\mbox{SAT}}\in\mbox{IP}\)</span>, אבל לא ש-<span class="math">\(\mbox{TQBF}\in\mbox{IP}\)</span>. הפרוטקול שראינו כולל את מרבית הרעיונות של ההוכחה הכללית, אבל יש תעלול אחד נוסף שנזדקק לו. למה ומדוע? נסו לחזור על אותה הוכחה עבור <span class="math">\(\mbox{TQBF}\)</span> ובדקו היכן אתם נתקעים. נסביר את הכל בפוסט הבא בנושא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/05/10/the_canon_anti_math/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מדוע &#34;הקנון המדעי&#34; לא כולל מתמטיקה?</span>
+            </a>
+            
+            
+            
+            <a href="/2011/05/02/damn_stupid_equation/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מה האסוציאציה שלכם ל-?=(1+2)2÷6?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

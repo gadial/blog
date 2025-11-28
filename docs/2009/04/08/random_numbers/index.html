@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז איך מגרילים מספרים במחשב? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז איך מגרילים מספרים במחשב?</h1>
+            <div class="post-meta">
+                <span class="date">2009-04-08</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/הסתברות.html">הסתברות</a>
+                    
+                    <a href="/categories/תכנות.html">תכנות</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>שפת התכנות הראשונה שהכרתי הייתה <a href="http://en.wikipedia.org/wiki/BASIC_programming_language">BASIC</a>, ואחד מהמשחקים הראשונים שכתבתי היה משחק שבו המחשב מגריל מספר והשחקן צריך לנחש אותו. למרבה הצער, שמתי לב לתופעה מאוד מוזרה במשחק שלי - המחשב תמיד ניחש את אותו המספר. לעומת זאת, אם הגדלתי את טווח המספרים שהוא יכל לבחור, הוא פתאום ניחש תמיד מספר אחר. רק אחרי זמן מה למדתי שכדי להבטיח שהמחשב יגריל מספר שונה בכל משחק, עלי לכתוב בתחילת התוכנית RANDOMIZE TIMER. מה זה בכלל אומר? מה הולך כאן?</p>
+<p>שורש הבעיה נעוץ בכך שמחשבים הם יצורים <a href="http://he.wikipedia.org/wiki/%D7%93%D7%98%D7%A8%D7%9E%D7%99%D7%A0%D7%99%D7%96%D7%9D">דטרמיניסטיים</a> באופיים - בהינתן המצב הנוכחי של תאי הזיכרון שלהם, הקידוד של החומרה שלהם וכו', המצב הבא נקבע באופן יחיד. אין "הגרלות" שמבוצעות בתוך המחשב - לפחות, כך אנחנו מקווים; התנהגות בלתי צפויה של המחשב (של המחשב עצמו, לא של תוכנה שמריצים עליו) מעידה על תקלה חמורה בו. אם כן, איך אפשר ליצור אקראיות מהדטרמיניזם הזה? האם בכלל יש משמעות למילה הזו, "אקראיות"?</p>
+<p>מבחינה פיזיקלית ופילוסופית, הדיון בשאלת האקראיות הוא עמוק ומעניין. למיטב הבנתי את <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%9B%D7%A0%D7%99%D7%A7%D7%AA_%D7%94%D7%A7%D7%95%D7%95%D7%A0%D7%98%D7%99%D7%9D">תורת הקוונטים</a>, משתמע ממנה שיש תהליכים בטבע שהם אקראיים באמת ובתמים - לא ניתן לקבוע בודאות מוחלטת מה תהיה תוצאת הסיום שלהם גם אם ידוע המצב ההתחלתי. מכיוון שאיני מבין בפיזיקה או בפילוסופיה, לא אכנס לדיון בנושאים הללו - אסתפק בדיון על מחשבים, שהם, כאמור, דטרמיניסטיים.</p>
+<p>דרך אחת להכניס אקראיות למחשבים היא "לרמות". לחבר את המחשב להתקן פיזיקלי שמודד משהו שנחשב אקראי - פליטת קרינה מאטום כלשהו, למשל. גם לזה אני לא רוצה להיכנס, למרות שזה בהחלט פתרון לגיטימי שגם משתמשים בו בפועל. כמו שאסביר בהמשך, פרט לסרבול הטכני יש אפילו חסרון רעיוני כלשהו בהסתמכות על התקנים שהם "אקראיים באמת", שכן לא ניתן (ככל הידוע לי) לחזור כמה פעמים על אותה סדרת ערכים אקראיים (בלי לרשום ולזכור את כולם).</p>
+<p>הפתרון השני הוא להסתמך על גורמים שאינם בדיוק אקראיים מבחינה פיזיקלית, אבל לכל דבר ועניין נראים אקראיים - למשל, הקלדות על המקלדת. מן הסתם יש חוקיות גדולה למדי בהקלדות על המקלדת (למשל, כשכותבים באנגלית, צפוי שמייד אחרי כתיבת q ייכתב u), אבל אם נמדוד את קצב ההקלדה, ובפרט את מספר השניות שעוברות בין כל הקלדה לזו שאחריה, נראה משהו אקראי למדי (שכמובן, נע בתוך תחום מוגדר). באותו אופן גם תנועות העכבר הן "אקראיות" (חשבו על כך שכל תזוזה, ולו הקטנה ביותר של העכבר, נמדדת; כך שגם אם מזיזים את העכבר מנקודה א' לנקודה ב', יש אלפי דרכים שונות לעשות זאת, וזו שנבחרת היא "אקראית"). ישנם עוד גורמים "אקראיים" בריצת המחשב, אבל לא נתעמק ברובם; במקום זה נעסוק במקור הפופולרי והנפוץ ביותר לאקראיות, למרות שהחוקיות שבו גדולה מאוד - השעון הפנימי.</p>
+<p>לשעון הפנימי יש יתרון ברור אחד - הוא משתנה. בכל שתי גישות לשעון הפנימי, הערך שיוחזר יהיה שונה. במחשב דטרמיניסטי, משהו שהוא תמיד שונה הוא תמיד תרומה מבורכת. עם זאת, ברור שהוא לא יכול לשמש בפני עצמו בתור יצרן של משהו אקראי. אם נדגום ממנו כל שניה, נקבל סדרה עולה עם הפרשים קבועים - לא משהו אקראי במיוחד. צריך לקחת את הפלט שהשעון (או קצב ההקלדה, או העכבר) נתן ולהפעיל עליו "ערבול" נוסף. זה מוביל אותנו לנושא המרכזי והחשוב ביותר של הפוסט הזה - <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%97%D7%95%D7%9C%D7%9C_%D7%A4%D7%A1%D7%91%D7%93%D7%95_%D7%90%D7%A7%D7%A8%D7%90%D7%99">מחולל מספרים פסאודו אקראיים</a>.</p>
+<p>מחולל מספרים פסאודו אקראיים הוא אלגוריתם שמקבל כקלט מספר, ומוציא כפלט מספר אחר, "אקראי", שנראה בלתי תלוי במספר שהוא קיבל כקלט. מכיוון שברוב המקרים אנו מעוניינים בסדרה של מספרים אקראיים (כי אנחנו מבצעים הרבה הגרלות), המחולל זוכר את הפלט שהוא הוציא בפעם האחרונה שבה הוא נקרא, ובפעם הבאה שבה קוראים לו, פועל על המספר הזה בתור הקלט. כמובן שהמחולל עדיין זקוק לקלט התחלתי כלשהו לפני שיוכל לייצר מספרים אקראיים שישמשו כקלטים בהמשך - לקלט ההתחלתי הזה קוראים ה"גרעין" (seed) של המחולל. אם מזינים למחולל גרעינים שונים, סדרת הערכים שהמחולל יפלוט תהיה שונה בתכלית; ואם ניקח סדרת מספרים שנפלטה על ידי המחולל ונחפש בה חוקיות - נתקשה מאוד לגלות כזו. כל זה, כמובן, בתנאי שהמחולל שווה משהו. בשביל שלא תהיה במחולל חוקיות ברורה, הכרחי שטווח הערכים שהוא מסוגל להוציא יהיה גדול מאוד, ושהוא לא יחזור על עצמו - ברגע שבו המחולל מוציא ערך שכבר היה בעבר באותה הסדרה, פירוש הדבר הוא שהוא נכנס ללולאה (כי המחולל דטרמיניסטי, ולכן המשך הסדרה אחרי המופע השני של הערך יהיה זהה להמשך שלה אחרי המופע הראשון שלו).</p>
+<p>כל זה טוב ויפה, אבל נניח שאני רוצה מספר אקראי בין 1 ל-6, כלומר הטלת קוביה. מה אני עושה? אני לוקח את הפלט של הפעלה אחת של המחולל, ובמקום להשתמש במספר כמות שהוא (כי כאמור, זה יהיה מספר ענקי) אני בודק מה השארית שהמספר הזה נותן בחלוקה ב-6 (כלומר, מהו ערכו של המספר מודולו 6). זה יהיה ערך בין 0 ל-5, שמתפלג באופן אחיד אם המחולל אכן מוצלח (כלומר, אם אחזור על ההגרלה הזו פעמים רבות, אראה שכל מספר התקבל בערך שישית מהפעמים). בצורה דומה אפשר לקבל מספר טבעי בכל טווח שהוא; אפשר גם להגריל מספרים "ממשיים" בתחום שבין 0 ו-1, פשוט על ידי נרמול - חלוקת המספר האקראי שהמחולל החזיר, במספר המקסימלי שהוא יכול להחזיר. התוצאה שתתקבל תמיד תהיה מספר רציונלי, אבל ממילא רק מספרים כאלו מיוצגים במחשב בשיטת הייצוג הסטנדרטית.</p>
+<p>כאן המקום לתאר כמה מחוללים קונקרטיים, אבל לא אעשה זאת, פשוט כי המתמטיקה של מחוללים טובים היא סבוכה וטכנית. אחד המחוללים הראשונים (אם לא הראשון) והפשוטים ביותר הומצא על ידי <a href="http://he.wikipedia.org/wiki/%D7%92%27%D7%95%D7%9F_%D7%A4%D7%95%D7%9F_%D7%A0%D7%95%D7%99%D7%9E%D7%9F">ג'ון פון נוימן</a> - קח מספר בן n ספרות, העלה אותו בריבוע וקבל מספר עם 2n ספרות (הוסף 0 בתחילת המספר שהתקבל אם יש צורך), וכעת קח את n הספרות האמצעיות בתור הפלט. הבעיה בשיטה החביבה הזו היא שלולאות צצות יחסית מהר. פון נוימן, שמיוחס לו הציטוט "Anyone who considers arithmetical methods of producing random digits is, of course, in a state of sin."', כנראה לא נזקק למשהו מחוכם יותר, אבל בשימושים קריפטוגרפיים, ואפילו עבור משחקים, זה לא מספיק טוב. הנה עוד דוגמה למחולל שכנראה לא כדאי להשתמש בו, באדיבות <a href="http://xkcd.com">xkcd</a>:</p>
+<p><img src="http://imgs.xkcd.com/comics/random_number.png" height="144" width="400" /><br />
+כעת אפשר להסביר מהו ה-Randomize timer של בייסיק. כשקוראים בשפת תכנות כלשהי לפונקציה שמחזירה מספר אקראי, לרוב הפונקציה הזו משתמשת במימוש של מחולל פסאודו אקראי זה או אחר. הגרעין של המחולל הזה מאותחל כאשר התוכנית מתחילה לרוץ - השאלה היא לאיזה ערך הוא יאותחל. אם השפה מאתחלת אותו תמיד ל-0, מן הסתם תמיד נקבל את אותה סדרה אקראית. לכן כדי לקבל סדרות שונות בכל הרצה, יש להשתמש במקור שמובטח שתמיד יתן ערך שונה - והשעון הפנימי של המחשב הוא המקור המושלם לכך. הפקודה Randomize timer מאתחלת את הגרעין של המחולל האקראי לערך שמושג מהשעון; בשפות אחרות יש פונקציה בשם srand שעושה את אותו הדבר. אלא שאין הכרח לאתחל דווקא באמצעות השעות; אפשר לאתחל גם באמצעות ערך מספרי שמועבר על ידי המשתמש עצמו, וכאן נכנס לתמונה אחת ההיבטים החביבים ביותר של מחולל פסאודו אקראי - אפשר לשחזר במדוייק את הסדרות האקראיות שהוא מייצר. פשוט מכניסים שוב את אותו גרעין, ומקבלים את אותה סדרה. בשביל מה זה טוב?</p>
+<p>לפני שנים הייתי מכור למשחק מחשב אווילי בשם <a href="http://he.wikipedia.org/wiki/%D7%95%D7%95%D7%A8%D7%9E%D7%A1_(%D7%9E%D7%A9%D7%97%D7%A7_%D7%9E%D7%97%D7%A9%D7%91)">Worms</a>, שבו אתה שולט על צוות תולעים אכזריות שמפצפצות לצוותים אחרים של תולעים את הצורה עם בזוקות, רימונים ושאר מרעין בישין. הקרבות התנהלו בשדה קרב שנוצר באופן אקראי. חלק משדות הקרב היו מוצלחים במיוחד (נניח, הם היו עמוסים בצוקים שאם תולעת עומדת עליהם, אפשר לפצפץ אותה לאינסוף ביתר קלות). איך אפשר, אם כן, לשחזר את אותו שדה קרב? פשוט מאוד - לכל שדה קרב שהוגרל היה כתוב באופן מפורש הגרעין של המחולל הפסאודו אקראי שיצר אותו. כדי לקבל את אותו שדה קרב, היה צורך לכתוב מחדש את הגרעין, וזהו. כמובן, הגרעין נראה סתם כמו ג'יבריש מאוד ארוך וזה לא היה הכי פרקטי לזכור אותו; אבל אפשר היה להכניס גרעינים משלך, פשוט בתור טקסט באנגלית (ההמרה של הטקסט למספר בוצעה, כמובן, מאחורי הקלעים), ולראות מה קיבלת. כך למשל, אם היית כותב "Alamo" היית מקבל דבר אחד (שנוצר בצורה אקראית לגמרי, ויכל להיות מוצלח או לא מוצלח, תלוי במזל), ואם היית כותב "Waterloo" היית מקבל משהו שונה; אבל בכל פעם שבה היית כותב אותם, היית מקבל את אותו שדה קרב כמו בפעם הקודמת. התעלול נפוץ גם במשחקי מחשב אחרים, כמובן.</p>
+<p>דוגמה אחרת - נניח שאני מהנדס שרוצה לבדוק עמידות של בתים לרעידות אדמה, באמצעות סימולציה מחוכמת במחשב. מה שאני עושה הוא לכתוב אלגוריתם שמדמה רעידת אדמה - אירוע עם הרבה אלמנטים אקראיים בתוכו (כמובן, מה שקורה ברעידה הוא בעצם דטרמיניסטי לגמרי ברמת המקרו, אבל מכיוון שהחישוב הדטרמיניסטי הזה תלוי בפרטים רבים מדי והוא מסובך מדי, אנו מעדיפים למדל אותו עם גורמים אקראיים). כעת אפשר להכניס לסימולציה בית שנבנה בצורה כך וכך, ולבדוק האם הוא קורס ברעידת האדמה או מחזיק מעמד. מכיוון שאנו רוצים להשוות אותו לבתים אחרים, נצטרך להכניס גם אותם לסימולציה באותם תנאים בדיוק - כלומר, הם צריכים להיות באותה רעידת אדמה, <strong>ובאותו מיקום</strong>, כך שאי אפשר להריץ את אותה סימולציה על שני בתים בו זמנית. צריך להריץ את אותה רעידת אדמה כמה וכמה פעמים, כשבכל פעם הפרמטר של "איזה בית נרסק היום" משתנה. לכן צריך לזכור את הגרעין שבאמצעותו "הוגרלה" רעידת האדמה.</p>
+<p>דוגמה שלישית, דומה ברוחה לדוגמה השניה - כשכותבים תוכנית מחשב, חלק בלתי נפרד מהתהליך הוא מה שנקרא Unit testing - הרצת בדיקות "נקודתיות" שבודקות פונקציות ומודולים ספציפיים בתוכנית. לעתים הבדיקות הללו צריכות להיות אקראיות, שכן המתכנת לא מצליח לחשוב בעצמו על כל המקרים המעניינים. במקרה שבו בדיקה אקראית גורמת לתקלה, חשוב שהפלט של המבחן, פרט ל"זה וזה נכשל" יהיה גם הגרעין שיצר את האקראיות שהובילה לתקלה - הרי ייתכן שבהרצות אקראיות אחרות לא תהיה שום תקלה, ואז איך נצליח לשחזר את התנאים שגרמו לתקלה כדי שנוכל לתקן אותם? (תיקון תקלות דורש לעתים קרובות הרצה חוזרת ונשנית של התוכנית על הקלט הבעייתי, עד שמתברר מה בדיוק הייתה הבעיה).</p>
+<p>כל הדיון עד כה היה מעשי לגמרי, וכעת ניתן לעבור לתיאוריה. בתיאוריה, לא ידוע ולו על מחולל מספרים פסאודו אקראיים אחד. אין כלום. אפס. נאדה. גורנישט. הסיבה לכך היא שהדרישות של הגישה התיאורטית מחמירות יותר - יש לספק הוכחה פורמלית לכך שהמחולל הוא "כמעט אקראי", וזהו מושג שהגדרתו אינו פשוטה, ועוד פחות ברור איך אפשר להוכיח שמשהו קונקרטי (כדוגמת המחוללים שמשתמשים בהם כיום) מקיים אותה. האינטואיציה הטובה לכך ששאלת קיום מחולל היא קשה מאוד <strong>מאוד</strong> מגיעה מכך שקיום מחולל שכזה יוכיח תכף ומייד <a href="http://he.wikipedia.org/wiki/P%3DNP">ש-P שונה מ-NP</a> (הכיוון ההפוך אינו נכון - ייתכן ש-P שונה מ-NP אך לא קיימים מחוללים). פירוט על כך - בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2009/04/13/pseudorandom_number_generators/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">האם ניתן להבחין בזמן פולינומי בין ההגדרה הפורמלית של מחולל פסאודו אקראי לזו המעשית?</span>
+            </a>
+            
+            
+            
+            <a href="/2009/04/04/more_crypto_examples/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">עוד על שימושי הקריפטוגרפיה בחיי היום יום (מציאת אוצרות ומעבר דרך קירות)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

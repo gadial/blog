@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אוטומט מחסנית - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אוטומט מחסנית</h1>
+            <div class="post-meta">
+                <span class="date">2015-03-22</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אוטומט מחסנית.html">אוטומט מחסנית</a>
+                    
+                    <a href="/tags/שפות חסרות הקשר.html">שפות חסרות הקשר</a>
+                    
+                    <a href="/tags/שפות פורמליות.html">שפות פורמליות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסטים הקודמים על שפות פורמליות הגדרתי את המושג של שפה חסרת הקשר. שפה היא חסרת הקשר אם יוצר אותה דקדוק חסר הקשר. זה מייצג גישה שונה לשפות פורמליות ביחס לזו שבה נקטתי עבור שפות רגולריות - שם הגדרתי את המחלקה לא באמצעות דקדוק שמייצר אותה (למרות שאפשר, והראיתי מחלקת דקדוקים כזו - דקדוקים לינאריים ימניים), אלא באמצעות מודל של אוטומט שמסוגל <strong>לזהות</strong> שפות. מה זה אומר "לזהות" שפה <span class="math">\(L\)</span>? שהאוטומט, בהינתן קלט <span class="math">\(w\)</span>, רץ על הקלט ובסוף אומר "כן" אם <span class="math">\(w\in L\)</span> ו"לא" אם <span class="math">\(w\notin L\)</span>.</p>
+<p>התהיה הטבעית שלנו היא האם קיים מודל דומה של אוטומט, או מכונה חישובית דומה, שתופס <strong>בדיוק</strong> את מחלקת השפות חסרות ההקשר. המודל של אוטומט סופי דטרמיניסטי הוא חלש מדי - את השפה חסרת ההקשר <span class="math">\(L=\left\{ a^{n}b^{n}\ |\ n\in\mathbb{N}\right\} \)</span> אין אוטומט סופי דטרמיניסטי שמזהה. לעומת זאת, המודל החישובי הסטנדרטי של מדעי המחשב - מכונת טיורינג - הוא חזק מדי; הוא מזהה את השפה <span class="math">\(L=\left\{ a^{n}b^{n}c^{n}\ |\ n\in\mathbb{N}\right\} \)</span> שאוכיח בעתיד שאינה חסרת הקשר. אם כן, אנחנו מחפשים מודל "ביניים" כלשהו בין אוטומט סופי דטרמיניסטי ובין מכונת טיורינג.</p>
+<p>מה בעצם ההבדל בין שני המודלים הללו? הרעיון מאחורי אוטומט סופי דטרמיניסטי הוא <strong>זכרון קבוע</strong>, כלומר שימוש בכמות זכרון שאינה תלויה בכלל בגודל הקלט. לעומת זאת, למכונת טיורינג יש <strong>זכרון לא חסום</strong>. לכן נראה מתבקש שהגבלה כלשהי על כמות הזכרון תניב לנו את מחלקת השפות חסרות ההקשר. למשל - אפשר לדרוש שכמות הזכרון שבה משתמשים לא תעלה על אורך הקלט. במילים אחרות, בזמן שאוטומט סופי דטרמיניסטי עובר על הקלט משמאל לימין ויכול רק לקרוא אותו, אפשר לחשוב על הרחבה של המודל שבה מותר לאוטומט ללכת ימינה ושמאלה בחופשיות על הקלט (למעשה, זה בפני עצמו לא מגדיל את הכוח של המודל ואוכיח זאת בפוסט עתידי), וגם מותר לו <strong>לכתוב</strong> על תאי הקלט, כלומר למחוק את מה שהיה שם קודם ולשים משהו חדש במקום. מודל כזה אכן מגדיר מחלקת שפות מעניינת, אבל זו <strong>אינה</strong> מחלקת השפות חסרות ההקשר אלא דווקא מחלקה אחרת של שפות שאפשר לתאר בעזרת דקדוקים שנקראת מחלקת השפות <strong>תלויות ההקשר</strong>. גם זה נושא יפה לפוסט עתידי ולא ארחיב על כך כעת; בינתיים רק חשבו על האופן שבו תכריעו את <span class="math">\(\left\{ a^{n}b^{n}c^{n}\ |\ n\in\mathbb{N}\right\} \)</span> בעזרת אוטומט שכזה (רמז: זה ממש, ממש קל).</p>
+<p>אם כן, מה הלאה? זכרון לוגריתמי? ובכן, אני כבר יודע את התשובה ולכן מעדיף לא ללכת לכיוון הזה. תחת זאת, בואו ננסה גישה קצת יותר פרודקטיבית - ננסה לחשוב איך ייראה אלגוריתם שמזהה שפה שנוצרה על ידי דקדוק חסר הקשר שרירותי, וננסה להבין מה המודל שבו טבעי לתאר את האלגוריתם הזה.</p>
+<p>אם כן, נתון לי דקדוק <span class="math">\(G=\left(V,T,S,P\right)\)</span> ונתונה לי מילה <span class="math">\(w\in T^{*}\)</span>. אני תוהה האם קיימת דרך לייצר את המילה הזו מתוך <span class="math">\(G\)</span>. איך אני עושה את זה? הנה הצעה מאוד נאיבית: בואו פשוט ננסה גזירה כלשהי בדקדוק ונראה אם נקבל בסופו של דבר את <span class="math">\(w\)</span>. כלומר, נתחיל עם <span class="math">\(S\)</span>, נבחר באופן שרירותי כלל גזירה <span class="math">\(S\to\alpha\)</span> מבין כל כללי הגזירה שמערבים את <span class="math">\(S\)</span> ונחליף את <span class="math">\(S\)</span> ב-<span class="math">\(\alpha\)</span>; אחר כך, כל עוד יש משתנה ב-<span class="math">\(\alpha\)</span> נבחר כלל גזירה עבורו ונשכתב את <span class="math">\(\alpha\)</span> וכן הלאה, עד אשר נקבל מחרוזת שכולה טרמינלים. ואז נשווה אותה ל-<span class="math">\(w\)</span>.</p>
+<p>יש שתי בעיות עם האלגוריתם הזה. ראשית, ה"שרירותי" שאני אומר שם - אלגוריתם בדרך כלל צריך לבחור בצורה מוגדרת היטב מה יהיה הצעד הבא שלו. אבל דקדוקים, מטבעם, אינם כאלו - הם <strong>אי דטרמיניסטיים</strong> באופיים. כדי לעשות לעצמי את החיים פשוטים, אני אניח שהאלגוריתם שלי יכול להיות אי דטרמיניסטי גם כן. בואו נזכיר מה זה אומר: לאלגוריתם אי דטרמיניסטי יכולות להיות ריצות רבות ושונות על אותו קלט, והדרישה שלנו היא שאם <span class="math">\(w\in L\)</span> אז <strong>קיימת</strong> ריצה שמסתיימת בקבלת <span class="math">\(w\)</span>, בעוד שאם <span class="math">\(w\notin L\)</span> אז <strong>כל</strong> ריצה מסתיימת בדחיית <span class="math">\(w\)</span>.</p>
+<p>הבעיה השניה עם האלגוריתם שלי היא שהוא נאיבי <strong>מדי</strong>. הוא לא מנצל שום הזדמנות כדי לאפטמז את עצמו אפילו קצת. מה שאני הולך להציע הם שיפורים פשוטים מאוד לאלגוריתם הזה - כמעט טריוויאליים - שיניבו את המודל המבוקש שלנו די בקלות.</p>
+<p>בכל שלב של ריצת האלגוריתם אנחנו מחזיקים ביד תבנית פסוקית <span class="math">\(\alpha\)</span> (מילה ב-<span class="math">\(\left(V\cup T\right)^{*}\)</span>). בגישה הנאיבית אני מחפש משתנה בתבנית הזו וגוזר אותו. בגישה הקצת פחות נאיבית, אני מציע להסתכל על התו הראשון ב-<span class="math">\(\alpha\)</span>. אם הוא משתנה, אגזור אותו; אם הוא טרמינל, אשווה אותו לטרמינל במקום המתאים ב-<span class="math">\(w\)</span>, ואם הם שונים אדחה מייד. אם הם זהים, אעיף את הטרמינל מ-<span class="math">\(\alpha\)</span> ואעבור למקום הבא ב-<span class="math">\(w\)</span>. זה הכל.</p>
+<p>הנה תיאור פורמלי של האלגוריתם. בכל צעד אני מחזיק שתי מילים: <span class="math">\(u\in T^{*}\)</span> ו-<span class="math">\(\alpha\in\left(V\cup T\right)^{*}\)</span>. בתחילת ריצת האלגוריתם <span class="math">\(u=w\)</span> (הקלט שלי) ו-<span class="math">\(\alpha=S\)</span>.</p>
+<p>בכל צעד של האלגוריתם, אני מסתכל על התו הראשון ב-<span class="math">\(\alpha\)</span>. אם התו הראשון הזה הוא טרמינל, כלומר <span class="math">\(\alpha=a\alpha^{\prime}\)</span> כך ש-<span class="math">\(a\in T\)</span>, אני בודק אם <span class="math">\(u=au^{\prime}\)</span>. אם לא, אני עוצר ודוחה מייד; אם כן, אני מוחק את <span class="math">\(a\)</span> הן מ-<span class="math">\(\alpha\)</span> והן מ-<span class="math">\(u\)</span>. כלומר, אני מבצע את ההשמות <span class="math">\(\alpha\leftarrow\alpha^{\prime}\)</span> ו-<span class="math">\(u\leftarrow u^{\prime}\)</span>. אני אקרא לפעולה הזו Shift בהמשך כי אני "מזיז" את הקלט.</p>
+<p>אם התו הראשון ב-<span class="math">\(\alpha\)</span> היה משתנה, כלומר <span class="math">\(\alpha=A\alpha^{\prime}\)</span>, אני בוחר באופן שרירותי כלל גזירה <span class="math">\(A\to\beta\in P\)</span> ומבצע את ההשמה <span class="math">\(\alpha\leftarrow\beta\alpha^{\prime}\)</span>.</p>
+<p>אם בשלב כלשהו הגעתי בו זמנית לכך ש-<span class="math">\(\alpha=u=\varepsilon\)</span>, אני עוצר ומקבל. אם אחת מהמילים הללו התרוקנה מבלי שהשניה תתרוקן, אני דוחה. זה הכל.</p>
+<p>האלגוריתם הזה נמצא בשימוש אמיתי בקומפיילרים וכלים דומים לניתוח תחבירי - זו דוגמה לאלגוריתם פרסור שהוא Top Down. רק שבעולם האמיתי אין לאלגוריתמים את הפריבילגיה של להיות אי דטרמיניסטיים ולכן עיקר החוכמה שלהם היא בבחירה של איזה כללי גזירה להפעיל בכל שלב (לרוב על ידי "הצצה קדימה" ב-<span class="math">\(u\)</span>). זה אומר שהאלגוריתמים הללו מסובכים קצת יותר ממה שהצגתי, ושהם לא עובדים לכל הדקדוקים. לא אכנס לכך כרגע. תחת זאת, אני רוצה לתהות איזה מודל חישובי מתאים לאלגוריתם שאני תיארתי.</p>
+<p>כבר ברור לנו שהמודל צריך להיות אי דטרמיניסטי. דבר יותר מעניין הוא שהאלגוריתם יכול לעבור על הקלט משמאל לימין ולקרוא תו אחד בכל פעם - אין לו צורך אמיתי להיות מסוגל "לחזור אחורה" בקלט. ברגע שבו ביצענו פעולת שיפט, אפשר לשכוח מתו הקלט הזה. מה שנכון הוא שאם אני מבצע פעולת גזירה, אני לא רוצה לקרוא את התו הבא בקלט - כך שהמודל שלי צריך להיות כזה שבו בכל צעד <strong>אפשר</strong> לקרוא את האות הבאה מהקלט, אבל לא <strong>חייבים</strong> - זה דומה למסעי-<span class="math">\(\varepsilon\)</span> באוטומט סופי.</p>
+<p>אם כן, מדוע אני לא יכול לבצע את האלגוריתם הזה באוטומט סופי? כי אני צריך לאחסן את <span class="math">\(\alpha\)</span> היכן שהוא, ואין לי <strong>שום</strong> חסם על הגודל של <span class="math">\(\alpha\)</span>. לא חסם של <span class="math">\(O\left(1\right)\)</span> זכרון, ולא חסם של <span class="math">\(O\left(\log n\right)\)</span> ולא חסם של <span class="math">\(O\left(n\right)\)</span> ולא כלום. אם אתם לא משוכנעים, נסו להמציא לי דקדוק שבו מילים יכולות להגיע לאורך שרירותי לפני שמתחילים לגזור מהן את הטרמינלים - זה תרגיל נחמד. אם כן, כל הכיוון שחשבתי עליו בהתחלה, של "בואו נגביל את כמות הזכרון של המודל" לא רלוונטית פה בכלל. אז מה הרווחתי? הרי אם כמות הזכרון אינה חסומה, אנחנו מקבלים מכונת טיורינג כללית!</p>
+<p>אה, אבל מה שעשינו לא נכון הוא שחשבו על זכרון רק במובן של <strong>כמות</strong>; אבל אני יכול להגביל משהו שונה לגמרי - את <strong>אופן הגישה</strong> לזכרון.</p>
+<p>האלגוריתם שלי בכל שלב אמנם שומר את כל <span class="math">\(\alpha\)</span>, אבל הוא מתעניין רק <strong>בתו הראשון</strong> של <span class="math">\(\alpha\)</span>; כל שאר התווים יכולים לחכות בשקט לתורם, אני לא מתעסק איתם. בכל צעד של האלגוריתם אני מוחק את התו הראשון של <span class="math">\(\alpha\)</span>, ואולי שם במקומו סדרה כלשהי של תווים (ואולי לא). גם בסדרת התווים הזו, אני אתעניין בצעד הבא רק בתו הראשון מביניהם, וכל היתר יכולים לחכות לתורם. האם אתם מנחשים איזה מבנה נתונים מתאים להתנהגות הזו? רגע, זה כתוב בכותרת הפוסט? אופס. מבנה הנתונים המתאים הוא <strong>מחסנית</strong>.</p>
+<p>אין לי הגדרה מדויקת למהו "מבנה נתונים" אבל הרעיון הכללי הוא זה: מבנה נתונים באופן כללי מאפשר לנו לעשות שלושה דברים: <strong>להכניס</strong> לתוכו פריטי מידע, <strong>להוציא</strong> מתוכו את פריטי המידע הללו, ו<strong>לגשת</strong> אל פריטי המידע. מבני נתונים שונים נבדלים באופן שבו מתבצעות הפעולות הללו, ביעילות הביצוע שלהן, בכמות הזכרון שנדרשת לייצוג מבנה הנתונים מעבר להחזקת פריטי המידע, וכן הלאה. מחסנית היא מבנה נתונים פשוט מאוד, שאפשר לתאר את פעולתו עם הקיצור LIFO, מלשון Last-in-first-out - האחרון להיכנס הוא הראשון לצאת. פעולת ההכנסה לתוך מחסנית נקראת Push, פעולת ההוצאה נקראת Pop, ולרוב הגישה שלנו היא רק אל האיבר האחרון שנדחף למחסנית, ומכונה Top. הסיבה שקוראים בעברית למבנה הנתונים הזה "מחסנית" היא כי כך מתנהגת מחסנית של כלי נשק - הקליעים נדחפים אליה בצורה כזו שהקליע האחרון שנדחף פנימה יהיה הראשון שיצא החוצה. למי שההקשר המיליטריסטי הזה לא נעים לו, באנגלית קוראים למבנה הנתונים הזה Stack ואפשר לחשוב עליו, למשל, בתור ערימת צלחות - אם אתם צריכים צלחת, אתם תיקחו את זה שבראש הערימה, ולא תיגשו למה שנמצא באמצע.</p>
+<p>מה שמוזר להרבה אנשים שנתקלים לראשונה במושג של מחסנית, ובפרט היה מוזר עבורי, הוא למה אנחנו <strong>צריכים</strong> להגביל את המחסנית ככה. למה שלא תהיה לנו גישה גם לאיברים שבאמצע? או לאיבר שבסוף? ובכן, ברור ש<strong>אפשר</strong> לתת גם גישה כזו; אבל הרעיון במחסנית הוא להשתמש בה בהקשרים שבהם <strong>אין צורך</strong> בגישה כזו ולכן נוח לחשוב על מבנה הנתונים שבו נשתמש בצורה המינימליסטית ביותר שאפשר. לרוב זה גם אומר שהמימוש יוכל להיות יותר יעיל, כי אנחנו צריכים לתמוך בפחות דברים.</p>
+<p>דוגמה מעניינת ולא טריוויאלית לשימוש במחסנית במדעי המחשב היא בשפות תכנות - בדרך כלל קריאה לפונקציה ממומשת בעזרת "מחסנית קריאות". בכל פעם שבה נקראת פונקציה אחת מתוך פונקציה אחרת, הנתונים של הפונקציה החדשה נדחפים למחסנית "מעל" הנתונים של הפונקציה הקודמת. גישה למשתנים מקומיים של הפונקציה נעשית בעזרת מצביע שמצביע "לתוך" המחסנית (הנה, רואים? אפשר לקרוא נתונים גם מהאמצע אם צריך). הרעיון הכללי הוא שאם קראו לפונקציה ב' מתוך א', אז עד שלא סיימנו את ב' וזרקנו לפח את הנתונים המקומיים שלה, אין סיכוי שנרצה לזרוק לפח את הנתונים המקומיים של א', ולכן מבנה הנתונים שלנו לא צריך לתמוך ב"לזרוק דברים שבאמצע". אבל לא ארחיב יותר מדי על הדוגמה הזו כעת.</p>
+<p>בהקשר שלנו מחסנית היא מבנה נתונים רלוונטי כי מצד אחד אנחנו לא צריכים יותר מאשר פונקציונליות של מחסנית בשביל האלגוריתם שהצגתי, ומצד שני ככל שמבנה הנתונים שבו אנחנו משתמשים הוא פשוט יותר, כך גדל הסיכוי שנוכל איכשהו "לסמלץ" אותו עם דקדוקים חסרי הקשר ולכן שנקבל מודל ששקול לדקדוקים חסרי הקשר. בפוסט הבא אראה בדיוק איך מבצעים את הסימולציה הזו, ואכן אסתמך בצורה חזקה מאוד על כך שיש לי מחסנית.</p>
+<p>עד כאן על המוטיבציה. אבל עכשיו נשאלת השאלה - איך אני מגדיר פורמלית את המודל שלי?</p>
+<p>ובכן, תזכורת: אוטומט רגיל כולל קבוצה של מצבים, ופונקציית מעברים שמתאימה לכל זוג של מצב והאות הנוכחית בקלט (או <span class="math">\(\varepsilon\)</span> אם לא רוצים לקרוא אות מהקלט) מצב שאליו עוברים. אוטומט מחסנית יהיה דומה, אבל יהיה לו מבנה נתונים של מחסנית שהוא יכול להשתמש בו. התוכן של המחסנית יהיה גם כן תווים, מתוך א"ב שייקרא <strong>א"ב המחסנית</strong> ולא חייב להיות זהה לא"ב הקלט. בכל צעד חישוב האוטומט יחליט מה הוא רוצה לעשות על פי שלושה דברים: המצב הנוכחי שלו, התו הנוכחי מהקלט (או <span class="math">\(\varepsilon\)</span>), והתו הנוכחי שנמצא בראש המחסנית. אחרי שהוא יחליט מה לעשות, הוא יבצע שני דברים - יעבור למצב חדש, וידחוף למחסנית מספר כלשהו של תווים (אפשר 0, אפשר 1, אפשר גם יותר).</p>
+<p>כדי שהתיאור והפירמול של המודל יהיו פשוטים ככל הניתן, אני מניח כמה הנחות על אופן הפעולה שלו. בפרט, אני מניח שבכל צעד שלו האוטומט <strong>תמיד מוציא תו מהמחסנית</strong>. בפרט זה אומר שאם המחסנית ריקה, האוטומט "נתקע". זה גם אומר שאם אני רוצה לא לשנות את מצב המחסנית, אני מבצע בזו אחר זו פעולה של הוצאת התו העליון מהמחסנית, ומייד אחר כך דחיפתו מחדש. נשמע קצת טיפשי, אבל בהגדרות הפורמליות זה פשוט יותר כך.</p>
+<p>אז הנה הפורמליזציה. אוטומט מחסנית הוא שביעייה <span class="math">\(M=\left(Q,\Sigma,\Gamma,q_{0},\bot,\delta,F\right)\)</span> כך ש-<span class="math">\(Q\)</span> היא קבוצה סופית של מצבים, <span class="math">\(\Sigma\)</span> הוא א"ב הקלט, <span class="math">\(\Gamma\)</span> הוא א"ב אחר שנקרא א"ב המחסנית, <span class="math">\(q_{0}\in Q\)</span> הוא המצב ההתחלתי של האוטומט, <span class="math">\(F\subseteq Q\)</span> היא קבוצת המצבים המקבלים שלו, <span class="math">\(\bot\in\Gamma\)</span> הוא סימן תחתית המחסנית, ופונקציית המעברים... זה מסובך.</p>
+<p>פונקציית המעברים מקבלת שלשה של מצב, אות קלט או <span class="math">\(\varepsilon\)</span>, וסימן מחסנית, ומחזירה את קבוצת כל הפעולות האפשריות שהמכונה יכולה לבצע על השלשה הזו (יש יותר מאחת כי המכונה יכולה להיות אי דטרמיניסטית). כל פעולה כזו היא זוג שכולל את המצב שאליו המכונה עוברת, ואת המילה שהיא דוחפת למחסנית. מגבלה קריטית אחת היא שלכל שלשה, קבוצת הפעולות האפשריות היא <strong>סופית</strong> - אחרת המודל יצא חזק מדי (יוכל להכריע כל שפה - כרגיל, זה תרגיל נחמד לעשות את זה). פורמלית אני כותב את כל זה ככה:</p>
+<p><span class="math">\(\delta:Q\times\left(\Sigma\cup\left\{ \varepsilon\right\} \right)\times\Gamma\to2^{Q\times\Gamma^{*}}\)</span> עם הדרישה הנוספת ש-<span class="math">\(\left|\delta\left(q,\sigma,A\right)\right|&lt;\infty\)</span> לכל <span class="math">\(q\in Q,\sigma\in\Sigma\cup\left\{ \varepsilon\right\} ,A\in\Gamma\)</span>.</p>
+<p>איך מתארים חישוב שמבצעת מכונה כזו? באוטומט השתמשנו בטריק של "הרחבת פונקציית המעברים" אבל כאן זה כבר יצא מסורבל מדי. תחת זאת, אנחנו משתמשים בשיטה שקצת מזכירה את האופן שבו אנחנו מתארים "חישובים" של דקדוקים - סדרה של "מצבי ביניים" כך שממצב ביניים אחד לבא אחריו מגיעים על ידי צעד בודד של המכונה. "מצב ביניים" כזה, או כפי שאקרא לו, <strong>קונפיגורציה</strong>, כולל את כל המידע הרלוונטי על מצב המכונה - במקרה שלנו זה כולל שלושה פרטי מידע: את המצב הפנימי של המכונה, את מה שנשאר מהקלט שלה (קלט שכבר קראנו לא מעניין אותנו יותר) ואת תוכן המחסנית (לא רק את התו העליון בה - כל התוכן, כי גם אם רק התו העליון רלוונטי כרגע, שאר התוכן עשוי להיות רלוונטי בהמשך). אני אסמן קונפיגורציה באופן הבא: <span class="math">\(\left[q,w,\alpha\right]\)</span> כך ש-<span class="math">\(w\in\Sigma^{*}\)</span> ו-<span class="math">\(\alpha\in\Gamma^{*}\)</span>.</p>
+<p>למכונה יש קונפיגורציה התחלתית יחידה ברורה: <span class="math">\(\left[q_{0},w,\bot\right]\)</span>, כך ש-<span class="math">\(w\)</span> היא מילת הקלט שלה. עכשיו אני רוצה להגדיר יחס של "עוקב" עבור קונפיגורציות. אז בואו ניקח מעבר כללי כלשהו של האוטומט, <span class="math">\(\left(p,\beta\right)\in\delta\left(q,\sigma,A\right)\)</span>, ובואו ניקח קונפיגורציה כלשהי שבה המעבר הזה יכול להתבצע - דהיינו, האוטומט במצב <span class="math">\(q\)</span>, אות הקלט הבאה שהוא יקרא היא <span class="math">\(\sigma\)</span> (או, אם <span class="math">\(\sigma=\varepsilon\)</span>, זה לא חשוב מה הקלט), והתו בראש המחסנית הוא <span class="math">\(A\)</span>. כל קונפיגורציה כזו היא מהצורה <span class="math">\(\left[q,\sigma w,A\alpha\right]\)</span> (שימו לב איך אני כותב את תוכן המחסנית - משמאל לימין, כאשר התו השמאלי ביותר הוא העליון ביותר והימני ביותר הוא התחתון ביותר). המעבר מגדיר את ה"עוקב" הבא:</p>
+<p><span class="math">\(\left[q,\sigma w,A\alpha\right]\vdash\left[p,w,\beta\alpha\right]\)</span></p>
+<p>שימו לב שמההגדרה הזו נובע מייד שאם בקונפיגורציה כלשהי המחסנית ריקה, לא תהיה לקונפיגורציה הזו קונפיגורציה עוקבת - המכונה "נתקעת". מצד שני, אם הקלט נגמר, עדיין יכולות להיות אינספור קונפיגורציות עוקבות, שמתאימות למעברי <span class="math">\(\varepsilon\)</span>. עכשיו, בואו ניקח את הסגור הרפלקסיבי-טרנזיטיבי של <span class="math">\(\vdash\)</span> ונסמן אותו ב-<span class="math">\(\vdash^{*}\)</span> וקיבלנו יחס שאומר "אפשר להגיע לקונפיגורציה הזו מהקונפיגורציה הזו במספר סופי כלשהו של צעדים".</p>
+<p>עכשיו אפשר להגדיר מה זה אומר שהאוטומט <strong>מקבל</strong> מילה - אם אפשר להגיע מהקונפיגורציה ההתחלתית על המילה הזו לקונפיגורציה שבה המצב שלנו הוא מצב מקבל וסיימנו את קריאת הקלט (ולא חשוב מה מצב המחסנית). כלומר:</p>
+<p><span class="math">\(w\in L\left(M\right)\iff\exists p\in F,\alpha\in\Gamma^{*}:\left[q_{0},w,\bot\right]\vdash^{*}\left[p,\varepsilon,\alpha\right]\)</span></p>
+<p>הכל טוב ויפה, אבל אם חושבים על זה, זו בעצם דרך די מסורבלת לקבל מילים. מה זאת אומרת? בואו נחשוב שניה על האלגוריתם שהצגתי קודם לבדיקה אם מילה שייכת לשפה של דקדוק כלשהו - האלגוריתם מסתיים שם בכך שהמחסנית והקלט מתרוקנים "בו זמנית", לא במעבר למצב מקבל. כדי לקבל, אני אצטרך לעשות איזה שהוא תעלול שבודק אם המחסנית התרוקנה, ואם כן - לעבור למצב מקבל. אבל הדגשתי שאם המחסנית ריקה אי אפשר לזוז יותר, אז מה עושים? התעלול יהיה לשים למחסנית "תחתית כפולה" - שני סימני תחתית שונים, כך שאם הסימן התחתון יותר נחשף אנחנו יודעים שהמחסנית כאילו-ריקה ועוברים למצב מקבל בהתאם. שום דבר כאן לא מורכב, אבל לכתוב את זה כל פעם מחדש - זה מסורבל. לכן נהוג להגדיר קבלה של מילים על ידי אוטומט מחסנית <strong>בדרך נוספת</strong> - דרך של "ריקון המחסנית". מסמנים זאת כך:</p>
+<p><span class="math">\(L_{e}\left(M\right)=\left\{ w\in\Sigma^{*}\ |\ \exists p\in Q:\left[q_{0},w,\bot\right]\vdash^{*}\left[p,\varepsilon,\varepsilon\right]\right\} \)</span></p>
+<p>לשפה <span class="math">\(L_{e}\left(M\right)\)</span> קוראים "השפה שהאוטומט מקבל על ידי ריקון מחסנית". מכיוון שלפעמים עדיין יותר נוח לעבוד עם מצבים מקבלים, לא מוותרים גם על ההגדרה הקודמת, ומגדירים גם את ה"השפה שהאוטומט מקבל על ידי מצבים מקבלים":</p>
+<p><span class="math">\(L_{f}\left(M\right)=\left\{ w\in\Sigma^{*}\ |\ \exists p\in F,\alpha\in\Gamma^{*}:\left[q_{0},w,\bot\right]\vdash^{*}\left[p,\varepsilon,\alpha\right]\right\} \)</span></p>
+<p>כלומר, כל אוטומט מחסנית מגדיר <strong>שתי</strong> שפות (שיכולות בהחלט להיות שונות זו מזו באופן דרסטי). לא קשה להראות (כבר נתתי רמז איך) שכל שפה שקיים אוטומט שמקבל אותה על ידי ריקון מחסנית, קיים גם אוטומט שמקבל אותה על ידי מצבים מקבלים, וההפך. כלומר, שני אופני הקבלה הללו הם <strong>שקולים</strong> מבחינת הכוח החישובי שלהם - אנחנו מאפשרים את שניהם פשוט כי זה יותר נוח ככה.</p>
+<p>בואו נראה דוגמה פשוטה - אוטומט שמקבל את<span class="math">\(L=\left\{ a^{n}b^{n}\ |\ n\in\mathbb{N}\right\} \)</span> על ידי ריקון. הרעיון: בהתחלה האוטומט בהלך רוח של "לקרוא <span class="math">\(a\)</span>-ים" - לכל <span class="math">\(a\)</span> שהוא קורא הוא דוחף <span class="math">\(A\)</span> למחסנית (בהתחלה במקום סימן תחתית המחסנית, ואחר כך מעל ל-<span class="math">\(A\)</span> הקודם שהוא דחף). אם הוא קורא <span class="math">\(b\)</span> בשלב כזה הוא פשוט נתקע. מתישהו הוא מחליט אי דטרמיניסטית שנמאס לו ועובר בעזרת מסע <span class="math">\(\varepsilon\)</span>להלך רוח של "לקרוא <span class="math">\(b\)</span>-ים". מעכשיו אם הוא קורא <span class="math">\(a\)</span> הוא נתקע, ואם הוא קורא <span class="math">\(b\)</span> הוא מוציא <span class="math">\(A\)</span> מהמחסנית. כך זה נמשך עד שהמחסנית מתרוקנת. אם היא התרוקנה בו זמנית עם סיום הקלט, מה טוב - אכן אמורים לקבל; אחרת, נתקעים. ואם המילה נגמרה כשהמחסנית לא ריקה, הרי שלא קיבלנו אותה.</p>
+<p>הנה האוטומט:</p>
+<p><span class="math">\(\delta\left(q_{0},a,\bot\right)=\left\{ \left(q_{0},A\right)\right\} \)</span></p>
+<p><span class="math">\(\delta\left(q_{0},a,A\right)=\left\{ \left(q_{0},AA\right)\right\} \)</span></p>
+<p><span class="math">\(\delta\left(q_{0},\varepsilon,A\right)=\left\{ \left(q_{1},A\right)\right\} \)</span></p>
+<p><span class="math">\(\delta\left(q_{1},b,A\right)=\left\{ \left(q_{1},\varepsilon\right)\right\} \)</span></p>
+<p>מה שמעניין בעיקר כאן הוא השינויים שאנחנו מבצעים במחסנית, כי בהתחלה קשה לעכל את הפורמליזציה הזו. בשורה הראשונה אנחנו <strong>מחליפים</strong> את <span class="math">\(\bot\)</span> ב-<span class="math">\(A\)</span>. בשניה אנחנו דוחפים <span class="math">\(A\)</span> אחד מעל הנוכחי - או, פורמלית, אנחנו מוציאים <span class="math">\(A\)</span> ודוחפים <span class="math">\(AA\)</span> במקומו. בשלישית אנחנו לא משנים את המחסנית - או, פורמלית, מוציאים <span class="math">\(A\)</span> ואז דוחפים <span class="math">\(A\)</span>. בשורה הרביעי אנחנו מוציאים את <span class="math">\(A\)</span> ולא דוחפים שום דבר במקומו.</p>
+<p>עכשיו אחרי שהבנו פחות או יותר מה הולך כאן, אפשר לחזור ליעד המקורי שלנו סוף כל סוף - לתאר אוטומט מחסנית שמזהה (על ידי ריקון מחסנית) את השפה של דקדוק חסר הקשר כלשהו. הבניה קלה למדי - כבר הבנו את הרעיון שלה (אני מקווה) ורק נשאר להבין את הפורמליזם. ניקח דקדוק <span class="math">\(G=\left(V,T,S,P\right)\)</span> ונגדיר אוטומט <span class="math">\(M=\left(\left\{ q_{0}\right\} ,T,V\cup T,q_{0},S,\delta,\emptyset\right)\)</span>. כלומר: לאוטומט יהיה רק מצב אחד, לא יהיו לו מצבים מקבלים בכלל, וא"ב המחסנית כולל את כל סימני הדקדוק. סימן תחתית המחסנית יהיה <span class="math">\(S\)</span> - המשתנה ההתחלתי (מתאים בדיוק לאלגוריתם שתיארתי קודם).</p>
+<p>והצעדים? בדיוק שניים, אחד עבור המקרה של טרמינל בראש המחסנית שזהה לאות הבאה בקלט, ואחד עבור המקרה של משתנה בראש המחסנית:</p>
+<p>לכל <span class="math">\(a\in T\)</span>: <span class="math">\(\delta\left(q_{0},a,a\right)=\left\{ \left(q_{0},\varepsilon\right)\right\} \)</span></p>
+<p>לכל <span class="math">\(A\in V\)</span>:<span class="math">\(\delta\left(q_{0},\varepsilon,A\right)=\left\{ \left(q_{0},\alpha\right)\ |\ A\to\alpha\in P\right\} \)</span></p>
+<p>זה הכל. ההוכחה שזה עובד היא לא לגמרי טריוויאלית, אבל אין בה רעיונות מתוחכמים נוספים.</p>
+<p>לאלו מכם שאוהבים לאפטמז, אפשר לתת בניה קצרה אפילו עוד יותר, אם מניחים שהדקדוק נמצא בצורה נורמלית מסויימת שנקראת <strong>הצורה הנורמלית של גרייבך</strong>. אציג אותה במפורט בהמשך, אבל הרעיון הכללי הוא שדקדוק הוא בצורה הנורמלית הזו אם כל כלל גזירה שלו הוא מהצורה <span class="math">\(A\to aA_{1}A_{2}\dots A_{n}\)</span> עבור <span class="math">\(a\in T\)</span> ו-<span class="math">\(A_{1},\dots,A_{n}\in V\)</span> או <span class="math">\(A\to\varepsilon\)</span>. כלומר, כל גזירה שלא סתם מוחקת את המשתנה גוזרת בדיוק טרמינל אחד ואז עוד כמה משתנים (זה בעצם כמו דקדוק לינארי ימני, אבל כאן מותר לגזור יותר ממשתנה אחד בפעם). לא קשה להוכיח שלכל שפה חסרת הקשר יש דקדוק בצורה הנורמלית של גרייבך, כך שאנחנו לא מאבדים את הכלליות. כעת, הבניה שלנו תהיה כזו:</p>
+<p>לכל <span class="math">\(a\in T\)</span> ולכל גזירה <span class="math">\(A\to aA_{1}\dots A_{n}\)</span> נוסיף את המעבר <span class="math">\(\left(q_{0},A_{1}\dots A_{n}\right)\in\delta\left(q_{0},a,A\right)\)</span>. כמו כן אם <span class="math">\(A\to\varepsilon\)</span> נוסיף את המעבר <span class="math">\(\left(q_{0},\varepsilon\right)\in\delta\left(q_{0},\varepsilon,A\right)\)</span>. בבניה הזו א"ב המחסנית כולל רק את <span class="math">\(V\)</span>, וההוכחה שזה עובד היא פשוטה משמעותית יותר.</p>
+<p>האם סיימנו? בוודאי שלא! הראינו מודל חישובי שמסוגל לקבל כל שפה חסרת הקשר, אבל זה בכלל לא היה האתגר, הרי גם מכונת טיורינג יכולה לעשות את זה. האתגר האמיתי הוא להראות שהמודל הזה לא חזק מדי - כלומר, שכל שפה שהוא מזהה היא חסרת הקשר. אני מאוד אוהב את הבניה שנדרשת לשם כך - כי איך לכל הרוחות אפשר לבנות דקדוק שמסמלץ ריצה של אוטומט מחסנית?! - אבל היא לא טריוויאלית עד כדי כך שהיא מצדיקה פוסט משלה. אז נתראה בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2015/03/31/pushdown_automata_cfg_equiv/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">שקילות אוטומט מחסנית ודקדוק חסר הקשר</span>
+            </a>
+            
+            
+            
+            <a href="/2015/03/15/context_free_grammars_and_gf/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז מה הקשר בין דקדוקים חסרי הקשר ופונקציות יוצרות?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תורת הקבוצות - יחסי שקילות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תורת הקבוצות - יחסי שקילות</h1>
+            <div class="post-meta">
+                <span class="date">2020-01-06</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                    <a href="/tags/יחסים.html">יחסים</a>
+                    
+                    <a href="/tags/יחסי שקילות.html">יחסי שקילות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="https://gadial.net/2019/10/21/intro_to_relations/">בפוסט הקודם</a> על תורת הקבוצות הצגתי את המושג של <strong>יחס</strong>. פורמלית, יחס מקבוצה <span class="math">\(A\)</span> לקבוצה <span class="math">\(B\)</span> היה תת-קבוצה של זוגות : <span class="math">\(R\subseteq A\times B\)</span>. בפוסט הזה ובבא אחריו אני רוצה לדבר ספציפית על המקרה שבו <span class="math">\(A=B\)</span> (ואז אומרים שהיחס <span class="math">\(R\)</span> הוא "מעל <span class="math">\(A\)</span>") ולדבר על שני סוגים מועילים במיוחד של יחסים - <strong>יחסי שקילות</strong> ו<strong>יחסי סדר</strong>. האינטואיציה מאחוריהם היא פשוטה יחסית - יחס שקילות הוא הכללה של שוויון, שאפשר לתאר בתור "שוויון עד כדי פרטים שלא רלוונטיים לנו", ואילו יחס סדר הוא הכללה של ה"גדול-שווה" שאנחנו מכירים ממספרים.</p>
+<p>הפעם נדבר על יחסי שקילות, ולשם כך בואו נתחיל מלהבין מה התכונות של שוויון. ראשית, יש את מה שנקרא בפילוסופיה "חוק הזהות". בניסוח שלנו הוא בסך הכל אומר ש-<span class="math">\(a=a\)</span> לכל איבר <span class="math">\(a\)</span>. שנית, יש לנו את אחת מטענות הבסיס של אוקלידס - "דברים השווים לאותו דבר שווים זה לזה", שאפשר לנסח כך: אם <span class="math">\(a=b\)</span> וגם <span class="math">\(b=c\)</span> אז <span class="math">\(a=c\)</span>. פרט לכך, לשוויון לא אכפת מהסדר שבו כותבים דברים: אם <span class="math">\(a=b\)</span> אז אפשר לכתוב גם <span class="math">\(b=a\)</span>. באופן מעניין למדי, שלוש התכונות הללו הן הדברים המהותיים שנזדקק להם כדי לקבל דברים מעניינים נוספים <strong>שאינם</strong> שוויון.</p>
+<p>בואו נגדיר את זה פורמלית, עבור יחס <span class="math">\(R\subseteq A\times A\)</span> כללי:</p>
+<ol> <li><span class="math">\(R\)</span> הוא <strong>רפלקסיבי</strong> אם לכל <span class="math">\(a\in A\)</span> מתקיים <span class="math">\(\left(a,a\right)\in R\)</span>.</li>
+
+
+<li><span class="math">\(R\)</span> הוא <strong>סימטרי</strong> אם <span class="math">\(\left(a,b\right)\in R\)</span> גורר <span class="math">\(\left(b,a\right)\in R\)</span>.</li>
+
+
+<li><span class="math">\(R\)</span> הוא <strong>טרנזיטיבי</strong> אם <span class="math">\(\left(a,b\right)\in R\)</span> וגם <span class="math">\(\left(b,c\right)\in R\)</span> גורר <span class="math">\(\left(a,c\right)\in R\)</span>.</li>
+
+</ol>
+
+<p>יחס שהוא בו זמנית רפלקסיבי, סימטרי וטרנזיטיבי נקרא <strong>יחס שקילות</strong> מעל <span class="math">\(A\)</span>.</p>
+<p>מתבקשת כאן דוגמא. אני אתן אחת שאינה פשוטה במיוחד, אבל היא חשובה מאוד בפני עצמה - אחד מיחסי השקילות המועילים ביותר במתמטיקה. אגדיר אותו על <span class="math">\(\mathbb{N}\)</span> למרות שאפשר גם על <span class="math">\(\mathbb{Z}\)</span>. נתחיל עם מקרה פרטי פשוט: אנחנו יודעים שאפשר לחלק את <span class="math">\(\mathbb{N}\)</span> ל<strong>זוגיים</strong> ו<strong>אי-זוגיים</strong>. מספר זוגי הוא מספר שמתחלק ב-2; מספר אי זוגי הוא מספר שאינו מתחלק ב-2. יחס השקילות שלי ניתן כעת לתיאור בתור "ל-<span class="math">\(a\)</span> ו-<span class="math">\(b\)</span> אותה זוגיות" (כלומר - או שהם שניהם זוגיים, או שהם שניהם אי זוגיים).</p>
+<p>הנה מקרה קצת יותר מתוחכם - חלוקה ב-3. כמקודם, אני יכול לפרק לשתי קבוצות של "מתחלקים ב-3" ו"לא מתחלקים ב-3", אבל משתלם לי הרבה יותר לחלק ל-3 קבוצות, על פי <strong>השארית בחלוקה ב-</strong><strong>3</strong> של המספר. הנה דוגמאות: אם נחלק את 13 ב-3, התוצאה תהיה מנה 4 ושארית 1, כלומר <span class="math">\(4\times3+1=13\)</span>. אם נחלק את 15 ב-3 נקבל מנה 5 ושארית 0. אם נחלק את <span class="math">\(11\)</span> ב-3 נקבל שארית 2. שימו לב שהשאריות הן מספרים בין 0 ל-2; שארית גדולה או שווה ל-3 לא ייתכן, כי במקרה כזה אפשר "לגנוב" מהשארית כדי להגדיל עוד קצת את המנה (כלומר- במקום לומר ש-13 זה <span class="math">\(3\times3+4\)</span> אנחנו לוקחים עוד 3 מהשארית ומגדילים את המנה ל-4). את יחס השקילות הזה אני אכנה <strong>שקילות מודולו </strong><strong>3</strong>.</p>
+<p>אני יכול כעת לנסח את יחס השקילות שלי בתור <span class="math">\(\left(a,b\right)\in R\)</span> אם ורק אם ל-<span class="math">\(a\)</span> ו-<span class="math">\(b\)</span> אותה שארית בחלוקה ל-3. אבל זה ניסוח קצת מילולי ומסורבל. הנה משהו פשוט יותר. בפוסט הקודם הגדרתי את יחס ה<strong>חלוקה</strong> שעוד נפגוש שוב גם בפוסט הזה. סימנתי אותו <span class="math">\(a|b\)</span>. המשמעות שלו היא זו: קיים <span class="math">\(d\in\mathbb{Z}\)</span> (שימו לב שכאן אני מרשה ל-<span class="math">\(d\)</span> להיות שלילי) כך ש-<span class="math">\(ad=b\)</span>. כעת, בעזרת יחס החלוקה אני יכול להגדיר את היחס החדש שלי: אסמן <span class="math">\(a\equiv_{3}b\)</span> אם ורק אם <span class="math">\(3|a-b\)</span>. למשל, <span class="math">\(5\equiv_{3}11\)</span> כי <span class="math">\(5-11=-6\)</span> ולכן <span class="math">\(d=-2\)</span> יעשה את העבודה.</p>
+<p>יחסית פשוט לראות ש-<span class="math">\(3|a-b\)</span> באמת רק אם השארית ש-<span class="math">\(a,b\)</span> משאירים בחלוקה ב-3 היא זהה. כי אפשר לכתוב <span class="math">\(a=3q_{a}+r_{a}\)</span> ו-<span class="math">\(b=3q_{b}+r_{b}\)</span> ואז <span class="math">\(a-b=3\left(q_{a}-q_{b}\right)+\left(r_{a}-r_{b}\right)\)</span>. מכיוון ש-3 מחלק את <span class="math">\(3\left(q_{a}-q_{b}\right)\)</span> הוא יצטרך לחלק גם את <span class="math">\(\left(r_{a}-r_{b}\right)\)</span> וקל לבדוק את כל המקרים (כי כל שארית היא או 0 או 1 או 2) ולראות שרק אם <span class="math">\(r_{a}=r_{b}\)</span> זה אפשרי.</p>
+<p>אני רוצה להוכיח ש-<span class="math">\(\equiv_{3}\)</span> הוא יחס שקילות. רפלקסיביות היא מיידית: לכל <span class="math">\(a\)</span> טבעי, <span class="math">\(a-a=0\)</span> וכמובן שזה מתחלק ב-3. גם סימטריה היא ברורה: אם <span class="math">\(3|a-b\)</span>, כלומר קיים <span class="math">\(d\)</span> שלם כך ש-<span class="math">\(3d=a-b\)</span>, אז <span class="math">\(b-a=3\left(-d\right)\)</span>. שימו לב שכאן בא לידי ביטוי הצורך שלי ש-<span class="math">\(d\)</span> יהיה שלם ולא סתם טבעי.</p>
+<p>טרנזיטיביות היא טיפה יותר מעניינת. אם <span class="math">\(a\equiv_{3}b\)</span> אז <span class="math">\(a-b=3d_{1}\)</span>. אם בנוסף <span class="math">\(b\equiv_{3}c\)</span> אז <span class="math">\(a-c=3d_{2}\)</span>. עכשיו נחבר את שתי המשוואות הללו ונקבל </p>
+<p><span class="math">\(a-c=\left(a-b\right)+\left(b-c\right)=3d_{1}+3d_{2}=3\left(d_{1}+d_{2}\right)\)</span></p>
+<p>וזה מסיים את ההוכחה ואנחנו רואים ש-<span class="math">\(\equiv_{3}\)</span> הוא יחס שקילות.</p>
+<p>תכף נחזור לדבר על <span class="math">\(\equiv_{3}\)</span> ספציפית, אבל בואו ננצל את ההזדמנות לראות כמה אפשר להכליל את ההוכחה הזו. ראשית, אין שום קסם במספר 3: לכל <span class="math">\(n\)</span> טבעי ההוכחה ש-<span class="math">\(\equiv_{n}\)</span> הוא יחס שקילות תעבוד באותו אופן בדיוק. שנית, שימו לב באילו תכונות של מספרים שלמים השתמשנו כאן: עבור הרפלקסיביות השתמשנו בכך ש-0 הוא מספר שלם ("קיום איבר אדיש לחיבור"); עבור הסימטריה בכך שאם <span class="math">\(d\)</span> שלם גם <span class="math">\(-d\)</span> שלם ("סגירות לנגדי"); ועבור טרנזיטיביות השתמשנו בכך שאם <span class="math">\(d_{1},d_{2}\)</span> שלמים כך גם <span class="math">\(d_{1}+d_{2}\)</span> ("סגירות לחיבור"). התכונות הללו ניתנות להכללה באופן טבעי במסגרת של <strong>תורת החבורות</strong> וזה מוליד את המושג החשוב של <strong>חבורות מנה</strong> <a href="https://gadial.net/2017/02/08/cosets_and_quotient_groups/">שכבר דיברתי עליו בבלוג</a>; לא אכנס אליו כאן.</p>
+<p>עכשיו, בואו נעשה עבור <span class="math">\(\equiv_{3}\)</span> את הדבר הבא: ניקח את 0 ונכתוב את כל מי ששקול ל-0 ביחס הזה. מכיוון ש-0 מתחלק ב-3 ללא שארית, מי ששקולים לו הם בדיוק המספרים שמתחלקים ב-3, כלומר נקבל</p>
+<p><span class="math">\(\left\{ 0,3,6,9,\dots\right\} \)</span></p>
+<p>עכשיו עבור 1. מהדוגמא של 0 אולי כבר קיבלתם את התחושה לפיה כדי לקבל את מי ששקול ל-1 כדאי להוסיף 3 כל הזמן. נקבל:</p>
+<p><span class="math">\(\left\{ 1,4,7,10,\dots\right\} \)</span></p>
+<p>ועבור 2 נקבל</p>
+<p><span class="math">\(\left\{ 2,5,8,11\dots\right\} \)</span></p>
+<p>האם יש עוד קבוצות? ובכן, לא! כל מספר יהיה שקול לאחד משלושת אלו. מדוע? פשוט מאוד. אם <span class="math">\(a\)</span> הוא מספר כלשהו, אז אפשר לחלק אותו ב-3 ולקבל שארית <span class="math">\(r\)</span> - כלומר, <span class="math">\(a=3q+r\)</span> כאשר <span class="math">\(r\in\left\{ 0,1,2\right\} \)</span>. כעת, <span class="math">\(a-r=3q\)</span> ולכן <span class="math">\(a\equiv_{3}r\)</span> - בעצם חזרתי פה על הנימוק הפורמלי לגבי "מחזירים את אותה שארית בחלוקה ב-3". אם כן, מה שקיבלנו הוא <strong>חלוקה</strong> של המספרים הטבעיים לאוסף של תת-קבוצות זרות (בלי איברים משותפים) ומשלימות (האיחוד שלהם הוא כל הטבעיים).</p>
+<p>זו סיטואציה כל כך נפוצה וחשובה כשיש לנו יחסי שקילות, שנותנים לה שם. לכל קבוצה כזו של "כל האיברים ששקולים למישהו" קוראים <strong>מחלקת שקילות</strong> של יחס השקילות. לאוסף של <strong>כל</strong> מחלקות השקילות קוראים <strong>קבוצת המנה</strong> של יחס השקילות. בואו נמצא דרך נוחה לסמן את זה. אם יש לי יחס שקילות <span class="math">\(R\)</span> מעל <span class="math">\(A\)</span> ו-<span class="math">\(a\in A\)</span> הוא איבר של <span class="math">\(A\)</span>, אני מסמן בתור <span class="math">\(\left[a\right]_{R}\)</span> את מחלקת השקילות של <span class="math">\(a\)</span>, כלומר את</p>
+<p><span class="math">\(\left[a\right]_{R}\triangleq\left\{ b\in A\ |\ \left(a,b\right)\in R\right\} \)</span></p>
+<p>על פי רוב אני פשוט אכתוב <span class="math">\(\left[a\right]\)</span> כשהיחס ברור מההקשר. בדוגמא של <span class="math">\(\equiv_{3}\)</span>:</p>
+<p><span class="math">\(\left[0\right]=\left\{ 0,3,6,9,\dots\right\} \)</span></p>
+<p><span class="math">\(\left[1\right]=\left\{ 1,4,7,10,\dots\right\} \)</span></p>
+<p><span class="math">\(\left[2\right]=\left\{ 2,5,8,11\dots\right\} \)</span></p>
+<p>שימו לב שבאותה מידה גם <span class="math">\(\left[8\right]=\left\{ 2,5,8,11\dots\right\} \)</span>, למשל. <strong>כל</strong> איבר ששייך למחלקת השקילות יכול לתאר אותה ככה. אם אני כותב מחלקת שקילות בתור <span class="math">\(\left[a\right]\)</span>, אני אומר ש-<span class="math">\(a\)</span> הוא <strong>נציג</strong> של המחלקה.</p>
+<p>עכשיו קל לתאר את קבוצת המנה. אם <span class="math">\(A\)</span> היא קבוצה ו-<span class="math">\(R\)</span> יחס שקילות מעליה, אז קבוצת המנה היא</p>
+<p><span class="math">\(A/R\triangleq\left\{ \left[a\right]_{R}\ |\ a\in A\right\} \)</span></p>
+<p>שימו לב שזו דוגמא לשימוש בכך שבכתיבת קבוצה אפשר לכתוב את אותו איבר כמה פעמים שונות וזה נספר רק פעם אחת. כי למשל, כשאני משתמש בכתיב הזה כדי לתאר את קבוצת המנה של שקילות מודולו 3 אני מקבל</p>
+<p><span class="math">\(\mathbb{N}/\equiv_{3}=\left\{ \left[0\right],\left[1\right],\left[2\right],\left[3\right],\left[4\right],\left[5\right],\dots\right\} =\left\{ \left[0\right],\left[1\right],\left[2\right]\right\} \)</span></p>
+<p>כלומר, קבוצת המנה אולי נראית אינסופית במבט ראשון, אבל היא בעצם קבוצה סופית של שלושה איברים (זה לא תמיד ככה; קבוצות מנה בהחלט יכולות להיות גם אינסופיות).</p>
+<p>נקודה אחרונה לפני שנעבור לשימוש של זה: אני עדיין רוצה להשתכנע שהדבר הזה קיים בכלל. אחרי האסון של הפרדוקס של ראסל, כל בניה של קבוצה חדשה היא משהו שאני מנסה לראות איך הוא נובע ישירות מהאקסיומות של תורת הקבוצות. יחסי שקילות בוודאי קיימים במובן זה שראינו שיחסים באופן כללי קיימים: כלומר, אם <span class="math">\(A\)</span> קיימת גם <span class="math">\(A\times A\)</span> קיימת ולכן גם תת-קבוצות של <span class="math">\(A\times A\)</span> שאני יכול לתאר עם קריטריון ברור קיימות. בנוסף, אם <span class="math">\(a\in A\)</span> הוא איבר אז הקבוצה <span class="math">\(\left[a\right]_{R}\)</span> היא תת-קבוצה של <span class="math">\(A\)</span> שמוגדרת עם קריטריון ברור ולכן גם היא קיימת. אבל מה עם קבוצת המנה, <span class="math">\(A/R\)</span>? ובכן, גם זה קל: <span class="math">\(A/R\)</span> היא אוסף של תת-קבוצות של <span class="math">\(A\)</span>, ולכן היא בעצמה תת-קבוצה של קבוצת החזקה <span class="math">\(\mathcal{P}\left(A\right)\)</span>. כלומר, <strong>אקסיומת קבוצת החזקה</strong> עושה את העבודה במקרה הזה.</p>
+<p>בואו ניקח את כל זה ונשתמש בו כדי לבנות את המספרים הרציונליים, <span class="math">\(\mathbb{Q}\)</span>. ואני מזהיר שהבניה הזו לוקה בחסר מסויים - אני לא אגדיר את פעולות החשבון על <span class="math">\(\mathbb{Q}\)</span> אלא רק את האיברים עצמם. <a href="https://gadial.net/2018/01/30/rings_of_fractions/">יש לי כבר פוסט</a> שמטפל גם בהיבטים הללו של הבניה בתוך הקשר כללי יותר.</p>
+<p>ובכן, בפוסט הקודם אמרתי שאפשר "להגדיר" את הרציונליים כך בצורה שלא עובדת: <span class="math">\(\mathbb{Q}\triangleq\left\{ \frac{a}{b}\ |\ a,b\in\mathbb{Z},b\ne0\right\} \)</span>. הצורה הזו לא עובדת כי הביטוי <span class="math">\(\frac{a}{b}\)</span> לא באמת מוגדר - זה לא אובייקט שקיים בעולם המתמטי שאנחנו מכירים, ויש בו הנחות מובלעות כמו זו ש-<span class="math">\(\frac{1}{2}=\frac{2}{4}\)</span>. אז הנה משהו פורמלי יותר. אני אגדיר את הקבוצה <span class="math">\(A=\left\{ \left(a,b\right)\ |\ a,b\in\mathbb{Z},b\ne0\right\} \)</span> של זוגות סדורים (היא בוודאי קיימת; זו תת קבוצה של <span class="math">\(\mathbb{Z}\times\mathbb{Z}\)</span>). על הקבוצה הזו אגדיר יחס שקילות שיזהה דברים כמו <span class="math">\(\frac{1}{2}=\frac{2}{4}\)</span>. </p>
+<p>לשם כך, בואו נשאל את עצמנו שאלה - באופן כללי, מתי <span class="math">\(\frac{a}{b}=\frac{c}{d}\)</span>? החשבון שלומדים בבית הספר היסודי אומר לנו שאפשר לכפול את שני האגפים ב-<span class="math">\(bd\)</span> ולקבל <span class="math">\(ad=bc\)</span>, אז זה יהיה יחס השקילות שלי: <span class="math">\(R=\left\{ \left(\left(a,b\right),\left(c,d\right)\right)\ |\ ad=bc\right\} \)</span> (שימו לב - זה יחס שקילות על הקבוצה <span class="math">\(A\)</span> שהיא <strong>מראש </strong>קבוצה של זוגות; כלומר, <span class="math">\(R\)</span> הוא אוסף זוגות של זוגות). צריך כמובן להשתכנע בכך ש-<span class="math">\(R\)</span> הוא יחס שקילות. הוא רפלקסיבי כי <span class="math">\(ab=ba\)</span> ולכן <span class="math">\(\left(\left(a,b\right),\left(a,b\right)\right)\in R\)</span>. הוא סימטרי כי אם <span class="math">\(ad=bc\)</span> אז גם <span class="math">\(cb=da\)</span>, והוא טרנזיטיבי כי... כי... טוב, אולי כדאי שאקח עוד פסקה בשביל זה ונעבוד במסודר.</p>
+<p>אם <span class="math">\(\left(a,b\right)\)</span> שקול ל-<span class="math">\(\left(c,d\right)\)</span> אז <span class="math">\(ad=bc\)</span>.</p>
+<p>אם <span class="math">\(\left(c,d\right)\)</span> שקול ל-<span class="math">\(\left(x,y\right)\)</span> אז <span class="math">\(cy=dx\)</span>.</p>
+<p>אנחנו רוצים לראות ש-<span class="math">\(ay=bx\)</span>. אז בואו ננסה "לחשב" את זה. מכיוון ש-<span class="math">\(d\ne0\)</span> אפשר לחלק בו ולקבל מ-<span class="math">\(ad=bc\)</span> את <span class="math">\(a=\frac{bc}{d}\)</span>. על כן <span class="math">\(ay=\frac{bcy}{d}\)</span> ומכיוון ש-<span class="math">\(cy=dx\)</span> נקבל <span class="math">\(\frac{bcy}{d}=\frac{bdx}{d}=bx\)</span>, כפי שרצינו. זה מסיים גם את הטרנזיטיביות.</p>
+<p>עכשיו אפשר להגדיר <span class="math">\(\mathbb{Q}\triangleq A/R\)</span> וסיימנו את בניית הרציונלים! חוץ מאשר הרמאות הבוטה שבה נקטתי פה ובטח חלקכם כבר זועמים עליה. כשהגדרתי את <span class="math">\(\mathbb{Z}\)</span> הייתי כזה "כן כן אני אגדיר רק את הקבוצה עצמה ולא אגדיר עליה פעולות חשבון, את זה עושים באלגברה" אבל הנה, עכשיו בהגדרה של <span class="math">\(\mathbb{Q}\)</span> <strong>השתמשתי</strong> בפעולת חשבון כזו על <span class="math">\(\mathbb{Z}\)</span> - פעולת הכפל. זו, כמובן, הונאה; יש לי עכשיו חור בהגדרה שאצטרך להשלים בהמשך ולהיזהר ששום דבר לא יהיה מעגלי (ספוילר: אני אצליח).</p>
+<p>מה השלב הבא? לבנות את הממשיים, <span class="math">\(\mathbb{R}\)</span>, מתוך <span class="math">\(\mathbb{Q}\)</span>. יש שתי דרכים נפוצות לעשות את זה - הדרך של קנטור והדרך של דדקינד. הדרך של קנטור מקסימה ויפהפיה ובעלת הכללות מרחיקות לכת ומתבססת על יחסי שקילות, ואני... לא הולך להיכנס אליה כאן, כי היא גם מצריכה חדו"א, ומצריכה דיבור על <strong>סדרות</strong> שהן מושג שטרם הגדרתי. תחת זאת אדבר על ההגדרה של דדקינד, שמתבססת על קבוצות ועל <strong>יחסי סדר</strong> שהם הנושא שאדבר עליו בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2020/01/10/order_relations/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת הקבוצות - יחסי סדר</span>
+            </a>
+            
+            
+            
+            <a href="/2019/12/11/new_quadratic_formula_proof_not/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">האם התגלתה שיטה חדשה לפתרון משוואה ריבועית? (לא)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

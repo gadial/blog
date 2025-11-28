@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ההוכחה הטופולוגית לקיום אינסוף ראשוניים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>ההוכחה הטופולוגית לקיום אינסוף ראשוניים</h1>
+            <div class="post-meta">
+                <span class="date">2009-03-16</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/טופולוגיה.html">טופולוגיה</a>
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הוכחות לא קונסטרוקטיביות.html">הוכחות לא קונסטרוקטיביות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסט הזה אני רוצה לתת דוגמה מקסימה ביותר לאופן שבו שני תחומים לכאורה שונים במתמטיקה מתנגשים חזיתית, כשאחד התחומים הוא <a href="http://he.wikipedia.org/wiki/%D7%AA%D7%95%D7%A8%D7%AA_%D7%94%D7%9E%D7%A1%D7%A4%D7%A8%D7%99%D7%9D">תורת המספרים האלמנטרית</a>, והתחום השני הוא ה<a href="http://he.wikipedia.org/wiki/%D7%98%D7%95%D7%A4%D7%95%D7%9C%D7%95%D7%92%D7%99%D7%94">טופולוגיה הקבוצתית</a>. הוכחות טופולוגיות לדברים שלכאורה אינם קשורים לטופולוגיה הן דבר מקסים - הן באלגנטיות שלהן (עבור מי שכבר "שוחה" במושגים הטופולוגיים) והן בגורם ההפתעה שהן טומנות בתוכן. כבר <a href="http://www.gadial.net/2008/04/17/compactness_and_compactness_theorem/">הראיתי בעבר</a> הוכחה טופולוגית למשפט ב<a href="http://he.wikipedia.org/wiki/%D7%9C%D7%95%D7%92%D7%99%D7%A7%D7%94_%D7%9E%D7%AA%D7%9E%D7%98%D7%99%D7%AA">לוגיקה</a> (משפט הקומפקטיות); ההוכחה הפעם היא של עובדה טריוויאלית בהרבה, ובמובנים מסויימים היא מסובכת הרבה יותר מההוכחה הסטנדרטית; ועם זאת, אני סבור שרוב המתמטיקאים יסכימו שהיא הוכחה יפהפיה בתכלית (כמו ש<a href="http://he.wikipedia.org/wiki/%D7%A4%D7%90%D7%95%D7%9C_%D7%90%D7%A8%D7%93%D7%A9">פאול ארדש</a> היה אומר, "הוכחה מהספר" - ואכן, היא מופיעה בספר "<a href="http://en.wikipedia.org/wiki/Proofs_from_THE_BOOK">Proofs From THE BOOK</a>").</p>
+<p>נתחיל בתזכורת. <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99">מספר ראשוני</a> הוא מספר טבעי גדול מ-1 שמתחלק רק ב-1 ובעצמו. כתוצאה מההגדרה הזו נובע שכל מספר טבעי אחר ניתן לכתיבה כמכפלה של ראשוניים (ועם עוד קצת עבודה אפשר להראות שצורת הכתיבה הזו היא יחידה), ולכן המספרים הראשוניים הם במובן מסויים "אבני הבניין" של המספרים הטבעיים. שאלה מעניינת שצצה מיידית היא האם קיים מספר סופי של "אבני בניין" שכאלו או שהוא אינסופי. ההוכחה הסטנדרטית של <a href="http://he.wikipedia.org/wiki/%D7%90%D7%95%D7%A7%D7%9C%D7%99%D7%93%D7%A1">אוקלידס</a> לכל שמספר הראשוניים הוא אינסופי היא כה פשוטה ויפה שראוי להביא אותה כאן: נניח שיש רק מספר סופי של ראשוניים, <span class="math">\(p_1,\dots,p_n\)</span>, אז נתבונן במספר <span class="math">\(a=p_1\cdot p_2\cdots p_n+1\)</span>. כאמור, כל מספר ניתן לכתיבה כמכפלת ראשוניים ולכן בפרט יש ראשוני <span class="math">\(q\)</span> שמחלק אותו; אבל אם אכן <span class="math">\(p_1,\dots,p_n\)</span> הם כל הראשוניים הקיימים אז <span class="math">\(q\)</span> הוא אחד מהם ולכן מחלק את מכפלתם, <span class="math">\(p_1\cdots p_n\)</span>. לכן הוא מחלק גם את <span class="math">\(a-p_1,\dots,p_n=1\)</span>, וזו סתירה (כי אם מספר טבעי מחלק את 1, הוא עצמו 1 ובפרט אינו ראשוני).</p>
+<p>אם כן, לטענה על קיום אינסוף ראשוניים יש הוכחה אלמנטרית ופשוטה. משהסכמנו על כך, והסכמנו על כך שמטרת ההוכחה הטופולוגית היא לא לתת גישה "טובה יותר" או "נכונה יותר" להוכחה אלא פשוט לתת דוגמה להוכחה יפה לכשעצמה, אפשר לעבור לטופולוגיה.</p>
+<p>תזכורת קצרה מאוד לגבי המושגים שנעסוק בהם - המושג הבסיסי בטופולוגיה הוא "קבוצה פתוחה". עבור כל קבוצת איברים <span class="math">\(X\)</span>,  (שבהקשר הזה מכנים "המרחב") ניתן להגדיר טופולוגיה - אוסף תתי קבוצות של <span class="math">\(X\)</span>, שכל אחת מהן נקראת "קבוצה פתוחה". יש מוטיבציה עמוקה מאחורי השם הזה, ולא ניכנס אליה בכלל. הדרישה היחידה מקבוצות פתוחות היא שתתי הקבוצות ה"טריוויאליות" <span class="math">\(X,\emptyset\)</span> (כלומר, המרחב והקבוצה הריקה) יוגדרו כפתוחות; שאיחוד כלשהו של קבוצות פתוחות יהיה בעצמו פתוח; ושחיתוך של מספר <strong>סופי</strong> של קבוצות פתוחות יהיה פתוח. הסופיות שדורשים בהקשר לחיתוכים היא קריטית - מי שיש לו ולו מעט נסיון בטופולוגיה קבוצות נתקל ודאי במקרים רבים שבהם הדרישה הזו היא מה שמפריד בין משפט נכון ומשפט שגוי. הסופיות הזו היא גם מה שעומד בבסיס ההוכחה שאציג בקרוב, כך שמי שחסר את האינטואיציה הטופולוגית לגבי חשיבות ה"סופי" הזה ייהנה כנראה קצת פחות, וחבל.</p>
+<p>כדי לתאר באופן נוח את אוסף כל הקבוצות הפתוחות במרחב, לרוב נהוג לתאר אותו באמצעות <strong>בסיס</strong> - אוסף של קבוצות פתוחות כך שכל קבוצה פתוחה במרחב ניתנת לתיאור כאיחוד של אברי הבסיס. למשל, עבור המרחב <span class="math">\(X=\mathbb{R}\)</span> נהוג להגדיר טופולוגיה שהבסיס שלה הוא אוסף כל הקטעים הפתוחים, <span class="math">\((a,b)\)</span>. מכאן עולה שהקבוצות הפתוחות במרחב הזה הן בדיוק איחודים של קטעים פתוחים (חשבו למה <span class="math">\(\mathbb{R}\)</span> עצמו הוא קבוצה פתוחה על פי הגדרה זו).</p>
+<p>משהגדרנו קבוצות פתוחות, אפשר להגדיר מושג מקביל שנקרא "קבוצה סגורה". קבוצה סגורה היא קבוצה שהמשלים שלה (ביחס ל-<span class="math">\(X\)</span>) הוא קבוצה פתוחה. בדוגמה שנתתי, אפשר להראות שכל קטע <strong>סגור</strong> יהיה קבוצה סגורה, למשל. קבוצות סגורות מקיימות תכונות מקבילות לאלו של קבוצות פתוחות - המרחב כולו והקבוצה הריקה הן קבוצות סגורות (ולכן הן קבוצות שהן גם סגורות וגם פתוחות בו זמנית - זה אפשרי בהחלט), חיתוך של מספר כלשהו של קבוצות סגורות הוא סגור, ואיחוד <strong>סופי</strong> של קבוצות סגורות הוא סגור.</p>
+<p>כעת ניגש להוכחה עצמה, שאינה דורשת שום ידע נוסף בטופולוגיה. הרעיון הוא להגדיר מרחב טופולוגי על קבוצת המספרים השלמים <span class="math">\(\mathbb{Z}\)</span>, כשהבסיס לטופולוגיה הוא אוסף כל הסדרות החשבוניות ה"דו כיווניות". כלומר: לכל שני מספרים שלמים <span class="math">\(a,d\)</span> נגדיר קבוצה <span class="math">\(S_{a,d}=\left\{a+nd|n\in\mathbb{Z}\right\}\)</span>. הקבוצה הזו היא כל המספרים שמתקבלים כאשר לוקחים את <span class="math">\(a\)</span> ומחברים אליו או מחסירים ממנו את <span class="math">\(d\)</span> מספר כלשהו של פעמים. אם היינו מצטצמים ל"מחברים אליו את <span class="math">\(d\)</span>" היינו מקבלים את ההגדרה הרגילה של סדרה חשבונית; מכיוון שאנו גם מרשים חיסור, אנו מקבלים משהו כללי יותר.</p>
+<p>נגדיר את כל הקבוצות <span class="math">\(S_{a,d}\)</span> הללו בתור הבסיס לטופולוגיה שלנו. לא ניכנס כאן להוכחה שהבסיס "חוקי", כלומר שאם לוקחים את אוסף כל הקבוצות שמתקבלות מאיחודים של אברי הבסיס, מה שמתקבל אכן מקיים את הדרישות מטופולוגיה; זה אכן מתקיים ואתם מוזמנים לעשות זאת כתרגיל. האבחנה המעניינת על <span class="math">\(S_{a,d}\)</span> היא שקבוצות אלו, פרט להיותן פתוחות, הן גם סגורות; הסיבה לכך היא שהמשלים של <span class="math">\(S_{a,d}\)</span> הוא איחוד כל הקבוצות <span class="math">\(S_{a^\prime,d}\)</span> כך ש-<span class="math">\(a^\prime\)</span> אינו שקול ל-<span class="math">\(a\)</span> מודולו <span class="math">\(d\)</span> (כלומר, השארית שהם מחזירים בחלוקה ב-<span class="math">\(d\)</span> היא שונה). כל הקבוצות הללו הן פתוחות, ולכן גם האיחוד שלהן פתוח.</p>
+<p>כעת המשפט נובע כמעט מייד. נתבונן באיחוד <span class="math">\(\bigcup_{p}S_{0,p}\)</span> שנלקח על כל הראשוניים <span class="math">\(p\)</span>. אם מספר הראשוניים סופי, הרי שזהו איחוד סופי של קבוצות סגורות, ולכן הוא בעצמו סגור. אבל המשלים של האיחוד הזה הוא בדיוק הקבוצה <span class="math">\(\left\{1,-1\right\}\)</span>, שכן כל מספר אחר מתחלק על ידי ראשוני <span class="math">\(p\)</span> כלשהו, ולכן שייך לסדרה החשבונית שהאיבר הכללי שלה הוא <span class="math">\(np\)</span>. אלא שפרט לקבוצה הריקה, כל קבוצה פתוחה היא אינסופית (כי היא מכילה לפחות סדרה חשבונית אחת), בסתירה לכך שקיבלנו קבוצה פתוחה סופית - מכאן שהאיחוד שלעיל חייב להיות אינסופי (ובכך לא יהיה סגור) ולכן יש מספר אינסופי של ראשוניים.</p>
+<p>ולנקודה היהודית - ההוכחה התגלתה על ידי <a href="http://he.wikipedia.org/wiki/%D7%94%D7%9C%D7%9C_%D7%A4%D7%95%D7%A8%D7%A1%D7%98%D7%A0%D7%91%D7%A8%D7%92">הלל פורסטנברג</a>, בזמן שעוד היה סטודנט לתואר ראשון בישיבה יוניברסיטי.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2009/04/04/more_crypto_examples/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">עוד על שימושי הקריפטוגרפיה בחיי היום יום (מציאת אוצרות ומעבר דרך קירות)</span>
+            </a>
+            
+            
+            
+            <a href="/2009/03/03/math_mind_reading/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">איך שליטה ברזי המתמטיקה תהפוך אתכם לקוראי מחשבות?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

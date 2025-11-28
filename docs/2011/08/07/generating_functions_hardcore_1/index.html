@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פונקציות יוצרות - והפעם ברצינות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>פונקציות יוצרות - והפעם ברצינות</h1>
+            <div class="post-meta">
+                <span class="date">2011-08-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/גם טכני זה כיף!.html">גם טכני זה כיף!</a>
+                    
+                    <a href="/tags/פונקציות יוצרות.html">פונקציות יוצרות</a>
+                    
+                    <a href="/tags/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>כבר כתבתי בעבר <a href="http://www.gadial.net/2009/09/08/generating_functions/">פוסט</a> על פונקציות יוצרות, אבל אני מעוניין לשכוח זמנית מקיומו ולהציג את הנושא מחדש, בצורה מעמיקה יותר ומנקודת המבט ה"פורמלית" שאליה לא ממש נכנסתי בפוסט ההוא. המטרה שלי היא לשכנע אתכם - בעיקר את מי שלמד פונקציות יוצרות לחמש דקות, לא הבין מה זה טוב ומה הולך שם ושכח מזה - שזה ממש, ממש מגניב. אני גם רוצה הפעם לתת סקירה מקיפה יותר ולהיכנס הרבה יותר לפינות האפלות כדי להבהיר שכל מה שהולך כאן הוא תקין לחלוטין (שכן בדרך ההצגה השטחית המקובלת חלק ממה שהולך שם גורם להרמת גבה). אני מקווה שנהנה.</p>
+<p>נתחיל עם המה ולמה. פונקציות יוצרות הן מושג בקומבינטוריקה אנומרטיבית - הענף שבו מתעסקים בשאלת "כמה?". בעיה קומבינטורית ממוצעת היא זו: כמה דרכים יש להחזיר ל-<span class="math">\(n\)</span> אנשים את המעיל שהם מסרו בתחילת המסיבה כך שאף אחד לא יקבל בחזרה את המעיל שלו? כמה דרכים יש לפרק את המספר <span class="math">\(n\)</span> לסכום של מספרים טבעיים קטנים או שווים לו? כמה ססמאות מאורך <span class="math">\(n\)</span> אפשר לבחור? וכו' וכו'.</p>
+<p>שימו לב שלא שאלתי שאלה בסגנון "כמה תוצאות אפשריות יש בלוטו?". זה מחדד את מה שאנחנו מדברים עליו כאן - בעיית ספירה שתלויה ב<strong>פרמטר</strong>. בכל הבעיות שתיארתי למעלה כיכב <span class="math">\(n\)</span> בתור פרמטר שמאפיין את ה"גודל" של האובייקטים שאנחנו סופרים כרגע. אני שם את המילה "גודל" במרכאות כי הפירוש שלה יכול להשתנות מבעיה לבעיה; מה שחשוב כאן הוא שאנחנו סופרים את כמות האיברים במחלקה אינסופית של אובייקטים, נקרא לה <span class="math">\(A\)</span>, שבה לכל <span class="math">\(n\)</span> יש רק מספר סופי של אובייקטים מגודל <span class="math">\(n\)</span>, והאתגר שלנו הוא למצוא את <span class="math">\(a_{n}\)</span> - מספר האובייקטים ב-<span class="math">\(A\)</span> שהם מגודל <span class="math">\(n\)</span>, לכל <span class="math">\(n\)</span>.</p>
+<p>האופן שבו אנחנו חושבים בדרך כלל על פתרון לבעיה כמו זו הוא <strong>נוסחה סגורה</strong> עבור <span class="math">\(a_{n}\)</span>. נוסחה סגורה היא ביטוי אלגברי פשוט שנותן לנו את <span class="math">\(a_{n}\)</span> כפונקציה כלשהי של <span class="math">\(n\)</span>, למשל <span class="math">\(a_{n}=\frac{n\left(n+1\right)}{2}\)</span> או <span class="math">\(a_{n}=\frac{n!}{\left(n-3\right)!}\)</span> הן נוסחאות סגורות. לרוע המזל, בקומבינטוריקה נוסחאות סגורות הן עניין נדיר למדי ולרוב פשוט לא ניתן למצוא כאלו. זו הבעיה הבסיסית. בעיית החלוקה שלעיל של <span class="math">\(n\)</span> למספרים טבעיים היא דוגמה לבעיה שלא ידועה לה נוסחה סגורה; לא מזמן כתבתי <a href="http://www.gadial.net/2011/06/29/partitions_and_ramanujan/">פוסט בעניין</a>. לפעמים הנוסחה הסגורה היא "מוזרה" קצת באופיה - למשל, לבעיה עם המעילים יש נוסחה סגורה פשוטה: <span class="math">\(a_{n}=\left[\frac{n!}{e}\right]\)</span>, כאשר הסוגריים המרובעים פירושם לעגל את <span class="math">\(\frac{n!}{e}\)</span> למספר הטבעי הקרוב ביותר, ו-<span class="math">\(e\)</span> הוא פשוט הקבוע המפורסם (איך מגיעים לנוסחה הזו? זה עוד תרגיל חביב בקומבינטוריקה שאדבר עליו בפעם אחרת), אבל בדרך כלל פשוט אין נוסחה כזו. לפעמים יש נוסחה אבל היא מסובכת להחריד וקשה להבין ממנה משהו, בעיקר כשרוצים פריט מידע שלא דורש לדעת את <span class="math">\(a_{n}\)</span> בדיוק מוחלט - למשל, רק את סדר הגודל של <span class="math">\(a_{n}\)</span>.</p>
+<p>אם כן, לפעמים צריך גישה שונה לגמרי לבעיות קומבינטוריות ופונקציות יוצרות מציעות גישה שונה לגמרי שכזו. בעוד שנוסחה סגורה עבור <span class="math">\(a_{n}\)</span> מתארת איבר בודד בסדרה, פונקציה יוצרת היא דרך לתאר את כל הסדרה (האינסופית!) "בבת אחת".</p>
+<p>הרעיון בפונקציות יוצרות - ובעיני הוא אחד מהרעיונות הנפלאים במתמטיקה - הוא "לשתול" את אברי הסדרה בתור מקדמים בטור חזקות אינסופי; טור שכזה מגדיר פונקציה שלאחר מכן ניתן לבצע עליה מניפולציות סטנדרטיות שמתבצעות על פונקציות - חיבור עם פונקציות אחרות, כפל בסקלרים ובפונקציות אחרות, העלאה בחזקה ואפילו גזירה ואינטגרציה, כשלכל המניפולציות הללו משמעויות קומבינטוריות של התמרה כלשהי שמתבצעת על כל הסדרה. בפרט, אם אנחנו יודעים את הפונקציות היוצרות של אובייקטים פשוטים, אנחנו מסוגלים לבנות מהם פונקציות יוצרות של אובייקטים מורכבים יותר בדרך שיטתית למדי, בעזרת מניפולציות אלגבריות. לאחר מכן, אם מתקבל ביטוי פשוט מספיק עבור הפונקציה היוצרת, אפשר להפיק ממנה מידע על הסדרה המקורית - לפעמים אפשר לקבל נוסחה מפורשת, לפעמים נוסחת נסיגה, אבל גם אם אי אפשר (כאמור, במקרים רבים אין ממש תקווה לנוסחה מפורשת) עדיין אפשר לקבל לעתים קרובות קירוב לסדרה, את קצב הגידול שלה וכן הלאה; כאן נכנסים לתמונה כלים מאנליזה מתמטית.</p>
+<p>בקיצור, פונקציות יוצרות הן נקודת מפגש מרתקת בין קומבינטוריקה, אלגברה ואנליזה. בואו נפסיק לקשקש עכשיו ונעבור לאקשן.</p>
+<p>בהינתן הסדרה <span class="math">\(a_{n}\)</span> (כש-<span class="math">\(n\ge0\)</span>), הפונקציה היוצרת שמתאימה לסדרה היא הביטוי <span class="math">\(\sum_{n=0}^{\infty}a_{n}x^{n}\)</span>. אני בכוונה כותב "ביטוי" ולא "פונקציה", כי על הדבר הזה לא חושבים בהכרח בתור פונקציה. פונקציה פירושה שמציבים ערכים בתוך <span class="math">\(x\)</span>, אבל אף אחד לא מבטיח לנו שאם נציב ערך בתוך <span class="math">\(x\)</span> התוצאה שנקבל תתכנס (במובן של חשבון אינפיניטסימלי). מבחינתנו, לפחות כרגע, היצור הזה הוא ביטוי פורמלי בלבד.</p>
+<p>טוב, זה נשמע די מטופש, חייבים להודות, אבל כדאי לזכור שבמתמטיקה גם פולינומים הם כאלו. למשל, היצור <span class="math">\(x^{2}+7x\)</span> - אנחנו יכולים לחשוב עליו בתור פונקציה, אבל אז נאבד חלק מהמידע - מה בדיוק המקדמים של כל חזקה של <span class="math">\(x\)</span> (ולפעמים זה אובדן של ממש; כך למשל <a href="http://www.gadial.net/2011/07/14/finite_fields_intro/">בשדה סופי</a> עם <span class="math">\(q\)</span> איברים הפולינום <span class="math">\(x^{q}-x\)</span> והפולינום <span class="math">\(0\)</span> מגדירים בדיוק את אותה פונקציה, אבל כפולינומים הם שונים). החשיבות של פולינומים באלגברה היא אדירה - למשל, בניית שדות הרחבה מתוארת, פורמלית, כבניה של חוגי מנה של חוגי פולינומים. למעשה, יצורים מהצורה <span class="math">\(\sum_{n=0}^{\infty}a_{n}x^{n}\)</span> הם הכללות טבעיות של פולינומים; גם על כל פולינום אפשר לחשוב כיצור מהצורה הזו, עבור סדרה שכולה אפסים החל ממקום מסויים. לביטוי <span class="math">\(\sum_{n=0}^{\infty}a_{n}x^{n}\)</span> קוראים "טור חזקות פורמלי".</p>
+<p>אחת הסיבות שבגללן פולינומים הם יצורים מעניינים היא שיש להם מבנה אלגברי מעניין - פעולות חיבור וכפל שהופכות אותם למה שנקרא <strong>חוג</strong> (שהוא, אה, קבוצה שעל אבריה מוגדרות פעולות חיבור וכפל; כמובן שיש כמה דרישות ספציפיות מהחיבור והכפל הללו). בפרט, כפל פולינומים הוא פעולה מעניינת מאוד, וכפל של טורי חזקות הוא הכללה טבעית שלו. אם יש לנו שני טורי חזקות, <span class="math">\(a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n}\)</span> ו-<span class="math">\(b\left(x\right)=\sum_{n=0}^{\infty}b_{n}x^{n}\)</span>, אז אפשר להגדיר חיבור וכפל שלהם כך (אני אשתמש ב-<span class="math">\(c\left(x\right)=\sum_{n=0}^{\infty}c_{n}x^{n}\)</span> בתור תוצר הפעולה):</p>
+<p><span class="math">\(c\left(x\right)=a\left(x\right)+b\left(x\right)\)</span> אם <span class="math">\(c_{n}=a_{n}+b_{n}\)</span>; זהו חיבור טבעי "איבר איבר".</p>
+<p><span class="math">\(c\left(x\right)=a\left(x\right)\cdot b\left(x\right)\)</span> אם <span class="math">\(c_{n}=\sum_{i=0}^{n}a_{i}b_{n-i}\)</span>. זה אותו הדבר עם כמו עם כפל פולינומים; נסו להסביר לעצמכם למה זו הגדרה נכונה והגיונית. אפשר לחשוב על הכפל הזה כך - אנחנו לוקחים את שתי הסדרות וכותבים אותן זו מעל זו, "הופכים" את הסדרה של ה-<span class="math">\(b_{n}\)</span>-ים, מזיזים אותה קצת (<span class="math">\(n\)</span> צעדים) ואז אנחנו מקבלים שיש רק איזור חפיפה מוגבל בין שתי הסדרות. אנחנו כופלים כל איבר בזה שמתחתיו, וסוכמים את הכל. לפעולה הזו קוראים <strong>קונבולוציה</strong>, והיא מופיעה באינספור תחומים מתמטיים. כפל פולינומים וטורי חזקות תופס אותה באופן טבעי.</p>
+<p>מה שצריך לשים לב אליו כאן הוא שלמרות ששני טורי החזקות הם אינסופיים, כל מקדם <span class="math">\(c_{n}\)</span> נקבע באמצעות כמות סופית של איברים, כלומר <span class="math">\(c\left(x\right)\)</span> מוגדר היטב בלי להיכנס בכלל לשאלות של התכנסות של טורים אינסופיים. זה בדיוק מה שמאפשר לנו להישאר פורמליים מבלי לגלוש לאנליזה.</p>
+<p>בואו נעבור לדוגמה - הסדרה <span class="math">\(1,1,1,\dots\)</span>. האם יש משהו (אינסופי) פשוט מזה? הפונקציה היוצרת המתאימה היא <span class="math">\(1+x+x^{2}+x^{3}+\dots=\frac{1}{1-x}\)</span>. איך הגעתי לכך שאגף שמאל שווה ל-<span class="math">\(\frac{1}{1-x}\)</span> אתם שואלים? אה, בקלות - סכום של טור הנדסי! אבל, אתם צועקים עכשיו, טור הנדסי אינסופי מתכנס רק כש-<span class="math">\(\left|x\right|&lt;1\)</span>, ובכלל מה הולך כאן, אמרת שלא מדברים על התכנסות!</p>
+<p>כאן אני שולף שפן מהכובע, ואני מקווה שאני מפיל אסימון כלשהו למי שמכיר פונקציות יוצרות רק בערך - את השוויון <span class="math">\(\sum_{n=0}^{\infty}x^{n}=\frac{1}{1-x}\)</span> אפשר להוכיח באופן הכי פורמלי שאפשר באמצעות ההגדרות שכבר נתתי, <strong>ובלי להשתמש כלל באנליזה</strong>! מה שאנחנו רוצים להראות הוא ש-<span class="math">\(1=\left(1-x\right)\cdot\sum_{n=0}^{\infty}x^{n}\)</span>. אם נחשוב על זה קצת, על <span class="math">\(1\)</span> אפשר לחשוב כטור חזקות פורמלי (שמתאים לסדרה <span class="math">\(1,0,0,\dots\)</span>) וגם על <span class="math">\(\left(1-x\right)\)</span> אפשר לחשוב כטור חזקות פורמלי (שמתאים לסדרה <span class="math">\(1,-1,0,0,\dots\)</span>) ולכן הטענה שבשוויון למעלה היא בעצם טענה פשוטה על כפל של טורי חזקות.</p>
+<p>אם כן, הבה ונסמן <span class="math">\(\sum_{n=0}^{\infty}c_{n}=\left(1-x\right)\cdot\sum_{n=0}^{\infty}x^{n}\)</span>. מהו <span class="math">\(c_{0}\)</span>? על פי הגדרה, <span class="math">\(c_{0}=a_{0}b_{0}=1\cdot1=1\)</span>. יופי, ומהו <span class="math">\(c_{1}\)</span>? על פי הגדרה, <span class="math">\(c_{1}=a_{0}b_{1}+a_{1}b_{0}=1\cdot1-1\cdot1=0\)</span>. ומה יהיה <span class="math">\(c_{2}\)</span>...?</p>
+<p>קל לראות ש-<span class="math">\(c_{n}\)</span>, לכל <span class="math">\(n\ge1\)</span>, יהיה אפס, כי תמיד נקבל <span class="math">\(c_{n}=a_{0}b_{n}+a_{1}b_{n-1}\)</span> (כל שאר ה-<span class="math">\(a_{i}\)</span>-ים מתאפסים) ומכיוון שכל ה-<span class="math">\(b_{i}\)</span>-ים הם תמיד 1 ו-<span class="math">\(a_{0}=1,a_{1}=-1\)</span> נקבל תמיד אפס. מכאן שקיבלנו את השוויון <span class="math">\(\sum_{n=0}^{\infty}x^{n}=\frac{1}{1-x}\)</span> בצורה הכי פורמלית שרק אפשר (כל עוד זוכרים לחשוב על ביטוי מהצורה <span class="math">\(\frac{1}{f\left(x\right)}\)</span> בתור "הפונקציה ההופכית של <span class="math">\(f\left(x\right)\)</span>; זו שכשכופלים אותה ב-<span class="math">\(f\left(x\right)\)</span> מקבלים 1"; זה תרגיל נחמד להראות שלטור חזקות כלשהו קיימת פונקציה הופכית אם ורק אם המקדם הראשון בו שונה מאפס).</p>
+<p>מה שאנחנו לומדים מכאן הוא שלפונקציות יוצרות אפשר למצוא לעתים קרובות ביטויים שהם פשוטים בהרבה מאשר טור אינסופי; ולביטויים הללו אפשר לבצע מניפולציות אלגבריות מכאן ועד להודעה חדשה. השאלה עכשיו היא - הבטחתי שיש למניפולציות האלגבריות משמעות קומבינטורית. מה היא?</p>
+<p>נניח ש-<span class="math">\(A,B\)</span> הם קבוצות של אובייקטים. <span class="math">\(a_{n}\)</span> הוא מספר האובייקטים מגודל <span class="math">\(n\)</span> ב-<span class="math">\(A\)</span> ו-<span class="math">\(b_{n}\)</span> הוא מספר האובייקטים מגודל <span class="math">\(n\)</span> ב-<span class="math">\(B\)</span>, ו-<span class="math">\(a\left(x\right),b\left(x\right)\)</span> הפונקציות היוצרות המתאימות. מה מתאר <span class="math">\(a\left(x\right)+b\left(x\right)\)</span>? ובכן, את הפונקציה היוצרת של <span class="math">\(A\cup B\)</span> (הקבוצה שמכילה את כל האיברים של <span class="math">\(A\)</span> וגם את כל האיברים של <span class="math">\(B\)</span>), בתנאי ש-<span class="math">\(A,B\)</span> זרות, כלומר ללא איברים משותפים (כי אחרת איבר משותף היה מופיע רק פעם אחת ב-<span class="math">\(A\cup B\)</span> אבל נספר פעמיים). בשביל שהסימונים יישארו פשוטים אני אסמן ב-<span class="math">\(A+B\)</span> תמיד את האיחוד <span class="math">\(A\cup B\)</span> תחת ההסכמה שאם יש ב-<span class="math">\(A,B\)</span> איברים זהים, כל אחד מהם זוכה לאיזה סימון ייחודי שמבדיל אותו כך שהאיחוד הוא תמיד זר (תרגיל - איך עושים כזה תעלול פורמלית?)</p>
+<p>ומה מתאר <span class="math">\(a\left(x\right)\cdot b\left(x\right)\)</span>? או, עכשיו זה נהיה כיפי. הוא מתאר את <span class="math">\(A\times B\)</span> - אוסף הזוגות של איבר מ-<span class="math">\(A\)</span> ואיבר מ-<span class="math">\(B\)</span>, אבל יש טוויסט כלשהו - בעצם בנינו כאן סוג חדש של אובייקטים - אובייקטים שהם זוגות, ולכן צריך להגדיר עבורם מושג חדש של "גודל". ההגדרה מתבקשת: הגודל של האיבר <span class="math">\(\left(a,b\right)\)</span>, כש-<span class="math">\(a\in A\)</span> ו-<span class="math">\(b\in B\)</span> הם איברים כלשהם (ממש לא בהכרח מאותו הגודל) הוא פשוט הגודל של <span class="math">\(a\)</span> ועוד הגודל של <span class="math">\(b\)</span>. לא קשה לראות ש-<span class="math">\(a\left(x\right)\cdot b\left(x\right)\)</span> אכן מתאר את הפונקציה היוצרת של <span class="math">\(A\times B\)</span> תחת ההגדרה הזו.</p>
+<p>אפשר כמובן לכפול קבוצה בעצמה; נסמן ב-<span class="math">\(A^{n}\)</span> את מה שמקבלים כשכופלים את <span class="math">\(A\)</span> בעצמה <span class="math">\(n\)</span> פעמים (כדי לא להסתבך יותר מדי פורמלית, חשבו על כך כעל סדרה של <span class="math">\(n\)</span> איברים מתוך <span class="math">\(A\)</span>, והגודל של הסדרה הוא סכום הגדלים של אבריה). כמו כן לצרכי נוחות הסימון מגדירים את <span class="math">\(A^{0}\)</span> בתור קבוצה שמכילה איבר בודד מגודל 0 שמסומן ב-<span class="math">\(\varepsilon\)</span> - כל מטרת היצור הזה היא לפשט לנו את הסימונים אז אל תחפשו בו יותר מדי משמעות.</p>
+<p>כעת נגדיר את הפעולה הבאה: <span class="math">\(A^{*}=\bigcup_{n=0}^{\infty}A^{n}\)</span>. דהיינו, <span class="math">\(A^{*}\)</span> מכילה סדרות מכל גודל סופי שהוא של איברי <span class="math">\(A\)</span>. נניח ש-<span class="math">\(a\left(x\right)\)</span> היא הפונקציה היוצרת של <span class="math">\(A\)</span>; אז הפונקציה היוצרת של <span class="math">\(A^{*}\)</span> היא - הפתעה הפתעה - <span class="math">\(\frac{1}{1-a\left(x\right)}\)</span>. קרוב לודאי שחלקכם צועקים כרגע "הא! תפסנו אותך! מה אם <span class="math">\(a\left(x\right)=1\)</span> ותו לא?" ואתם צודקים - הבניה <span class="math">\(A^{*}\)</span> היא בעייתית אם <span class="math">\(A\)</span> מכיל איבר <strong>כלשהו</strong> מגודל 0, שכן אז הדרישה שלנו שלכל <span class="math">\(n\)</span> יהיה רק מספר סופי של איברים מגודל <span class="math">\(n\)</span> הולכת לפח (למשל, אם <span class="math">\(\alpha\)</span> הוא איבר ב-<span class="math">\(A\)</span> מגודל 0, ו-<span class="math">\(\gamma\)</span> הוא איבר מגודל <span class="math">\(n\)</span>, אז אינסוף איברים ב-<span class="math">\(A^{*}\)</span> שכולם מגודל <span class="math">\(n\)</span> הם כל האיברים מהצורה <span class="math">\(\left(\gamma,\alpha,\alpha,\dots\alpha\right)\)</span>), לכן עבור קבוצות <span class="math">\(A\)</span> שכאלו ממילא אין משמעות קומבינטורית סבירה ל-<span class="math">\(A^{*}\)</span>; אבל לכל קבוצה אחרת <span class="math">\(\frac{1}{1-a\left(x\right)}\)</span> מוגדר היטב. למה זה מה שיוצא? ובכן, מכללי החיבור והכפל שכבר הראיתי ברור שהפונקציה היוצרת של <span class="math">\(A^{*}\)</span> היא <span class="math">\(1+a\left(x\right)+a^{2}\left(x\right)+\dots=\frac{1}{1-a\left(x\right)}\)</span>.</p>
+<p>טוב, אז סוף סוף השלמנו את הצגת הכלים הבסיסיים שלנו (אם כי אלו בשום פנים ואופן לא כל הכלים האלגבריים שמשתתפים במשחק; רק הפשוטים ביותר מביניהם). בואו נעבור לראות כמה דוגמאות לאופן "מובנה" שבו מוצאים פונקציות יוצרות לבעיות שונות ומשונות. נתחיל ממשהו שהוא פשוט ממילא - סדרות בינאריות. סדרה בינארית היא פשוט סדרה של אפסים ואחדים כשה"גודל" שלה נמדד באורך הסדרה; מה הפונקציה היוצרת של מחלקת הסדרות הבינאריות?</p>
+<p>נגדיר <span class="math">\(A=\left\{ 0,1\right\} \)</span> כשהגודל של 0,1 הוא 1. מיידי לראות ש-<span class="math">\(A^{*}\)</span> היא בדיוק המחלקה שאנחנו מעוניינים בה (<span class="math">\(\varepsilon\)</span> מתפרש כאן כסדרה חסרת איברים). מה הפונקציה היוצרת של <span class="math">\(A\)</span>? פשוט מאוד, <span class="math">\(a\left(x\right)=2x\)</span> (שני איברים מגודל 1 ותו לא). מכאן שהפונקציה היוצרת שאנחנו רוצים היא <span class="math">\(\frac{1}{1-2x}\)</span>, סוף הסיפור. זו גם פונקציה יוצרת שקל לפתח חזרה לטור חזקות כדי לקבל נוסחה מפורשת למקדמים: <span class="math">\(\sum\left(2x\right)^{n}=\sum2^{n}x^{n}\)</span>, כלומר יש <span class="math">\(2^{n}\)</span> סדרות בינאריות מאורך <span class="math">\(n\)</span>. כמובן, זה דבר שקל לדעת גם בשיטות קומבינטוריות אחרות, אבל קיבלנו את זה כאן בדרך חדשה ושונה לגמרי - בעצם, דרך שהיא חפה כמעט לחלוטין מטיעונים קומבינטוריים (טיעונים שמוחבאים אי שם בהוכחה של ההתאמה בין פעולות אלגבריות על פונקציות יוצרות ופעולות קומבינטוריות על המחלקות המתאימות).</p>
+<p>בואו נעבור עכשיו לדוגמה הרבה יותר מופרעת שתבהיר קצת יותר טוב על מה אני מדבר כשאני מדבר על "מניפולציות" - עצים. עץ הוא גרף שמורכב מצומת "שורש" שאליו מחוברים אפס או יותר בנים שהם גם כן עצים. אני רוצה לספור עצים שבהם הסדר הפנימי בין הבנים משנה - כלומר, עץ שמורכב משורש שלבנו השמאלי יש בן יחיד ולבנו הימני יש שני בנים יהיה שונה מעץ שבו לבן השמאלי יש שני בנים ולימני יש בן אחד.</p>
+<p>תחת ההגדרה הזו צץ תיאור פשוט מאוד של עצים באופן רקורסיבי - "עץ" הוא זוג שכולל צומת יחיד וסדרה של אפס או יותר עצים (הצומת הוא האיבר הראשון בזוג והסדרה היא האיבר השני). אם נסמן ב-<span class="math">\(G\)</span> את מחלקת העצים וב-<span class="math">\(A\)</span> קבוצה שיש בה איבר בודד מגודל 1 (<span class="math">\(A=\left\{ \bullet\right\} \)</span> - חשבו על <span class="math">\(\bullet\)</span> בתור צומת), אז קיבלנו את המשוואה הבאה שמגדירה את <span class="math">\(G\)</span>:</p>
+<p><span class="math">\(G=A\times G^{*}\)</span></p>
+<p>המשוואה הזו היא בסך הכל תיאור פורמלי של התיאור המילולי שנתתי למעלה (זוג שכולל את הצומת הבודד של <span class="math">\(A\)</span> ואז סדרה של עצים - <span class="math">\(G^{*}\)</span> היא בדיוק זה). כעת, אם <span class="math">\(g\left(x\right)\)</span> היא הפונקציה היוצרת של <span class="math">\(G\)</span> ו-<span class="math">\(a\left(x\right)=x\)</span> היא הפונקציה היוצרת של <span class="math">\(A\)</span>, נקבל מייד ש-<span class="math">\(g=\frac{x}{1-g}\)</span>. זה מוביל למשוואה <span class="math">\(g-g^{2}=x\)</span>, או בניסוח טיפה שונה <span class="math">\(g^{2}-g+x=0\)</span>, ועל ידי נוסחת השורשים הרגילה נקבל <span class="math">\(g=\frac{1-\sqrt{1-4x}}{2}\)</span>.</p>
+<p>כמובן שעולות מיד שתי שאלות. ראשית, נוסחת השורשים נותנת שני פתרונות; למה <span class="math">\(\frac{1+\sqrt{1-4x}}{2}\)</span> אינו הפתרון ה"נכון"? ושנית, מה זה בכלל <span class="math">\(\sqrt{1-4x}\)</span> בהקשר ה"פורמלי" שלנו? ובכן, זהו טור חזקות שכאשר כופלים אותו בעצמו מקבלים את <span class="math">\(1-4x\)</span>. האם הוא בהכרח קיים? כאן נחלצת לעזרתנו תוצאה מוכרת - ההכללה של הבינום של ניוטון לחזקות לא שלמות:</p>
+<p><span class="math">\(\left(1+y\right)^{\alpha}=1+\alpha y+\frac{\alpha\left(\alpha-1\right)}{2!}y^{2}+\dots\)</span>. האופן שבו מוכיחים את הנוסחה הזו הוא באמצעות אנליזה - מפתחים את הפונקציה <span class="math">\(\left(1+y\right)^{\alpha}\)</span> לטור חזקות. אנחנו עובדים בעולם פורמלי ולא יכולים להשתמש בנימוקים הללו אבל זה לא מונע מהבינום של ניוטון להצביע על האופן שבו <span class="math">\(\sqrt{1+y}\)</span> <strong>חייב</strong> להיראות, אם יש לו משמעות כטור חזקות: הוא חייב להיות <span class="math">\(1+\frac{1}{2}y-\frac{1}{8}y^{2}+\frac{1}{16}y^{3}-\frac{5}{128}y^{4}+\dots\)</span> (יש גם צורה כללית סגורה לביטוי: <span class="math">\(\sqrt{1+y}=\sum_{n=0}^{\infty}\frac{\left(-1\right)^{n}\left(2n\right)!}{\left(1-2n\right)\left(n!\right)^{2}4^{n}}y^{n}\)</span> - לא הכי יפה, חייבים להודות). אם טורחים לשבת ולכפול את טור החזקות הזה בעצמו, פורמלית, מקבלים את <span class="math">\(1+y\)</span>, כך שגם מבחינה פורמלית לחלוטין אין לנו בעיות עם שורשים פשוטים.</p>
+<p>כעת, אם מציבים במקום <span class="math">\(y\)</span> את <span class="math">\(-4x\)</span> מקבלים <span class="math">\(1-2x-2x^{2}-4x^{3}-10x^{4}+\dots\)</span>. אם לזה היינו מוסיפים 1 ומחלקים ב-2, היינו מקבלים תוצאה לא קומבינטורית בעליל - טור חזקות שיש לו מקדמים שליליים, כך שהפתרון <span class="math">\(\frac{1+\sqrt{1-4x}}{2}\)</span> אינו יכול להיות הפתרון המתאים לבעיה שלנו; הפתרון חייב להיות <span class="math">\(\frac{1-\sqrt{1-4x}}{2}\)</span>, שנותן לנו את הסדרה <span class="math">\(x+x^{2}+2x^{3}+5x^{4}+\dots\)</span>. אם נאזור אומץ ונציב <span class="math">\(y=-4x\)</span> בנוסחה הכללית שתיארתי למעלה ונבצע את כל הפישוטים, נקבל שהפונקציה היוצרת היא <span class="math">\(\sum_{n=1}^{\infty}\frac{\left(2n\right)!}{2\left(2n-1\right)\left(n!\right)^{2}}x^{n}\)</span>. אפילו את זה אפשר לפשט עוד טיפה אם שמים לב לכך ש-</p>
+<p><span class="math">\(\frac{\left(2n\right)!}{2\left(2n-1\right)\left(n!\right)^{2}}=\frac{\left(2n\right)\cdot\left(2n-1\right)\cdot\left(2n-2\right)!}{2\left(2n-1\right)n^{2}\left(\left(n-1\right)!\right)^{2}}=\frac{1}{n}{2n-2 \choose n-1}\)</span></p>
+<p>כלומר, בסופו של דבר <span class="math">\(g\left(x\right)=\sum_{n=1}^{\infty}\frac{1}{n}{2n-2 \choose n-1}x^{n}\)</span>. שימו לב לטכניקות הלא קומבינטוריות בעליל שהשתמשנו בהן כאן; הקומבינטוריקה נגמרה באבחנה הפשוטה (והיפה) לפיה <span class="math">\(G=A\times G^{*}\)</span>; מכאן זה היה תהליך אלגברי/אנליטי סטנדרטי לגמרי - קצת מלוכלך כשעושים אותו ביד בפעם הראשונה, אבל לא משהו רציני למי שכבר משופשף בעניינים הללו ובוודאי שלא בעיה למערכת אלגברה ממוחשבת שתפקידה להתמודד עם משוואות כאלו. בסופו של דבר הגענו אפילו לנוסחה סגורה: מספר העצים הוא <span class="math">\(\frac{1}{n}{2n-2 \choose n-1}\)</span>. עכשיו כבר אפשר לגלות את הסוד: המספרים <span class="math">\(C_{n}=\frac{1}{n+1}{2n \choose n}\)</span> מוכרים מאוד בקומבינטוריקה ונקראים "מספרי קטלן"; מה שהוכחנו פה הוא שמספר העצים על <span class="math">\(n\)</span> קודקודים הוא בדיוק מספר קטלן ה-<span class="math">\(n-1\)</span> (למי שמכיר את מספרי קטלן אולי נופל פתאום אסימון; מספרי קטלן ניתנים להגדרה באמצעות נוסחת נסיגה שגם היא משתמשת בקונבולוציה).</p>
+<p>אם כן, זה מה שאנחנו מסוגלים להפיק כשאנו חמושים רק בכלים הפשוטים ביותר; בפוסט הבא אני אתן עוד דוגמאות שמתבססות על מניפולציות מתוחכמות עוד יותר.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/08/13/generating_functions_hardcore_2/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">פונקציות יוצרות - והפעם ברצינות (חלק ב&#39;)</span>
+            </a>
+            
+            
+            
+            <a href="/2011/08/03/ramsey_theorem/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">משפט רמזי</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

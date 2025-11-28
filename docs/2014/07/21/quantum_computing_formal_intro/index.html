@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי - ועכשיו פורמלית - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי - ועכשיו פורמלית</h1>
+            <div class="post-meta">
+                <span class="date">2014-07-21</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/פיזיקה.html">פיזיקה</a>
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>הפוסטים שלי עד כה על חישוב קוונטי ותורת הקוונטים דיברו מאוד באוויר. עכשיו הגיע הזמן לתכל'ס - לתאר את המודל המתמטי הבסיסי של תורת הקוונטים שבו אנחנו הולכים להשתמש. לפני שאני מתחיל אני רק רוצה להזכיר שהרעיון בתורת הקוונטים הוא לתת <strong>מסגרת</strong> שבה אפשר להשתמש כדי לבנות מודלים לאינספור מערכות פיזיקליות אמיתיות, אבל בניית מודלים כאלו יכולה להיות קשה ומורכבת וזה לחלוטין לא מה שאנחנו עושים כאן. למעשה, ננקוט בגישה ההפוכה - נציג מודלים פשוטים יחסית, ובכלל לא נדון בשאלה האם קיימת מערכת פיזיקלית אמיתית שמסוגלת לממש אותם.</p>
+<p>המודל המתמטי הוא, ובכן, מתמטי. צריך להכיר בעיקר אלגברה לינארית בשבילו, אבל ברמה שבה כבר מרגישים בנוח עם המושגים. מכיוון שכתבתי בבלוג פוסטים על הנושאים הרלוונטיים אני לא הולך לחזור על שום דבר מהמתמטיקה עכשיו אלא להניח שהקוראים מכירים אותה. עם הקוראים שלא מכירים מתמטיקה אבל קיוו להבין פורמלית מהו חישוב קוונטי הסליחה; אבל לטעמי בלי להבין טוב את המתמטיקה (שאינה מתקדמת במיוחד) אין אפשרות להבין חישוב קוונטי.</p>
+<p>ה"אקסיומה" הראשונה של תורת הקוונטים היא שניתן לתאר את המערכת בתור <strong>מרחב וקטורי</strong>; ליתר דיוק, מרחב הילברט מעל <span class="math">\(\mathbb{C}\)</span>, דהיינו יש לנו גם מכפלה פנימית בעסק והמרחב מתנהג "נחמד". אני הולך להתעסק רק עם מרחבים סוף-ממדיים אז התורה הכללית יותר של מרחבי הילברט לא לגמרי רלוונטית, אבל בניתוח של מערכות פיזיקליות אמיתיות העבודה עם מרחבים אינסוף-ממדיים היא בלתי נמנעת (ולמען האמת, טקסטים פיזיקאיים לרוב מרמים על ימין ועל שמאל בנקודה הזו, אבל זה לא אמור להיות פוסט מרמור על פיזיקה אז לא תשמעו ממני כלום על זה). המרחב הוקטורי הזה נקרא <strong>מרחב המצבים</strong> של המערכת. המצב של המערכת ברגע נתון מתואר על ידי וקטור אחד מתוך המרחב. על הוקטור הזה יש דרישה שהוא יהיה מנורמה 1, וארחיב על זה בהמשך.</p>
+<p>בואו נראה את הדוגמה הבסיסית ביותר למרחב שכזה: <strong>קיוביט</strong>. קיוביט הוא האנלוג הקוונטי של הביט ה"קלאסי". מהו ביט? יחידת המידע הבסיסית במחשב, שיכולה להיות 0 או 1 (מבחינה פיזיקלית ניתן לייצג ביט, למשל, על ידי רמות מתח שונות ברכיב חשמלי מסויים). כמובן שעם ביט בודד קשה לעשות הרבה, אבל הרבה ביטים ביחד מסוגלים לייצג כל מה שתרצו, בערך.</p>
+<p>קיוביט הוא מערכת קוונטית שבה יש שני מצבי בסיסי, דהיינו מרחב המצבים הוא מרחב וקטורי ממימד 2 מעל <span class="math">\(\mathbb{C}\)</span>. נהוג לקחת בסיס אורתונורמלי שלו ולסמן את אבריו ב-0 ו-1, אבל כשהם נמצאים בתוך <span class="math">\(\left|\cdot\right\rangle\)</span>. דהיינו, אברי הבסיס מסומנים על ידי <span class="math">\(\left|0\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \)</span> (אבל 0 ו-1 הם <strong>סימונים</strong> ותו לא; אין להם משמעות מספרית כאן).</p>
+<p>מה פשר השימוש ב-<span class="math">\(\left|\cdot\right\rangle \)</span>? נראה לי שהגיע הזמן להסביר. מדובר על סימון שהמציא הפיזיקאי פול דיראק. על היתרונות והחסרונות שלו אולי נדבר בהמשך, אחרי שנצבור קצת נסיון בעבודה איתו. בינתיים נסביר מה קורה כאן. נתחיל מהאופן שבו נהוג לפעמים לכתוב מכפלה פנימית של שני וקטורים: <span class="math">\(\left\langle a|b\right\rangle \)</span>. כלומר, <span class="math">\(a,b\)</span> נמצאים בתוך סוגריים משולשים עם קו מפריד ביניהם. באנגלית סוגריים כאלו נקראים brackets. עכשיו, מה שדירק עושה הוא "לחתוך באמצע" את המכפלה הפנימית הזו - לפרק אותה לזוג <span class="math">\(\left\langle a\right|\cdot\left|b\right\rangle \)</span>. את המשמעות של <span class="math">\(\left|b\right\rangle \)</span> כבר הבנו - זה פשוט איבר במרחב הוקטורי שלנו, שאסמן בתור <span class="math">\(V\)</span>. מהו <span class="math">\(\left\langle a\right|\)</span>, עם הסוגריים ה"הפוכים"? ובכן, זהו <strong>פונקציונל לינארי</strong> מעל <span class="math">\(V\)</span>. תזכורת קטנה מה זה: פונקציונל לינארי מעל <span class="math">\(V\)</span> הוא פונקציה <span class="math">\(f:V\to\mathbb{C}\)</span> (כלומר, טרנספורמציה לינארית מהמרחב אל השדה שמעליו המרחב מוגדר, שבמקרה שלו הוא <span class="math">\(\mathbb{C}\)</span>). לכן הסימון <span class="math">\(\left\langle a\right|\cdot\left|b\right\rangle \)</span> משמעותו - קחו את הפונקציונל <span class="math">\(\left\langle a\right|\)</span> והפעילו אותו על הוקטור <span class="math">\(\left|b\right\rangle \)</span>. במקרה שבו <span class="math">\(\left|a\right\rangle\)</span> הוא איבר של המרחב הוקטורי שלנו, אנחנו מקבלים ממנו באופן טבעי פונקציונל <span class="math">\(\left\langle a\right|\)</span>: מה ש-<span class="math">\(\left\langle a\right|\)</span> עושה על קלט <span class="math">\(\left|b\right\rangle \)</span> הוא פשוט להחזיר את המכפלה הפנימית של <span class="math">\(\left|a\right\rangle \)</span> עם <span class="math">\(\left|b\right\rangle \)</span>. אם אסמן לרגע את המכפלה הפנימית של שני וקטורים באמצעות סוגריים רגילים, בעצם יש לנו כאן את ההגדרה <span class="math">\(\left\langle a\right|\cdot\left|b\right\rangle \triangleq\left(\left|a\right\rangle ,\left|b\right\rangle \right)\)</span>. אם נשמיט את הנקודה בין <span class="math">\(\left\langle a\right|\)</span> ו-<span class="math">\(\left|b\right\rangle \)</span> ו"נצמיד" את הסמלים של שני האיברים נקבל בחזרה את הסימון <span class="math">\(\left\langle a|b\right\rangle \)</span> למכפלה הפנימית; זו הייתה מן הסתם המוטיבציה של שיטת הסימון של דיראק. לסיום, מכיוון שלקחנו את <span class="math">\(\left\langle a|b\right\rangle \)</span> ו"חתכנו אותו באמצע" לקבלת <span class="math">\(\left\langle a\right|,\left|b\right\rangle \)</span>, עושים דבר דומה גם עם ה<strong>שמות</strong>: סוגריים משולשים נקראים brackets, ובהתאם הסימון <span class="math">\(\left\langle a\right|\)</span> (סימון שמתאר, כזכור, פונקציונל) נקרא bra והסימון <span class="math">\(\left|b\right\rangle \)</span> נקרא ket. וכל שיטת הסימון הזו נקראת לפעמים bra-ket notation.</p>
+<p>מבלבל? הו כן, בהחלט. זה סימון שקצת קשה להתרגל אליו. אבל זה כל מה שהוא - סימון.</p>
+<p>עכשיו בואו נסבך את העניינים עוד יותר ונגדיר משהו שנקרא <strong>מכפלה חיצונית</strong> של שני וקטורים: הוא יסומן בתור <span class="math">\(\left|b\right\rangle \left\langle a\right|\)</span>. המשמעות של המשהו הזה נובעת כמעט מאליה מתוך הסימון: זה אופרטור לינארי מ-<span class="math">\(V\)</span> אל <span class="math">\(V\)</span>, שמקבל כקלט וקטור <span class="math">\(\left|c\right\rangle \)</span>, מחשב את המכפלה הפנימית של <span class="math">\(\left|c\right\rangle \)</span> עם <span class="math">\(\left|a\right\rangle \)</span>, מקבל סקלר מרוכב ואז כופל את הסקלר המרוכב הזה ב-<span class="math">\(\left|b\right\rangle \)</span>. פורמלית, אם <span class="math">\(\left\langle a|c\right\rangle =\lambda\)</span> אנחנו רואים שהסימון של דיראק הופך את האופרטור הזה ל"טבעי", אם אנחנו מרשים לעצמנו להתעלל קצת בסימון ולהניח שהוא מקיים אסוציאטיביות:</p>
+<p><span class="math">\(\left|b\right\rangle \left\langle a\right|\left(\left|c\right\rangle \right)=\left|b\right\rangle \left(\left\langle a|c\right\rangle \right)=\left|b\right\rangle \cdot\lambda=\lambda\left|b\right\rangle \)</span>.</p>
+<p>בואו נשחק טיפה עם הסימון הזה. אם יש לנו בסיס אורתונורמלי למרחב - נאמר, <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> ויש לנו וקטור <span class="math">\(\left|a\right\rangle \)</span>, אז אפשר להציג את <span class="math">\(\left|a\right\rangle \)</span> כצירוף לינארי של אברי הבסיס, כשהמקדמים מתקבלים בדיוק ממכפלה פנימית של <span class="math">\(\left|a\right\rangle \)</span> עם אברי הבסיס. כלומר: <span class="math">\(\left|a\right\rangle =\left\langle 0|a\right\rangle \left|0\right\rangle +\left\langle 1|a\right\rangle \left|1\right\rangle \)</span>. דרך אחרת לכתוב את השוויון הזה, עם הסימונים שלנו, היא <span class="math">\(\left|a\right\rangle =\left(\left|0\right\rangle \left\langle 0\right|+\left|1\right\rangle \left\langle 1\right|\right)\left|a\right\rangle \)</span>. אנחנו רואים כאן שמתקיים ש-<span class="math">\(\left|0\right\rangle \left\langle 0\right|+\left|1\right\rangle \left\langle 1\right|\)</span> הוא אופרטור היחידה, <span class="math">\(\left|0\right\rangle \left\langle 0\right|+\left|1\right\rangle \left\langle 1\right|=I\)</span>. עוד קצת מחשבה ונראה ש-<span class="math">\(\left|0\right\rangle \left\langle 0\right|\)</span> הוא האופרטור שמטיל כל וקטור על תת-המרחב שנפרש על ידי <span class="math">\(\left|0\right\rangle \)</span> (ובאופן כללי, אם יש לנו בסיס אורתונורמלי <span class="math">\(\left|e_{1}\right\rangle ,\left|e_{2}\right\rangle ,\dots\left|e_{n}\right\rangle \)</span> אז כל אופרטור <span class="math">\(\sum_{j}\left|e_{j}\right\rangle \left\langle e_{j}\right|\)</span> כאשר <span class="math">\(j\)</span> רץ על חלק מהאינדקסים בין 1 ל-<span class="math">\(n\)</span>, הוא אופרטור הטלה על תת-המרחב שנפרש על ידי אברי הבסיס המתאימים).</p>
+<p>שיטת ההצגה הזו מאפשרת לנו לתאר מאוד בפשטות אופרטורים שהם <strong>לכסינים</strong>. אם <span class="math">\(T\)</span> הוא אופרטור כזה, שבבסיס האורתונורמלי <span class="math">\(\left|e_{1}\right\rangle ,\left|e_{2}\right\rangle ,\dots\left|e_{n}\right\rangle \)</span> הוא מתואר על ידי מטריצה אלכסונית <span class="math">\(\mbox{diag}\left(\lambda_{1},\dots,\lambda_{n}\right)\)</span>, אז ניתן לכתוב אותו כך: <span class="math">\(T=\sum\lambda_{i}\left|e_{i}\right\rangle \left\langle e_{i}\right|\)</span>. בואו ניתן עוד דוגמה. לצורך הדוגמה אני אציג שלוש מטריצות שנקראות <strong>מטריצות פאולי</strong>; הן זכו לשם מיוחד כי הן שימושיות למדי, מן הסתם. הנה הן:</p>
+<p><span class="math">\(\sigma_{x}=\left[\begin{array}{cc}0 & 1\\1 & 0\end{array}\right],\sigma_{y}=\left[\begin{array}{cc}0 & -i\\i & 0\end{array}\right],\sigma_{z}=\left[\begin{array}{cc}1 & 0\\0 & -1\end{array}\right]\)</span></p>
+<p>את <span class="math">\(\sigma_{z}\)</span> אפשר להציג בקלות עם הבסיס הסטנדרטי שלנו: <span class="math">\(\sigma_{z}=\left|0\right\rangle \left\langle 0\right|-\left|1\right\rangle \left\langle 1\right|\)</span>. עבור שתי האחרות זה יותר בעייתי. למשל, עבור <span class="math">\(\sigma_{x}\)</span> בסיס של וקטורים עצמיים הוא <span class="math">\(\left|0\right\rangle +\left|1\right\rangle \)</span> ו-<span class="math">\(\left|0\right\rangle -\left|1\right\rangle \)</span>, עם ערכים עצמיים 1 ו-<span class="math">\(-1\)</span> בהתאמה. אז מפתה לכתוב משהו כזה:</p>
+<p><span class="math">\(\sigma_{x}=\left(\left|0\right\rangle +\left|1\right\rangle \right)\left(\left\langle 0\right|+\left\langle 1\right|\right)-\left(\left|0\right\rangle -\left|1\right\rangle \right)\left(\left\langle 0\right|-\left\langle 1\right|\right)\)</span></p>
+<p>ואז לפתוח סוגריים, לצמצם איברים ולקבל</p>
+<p><span class="math">\(\sigma_{x}=2\left(\left|1\right\rangle \left\langle 0\right|+\left|0\right\rangle \left\langle 1\right|\right)\)</span></p>
+<p>אבל זה פשוט <strong>לא נכון</strong>; מאיפה הגיע הכפל הזה ב-2? הסיבה היא שרימינו עם בחירת הבסיס של הוקטורים העצמיים; בחרנו בסיס לא אורתונורמלי - הנורמה של שני האיברים בו היא 2. אם יש לנו בסיס לא אורתונורמלי, דרך הכתיבה של האופרטור בתור <span class="math">\(\sum\lambda_{i}\left|e_{i}\right\rangle \left\langle e_{i}\right|\)</span> היא פשוט לא חוקית. אם היינו עובדים עם בסיס אורתונורמלי, כלומר מחלקים כל וקטור ב-<span class="math">\(\sqrt{2}\)</span>, בסוף היינו מגיעים אל <span class="math">\(\sigma_{x}=\left|1\right\rangle \left\langle 0\right|+\left|0\right\rangle \left\langle 1\right|\)</span>, שהיא דרך ההצגה הנכונה של האופרטור הזה. מכאן כבר קצרה הדרך להבנה שאפשר לייצג באופן כללי את האופרטור <span class="math">\(\left[\begin{array}{cc}a & b\\c & d\end{array}\right]\)</span> על ידי <span class="math">\(a\left|0\right\rangle \left\langle 0\right|+b\left|0\right\rangle \left\langle 1\right|+c\left|1\right\rangle \left\langle 0\right|+d\left|1\right\rangle \left\langle 1\right|\)</span>, ובפרט <span class="math">\(\sigma_{y}=-i\left|0\right\rangle \left\langle 1\right|+i\left|1\right\rangle \left\langle 0\right|\)</span>.</p>
+<p>אם תזכרו, אמרנו שהמצבים של המערכת הקוונטית שלנו הם תמיד וקטורים <strong>מנורמה </strong><strong>1</strong> במרחב שלנו. את הסיבה לדרישה הזו נסביר בהמשך, אבל משמעותה היא שוקטור כמו <span class="math">\(\left|0\right\rangle +\left|1\right\rangle \)</span> הוא לא איבר חוקי במרחב שלנו; צריך לכתוב <span class="math">\(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span>. הבעיה היא שלכתוב את החלקי-שורש-שתיים הזה, זה פשוט מסורבל מדי לפעמים ולמי יש כוח לזה. אז מה עושים? מרמים בסימון, זה מה שעושים. כותבים <span class="math">\(\left|0\right\rangle +\left|1\right\rangle \)</span> בכל זאת, מתוך הנחה שכל מי שמבין עניין מבין שצריך לחלק שם בשורש שתיים ואנחנו סתם כותבים קיצור.</p>
+<p>עוד סימון לא סטנדרטי אחד שנזדקק לו נוגע למכפלה פנימית שמערבת גם הפעלת אופרטור. קודם כל נזכיר את הרעיון הכללי, תוך שאני מסמן מכפלה פנימית של וקטורים <span class="math">\(a,b\)</span> ב-<span class="math">\(\left(a,b\right)\)</span>. לכל טרנספורמציה לינארית <span class="math">\(T\)</span> מהמרחב לעצמו קיימת מה שנקרא <strong>טרנספורמציה צמודה</strong> <span class="math">\(T^{*}\)</span> המקיימת את התכונה ש-<span class="math">\(\left(a,Tb\right)=\left(T^{*}a,b\right)\)</span>, כלומר אפשר "להעביר" את <span class="math">\(T\)</span> צד במכפלה הפנימית ב"מחיר" של מעבר מ-<span class="math">\(T\)</span> אל הצמודה שלה <span class="math">\(T^{*}\)</span>. <a href="http://www.gadial.net/2012/04/29/inner_product_space_adjoint/">היה לי על זה פוסט</a>, למי שמעוניין (אגב, פיזיקאים אמיתיים כותבים <span class="math">\(T^{\dagger}\)</span> במקום <span class="math">\(T^{*}\)</span>, אבל איני פיזיקאי אמיתי).</p>
+<p>בקוונטית מסמנים את זוג הביטויים השווים הללו - <span class="math">\(\left(a,Tb\right)\)</span> ו-<span class="math">\(\left(T^{*}a,b\right)\)</span>, באופן הבא: <span class="math">\(\left\langle a|T|b\right\rangle \)</span>. הסימון הזה יכול אולי להיראות טיפה דו-משמעי במבט ראשון בגלל הסימטריה שלו, אבל זכרו שזו סימטריה מדומה: <span class="math">\(\left|b\right\rangle \)</span> הוא וקטור, בזמן ש-<span class="math">\(\left\langle a\right|\)</span> הוא אופרטור, ולכן הביטוי <span class="math">\(\left\langle a|T|b\right\rangle \)</span> אומר בצורה ברורה - הפעילו את <span class="math">\(T\)</span> על <span class="math">\(\left|b\right\rangle \)</span>, קחו את התוצאה והפעילו עליה את האופרטור <span class="math">\(\left\langle a\right|\)</span>, כלומר כפלו את התוצאה במכפלה פנימית עם <span class="math">\(\left|a\right\rangle \)</span>. חד משמעי למדי.</p>
+<p>עוד דבר אחד שאני רוצה לדבר עליו לפני שנעבור הלאה הוא איך אפשר לבנות מערכות גדולות יותר מתוך מערכות קיימות. קיוביט אחד זה נחמד, אבל אי אפשר לעשות איתו יותר מדי; איך נראית מערכת של שני קיוביטים? ושלושה? ו-<span class="math">\(n\)</span> קיוביטים?</p>
+<p>ובכן, זה פשוט מאוד: מערכת מורכבת שכזו היא, מבחינה מתמטית, <strong>מכפלה טנזורית</strong> של המרחבים של המערכות הקיימות. את המושג של מכפלה טנזורית <a href="http://www.gadial.net/2014/06/10/vector_space_tensor_product/">תיארתי לא מזמן בבלוג</a> בדיוק בתור הכנה לפוסטים על חישוב קוונטי ולכן לא אתעכב עליו עכשיו. רק אעיר משהו על סימון: זה מעייף לכתוב <span class="math">\(\left|0\right\rangle \otimes\left|0\right\rangle \)</span> כל הזמן, אז פשוט כותבים <span class="math">\(\left|00\right\rangle \)</span> ושאר התעללויות דומות בסימון. בהמשך יש סיכוי שנראה התעללויות גדולות עוד יותר.</p>
+<p>יפה, הבנו פחות או יותר את הסימונים ואת הרעיון הבסיסי; על אילו עוד הנחות אנו מתבססים במודלים של תורת הקוונטים שלנו?</p>
+<p>הההנחה השניה מדברת על האופן שבו מערכת קוונטית סגורה - כלומר, בלי השפעות חיצוניות - <strong>מתפתחת בזמן</strong>. את השינוי הזה מתארת משוואה דיפרנציאלית שנקראת "משוואת שרדינגר":</p>
+<p><span class="math">\(i\hbar\frac{d\left|a\right\rangle }{dt}=H\left|a\right\rangle \)</span></p>
+<p>כאשר <span class="math">\(\hbar\)</span> הוא קבוע פיזיקלי ("קבוע פלאנק") ולא ניכנס אליו, ואילו <span class="math">\(H\)</span> הוא אופרטור הרמיטי שנקרא ה<strong>המילטוניאן</strong> של המערכת הקוונטית והוא מקודד את כל המידע הרלוונטי על המערכת לצורך ידיעת ההתפתחות שלה. כאשר רוצים לנתח מערכות קוונטיות אמיתיות מתארים את ההמילטוניאן שלהן במפורש ואז מנסים לפתור את המשוואה - למצוא ייצוגים מפורשים לפתרונות או לפחות להבין איך הם מתנהגים.</p>
+<p>כל זה לא יהיה רלוונטי בכלל עבורנו, מכיוון שאנחנו עוסקים במערכות פשוטות מאוד. תחת זאת מספיק לדעת את הדבר הבא: אם <span class="math">\(\left|a_{1}\right\rangle \)</span> הוא תיאור של המערכת בזמן א' ו-<span class="math">\(\left|a_{2}\right\rangle \)</span> הוא תיאור שלה בזמן ב' שבא אחרי זמן א', אז קיים אופרטור אוניטרי <span class="math">\(T\)</span> כך ש-<span class="math">\(\left|a_{2}\right\rangle =T\left|a_{1}\right\rangle \)</span>. אופרטור אוניטרי, כזכור, הוא אופרטור שמשמר את הנורמה של האיברים שהוא פועל עליהם; זה רלוונטי כי הנורמה של כל האיברים ה"חוקיים" במרחב שלנו היא 1. במקרה של המערכות הפשוטות שבהן נתעסק, אנו מניחים שאפשר לממש בפועל כל אופרטור אוניטרי כזה - כלומר, שאם יש לנו מערכת קוונטית במצב <span class="math">\(\left|a\right\rangle \)</span> כלשהו ויש לנו אופרטור אוניטרי <span class="math">\(T\)</span>, אז אפשר לעשות איזה הוקוס פוקוס שיעביר את המערכת למצב <span class="math">\(T\left|a\right\rangle \)</span>. איך עושים את זה בפועל? האם אפשר לעשות את זה בפועל? אלו לא שאלות שרלוונטיות להבנת היכולות של המודל החישובי שלנו אלא רק לשאלה (החשובה) עד כמה הוא ניתן למימוש במציאות. אנחנו לא הולכים לדבר על זה, בראש ובראשונה כי אני לא מבין בזה כלום.</p>
+<p>ההנחה השלישית שלנו נוגעת למה שאנחנו קוראים לו <strong>מדידה</strong>. מדידה של מערכת קוונטית היא אינטראקציה חיצונית איתה (כלומר, לא כפופה להנחה הקודמת) שבמסגרתה המערכת "קורסת" למצב כלשהו, כאשר השאלה לאיזה מצב המערכת תקרוס היא <strong>הסתברותית</strong>; מדידה לרוב יכולה לגרום לקריסה לכמה מצבים שונים, והשאלה מי מביניהם יעלה בגורל נענית באופן הסתברותי. נפנוף הידיים הוא שנתון לנו בסיס אורתונורמלי למרחב <span class="math">\(\left|e_{1}\right\rangle ,\left|e_{2}\right\rangle ,\dots\left|e_{n}\right\rangle \)</span>, ומדידה פירושה שאם המערכת נמצאת במצב <span class="math">\(\left|a\right\rangle \)</span> , אז היא עוברת לאחד ממצבי הבסיס, כשההסתברות לעבור למצב <span class="math">\(\left|e_{i}\right\rangle \)</span> היא <span class="math">\(\left|\left\langle e_{i},a\right\rangle \right|^{2}\)</span>, דהיינו הריבוע של המקדם של <span class="math">\(\left|e_{i}\right\rangle \)</span> בהצגה של <span class="math">\(\left|a\right\rangle \)</span> כצירוף לינארי של אברי הבסיס.</p>
+<p>אבל, הניסוח המדויק הוא כללי יותר. בואו נראה אותו בלי להיכנס יותר מדי לפאניקה, כי את האינטואיציה כבר יש לנו.</p>
+<p>הרעיון הבסיסי הוא שכל מדידה - או אם להשתמש בטרמינולוגיה המקובלת, כל <strong>ערך נצפה</strong> - מאופיינת מבחינה מתמטית על ידי אופרטור לינארי <span class="math">\(T\)</span> שפועל על מרחב המצבים. התוצאות האפשריות של המדידה הן בדיוק <strong>הערכים העצמיים</strong> של <span class="math">\(T\)</span>, ואחרי מדידה המערכת הקוונטית קורסת לתוך <strong>המרחב העצמי</strong> שמתאים לערך העצמי שנמדד. כמו כן <span class="math">\(T\)</span> חייב להיות אופרטור <strong>הרמיטי</strong>, כלומר לקיים <span class="math">\(T^{*}=T\)</span>. אחת מהמשמעויות של הרמיטיות, נזכיר, היא שכל הערכים העצמיים של <span class="math">\(T\)</span> הם <strong>מספרים ממשיים</strong>; זה מתאים לכך שהמדידות שאנחנו מבצעים במציאות מחזירות מספרים ממשיים ולא מספרים מרוכבים כלליים, למרות שהפורמליזם המתמטי שלנו מדבר על מרחב וקטורי מעל המרוכבים.</p>
+<p>כרגיל, אפשר לשאול את השאלה - איך אפשר בכלל להוכיח שזה המצב? למה דווקא אופרטור לינארי? למה דווקא הערכים העצמיים? למה הרמיטי? ייתכן מאוד שיש תשובות תיאורטיות נפלאות לשאלות הללו, אבל אני לא מכיר אותן; אני מצדד לעת עתה בגישת "זה פורמליזם, זה עובד בשטח, זה מגניב, בואו נדבוק בזה ונראה מה קורה". אני מסכים שזו לא מעט שרירותיות שצריך לבלוע בביס אחד.</p>
+<p>כשאנחנו מדברים על מרחבי הילברט כלליים, ערכים עצמיים של אופרטור זה עניין מסובך ואני לא הולך להיכנס בכלל לפרטים שלו. אז מראש אנחנו הולכים לדבר על מקרים פשוטים יותר: אצלנו המרחב הוא סוף-ממדי ולכן יש רק מספר סופי של ערכים עצמיים אפשריים. במקרה הזה, אנחנו נופלים תחת <strong>משפט הפירוק הספקטרלי</strong> שאומר שכל אופרטור נורמלי ניתן ללכסון אורתונורמלי, כלומר שקיים בסיס אורתונורמלי למרחב שבו האופרטור מיוצג על ידי מטריצה אלכסונית, או באופן שקול - קיים בסיס אורתונורמלי למרחב שכולו וקטורים עצמיים של האופרטור. אופרטור נורמלי הוא כזה שמתחלף עם הצמוד שלו - כלומר מקיים <span class="math">\(TT^{*}=T^{*}T\)</span>. כל האופרטורים ההרמיטיים הם נורמליים, כמובן, ולכן כולם ניתנים לפירוק ספקטרלי שכזה.</p>
+<p>על פניו זה מוביל אותנו ישירות אל ההגדרה הקודמת: יהא <span class="math">\(\left|e_{1}\right\rangle ,\left|e_{2}\right\rangle ,\dots\left|e_{n}\right\rangle \)</span> בסיס אורתונורמלי של וקטורים עצמיים של <span class="math">\(T\)</span> עם ערכים עצמיים <span class="math">\(\lambda_{1},\dots,\lambda_{n}\)</span>, אז ההסתברות שלנו למדוד את <span class="math">\(\lambda_{i}\)</span> אם אנחנו כרגע במצב <span class="math">\(\left|a\right\rangle \)</span> היא בדיוק <span class="math">\(\left|\left\langle e_{i},a\right\rangle \right|^{2}\)</span> ואחר כך נקרוס למצב <span class="math">\(\left|e_{i}\right\rangle \)</span>. למה זה לא כללי מספיק? כי ייתכן של-<span class="math">\(T\)</span> יהיו ערכים עצמיים שהמרחב העצמי שלהם הוא ממימד גדול מ-1, כלומר יש יותר משני וקטורים עצמיים שונים מהותית (שאינם כפולה אחד של השני בסקלר) לערך העצמי הזה.</p>
+<p>במקרה הזה, שבו יש יותר מוקטור עצמי אחד, ההסתברות לקבל את הערך העצמי המתאים היא סכום ההסתברויות לקבל אותה עם כל אחד מהוקטורים העצמיים, אבל השאלה היותר מעניינת היא - "לאן" נקרוס? האם אנחנו יכולים לבחור בשרירותיות וקטור ששייך למרחב העצמי ולקרוס אליו? האם במדידות שונות נוכל לקרוס לוקטורים שונים באותו מרחב עצמי? ובכן, לא, וכדי להסביר מה בדיוק קורה אנחנו נזקקים למושג של <strong>הטלה</strong> (<a href="http://www.gadial.net/2011/12/24/simultaneous_diagonalization/">שהזכרתי פעם בבלוג</a>). הטלה של וקטור על תת-מרחב מפרקת את הוקטור לשני חלקים - חלק אחד שנמצא במרחב, וחלק שני שנמצא ב"משלים" של המרחב. פורמלית, אם <span class="math">\(V\)</span> הוא מרחב וקטורי כך ש-<span class="math">\(V=W\oplus U\)</span> אז הטלה של וקטור <span class="math">\(v\in V\)</span> על <span class="math">\(W\)</span> מציגה אותו כסכום <span class="math">\( v=w+u\)</span> כך ש-<span class="math">\(w\in W,u\in U\)</span>. הסכום הזה הוא <strong>יחיד</strong> (זה חלק מהרעיון בסכום ישר, מה שמסומן ב-<span class="math">\(\oplus\)</span> - ואני מניח שאתם כבר יודעים את זה!) וההטלה פשוט מחזירה את <span class="math">\(w\)</span>.</p>
+<p>במקרה שלנו, בגלל שמדובר על בסיסים אורתונורמליים, הכל מאוד פשוט; למעשה, כבר הזכרתי את זה קודם. אם תת-המרחב העצמי הרלוונטי נפרש על ידי הוקטורים <span class="math">\( \left|e_{1}\right\rangle ,\left|e_{2}\right\rangle ,\dots\left|e_{t}\right\rangle \)</span>, אז אופרטור ההטלה על תת-המרחב הזה נתון במפורש על ידי <span class="math">\(P=\sum_{i=1}^{t}\left|e_{i}\right\rangle \left\langle e_{i}\right|\)</span>. כרגיל, זו תוצאה שאני מניח שאתם כבר מכירים ולא אוכיח שוב.</p>
+<p>קל לראות שאופרטור ההטלה הזה מקיים שני דברים: הוא הרמיטי (כלומר <span class="math">\(P^{*}=P\)</span>) והוא מקיים <span class="math">\(P^{2}=P\)</span>. או במילים אחרות, <span class="math">\(P^{*}P=P\)</span>. זה יהיה חשוב עוד רגע. גם את התכונות הללו אני לא אוכיח.</p>
+<p>אם כך, ננסח מחדש את כל עניין המדידה: יש לנו אופרטורי הטלה <span class="math">\(P_{1},\dots,P_{n}\)</span> לתת-המרחבים העצמיים המתאימים לערכים העצמיים השונים <span class="math">\(\lambda_{1},\dots,\lambda_{n}\)</span> של האופרטור <span class="math">\(T\)</span> שאמרנו שהוא מה שמאפיין את המדידה. בהינתן מערכת במצב <span class="math">\(\left|a\right\rangle \)</span>, מה ההסתברות שתת המרחב העצמי של <span class="math">\(\lambda_{i}\)</span> יהיה תוצאת המדידה? ההנחה היא שההסתברות הזו היא בדיוק הנורמה בריבוע של <span class="math">\(P_{i}\left|a\right\rangle \)</span>, כלומר <span class="math">\(\left(P_{i}\left|a\right\rangle ,P_{i}\left|a\right\rangle \right)\)</span>, מה שמסומן בסימונים שלנו בתור <span class="math">\(\left\langle a|P_{i}^{*}P_{i}|a\right\rangle \)</span> ובגלל ש-<span class="math">\(P_{i}^{*}P_{i}=P_{i}\)</span> אפשר פשוט לכתוב בתור <span class="math">\(\left\langle a|P_{i}|a\right\rangle \)</span>. אם <span class="math">\(\lambda_{i}\)</span> הייתה תוצאת המדידה, מה יהיה המצב של המערכת הקוונטית אחרי המדידה? על פניו אנחנו אמורים לעבור אל <span class="math">\(P_{i}\left|a\right\rangle \)</span>, אבל לא מובטח לנו שהוקטור הזה מנורמל. לכן ננרמל אותו: אנחנו עוברים אל <span class="math">\(\frac{P_{i}\left|a\right\rangle }{\sqrt{\left\langle a|P_{i}|a\right\rangle }}\)</span>.</p>
+<p>אז אלו ההנחות שנתבסס עליהן - האופן שבו מערכות קוונטיות מתוארות, האופן שבו הן מתפתחות כל עוד לא מודדים אותן, והאופן שבו מודדים אותן. החל מהפוסט הבא גם נתחיל לעשות עם המערכות הללו דברים מעניינים.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2014/07/25/quantum_computing_first_example/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חישוב קוונטי - דוגמה ראשונה</span>
+            </a>
+            
+            
+            
+            <a href="/2014/07/19/quantum_physics_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מבוא לאפקטים קוונטיים על קצה המזלג</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

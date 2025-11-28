@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מכפלות טנזוריות (של מרחבים וקטוריים) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מכפלות טנזוריות (של מרחבים וקטוריים)</h1>
+            <div class="post-meta">
+                <span class="date">2014-06-10</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מכפלה טנזורית.html">מכפלה טנזורית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בסדרת הפוסטים שלי על אלגברה לינארית יש נושא אחד שהזנחתי בצד - <strong>מכפלה טנזורית</strong> של מרחבים וקטוריים. לא הזנחתי אותו במקרה, וזה גם לא מקרה שספרי הלימוד הסטנדרטיים באלגברה לינארית לא מתעסקים בו יותר מדי - לרוב אין בו צורך, והוא קצת קשה לעיכול בשל האבסטרקטיות היחסית שלו. הדרך ה"נכונה" עבור מתמטיקאים להתקל במכפלות טנזוריות היא בהקשרים מתקדמים יותר מאשר קורס בסיסי באלגברה לינארית, ואחרי שמבינים את המושג בהקשרים הללו גם אין בעיה להבין אותו בהקשר הספציפי של מרחבים וקטוריים.</p>
+<p>אבל, אני הולך להצטרך את המושג הזה בהמשך, ואני רוצה לתת לו מבוא קל עד כמה שאפשר, שלא יצריך מתמטיקה מתקדמת בכלל, ורק ידע בסיסי באלגברה לינארית (מהם מרחבים וקטוריים ואולי גם קצת מהן טרנספורמציות לינאריות). בנוסף, אני רוצה להציג את המושג הזה בצורה שתהיה ידידותית יחסית ולכן לא אגש ישר להגדרות אלא קודם אנסה לתת מוטיבציה. אחר כך אתן הגדרה שהיא מאוד ישירה, ורק בסוף אתן את ההגדרה שמסתכלת על הכל "ממעוף הציפור" והיא כנראה ההגדרה הנכונה ביותר.</p>
+<p>מה שמתמטיקאים אוהבים לעשות, בהינתן אובייקטים מתמטיים, הוא לבנות מהם אובייקטים מתמטיים חדשים. בניה נפוצה אחת שניתן לבצע היא זו: אם יש לנו שתי קבוצות <span class="math">\(A,B\)</span> שהן <strong>זרות</strong>, כלומר אין להן איברים משותפים, אנחנו בונים קבוצה חדשה שהיא <strong>האיחוד הזר</strong> שלהן: <span class="math">\(C=A\cup B=\left\{ x\ |\ x\in A\vee x\in B\right\} \)</span>. הקבוצה הזו כוללת את כל האיברים שנמצאים או ב-<span class="math">\(A\)</span> או ב-<span class="math">\(B\)</span>. אם נחשב את הגודל שלה - מספר האיברים שבה - נקבל שהוא <span class="math">\(\left|A\cup B\right|=\left|A\right|+\left|B\right|\)</span>. כלומר, איחוד זר מתקשר לנו אינטואיטיבית ל"חיבור" של קבוצות.</p>
+<p>באופן דומה מוגדרת <strong>מכפלה קרטזית</strong> של קבוצות: <span class="math">\(A\times B=\left\{ \left(a,b\right)\ |\ a\in A,b\in B\right\} \)</span> - אוסף כל הזוגות של איברים שהשמאלי מביניהם שייך ל-<span class="math">\(A\)</span> והימני שייך ל-<span class="math">\(B\)</span>. מתקיים ש-<span class="math">\(\left|A\times B\right|=\left|A\right|\cdot\left|B\right|\)</span>, כך שמכפלה קרטזית אכן מתקשרת לנו אינטואיטיבית ל"כפל" של קבוצות.</p>
+<p>כעת, רוב הקבוצות במתמטיקה כוללות <strong>מבנה</strong> כלשהו שמגיע עליהן - מבנה של מרחב וקטורי, או חבורה, או מרחב טופולוגי, או אלף ואחד דברים אחרים. ואם אנחנו בונים מתוך שתי קבוצות בעלות מבנה קבוצה חדשה, אנחנו רוצים להגדיר גם עליה את אותו מבנה, באופן ש"נובע" איכשהו מהמבנה על הקבוצות הקיימות. אנחנו מדברים על מרחבים וקטוריים כאן, ולכן אני אתאר איך זה קורה במקרה שלהם.</p>
+<p>בואו ניקח שני מרחבים וקטוריים <span class="math">\(V,W\)</span> מעל שדה <span class="math">\(\mathbb{F}\)</span>, עם ממדים <span class="math">\(n,m\)</span> בהתאמה. אוטומטית, לא ייתכן ש-<span class="math">\(V,W\)</span> הן קבוצות זרות כי שתיהן כוללות את איבר האפס של המרחב הוקטורי. אבל הן יכולות להיות "זרות-פרט-לאפס", כלומר <span class="math">\(V\cap W=\left\{ 0\right\} \)</span>. במקרה הזה, אפשר להגדיר את מה שנקרא <strong>סכום ישר</strong> של שני המרחבים: <span class="math">\(V\oplus W\triangleq\left\{ v+w\ |\ v\in V,w\in W\right\} \)</span>. בהגדרה הזו מובלעת הנחה שאנחנו יודעים איך לחבר את האיברים של <span class="math">\(V\)</span> עם האיברים של <span class="math">\(W\)</span>, אז אפשר להניח לצורך פשטות ש-<span class="math">\(V,W\)</span> הם תת-מרחבים של מרחב גדול יותר; אפשר להסתדר גם בלי ההנחה הזו, כפי שנראה תכף.</p>
+<p>כעת, בואו ניקח שני <strong>בסיסים</strong> עבור המרחבים הללו: עבור <span class="math">\(V\)</span> נסמן את אברי הבסיס בתור <span class="math">\(\left\{ e_{1},\dots,e_{n}\right\} \)</span>, ואילו עבור <span class="math">\(W\)</span> נסמן את אברי הבסיס בתור <span class="math">\(\left\{ f_{1},\dots,f_{m}\right\} \)</span>. כעת זה תרגיל לא קשה להראות שהקבוצה <span class="math">\(\left\{ e_{1},\dots,e_{n},f_{1},\dots,f_{m}\right\} \)</span> היא בסיס ל-<span class="math">\(V\oplus W\)</span>, ולכן המימד של <span class="math">\(V\oplus W\)</span> שווה ל-<span class="math">\(n+m\)</span>. אם כן, זו האינטואיציה שלנו ל"סכום" של שני מרחבים וקטוריים. שימו לב שויתרנו על האינטואיציה הנאיבית של "שתי הקבוצות יהיו זרות"; שימו לב שגם ויתרנו על האינטואיציה הנאיבית של "המרחב יהיה מורכב בדיוק מאברי האיחוד הזר" (תחת זאת הוא מורכב מסכומים שלהם). עדיין, התוצאה שקיבלנו היא התאמה די טבעית של רעיון ה"סכום" של שתי קבוצות עבור ההקשר של מרחבים וקטוריים.</p>
+<p>מכפלה טנזורית של מרחבים וקטוריים זה אותו דבר, רק עבור - לא מפתיע - כפל.</p>
+<p>איך נכפול מרחבים וקטוריים? אני יכול לחשוב מיידית על שתי דרכים אינטואיטיביות נורא לעשות את זה. רק מה, כפי שנראה הראשונה היא לא מעניינת, והשניה היא הדרך הנכונה. הראשונה היא פשוט להסתכל על קבוצת כל הזוגות <span class="math">\(V\times W=\left\{ \left(v,w\right)\ |\ v\in V,w\in W\right\} \)</span> ולהגיד "הנה מרחב וקטורי חדש. איבר האפס שלו הוא <span class="math">\(\left(0,0\right)\)</span>. חיבור שני וקטורים הוא בצורה הטבעית, <span class="math">\(\left(a_{1},b_{1}\right)+\left(a_{2},b_{2}\right)\triangleq\left(a_{1}+a_{2},b_{1}+b_{2}\right)\)</span>. כפל בסקלר הוא בצורה הטבעית, <span class="math">\(\lambda\left(a,b\right)=\left(\lambda a,\lambda b\right)\)</span>".</p>
+<p>אוקיי, נחמד, למה אני אומר שזה לא מעניין? כי כרגע הגדרתי מחדש את <span class="math">\(V\oplus W\)</span> בתחפושת. הנה לכם איזומורפיזם בין שני המרחבים הללו: טרנספורמציה לינארית <span class="math">\(T:V\times W\to V\oplus W\)</span> שהיא חח"ע ועל: <span class="math">\(T\left(\left(a,b\right)\right)=a+b\)</span>. וואו, זה היה פשוט. אתם מוזמנים להוכיח שזה גם עובד.</p>
+<p>אני חושב שדרך נוחה מאוד להבין את העניין היא דרך מרחבים וקטוריים מעל שדה <strong>סופי</strong>. נאמר, <span class="math">\(\left|\mathbb{F}\right|=3\)</span>. במקרה הזה, אנחנו יודעים בדיוק כמה איברים יש ב-<span class="math">\(V\)</span>: לכל איבר ב-<span class="math">\(V\)</span> יש ייצוג יחיד בצורה <span class="math">\(\sum\lambda_{i}e_{i}\)</span> כך ש-<span class="math">\(\lambda_{i}\in\mathbb{F}\)</span>, כלומר יש 3 אפשרויות לערך של <span class="math">\(\lambda_{i}\)</span> לכל <span class="math">\(1\le i\le n\)</span>, ולכן - קומבינטוריקה פשוטה - <span class="math">\(\left|V\right|=3^{n}\)</span>. בדומה, <span class="math">\(\left|W\right|=3^{m}\)</span>. ולכן: <span class="math">\(\left|V\times W\right|=\left|V\right|\cdot\left|W\right|=3^{n}3^{m}=3^{n+m}\)</span>. כבר מהתוצאה המספרית הזו אנו רואים שהמכפלה הקרטזית תניב לנו מרחב וקטורי שהמימד שלו הוא <span class="math">\(n+m\)</span>. אין עם זה שום בעיה עקרונית, כן? הסכום הישר של מרחבים וקטוריים הוא בניה חשובה ומועילה מאוד.</p>
+<p>גישת ה"מכפלה" עוזרת לפייס את מי שלא הבין איך אפשר לקחת סכום ישר של מרחבים וקטוריים שאנחנו לא יודעים איך לחבר את האיברים שלהם: התשובה היא שאנחנו לא באמת מחברים אותם אלא מסתכלים על <strong>סכומים פורמליים</strong> של אבריהם. כלומר, אני כותב <span class="math">\(v+w\)</span>, אבל אני לא מתכוון בכך בהכרח לכך שאפשר לבצע פישוט כלשהו שיניב מ-<span class="math">\(v+w\)</span> איבר <span class="math">\(u\)</span> שהוא "שניהם ביחד"; פשוט אין לי בעיה להשאיר את הביטוי הזה בצורת סכום. כולנו מכירים סכומים פורמליים לפחות במקום אחד - פולינומים! נניח, הפולינום <span class="math">\(5x^{2}+3x+7\)</span> מורכב מסכום פורמלי של שלושה ביטויים ואין לאף אחד בעיה עם זה שהוא כולל פלוסים בתוכו. אני מתעכב על הנקודה הזו כי כפי שאתם ודאי מנחשים, אני תכף הולך להשתמש בסכומים פורמליים למטרה נוספת.</p>
+<p>מה הדרך האינטואיטיבית השניה להגדיר את המכפלה של שני המרחבים הוקטוריים? ובכן, שוב, טוב לשאוב השראה מסכומים ישרים: שם מה שקרה הוא שהבסיס של הסכום הישר היה האיחוד הזר של <strong>הבסיסים</strong> של המרחבים. אז אצלנו הבסיס של המכפלה יהיה המכפלה של הבסיסים של המרחבים. שימו לב: מה שנקבל אחרי המכפלה לא יהיה כל המרחב; זה יהיה רק <strong>בסיס</strong> למרחב. אם נתון לנו בסיס, מי הם שאר האיברים?</p>
+<p>ובכן, אתם לא תאהבו את התשובה הזו, אבל היא פשוטה מאוד: אברי המרחב יהיו פשוט כל הצירופים הלינאריים הפורמליים של אברי הבסיס. הרי זה הרעיון בבסיס - ש<strong>כל</strong> איבר במרחב יהיה ניתן לייצוג <strong>יחיד</strong> כצירוף לינארי של אברי הבסיס.</p>
+<p>זה מוביל אותנו להגדרה הפורמלית הבאה של מכפלה טנזורית: <span class="math">\(V\otimes W\triangleq\mbox{span}\left\{ e_{i}\otimes f_{j}\ |\ 1\le i\le n,1\le j\le m\right\} \)</span>. הסימן <span class="math">\(\otimes\)</span> הוא סימן מיוחד שבא להבהיר לנו ש-<span class="math">\(V\otimes W\)</span> היא מכפלה טנזורית ולא כפל רגיל; וכאשר אני כותב <span class="math">\(e\otimes f\)</span> זה ביטוי פורמלי נטו; הייתי יכול לכתוב גם <span class="math">\(\left(e,f\right)\)</span> או <span class="math">\(e\diamondsuit f\)</span> או כל סימן אחר שעדיין היה מאפשר לי לדעת מי הם <span class="math">\(e,f\)</span> ש"תורמים" לאיבר הזה. השימוש בסימן <span class="math">\(\otimes\)</span> כאן הוא פשוט מוסכמה.</p>
+<p>ההגדרה די פשוטה. אבל יש מרחק בין להבין אותה ובין "להרגיש" מה קורה פה, אז הכרחי לתת דוגמה קונקרטית עם שני מרחבים פשוטים אבל שיהיו שונים זה מזה. אז ניקח <span class="math">\(V=\mathbb{R}^{2}\)</span> ו-<span class="math">\(W=\mathbb{R}_{3}\left[x\right]\)</span>. כלומר, איבר ב-<span class="math">\(V\)</span> הוא זוג מספרים ממשיים <span class="math">\(\left(a,b\right)\)</span> ואילו איבר ב-<span class="math">\(W\)</span> הוא פולינום ממעלה לכל היותר 2, <span class="math">\(p\left(x\right)\)</span>. בסיס פשוט של <span class="math">\(V\)</span> הוא <span class="math">\(\left\{ \left(1,0\right),\left(0,1\right)\right\} \)</span> ובסיס פשוט של <span class="math">\(W\)</span> הוא <span class="math">\(\left\{ 1,x,x^{2}\right\} \)</span>. המכפלה הטנזורית של שני המרחבים הללו תהיה מרחק ממימד 6 שנפרש על ידי האיברים הבאים:</p>
+<p><span class="math">\(V\otimes W=\mbox{span}\left\{ \left(1,0\right)\otimes1,\left(1,0\right)\otimes x,\left(1,0\right)\otimes x^{2},\left(0,1\right)\otimes1,\left(0,1\right)\otimes x,\left(0,1\right)\otimes x^{2}\right\} \)</span></p>
+<p>כלומר, איבר לדוגמה במכפלה הטנזורית הוא <span class="math">\(\pi\left(\left(0,1\right)\otimes x^{2}\right)+17\left(\left(1,0\right)\otimes1\right)\)</span> (כאן המקדם של אחד מאברי הבסיס הוא <span class="math">\(\pi\)</span>, מקדם של איבר בסיס אחר הוא 17 וכל היתר הם 0).</p>
+<p>טוב, שמעו, זה נראה נורא.</p>
+<p>מייד עולה מאליה השאלה אם לא ניתן להציג לפחות חלק מהאיברים של המכפלה הטנזורית בצורה נחמדה יותר. שוב, כדי לקבל אינטואיציה כללית אני אסתכל קודם כל על דוגמה פשוטה - הפעם נבחר <span class="math">\(V=W=\mathbb{R}^{2}\)</span>. אז אנחנו יודעים ש-<span class="math">\(V\otimes W\)</span> הוא מרחב ממימד 4 מעל <span class="math">\(\mathbb{R}\)</span> ולכן איזומורפי ל-<span class="math">\(\mathbb{R}^{4}\)</span>. כדי לתאר את האיזומורפיזם מספיק לתאר איך אברי הבסיס של <span class="math">\(V\otimes W\)</span> עוברים לאיברים ב-<span class="math">\(\mathbb{R}^{4}\)</span>. אז בואו נגדיר את זה שרירותית:</p>
+<p><span class="math">\(\left(1,0\right)\otimes\left(1,0\right)\mapsto\left(1,0,0,0\right)\)</span></p>
+<p><span class="math">\(\left(1,0\right)\otimes\left(0,1\right)\mapsto\left(0,0,1,0\right)\)</span></p>
+<p><span class="math">\(\left(0,1\right)\otimes\left(1,0\right)\mapsto\left(0,1,0,0\right)\)</span></p>
+<p><span class="math">\(\left(0,1\right)\otimes\left(0,1\right)\mapsto\left(0,0,0,1\right)\)</span></p>
+<p>אם תחשבו על זה לרגע, תראו שההגדרה אינה שרירותית אלא יש בה הגיון כלשהו. הנה נוסחה כללית שמתארת את הטרנספורמציה שביצעתי:</p>
+<p><span class="math">\(\left(a_{1},a_{2}\right)\otimes\left(b_{1},b_{2}\right)\mapsto\left(a_{1}b_{1},a_{2}b_{1},a_{1}b_{2},a_{2}b_{2}\right)\)</span></p>
+<p>כשאני רואה את הנוסחה הזו, מדגדג לי להציב בתור הוקטורים הכלליים <span class="math">\(\left(a_{1},a_{2}\right),\left(b_{1},b_{2}\right)\)</span> גם וקטורים שאינם אברי בסיס ולשאול - מה יקרה? למשל, עבור <span class="math">\(\left(1,1\right)\otimes\left(1,0\right)\)</span>, האיבר הזה יעבור אל <span class="math">\(\left(1,1,0,0\right)\)</span>, שלא קשה לראות שהוא התמונה של <span class="math">\(\left(1,0\right)\otimes\left(1,0\right)+\left(0,1\right)\otimes\left(1,0\right)\)</span>, אז בעצם קיבלתי את המשוואה הבאה:</p>
+<p><span class="math">\(\left(1,0\right)\otimes\left(1,0\right)+\left(0,1\right)\otimes\left(1,0\right)=\left(1,1\right)\otimes\left(1,0\right)\)</span></p>
+<p>ואם אני מנסה להכליל אותה, אני אקבל את זוג המשוואות הבא:</p>
+<p><span class="math">\(e_{1}\otimes f+e_{2}\otimes f=\left(e_{1}+e_{2}\right)\otimes f\)</span></p>
+<p><span class="math">\(e\otimes f_{1}+e\otimes f_{2}=e\otimes\left(f_{1}+f_{2}\right)\)</span></p>
+<p>כלומר, אם אני אנסה להכליל את <span class="math">\(\otimes\)</span> למכפלה של שני איברים כללים ב-<span class="math">\(V,W\)</span>, אז רצוי ש-<span class="math">\(\otimes\)</span> יקיים מעין תכונת אדיטיביות (שמזכירה את זו של מכפלה פנימית, למי שמכיר).</p>
+<p>ומה בדבר כפל בסקלר? ובכן, <span class="math">\(2\left(1,0\right)\otimes\left(0,1\right)\)</span> הולך לעבור אל <span class="math">\(\left(2,0,0,0\right)\)</span>, כלומר אל <span class="math">\(2\left(\left(1,0\right)\otimes\left(0,1\right)\right)\)</span>, וכך גם <span class="math">\(\left(1,0\right)\otimes2\left(0,1\right)\)</span>, מה שמוביל אותנו לחוק הבא:</p>
+<p><span class="math">\(\lambda\left(e\otimes f\right)=\lambda e\otimes f=e\otimes\lambda f\)</span></p>
+<p>מצויידים בשלושת החוקים הללו, קל לנו להגדיר את <span class="math">\(v\otimes w\)</span> בצורה כללית: פשוט נכתוב <span class="math">\(v=\sum\lambda_{i}e_{i}\)</span> ו-<span class="math">\(w=\sum\rho_{j}f_{j}\)</span>, נשתמש בכללי הפישוט שהגדרתי לעיל, ונקבל:</p>
+<p><span class="math">\(v\otimes w=\left(\sum\lambda_{i}e_{i}\right)\otimes\left(\sum\rho_{j}f_{j}\right)=\sum_{i,j}\lambda_{i}\rho_{j}\left(e_{i}\otimes f_{j}\right)\)</span></p>
+<p>הכתיב <span class="math">\(v\otimes w\)</span>, אם כן, משמש אותנו סתם בתור סימון מקוצר כאן. בפועל העסק הרבה פחות שרירותי ממה שנדמה לנו כרגע ואראה את זה בסוף הפוסט, אבל בינתיים אני רוצה שנעכל את הקפיצה אל שימוש בסימונים כמו <span class="math">\(v\otimes w\)</span>. יש שתי טעויות מתבקשות שכולנו עושים כשאנחנו רואים את צורת הסימון הזו: ראשית, אנחנו שוכחים שלאותו איבר של המכפלה הטנזורית יכולים להיות <strong>כמה ייצוגים שונים</strong> בדרך הזו. למשל, כפי שראינו לפני רגע, <span class="math">\(\left(2,0\right)\otimes\left(0,1\right)\)</span> ו-<span class="math">\(\left(1,0\right)\otimes\left(0,2\right)\)</span> הם <strong>שני ייצוגים שונים לאותו איבר בדיוק</strong>. שנית, אנחנו עלולים לחשוב בטעות ש<strong>כל</strong> איבר ב-<span class="math">\(V\otimes W\)</span> הוא איבר מהצורה <span class="math">\(v\otimes w\)</span> עבור <span class="math">\(v\in V\)</span> ו-<span class="math">\(w\in W\)</span>, וזה <strong>ממש לא נכון</strong>. לאיבר שניתן לכתוב בצורה <span class="math">\(v\otimes w\)</span> קוראים לפעמים "טנזור טהור" כדי להבדיל אותו מהאיברים של <span class="math">\(V\otimes W\)</span> שלא ניתנים לכתיבה בצורה הזו, אבל בהחלט יש כאלו. אז איך כותבים אותם? בתור <strong>סכום</strong> של טנזורים טהורים. והאם אני יכול לתת דוגמה ליצור כזה? בטח.</p>
+<p>אנחנו עדיין ב-<span class="math">\(\mathbb{R}^{2}\otimes\mathbb{R}^{2}\)</span>. בואו נסתכל על <span class="math">\(\left(1,0\right)\otimes\left(1,0\right)+\left(0,1\right)\otimes\left(0,1\right)\)</span>. האם אתם רואים דרך "לפשט" את הביטוי הזה ולהציג אותו בצורה <span class="math">\(\left(a_{1},a_{2}\right)\otimes\left(b_{1},b_{2}\right)\)</span>? אני מניח שלא. אבל זה שאתם לא רואים איך לעשות משהו לא אומר שאי אפשר לעשות אותו; צריך להוכיח שאי אפשר. אז בואו ניקח את הביטוי הכללי <span class="math">\(\left(a_{1},a_{2}\right)\otimes\left(b_{1},b_{2}\right)\)</span> ונפרק אותו לסכום אברי בסיס:</p>
+<p><span class="math">\(\left(a_{1},a_{2}\right)\otimes\left(b_{1},b_{2}\right)=a_{1}b_{1}\left[\left(1,0\right)\otimes\left(1,0\right)\right]+a_{1}b_{2}\left[\left(1,0\right)\otimes\left(0,1\right)\right]+a_{2}b_{1}\left[\left(0,1\right)\otimes\left(1,0\right)\right]+a_{2}b_{2}\left[\left(0,1\right)\otimes\left(0,1\right)\right]\)</span></p>
+<p>נשווה את זה עם הביטוי <span class="math">\(\left(1,0\right)\otimes\left(1,0\right)+\left(0,1\right)\otimes\left(0,1\right)\)</span> וקיבלנו מערכת של ארבע משוואות בארבעה נעלמים:</p>
+<p><span class="math">\(a_{1}b_{1}=1\)</span></p>
+<p><span class="math">\(a_{1}b_{2}=0\)</span></p>
+<p><span class="math">\(a_{2}b_{1}=0\)</span></p>
+<p><span class="math">\(a_{2}b_{2}=1\)</span></p>
+<p>קל מאוד לראות שאין למערכת הזו פתרון: מכיוון ש-<span class="math">\(a_{1}b_{2}=0\)</span> אחד משניהם חייב להיות 0. אם <span class="math">\(a_{1}=0\)</span> אז <span class="math">\(1=a_{1}b_{1}=0\)</span> וזה בלתי אפשרי; אם <span class="math">\(b_{2}=0\)</span> אז <span class="math">\(1=a_{2}b_{2}=0\)</span> וגם זה בלתי אפשרי. מסקנה: <span class="math">\(\left(1,0\right)\otimes\left(1,0\right)+\left(0,1\right)\otimes\left(0,1\right)\)</span> הוא לא טנזור טהור.</p>
+<p>כמובן, קל לראות שלא ייתכן שהמכפלה הטנזורית תכיל רק טנזורים טהורים אפילו משיקולים פשוטים יותר: אם נחזור אל המרחבים הוקטוריים מעל השדה הסופי עם שלושה איברים, אז כפי שכבר ראינו אם <span class="math">\(\left|V\right|=3^{n}\)</span> ו-<span class="math">\(\left|W\right|=3^{m}\)</span> אז <span class="math">\(\left|V\times W\right|=3^{m+n}\)</span> וזה גם מספר הטנזורים ה"טהורים", אבל המכפלה הטנזורית היא מרחב ממימד <span class="math">\(nm\)</span> ולכן מכילה <span class="math">\(3^{mn}\)</span> איברים - הרבה יותר מאשר <span class="math">\(3^{m+n}\)</span> עבור כמעט כל הערכים של <span class="math">\(n,m\)</span>.</p>
+<p>טוב, אז אני מקווה שאנחנו מבינים מה זו מכפלה טנזורית ברמת ההגדרות ואפשר יהיה להשתמש במושג הזה יחסית בחופשיות בפוסטים שבהם אזדקק לו (מן הסתם מתוכננים כאלו). עכשיו אפשר לעבור לדוגמה כללית יחסית וחשובה מאוד - מכפלה טנזורית של מטריצות. כלומר, <span class="math">\(V\)</span> יהיה מרחב של מטריצות וגם <span class="math">\(W\)</span> יהיה מרחב של מטריצות. אין חשיבות לסדר של המטריצות - הוא יכול להיות שונה בצורה דרסטית. כעת, כדי לתאר את <span class="math">\(V\otimes W\)</span> מספיק לי לתאר איך נראה איבר כללי <span class="math">\(A\otimes B\)</span> עבור <span class="math">\(A\in V\)</span> ו-<span class="math">\(B\in W\)</span>. התיאור הוא פשוט ומקסים: בואו נכתוב בצורה כללית את <span class="math">\(A\)</span>:</p>
+<p><span class="math">\(A=\left[\begin{array}{cccc}a_{11} & a_{12} & \cdots & a_{1m}\\a_{21} & a_{22} & \cdots & a_{2m}\\\vdots & \vdots & \ddots & \vdots\\a_{n1} & a_{n2} & \cdots & a_{nm}\end{array}\right]\)</span></p>
+<p>כעת, <span class="math">\(A\otimes B\)</span> יוגדר כך:</p>
+<p><span class="math">\(A\otimes B\triangleq\left[\begin{array}{cccc}a_{11}B & a_{12}B & \cdots & a_{1m}B\\a_{21}B & a_{22}B & \cdots & a_{2m}B\\\vdots & \vdots & \ddots & \vdots\\a_{n1}B & a_{n2}B & \cdots & a_{nm}B\end{array}\right]\)</span></p>
+<p>הסימון הזה נראה מוזר - כאילו אנחנו דוחפים מטריצה לתוך הכניסות של מטריצה אחרת, ומה זה אומר בכלל. בפועל זה סימון מקובל עבור <strong>מטריצת בלוקים</strong>. הדרך הכי טובה להסביר היא פשוט לתת דוגמה: נבחר <span class="math">\(A=\left[\begin{array}{cc}1 & 2\\3 & 4\end{array}\right]\)</span> ו-<span class="math">\(B=\left[\begin{array}{cc}5 & 0\\0 & 5\end{array}\right]\)</span> ונקבל ש-</p>
+<p><span class="math">\(A\otimes B=\left[\begin{array}{cccc}5 & 0 & 10 & 0\\0 & 5 & 0 & 10\\15 & 0 & 20 & 0\\0 & 15 & 0 & 20\end{array}\right]\)</span></p>
+<p>רואים את ה"בלוקים"?</p>
+<p>כמובן, כדי להוכיח שההגדרה שלנו למכפלה הטנזורית באמת עובדת אנחנו צריכים להראות שיש איזומורפיזם בין המרחב שהגדרתי כרגע ובין ההגדרה ה"רגילה" שלי של מכפלה טנזורית - זה כמובן יעבוד ואני משאיר את זה בתור תרגיל למי שמעוניין.</p>
+<p>עכשיו, לסיום, אני רוצה להציג נקודת מבט טיפה שונה על ההגדרה של מכפלה טנזורית, שנותנת דרך התבוננות שהיא ככל הנראה נכונה יותר, אם כי גם קשה יותר לעיכול. מילת המפתח פה היא <strong>העתקה בילינארית</strong>. בואו נזכיר מה זה אומר: <strong>העתקה לינארית</strong> (או "טרנספורמציה לינארית" כמו שאני לרוב קורא לה) היא פונקציה <span class="math">\(T:V\to W\)</span> בין שני מרחבים וקטוריים (מעל אותו שדה) שמשמרת את פעולות החיבור והכפל בסקלר, כלומר <span class="math">\(T\left(a+b\right)=T\left(a\right)+T\left(b\right)\)</span> ו-<span class="math">\(T\left(\lambda a\right)=\lambda T\left(a\right)\)</span> עבור סקלר <span class="math">\(\lambda\)</span>. העתקה בילינארית זה בערך אותו דבר, אבל עבור פונקציה בשני משתנים.</p>
+<p>פורמלית, אם <span class="math">\(V,W,U\)</span> הם מרחבים וקטוריים מעל אותו שדה אז <span class="math">\(f:V\times W\to U\)</span> היא העתקה בילינארית אם כאשר ניקח את <span class="math">\(f\)</span> ו"נקפיא" את אחד מהמשתנים שלה, הפונקציה שנקבל במשתנה השני תהיה העתקה לינארית. במילים אחרות, ניקח וקטור <span class="math">\(w\in W\)</span> כלשהו ונגדיר פונקציה חדשה <span class="math">\(T_{w}:V\to U\)</span>, <span class="math">\(T_{w}\left(v\right)=f\left(v,w\right)\)</span>, אז אני דורש -<span class="math">\(T_{w}\)</span> תהיה העתקה לינארית. כך גם אם אקח <span class="math">\(v\in V\)</span> ואגדיר <span class="math">\(S_{v}:W\to U\)</span> על ידי <span class="math">\(S_{v}\left(w\right)=f\left(v,w\right)\)</span> (הפעולה הזו, של הצבת ערך קבוע בתוך פונקציה בכמה משתנים ועל ידי כך "ייצור" של פונקציה עם משתנה אחד פחות מכונה Currying על שם הלוגיקאי הסקל קרי; זה תעלול מקובל בשפות תכנות מסויימות, למשל הסקל).</p>
+<p>העתקה לינארית הוגדרה על ידי שני תנאים, אז אם ננסה לפרוט לפרוטות את התנאים של העתקה בילינארית נראה שהיא מוגדרת על ידי ארבעה, שניים לכל רכיב:</p>
+<ol>
+    <li><span class="math">\(f\left(v_{1}+v_{2},w\right)=f\left(v_{1},w\right)+f\left(v_{2},w\right)\)</span></li>
+    <li><span class="math">\(f\left(\lambda v,w\right)=\lambda f\left(v,w\right)\)</span></li>
+    <li><span class="math">\(f\left(v,w_{1}+w_{2}\right)=f\left(v,w_{1}\right)+f\left(v,w_{2}\right)\)</span></li>
+    <li><span class="math">\(f\left(v,\lambda w\right)=\lambda f\left(v,w\right)\)</span></li>
+</ol>
+<p>נראה מוכר? לא במקרה, כמובן.</p>
+<p>ניקח שני מרחבים וקטוריים <span class="math">\(V,W\)</span>. יש כמובן המון פונקציות בילינאריות שניתן להגדיר עליהם, שהולכות למרחבים רבים ושונים. הרעיון במכפלה טנזורית הוא לתאר את המכפלה הבילינארית <strong>הכללית ביותר</strong> שאפשר להגדיר על <span class="math">\(V\times W\)</span>. מה זה אומר? ובכן, בואו נניח שקיים מרחב וקטורי <span class="math">\(E\)</span> ופונקציה בילינארית <span class="math">\(h:V\times W\to E\)</span> שמקיימים את התכונה הבאה: אם <span class="math">\(U\)</span> הוא מרחב וקטורי <strong>כלשהו</strong> ו-<span class="math">\(f:V\times W\to U\)</span> היא פונקציה בילינארית <strong>כלשהי</strong>, אז אפשר לבנות את <span class="math">\(f\)</span> על ידי הרכבה של פונקציה לינארית מתאימה על <span class="math">\(h\)</span>, באופן שהוא <strong>יחיד</strong>. פורמלית, קיימת <span class="math">\(T:E\to U\)</span> <strong>יחידה</strong> כך ש-<span class="math">\(f=Th\)</span> (כלומר, <span class="math">\(f\left(v,w\right)=T\left(h\left(v,w\right)\right)\)</span> לכל <span class="math">\(v\in V,w\in W\)</span>). זה אומר ש-<span class="math">\(h\)</span> היא אכן "כללית ביותר" כי היא לא מאבדת שום מידע; אחרי שמפעילים אותה אפשר לבצע "תיקון" ולקבל כל פונקציה בילינארית אחרת. ככה זה נראה בדיאגרמה קומוטטיבית:</p>
+<p><img src="/img/2014/06/tensor_product_diagram.png" alt="\xymatrix{ & E\ar[dd]^{T}\\V\times W\ar[ur]^h}\ar[dr]^{f}\\ & U}"/></p>
+<p>הכוונה ב"קומוטטיבית" כאן היא שלא משנה איך הולכים עם החצים - אם הולכים עם <span class="math">\(f\)</span> או אם הולכים עם <span class="math">\(h\)</span> ואז עם <span class="math">\(T\)</span> - בסוף מגיעים לאותו דבר (אם התחלנו מאותו איבר קלט).</p>
+<p>התכונה שתיארתי כעת היא דוגמה ל<strong>תכונה אוניברסלית</strong>; לא אכנס כאן להגדרה מדוייקת של מה זו תכונה אוניברסלית כי זה כבר ייקח אותי לתוך תורת הקטגוריות. תחת זאת, אני רוצה לשכנע אתכם שיש בדיוק מרחב <span class="math">\(E\)</span> יחיד (עד כדי איזומורפיזם) שמקיים את התכונה הזו. ההוכחה טריוויאלית למדי: נניח שיש <span class="math">\(E_{1},E_{2}\)</span> עם פונקציות <span class="math">\(h_{1},h_{2}\)</span> שמקיימים את התכונה שלעיל. אז בפרט אם נבחר <span class="math">\(f=h_{2}\)</span> נקבל שקיימת טרנספורמציה לינארית <span class="math">\(T_{1}:E_{1}\to E_{2}\)</span> כך ש-<span class="math">\(h_{2}=T_{1}h_{1}\)</span>. בדומה, קיימת טרנספורמציה לינארית <span class="math">\(T_{2}:E_{2}\to E_{1}\)</span> כך ש-<span class="math">\(h_{1}=T_{2}h_{2}\)</span>. אם כן, נקבל: <span class="math">\(h_{1}=T_{2}h_{2}=T_{2}T_{1}h_{1}\)</span>.</p>
+<p>שימו לב מה קיבלנו:</p>
+<p><img src="/img/2014/06/tensor_product_diagram2.png" alt="\xymatrix{ & E_{1}\ar[dd]^{T_{2}T_{1}}\\V\times W\ar[ur]^{h_{1}}\ar[dr]^{h_{1}}\\ & E_{1}}"/></p>
+<p>מה שקורה כאן הוא שראינו שאת ההעתקה <span class="math">\(h_{1}:V\times W\to E_{1}\)</span> אפשר לבנות בתור ההרכבה <span class="math">\(T_{2}T_{1}h_{1}\)</span>. אבל מצד שני, אפשר לבנות אותה גם בתור ההרכבה של פונקציית הזהות על <span class="math">\(h_{1}\)</span>. כאן נכנסת לתמונה הדרישה שלי שאופן הבניה הזה יהיה <strong>יחיד</strong> - זה אומר ש-<span class="math">\(T_{2}T_{1}\)</span> היא פונקציית הזהות על <span class="math">\(E_{1}\)</span>, ולכן <span class="math">\(T_{1}\)</span> בפרט הפיכה, ולכן היא איזומורפיזם. הצלחתם לעקוב אחרי הטיעון הזה? (כי אני לא ממש) באלגברה מופשטת זה מה שקורה כל הזמן.</p>
+<p>עכשיו כשאנחנו יודעים ש-<span class="math">\(E\)</span> הזה הוא יחיד, בואו נראה שהוא בכלל קיים. אפשר להגדיר את <span class="math">\(E\)</span> להיות <span class="math">\(V\otimes W\)</span> שכבר הגדרתי קודם ולהוכיח שהוא מקיים את תכונת האוניברסליות, אבל איפה הכיף בזה? בואו נבנה אותו בגישה שונה.</p>
+<p>ראשית, ברור ש-<span class="math">\(h:V\times W\to E\)</span> חייבת להיות חד-חד-ערכית, כלומר ש-<span class="math">\(E\)</span> יהיה חייב להכיל בתוכו עותק של <span class="math">\(V\times W\)</span>. כי בואו נניח ש-<span class="math">\(h\left(v_{1},w_{1}\right)=h\left(v_{2},w_{2}\right)\)</span> עבור <span class="math">\(\left(v_{1},w_{1}\right)\ne\left(v_{2},w_{2}\right)\)</span>; במקרה זה נגדיר <span class="math">\(f\)</span> בילינארית שמקיימת <span class="math">\(f\left(v_{1},w_{1}\right)=f\left(v_{2},w_{2}\right)\)</span> ואז הלך עלינו - לא משנה איזה <span class="math">\(T\)</span> נבחר, נקבל ש-<span class="math">\(Th\left(v_{1},w_{1}\right)=Th\left(v_{2},w_{2}\right)\)</span> ולכן אין סיכוי ש-<span class="math">\(f=Th\)</span>. אז <span class="math">\(E\)</span> חייב לכלול איבר ייחודי שאסמן <span class="math">\(\delta_{\left(v,w\right)}\)</span> לכל <span class="math">\(\left(v,w\right)\)</span> (ולמה לא להשתמש בסימון <span class="math">\(v\otimes w\)</span> וחסל? עוד מעט נבין). עכשיו, ה-<span class="math">\(\delta_{\left(v,w\right)}\)</span> לא מרכיבים את כל המרחב לבדם; מכיוון שאנחנו רוצים ש-<span class="math">\(E\)</span> יהיה מרחב וקטורי, אנחנו צריכים להגדיר גם פעולות של חיבור וכפל בסקלר עליהם. כאן אי אפשר סתם לתת הגדרות שרירותיות, כי אז יצוצו בעיות. למשל, נניח שאנו מגדירים שרירותית ש-<span class="math">\(\lambda\delta_{\left(v_{1},w_{1}\right)}=\delta_{\left(v_{2},w_{2}\right)}\)</span>. מה נובע מזה? אם <span class="math">\(T\)</span> היא טרנספורמציה לינארית מ-<span class="math">\(E\)</span>, אז היא תקיים תמיד <span class="math">\( T\left(\delta_{\left(v_{2},w_{2}\right)}\right)=T\left(\lambda\delta_{\left(v_{1},w_{1}\right)}\right)=\lambda T\left(\delta_{\left(v_{1},w_{1}\right)}\right)\)</span>. זה אומר שאם ניקח <span class="math">\(f\)</span> שמקיימת <span class="math">\(f\left(v_{2},w_{2}\right)\ne\lambda f\left(v_{1},w_{1}\right)\)</span> אז אין <span class="math">\(T\)</span> כך ש-<span class="math">\(f=Th\)</span> ואנחנו שוב בצרות.</p>
+<p>במילים אחרות, אנחנו חייבים שבמרחב שלנו יהיו יותר איברים מאשר רק <span class="math">\(\delta_{\left(v,w\right)}\)</span>-ים. אז מה נעשה? איך נדע את מי להוסיף ואת מי לא? אם קודם כשבנינו את המכפלה הטנזורית נקטנו בשיטת Bottom-up - התחלנו מהבסיס של מה שאנחנו רוצים שיהיה לנו (מכפלות טנזוריות של אברי הבסיסים) ובנינו את המרחב מתוך זה, הפעם נעשה מעין Top-down: נתחיל ממרחב גדול מדי, ואז נתקן אותו.</p>
+<p>מה שנאמר הוא ש<strong>לכל</strong> צירוף לינארי סופי <span class="math">\(\sum\lambda_{i}\delta_{\left(v_{i},w_{i}\right)}\)</span> יהיה לנו איבר במרחב, והמרחב הזה יהיה <strong>חופשי מיחסים</strong> בין האיברים: שני איברים יהיו שונים אם ורק אם הצירוף הלינארי שמגדיר אותם זהה. לדבר כזה קוראים <strong>מרחב וקטורי חופשי</strong>. הבעיה עם המרחב הזה היא שהוא גדול <strong>מדי</strong>. תחשבו על זה ככה: אם <span class="math">\(V=W=\mathbb{R}\)</span> (מרחבים ממימד 1) אז לכל <span class="math">\(s,t\in\mathbb{R}\)</span> יהיה לנו איבר <span class="math">\(\delta_{\left(s,t\right)}\)</span> שהוא איבר <strong>בסיס</strong> של המרחב החדש; זה אומר שהמרחב החדש שלנו יהיה בעל בסיס לא בן מניה - עצום בגודלו. כמו כן, אם נגדיר את ההעתקה <span class="math">\(h\left(v,w\right)=\delta_{\left(v,w\right)}\)</span> קל לראות שזו <strong>אינה</strong> העתקה בילינארית: הרי <span class="math">\(h\left(\lambda v,w\right)=\delta_{\left(\lambda v,w\right)}\ne\lambda\delta_{\left(v,w\right)}=\lambda h\left(v,w\right)\)</span>, כשאי השוויון נובע בדיוק מהחופשיות של המרחב.</p>
+<p>במילים אחרות, אם אנחנו רוצים שתהיה לנו תקווה כלשהי לכך ש-<span class="math">\(h\)</span> תהיה בילינארית, אנחנו חייבים לוודא ש-<span class="math">\(\delta_{\left(\lambda v,w\right)}=\lambda\delta_{\left(v,w\right)}\)</span>. איך עושים את זה, למרות שהאיברים הללו כרגע שונים? הטריק הסטנדרטי ביותר בספר: מגדירים <strong>יחס שקילות</strong> על המרחב שלנו, שבו שני איברים הם שקולים אם הם "אמורים להיות שווים", ואז לוקחים את קבוצת המנה (אוסף כל מחלקות השקילות של היחס). אם לא ראיתם את זה מעולם, זה מבלבל נורא: הדוגמה הקלאסית שאני יכול להציע לכם היא מספרים רציונליים; אפשר להגדיר אותם בתור אוסף של זוגות של שלמים, כך ש-<span class="math">\(\left(a,b\right)\)</span> מייצג את המספר <span class="math">\(\frac{a}{b}\)</span>; מהר מאוד אנחנו מבינים ש-<span class="math">\(\left(1,2\right)\)</span> ו-<span class="math">\(\left(2,4\right)\)</span> אמורים לייצג את אותו המספר, אז מגדירים יחס שקילות ש"מזהה" ביניהם.</p>
+<p>יחס השקילות שלנו יוגדר על ידי כל התכונות שנדרשות כדי להפוך את <span class="math">\(h\)</span> לבילינארית. פורמלית, מה שעושים הוא לבנות <strong>תת-מרחב וקטורי</strong> של המרחב שלנו, ואז לקחת את <strong>מרחב המנה</strong> - עוד בניה סטנדרטית, שכנראה תהיה מוכרת לכל מי שהתעסק טיפה עם חבורות. תת-המרחב שלנו ייפרש בדיוק על ידי כל האיברים מהצורות הבאות:</p>
+<ul>
+    <li><span class="math">\(\delta_{\left(\lambda v,w\right)}-\lambda\delta_{\left(v,w\right)}\)</span></li>
+    <li><span class="math">\(\delta_{\left(v,\lambda w\right)}-\lambda\delta_{\left(v,w\right)}\)</span></li>
+    <li><span class="math">\(\delta_{\left(v_{1}+v_{2},w\right)}-\delta_{\left(v_{1},w\right)}-\delta_{\left(v_{2},w\right)}\)</span></li>
+    <li><span class="math">\(\delta_{\left(v,w_{1}+w_{2}\right)}-\delta_{\left(v,w_{1}\right)}-\delta_{\left(v,w_{2}\right)}\)</span></li>
+</ul>
+<p>אחרי שמחלקים בתת-המרחב הזה, כל היוצרים שלו הופכים לשווים לאפס במרחב המנה. לכן, למשל, במרחב המנה המשוואה <span class="math">\(\delta_{\left(\lambda v,w\right)}-\lambda\delta_{\left(v,w\right)}=0\)</span> היא נכונה, כלומר <span class="math">\(\delta_{\left(\lambda v,w\right)}=\lambda\delta_{\left(v,w\right)}\)</span> במרחב הזה.</p>
+<p>מה שתיארתי פה הוא בניה סטנדרטית לגמרי באלגברה, שבה בונים אובייקט באמצעות <strong>יוצרים</strong> ו<strong>יחסים</strong>. היוצרים הם ה-<span class="math">\(\delta\)</span>-ות; היחסים הן המשוואות שהגדירו לי את תת-המרחב. אם זו הפעם הראשונה שבה אתם שומעים על המושגים הללו, אני ממליץ לנסות וללמוד אותם דרך תורת החבורות קודם; ככה זה יותר קל לעיכול.</p>
+<p>עכשיו אפשר להחזיר לתמונה את הסימון <span class="math">\(v\otimes w\)</span> הידוע לשמצה - זה יהיה האיבר במרחב המנה שמתאים ל-<span class="math">\(\delta_{\left(v,w\right)}\)</span> (<strong>מחלקת השקילות</strong> של <span class="math">\(\delta_{\left(v,w\right)}\)</span>). מכאן ואילך זו עבודה סטנדרטית יחסית להראות שהמרחב הזה אכן מקיים את כל מה שאנחנו רוצים. בהינתן <span class="math">\(f:V\times W\to U\)</span>, מגדירים <span class="math">\(T\left(v\otimes w\right)=f\left(v,w\right)\)</span> ומקבלים ש-<span class="math">\(f=Th\)</span> (צריך להוכיח ש-<span class="math">\(T\)</span> היא טרנספורמציה לינארית מוגדרת היטב - זה נובע מכך ש-<span class="math">\(f\)</span> היא בילינארית). היחידות של <span class="math">\(T\)</span> נובעת מכך שמרגע שהגדרנו את <span class="math">\(T\)</span> על כל האיברים מהצורה <span class="math">\(v\otimes w\)</span> אז <span class="math">\(T\)</span> נקבעת באופן יחיד עבור כל יתר המרחב (למעשה, מספיקה ההגדרה של <span class="math">\(T\)</span> על אברי בסיס כפי שהגדרנו אותם בתחילת הפוסט; לא צריך את כל הטנזורים הטהורים), ובהינתן <span class="math">\(f\)</span>, אין לנו בחירה לערכים של <span class="math">\(T\)</span> על טנזורים טהורים - הם חייבים לתת להם בדיוק מה ש-<span class="math">\(f\)</span> נותנת לזוג המתאים. זה מסיים (בנפנוף ידיים, כמובן) את ההוכחה.</p>
+<p>קצת ניסיתי בפוסט הזה ללכת בלי ולהרגיש עם - לא לצלול עמוק מדי אל ההקשר האלגברי הרחב יותר, ובכל זאת להזכיר אותו; אני מקווה שהצלחתי כך לתת משהו לכל קורא של הפוסט, ולא סתם שהרגזתי את כולם במידה שווה.</p>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {extensions: ["http://www.gadial.net/libs/xyjax/extensions/TeX/xypic.js"]}
+  });
+</script>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2014/06/23/euclid_the_game/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">בניות בסרגל ומחוגה - המשחק!</span>
+            </a>
+            
+            
+            
+            <a href="/2014/05/27/fast_fourier_transform/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">התמרת פורייה המהירה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

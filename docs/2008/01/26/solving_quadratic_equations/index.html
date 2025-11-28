@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז איך פותרים משוואה ריבועית? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז איך פותרים משוואה ריבועית?</h1>
+            <div class="post-meta">
+                <span class="date">2008-01-26</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/categories/ההיסטוריה של המתמטיקה.html">ההיסטוריה של המתמטיקה</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אחת מהשאלות שהביאה נפשות תועות לבלוג הייתה "איך פותרים <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%95%D7%95%D7%90%D7%94_%D7%9E%D7%9E%D7%A2%D7%9C%D7%94_%D7%A9%D7%A0%D7%99%D7%99%D7%94">משוואה ריבועית</a>". תכננתי לענות עליה במסגרת מדור "שאלות ותשובות", תשובה שהייתה בערך זו: "הפתרון של המשוואה <span class="math">\(ax^2+bx+c=0\)</span> הוא <span class="math">\(x_{1,2}=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\)</span>", אבל אז הבנתי שזו אולי תשובה נכונה ומדוייקת, אבל התחמקות גמורה מהשאלה. אנסה להסביר מדוע.</p>
+<p>לא מזמן ראיתי הרצאה של מתמטיקאי שעסקה בשאלת המבחנים האמריקאיים אל מול המבחנים הפתוחים. מהר מאוד ההרצאה התגלגלה למערכת החינוך המוצלחת שלנו ושיטות אי-הוראת המתמטיקה בה. המרצה סיפר את סיפור הזוועה הבא על בנו: הבן, שמתכונן לבחינות הבגרות, היה צריך לפתור את המשוואה הבאה: <span class="math">\((x-6)^2=900\)</span>. מה עשה הבן? פתח את הסוגריים, קיבל <span class="math">\(x^2-12x+36=900\)</span>. העביר אגף, קיבל את המשוואה <span class="math">\(x^2-12x-864=0\)</span> שמתאימה ל"צורה הכללית", ופתר באמצעות הנוסחה. על פניו, פתרון כשר ותקין לחלוטין, אז מה הבעיה? שאני נתקף חלחלה רק מעצם המחשבה על ביצוע החישובים שנדרשים להצבת הערכים הללו בנוסחה הכללית, ועם זאת אני מסוגל לפתור את המשוואה המקורית בשניות, רק מהסתכלות עליה, ולדעת שהפתרונות הם 36 ומינוס 24. לא כי אני <a href="http://he.wikipedia.org/wiki/%D7%92%D7%90%D7%95%D7%9F_%D7%97%D7%99%D7%A9%D7%95%D7%91">מחשבון אנושי</a>, חלילה; פשוט מכיוון שאני רואה שאפשר להוציא מייד שורש משני האגפים ולחבר 6 לשניהם כדי לקבל את הפתרונות.</p>
+<p>מה הבעיה כאן? שהבן התרגל לפתור משוואות בצורה מכנית, כאילו היה מחשב. רואים משוואה? מייד להביא אותה ל"צורה הכללית" שמכירים, ומשם לפתור עם הנוסחה. החישובים אולי יהיו קקי, אבל ממילא <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%97%D7%A9%D7%91%D7%95%D7%9F">מחשבון</a> הוא סטנדרט בכל בחינה תיכונית במתמטיקה (לצורך ההשוואה - יש רק קורס מתמטי אחד שלמדתי אי פעם באוניברסיטה שבו הורשינו להשתמש במחשבון; וגם בו הוא היה מיותר לגמרי. זה היה <a href="http://he.wikipedia.org/wiki/%D7%90%D7%A0%D7%9C%D7%99%D7%96%D7%94_%D7%A0%D7%95%D7%9E%D7%A8%D7%99%D7%AA">הקורס</a> שעסק בשיטות שבהן מחשבים משתמשים כדי לבצע חישובים נומריים). האירוניה כאן היא שכל הרעיון שמאחורי הנוסחה ("נוסחת השורשים") הוא הבאה של המשוואה הכללית לצורה של "משהו בריבוע שווה מספר", כמו זו שממנה הבן התחיל.</p>
+<p>אלא מה? אני די בספק אם רבים מהתלמידים בבית הספר זוכרים את ההוכחה של נוסחת השורשים - אם בגלל שלא לימדו אותם, ואם בגלל שלא לימדו אותם למה לדעת את ההוכחה חשוב. כשכל מה שצריך לדעת הוא התוצר הסופי (הנוסחה), למי אכפת ממה שקרה בדרך? וכך מתעלמים מהסיבה האמיתית שבגללה לומדים הוכחות (גם את זה המרצה אמר, כציטוט של מישהו אחר...) - לא בשביל לדעת שמשהו הוא נכון, אלא כדי לדעת <strong>למה</strong> הוא נכון. וכשיודעים את ה"למה", קל גם לזהות מצבים שבהם אין צורך בנוסחה הכללית ויש "דרך קיצור" נוחה.</p>
+<p>אם כן, איך הגיעו לנוסחה הכללית? מה השיטה שעומדת בבסיסה? השיטה היא שיטה עתיקת יומין, שקיימת לפחות מימי ה<a href="http://he.wikipedia.org/wiki/%D7%91%D7%91%D7%9C">בבלים</a> - שיטת ה"<a href="http://he.wikipedia.org/wiki/%D7%94%D7%A9%D7%9C%D7%9E%D7%94_%D7%9C%D7%A8%D7%99%D7%91%D7%95%D7%A2">השלמה לריבוע</a>". אציג אותה כאן ראשית כל בניסוח "אלגברי" מודרני - בתור משהו שמושג על ידי מניפולציה של סמלים. עם זאת, הדבר המעניין בשיטה הזו, לטעמי, הוא דווקא הצורה שבה הבבלים הבינו אותה. הבבלים לא עסקו כלל ב<a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%92%D7%91%D7%A8%D7%94">אלגברה</a>. הם לא ייצגו ערכים על ידי משתנים. מה שהם כן עשו היה לפתור בעיות ספציפיות בעזרת <a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%92%D7%95%D7%A8%D7%99%D7%AA%D7%9D">אלגוריתמים</a> כלליים, והשלמה לריבוע היא דוגמה לאלגוריתם שכזה. בפרט, ממש רואים בה את ה"ריבוע" פיזית. לכן אציג גם את מה שאני מכיר בתור השיטה הבבלית (כמובן, ייתכן שזו לא <strong>באמת</strong> השיטה שבה הבבלים השתמשו; אני לא היסטוריון של המתמטיקה אלא רק מסתמך על כאלו).</p>
+<p>אם כן, משוואה ריבועית "כללית" מסומנת ב-<span class="math">\(Ax^2+Bx+C=0\)</span> כאשר <span class="math">\(A,B,C\)</span> הם <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%9E%D7%9E%D7%A9%D7%99">מספרים ממשיים</a> (אבל לא רק; כפי שתראו, מה שאציג עובד בכל <a href="http://he.wikipedia.org/wiki/%D7%A9%D7%93%D7%94_%28%D7%90%D7%9C%D7%92%D7%91%D7%A8%D7%94%29">שדה</a> - כלומר, בכל קבוצה שיש בה פעולות של חיבור, חיסור, כפל וחילוק שמקיימות את התכונות שאנו מכירים ואוהבים) ואנו מעוניינים לגלות מספר שכאשר מציבים אותו במקום <span class="math">\(x\)</span> המשוואה מתקיימת. הדבר הראשון שעושים הוא להעביר את המשוואה לצורה פשוטה קצת יותר: <span class="math">\(x^2+\frac{B}{A}x+\frac{C}{A}\)</span> - כלומר, חילקתי ב-<span class="math">\(A\)</span>. אי אפשר לחלק ב-<span class="math">\(A\)</span> אם הוא 0; אבל במקרה כזה, אין לנו את <span class="math">\(x^2\)</span> בשום מקום במשוואה ולכן זו לא משוואה ריבועית. אסמן <span class="math">\(b=\frac{B}{A}, c=\frac{C}{A}\)</span> ומעכשיו ועד עולם אפשר לדבר על הדרך התיאורטית הכללית לפתור את המשוואה <span class="math">\(x^2+bx+c=0\)</span>. כפי שתראו, חיסול אחד מהמקדמים פשוט מקל על החישובים (ועל הצגת השיטה הבבלית).</p>
+<p>מה כעת? מבחינה אלגברית, השאיפה שלנו תמיד בפתרון משוואות הוא לרכז את כל ה-<span class="math">\(x\)</span>-ים בצד אחד, ואת כל המספרים שאינם <span class="math">\(x\)</span> בצד השני. על כן, מעבירים אגף ומקבלים <span class="math">\(x^2+bx=-c\)</span>. כעת, היינו רוצים להוציא את <span class="math">\(x\)</span> כגורם משותף, אבל אז היינו מקבלים <span class="math">\(x(x+b)=c\)</span>. מכיוון שיש <span class="math">\(x\)</span> גם בסוגריים אין הרבה תועלת בפעולה הזו - קשה "לבודד" את <span class="math">\(x\)</span>. לכן משתמשים בתעלול.</p>
+<p>התעלול הוא כדלהלן: ידוע שמתקיים <span class="math">\((x+t)^2=x^2+2tx+t^2\)</span> וזאת לכל <span class="math">\(x,t\)</span>. מה שטוב בכך הוא שזה מאפשר לנו להפוך סכום של <span class="math">\(x^2\)</span> שמופיע בו גם <span class="math">\(x\)</span> למשהו שמכיל רק <span class="math">\(x\)</span>. אם כן, רוצים לחשוב על <span class="math">\(x^2+bx\)</span> בתור ביטוי מהצורה שלעיל, אבל לעת עתה הם ממש לא דומים; בביטוי שלמעלה יש שלושה מחוברים, וכאן יש רק שניים. הפתרון לכך פשוט - נחבר את אותו המספר לשני אגפי המשוואה (<strong>נשלים</strong> את אגף שמאל של המשוואה כך שיהיה <strong>ריבוע</strong> של מספר כלשהו). המספר אמור להיות <span class="math">\(t^2\)</span>, אבל לא ברור לנו עדיין מהו <span class="math">\(t\)</span>. כדי להבין מה הוא אמור להיות, נשווה את המקדמים של <span class="math">\(x\)</span> בשתי המשוואות; נקבל <span class="math">\(b=2t\)</span>, כלומר <span class="math">\(t=\frac{b}{2}\)</span>. אם כן, מה שיש לחבר לשתי המשוואות הוא <span class="math">\(t^2=\frac{b^2}{4}\)</span>. נעשה זאת ונקבל את המשוואה:</p>
+<p><span class="math">\(x^2+bx+\frac{b^2}{4}=\frac{b^2}{4}-c\)</span></p>
+<p>כעת אפשר "לסגור" את אגף שמאל על פי הנוסחה שכבר ראינו:</p>
+<p><span class="math">\(\left(x+\frac{b}{2}\right)^2=\frac{b^2}{4}-c\)</span></p>
+<p>כדי להקל לעצמי על החיים אני "מעלה" את <span class="math">\(c\)</span> אל השבר באגף ימין על ידי טריק נפוץ נוסף - אני כופל ומחלק אותו ב-4:</p>
+<p><span class="math">\(\left(x+\frac{b}{2}\right)^2=\frac{b^2-4c}{4}\)</span></p>
+<p>וכעת אני מוציא שורש מאגף שמאל, ולכן גם מאגף ימין. זה, כאמור, לב העניין כולו וזו הייתה המטרה המרכזית שלי:</p>
+<p><span class="math">\(x+\frac{b}{2}=\pm\sqrt{\frac{b^2-4c}{4}}\)</span></p>
+<p>לא תמיד אפשר להוציא שורש לאגף ימין - למשל, כשאנו עוסקים במספרים ממשיים בלבד, מה שמופיע באגף ימין חייב להיות מספר לא שלילי. לכן לא לכל משוואה יש פתרון מאותו השדה (תמיד יש לה פתרון בשדה רחב יותר, כמו למשל במקרה של המרוכבים, אך לא ניכנס לזה). חשוב גם לשים לב לכך שקיבלנו <strong>שני</strong> פתרונות במקרה הכללי, כי הוצאת שורש אינה פעולה חד ערכית.</p>
+<p>כעת מעבירים את <span class="math">\(\frac{b}{2}\)</span> אגף, ובאותה הזדמנות אפשר להשאיר את השורש על המונה של אגף ימין בלבד, כי להוציא שורש למכנה אנו יודעים:</p>
+<p><span class="math">\(x=\frac{\pm\sqrt{b^2-4c}}{2}-\frac{b}{2}\)</span></p>
+<p>ובצורת כתיבה אחרת מקבלים את הנוסחה המוכרת לנו:</p>
+<p><span class="math">\(x=\frac{-b\pm\sqrt{b^2-4c}}{2}\)</span></p>
+<p>אם מציבים <span class="math">\(b=\frac{B}{A}, c=\frac{C}{A}\)</span> במשוואה הזו מקבלים את הנוסחה הכללית ביותר (הטריק היחיד שיש לבצע כאן הוא לכפול ולחלק את <span class="math">\(C\)</span> שבתוך השורש ב-<span class="math">\(A\)</span>, ואז ניתן להוציא את <span class="math">\(\frac{1}{A^2}\)</span> מחוץ לשורש):<br />
+<span class="math">\(x=\frac{-B\pm\sqrt{B^2-4AC}}{2A}\)</span></p>
+<p>הגרסה הזו נוחה במקרים שבהם לא כיף לחלק ב-<span class="math">\(A\)</span> ואז לחשב כל מני דברים מעצבנים, כמו את הריבוע של <span class="math">\(\frac{B}{A}\)</span>.</p>
+<p>אם כן, זו הגישה ה"אלגברית" לכל זה. אבל מה הבבלים עשו? האם יש אינטואיציה לפתרון שהיא מעבר ל"אם נעשה את המניפולציה הזו והזו על הסמלים הזה והזה, יצא לנו משהו נחמד"?</p>
+<p>הבבלים עוסקים בשאלה שבמבט ראשון נראית קשורה רק למחצה, במקרה הטוב: נתון להם מלבן. הם יודעים את שטח המלבן ואת ההפרש בין אורך צלעותיו של המלבן. המטרה: לגלות את אורך הצלעות. ראשית אציג את הדרך שבה פותרים את הבעיה הזו; אחר כך אסביר מדוע עבור מקרים רבים זו הבעיה שלנו, בתחפושת. נתחיל בתמונה אחת ששווה אלף מילים - תיאור התהליך כולו.<br />
+<a title="Completion" href="/img/2008/01/completion_to_square.png"><img alt="Completion" src="/img/2008/01/completion_to_square.png" /></a></p>
+<p>כעת להסבר. אנחנו מתחילים ממלבן A שאורך צלעותיו הוא הנעלמים <span class="math">\(x,y\)</span>. מה אנחנו כן יודעים? את שטחו <span class="math">\(xy\)</span> ואת הערך <span class="math">\(y-x\)</span>.</p>
+<p>הרעיון הכללי בבנייה הוא להפוך את המלבן לריבוע. לשם כך יהיה צורך "להשלים" אותו על ידי הוספת פיסה נוספת - זו ה-D שמופיעה בשלב האחרון. את התהליך מתחילים כך: A הוא מלבן, ולכן יש בו צלע ארוכה וצלע קצרה יותר. אפשר להעביר מקביל בתוך המלבן לצלע הקצרה יותר כדי לחלק את A לריבוע (B) ולמלבן קטן יותר, C. אורך הצלע של הריבוע B הוא <span class="math">\(x\)</span>, ואילו אורך הצלעות של C הוא <span class="math">\(x\)</span> ו-<span class="math">\(y-x\)</span> (כי "גזרנו" מהצלע שאורכה <span class="math">\(y\)</span> קטע שאורכו <span class="math">\(x\)</span>). מה שחשוב במלבן החדש הוא שאנו יודעים את אורך הצלע <span class="math">\(y-x\)</span> - זה חלק מהנתון.</p>
+<p>כעת, מחלקים את המלבן הזה לשני חלקים - C1,C2. את C1 משאירים במקומו, אבל עם C2 יוצאים לטיולים. לוקחים אותו, מסובבים אותו ב-90 מעלות, ומדביקים אותו בחלק התחתון של הריבוע B. זה יוצר לנו צורה שהיא "כמעט ריבוע" - אורך צלעה הוא <span class="math">\(x+\frac{y-x}{2}\)</span>, אך חסר בה חלק. את החלק הזה - D - "משלימים", ומקבלים ריבוע תקין.</p>
+<p>מה שטח הריבוע הזה? את זה אפשר לדעת מהנתונים. זה שווה לשטח המלבן המקורי, ועוד שטח D. את שטח D יודעים, כי D הוא ריבוע שאורך צלעו <span class="math">\(\frac{y-x}{2}\)</span>, ושטח D הוא פשוט ריבוע האורך הזה. אם כן, את השטח הכולל, שאסמן ב-<span class="math">\(S\)</span>, אפשר לחשב באמצעות חיבור שטח A לשטח D. בנוסף, ידוע ששטח זה הוא ה<strong>ריבוע</strong> של אורך הצלע של ה<strong>ריבוע</strong> שיצרנו: <span class="math">\(S=\left(x+\frac{y-x}{2}\right)^2\)</span>. זהו מקורה ה"היסטורי" של המילה "ריבוע" (באנגלית Square; וכאשר מדברים על חזקה שלישית, זה Cube - אני מניח שכעת ברור למה). אם כן, כל מה שנשאר לעשות הוא להוציא שורש לשטח הריבוע, שאותו כאמור אנו יודעים, וקיבלנו את <span class="math">\(x+\frac{y-x}{2}\)</span>. מכיוון שאנחנו יודעים את <span class="math">\(\frac{y-x}{2}\)</span>, קל לגלות את <span class="math">\(x\)</span>, ולכן גם את <span class="math">\(y\)</span>.</p>
+<p>את כל זה הצגתי, שוב, בגישה אלגברית יחסית, תוך שימוש במשתנים. הבבלים פשוט הציגו את זה בעזרת דוגמאות. למשל, נניח ששטח המלבן הוא 7 וההפרש בין אורכי הצלעות הוא 6: אז אורך C יהיה 6, ולכן חצי מאורך C יהיה 3. לכן שטח D יהיה 9, ולכן השטח הכולל של הריבוע הגדול יהיה 16 - לכן אורך צלעו של הריבוע הגדול הוא 4, ולכן אורך צלע אחת של הריבוע המקורית הוא <span class="math">\(4-3=1\)</span> (ה-3 הגיע מ"חצי מאורך C"). לכן אורך הצלע השנייה הוא 7, וגמרנו.</p>
+<p>לדעתי השיטה הזו נאה מאוד גם בקני המידה של ימינו. הנה הצורה שבה אני לפחות, כתוצר משובח של מערכת החינוך שלנו, הייתי ניגש לבעיה הזו אם היו מציגים לי אותה בניסוח אלגברי טהור, כלומר מציגים בפני את שתי המשוואות <span class="math">\(xy=7, y-x=6\)</span>: הייתי מחלץ מהמשוואה השנייה <span class="math">\(y=6+x\)</span>, מציב במשוואה הראשונה <span class="math">\(x(6+x)=7\)</span>. פותח סוגריים ומקבל <span class="math">\(x^2+6x-7=0\)</span>, וכאן משתמש בנוסחת השורשים ומקבל <span class="math">\(x=\frac{-6\pm\sqrt{36+28}}{2}=\frac{-6\pm 8}{2}\)</span> ובסופו של דבר, את התוצאות <span class="math">\(x=1\)</span> ו-<span class="math">\(x=-7\)</span> (שלא מתאים לתיאור הגאומטרי, שבו אורכים הם תמיד חיוביים). כמות החישובים שהגישה הזו דרשה ממני היא גדולה יותר, ואני מבצע אותה לאט יותר (מחשב, כמובן, יעדיף את הגישה האלגברית...).</p>
+<p>טרם סיימתי. טענתי קודם שהשיטה הזו של הבבלים היא (לא תמיד, אבל במקרים רבים) השיטה לפתרון משוואה ריבועית שאנו מכירים, פשוט בתחפושת. על פניו, לא נראה שיש קשר ישיר ביניהן; הרי כאמור, השיטה הזו פותרת את מערכת המשוואות <span class="math">\(xy=t_1,y-x=t_2\)</span> (כש-<span class="math">\(t_1,t_2\)</span> הם מספרים כלשהם). כדי להבין איך זה מתקשר למשוואות ריבועיות "רגילות", צריך להיזכר במה שמכונה "נוסחאות <a href="http://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%A0%D7%A1%D7%95%D7%90%D7%94_%D7%95%D7%99%D7%99%D7%98%D7%94">וייטה</a>".</p>
+<p>נניח שיש לנו את המשוואה הריבועית <span class="math">\(x^2+bx+c=0\)</span>. אפשר לחשוב על בעיית הפתרון שלה כעל בעיית מציאת השורשים של ה<a href="http://he.wikipedia.org/wiki/%D7%A4%D7%95%D7%9C%D7%99%D7%A0%D7%95%D7%9D">פולינום</a> <span class="math">\(x^2+bx+c\)</span>. נניח שהשורשים הם <span class="math">\(\alpha,\beta\)</span>. היכרות עם תכונות של פולינומים מראה שקיים פולינום יחיד ממעלה שנייה שאלו הם שורשיו, וניתן לכתוב אותו בתור <span class="math">\((x-\alpha)(x-\beta)\)</span>. לאחר פתיחת סוגריים מקבלים <span class="math">\(x^2+(-\alpha-\beta)x+\alpha\beta\)</span>. אם כן, קיבלנו <span class="math">\(b=-\alpha-\beta\)</span> ו-<span class="math">\(c=\alpha\beta\)</span>. אלו הן נוסחאות וייטה עבור משוואה ריבועית - הן מראות שמקדמי המשוואה הם פשוט מינוס הסכום והמכפלה של הפתרונות. במקרה שלנו, זה עוזר לנו "להנדס" בעיית מלבן שתפתור לנו את המשוואה הריבועית. הבעיה המרכזית כאן היא שפתרון בעיית המלבן מבוסס על הכרת ההפרש בין שני המספרים שאנו מחפשים, ואילו כאן נתון לנו דווקא מינוס הסכום שלהם. לכן נשתמש בתעלול הבא: אם <span class="math">\(\alpha,\beta\)</span> הם הפתרונות של המשוואה, אז <span class="math">\(b=-\beta-\alpha\)</span>. אם נסמן <span class="math">\(x=\alpha, y=-\beta\)</span> (סליחה על השימוש הכפול ב-x - אני מנסה להיות קונסיסטנטי עם השימוש בו בבעיית המלבן) נקבל <span class="math">\(b=y-x\)</span>, בדיוק כמו בבעיית המלבן. לכן, אם נפתור את בעיית המלבן ונמצא <span class="math">\(x,y\)</span>, הפתרונות למשוואה הריבועית יהיו <span class="math">\(x,-y\)</span>.</p>
+<p>מה עוד נשאר כדי לקבל בעיית מלבן? צריך לדעת גם את <span class="math">\(xy=-\alpha\beta=-c\)</span> - וכאמור, אנו יודעים אותו. אם כן, כדי לפתור את המשוואה הריבועית אנו פותרים בעיית מלבן עם שטח <span class="math">\(-c\)</span> והפרש צלעות <span class="math">\(b\)</span> ואז מתרגמים את פתרונות בעיית המלבן חזרה לפתרונות של המשוואה הריבועית.</p>
+<p>כמובן, השיטה הזו תקפה רק אם <span class="math">\(c\)</span> שלילי, אחרת נקבל בעיית מלבן לא הגיונית, עם שטח שלילי; לכן לא ניתן לטפל במשוואות כמו <span class="math">\(x^2+1=0\)</span> בעזרת השיטה הזו. עם זאת, אני חושב שבהתחשב בכך שהמתמטיקה הבבלית הייתה קיימת למעלה מאלף וחמש מאות שנים לפני הספירה, אני חושב ששיטת ההשלמה לריבוע היא הישג מרשים ונאה ביותר לזמנו.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2008/02/23/monty_hall/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">הבעיה של מונטי הול</span>
+            </a>
+            
+            
+            
+            <a href="/2008/01/20/lim_sin_x_over_x/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הונאה מעבר לגבול</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

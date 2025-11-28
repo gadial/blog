@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מספרי ברנולי - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מספרי ברנולי</h1>
+            <div class="post-meta">
+                <span class="date">2024-12-18</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מספרי ברנולי.html">מספרי ברנולי</a>
+                    
+                    <a href="/tags/סכומי חזקות.html">סכומי חזקות</a>
+                    
+                    <a href="/tags/פונקציות יוצרות אקספוננציאליות.html">פונקציות יוצרות אקספוננציאליות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>בואו נסכום סכומים</h2>
+
+<p>אחד מהדברים הבאמת נחמדים שלמדתי במתמטיקה בתיכון היה הנוסחה לסכום של סדרה חשבונית, שבמקרה הפשוט ביותר שלה הוא הסכום הבא:</p>
+<p><span class="math">\(1+2+3+\ldots+n=\frac{n\left(n+1\right)}{2}\)</span></p>
+<p>סביב הסכום הזה יש את הצ'יזבט האהוב על המתמטיקאי קרל פרידריך גאוס, שלכאורה גילה אותו בתור ילד קטן שהמורה בבית הספר נתן לו וליתר התלמידים לסכום את המספרים מ-1 עד 100 כדי להעסיק אותם בזמן שהוא נח. גאוס הילד היה נאמן לסלוגן על כך שמתמטיקאים הם עצלנים: במקום לחבר את הכל במפורש, הוא שם לב לכך ש-1 ועוד 100 שווה 101, וגם 2 ועוד 99 שווה 101 וכן הלאה, כך שיש לו 50 זוגות מספרים שהסכום של כולם הוא 101 ורק צריך לחשב את הכפל הקל 50 כפול 101 ואת זה אפילו אני יודע לעשות בראש ולקבל 5050. הנוסחה שכתבתי למעלה היא אותו דבר: יש לנו <span class="math">\(\frac{n}{2}\)</span> זוגות שהסכום של כולם הוא <span class="math">\(n+1\)</span>, אז אנחנו פשוט כופלים (אם <span class="math">\(n\)</span> אי זוגי יש איבר בודד באמצע שאי אפשר למצוא לו בן זוג, אבל הנוסחה עדיין עובדת כי היא סופרת אותו בתור "חצי זוג" - נסו בעצמכם לבדוק על מספרים קטנים!)</p>
+<p>מה שלא שמעתי עליו בבית הספר, וקצת חבל, הוא שיש לנו נוסחה דומה גם עבור הסכום של <strong>הריבועים</strong> של הטבעיים:</p>
+<p><span class="math">\(1^{2}+2^{2}+3^{2}+4^{2}+\ldots+n^{2}=\frac{n\left(n+1\right)\left(2n+1\right)}{6}\)</span></p>
+<p>הנוסחה הזו פחות פשוטה מהקודמת, אבל היא עדיין די פשוטה ומערבת רק מכפלה של שלושה מספרים. זה מעלה את השאלה אם גם כשאני מחבר חזקות גבוהות יותר של הטבעיים, אני עדיין אקבל נוסחה פשוטה יחסית. מה למשל קורה עם <span class="math">\(1^{3}+2^{3}+3^{3}+\ldots\)</span>? התשובה היא שאכן, יש נוסחה פשוטה יחסית למקרה הזה ובעצם לכל מקרה של <span class="math">\(1^{m}+2^{m}+3^{m}+\ldots+n^{m}\)</span>, אם כי "פשוטה" זה כמובן עניין יחסי כי ככל ש-<span class="math">\(m\)</span> גדול יותר הנוסחה תהיה מסובכת יותר. אבל מה שאפשר לומר שהופך את העניין לפשוט הוא שני דברים:</p>
+<ul> <li>הנוסחה היא תמיד <strong>פולינום</strong> ממעלה <span class="math">\(m+1\)</span>.</li>
+
+
+<li>אפשר לכתוב את הנוסחה באופן כללי, לכל <span class="math">\(m\)</span> שהוא, בעזרת משהו שנקרא <strong>מספרי ברנולי.</strong></li>
+
+</ul>
+
+<p>קודם כל - מה זה "פולינום"? יהיה קל להסביר את זה אם ניקח את הנוסחה <span class="math">\(\frac{n\left(n+1\right)}{2}\)</span> ונפתח את הסוגריים. נקבל, על פי כללי החשבון הרגילים, <span class="math">\(\frac{1}{2}n^{2}+\frac{1}{2}n\)</span>. באופן דומה אם נפתח את <span class="math">\(\frac{n\left(n+1\right)\left(2n+1\right)}{6}\)</span> נקבל <span class="math">\(\frac{1}{3}n^{3}+\frac{1}{2}n^{2}+\frac{1}{6}n\)</span>. ביטוי כזה נקרא <strong>פולינום</strong>: זה ביטוי שכולל <strong>משתנה</strong>, במקרה שלנו <span class="math">\(n\)</span>, שהרעיון בו הוא שהוא לא מייצג מספר קונקרטי (אבל אפשר <strong>להציב</strong> בו מספרים קונקרטיים ולראות מה קורה) ואנחנו מסתכלים גם על חזקות שלו, כמו למשל <span class="math">\(n^{2}\)</span> או <span class="math">\(n^{3}\)</span>, ועל מכפלות של כל אלו במספרים, ועל סכומים של כל זה. בביטוי כמו <span class="math">\(\frac{1}{3}n^{3}+\frac{1}{2}n^{2}+\frac{1}{6}n\)</span> אני אומר שה-<span class="math">\(\frac{1}{3}\)</span> שבו מוכפל <span class="math">\(n^{3}\)</span> הוא <strong>המקדם</strong> של <span class="math">\(n^{3}\)</span> (ולכן <span class="math">\(\frac{1}{6}\)</span> הוא המקדם של <span class="math">\(n\)</span> וכדומה). באופן כללי יכול להופיע בפולינום גם מספר שלא מוכפל ב-<span class="math">\(n\)</span> ואז הוא נקרא <strong>המקדם החופשי</strong> אבל אפשר לחשוב עליו כאילו הוא מוכפל ב-<span class="math">\(n^{0}\)</span> (<a href="https://gadial.net/2018/01/01/zero_power_equals_one/">הנה פוסט</a> על למה דברים בחזקת 0 נחשבים 1) אם כי בהקשר שלנו מקדם חופשי כזה פשוט לא הולך להופיע. בנוסף, <strong>המעלה</strong> של פולינום היא החזקה הגבוהה ביותר שמופיעה בו, כלומר לדוגמא, המעלה של <span class="math">\(\frac{1}{3}n^{3}+\frac{1}{2}n^{2}+\frac{1}{6}n\)</span> היא 3.</p>
+<p>פולינומים הם באמת ובתמים פונקציות פשוטות מאוד. אם מציבים ערך בפולינום, החישוב רק דורש לחשב חזקות של הערך, לכפול אותן במקדמים, ולחבר. אם אני מצליח לתרגם את החיבור של המספרים <span class="math">\(1^{10}+2^{10}+3^{10}+\ldots+1000^{10}\)</span> לחישוב של הצבה של 1000 בפולינום ממעלה 11, המרתי את הבעיה של חישוב 1000 חזקות עשיריות של מספרים וחיבור של כולן, לבעיה של חישוב 11 חזקות שונות של אותו מספר (וכשהמספר הזה הוא 1,000 זה לא בדיוק החלק הקשה פה) ואז כפל של 11 החזקות הללו במקדמים וחיבור שלהן - משמעותית פחות עבודה. זה הוביל את יעקב ברנולי, שגילה את הנוסחה הכללית (ולא אכנס כאן לדיון ההיסטורי של מי בדיוק גילה מה ובאיזה נוסח למרות שיש דיון כזה) לכתוב בהתלהבות ביומן שלו שבעזרת הנוסחה לקחה לו פחות מרבע שעה כדי לחשב את סכום החזקות העשיריות של המספרים עד 1000 ולקבל שיצא <span class="math">\(91,409,924,241,424,243,424,241,924,242,500\)</span>. גם ברנולי היה נאמן לסלוגן "מתמטיקאים הם עצלנים", בדרך המאוד מוזרה שבה העצלנות הזו מתבטאת בפועל. </p>
+<p>בהמשך אני אראה איך מגיעים לנוסחה ומוכיחים אותה, אבל מכיוון שזה ידרוש מתמטיקה טיפה לא טריוויאלית בואו נתחיל קודם מתיאור של הנוסחה עצמה. בשביל לתאר אותה צריך להגדיר את מספרי ברנולי, ובשבילם צריך קצת קונבנציות מתמטיות.</p>
+<p>ראשית, יש את הסימון המוסכם לסכימה. למשל, במקום לכתוב <span class="math">\(1^{m}+2^{m}+3^{m}+\ldots+n^{m}\)</span> אני כותב <span class="math">\(\sum_{k=1}^{n}k^{m}\)</span>. כאן הסימן <span class="math">\(\Sigma\)</span> אומר שיש לי תיאור של סכום, ה-<span class="math">\(k^{m}\)</span> שליד ה-<span class="math">\(\Sigma\)</span> הוא "האיבר הכללי" של הסכום - כלומר, הצורה שיש לכל איבר בסכום. ה-<span class="math">\(k=1\)</span> למטה גם אומר שמשתנה הסכימה הוא <span class="math">\(k\)</span>, מה שאומר שבביטוי <span class="math">\(k^{m}\)</span> אני מציב ערכים ב-<span class="math">\(k\)</span> אבל משאיר את <span class="math">\(m\)</span> כמות שהוא, וגם שהערך של <span class="math">\(k\)</span> הזה מתחיל מ-1. ה-<span class="math">\(n\)</span> למעלה אומר שהערך הגדול ביותר ש-<span class="math">\(k\)</span> מגיע אליו הוא <span class="math">\(n\)</span>, והקונבנציה הלא כתובה היא שמגדילים בכל פעם את הערך של <span class="math">\(k\)</span> ב-1. לכן <span class="math">\(\sum_{k=1}^{n}k^{m}=1^{m}+2^{m}+3^{m}+\ldots+n^{m}\)</span>. למרות שסימון הסכימה הזה נראה קצת מרתיע בהתחלה הוא הרבה יותר קומפקטי וברור אחרי שמתרגלים אליו.</p>
+<p>שנית, אנחנו הולכים לראות מספרים מהצורה <span class="math">\({a \choose b}\)</span>. הסימון הזה, שנקרא <strong>מקדם הבינום</strong> (אסביר בהמשך למה) מוגדר באופן הבא. ראשית, מגדירים <strong>עצרת</strong> של מספר טבעי, שמסומנת בתור המספר עם סימן קריאה אחריו: <span class="math">\(a!=1\cdot2\cdot3\cdots a\)</span>, כלומר מכפלת כל המספרים הטבעיים מ-1 עד <span class="math">\(a\)</span> (למשל <span class="math">\(4!=1\cdot2\cdot3\cdot4=24\)</span>) ובנוסף ההגדרה המפורשת <span class="math">\(0!=1\)</span>. שנית, <span class="math">\({a \choose b}=\frac{a!}{b!\left(a-b!\right)}\)</span> והביטוי הזה מוגדר כאשר <span class="math">\(0\le b\le a\)</span>. יש הגיון מאחורי הביטוי הזה, לא סתם החלטנו להמציא אותו: <span class="math">\({a \choose b}\)</span> סופר את מספר הדרכים שבהן אפשר לבחור <span class="math">\(b\)</span> איברים מתוך <span class="math">\(a\)</span> איברים, במקרה שבו אין חשיבות לסדר שבו הבחירה הזו מתבצעת. (אני מתאר את זה <a href="https://gadial.net/2010/06/20/combinatorics_intro/">כאן</a>).</p>
+<p>לבסוף, בנוסחה שאני הולך להציג יופיעו <strong>מספרי ברנולי</strong> שמסומנים ב-<span class="math">\(B_{0},B_{1},B_{2},\ldots\)</span> והם יהיו המושג המרכזי בפוסט.</p>
+<p>אני אגלה כבר עכשיו שמספרי ברנולי הראשונים הם <span class="math">\(B_{0}=1,B_{1}=-\frac{1}{2},B_{2}=\frac{1}{6},B_{3}=0\)</span> ואת ההגדרה הכללית שלהם אביא עוד מעט, אבל קודם אני רוצה להראות איך הם נותנים לנו את הנוסחה לסכום החזקות. אלא שכאן יש סיבוך קטן. אמרתי ש-<span class="math">\(B_{1}=-\frac{1}{2}\)</span>, אבל יש גם כאלו שמעדיפים להגדיר <span class="math">\(B_{1}=\frac{1}{2}\)</span>. שתי הקונבנציות סבירות, אבל אני בפוסט הזה הולך להשתמש בקונבנציה ש-<span class="math">\(B_{1}=-\frac{1}{2}\)</span> וזה טיפה משפיע על הנוסחה: במקום להסתכל על <span class="math">\(\sum_{k=1}^{n}k^{m}\)</span> אני מסתכל על <span class="math">\(\sum_{k=1}^{n-1}k^{m}\)</span>, כלומר על הסכום <span class="math">\(1^{m}+2^{m}+\ldots+\left(n-1\right)^{m}\)</span>. את הסכום הזה אני אסמן ב-<span class="math">\(S_{m}\left(n\right)\)</span>. כמובן שזה לא שינוי גדול במיוחד; אם ניקח את הנוסחה <span class="math">\(\frac{n\left(n+1\right)}{2}\)</span> שראינו קודם ונחליף את <span class="math">\(n\)</span> ב-<span class="math">\(n-1\)</span> נקבל <span class="math">\(S_{1}\left(n\right)=\frac{n\left(n-1\right)}{2}=\frac{1}{2}n^{2}-\frac{1}{2}n\)</span>. באופן דומה אם ניקח את <span class="math">\(\frac{n\left(n+1\right)\left(2n+1\right)}{6}\)</span> ונחליף את <span class="math">\(n\)</span> ב-<span class="math">\(n-1\)</span> נקבל <span class="math">\(S_{2}\left(n\right)=\frac{n\left(n-1\right)\left(2n-1\right)}{6}=\frac{1}{3}n^{3}-\frac{1}{2}n^{2}+\frac{1}{6}n\)</span>.</p>
+<p>עכשיו אפשר להציג את הנוסחה הכללית</p>
+<ul> <li><span class="math">\(S_{m}\left(n\right)=\frac{1}{m+1}\sum_{k=0}^{m}{m+1 \choose k}B_{k}n^{m+1-k}\)</span></li>
+
+</ul>
+
+<p>בואו נראה איך היא נותנת את הסכומים שכבר ראינו. ראשית, עבור <span class="math">\(1+2+3+\ldots+n-1\)</span>, זה הסכום <span class="math">\(\sum_{k=1}^{n-1}k^{1}\)</span>, כלומר <span class="math">\(m=1\)</span>. לכן כשמשתמשים בנוסחה הכללית שראינו, מקבלים</p>
+<p><span class="math">\(S_{1}\left(n\right)=\frac{1}{2}\left[{2 \choose 0}B_{0}n^{2}+{2 \choose 1}B_{1}n^{1}\right]=\frac{1}{2}\left[n^{2}+2\cdot\left(-\frac{1}{2}\right)n\right]=\frac{1}{2}n^{2}-\frac{1}{2}n\)</span></p>
+<p>ובאופן דומה:</p>
+<p><span class="math">\(S_{2}\left(n\right)=\frac{1}{3}\left[{3 \choose 0}B_{0}n^{3}+{3 \choose 1}B_{1}n^{2}+{3 \choose 2}B_{2}n\right]=\frac{1}{3}\left[n^{3}-\frac{3}{2}n^{2}+\frac{3}{6}n\right]=\frac{1}{3}n^{3}-\frac{1}{2}n^{2}+\frac{1}{6}n\)</span></p>
+<p>לי הנוסחה הכללית נראית טיפה מפחידה, אבל כשאני מקליד את המקרים המפורשים החוקיות "מרגישה" לי הרבה יותר פשוטה - בעצם אין בנוסחאות הללו כמעט שום דבר מסובך, חוץ ממספרי ברנולי עצמם - הם ה"לב" של הסיבוך כאן. אז איך מגדירים אותם? ולמה זה עובד? אני פשוט אציג את ההגדרה כאן, ובהמשך נגיע אל ההוכחה שגם תסביר לנו מאיפה ההגדרה בעצם צצה.</p>
+<p>ההגדרה היא <strong>רקורסיבית</strong>: אני מניח שכבר הגדרתי את כל המספרים <span class="math">\(B_{0},B_{1},B_{2},\ldots,B_{k-1}\)</span> ומגדיר באמצעותם את <span class="math">\(B_{k}\)</span>, בצורה הבאה:</p>
+<p><span class="math">\(B_{k}=-\frac{1}{k+1}\sum_{i=0}^{k-1}{k+1 \choose i}B_{i}\)</span></p>
+<p>עם מקרה הבסיס <span class="math">\(B_{0}=1\)</span>. גם פה, הרבה יותר קל "להרגיש" את ההגדרה כשכותבים כמה מקרים ידנית:</p>
+<p><span class="math">\(B_{1}=-\frac{1}{2}{2 \choose 0}B_{0}=-\frac{1}{2}\)</span></p>
+<p><span class="math">\(B_{2}=-\frac{1}{3}\left[{3 \choose 0}B_{0}+{3 \choose 1}B_{1}\right]=-\frac{1}{3}\left[1-\frac{3}{2}\right]=-\frac{1}{3}\left(-\frac{1}{2}\right)=\frac{1}{6}\)</span></p>
+<p>ואם ממשיכים בחישובים, מקבלים את הסדרה הבאה:</p>
+<p><span class="math">\(1,-\frac{1}{2},\frac{1}{6},0,-\frac{1}{30},0,\frac{1}{42},0,-\frac{1}{30},0,\frac{5}{66},0,-\frac{691}{2730},\ldots\)</span></p>
+<p>בדרך כלל ה-<span class="math">\(-\frac{691}{2730}\)</span> הוא זה שבו מרימים ידיים בייאוש ושואלים "אתם צוחקים עלינו?!". עד לשם, אפשר לראות ניצוצות של חוקיות סבירה - כל המספרים במקומות האי זוגיים למעט <span class="math">\(B_{1}\)</span> הם 0; המספרים האחרים מחליפים סימן בין מינוס לפלוס; במכנה מופיעים מספרים סבירים יחסית כולל 42 יקיר המין האנושי; אבל אז מגיע <span class="math">\(-\frac{691}{2730}\)</span> שכולל מונה ומכנה שאין לאף אחד שמץ של מושג מה הם רוצים מחיינו, והורס כל תקווה לאיזו נוסחה פשוטה יחסית, יותר מנוסחת הנסיגה שיש לנו (יש גם נוסחאות סגורות שכוללות סכימה ואני לא חושב שאפשר לומר שהן פשוטות יותר).</p>
+<p>אוקיי, אז זה מה שעושים עם זה, בואו נוכיח שזה עובד.</p>
+<h2>בואו נביים בינומים</h2>
+
+<p>לפני שאני מגיע להוכחה האמיתית, שמשתמשת בכלי אלגנטי ויפה אבל לא טריוויאלי להבנה, הנה גישה קצת יותר בסיסית לנושא שכל אחד יכול להבין. בינתיים אני לא אנסה להוכיח את הנוסחה שראינו למעלה אלא משהו צנוע יותר - להוכיח ש-<span class="math">\(S_{m}\left(n\right)\)</span> הוא פולינום ממעלה <span class="math">\(m+1\)</span> ולהראות איך למצוא אותו. בשביל זה אני קודם כל הולך להשתמש במשהו שנקרא <strong>הבינום של ניוטון</strong> (יש לי עליו <a href="https://gadial.net/2010/06/22/newton_binom/">פוסט</a>) שאומר באופן כללי:</p>
+<p><span class="math">\(\left(a+b\right)^{n}=\sum_{i=0}^{n}{n \choose i}a^{i}b^{n-i}\)</span></p>
+<p>אם במקום <span class="math">\(b\)</span> יש לי 1 זה נהיה משמעותית פשוט יותר:</p>
+<p><span class="math">\(\left(a+1\right)^{n}=\sum_{i=0}^{n}{n \choose i}a^{i}=1+{n \choose 1}a+{n \choose 2}a^{2}+\ldots+{n \choose n-1}a^{n-1}+a^{n}\)</span></p>
+<p>עכשיו נשתמש בזה עבור <span class="math">\(a=k\)</span> ו-<span class="math">\(n=m+1\)</span> ונקבל את הדבר הבא:</p>
+<p><span class="math">\(\left(k+1\right)^{m+1}-k^{m+1}=1+{m+1 \choose 1}k+{m+1 \choose 2}k^{2}+\ldots+{m+1 \choose m}k^{m}\)</span></p>
+<p>מה שנחמד בביטוי <span class="math">\(\left(k+1\right)^{m+1}-k^{m+1}\)</span> הוא שהוא יוצר לנו <strong>טור טלסקופי</strong>, כלומר טור שבו כל האיברים מבטלים זה את זה חוץ מהראשון והאחרון. כדי לראות את זה, בואו נחבר את כל הביטויים הללו עבור <span class="math">\(k=0,1,2,\ldots,n-1\)</span>:</p>
+<p><span class="math">\(\left[n^{m+1}-\left(n-1\right)^{m+1}\right]+\left[\left(n-1\right)^{m+1}-\left(n-2\right)^{m+1}\right]+\ldots+\left[2^{m+1}-1^{m+1}\right]+\left[1^{m+1}-0^{m+1}\right]=n^{m+1}\)</span></p>
+<p>אז אם אנחנו מחברים את אגף <strong>שמאל</strong> של הביטוי</p>
+<p><span class="math">\(\left(k+1\right)^{m+1}-k^{m+1}=1+{m+1 \choose 1}k+{m+1 \choose 2}k^{2}+\ldots+{m+1 \choose m}k^{m}\)</span></p>
+<p>לכל <span class="math">\(k=0,1,2,\ldots,n-1\)</span> אנחנו מקבלים <span class="math">\(n^{m+1}\)</span>. מה קורה כשאנחנו מחברים את אגף <strong>ימין</strong>? אפשר להסתכל על כל מחובר לבד. המחובר <span class="math">\(1\)</span> יחובר לעצמו <span class="math">\(n\)</span> פעמים ויהפוך ל-<span class="math">\(n\)</span>; המחובר <span class="math">\({m+1 \choose 1}k\)</span> הופך לטור <span class="math">\({m+1 \choose 1}\left(1+2+\ldots+n-1\right)={m+1 \choose 1}S_{1}\left(n\right)\)</span>. המחובר <span class="math">\({m+1 \choose 2}k^{2}\)</span> הופך לטור <span class="math">\({m+1 \choose 2}S_{2}\left(n\right)\)</span> וכן הלאה. אז אנחנו מקבלים:</p>
+<p><span class="math">\(n^{m+1}=n+{m+1 \choose 1}S_{1}\left(n\right)+{m+1 \choose 2}S_{2}\left(n\right)+\ldots+{m+1 \choose m}S_{m}\left(n\right)\)</span></p>
+<p>וזו נוסחה די מרהיבה כי היא מקשרת את כל הנוסחאות לסכומים עד לחזקה ה-<span class="math">\(m\)</span>-ית. אפשר לבודד את <span class="math">\(S_{m}\left(n\right)\)</span> ולקבל</p>
+<p><span class="math">\(S_{m}\left(n\right)=\frac{1}{m+1}\left[n^{m+1}-{m+1 \choose m-1}S_{m-1}\left(n\right)-\ldots-{m+1 \choose 1}S_{1}\left(n\right)-n\right]\)</span></p>
+<p>אם אנחנו כבר יודעים, אינדוקטיבית, שכל <span class="math">\(S_{k}\left(n\right)\)</span> כזה הוא ממעלה לכל היותר <span class="math">\(k+1\)</span> המסקנה היא שהביטוי באגף ימין הוא פולינום ממעלה <span class="math">\(m+1\)</span> (בגלל ה-<span class="math">\(n^{m+1}\)</span> שמופיע שם והעובדה שכל ה-<span class="math">\(S_{k}\left(n\right)\)</span>-ים הם ממעלה קטנה יותר). הנוסחה הזו גם פותחת פתח לבניה רקורסיבית של ה-<span class="math">\(B_{m}\)</span>-ים ויש ספרים שנוקטים בגישה הזו (למשל Concrete Mathematics של קנות' ושות') אבל זה טכני לא כיף. אני רוצה טכני כיף.</p>
+<h2>בואו טכני כיף</h2>
+
+<p>הכלי הטכני שאני משתמש בו נקרא <strong>פונקציות יוצרות</strong>. הרעיון בפונקציות יוצרות הוא זה: אם יש לנו סדרה, אפשר "לשתול" את האיברים שלה בתור מקדמים של טור חזקות, ואז לבצע מניפולציות על הפונקציה שטור החזקות הזה מתאר והמניפולציות הללו יתורגמו למניפולציות בסדרות ש"שתלנו".</p>
+<p>זה לא נושא קל לעיכול (<a href="https://gadial.net/2011/08/07/generating_functions_hardcore_1/">יש לי פוסט</a> עליו) אבל חלק מהקושי בו, לטעמי, הוא שקשה להבין אותו בלי לראות דוגמאות קונקרטיות לשימושים שלו - וכאלו שבאמת מפשטים דברים. עכשיו יש לנו הזדמנות לראות דבר כזה.</p>
+<p>הנה מבוא קצרצר לפונקציות יוצרות: בהינתן סדרת מספרים <span class="math">\(a_{0},a_{1},a_{2},\ldots\)</span> <strong>הפונקציה היוצרת</strong> שלה היא הטור <span class="math">\(\sum_{n=0}^{\infty}a_{n}x^{n}\)</span>. צריך להבהיר כבר עכשיו נקודה קריטית - הטור הזה הוא <strong>אובייקט פורמלי</strong>, כמו פולינום. הוא לא פונקציה. לא מציבים ב-<span class="math">\(x\)</span> ערכים (<strong>אפשר</strong> להציב ב-<span class="math">\(x\)</span> ערכים כחלק מניתוח מתקדם יותר של מה שהפונקציה היוצרת מייצגת, אבל לא <strong>חייבים</strong> לעשות את זה). המשמעות של זה היא שאפשר לכתוב משהו כמו <span class="math">\(1+x+x^{2}+\ldots=\frac{1}{1-x}\)</span> וזה יהיה שוויון תקין, שלא תלוי בסייגים כמו לומר ש-<span class="math">\(\left|x\right|<1\)</span> או משהו.</p>
+<p>איך זה עובד? האובייקט הבסיסי הוא כאמור הטור עצמו. על האובייקט הזה מגדירים פעולות חיבור וכפל שהופכות אותו לחוג:</p>
+<ul> <li><span class="math">\(\sum_{n=0}^{\infty}a_{n}x^{n}+\sum_{n=0}^{\infty}b_{n}x^{n}=\sum_{n=0}^{\infty}c_{n}x^{n}\)</span> עם <span class="math">\(c_{n}=a_{n}+b_{n}\)</span></li>
+
+
+<li><span class="math">\(\left(\sum_{n=0}^{\infty}a_{n}x^{n}\right)\left(\sum_{n=0}^{\infty}b_{n}x^{n}\right)=\sum_{n=0}^{\infty}c_{n}x^{n}\)</span> עם <span class="math">\(c_{n}=\sum_{k=0}^{n}a_{n-k}b_{k}\)</span></li>
+
+</ul>
+
+<p>הדוגמא הקלאסית לכפל היא <span class="math">\(\left(1+x+x^{2}+\ldots\right)\left(1-x\right)=1\)</span> (נסו לבצע את החישוב בעצמכם!) שהיא זו שמצדיקה את הכתיב <span class="math">\(1+x+x^{2}+\ldots=\left(1-x\right)^{-1}\)</span> או, בכתיב הנפוץ יותר, <span class="math">\(1+x+x^{2}+\ldots=\frac{1}{1-x}\)</span>. אני בכוונה לא נכנס יותר מדי לפרטים כי כאמור, יש לי פוסט על זה.</p>
+<p>דבר אחד שאין בפוסט וכן נשתמש בו כאן הוא <strong>פונקציות יוצרות אקספוננציאליות</strong>. הפונקציה היוצרת האקספוננציאלית של <span class="math">\(\left\{ a_{n}\right\} _{n=0}^{\infty}\)</span> היא <span class="math">\(\sum_{n=0}^{\infty}a_{n}\frac{x^{n}}{n!}\)</span>. זה עדיין ביטוי פורמלי וההגדרות למעלה עדיין תקפות לגביו, אבל בואו נראה מה קורה לפעולות החיבור והכפל. עבור חיבור עדיין נקבל <span class="math">\(\sum_{n=0}^{\infty}a_{n}\frac{x^{n}}{n!}+\sum_{n=0}^{\infty}b_{n}\frac{x^{n}}{n!}=\sum_{n=0}^{\infty}c_{n}\frac{x^{n}}{n!}\)</span> עם <span class="math">\(c_{n}=a_{n}+b_{n}\)</span>, כלומר פעולת החיבור של פונקציות יוצרות של שתי סדרות מניבה את הפונקציה היוצרת של סדרת הסכומים. כפל, לעומת זאת, הוא קצת יותר טריקי.</p>
+<p>מה שאנחנו רוצים לעשות הוא, בהינתן הסדרות <span class="math">\(a_{n},b_{n}\)</span>, להבין מה הסדרה <span class="math">\(c_{n}\)</span> שעבורה תתקיים המשוואה</p>
+<p><span class="math">\(\left(\sum_{n=0}^{\infty}a_{n}\frac{x^{n}}{n!}\right)\left(\sum_{n=0}^{\infty}b_{n}\frac{x^{n}}{n!}\right)=\sum_{n=0}^{\infty}c_{n}\frac{x^{n}}{n!}\)</span></p>
+<p>כדי להבין למה זה טריקי, בואו נראה מה קורה עבור <span class="math">\(x^{2}\)</span>: אנחנו רוצים שהמכפלה תיתן את המקדם <span class="math">\(\frac{c_{2}}{2!}\)</span>. עכשיו, אם מסתכלים על <span class="math">\(\left(a_{0}+a_{1}x+\frac{a_{2}}{2!}x^{2}\right)\left(b_{0}+b_{1}x+\frac{b_{2}}{2!}x^{2}\right)\)</span> ופותחים סוגריים ומקבצים לפי החזקה של <span class="math">\(x\)</span>, מקבלים</p>
+<p><span class="math">\(\left(\frac{a_{2}}{2}b_{0}+a_{1}b_{1}+a_{0}\frac{b_{2}}{2}\right)x^{2}\)</span></p>
+<p>אנחנו רוצים להוציא החוצה את ה-<span class="math">\(\frac{1}{2!}\)</span> ולכן נקבל</p>
+<p><span class="math">\(\left(a_{2}b_{0}+2a_{1}b_{1}+a_{0}b_{2}\right)\frac{x^{2}}{2!}\)</span></p>
+<p>מה קורה באופן כללי? המקדם של <span class="math">\(x^{n}\)</span> יהיה <span class="math">\(\sum_{k=0}^{n}\frac{a_{k}}{k!}\frac{b_{n-k}}{\left(n-k\right)!}\)</span>. עכשיו, זכרו את הבינום של ניוטון: <span class="math">\({n \choose k}=\frac{n!}{k!\left(n-k\right)!}\)</span>. לכן, אם נכפול ונחלק את הסכום ב-<span class="math">\(n!\)</span>, נקבל</p>
+<p><span class="math">\(\sum_{k=0}^{n}\frac{a_{k}}{k!}\frac{b_{n-k}}{\left(n-k\right)!}=\frac{1}{n!}\sum_{k=0}^{n}{n \choose k}a_{k}b_{n-k}\)</span></p>
+<p>כלומר, את נוסחת הכפל צריך לתקן באופן הבא:</p>
+<ul> <li><span class="math">\(\left(\sum_{n=0}^{\infty}a_{n}\frac{x^{n}}{n!}\right)\left(\sum_{n=0}^{\infty}b_{n}\frac{x^{n}}{n!}\right)=\sum_{n=0}^{\infty}c_{n}\frac{x^{n}}{n!}\)</span> עם <span class="math">\(c_{n}=\sum_{k=0}^{n}{n \choose k}a_{n-k}b_{k}\)</span></li>
+
+</ul>
+
+<p>עכשיו אפשר לדבר על הפונקציה היוצרת האקספוננציאלית הבסיסית שלנו: זו שמתאימה לסדרה <span class="math">\(a_{n}=1\)</span>, כלומר לטור <span class="math">\(\sum_{n=0}^{\infty}\frac{x^{n}}{n!}\)</span>. את הפונקציה הזו אני אסמן בסימון המקוצר המסתורי <span class="math">\(e^{x}\)</span>. כמובן, ייתכן שחלקכם מכירים את הסימון הזה והוא לא נראה להם מסתורי, אבל זה <strong>מסוכן מאוד</strong> לחשוב ככה כי למשל אם אני אכתוב עכשיו <span class="math">\(e^{2x}\)</span> אתם תגידו "כמובן, זה הטור <span class="math">\(\sum_{n=0}^{\infty}2^{n}\frac{x^{n}}{n!}\)</span>" וזה יהיה נכון בכל מה שנוגע לפונקציה שנקראת "אקספוננט" שאנחנו פוגשים בחדו"א, אבל כאן אנחנו בעולם קצת שונה, של טורי חזקות פורמליים, והביטוי <span class="math">\(e^{2x}\)</span> הוא פשוט <strong>לא מוגדר</strong>. מה שמתבקש הוא להגדיר אותו בתור <span class="math">\(e^{x}\cdot e^{x}\)</span>, כי כפל כן הגדרנו, אבל צריך לוודא שזה עובד.</p>
+<p>מכיוון ש-<span class="math">\(e^{x}\)</span> התאים לסדרה <span class="math">\(a_{n}=1\)</span>, אז <span class="math">\(e^{x}\cdot e^{x}\)</span> מתאים לסדרה <span class="math">\(c_{n}=\sum_{k=0}^{n}{n \choose k}\)</span>. למרבה השמחה, אנחנו יודעים ש-<span class="math">\(\sum_{k=0}^{n}{n \choose k}=2^{n}\)</span> (הוכחה קומבינטורית: <span class="math">\({n \choose k}\)</span> הוא מספר הדרכים לבחור <span class="math">\(k\)</span> איברים מתוך <span class="math">\(n\)</span>, ואילו <span class="math">\(2^{n}\)</span> הוא מספר הדרכים לבחור תת-קבוצה כלשהי מתוך <span class="math">\(n\)</span>) ולכן באמת מקבלים ש-<span class="math">\(e^{x}\cdot e^{x}\)</span> מיוצג על ידי הטור <span class="math">\(\sum_{n=0}^{\infty}2^{n}\frac{x^{n}}{n!}\)</span> מה ש"מצדיק" את הסימון <span class="math">\(e^{2x}=e^{x}\cdot e^{x}\)</span>. בגישה קצת פחות פורמלית הייתי אומר "מכיוון ש-<span class="math">\(e^{x}\)</span> שלי הוגדרה עם אותו טור כמו אקספוננט אז כל תוצאה שיש לנו על אקספוננט עובדת כאן עם הבונוס שלא צריך להתחשב בשיקולי התכנסות" אבל אני לא אעשה את זה.</p>
+<p>עכשיו, אם יש לנו את <span class="math">\(e^{2x}\)</span>, מה עם <span class="math">\(e^{kx}\)</span> עבור <span class="math">\(k\)</span> טבעי כללי? ההגדרה המתבקשת היא <span class="math">\(e^{kx}=\sum_{n=0}^{\infty}k^{n}\frac{x^{n}}{n!}\)</span>. הייתי רוצה להראות שזו באמת החזקה ה-<span class="math">\(k\)</span>-ית של <span class="math">\(e^{x}\)</span>, ואת זה אני יכול להוכיח באינדוקציה. נניח שבאמת מתקיים <span class="math">\(e^{kx}=\sum_{n=0}^{\infty}k^{n}\frac{x^{n}}{n!}\)</span> ונוכיח ש-<span class="math">\(e^{x}\cdot e^{kx}=\sum_{n=0}^{\infty}\left(k+1\right)^{n}\frac{x^{n}}{n!}\)</span>.</p>
+<p>לצורך ההוכחה שוב נתבסס על הגדרת הכפל עבור האיבר הכללי - הפעם הוא יוצא <span class="math">\(c_{n}=\sum_{i=0}^{n}{n \choose i}k^{i}\)</span>. על <span class="math">\({n \choose i}k^{i}\)</span> אפשר לחשוב קומבינטורית בתור בחירה של <span class="math">\(i\)</span> מתוך <span class="math">\(n\)</span> איברים, ואז צביעה של כל איבר בצבע מתוך קבוצה בת <span class="math">\(k\)</span> צבעים, כך שאפשר לבחור את אותו צבע יותר מפעם אחת. עכשיו, אם אני סופר את מספר הדרכים לבחור <strong>תת-קבוצה</strong> של <span class="math">\(n\)</span> האיברים ולצבוע את אבריה ב-<span class="math">\(k\)</span> צבעים, אפשר להתחכם טיפה - ל-<span class="math">\(k\)</span> הצבעים נוסיף "צבע שקוף", ואז פשוט נצבע את כל <span class="math">\(n\)</span> האיברים ב-<span class="math">\(k+1\)</span> הצבעים, ומי שצבוע בצבע שקוף ייחשב כאילו לא לקחנו אותו לתת הקבוצה. כך קיבלנו שמספר הדרכים הכולל הוא <span class="math">\(\left(k+1\right)^{n}\)</span>, כלומר <span class="math">\(c_{n}=\left(k+1\right)^{n}\)</span>, כמו שרצינו להראות.</p>
+<p>למה אני בכלל טורח כל כך להתעסק בחזקות של <span class="math">\(e^{x}\)</span>? מן הסתם אני חותר למשהו. בואו נחזור אל המטרה שלנו - אנחנו רוצים למצוא נוסחה עבור <span class="math">\(S_{m}\left(n\right)\)</span>, לכל <span class="math">\(m\)</span>. קודם ראינו שאולי קשה להבין את <span class="math">\(S_{m}\left(n\right)\)</span> עבור <span class="math">\(m\)</span> <strong>בודד</strong> אבל אם מסתכלים על ה-<span class="math">\(S_{m}\)</span>-ים הללו <strong>כמכלול</strong>, כולם ביחד, יש ביניהם קשרים. פונקציות יוצרות הן בדיוק דרך לנצל את הקשרים הללו, אז די מתבקש לקחת את <span class="math">\(S_{m}\)</span> ולשתול אותם בתוך פונקציה יוצרת. עכשיו, בפונקציה יוצרת מה ששותלים הוא <strong>סדרות מספרים</strong>, אבל <span class="math">\(S_{m}\)</span> היא לא סדרה של מספרים, היא סדרה של פונקציות - אז נבחר <span class="math">\(n\)</span> קונקרטי, נקבל עבורו סדרה קונקרטית של מספרים, <span class="math">\(\left\{ S_{m}\left(n\right)\right\} _{m=0}^{\infty}\)</span>. נשתול אותה בתוך פונקציה יוצרת אקספוננציאלית ונראה מה נקבל:</p>
+<p><span class="math">\(\sum_{m=0}^{\infty}S_{m}\left(n\right)\frac{x^{m}}{m!}=\sum_{m=0}^{\infty}\left(\sum_{k=0}^{n-1}k^{m}\right)\frac{x^{m}}{m!}\)</span></p>
+<p>עכשיו שימו לב מה קורה כאן: יש לנו פונקציה יוצרת אקספוננציאלית שהאיבר הכללי שלה הוא <strong>סכום סופי</strong> של איברים. זה מתאים לסיטואציה <span class="math">\(c_{n}=a_{n}+b_{n}\)</span> שראינו קודם, רק לא עם שני איברים אלא עם <span class="math">\(n\)</span> איברים, אבל באינדוקציה אפשר להראות שכל איבר כללי שהוא סכום של מספר סופי כלשהו של איברים מתפרק לסכום של פונקציות יוצרות, ולכן נקבל</p>
+<p><span class="math">\(\sum_{m=0}^{\infty}S_{m}\left(n\right)\frac{x^{m}}{m!}=\sum_{m=0}^{\infty}\left(\sum_{k=0}^{n-1}k^{m}\right)\frac{x^{m}}{m!}=\sum_{k=0}^{n-1}\left[\sum_{m=0}^{\infty}k^{m}\frac{x^{m}}{m!}\right]\)</span></p>
+<p>הפלא ופלא, כל הפונקציות היוצרות שבסכום מתאימות בדיוק לחזקות של <span class="math">\(e\)</span> שראינו קודם, אז קיבלנו את התוצאה</p>
+<p><span class="math">\(\sum_{m=0}^{\infty}S_{m}\left(n\right)\frac{x^{m}}{m!}=e^{0x}+e^{x}+e^{2x}+e^{3x}+\ldots+e^{\left(n-1\right)x}\)</span></p>
+<p>עכשיו אפשר סוף סוף לראות את הכוח של פונקציות יוצרות: את הביטוי <span class="math">\(e^{0x}+e^{x}+e^{2x}+e^{3x}+\ldots+e^{\left(n-1\right)x}\)</span> אפשר לראות בתור <strong>טור הנדסי</strong>. כזכור, אם יש לנו טור הנדסי <span class="math">\(1+q+q^{2}+q^{3}+\ldots+q^{n-1}\)</span> אנחנו יודעים לחשב את הסכום שלו על ידי הטריק הבא: נכפול ונחלק ב-<span class="math">\(\left(q-1\right)\)</span> ואז נקבל במונה טור טלסקופי שכל מה שיישאר ממנו הוא <span class="math">\(q^{n}-1\)</span>, בזמן שבמכנה יהיה לנו <span class="math">\(q-1\)</span>, כלומר קיבלנו <span class="math">\(1+q+q^{2}+q^{3}+\ldots+q^{n-1}=\frac{q^{n}-1}{q-1}\)</span>. אם נציב <span class="math">\(q=e^{x}\)</span>, זה נותן לנו את הביטוי <span class="math">\(\frac{e^{nx}-1}{e^{x}-1}\)</span> (חדי העין ישימו לב שטיפה רימיתי פה - אני אחזור לזה בהמשך).</p>
+<p>עכשיו, בואו נכפול ונחלק את הביטוי הזה ב-<span class="math">\(x\)</span> ונקבל <span class="math">\(\frac{e^{nx}-1}{e^{x}-1}=\frac{e^{nx}-1}{x}\frac{x}{e^{x}-1}\)</span>. אני עוד מעט אקדיש חלק שלם כדי להסביר למה <span class="math">\(\frac{x}{e^{x}-1}=\sum_{k=0}^{\infty}B_{k}\frac{x^{k}}{k!}\)</span>, כלומר <span class="math">\(\frac{x}{e^{x}-1}\)</span> הוא הפונקציה היוצרת האקספוננציאלית של מספרי ברנולי. לגבי <span class="math">\(\frac{e^{nx}-1}{x}\)</span>, קל יותר לטפל בו: <span class="math">\(e^{nx}=1+nx+\frac{n^{2}x^{2}}{2}+\ldots\)</span> ולכן <span class="math">\(\frac{e^{nx}-1}{x}=n+\frac{n^{2}x}{2}+\ldots=\sum_{k=0}^{\infty}\frac{n^{k+1}}{k+1}\cdot\frac{x^{k}}{k!}\)</span></p>
+<p>נסכם לרגע בזהירות את מה שראינו:</p>
+<p><span class="math">\(\sum_{m=0}^{\infty}S_{m}\left(n\right)\frac{x^{m}}{m!}=\left(\sum_{k=0}^{\infty}\frac{n^{k+1}}{k+1}\frac{x^{k}}{k!}\right)\left(\sum_{k=0}^{\infty}B_{k}\frac{x^{k}}{k!}\right)\)</span></p>
+<p>כלומר, כשעוברים מרמת הפונקציות היוצרות האקספוננציאליות לרמת האיבר הבודד, וזוכרים איך כפל של פונקציות יוצרות אקספוננציאליות עובד כשעוברים לרמת האיבר הבודד, מקבלים:</p>
+<p><span class="math">\(S_{m}\left(n\right)=\sum_{k=0}^{m}{m \choose k}B_{k}\frac{n^{\left(m-k\right)+1}}{\left(m-k\right)+1}\)</span></p>
+<p>את הגורם שבפנים אפשר לפשט עם עוד תעלול אלגברי/קומבינטורי קטן:</p>
+<p><span class="math">\({m \choose k}\frac{1}{m-k+1}=\frac{m!}{k!\left(m-k\right)!}\cdot\frac{1}{m-k+1}=\frac{m!}{k!\left(m-k+1\right)!}=\frac{1}{m+1}\frac{\left(m+1\right)!}{k!\left(m-k+1\right)!}=\frac{1}{m+1}{m+1 \choose k}\)</span></p>
+<p>וקיבלנו את הנוסחה שמציגים בכל מקום:</p>
+<p><span class="math">\(S_{m}\left(n\right)=\frac{1}{m+1}\sum_{k=0}^{m}{m+1 \choose k}n^{m+1-k}B_{k}\)</span></p>
+<p>וזה היה... ממש טכני? ובכן, כן ולא. אני יודע שזה די מרתיע אבל בסופו של דבר כשמבינים את הרעיון של פונקציות יוצרות כל מה שעשינו פה הוא מאוד סטנדרטי. זה לא אומר שהיה כיף גדול לעשות את זה, אבל בהתחשב בתוצאה הדי כללית שמקבלים פה זה ממש נחמד - בפרט שזו תוצאה שמטפלת בכל אינסוף ה-<span class="math">\(S_{m}\left(n\right)\)</span>-ים בו זמנית.</p>
+<p>אבל עדיין לא סיימתי כי נשאר לי להסביר מאיפה מספרי ברנולי הגיעו.</p>
+<h2>בואו למסע אל מקורות הברנולי</h2>
+
+<p>אני טענתי, ללא הוכחה, ש-<span class="math">\(\frac{x}{e^{x}-1}=\sum_{k=0}^{\infty}B_{k}\frac{x^{k}}{k!}\)</span>. כלומר אני <strong>מגדיר</strong> את מספרי ברנולי בתור הסדרה ש-<span class="math">\(\frac{x}{e^{x}-1}\)</span> היא הפונקציה היוצרת האקספוננציאלית שלה. יש כאן שתי שאלות</p>
+<ul> <li>למה אני יודע בכלל ש-<span class="math">\(\frac{x}{e^{x}-1}\)</span> ניתן לתיאור על ידי טור חזקות כזה?</li>
+
+
+<li>איך אני יודע שאלו מספרי ברנולי? כלומר, איך אני מראה שמתקיימת הנוסחה הרקורסיבית <span class="math">\(B_{n}=-\frac{1}{n+1}\sum_{k=0}^{n-1}{n+1 \choose k}B_{k}\)</span> שהצגתי קודם?</li>
+
+</ul>
+
+<p>נתחיל מהשאלה הראשונה, למה <span class="math">\(\frac{x}{e^{x}-1}\)</span> ניתן לתיאור על ידי טור חזקות פורמלי. אם לא היינו עובדים במסגרת פורמלית אלא בחדו"א, הסיפור היה הולך ככה: היינו שמים לב שכשמציבים <span class="math">\(x=0\)</span> אז <span class="math">\(e^{x}=1\)</span> ולכן <span class="math">\(e^{x}-1=0\)</span> ולכן המכנה של <span class="math">\(\frac{x}{e^{x}-1}\)</span> יכול להתאפס ומדובר בקטסטרופה. אבל מצד שני, גם <strong>המונה</strong> מתאפס כש-<span class="math">\(x=0\)</span> ולכן אפשר להשתמש בלהטוט החדו"אי שנקרא כלל לופיטל ולקבל <span class="math">\(\lim_{x\to0}\frac{x}{e^{x}-1}=\lim_{x\to0}\frac{1}{e^{x}}=1\)</span>. כלומר, אפשר "לתקן" את הפונקציה <span class="math">\(\frac{x}{e^{x}-1}\)</span> כך שב-<span class="math">\(x=0\)</span> היא תוגדר להיות 1 ולקבל פונקציה נחמדה שאפשר לפתח לטור והכל טוב ויפה.</p>
+<p>אני לא הולך לעשות את זה כאן. כאמור, אני דוגל בגישה הפורמלית. בגישה הזו כל מה שיש בעולם הוא טורי חזקות פורמליים ולכן הביטוי <span class="math">\(\frac{x}{e^{x}-1}\)</span> הוא בסך הכל <strong>סימון מקוצר</strong> לטור חזקות פורמלי כלשהו. איזה? על פניו, הטור <span class="math">\(x\left(e^{x}-1\right)^{-1}\)</span> כאשר <span class="math">\(\left(e^{x}-1\right)^{-1}\)</span> הוא טור החזקות ההופכי של <span class="math">\(e^{x}-1\)</span>, דהיינו הטור שכשכופלים אותו ב-<span class="math">\(e^{x}-1\)</span> מקבלים <span class="math">\(1\)</span>. אבל, לצערנו, <strong>אין טור חזקות כזה</strong>. בשביל שטור חזקות יהיה "הפיך" במובן שציינתי, המקדם החופשי שלו צריך להיות הפיך - ובמקרה שלנו, המקדם החופשי של <span class="math">\(e^{x}-1\)</span> הוא 0 שאינו הפיך.</p>
+<p>אבל לא הכל אבוד, אני לא באמת צריך הופכיים פה. מה שאני רוצה להגיד בביטוי <span class="math">\(\frac{x}{e^{x}-1}=f\left(x\right)\)</span> הוא שמתקיים השוויון <span class="math">\(x=f\left(x\right)\left(e^{x}-1\right)\)</span>. אז אני אבדוק אם אני מסוגל <strong>להגדיר</strong> את <span class="math">\(f\left(x\right)\)</span> כדי שהשוויון הזה יתקיים; אם אני מסוגל, אז אפשר יהיה להשתמש בסימון המקוצר <span class="math">\(\frac{x}{e^{x}-1}\)</span> כמו קודם.</p>
+<p>בואו נתחיל מלכתוב את <span class="math">\(f\left(x\right)\)</span> בתור טור חזקות אקספוננציאלי כללי: <span class="math">\(f\left(x\right)=\sum_{k=0}^{\infty}b_{k}\frac{x^{k}}{k!}\)</span>. כרגע אני <strong>לא יודע</strong> שה-<span class="math">\(b_{k}\)</span>-ים הללו הם מספרי ברנולי, או אפילו שאני יכול לבחור להם ערכים בצורה כזו שתצדיק את השוויון <span class="math">\(\frac{x}{e^{x}-1}=f\left(x\right)\)</span>, אבל אני כן יכול לקחת טור חזקות אקספוננציאלי כללי כלשהו, לתת למקדמים שלו את הסימון <span class="math">\(b_{k}\)</span>, לכפול אותו ב-<span class="math">\(e^{x}-1\)</span> ולראות מה קורה. נוסחת הכפל הרגילה של טורי חזקות אקספוננציאליים תקפה גם כאן:</p>
+<p><span class="math">\(c_{n}=\sum_{k=0}^{n}{n \choose k}a_{n-k}b_{k}\)</span></p>
+<p>אצלנו <span class="math">\(a_{0}=0\)</span> ואילו <span class="math">\(a_{k}=1\)</span> לכל <span class="math">\(k>0\)</span> (כי החסרת 1 מ-<span class="math">\(e^{x}\)</span> הורידה 1 מהאיבר במקום 0; אם למשל היינו רוצים להוריד 3 מהאיבר במקום 2 היינו צריכים לחסר <span class="math">\(3x^{2}\)</span>). בנוסחה <span class="math">\(c_{n}=\sum_{k=0}^{n}{n \choose k}a_{n-k}b_{k}\)</span> אני מקבל את <span class="math">\(a_{0}\)</span> כאשר <span class="math">\(k=n\)</span> ולכן המקרה הזה אף פעם לא יופיע, ואני מקבל:</p>
+<p><span class="math">\(c_{n}=\sum_{k=0}^{n-1}{n \choose k}b_{k}\)</span></p>
+<p>כלומר, עבור <span class="math">\(c_{0}\)</span> אני מקבל סכום "ריק" ולכן <span class="math">\(c_{0}=0\)</span> תמיד, אין לי שליטה על זה (זו בדיוק הסיבה שבגללה <span class="math">\(e^{x}-1\)</span> לא הפיך). זו לא באמת בעיה, כי אנחנו רוצים לקבל את התוצאה <span class="math">\(x\)</span>, כלומר התוצאה שמתאימה למקרה שבו <span class="math">\(c_{1}=1\)</span> ואילו <span class="math">\(c_{n}=0\)</span> לכל <span class="math">\(n\ne1\)</span>. אז מה באמת קורה עבור <span class="math">\(c_{1}\)</span>?</p>
+<p><span class="math">\(c_{1}={1 \choose 0}b_{0}=b_{0}\)</span></p>
+<p>זה מאלץ אותנו להגדיר <span class="math">\(b_{0}=1\)</span>, אבל יופי - אם אנחנו מגדירים את <span class="math">\(b_{0}=1\)</span> אנחנו באמת מקבלים את הערך המבוקש של <span class="math">\(c_{1}\)</span>. מה עם היתר?</p>
+<p>עבור <span class="math">\(c_{2}\)</span> צריך להתקיים <span class="math">\(c_{2}=0\)</span>, ואנחנו יודעים ש-</p>
+<p><span class="math">\(c_{2}={2 \choose 0}b_{0}+{2 \choose 1}b_{1}\)</span></p>
+<p>כלומר:</p>
+<p><span class="math">\(0=b_{0}+2b_{1}\)</span></p>
+<p>כלומר:</p>
+<p><span class="math">\(b_{1}=-\frac{1}{2}b_{0}=-\frac{1}{2}\)</span></p>
+<p>בינתיים זה מתקדם כמו שרצינו! באמת הגדרנו ש-<span class="math">\(b_{1}=-\frac{1}{2}\)</span> בהגדרה שלנו למספרי ברנולי! אז יופי, בואו נעבור למקרה הכללי. נניח שכבר הגדרנו את <span class="math">\(b_{0},b_{1},\ldots,b_{n-1}\)</span> בצורה כזו שבה כל המקדמים עד <span class="math">\(c_{n}\)</span> קיבלו את הערך הנכון, ונטפל ב-<span class="math">\(c_{n+1}=0\)</span>. על פי נוסחת המכפלה, אנחנו יודעים ש-</p>
+<p><span class="math">\(c_{n+1}=\sum_{k=0}^{n}{n+1 \choose k}b_{k}\)</span></p>
+<p>נציב <span class="math">\(c_{n+1}=0\)</span> וכמו כן נפריד את <span class="math">\(b_{n}\)</span> מכל היתר:</p>
+<p><span class="math">\(0={n+1 \choose n}b_{n}+\sum_{k=0}^{n-1}{n+1 \choose k}b_{k}\)</span></p>
+<p>עכשיו, <span class="math">\({n+1 \choose n}=n+1\)</span> ולכן אחרי העברת אגפים וחלוקה:</p>
+<p><span class="math">\(b_{n}=-\frac{1}{n+1}\sum_{k=0}^{n-1}{n+1 \choose k}b_{k}\)</span></p>
+<p>וזו בדיוק, אבל בדיוק, הנוסחה עבור מספרי ברנולי:</p>
+<p><span class="math">\(B_{n}=-\frac{1}{n+1}\sum_{k=0}^{n-1}{n+1 \choose k}B_{k}\)</span></p>
+<p>מה שמשיג את שתי המטרות שלנו: הראנו שבאמת קיימת פונקציה <span class="math">\(f\left(x\right)\)</span> כך ש-<span class="math">\(f\left(x\right)\left(e^{x}-1\right)=x\)</span> למרות ש-<span class="math">\(e^{x}-1\)</span> לא הפיכה, והראינו שהמקדמים של הפונקציה היוצרת האקספוננציאלית שלה הם מספרי ברנולי <span class="math">\(B_{k}\)</span>, ולכן אפשר לכתוב</p>
+<p><span class="math">\(\frac{x}{e^{x}-1}=\sum_{k=0}^{\infty}B_{k}\frac{x^{k}}{k!}\)</span></p>
+<p>כפי שרצינו.</p>
+<p>האם סיימנו? כמעט. אני עדיין רוצה להסביר את הפורמליות שמאחורי יתר נפנופי הידיים שביצעתי. בואו ניזכר מה בדיוק קרה שם:</p>
+<ul> <li>הגעתי איכשהו אל הפונקציה היוצרת <span class="math">\(e^{0x}+\ldots+e^{\left(n-1\right)x}\)</span></li>
+
+
+<li>טענתי ש-<span class="math">\(e^{0x}+\ldots+e^{\left(n-1\right)x}=\frac{e^{nx}-1}{e^{x}-1}\)</span></li>
+
+
+<li>טענתי ש-<span class="math">\(\frac{e^{nx}-1}{e^{x}-1}=\frac{e^{nx}-1}{x}\frac{x}{e^{x}-1}\)</span></li>
+
+</ul>
+
+<p>אלו טענות "מפוקפקות" כי הן מחלקות בדברים שאין להם הופכי (גם <span class="math">\(e^{x}-1\)</span> וגם <span class="math">\(x\)</span>). אז בואו ננסח אותן מחדש בצורה פורמלית יותר אם כי אינטואיטיבית פחות.</p>
+<p>כבר ראיתי שיש פונקציה <span class="math">\(f\left(x\right)=\frac{x}{e^{x}-1}\)</span>, כלומר פורמלית זה טור חזקות שמקיים <span class="math">\(\left(e^{x}-1\right)f\left(x\right)=x\)</span>.</p>
+<p>בנוסף, ראיתי שיש <span class="math">\(g\left(x\right)=\frac{e^{nx}-1}{x}\)</span>, כלומר פורמלית זה טור חזקות שמקיים <span class="math">\(xg\left(x\right)=e^{nx}-1\)</span>.</p>
+<p>בנוסף, במקום להשתמש בנוסחת הטור ההנדסי אפשר לתאר את הסיטואציה בעזרת כפל בלבד, כלומר להישאר ברמת הטור הטלסקופי: <span class="math">\(\left(e^{x}-1\right)\left(e^{0x}+\ldots+e^{\left(n-1\right)x}\right)=e^{nx}-1\)</span>.</p>
+<p>עכשיו אני יכול לעשות שרשרת של הצבות:</p>
+<p><span class="math">\(\left(e^{x}-1\right)\left(e^{0x}+\ldots+e^{\left(n-1\right)x}\right)=e^{nx}-1=xg\left(x\right)=\left(e^{x}-1\right)f\left(x\right)g\left(x\right)\)</span></p>
+<p>וכאן מגיע להטוט אחד אחרון: באופן כללי, בכל חוג שהוא <strong>תחום שלמות</strong> (כלומר, אין בו מחלקי אפס - איברים שונים מאפס שכשכופלים אותם מקבלים אפס) אפשר תמיד <strong>לצמצם</strong>: אם יש לי <span class="math">\(ab=ac\)</span> עבור <span class="math">\(a\ne0\)</span> אז נובע מכך <span class="math">\(b=c\)</span> אפילו אם <span class="math">\(a\)</span> לא הפיך, פשוט כי אני מסתכל על <span class="math">\(a\left(b-c\right)=0\)</span> ובגלל שאני בתחום שלמות ו-<span class="math">\(a\ne0\)</span> אז <span class="math">\(b-c=0\)</span> כלומר <span class="math">\(b=c\)</span>. זה בדיוק מה שאני אשתמש בו למעלה כדי להיפטר מה-<span class="math">\(e^{x}-1\)</span> המשותף, ולקבל את השוויון הפורמלי לחלוטין:</p>
+<p><span class="math">\(e^{0x}+\ldots+e^{\left(n-1\right)x}=f\left(x\right)g\left(x\right)\)</span></p>
+<p>מה שמסיים את ההוכחה.</p>
+<p>הסיפור של מספרי ברנולי לא נגמר כאן - יש עוד כל מני דברים מעניינים להראות עליהם, אבל עם סיום התוצאה הבסיסית הזו הגענו אל נקודה טובה לעצור בה לבינתיים.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2025/01/31/normal_distribution_1/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מה הקטע עם התפלגות נורמלית? (חלק א&#39;: שלוש היסטוגרמות למלכי ההתפלגות במרומם, ועקומה אחת למשול בם ולקשרם)</span>
+            </a>
+            
+            
+            
+            <a href="/2024/12/14/computing_determinants_bareiss_algorithm/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">איך מחשבים דטרמיננטה עם אלגוריתם בריס?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

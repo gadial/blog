@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי: האלגוריתם של שור - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי: האלגוריתם של שור</h1>
+            <div class="post-meta">
+                <span class="date">2022-09-30</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                    <a href="/tags/האלגוריתם של שור.html">האלגוריתם של שור</a>
+                    
+                    <a href="/tags/שברים משולבים.html">שברים משולבים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>סדרת הפוסטים הקודמת שלי על חישוב קוונטי הסתיימה <a href="https://gadial.net/2014/08/24/shor_algorithm/">בפוסט גדול על האלגוריתם של שור</a>. אני חושב שהגיע הזמן לתת עוד סיבוב, עם פוסט שייתן מבט רחב יותר על מה הרעיון הכללי של האלגוריתם ואיך הוא עובד, ויוותר על חלק מהפרטים הקטנים שכבר הוכחתי בפוסט המקורי ההוא. היתרון הגדול שלי עכשיו על פני הסיבוב הקודם הוא שכבר היו לי פוסטים נפרדים על <a href="https://gadial.net/2022/09/01/quantum_fourier_transform/">התמרת פורייה הקוונטית</a> ועל <a href="https://gadial.net/2022/09/06/phase_estimation_algorithm/">אלגוריתם הערכת פאזה</a>, שהם הרכיבים הקוונטיים המרכזיים של האלגוריתם, והיכרות איתם מאפשרת להסתכל עליו "ממעוף הציפור", מה שבלתי אפשרי בלעדיהם.</p>
+<p>אז בואו נתחיל עם מעוף הציפור הזה. ראשית, הבעיה שאלגוריתם שור בא לפתור היא בעיית <strong>הפירוק לגורמים</strong>: נתון לנו מספר טבעי <span class="math">\(N\)</span>, ואנחנו מחפשים מספר טבעי <span class="math">\(1<d<N\)</span> כך ש-<span class="math">\(d\)</span> מחלק את <span class="math">\(N\)</span>. למשל עבור <span class="math">\(N=15\)</span> אנחנו נשמח לקבל את <span class="math">\(d=3\)</span> או <span class="math">\(d=5\)</span>. זו נראית בעיה לא גדולה כל כך במספרים קטנים, אבל כש-<span class="math">\(N\)</span> הוא מספר בן מאות ספרות, אפילו האלגוריתמים המחוכמים ביותר שיש לנו כיום שאינם משתמשים במחשב קוונטי (ואלו אלגוריתמים <strong>מאוד</strong> מחוכמים, עם מתמטיקה <strong>מאוד</strong> מתקדמת) לא מסוגלים להתמודד עם הבעיה, וזה למרות שקל לנו לעשות חשבונות עם מספרים בני מאות ספרות; זו לא סתם בעיה של "המספר גדול מכדי שנעשה איתו כל דבר שהוא" - זו בעיה של <strong>סיבוכיות זמן ריצה אקספוננציאלית</strong>. מה שהאלגוריתם של שור מציע הוא פתרון <strong>מהיר</strong> של הבעיה, בזמן ריצה <strong>פולינומי</strong> (לא חייבים באמת להבין מה המילים הללו אומרות, מעבר לזה שכאן "אקספוננציאלי" זו מילה נרדפת לא מדוייקת ל"איטי" ו"פולינומי" זו מילה נרדפת לא מדוייקת ל"מהיר"). בשביל המהירות הגדולה הזו, האלגוריתם של שור משתמש במחשב קוונטי (אם כי טרם נבנה מחשב קוונטי שמסוגל להריץ את שור עבור מספרים בני מאות ספרות, וזו שאלה טובה מתי יהיה כזה).</p>
+<p>אחרי שאמרנו את זה, צריך להבהיר שהאלגוריתם של שור, למעשה, <strong>איננו</strong> אלגוריתם לפירוק לגורמים! הוא אלגוריתם שבא לפתור בעיה אחרת, שנקראת "בעיית מציאת הסדר", כי היכולת שלנו לפתור את בעיית מציאת הסדר נותנת לנו גם שיטה לפירוק לגורמים, אבל החלק שנעזר במציאת הסדר כדי לפרק לגורמים הוא חלק "קלאסי", שלא מעורב בו חישוב קוונטי. </p>
+<p>עוד נקודה שצריך להבהיר היא שהאלגוריתם של שור הוא <strong>הסתברותי</strong> - ייתכן בהחלט שנריץ אותו, לא נקבל שום דבר שיעזור לנו לפרק את <span class="math">\(N\)</span> לגורמים, ונאלץ להריץ אותו שוב. ההסתברות שהוא יצליח היא טובה למדי, אבל הניתוח שנדרש כדי להראות את זה הוא לא פשוט.</p>
+<p>ולבסוף, החלק הקוונטי של האלגוריתם של שור הוא פשוט מקרה ספציפי של אלגוריתם הערכת הפאזה, עבור <span class="math">\(U\)</span> קונקרטי כלשהו שאציג בהמשך. זה מקרה מעניין יותר ממה שדיברנו עליו בפוסט הקודם, כי שם היה נתון לנו <span class="math">\(\left|u\right\rangle \)</span> שהוא וקטור עצמי של <span class="math">\(U\)</span>, אבל באלגוריתם של שור אין לנו מושג מי הוקטורים העצמיים של <span class="math">\(U\)</span>; אבל באמצעות תעלול מחוכם ויפה, אנחנו הולכים להריץ את אלגוריתם הערכת הפאזה על <strong>סופרפוזיציה</strong> של הערכים העצמיים של <span class="math">\(U\)</span> ואיכשהו זה יסתדר לנו.</p>
+<p>גם אחרי שאלגוריתם הערכת הפאזה הסתיים, הפלט שלו הוא לא התוצאה הסופית של שום דבר - הוא בוודאי לא מספר שמחלק את <span class="math">\(N\)</span>, אבל הוא אפילו לא אותו "סדר" מסתורי שאנחנו צריכים למצוא; מה שאלגוריתם הערכת הפאזה נותן לנו הוא מספר רציונלי בין 0 ל-1 שבפני עצמו אין בו כלום; מה שאנחנו עושים (וגם זה חישוב קלאסי לגמרי) הוא ליצור בדרך מסויימת סדרה של <strong>קירובים</strong> לתוצאה הזו של הערכת הפאזה שקיבלנו. כל קירוב כזה יהיה מספר רציונלי <span class="math">\(\frac{s}{r}\)</span>, כשהמכנה <span class="math">\(r\)</span> <strong>עשוי להיות</strong> ה"סדר" שחיפשנו. זה אומר שבהינתן התוצאה של שור, אנחנו מקבלים קבוצה של כמה וכמה מועמדים להיות ה"סדר", ועבור כל אחד מהם צריך לבדוק אם הוא איכשהו נותן לנו פירוק לגורמים של <span class="math">\(N\)</span>.</p>
+<p>זה נשמע ממש מסורבל - איפה זה ואיפה הגרסה האוטופית המדומיינת של האלגוריתם של שור, שבה אנחנו עושים איזה מעגל קוונטי חמוד, מודדים ומקבלים גורם של <span class="math">\(N\)</span>. אבל ככה זה בחישוב קוונטי - זה אף פעם לא פשוט כמו שעושים מזה, אבל כשמבינים את הפרטים המשוגעים זה נהיה עוד יותר יפה משזה נשמע במבט ראשון.</p>
+<h2>איך "מציאת סדר" עוזרת לפרק מספר לגורמים?</h2>
+
+<p>בואו ניכנס קצת יותר לפרטים של מה עושים כשרוצים למצוא גורם של <span class="math">\(N\)</span>. המתמטיקה שצריך להכיר פה היא זו של <strong>חשבון מודולרי</strong>, כלומר של ביצוע פעולות חיבור וכפל כשבסוף מחלקים במשהו ולוקחים את השארית. החישובים שלנו יהיו מודולו <span class="math">\(N\)</span>. למשל, אם <span class="math">\(N=15\)</span> ו-<span class="math">\(a=7\)</span> אז <span class="math">\(7^{2}\)</span> מודולו <span class="math">\(N\)</span> הוא שארית החלוקה של 49 ב-15, כלומר 4. כותבים את זה <span class="math">\(7^{2}\equiv_{N}4\)</span>. הדבר השני שצריך להכיר הוא את הקיום של אלגוריתם יעיל שבהינתן שני מספרים <span class="math">\(a,b\)</span> מחשב את ה-<span class="math">\(\text{gcd}\left(a,b\right)\)</span> - המספר הגדול ביותר שמחלק את <span class="math">\(a\)</span> וגם את <span class="math">\(b\)</span>. לא חשוב כרגע איך אלגוריתם עושה את זה (<a href="https://gadial.net/2011/09/12/euclidean_algorithm_and_rings/">יש לי פוסט</a>) אלא רק שאפשר לבדוק את זה ביעילות.</p>
+<p>מה זה ה"סדר" המסתורי שהאלגוריתם של שור מחשב? זה המושג הסטנדרטי מתורת החבורות: הסדר של <span class="math">\(a\)</span> מודולו <span class="math">\(N\)</span> הוא המספר <span class="math">\(r>0\)</span> המינימלי שעבורו <span class="math">\(a^{r}\equiv_{N}1\)</span>. מספר כזה קיים בהכרח רק <span class="math">\(\text{gcd}\left(a,N\right)=1\)</span>; אבל אם <span class="math">\(\text{gcd}\left(a,N\right)>1\)</span> אז המספר <span class="math">\(\text{gcd}\left(a,N\right)\)</span> (שאפשר לחשב ביעילות, כאמור) הוא מחלק לא טריוויאלי של <span class="math">\(N\)</span> וסיימנו.</p>
+<p>אז איך עובד כל התהליך? ראשית, בודקים ש-<span class="math">\(N\)</span> הוא לא זוגי, כלומר פשוט מנסים לחלק אותו ב-2. אם כן - סיימנו. אחרת, בודקים ש-<span class="math">\(N\)</span> הוא לא חזקה של ראשוני, כלומר <span class="math">\(N=p^{n}\)</span> עבור <span class="math">\(n\)</span> כלשהו. זה כבר עניין טריקי יותר, אבל יש אלגוריתם יעיל שעושה את זה ואני לא מציג אותו כי זה לא באמת קשור לאלגוריתם של שור. </p>
+<p>בהינתן ש-<span class="math">\(N\)</span> הוא לא מהצורה הזו, אנחנו עושים את הדבר הבא: מגרילים מספר <span class="math">\(1<a<N\)</span>. בודקים ש-<span class="math">\(\text{gcd}\left(a,N\right)=1\)</span>, כי אם הוא גדול יותר אז מצאנו מחלק של <span class="math">\(N\)</span>.</p>
+<p>אחר כך אנחנו מפעילים את החלק הקוונטי של האלגוריתם של שור ומקבלים כל מני מספרים שכל אחד מהם הוא בעל פוטנציאל להיות הסדר של <span class="math">\(a\)</span>. לכל מספר <span class="math">\(r\)</span> כזה, אם <span class="math">\(r\)</span> אי זוגי מתעלמים ממנו, ואם <span class="math">\(r\)</span> זוגי, אנו בודקים האם <span class="math">\(\text{gcd}\left(a^{\frac{r}{2}}-1,N\right)>1\)</span> או ש-<span class="math">\(\text{gcd}\left(a^{\frac{r}{2}}+1,N\right)>1\)</span>. אם קיבלנו מספר כזה, סיימנו; מצאנו מחלק לא טריוויאלי של <span class="math">\(N\)</span>. אם לכל ה-<span class="math">\(r\)</span>-ים שעשינו הניסוי לא הצליח, אנחנו מגרילים <span class="math">\(a\)</span> אחר ומנסים שוב. זהו, זה כל האלגוריתם... למעט החלק של מציאת הסדר, שהוא כאמור העיקר.</p>
+<p>למה כל זה עובד? כאן מגיעה הוכחה קצת מייגעת מתורת המספרים, שאני ארשה לעצמי לדלג עליה לגמרי כי כבר יש לי אותה <a href="https://gadial.net/2014/08/24/shor_algorithm/">בפוסט הקודם</a> על האלגוריתם של שור. זה עובד, תסמכו עלי. אנחנו פה בשביל החלק הקוונטי.</p>
+<h2>איך בגדול עובד אלגוריתם מציאת הסדר?</h2>
+
+<p>בואו ניזכר מה עושה אלגוריתם הערכת הפאזה: הוא מניח שאנחנו יודעים לבנות מעגל עבור אופרטור <span class="math">\(U:\mathbb{C}^{2^{m}}\to\mathbb{C}^{2^{m}}\)</span>, ובהינתן שני רגיסטרים קוונטיים (שזה שם יפה ל"הרבה קיוביטים שאנחנו מחלקים אותם קונספטואלית לשתי קבוצות") <span class="math">\(\left|0^{n}\right\rangle \left|u\right\rangle \)</span> כך ש-<span class="math">\(\left|u\right\rangle \)</span> הוא וקטור עצמי של <span class="math">\(U\)</span>, אנחנו מסוגלים לבצע חישוב שבסוף שלו מדידה של הרגיסטר הראשון תניב קירוב ל-<span class="math">\(\varphi\)</span>, שהוא מספר <span class="math">\(0\le\varphi\le1\)</span> שמקיים <span class="math">\(U\left|u\right\rangle =e^{2\pi i\varphi}\)</span>.</p>
+<p>לכן, כשאנחנו באים להשתמש באלגוריתם הזה בפועל, השאלה הראשונה שאנחנו צריכים לענות עליה היא מהו <span class="math">\(U\)</span> שלנו, והשניה היא מהו <span class="math">\(\left|u\right\rangle \)</span>. בואו נראה איך זה יהיה אצלנו.</p>
+<p>ראשית, בואו ניזכר איך אני משתמש בכתיב <span class="math">\(\left|a\right\rangle \)</span> כאשר <span class="math">\(a\)</span> הוא מספר טבעי. למשל, אם <span class="math">\(a=5\)</span> אז הייצוג הבינארי של <span class="math">\(a\)</span> הוא <span class="math">\(101\)</span>, ואז הסימון <span class="math">\(\left|a\right\rangle \)</span> מסמן את <span class="math">\(\left|101\right\rangle =\left|1\right\rangle \otimes\left|0\right\rangle \otimes\left|1\right\rangle \)</span>. צריך קצת להיזהר - אם מלכתחילה ברגיסטר שלנו משתתפים יותר קיוביטים מאשר צריך ספרות כדי לייצג את המספר, אז כל הקיוביטים ה"מיותרים" יהיו אפס. למשל, אם יש חמישה קיוביטים ואני מתבונן על המספר <span class="math">\(13\)</span>, אז <span class="math">\(\left|13\right\rangle =\left|01101\right\rangle \)</span>. מעכשיו בכל מה שהולך לקרות באלגוריתם של שור, אני אשתמש רק בסימון <span class="math">\(\left|a\right\rangle \)</span> כש-<span class="math">\(a\)</span> הוא מספר טבעי; אני לא אכתוב דברים בינאריים שם.</p>
+<p>עכשיו אפשר לתאר את <span class="math">\(U\)</span>. כזכור, אלגוריתם מציאת הסדר מקבל כקלט מספר <span class="math">\(N\)</span> ומספר <span class="math">\(a<N\)</span> והשאלה היא מהו הסדר של <span class="math">\(a\)</span> מודולו <span class="math">\(N\)</span>. אז האופרטור <span class="math">\(U\)</span> שבו משתמשים נבנה בהתבסס על שני המספרים הללו:</p>
+<p><span class="math">\(U\left|b\right\rangle =\left|ab\text{ mod }N\right\rangle \)</span></p>
+<p>כלומר, הוא בסך הכל כפל ב-<span class="math">\(a\)</span> מודולו <span class="math">\(N\)</span>. בגלל שמעצבן לכתוב כל הזמן <span class="math">\(\text{mod }N\)</span> אני הולך להשמיט אותו מעכשיו והלאה, אבל בכל פעם שבה מופיע משהו כמו <span class="math">\(\left|a^{2}\right\rangle \)</span>, תזכרו שאני מתכוון אל הערך של <span class="math">\(a^{2}\)</span> מודולו <span class="math">\(N\)</span>.</p>
+<p>עכשיו, אם אנחנו זוכרים, בהערכת פאזה צריך להיות מסוגלים לחשב לא רק את <span class="math">\(U\)</span> אלא גם את <span class="math">\(U^{2^{t}}\)</span> עבור ערכים הולכים וגדלים של <span class="math">\(t\)</span>, כלומר לחשב</p>
+<p><span class="math">\(U^{2^{t}}\left|b\right\rangle =\left|a^{2^{t}}b\text{ mod }N\right\rangle \)</span></p>
+<p>אני <strong>לא הולך להסביר</strong> בפוסט הזה איך עושים את זה, כדי להישאר ממוקד. יש איזו פרדוקסליות בשאלה איך עושים את זה. מצד אחד, באופן כללי אנחנו מסוגלים לבצע חישובים "רגילים" במחשב קוונטי, מה שמזמין פוסט שעומד בפני עצמו שמסביר איך בדיוק עושים את זה. מצד שני, השאלה איך מחשבים את <span class="math">\(U^{2^{t}}\)</span> בצורה אופטימלית, עם מינימום שערים, היא לא שאלה סגורה גם כיום. לכל זוג של <span class="math">\(a,N\)</span> בעצם בונים מעגל אחר שמבצע את החישוב המתאים, וזו בעיה קלאסית בתחום של <strong>סינתזה</strong> של מעגלים קוונטיים - הבניה של מעגל אופטימלי מתוך התיאור האבסטרקטי יותר שלו. אז אני לא נכנס לזה בפוסט הזה כי זה מזמין סדרת פוסטים בפני עצמה. אבל אפשר לעשות את זה.</p>
+<p>יפה, אז יש לנו את האופרטור <span class="math">\(U\left|b\right\rangle =\left|ab\text{ mod }N\right\rangle \)</span>. איך בדיוק הוא קשור לסדר <span class="math">\(r\)</span> של <span class="math">\(a\)</span> מודולו <span class="math">\(N\)</span>? איך כל זה קשור ל"פאזה"? מה הולך כאן? בואו נפיל את האסימון הזה - לטעמי זה הולך להיות הרגע היפה ביותר מבין כל מה שראינו עד כה בסדרת הפוסטים הזו על חישוב קוונטי. כל כך יפה, שאני ארשה לעצמי להיות לא מדויק בניסוחים שלי - בהמשך גם זה יגיע.</p>
+<p>בואו נסתכל לרגע על מה <span class="math">\(U\)</span> עושה לכמה איברים קונקרטיים:</p>
+<p><span class="math">\(U\left|1\right\rangle =\left|a\cdot1\text{ mod }N\right\rangle =\left|a\right\rangle \)</span></p>
+<p><span class="math">\(U\left|a\right\rangle =\left|a\cdot a\text{ mod }N\right\rangle =\left|a^{2}\right\rangle \)</span></p>
+<p><span class="math">\(U\left|a^{2}\right\rangle =\left|a\cdot a^{2}\text{ mod }N\right\rangle =\left|a^{3}\right\rangle \)</span></p>
+<p>אוקיי, אנחנו מבינים, על סדרת הערכים <span class="math">\(1,a,a^{2},\ldots\)</span> מה ש-<span class="math">\(U\)</span> עושה הוא לקדם את האיבר הנוכחי אל האיבר הבא בסדרה. אבל מתי זה נגמר? ובכן, זה נגמר בדיוק כשמגיעים לסדר של <span class="math">\(a\)</span> - לאיבר <span class="math">\(a^{2}\equiv_{N}1\)</span>. במילים אחרות:</p>
+<p><span class="math">\(U\left|a^{r-1}\right\rangle =\left|a\cdot a^{r-1}\text{ mod }N\right\rangle =\left|1\right\rangle \)</span></p>
+<p>ואז אנחנו חוזרים אל <strong>התחלת</strong> הסדרה (במתמטית אומרים על זה ש-<span class="math">\(U\)</span> מבצע לסדרה <span class="math">\(1,a,a^{2},\ldots,a^{r-1}\)</span> <strong>הזזה ציקלית</strong>).</p>
+<p>סבבה, איך זה נותן לנו וקטור עצמי של <span class="math">\(U\)</span>? פשוט מאוד: בואו ניקח <strong>סופרפוזיציה אחידה</strong> של כל אברי הסדרה הזו, כלומר נסתכל על המצב</p>
+<p><span class="math">\(\left|u_{0}\right\rangle =\frac{\left|1\right\rangle +\left|a\right\rangle +\left|a^{2}\right\rangle +\ldots+\left|a^{r-1}\right\rangle }{\sqrt{r}}=\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\left|a^{k}\right\rangle \)</span></p>
+<p>המצב הזה הוא בבירור מצב עצמי של <span class="math">\(U\)</span>, כלומר <span class="math">\(U\left|u_{0}\right\rangle =\left|u_{0}\right\rangle \)</span>; הוא מתאים לערך העצמי 1, וזה... לא עוזר לנו... בשום צורה? אלגוריתם הערכת הפאזה, אם יופעל על המצב הזה, יחזיר לנו 0. זה לא נותן לנו את <span class="math">\(r\)</span>; זה לא נותן לנו שום כלום. אז בשביל מה אני משגע אתכם?</p>
+<p>אה-הא! העניין הוא שיש <strong>עוד</strong> וקטורים עצמיים! <span class="math">\(\left|u_{0}\right\rangle \)</span> הוא רק האבטיפוס; הדוגמא הראשונה והפשוטה שנותנת לנו את האינטואיציה כדי להמשיך הלאה. בואו נחשוב לרגע על אותו וקטור, אבל עם <strong>מקדמים</strong> עבור האיברים:</p>
+<p><span class="math">\(\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle \)</span></p>
+<p>אם אנחנו רוצים שאחרי הפעלת <span class="math">\(U\)</span> נחזור לאותו מצב בדיוק כפול סקלר כלשהו, צריך להתקיים</p>
+<p><span class="math">\(U\left(\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle \right)=\lambda\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle \)</span></p>
+<p>אבל</p>
+<p><span class="math">\(U\left(\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle \right)=\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}U\left(\left|a^{k}\right\rangle \right)=\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k+1\text{ mod }r}\right\rangle \)</span></p>
+<p>אם אנחנו משווים את זה אל <span class="math">\(\lambda\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle \)</span> אנחנו מקבלים</p>
+<p><span class="math">\(\lambda\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k}\right\rangle =\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}\alpha_{k}\left|a^{k+1\text{ mod }r}\right\rangle \)</span></p>
+<p>ואחרי חילוץ המקדמים, אנחנו מקבלים את המשוואות</p>
+<p><span class="math">\(\lambda\alpha_{0}=\alpha_{r-1}\)</span></p>
+<p><span class="math">\(\lambda\alpha_{1}=\alpha_{0}\)</span></p>
+<p><span class="math">\(\lambda\alpha_{2}=\alpha_{1}\)</span></p>
+<p>וכן הלאה, עד שמגיעים לבסוף אל</p>
+<p><span class="math">\(\lambda\alpha_{r-1}=\alpha_{r-2}\)</span></p>
+<p>אם נכפול את אגפי ימין ושמאל של כל המשוואות, נקבל</p>
+<p><span class="math">\(\lambda^{r}\prod_{k=0}^{r-1}\alpha_{k}=\prod_{k=0}^{r-1}\alpha_{k}\)</span></p>
+<p>כלומר, <span class="math">\(\lambda^{r}=1\)</span>. או במילים אחרות, אנחנו מסוגלים לקבל וקטור עצמי עבור כל <strong>שורש יחידה </strong>מסדר<strong> </strong><span class="math">\(r\)</span>.</p>
+<p>הצורה הכללית של שורש יחידה מסדר <span class="math">\(r\)</span> היא</p>
+<p><span class="math">\(e^{\frac{2\pi i}{r}\cdot s}\)</span></p>
+<p>כאשר <span class="math">\(0\le s<r\)</span>.</p>
+<p>עכשיו, עבור שורש יחידה <span class="math">\(e^{\frac{2\pi i}{r}\cdot s}\)</span> קונקרטי, איך נקבל את הוקטורים העצמיים המתאימים? אפשר לקבוע שרירותית שתמיד יתקיים <span class="math">\(\alpha_{0}=1\)</span> כי ככה דברים ייצאו לנו נחמד, ואז נובע ש-</p>
+<p><span class="math">\(\alpha_{1}=\lambda^{-1}\alpha_{0}=e^{-\frac{2\pi i}{r}\cdot s}\)</span></p>
+<p>ובדומה נקבל</p>
+<p><span class="math">\(\alpha_{2}=e^{-2\cdot\frac{2\pi i}{r}\cdot s}\)</span></p>
+<p>ובאופן כללי, נקבל את הוקטור העצמי</p>
+<p><span class="math">\(\left|u_{s}\right\rangle =\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}e^{-k\cdot\frac{2\pi i}{r}s}\left|a^{k}\right\rangle \)</span></p>
+<p>והוקטור <span class="math">\(\left|u_{0}\right\rangle \)</span> שראינו קודם אכן מתקבל כאן כמקרה פרטי, כאשר <span class="math">\(s=0\)</span>.</p>
+<p>האם אלו באמת וקטורים עצמיים? אפשר לעשות שוב את החישוב, אבל כבר עשינו אותו קודם והוא יעבוד באותה צורה כל פעם. עבור <span class="math">\(\left|u_{s}\right\rangle \)</span>, הערך העצמי הוא שורש היחידה ה-<span class="math">\(r\)</span>-י שהתאים ל-<span class="math">\(s\)</span>, כלומר</p>
+<p><span class="math">\(U\left|u_{s}\right\rangle =e^{\frac{2\pi i}{r}s}\left|u_{s}\right\rangle \)</span></p>
+<p>ואם לחזור ללשון של אלגוריתם הערכת הפאזה, אז הפאזה <span class="math">\(\varphi_{s}\)</span> של <span class="math">\(\left|u_{s}\right\rangle \)</span> היא <span class="math">\(\varphi_{s}=\frac{s}{r}\)</span>. בפרט, <strong>אם</strong> הייתה לנו דרך להפעיל את אלגוריתם הערכת הפאזה על <span class="math">\(\left|u_{1}\right\rangle \)</span> ולקבל תוצאה מדויקת, אז היינו מקבלים ליד את המספר הרציונלי <span class="math">\(\frac{1}{r}\)</span>. היינו מקבלים אותו בייצוג בינארי, אבל מתוך הייצוג הזה קל לחשב את <span class="math">\(r\)</span> עצמו, מה שמסיים לנו את כל העבודה!</p>
+<p>זהו, זו "נפילת האסימון" המדוברת. זה האופן שבו הסדר <span class="math">\(r\)</span> עשוי לצוץ מתוך אלגוריתם הערכת פאזה. כשאני רוצה לסכם לעצמי את הפאנץ' של האלגוריתם, אני חושב על הסדרה <span class="math">\(1,a,a^{2},\ldots,a^{r-1}\)</span> ואומר לעצמי "הזזה ציקלית. הזזה ציקלית".</p>
+<p>העניין הוא שזה לא מספיק. מה שתיארתי עד כה הוא אמנם נכון מבחינה רעיונית, אבל אנחנו לא באמת מסוגלים לממש את זה בפועל. נזדקק לעוד תעלול אחד אחרון. והתעלול הזה הוא כנראה הדבר הכי מגניב פה.</p>
+<p>מה בעצם הבעיה? אם הייתי מסוגל להפעיל את אלגוריתם הערכת הפאזה על <span class="math">\(\left|u_{1}\right\rangle \)</span> אכן הייתי מקבל את <span class="math">\(\frac{1}{r}\)</span> (או לפחות קירוב טוב של <span class="math">\(\frac{1}{r}\)</span> ועוד נחזור לחישוב המדויק). אבל <strong>אני לא יודע</strong> את <span class="math">\(\left|u_{1}\right\rangle \)</span>. אין לי מושג איך לבנות אותו. המקדמים שלו מקודדים איכשהו את <span class="math">\(e^{\frac{2\pi i}{r}}\)</span>; בשביל ליצור אותם אני כנראה אצטרך לדעת מה הוא <span class="math">\(r\)</span>, שהוא המספר שאותו אנחנו מחפשים! לכאורה אני במעגל ולא התקדמתי אף צעד; זה הכי כיף כשנראה שאנחנו בסיטואציה כזו כשלמעשה אנחנו במרחק צעד אחד מהפתרון.</p>
+<p>הפתרון הוא לקחת את <strong>כל</strong> הוקטורים העצמיים <span class="math">\(\left|u_{s}\right\rangle \)</span>, עבור <strong>כל</strong> <span class="math">\(0\le s<r\)</span>, ולהסתכל על הסופרפוזיציה של כולם ביחד, כלומר על</p>
+<p><span class="math">\(\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|u_{s}\right\rangle \)</span></p>
+<p>לכאורה לא התקדמנו בכלל - קודם היה מצב אחד שלא היה לנו מושג מהו, ועכשיו יש לנו סופרפוזיציה של הרבה מצבים כאלו; איך אנחנו אמורים לבנות אותה? התשובה היא שהיא מצב שאנחנו מכירים היטב וקל לנו מאוד לבנות - רק צריך לעשות את החישוב:</p>
+<p><span class="math">\(\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|u_{s}\right\rangle =\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left(\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1}e^{-k\cdot\frac{2\pi i}{r}s}\left|a^{k}\right\rangle \right)=\)</span></p>
+<p><span class="math">\(=\frac{1}{r}\sum_{k=1}^{r-1}\left(\sum_{s=0}^{r-1}e^{-k\cdot\frac{2\pi i}{r}s}\right)\left|a^{k}\right\rangle \)</span></p>
+<p>עכשיו נחלץ לעזרתנו תעלול ידוע ומוכר - אם <span class="math">\(\omega\)</span> הוא שורש יחידה <strong>כלשהו</strong> מסדר <span class="math">\(r\)</span>, אז <span class="math">\(1+\omega+\omega^{2}+\ldots+\omega^{r-1}=\begin{cases} 0 & \omega\ne1\\ r & \omega=1 \end{cases}\)</span>. למה? כי אם <span class="math">\(\omega\ne1\)</span> אז הסכום משמאל הוא טור הנדסי שיוצא <span class="math">\(\frac{\omega^{r}-1}{\omega-1}=\frac{1-1}{\omega-1}=0\)</span>.</p>
+<p>במקרה שלנו, <span class="math">\(\omega=-k\frac{2\pi i}{r}\)</span> - זה בהחלט שורש יחידה מסדר <span class="math">\(r\)</span>, והוא שווה ל-1 רק כאשר <span class="math">\(k=0\)</span>. כלומר מכל הסכום הגדול נשאר רק</p>
+<p><span class="math">\(\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|u_{s}\right\rangle =\frac{1}{r}\cdot r\left|a^{0}\right\rangle =\left|1\right\rangle \)</span></p>
+<p>שימו לב: <span class="math">\(\left|1\right\rangle \)</span> במקרה הזה הוא לא קיוביט בודד שערכו <span class="math">\(\left|1\right\rangle \)</span>, אלא כזכור, הסימון המקוצר שלי ל-<span class="math">\(\left|000\ldots01\right\rangle \)</span>. אבל זה בוודאי ובוודאי מצב שאנחנו יודעים לבנות - כלומר, אנחנו בהחלט יודעים לקבל את הסופרפוזיציה של כל ה-<span class="math">\(\left|u_{s}\right\rangle \)</span> גם אם אנחנו לא יודעים לקבל אף אחד מהם אישית; זו גם הסיבה שבגללה כל כך עניין אותי להבין את כל ה-<span class="math">\(\left|u_{s}\right\rangle \)</span> כולל <span class="math">\(\left|u_{0}\right\rangle \)</span> ולא סתם התמקדתי ב-<span class="math">\(\left|u_{1}\right\rangle \)</span>.</p>
+<p>בסופו של דבר, מה עושה המעגל של אלגוריתם הערכת פאזה? נקרא לו <span class="math">\(\text{PE}\)</span> (קיצור של Phase Estimation). אם מריצים אותו עד השלב שלפני המדידה שבסוף, הוא מחשב את האופרטור האוניטרי</p>
+<p><span class="math">\(\text{PE}\left(\left|0^{n}\right\rangle \left|u_{s}\right\rangle \right)=\left|\tilde{\varphi}_{s}\right\rangle \left|u_{s}\right\rangle \)</span></p>
+<p>כאשר <span class="math">\(\left|\tilde{\varphi}_{s}\right\rangle \)</span> הוא מצב קוונטי שהמדידה שלו נותנת בהסתברות טובה קירוב טוב של <span class="math">\(\varphi_{s}\)</span> - הפאזה שמתאימה ל-<span class="math">\(u_{s}\)</span>, כלומר <span class="math">\(\frac{s}{r}\)</span>. עכשיו, אם במקום לרוץ על מצב בודד, נרוץ על סופרפוזיציה שלהם, העובדה ש-<span class="math">\(\text{PE}\)</span> הוא אופרטור <strong>לינארי</strong> נותנת לנו</p>
+<p><span class="math">\(\text{PE}\left(\left|0^{n}\right\rangle \left(\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|u_{s}\right\rangle \right)\right)=\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\text{PE}\left(\left|0^{n}\right\rangle \left|u_{s}\right\rangle \right)=\frac{1}{\sqrt{r}}\sum_{s=0}^{r-1}\left|\tilde{\varphi}_{s}\right\rangle \left|u_{s}\right\rangle \)</span></p>
+<p>במילים אחרות, אנחנו מקבלים ברגיסטר הראשון סופרפוזיציה אחידה של כל ה-<span class="math">\(\left|\tilde{\varphi}_{s}\right\rangle \)</span>-ים, ולכן אפשר לחשוב על מדידה של הרגיסטר הראשון כאילו היא עושה שני דברים בזה אחר זה:</p>
+<ul> <li>מגרילה <span class="math">\(0\le s<r\)</span> באקראי ובהתפלגות אחידה.</li>
+
+
+<li>מודדת את <span class="math">\(\left|\tilde{\varphi}_{s}\right\rangle \)</span>, כלומר מקבלת ערך שבהסתברות טובה הוא קירוב טוב של <span class="math">\(\frac{s}{r}\)</span>.</li>
+
+</ul>
+
+<p>האם כל ה-<span class="math">\(s\)</span>-ים טובים עבורנו? ובכן, לא. ראינו כבר קודם שעבור <span class="math">\(s=0\)</span> אין לנו כלום - לא נוכל לחלץ את <span class="math">\(r\)</span> מהערך שנקבל. ובמקרים אחרים, אם <span class="math">\(\text{gcd}\left(s,r\right)>1\)</span> אז הסיכוי שנצליח לעשות משהו טוב נפגע מאוד - <span class="math">\(\frac{s}{r}\)</span> לא יהיה שבר מצומצם ולכן אם ננסה "לשחזר" את <span class="math">\(\frac{s}{r}\)</span> לא נקבל את <span class="math">\(r\)</span>. הנה דוגמא פשוטה: נניח ש-<span class="math">\(r=15\)</span> ו-<span class="math">\(s=3\)</span>. אז <span class="math">\(\frac{s}{r}=\frac{3}{15}=\frac{1}{5}=0.2\)</span>; אז אפילו אם נקבל את התוצאה המדויקת <span class="math">\(0.2\)</span> לא נוכל לשחזר מזה את <span class="math">\(r=15\)</span>; המכנה שנשחזר הוא 5. בגלל הבעיה הזו, לפעמים באלגוריתם של שור כשמקבלים "מועמד ל-<span class="math">\(r\)</span>" משתלם לפעול לא רק מתוך הנחה שהמועמד הזה טוב, אלא גם לנסות כמה כפולות שלו - להכפיל ב-2,3,4 וכו' ולנסות גם עבורן. זה חישוב מהיר מאוד שלא מאט אותנו, ואם במקרה הוא מצליח ומצאנו גורם של <span class="math">\(N\)</span> נדע בודאות שהצלחנו, כך שאין חיסרון של ממש להרחבה הזו.</p>
+<p>זה סוף אלגוריתם הערכת הפאזה, כלומר סוף החלק הקוונטי של האלגוריתם; הנה איך הכל נראה בסופו של דבר.</p>
+<p><img src="/img/2022/shor_algorithm.png" alt=""/></p>
+<h2>איך משחזרים את הסדר מתוך הקירוב שהערכת הפאזה נותנת לנו?</h2>
+
+<p>ברגע שבו אלגוריתם הערכת הפאזה מסתיים, נגמר החלק הקוונטי של האלגוריתם, אבל עדיין נשאר חלק לא טריוויאלי בעליל שצריך לבצע - השלב שבו אנחנו עוברים מה<strong>קירוב</strong> שקיבלנו לפאזה, עד שיש לנו ביד מועמד פוטנציאלי להיות הסדר, <span class="math">\(r\)</span>. כאן נכנס לתמונה מה שנקרא <strong>אלגוריתם השברים המשולבים</strong>, שזו פשוט דרך מפחידה להגיד "שיטה למציאת קירובים רציונלים טובים למספר שקיבלנו".</p>
+<p>מה זה שבר משולב? <a href="https://gadial.net/2010/05/29/continued_fractions_1/">יש לי פוסט על זה</a> אבל הוא נכנס לעומק שאני לא זקוק לו פה, ומצד שני תמיד נחמד להציג שוב נושא כל כך מגניב, בטח כשיש לו שימוש פרקטי. אז הנה מבוא על רגל אחת. נתחיל עם דוגמא קונקרטית - המספר <span class="math">\(\pi\)</span> - היחס בין היקף מעגל לקוטרו - הוא אחד מהקבועים המתמטיים המפורסמים ביותר. אם ננסה לכתוב אותו בבסיס עשרוני הוא ייראה משהו כמו <span class="math">\(\pi=3.14159\ldots\)</span>, כשהנקודות אומרות שיש עוד ספרות בהמשך. אם נוותר על הנקודות ונסתכל על המספר <span class="math">\(3.14159\)</span>, מה שיש לנו ביד הוא <strong>קירוב רציונלי</strong> של <span class="math">\(\pi\)</span> - קירוב שאפשר לכתוב אותו בתור מנה של שני מספרים שלמים, <span class="math">\(\frac{314159}{10000}\)</span> (זאת להבדיל מ-<span class="math">\(\pi\)</span> עצמו שיש הוכחה שאי אפשר להציג בתור מנה של שני מספרים שלמים). אני יכול גם להסתכל על קירובים שמתקבלים מלקחת <strong>פחות</strong> ספרות של <span class="math">\(\pi\)</span>: אני מקבל את סדרת הקירובים</p>
+<p><span class="math">\(3,\frac{31}{10},\frac{314}{100},\frac{3141}{1000},\frac{31415}{10000}\)</span></p>
+<p>האם זו סדרת קירובים <strong>טובה</strong>? הקירוב <span class="math">\(\frac{314}{100}=3.14\)</span>, למשל, הוא מפורסם במיוחד: צורת הכתיב שלו, בשילוב עם שיטת כתיב התאריכים האמריקאית ויום ההולדת של אלברט איינשטיין, הולידו את <strong>יום פאי</strong>. אבל האמת היא, בינינו, שזה קירוב <strong>די גרוע</strong> לעומת קירוב אחר, <span class="math">\(\frac{22}{7}\)</span>, שזכה ליום פחות מפורסם משל עצמו ("יום קירוב פאי", למרות שכאמור הוא דווקא הקירוב הטוב יותר). אם נחשב את ההפרש של כל אחד מהקירובים מפאי נקבל<span class="math">\(\left|\pi-3.14\right|=0.001592\dots\)</span> ו-<span class="math">\(\left|\pi-\frac{22}{7}\right|=0.001264\ldots\)</span>, כלומר יש יתרון ברור ל-<span class="math">\(\frac{22}{7}\)</span>, למרות שלכאורה נקודת המוצא של <span class="math">\(\frac{314}{100}\)</span> היא טובה <strong>הרבה </strong>יותר, כי המכנה שלו הוא מספר גדול יותר, ולכן לכאורה מאפשר למצוא מספר שקרוב לפאי ברזולוציה טובה יותר (תחשבו על סרגל שיש בו סימוני סנטימטרים לעומת סרגל שיש בו רק שבעה סימנים ברווחים אחידים בין כל מטר - מה נראה לנו כמו כלי מדויק יותר?)</p>
+<p>אם נסתכל על הקירוב ה"טוב", <span class="math">\(\frac{22}{7}\)</span>, מה מבדיל אותו מהסדרה שהראיתי קודם? בסדרה הזו, <strong>המכנה</strong> של כל השברים היה חזקה של 10: 1, 10, 100, 1000 וכו'. לעומת בקירוב <span class="math">\(\frac{22}{7}\)</span> נדחף לנו ה-7 הלא קשור הזה. העניין הוא שמבחינת המתמטיקה, האהבה שלנו למספר 10 היא <strong>שרירותית</strong>; זה בגלל שהביולוגיה חננה אותנו בעשר אצבעות, לא בגלל שעשר הוא מספר מופלא לקירובים. לכן, שיטת הקירובים שאנחנו רגילים אליה מהבסיס העשרוני שלנו היא לאו דווקא אופטימלית; שברים משולבים הם אלו שנותנים לנו את הקירובים האופטימליים, במובן מאוד מדויק שאתאר עוד מעט - ובגלל שמקבלים קירובים כל כך טובים, זה מתקשר ישירות לאלגוריתם שלנו. </p>
+<p>איך זה קשור? ובכן, עוד מעט אראה איך בעזרת שברים משולבים אפשר לקבל סדרת קירובים למספר כלשהו <span class="math">\(x\)</span>. הקסם המופלא בשיטה הזו הוא שאם למספר <span class="math">\(x\)</span> כלשהו יש קירוב <strong>טוב</strong> (עבור משמעות של "טוב" שאתן במדויק בהמשך), אז <strong>בודאות מוחלטת</strong> הקירוב הטוב הזה יופיע בסדרת הקירובים שמקבלים מהפיתוח של <span class="math">\(x\)</span> לשבר משולב.</p>
+<p>איך זה קשור אלינו? כי בואו נחשוב רגע מה עושה שלב הערכת הפאזה: הוא מחזיר מספר <span class="math">\(x\)</span> שהוא <strong>קירוב טוב</strong> של <span class="math">\(\frac{s}{r}\)</span> כאשר <span class="math">\(r\)</span> הוא הסדר שאנחנו מחפשים - מטרת האלגוריתם - ו-<span class="math">\(0\le s<r\)</span> הוא מספר אקראי. אבל אם <span class="math">\(x\)</span> הוא <strong>קירוב טוב</strong> של <span class="math">\(\frac{s}{r}\)</span> ההפך נכון באותה מידה: <span class="math">\(\frac{s}{r}\)</span> הוא <strong>קירוב טוב </strong>של <span class="math">\(x\)</span>, ולכן הולך להופיע בפיתוח לשברים משולבים של <span class="math">\(x\)</span>. כזכור, בפוסט על אלגוריתם הערכת פאזה ראינו בדיוק כיצד ניתן להגדיל את ההסתברות לקבלת קירוב טוב (עוד קיוביטים), אז מה שנצטרך לעשות הוא להבין כמה טוב צריך להיות <strong>הקירוב הטוב</strong> הזה.</p>
+<p>עוד עניין שאין לנו דרך להתמודד איתו הוא ש-<span class="math">\(\frac{s}{r}\)</span> צריך להיות <strong>שבר מצומצם</strong>. אם למשל <span class="math">\(s=7\)</span> ו-<span class="math">\(r=63\)</span>, אז <span class="math">\(\frac{s}{r}=\frac{7}{63}=\frac{1}{9}\)</span>, ואז מה שהפיתוח לשברים משולבים ייתן לנו הוא את <span class="math">\(\frac{1}{9}\)</span>. זה כמובן אותו מספר בדיוק כמו <span class="math">\(\frac{7}{63}\)</span>, אבל אנחנו מעוניינים במספר 63 שנמצא במכנה, לא ב-9. אז כדי שהאלגוריתם יצליח, ה-<span class="math">\(0\le s<r\)</span> שנבחר באקראי צריך להיות זר ל-<span class="math">\(r\)</span>. למרבה המזל, רוב ה-<span class="math">\(s\)</span>-ים הללו אכן כאלו, אז זו לא בעיה אמיתית - אבל מי שרוצים להיות ממש זהירים יכולים, בהינתן המספר שהתקבל במכנה, לנסות גם כפולות שלו - אם היינו מנסים לקחת את ה-9 שקיבלנו במכנה, לכפול אותו ב-7 ולנסות לפרק לגורמים את <span class="math">\(N\)</span> עם ה-<span class="math">\(63\)</span> שקיבלנו, היינו מצליחים; הנסיונות הללו לא מפריעים לשום דבר ומגדילים עוד קצת את הסיכוי שנצליח, אבל כנראה שאפשר גם בלעדיהם.</p>
+<p>אוקיי, בואו נעבור לשברים משולבים! ספציפית אל המספר <span class="math">\(\frac{314159}{100000}\)</span> שהבטחתי למצוא לו סדרת קירובים טובה יותר מאשר <span class="math">\(3,3.1,3.14\)</span> וכן הלאה. הטכניקה שבה אשתמש תיראה מוזרה במבט ראשון, אבל סמכו עלי - היא עובדת. כזכור, אי שם בבית הספר לימדו אותנו שיש משהו שנקרא "שבר מדומה" שהוא שבר שבו המונה גדול מהמכנה. שבר כזה אפשר להפריד לסכום שנקרא "מספר מעורב" של החלק השלם ועוד החלק השברי שהוא בין 0 ל-1. במקרה שלנו:</p>
+<p><span class="math">\(\frac{314159}{100000}=3+\frac{14159}{100000}\)</span></p>
+<p>עכשיו אני עושה את הטריק המרכזי שלי: אני משתמש בכך שבאופן כללי, <span class="math">\(\frac{a}{b}=\frac{1}{\frac{b}{a}}\)</span> כדי לכתוב</p>
+<p><span class="math">\(\frac{14159}{100000}=\frac{1}{\frac{100000}{14159}}\)</span></p>
+<p>מה הולך פה? קודם היה לנו שבר "אמיתי", שבו המונה <strong>קטן</strong> מהמכנה; עכשיו המונה והמכנה התהפכו, אז שוב קיבלנו שבר מדומה שאנחנו יכולים להפריד למספר שלם ועוד שבר. בשביל לעשות את זה, צריך לחלק את 100,000 ב-14,159; המנה שנקבל היא החלק השלם, והשארית שנקבל היא מה שנשאר על השבר: <span class="math">\(\frac{100000}{14159}=7+\frac{887}{14159}\)</span>.</p>
+<p>אם שותלים את הביטוי הזה בחישוב שכבר עשינו, מקבלים</p>
+<p><span class="math">\(3+\frac{14159}{100000}=3+\frac{1}{7+\frac{887}{14159}}\)</span></p>
+<p>אפשר להמשיך עם זה ולהתעלל גם ב--<span class="math">\(\frac{887}{14159}\)</span>, אבל אפשר גם לקחת הפסקה לרגע ולהגיד "אוקיי, בואו נתעלם לגמרי מה-<span class="math">\(\frac{887}{14159}\)</span>, מה קיבלנו עכשיו?" ואז יש לנו את השבר</p>
+<p><span class="math">\(3+\frac{1}{7}=\frac{22}{7}\)</span></p>
+<p>הופה! הנה צץ לנו הקירוב המצוין לפאי שדיברתי עליו קודם! כאילו במטה קסם. ובכן, כן, זה <strong>באמת</strong> קסם, עד כמה שדברים שקורים במתמטיקה הם קסם; זה הקסם שמאפשר לנו לסיים את האלגוריתם של שור. <strong>למה</strong> זה קורה? סבלנות! עוד אוכיח את זה באופן מלא בפוסט הזה.</p>
+<p>נחזור אל ה-<span class="math">\(\frac{887}{14159}\)</span>. בשלב הזה אנחנו כבר יודעים מה לעשות - לחלק את 14159 ב-887 ולראות מה המנה ומה השארית, ואז לכתוב</p>
+<p><span class="math">\(\frac{887}{14159}=\frac{1}{15+\frac{854}{887}}\)</span></p>
+<p>אם נשתול את זה בביטוי המקורי נקבל משהו שהוא כבר בלתי קריא בעליל:</p>
+<p><span class="math">\(3+\frac{1}{7+\frac{1}{15+\frac{854}{887}}}\)</span></p>
+<p>בגלל שזה בלתי קריא, משתמשים לפעמים בשיטת סימון אחרת, שבה לא צריך לרדת למטה עוד ועוד:</p>
+<p><span class="math">\(3+\frac{1}{7+}\frac{1}{15+}\frac{1}{887/854}\)</span></p>
+<p>אבל אני אשתמש בשיטת סימון עוד יותר קומפקטית: הרי לא באמת צריך את כל הפלוסים וה-1 חלקי הללו, אנחנו מתעניינים רק במספרים שליד הפלוסים. אז אפשר לכתוב</p>
+<p><span class="math">\(\left[3,7,15,\frac{887}{854}\right]\)</span></p>
+<p>זו צורת הכתיב הנפוצה והמקובלת. הנה הגדרה פורמלית של מה היא אומרת:</p>
+<p><span class="math">\(\left[a_{0},a_{1},\ldots a_{n}\right]=a_{0}+\frac{1}{a_{1}+\frac{1}{a_{2}+\frac{1}{\cdots+\frac{1}{a_{n}}}}}\)</span></p>
+<p>ועכשיו אפשר להמשיך יותר בנוחות. נחלק את 887 ב-854 ונקבל מנה 1 ושארית 33, כלומר השלב הבא הוא</p>
+<p><span class="math">\(\left[3,7,15,1,\frac{854}{33}\right]\)</span></p>
+<p>בשלב הבא נחלק 854 ב-33 ונקבל מנה 25 ושארית 29, ובואו נמשיך גם לשלב הבא כי הבנו את הקטע:</p>
+<p><span class="math">\(\left[3,7,15,1,25,\frac{33}{29}\right]=\left[3,7,15,1,25,1,\frac{29}{4}\right]=\)</span></p>
+<p><span class="math">\(=\left[3,7,15,1,25,1,7,\frac{4}{1}\right]\)</span></p>
+<p>וזה השלב האחרון, כי 4 מתחלק ב-1 ללא שארית! זו הצורה ה"סופית" של השבר המשולב:</p>
+<p><span class="math">\(\left[3,7,15,1,25,1,7,4\right]\)</span></p>
+<p>כלומר, אנחנו מרגישים רגועים לומר שסיימנו כשהאיבר האחרון, הימני ביותר, הוא עצמו מספר שלם ולא שבר.</p>
+<p>ואיך כל זה עוזר לנו בכלל? כפי שראינו קודם, כבר כש"עצרנו" את החישוב אחרי שקיבלנו את ה-7 הראשון והתעלמנו מהשארית, קיבלנו את הקירוב <span class="math">\(\frac{22}{7}\)</span> המצוין. באותו אופן אפשר לעצור את הקירוב גם בשלבים מתקדמים יותר ולקבל קירובים מצויינים אחרים. למשל:</p>
+<p><span class="math">\(\left[3,7,15\right]=3+\frac{1}{7+\frac{1}{15}}=3+\frac{1}{\frac{106}{15}}=\frac{333}{106}\)</span></p>
+<p>גם זה קירוב מפורסם של פאי, וכן הלאה - הבנו את הרעיון. שימו לב, אגב, שלא עבדנו עם <span class="math">\(\pi\)</span> בכלל; התחלנו עם המספר <span class="math">\(3.14159\)</span> ומצאנו סדרת קירובים <strong>אליו</strong>; בגלל שהוא קירוב לא רע של פאי, קיבלנו שסדרת הקירובים החלקיים עד כה נותנת גם את הקירובים המצויינים של <span class="math">\(\pi\)</span>. אם היינו מלכתחילה רוצים לחשב שבר משולב עבור <span class="math">\(\pi\)</span> היינו נתקלים בשתי בעיות - החישוב קצת יותר מסובך, והשבר המשולב המתקבל צריך להיות <strong>אינסופי</strong>; כדי להתחמק מהסיבוך הזה שלא דרוש לי הסתפקתי בלתאר איך מחשבים שבר משולב עבור מספר שהוא מלכתחילה שבר - ומה שראינו הוא שהשבר המשולב שאנחנו בונים אכן נותן סדרה מצויינת של קירובים לאותו השבר. זה המקרה הרלוונטי לנו כי כזכור, אנחנו מקבלים מאלגוריתם הערכת הפאזה מספר <strong>רציונלי </strong><span class="math">\(x\)</span> שבתקווה <span class="math">\(\frac{s}{r}\)</span> הוא קירוב מצויין אליו. אם <span class="math">\(x\)</span> הוא מספר רציונלי, אנחנו יודעים איך לחשב לו שבר משולב ואז לקבל ממנו את סדרת הקירובים האופטימלית שהוא נותן - זה חישוב מאוד פשוט שכולל בסך הכל פעולות של חילוק עם שארית וחישובים אריתמטיים פשוטים יותר. קל לתכנת את זה והריצה של החלק הזה לוקחת שברירי שניה.</p>
+<h2>בונוס: איך מוכיחים את כל הקטע הזה של השברים המשולבים?</h2>
+
+<p>יופי, סיימנו עם האלגוריתם של שור ואפשר לעבור לתורת המספרים נטו! בואו נעבור לתיאור פורמלי של עניין ה<strong>קירוב טוב</strong> הזה. נתחיל עם סימון: אם <span class="math">\(x\)</span> הוא מספר רציונלי עם פיתוח לשבר משולב <span class="math">\(\left[a_{0},a_{1},\ldots,a_{n}\right]\)</span>, אני אסמן את סדרת הקירובים שמתקבלת מהפיתוח הזה בתור <span class="math">\(\frac{p_{0}}{q_{0}},\frac{p_{1}}{q_{1}},\frac{p_{2}}{q_{2}},\ldots,\frac{p_{n}}{q_{n}}\)</span>. כלומר, <span class="math">\(\frac{p_{k}}{q_{k}}=\left[a_{0},a_{1},\ldots,a_{k}\right]\)</span>. </p>
+<p>הנה דברים שאפשר להראות אבל לא אראה הפעם: <span class="math">\(q_{0}<q_{1}<q_{2}<\ldots<q_{n}\)</span>, כלומר המכנה הולך וגדל ככל שמתקדמים בסדרה; <span class="math">\(p_{k},q_{k}\)</span> זרים זה לזה לכל אינדקס <span class="math">\(k\)</span>; והקירוב <span class="math">\(\frac{p_{k}}{q_{k}}\)</span> הוא טוב במובן הבא:</p>
+<p><span class="math">\(\left|x-\frac{p_{k}}{q_{k}}\right|<\frac{1}{q_{k}q_{k+1}}<\frac{1}{q_{k}^{2}}\)</span></p>
+<p>כשהמעבר השני נובע מכך ש-<span class="math">\(q_{k}<q_{k+1}\)</span> (עבור <span class="math">\(k=n\)</span> הנוסחה לא עובדת כי אין <span class="math">\(q_{k+1}\)</span> אבל ממילא בשלב הזה ההפרש הוא 0).</p>
+<p><span class="math">\(\frac{p_{k}}{q_{k}}\)</span> הוא <strong>הקירוב הטוב ביותר</strong> במובן זה שלכל <span class="math">\(1\le d\le q_{k}\)</span> ולכל <span class="math">\(c\)</span> מתקיים</p>
+<p><span class="math">\(\left|x-\frac{p_{k}}{q_{k}}\right|\le\left|x-\frac{c}{d}\right|\)</span></p>
+<p>כלומר, אם מסתכלים על כל המספרים הרציונליים עם מכנה שהוא לכל היותר <span class="math">\(q_{k}\)</span>, לא נמצא אף אחד שהוא קירוב יותר טוב ל-<span class="math">\(x\)</span> מאשר <span class="math">\(\frac{p_{k}}{q_{k}}\)</span>.</p>
+<p>יפה, כל אלו הם משפטים מעניינים, אבל המשפט שמעניין אותי באמת הוא זה שמבטיח לנו שקירוב טוב בהכרח יופיע בפיתוח לשבר משולב, וסוף סוף אפשר לנסח אותו פורמלית: אם <span class="math">\(c,d\)</span> זרים זה לזה, עם <span class="math">\(1\le d\)</span>, ומתקיים</p>
+<p><span class="math">\(\left|x-\frac{c}{d}\right|<\frac{1}{2d^{2}}\)</span></p>
+<p>אז <strong>בודאות</strong> קיים <span class="math">\(k\)</span> כך ש-<span class="math">\(\frac{c}{d}=\frac{a_{k}}{b_{k}}\)</span> עבור איבר <span class="math">\(\frac{a_{k}}{b_{k}}\)</span> בסדרת הקירובים שמתקבלת מהפיתוח של <span class="math">\(x\)</span> לשבר משולב.</p>
+<p>איך מוכיחים את זה?</p>
+<p>טוב, אני אצטרך שנכיר עוד כמה דברים על שברים משולבים כדי להתקדם. הדבר הראשון הוא נוסחה די משוגעת שעבור שבר משולב <span class="math">\(\left[a_{0},a_{1},\ldots,a_{n},a_{n+1}\right]\)</span> נותנת לנו את <span class="math">\(\frac{p_{n+1}}{q_{n+1}}\)</span> - האיבר הבא בסדרת הקירובים - אם נתונים לנו <span class="math">\(\frac{p_{n}}{q_{n}},\frac{p_{n-1}}{q_{n-1}}\)</span> ו-<span class="math">\(a_{n+1}\)</span>. הנה הנוסחה:</p>
+<p><span class="math">\(\frac{p_{n+1}}{q_{n+1}}=\frac{a_{n+1}p_{n}+p_{n-1}}{a_{n+1}q_{n}+q_{n-1}}\)</span></p>
+<p>בואו נראה את זה בפעולה עבור <span class="math">\(\left[3,7,15,1,25,1,7,4\right]\)</span>, השבר המשולב שכבר מצאנו עבור הקירוב לפאי. כזכור, שני הקירובים הראשונים שקיבלנו היו <span class="math">\(\frac{3}{1}\)</span> ו-<span class="math">\(\frac{22}{7}\)</span>, והקירוב השלישי היה <span class="math">\(\frac{333}{106}\)</span>. לכאורה כדי לקבל את הקירוב השלישי אנחנו לא יכולים להיעזר בשני הראשונים; אנחנו חייבים לבצע את כל החישוב <span class="math">\(3+\frac{1}{7+\frac{1}{15}}\)</span>; אי אפשר לקחת את <span class="math">\(\frac{22}{7}=3+\frac{1}{7}\)</span> ופשוט "לשתול" את <span class="math">\(15\)</span> בתוכו בצורה פשוטה. אבל בואו נראה מה קורה עם הנוסחה:</p>
+<p><span class="math">\(\frac{a_{2}p_{1}+p_{0}}{a_{2}q_{1}+q_{0}}=\frac{15\cdot22+3}{15\cdot7+1}=\frac{333}{106}\)</span></p>
+<p>קסם! תקשיבו לי, זה פשוט קסם! אין לי שמץ של מושג איך זה קורה למרות שלדעתי כבר ראיתי כמה פעמים את ההוכחה. בואו נראה אותה שוב ביחד.</p>
+<p>כפי שניתן לנחש, מוכיחים את הטענה באינדוקציה. המקרה הפשוט ביותר שהוא היא רלוונטית הוא <span class="math">\(n=1\)</span>. במקרה הזה, השבר המשולב שלנו הוא <span class="math">\(\left[a_{0},a_{1},a_{2}\right]\)</span> והפיתוחים החלקיים שלו הם</p>
+<p><span class="math">\(\frac{p_{0}}{q_{0}}=\frac{a_{0}}{1}\)</span></p>
+<p><span class="math">\(\frac{p_{1}}{q_{1}}=a_{0}+\frac{1}{a_{1}}=\frac{a_{0}a_{1}+1}{a_{1}}\)</span></p>
+<p>מאלו אנחנו יכולים להסיק:</p>
+<p><span class="math">\(p_{0}=a_{0},q_{0}=1\)</span></p>
+<p><span class="math">\(p_{1}=a_{0}a_{1}+1,q_{1}=a_{1}\)</span></p>
+<p>עבור האיבר הבא החישוב קצת יותר מסובך אבל נעשה אותו במפורש:</p>
+<p><span class="math">\(\frac{p_{2}}{q_{2}}=a_{0}+\frac{1}{a_{1}+\frac{1}{a_{2}}}=a_{0}+\frac{a_{2}}{a_{2}a_{1}+1}=\frac{a_{2}a_{0}a_{1}+a_{0}+a_{2}}{a_{2}a_{1}+1}=\)</span></p>
+<p><span class="math">\(=\frac{a_{2}\left(a_{0}a_{1}+1\right)+a_{0}}{a_{2}a_{1}+1}=\frac{a_{2}p_{1}+p_{0}}{a_{2}q_{1}+q_{0}}\)</span></p>
+<p>קיבלנו את הנוסחה במקרה הזה, ועכשיו רק נשאר לסיים באינדוקציה את המקרה הכללי. כאן פשוט <strong>חייב</strong> לבוא איזה טיעון מתוחכם, כי הנוסחה הזו מפשטת לנו מאוד משהו שנראה מבעית בהתחלה. הנה ההתחכמות: במקרה הכללי, השבר המשולב שמתקבל מהאיברים הראשונים עד <span class="math">\(a_{n}\)</span> הוא</p>
+<p><span class="math">\(\left[a_{0},a_{1},\ldots,a_{n}\right]\)</span></p>
+<p>ועבורו יש לנו את נוסחת הנסיגה</p>
+<p><span class="math">\(\left[a_{0},a_{1},\ldots,a_{n}\right]=\frac{a_{n}p_{n-1}+p_{n-2}}{a_{n}q_{n-1}+q_{n-2}}\)</span></p>
+<p>עכשיו הטיעון המתוחכם: <span class="math">\(p_{n-1},q_{n-1},p_{n-2},q_{n-2}\)</span> מתקבלים מ-<span class="math">\(\left[a_{0},a_{1},\ldots,a_{n-1}\right]\)</span> ומ-<span class="math">\(\left[a_{0},a_{1},\ldots,a_{n-2}\right]\)</span>; השברים המשולבים הללו לא תלויים באיבר האחרון, ולכן המספרים הללו יישארו זהים גם אם נשתול בתור האיבר האחרון משהו אחר, למשל את <span class="math">\(a_{n}+\frac{1}{a_{n+1}}\)</span>. אבל מה זה <span class="math">\(\left[a_{0},a_{1},\ldots,a_{n-1},a_{n}+\frac{1}{a_{n+1}}\right]\)</span>? אם נפתח את ההגדרה, נראה שזה</p>
+<p><span class="math">\(a_{0}+\frac{1}{a_{1}+\frac{1}{a_{2}+\frac{1}{\cdots+\frac{1}{a_{n}+\frac{1}{a_{n+1}}}}}}\)</span></p>
+<p>כלומר, זה פשוט המספר <span class="math">\(\left[a_{0},a_{1},\ldots,a_{n-1},a_{n},a_{n+1}\right]=\frac{p_{n+1}}{q_{n+1}}\)</span>, רק שעבור הצורה הקודמת אפשר להשתמש בנוסחת הנסיגה:</p>
+<p><span class="math">\(\left[a_{0},a_{1},\ldots,a_{n-1},a_{n}+\frac{1}{a_{n+1}}\right]=\frac{\left(a_{n}+\frac{1}{a_{n+1}}\right)p_{n-1}+p_{n-2}}{\left(a_{n}+\frac{1}{a_{n+1}}\right)q_{n-1}+q_{n-2}}\)</span></p>
+<p>זה קצת מזוויע אבל נכפול מונה ומכנה ב-<span class="math">\(a_{n+1}\)</span> ונקבל</p>
+<p><span class="math">\(\frac{\left(a_{n+1}a_{n}+1\right)p_{n-1}+a_{n+1}p_{n-2}}{\left(a_{n+1}a_{n}+1\right)q_{n-1}+a_{n+1}q_{n-2}}=\frac{a_{n+1}\left(a_{n}p_{n-1}+p_{n-2}\right)+p_{n-1}}{a_{n+1}\left(a_{n}q_{n-1}+q_{n-2}\right)+q_{n-1}}=\frac{a_{n+1}p_{n}+p_{n-1}}{a_{n+1}q_{n}+q_{n-1}}\)</span></p>
+<p>וזה בדיוק הביטוי שקיווינו לקבל! זה מסיים את ההוכחה הזו.</p>
+<p>בעזרת הנוסחה הזו אפשר לקבל נוסחה מקסימה נוספת, שמקשרת בין <span class="math">\(\frac{p_{n}}{q_{n}}\)</span> ובין האיבר הקודם לו, <span class="math">\(\frac{p_{n-1}}{q_{n-1}}\)</span>:</p>
+<p><span class="math">\(q_{n}p_{n-1}-p_{n}q_{n-1}=\left(-1\right)^{n}\)</span></p>
+<p>ההוכחה של זה היא באינדוקציה פשוטה למדי: במקרה הבסיס <span class="math">\(n=1\)</span> אנו מתבססים על כך שבפיתוח של <span class="math">\(\left[a_{0},a_{1},\ldots,a_{k}\right]\)</span> מקבלים, כמו שכבר ראינו, <span class="math">\(\frac{p_{0}}{q_{0}}=\frac{a_{0}}{1}\)</span> ולכן <span class="math">\(p_{0}=a_{0},q_{0}=1\)</span> וש-<span class="math">\(\frac{p_{1}}{q_{1}}=a_{0}+\frac{1}{a_{1}}=\frac{a_{0}a_{1}+1}{a_{1}}\)</span>, כלומר <span class="math">\(p_{1}=a_{0}a_{1}+1\)</span> ו-<span class="math">\(q_{1}=a_{1}\)</span>. אנו מציבים את זה בנוסחה ומקבלים</p>
+<p><span class="math">\(q_{1}p_{0}-p_{1}q_{0}=a_{1}a_{0}-\left(a_{0}a_{1}+1\right)=1\)</span></p>
+<p>זה מסיים את המקרה הזה. ובאופן כללי? אם נניח שהקשר מתקיים עבור <span class="math">\(n,n-1\)</span>, בואו נוכיח אותו עבור <span class="math">\(n+1,n\)</span> תוך ניצול נוסחת הנסיגה שכבר מצאנו, שהיא כזכור</p>
+<p><span class="math">\(p_{n+1}=a_{n+1}p_{n}+p_{n-1}\)</span></p>
+<p><span class="math">\(q_{n+1}=a_{n+1}q_{n}+q_{n-1}\)</span></p>
+<p>נציב את אלו בנוסחה שאנחנו רוצים להוכיח עבורה את הטענה:</p>
+<p><span class="math">\(q_{n+1}p_{n}-p_{n+1}q_{n}=\left(a_{n+1}q_{n}+q_{n-1}\right)p_{n}-\left(a_{n+1}p_{n}+p_{n-1}\right)q_{n}=\)</span></p>
+<p><span class="math">\(=\left(a_{n+1}q_{n}p_{n}-a_{n+1}p_{n}q_{n}\right)+\left(q_{n-1}p_{n}-p_{n-1}q_{n}\right)=\)</span></p>
+<p><span class="math">\(=-\left(p_{n-1}q_{n}-q_{n-1}p_{n}\right)=-\left(-1\right)^{n}=\left(-1\right)^{n+1}\)</span></p>
+<p>מה שמסיים גם את זה! עכשיו סוף סוף יש לנו את הכלים שאנחנו צריכים כדי להוכיח את הטענה המקורית שלנו: שעבור <span class="math">\(x\)</span> רציונלי, אם ניקח <span class="math">\(\frac{c}{d}\)</span> חיובי שמקיים</p>
+<p><span class="math">\(\left|x-\frac{c}{d}\right|<\frac{1}{2d^{2}}\)</span></p>
+<p>אז <span class="math">\(\frac{c}{d}\)</span> יופיע בפיתוח לשבר משולב של <span class="math">\(x\)</span>. נקודה אחת שצריך לשים לב אליה ולא אוכיח פורמלית היא שהפיתוח לשבר משולב שבו כל האיברים הם שלמים הוא <strong>יחיד</strong> למעט אפשרות להתחכם קצת בשלב האחרון: אפשר להחליף את <span class="math">\(\left[a_{0},a_{1},\ldots,a_{n}\right]\)</span> ב-<span class="math">\(\left[a_{0},a_{1},\ldots,a_{n}-1,1\right]\)</span>, כי <span class="math">\(a_{n}-1+\frac{1}{1}=a_{n}\)</span>. אם כן, אם אני אראה שיש ל-<span class="math">\(x\)</span> פיתוח <strong>כלשהו </strong>לשבר משולב שבו <span class="math">\(\frac{c}{d}\)</span> מופיע לפני הסוף, סיימנו. מצד שני, בזכות ההתחכמות שהראיתי, אפשר תמיד להניח שכשאנחנו לוקחים פיתוח של משהו לשבר משולב, אנחנו יכולים לשלוט על האם הפיתוח הוא מאורך <strong>זוגי</strong> או <strong>אי זוגי</strong>, כלומר האם <span class="math">\(q_{n}p_{n-1}-p_{n}q_{n-1}\)</span> הוא 1 או דווקא <span class="math">\(-1\)</span>; אני הולך להשתמש בזה בקרוב.</p>
+<p>עכשיו אפשר לגשת סוף סוף לעניינים. מכיוון ש-<span class="math">\(\frac{c}{d}\)</span> הוא עצמו מספר רציונלי, קיים לו פיתוח לשבר משולב שהאיבר האחרון שלו יסומן ב-<span class="math">\(\frac{p_{n}}{q_{n}}\)</span>:</p>
+<p><span class="math">\(\frac{c}{d}=\frac{p_{n}}{q_{n}}=\left[a_{0},a_{1},\ldots,a_{n}\right]\)</span></p>
+<p>כאשר כאמור בהמשך אני אגיד אם <span class="math">\(n\)</span> זוגי או לא, בהתאם למה שיתאים לי. הרעיון עכשיו הוא למצוא <span class="math">\(\lambda\)</span> רציונלי כלשהו כך שמתקיים</p>
+<p><span class="math">\(x=\left[a_{0},a_{1},\ldots,a_{n},\lambda\right]\)</span></p>
+<p>שימו לב: זה לא הפיתוח המלא של <span class="math">\(x\)</span> לשברים משולבים! אבל אם <span class="math">\(\lambda\ge1\)</span> אפשר להמשיך את הפיתוח - לפתח גם את <span class="math">\(\lambda\)</span> לשבר משולב ולהוסיף את זה להמשך הפיתוח. זה נשמע מבלבל, אבל זה בדיוק מה שעשינו בדוגמה של פאי שכל כך התעקשתי עליה משום מה. הגעתי לביטוי כמו</p>
+<p><span class="math">\(\left[3,7,15,1,\frac{854}{33}\right]\)</span></p>
+<p>ואז פשוט המשכתי עם <span class="math">\(\frac{854}{33}\)</span>, בעזרת אותה טכניקה שבה מצאתי את האיברים הקודמים בסדרה. אם כן, ה-<span class="math">\(\lambda\)</span> הוא ה-<span class="math">\(\frac{854}{33}\)</span> שלנו כאן - אבל קודם צריך להשתכנע בכך שהוא קיים ושהוא גדול או שווה ל-1.</p>
+<p>החלק היפה הוא שאם <span class="math">\(\lambda\)</span> קיים, אנחנו יודעים בדיוק איזו נוסחה שמערבת את <span class="math">\(x\)</span> הוא אמור לקיים, כי זה מה שטרחתי להוכיח קודם:</p>
+<p><span class="math">\(x=\left[a_{0},a_{1},\ldots,a_{n},\lambda\right]=\frac{\lambda p_{n}+p_{n-1}}{\lambda q_{n}+q_{n-1}}\)</span></p>
+<p>אנחנו רוצים לחלץ את <span class="math">\(\lambda\)</span> מפה, אז נכפול את שני האגפים ב-<span class="math">\(\lambda q_{n}+q_{n-1}\)</span> ונקבל</p>
+<p><span class="math">\(\lambda q_{n}x+q_{n-1}x=\lambda p_{n}+p_{n-1}\)</span></p>
+<p>נעביר אגפים ונוציא את <span class="math">\(\lambda\)</span> החוצה:</p>
+<p><span class="math">\(\lambda\left(q_{n}x-p_{n}\right)=p_{n-1}-q_{n-1}x\)</span></p>
+<p>ולסיום נחלק ב-<span class="math">\(q_{n}x-p_{n}\)</span> ונקבל</p>
+<p><span class="math">\(\lambda=\frac{p_{n-1}-q_{n-1}x}{q_{n}x-p_{n}}\)</span></p>
+<p>הביטוי הזה מוגדר תמיד, למעט במקרה שבו <span class="math">\(x=\frac{p_{n}}{q_{n}}\)</span> ואז נקבל במכנה 0; אבל המקרה הזה הוא טריוויאלי, כי <span class="math">\(\frac{p_{n}}{q_{n}}\)</span> הוא כזכור מה שרצינו לטעון שמופיע בפיתוח של <span class="math">\(x\)</span>, ולכן אם הוא עצמו <span class="math">\(x\)</span> בוודאי שהוא מופיע!</p>
+<p>אז נניח ש-<span class="math">\(x\ne\frac{p_{n}}{q_{n}}\)</span>. אנחנו יודעים (זו הייתה ההנחה שלנו) ש-<span class="math">\(\left|x-\frac{p_{n}}{q_{n}}\right|<\frac{1}{2q_{n}^{2}}\)</span> ולכן אפשר לסמן את זה</p>
+<p><span class="math">\(x-\frac{p_{n}}{q_{n}}=\frac{\delta}{2q_{n}^{2}}\)</span></p>
+<p>כאשר <span class="math">\(0<\left|\delta\right|<1\)</span>. נעביר אגף ונקבל</p>
+<p><span class="math">\(x=\frac{p_{n}}{q_{n}}+\frac{\delta}{2q_{n}^{2}}\)</span></p>
+<p>עכשיו אני רוצה לקחת את זה ולהציב בתוך <span class="math">\(\lambda=\frac{p_{n-1}-q_{n-1}x}{q_{n}x-p_{n}}\)</span>. מכיוון שנקבל ביטוי פשוט אבל עם שלב ביניים מסובך, בואו נטפל במונה ובמכנה בנפרד. קודם כל המכנה:</p>
+<p><span class="math">\(q_{n}x-p_{n}=q_{n}\left(\frac{p_{n}}{q_{n}}+\frac{\delta}{2q_{n}^{2}}\right)-p_{n}=p_{n}+\frac{\delta}{2q_{n}}-p_{n}=\frac{\delta}{2q_{n}}\)</span></p>
+<p>אוקיי, זה לא היה כל כך נורא! עכשיו המונה:</p>
+<p><span class="math">\(p_{n-1}-q_{n-1}x=p_{n-1}-\frac{p_{n}q_{n-1}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}\)</span></p>
+<p>זה נראה מזוויע, אבל זוכרים את הנוסחה <span class="math">\(q_{n}p_{n-1}-p_{n}q_{n-1}=1\)</span>? היא מתחבאת כאן, רק צריך להעלות את ה-<span class="math">\(p_{n-1}\)</span> הזה למעלה:</p>
+<p><span class="math">\(p_{n-1}-\frac{p_{n}q_{n-1}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}=\frac{p_{n-1}q_{n}-p_{n}q_{n-1}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}=\frac{\left(-1\right)^{n}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}\)</span></p>
+<p>עכשיו, לחלק את זה ב-<span class="math">\(\frac{\delta}{2q_{n}}\)</span> זה כמו לכפול את זה ב-<span class="math">\(\frac{2q_{n}}{\delta}\)</span> (מותר לנו כי <span class="math">\(\delta\ne0\)</span> כי <span class="math">\(x\ne\frac{p_{n}}{q_{n}}\)</span>). נקבל:</p>
+<p><span class="math">\(\lambda=\frac{2q_{n}}{\delta}\left(\frac{\left(-1\right)^{n}}{q_{n}}-\frac{q_{n-1}\delta}{2q_{n}^{2}}\right)=\left(-1\right)^{n}\frac{2}{\delta}-\frac{q_{n-1}}{q_{n}}\)</span></p>
+<p>וזה יצא... ממש פשוט! עכשיו, כזכור אנחנו רוצים לקבל <span class="math">\(\lambda>1\)</span>; בשביל זה אנחנו חייבים להבטיח שהביטוי <span class="math">\(\left(-1\right)^{n}\frac{2}{\delta}\)</span> ייצא חיובי ולא שלילי, זה מחזיר אותנו לבחירה של <span class="math">\(n\)</span> בהתחלה; אם <span class="math">\(\delta>0\)</span> אז בוחרים את <span class="math">\(n\)</span> להיות זוגי ומקבלים <span class="math">\(\left(-1\right)^{n}=1\)</span>, ואם <span class="math">\(\delta<0\)</span> בוחרים <span class="math">\(n\)</span> אי זוגי ומקבלים <span class="math">\(\left(-1\right)^{n}=-1\)</span>. בכל מקרה אנחנו לבסוף מקבלים</p>
+<p><span class="math">\(\lambda=\frac{2}{\left|\delta\right|}-\frac{q_{n-1}}{q_{n}}\)</span></p>
+<p>יותר מזה, בגלל שסדרת המכנים בפיתוח לשבר משולב היא עולה, <span class="math">\(q_{n-1}<q_{n}\)</span> ולכן <span class="math">\(\frac{q_{n-1}}{q_{n}}<1\)</span> ומצד שני בגלל ש-<span class="math">\(\left|\delta\right|<1\)</span> אז <span class="math">\(\frac{2}{\left|\delta\right|}>2\)</span>, ואנחנו מקבלים <span class="math">\(\lambda>1\)</span>, כפי שרצינו. אנחנו מפתחים אותו לשבר משולב, מקבלים <span class="math">\(\lambda=\left[b_{1},\ldots,b_{m}\right]\)</span> ולבסוף מקבלים <span class="math">\(x=\left[a_{1},\ldots,a_{n},b_{1},\ldots,b_{m}\right]\)</span> - פיתוח מלא של <span class="math">\(x\)</span> לשבר משולב שבמהלכו מופיע <span class="math">\(\frac{a}{b}=\frac{p_{n}}{q_{n}}\)</span>, כפי שרצינו. זה מסיים את ההוכחה!</p>
+<h2>דברי סיכום ופרידה</h2>
+
+<p>ובכן, מה היה לנו הפעם? איך זה היה שונה מהפוסט הקודם שלי על האלגוריתם של שור? האלגוריתם מחולק קונספטואלית לשלושה חלקים; החלק הראשון, של הרדוקציה מבעיית הפירוק לגורמים אל בעיית הפרת הסדר, הוא חלק שהרחבתי עליו מאוד בפוסט ההוא והפעם לא נגעתי בו כי אין לי משהו נוסף לומר, אבל בשני החלקים האחרים הרחבתי לא מעט. ראשית, הצגתי באופן מפורש את שור בתור מקרה פרטי של אלגוריתם הערכת פאזה, שזה משהו שבכלל לא ניסיתי לעשות בפוסט הקודם (בואו לא נדבר על השאלה המביכה עד כמה הבנתי את זה בעצמי). שנית, הפעם התעמקתי קצת יותר במשפט הספציפי שקשור לשברים משולבים שמבטיח לנו שעם קצת מזל, ה-<span class="math">\(\frac{s}{r}\)</span> שאנחנו מחפשים יצוץ מתוך תוצאת אלגוריתם הערכת הפאזה. זה דרש גלישה נוספת לתורת המספרים במקום לחישוב קוונטי, אבל הנושא של שברים משולבים הוא כל כך כיפי שלא יכלתי להתאפק.</p>
+<p>לאן הולכים מכאן? בסדרת הפוסטים הקודמת שלי, שור היה המטרה הסופית; אבל בסדרה הנוכחית, אני מקווה שעכשיו משהוצאנו את זה מהדרך, אפשר להראות כל מני דברים לא קשורים בעליל אבל מגניבים לא פחות.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2022/10/09/density_matrices/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חישוב קוונטי: פורמליזם מטריצות הצפיפות</span>
+            </a>
+            
+            
+            
+            <a href="/2022/09/06/phase_estimation_algorithm/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי: אלגוריתם הערכת פאזה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אנליזה וקטורית - תכונות בסיסיות של הנגזרת - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אנליזה וקטורית - תכונות בסיסיות של הנגזרת</h1>
+            <div class="post-meta">
+                <span class="date">2015-08-19</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אנליזה וקטורית.html">אנליזה וקטורית</a>
+                    
+                    <a href="/tags/נגזרת.html">נגזרת</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2015/07/05/multivariable_derivatives/">אז הכרנו</a> את הנגזרת של פונקציה <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}^{m}\)</span> וראינו איך אפשר לחשב אותה באמצעות נגזרות חלקיות. בואו נעבור עכשיו לכמה תוצאות תיאורטיות כלליות וקלות יחסית, כדי שנתרגל; עד סוף הפוסט נגיע להצגת תוצאה לא טריוויאלית ושימושית - <strong>משפט הפונקציה ההפוכה</strong>. אבל נתחיל מהבסיס.</p>
+<p>נתחיל בתכונה אחת שנובעת כמעט מייד מכך שפונקציה היא גזירה אבל טרם הראיתי זאת במפורש, והגיע הזמן כי נשתמש בה בהמשך: רציפות. נזכיר ש-<span class="math">\(f\)</span> היא פונקציה רציפה ב-<span class="math">\(a\)</span> אם <span class="math">\(\lim_{x\to a}f\left(x\right)=f\left(a\right)\)</span> - או, באופן שקול, אם <span class="math">\(\lim_{h\to0}f\left(a+h\right)-f\left(a\right)=0\)</span>. זו תכונה מאוד מאוד מועילה במקרים רבים כי היא מבטיחה ש-<span class="math">\(f\)</span> לא יכולה "להתפרע" יותר מדי כשמתקרבים לנקודה כלשהי. עכשיו, אם <span class="math">\(f\)</span> גזירה ב-<span class="math">\(a\)</span> היא גם רציפה שם. למה? כי נניח ש-<span class="math">\(\lim_{h\to0}\frac{f\left(a+h\right)-f\left(a\right)-Df\left(a\right)h}{\left|h\right|}=0\)</span> ועכשיו ננסה לכתוב את <span class="math">\(\lim_{h\to0}f\left(a+h\right)-f\left(a\right)\)</span> בעזרת הגבול ההוא:</p>
+<p><span class="math">\(\lim_{h\to0}f\left(a+h\right)-f\left(a\right)=\lim_{h\to0}\left|h\right|\left[\frac{f\left(a+h\right)-f\left(a\right)-Df\left(a\right)\cdot h}{\left|h\right|}\right]+Df\left(a\right)\cdot h\)</span></p>
+<p>ומה קיבלנו פה? גבול שמערב כמה חלקים. ה-<span class="math">\(\left|h\right|\)</span> שואף כמובן לאפס. ה-<span class="math">\(\left[\frac{f\left(a+h\right)-f\left(a\right)-Df\left(a\right)\cdot h}{\left|h\right|}\right]\)</span> גם, כי הנחנו שהפונקציה גזירה. לכן כל המחובר השמאלי שואף לאפס. במחובר הימני אנחנו מקבלים מטריצה קבועה כפול וקטור ששואף לאפס - קל לראות שזה שואף לאפס (טפלו בכל רכיב בנפרד; זו פונקציה רציפה חד ממדית), וזה מסיים את ההוכחה.</p>
+<p>עכשיו בואו נעבור לטפל בכללי גזירה שונים ומשונים. ככה זה עובד: הגדרנו פעולה של גזירה על פונקציות. מייד אנו תוהים - מה מניבה הגזירה עבור פונקציות פשוטות יחסית? כמו כן - על פונקציות מוגדרות כל מני פעולות - חיבור, כפל, הרכבה וכדומה. האם קל לדעת את הנגזרת של חיבור פונקציות, אם יודעים את הנגזרת של הפונקציות שמחברים?</p>
+<p>פונקציה פשוטה במיוחד היא פונקציה קבועה: <span class="math">\(f\left(x\right)=c\)</span> עבור <span class="math">\(c\in\mathbb{R}^{m}\)</span> קבוע כלשהו. מכיוון שעבור פונקציה ממשית קבועה הנגזרת היא 0, נקבל כאן שהנגזרות החלקיות בכל מקום הן 0. אלו נגזרות חלקיות רציפות, ולכן <span class="math">\(f\)</span> המקורית גזירה והנגזרת שלה היא מטריצת אפסים, כלומר <span class="math">\(Df\left(a\right)=0\)</span> כשכאן 0 היא טרנספורמציית האפס. עוד פונקציה פשוטה במיוחד היא טרנספורמציה לינארית <span class="math">\(T:\mathbb{R}^{n}\to\mathbb{R}^{m}\)</span>. כאן אפילו אין טעם לדבר על נגזרות חלקיות כשההגדרה הבסיסית עובדת מייד ומראה לנו ש-<span class="math">\(T\)</span> היא (כמובן) הדיפרנציאל של עצמה: <span class="math">\(\lim_{h\to0}\frac{T\left(a+h\right)-T\left(a\right)-T\left(h\right)}{h}=\lim_{h\to0}\frac{T\left(a+h-a-h\right)}{h}=\lim_{h\to0}\frac{T\left(0\right)}{h}=0\)</span>. דוגמה לטרנספורמציה לינארית פשוטה שכזו היא חיבור: <span class="math">\(s\left(x,y\right)=x+y\)</span> (זו פונקציה <span class="math">\(s:\mathbb{R}^{2}\to\mathbb{R}\)</span>), אז אנחנו יודעים לגזור גם אותה.</p>
+<p>ומה על כפל? <span class="math">\(p:\mathbb{R}^{2}\to\mathbb{R}\)</span> המוגדרת על ידי <span class="math">\(p\left(x,y\right)=xy\)</span>? גזירה חלקית מראה שהנגזרת בנקודה <span class="math">\(\left(a,b\right)\)</span> היא <span class="math">\(\left(b,a\right)\)</span>, כלומר הדיפרנציאל הוא <span class="math">\(bx+ay\)</span>.</p>
+<p>מה שנחמד בפונקציות החיבור והכפל הללו הוא שהן יאפשרו לנו לטפל בחיבור וכפל של פונקציות סקלריות <strong>כלליות</strong>. למשל, אם <span class="math">\(f,g:\mathbb{R}^{n}\to\mathbb{R}\)</span> ואנחנו מגדירים <span class="math">\(h=f+g\)</span>, אז <span class="math">\(h=s\left(f,g\right)\)</span>. יש לנו כאן <strong>הרכבה</strong> של פונקציה <span class="math">\(\mathbb{R}^{n}\to\mathbb{R}^{2}\)</span> שבנויה על הזוג <span class="math">\(\left(f,g\right)\)</span>, עם הפונקציה <span class="math">\(s:\mathbb{R}^{2}\to\mathbb{R}\)</span>. אם נדע איך לגזור הרכבה, נדע לגזור גם חיבור וכפל של פונקציות, בלי שום מאמץ מחשבתי נוסף מצידנו. אז זו הבעיה שאפתור עכשיו.</p>
+<p>הכלל שמתאר את העובדה שהרכבה של פונקציות גזירות הוא גזיר ונותן את הנוסחה לביצוע הגזירה נקרא <strong>כלל השרשרת</strong>. אתם בוודאי מכירים את הגרסה שלו עבור פונקציות ממשיות. בואו נתחיל מלראות אותה. מאוד קל לזכור את הגרסה הזו אם משתמשים בסימון של לייבניץ לגזירת פונקציות: אם <span class="math">\(f\left(x\right)\)</span> היא פונקציה עם המשתנה היחיד <span class="math">\(x\)</span>, אז במקום לכתוב <span class="math">\(f^{\prime}\)</span> (בערך הכתיב שבו ניוטון השתמש), אפשר לכתוב <span class="math">\(\frac{df}{dx}\)</span>. אחת הסיבות לכתיב הזה היא שקל לזכור את כלל השרשרת בעזרתו.</p>
+<p>אם <span class="math">\(y:\mathbb{R}\to\mathbb{R}\)</span> היא פונקציה, ואנחנו מסתכלים על ההרכבה <span class="math">\(f\left(y\left(x\right)\right)\)</span>, אז הנגזרת שלה היא <span class="math">\(\frac{df}{dx}=\frac{df}{dy}\frac{dy}{dx}\)</span>. הבעיה היא - וזה משהו שאני מרגיש ביתר שאת עכשיו, כשאני מנסה לכתוב את הפוסט הזה בצורה מסודרת - שזה כתיב מאוד לא פורמלי שקל לאבד בו דקויות. בואו נסתכל שוב על המשוואה <span class="math">\(\frac{df}{dx}=\frac{df}{dy}\frac{dy}{dx}\)</span>. כאן נראה ש-<span class="math">\(f\)</span> היא פונקציה של שני משתנים שונים: המשתנה <span class="math">\(x\)</span>, באגף שמאל; והמשתנה <span class="math">\(y\)</span>, באגף ימין. אבל הרי <span class="math">\(y\)</span> הוא לא באמת משתנה; הוא פונקציה. ומה שמופיע באגף ימין הוא בעצם לא <span class="math">\(f\)</span>, הוא פונקציה מסובכת יותר שמתקבלת מהרכבת <span class="math">\(f\)</span> על <span class="math">\(y\)</span>. בקיצור, הסימון הזה יכול להיות מועיל אבל הוא גם מסוכן למי שלא שולט בו, ואני אישית לא אוהב אותו. וזה בלי שניכנס בכלל לתלונות על כך שמתרחש פה משהו שנקרא כמו "צמצום דיפרנציאלים" - משהו שבוודאי אין לו משמעות פורמלית עבור רמת החומר שבדרך כלל נלמדת באינפי 1.</p>
+<p>אז הנה העסק בכתיב ניוטוני. נניח ש-<span class="math">\(f,g;\mathbb{R}\to\mathbb{R}\)</span> ונגדיר <span class="math">\(h\left(x\right)=f\left(g\left(x\right)\right)\)</span> (לפעמים זה מסומן ב-<span class="math">\(f\circ g\)</span> ולפעמים ב-<span class="math">\(g\circ f\)</span>, תלוי איזה ספר אתם קוראים, ויש הגיון מאחורי שתי שיטות הסימון; לכן אני שונא גם את הסימון הזה). אז כלל השרשרת אומר לנו ש-<span class="math">\(h^{\prime}\left(x\right)=f^{\prime}\left(g\left(x\right)\right)g^{\prime}\left(x\right)\)</span>. כלומר, הנגזרת ב-<span class="math">\(x\)</span> שווה למכפלה של הנגזרת של <span class="math">\(g\)</span> ב-<span class="math">\(x\)</span>, כפול הנגזרת של <span class="math">\(f\)</span>, אבל לא ב-<span class="math">\(x\)</span> אלא בנקודה שאליה <span class="math">\(g\)</span> מעביר את <span class="math">\(x\)</span> (ההבחנה הזו היא עניין מבלבל). למשל, אם <span class="math">\(g\left(x\right)=x^{2}\)</span> ו-<span class="math">\(f\left(x\right)=\sin x\)</span> אז <span class="math">\(h\left(x\right)=\sin\left(x^{2}\right)\)</span> ולכן <span class="math">\(h^{\prime}\left(x\right)=\cos\left(x^{2}\right)\cdot2x\)</span> (ולא <span class="math">\(\cos\left(x\right)\cdot2x\)</span>).</p>
+<p>האינטואיציה מאחורי ההוכחה של המקרה החד ממדי די פשוטה. ראשית, בואו ניזכר בכך שאפשר לכתוב את הנגזרת גם בצורה קצת שונה, אולי קצת יותר טבעית:</p>
+<p><span class="math">\(h^{\prime}\left(a\right)=\lim_{t\to0}\frac{h\left(a+t\right)-h\left(a\right)}{t}=\lim_{x\to a}\frac{h\left(x\right)-h\left(a\right)}{x-a}\)</span></p>
+<p>תוך שימוש בניסוח הזה, פשוט מפרקים את הביטוי של הנגזרת למכפלה של שני ביטויי נגזרת מתאימים על ידי כפל וחילוק ב-<span class="math">\(g\left(x\right)-g\left(a\right)\)</span>:</p>
+<p><span class="math">\(h^{\prime}\left(a\right)=\lim_{x\to a}\frac{h\left(x\right)-h\left(a\right)}{x-a}=\lim_{x\to a}\frac{f\left(g\left(x\right)\right)-f\left(g\left(a\right)\right)}{g\left(x\right)-g\left(a\right)}\frac{g\left(x\right)-g\left(a\right)}{x-a}=f^{\prime}\left(g\left(a\right)\right)g^{\prime}\left(a\right)\)</span></p>
+<p>כמובן, צריך להיות זהירים פה ולהסביר יותר במדויק למה <span class="math">\(\lim_{x\to a}\frac{f\left(g\left(x\right)\right)-f\left(g\left(a\right)\right)}{g\left(x\right)-g\left(a\right)}=f^{\prime}\left(g\left(a\right)\right)\)</span>; הרי יכולות לצוץ כל מני בעיות משונות בגלל ש-<span class="math">\(g\)</span> יכולה להתנהג מוזר (מה קורה אם <span class="math">\(g\left(x\right)=g\left(a\right)\)</span> עבור <span class="math">\(x\ne a\)</span> כלשהו?). אני מביא את חצי ההוכחה הזו כדי שנרגיש מאיפה הנוסחה מגיעה בכלל. הוכחה מלאה ומדוייקת אני אתן עכשיו למשפט הכללי, עבור פונקציות וקטוריות כלליות; מן הסתם נקבל את כלל השרשרת המקורי בתור מקרה פרטי.</p>
+<p>אז איך בכלל מנוסח המשפט הכללי? אם אני רוצה להרכיב את <span class="math">\(f\)</span> על <span class="math">\(g\)</span> אני צריך שהטווח של <span class="math">\(g\)</span> יהיה מאותו מימד כמו התמונה של <span class="math">\(f\)</span>, כלומר <span class="math">\(g:\mathbb{R}^{n}\to\mathbb{R}^{k}\)</span> ואילו <span class="math">\(f:\mathbb{R}^{k}\to\mathbb{R}^{m}\)</span>. שימו לב ל-<span class="math">\(k\)</span> המשותף הזה. עכשיו נגדיר <span class="math">\(h\left(x\right)=f\left(g\left(x\right)\right)\)</span> וקיבלנו פונקציה <span class="math">\(h:\mathbb{R}^{n}\to\mathbb{R}^{m}\)</span> נטולת <span class="math">\(k\)</span>. בהינתן <span class="math">\(a\in\mathbb{R}^{n}\)</span> אנחנו רוצים לדעת מהי <span class="math">\(Dh\left(a\right)\)</span>; זוהי מטריצה <span class="math">\(m\times n\)</span> (זוכרים? כל שורה של המטריצה היא גרדיאנט של אחד מהרכיבים של <span class="math">\(h\)</span>; יש ל-<span class="math">\(h\)</span> <span class="math">\(m\)</span> רכיבים והאורך של כל גרדיאנט הוא <span class="math">\(n\)</span>). אם נרצה פשוט לקחת את הנוסחה של כלל השרשרת החד ממדי ולכתוב אותה מחדש, נקבל את הדבר הבא:</p>
+<p><span class="math">\(Dh\left(a\right)=Df\left(g\left(a\right)\right)\cdot Dg\left(a\right)\)</span></p>
+<p>מה יש לנו כאן? ובכן, <span class="math">\(Df\left(g\left(a\right)\right)\)</span> היא מטריצה <span class="math">\(m\times k\)</span> ואילו <span class="math">\(Dg\left(a\right)\)</span> היא מטריצה <span class="math">\(k\times n\)</span>. לכן המכפלה שלהן - ובסדר הזה, הנגזרת של <span class="math">\(f\)</span> משמאל והנגזרת של <span class="math">\(g\)</span> מימין - נותנת לנו באמת מטריצה <span class="math">\(m\times n\)</span>. כך שנראה שהנוסחה עובדת! רק יהיה צריך להוכיח אותה. הבעיה היא שמייד ברור שההוכחה האלגנטית של המקרה החד ממדי לא תעבוד. כי אנחנו כבר לא עובדים עם ביטוי נחמד כמו <span class="math">\(\lim_{x\to a}\frac{h\left(x\right)-h\left(a\right)}{x-a}\)</span> אלא עם המפלצת <span class="math">\(\lim_{t\to0}\frac{h\left(a+t\right)-h\left(a\right)-Dh\left(a\right)t}{\left|t\right|}\)</span> שבה <span class="math">\(t\)</span> הוא בכלל וקטור והמטרה שלנו היא לא להראות שהגבול קיים אלא שהוא אפס. לכו תפתחו את זה למכפלה של שני גבולות שונים, שבהם מה ששואף לאפס שייך למרחבים ממימד אחר, והדיפרנציאלים המעורבים הם ממימדים שונים, וכו' וכו' וכו'. בקיצור, זה הולך להיות יותר טכני. בשורה התחתונה מה שנעשה הוא פשוט לבוא עם פטיש גדול ולהתחיל לדפוק על ההוכחה עד שזה יסתדר - אין כאן חוכמה גדולה ובעיקר יש טיפול שנראה קצת משמים בכל מני ביטויים. סביר להניח שחלקכם יאבדו אותי כאן ויכולים פשוט לקפוץ אל "עכשיו אפשר לשכוח מכל המהומה הטכנית" שאחר כך; מי שבאמת רוצה להבין, אני ממליץ על כתיבת ההוכחה בעצמכם במקביל אלי (הדרך היחידה שבה אני ממש מבין את ההוכחה היא על ידי כך שאני כותב אותה).</p>
+<p>בתור התחלה, אנחנו לא מניחים ש-<span class="math">\(f,g\)</span> בהכרח מוגדרות לכל <span class="math">\(\mathbb{R}^{n}\)</span> ו-<span class="math">\(\mathbb{R}^{k}\)</span>, בהתאמה (הרבה פעמים אנחנו רוצים להשתמש בכלל השרשרת גם לפונקציות שמוגדרות רק עבור חלק מהתחום הזה). כל מה שאנחנו מניחים הוא ש-<span class="math">\(g\)</span> היא גזירה ב-<span class="math">\(a\)</span> ו-<span class="math">\(f\)</span> גזירה ב-<span class="math">\(g\left(a\right)\)</span>. מכך אני רוצה להסיק ש-<span class="math">\(h\)</span> גזירה ב-<span class="math">\(a\)</span> ולמצוא את הנגזרת שלה. לצורך כך אני רוצה להיות מסוגל לדבר על ערכים של <span class="math">\(h\)</span> ב<strong>סביבה</strong> של <span class="math">\(a\)</span>, כי זה מה שמופיע בהגדרת הנגזרת - כלומר, על ערכים מהצורה <span class="math">\(h\left(a+t\right)\)</span> עבור <span class="math">\(t\)</span> קטן. הטענה היא שעבור <span class="math">\(t\)</span> קטן מספיק (כלומר, <span class="math">\(\left|t\right|&lt;\delta\)</span> עבור <span class="math">\(\delta&gt;0\)</span> מסויים), הביטוי <span class="math">\(h\left(a+t\right)\)</span> יהיה מוגדר. עכשיו, מכיוון שאנחנו יודעים ש-<span class="math">\(f\)</span> רציפה ב-<span class="math">\(g\left(a\right)\)</span> בפרט קיים <span class="math">\(\varepsilon&gt;0\)</span> כך ש-<span class="math">\(f\)</span> מוגדרת לכל <span class="math">\(y\)</span> כך ש-<span class="math">\(\left|y-g\left(a\right)\right|&lt;\varepsilon\)</span>. מהרציפות של <span class="math">\(g\)</span> עולה שקיים <span class="math">\(\delta&gt;0\)</span> כך ש-שאם <span class="math">\(\left|x-a\right|&lt;\delta\)</span> אז <span class="math">\(g\)</span> מוגדרת ב-<span class="math">\(x\)</span> ומתקיים <span class="math">\(\left|g\left(x\right)-g\left(a\right)\right|&lt;\varepsilon\)</span> (זו ההגדרה של רציפות, כשפותחים אותה לאפסילון-דלתא). קיבלנו את ה-<span class="math">\(\delta\)</span> שרצינו.</p>
+<p>אם כן, בואו ניקח <span class="math">\(t\)</span> כך ש-<span class="math">\(\left|t\right|&lt;\delta\)</span>. זה אומר ש-<span class="math">\(\left|g\left(a+t\right)-g\left(a\right)\right|&lt;\varepsilon\)</span> ולכן <span class="math">\(f\)</span> מוגדרת ב-<span class="math">\(g\left(a+t\right)\)</span>. כעת, מכיוון ש-<span class="math">\(f\)</span> גזירה, זה אומר שמתקיים הגבול הבא:</p>
+<p><span class="math">\(\lim_{s\to0}\frac{f\left(g\left(a\right)+s\right)-f\left(g\left(a\right)\right)-Df\left(g\left(a\right)\right)s}{\left|s\right|}=0\)</span></p>
+<p>בואו נרשום את הביטוי שבתוך הגבול בתור פונקציה של <span class="math">\(s\)</span>: <span class="math">\(F\left(s\right)=\frac{f\left(g\left(a\right)+s\right)-f\left(g\left(a\right)\right)-Df\left(g\left(a\right)\right)s}{\left|s\right|}\)</span>. הפונקציה הזו מוגדרת לכל <span class="math">\(s\)</span> כך ש-<span class="math">\(0&lt;\left|s\right|&lt;\varepsilon\)</span> (עבור <span class="math">\(s\)</span>-ים גדולים יותר לא מובטח ש-<span class="math">\(f\left(g\left(a\right)+s\right)\)</span> תהיה מוגדרת) ומה שאני רוצה לעשות הוא להציב במקום <span class="math">\(s\)</span> את <span class="math">\(g\left(a+t\right)-g\left(a\right)\)</span> (שראינו לפני רגע שאכן קטן בערכו המוחלט מאפסילון), בערך כמו מה שעושים בהוכחת כלל השרשרת הרגיל. ההצבה הזו מועילה לי במיוחד בטיפול בגורם <span class="math">\(f\left(g\left(a\right)+k\right)\)</span>: כרגע הוא לא משהו שאני יכול לכתוב עם <span class="math">\(h\)</span>, הפונקציה שאני רוצה בסופו של דבר לגזור; אבל אחרי ההצבה הזו נקבל את <span class="math">\(f\left(g\left(a+t\right)\right)=h\left(a+t\right)\)</span>.</p>
+<p>אם כן, בואו ניקח את המשוואה שהגדירה את <span class="math">\(F\left(s\right)\)</span> ונטפל בה קצת - נכפול ב-<span class="math">\(\left|s\right|\)</span>, נעביר אגפים ונקבל</p>
+<p><span class="math">\(f\left(g\left(a\right)+s\right)-f\left(g\left(a\right)\right)=\left|s\right|F\left(k\right)+Df\left(g\left(a\right)\right)s\)</span></p>
+<p>לעת עתה אשתמש בקיצור <span class="math">\(\Delta g=g\left(a+t\right)-g\left(a\right)\)</span> כי זה יחסוך לי כתיבה. אם כן, אחרי הצבת <span class="math">\(s=\Delta g\)</span> אני מקבל</p>
+<p><span class="math">\(h\left(a+t\right)-h\left(a\right)=\left|\Delta g\right|F\left(\Delta g\right)+Df\left(g\left(a\right)\right)\cdot\Delta g\)</span></p>
+<p>בואו ונסתכל על הגורם הכי ימני במשוואה הזו: <span class="math">\(Df\left(g\left(a\right)\right)\cdot\Delta g\)</span>. זה <strong>קצת</strong> מזכיר לנו את מה שאנחנו מצפים שיופיע בנוסחה הסופית: <span class="math">\(Df\left(g\left(a\right)\right)\cdot Dg\left(a\right)\)</span>. כך שהשלב המתבקש הבא הוא לנסות ולמצוא תיאור נחמד יותר עבור <span class="math">\(\Delta g\)</span>. אפשר לשכוח לרגע מהמשוואה שקיבלנו ולהתמקד בניתוח שלו.</p>
+<p>לצורך כך, בואו ניזכר בכך שגם <span class="math">\(g\)</span> היא פונקציה גזירה, ולכן אפשר לכתוב עבורה פונקציה דומה לזו שכתבנו עבור <span class="math">\(f\)</span>, רק פשוטה יותר:</p>
+<p><span class="math">\(G\left(t\right)=\frac{g\left(a+t\right)-g\left(a\right)-Dg\left(a\right)t}{\left|t\right|}\)</span></p>
+<p>הפונקציה הזו מוגדרת לכל <span class="math">\(0&lt;\left|t\right|&lt;\delta\)</span>, ואפשר להגדיר <span class="math">\(G\left(0\right)=0\)</span> ונקבל ש-<span class="math">\(G\)</span> הזו גם רציפה לכל <span class="math">\(\left|t\right|&lt;\delta\)</span>. ושוב, על ידי כפל והעברת אגפים נקבל</p>
+<p><span class="math">\(\Delta g=\left|t\right|G\left(t\right)+Dg\left(a\right)t\)</span></p>
+<p>קיבלנו את התיאור עבור <span class="math">\(\Delta g\)</span> שרצינו. עכשיו, בואו נחזור אל <span class="math">\(h\)</span>. המטרה שלנו, כזכור, היא לחשב את הגבול הבא:</p>
+<p><span class="math">\(\frac{h\left(a+t\right)-h\left(a\right)-Dh\left(a\right)t}{\left|t\right|}\)</span></p>
+<p>כאשר ההימור שלנו למועמדת לתפקיד <span class="math">\(Dh\left(a\right)\)</span> היא <span class="math">\(Df\left(g\left(a\right)\right)\cdot Dg\left(a\right)\)</span>. במילים אחרות, אנחנו רוצים לחשב את הגבול של</p>
+<p><span class="math">\(\frac{h\left(a+t\right)-h\left(a\right)-Df\left(g\left(a\right)\right)\cdot Dg\left(a\right)\cdot t}{\left|t\right|}\)</span></p>
+<p>(שימו לב שאני כותב את <span class="math">\(Df\left(g\left(a\right)\right)\cdot Dg\left(a\right)\cdot t\)</span> בלי סוגריים; זה תקין, מכיוון שכפל מטריצות הוא אסוציאטיבי).</p>
+<p>עכשיו, נחליף את <span class="math">\(h\left(a+t\right)-h\left(a\right)\)</span> בתיאור שמצאנו למעלה, ונקבל:</p>
+<p><span class="math">\(\frac{\left|\Delta g\right|F\left(\Delta g\right)+Df\left(g\left(a\right)\right)\cdot\Delta g-Df\left(g\left(a\right)\right)\cdot Dg\left(a\right)\cdot t}{\left|t\right|}\)</span></p>
+<p>ועכשיו נציב את ה-<span class="math">\(\Delta g\)</span> שמצאנו, ונקבל:</p>
+<p><span class="math">\(\frac{\left|\Delta g\right|F\left(\Delta g\right)+\left|t\right|Df\left(g\left(a\right)\right)G\left(t\right)+Df\left(g\left(a\right)\right)\cdot Dg\left(a\right)\cdot t-Df\left(g\left(a\right)\right)\cdot Dg\left(a\right)\cdot t}{\left|t\right|}\)</span></p>
+<p>שני הגורמים האחרונים מבטלים זה את זה, כך שאנחנו נשארים עם הביטוי היחסית פשוט</p>
+<p><span class="math">\(\frac{\left|\Delta g\right|F\left(\Delta g\right)}{\left|t\right|}+Df\left(g\left(a\right)\right)G\left(t\right)\)</span></p>
+<p>ואנחנו רוצים להראות שהוא שואף לאפס כאשר <span class="math">\(t\)</span> שואף לאפס. מה שיש כאן הוא חשבון מכולת סטנדרטי של אינפי - מראים שיש לנו סכום של גורמים כך שכל גורם כולל חלק ששואף לאפס, וחלק שהוא חסום ולכן "לא מפריע" לו. נתחיל עם <span class="math">\(Df\left(g\left(a\right)\right)G\left(t\right)\)</span>. כאן <span class="math">\(Df\left(g\left(a\right)\right)\)</span> הוא מספר קבוע בעוד ש-<span class="math">\(G\left(t\right)\)</span> שואפת כמובן לאפס (למה "כמובן"? בטח איבדתם אותי לגמרי כבר; <span class="math">\(G\left(t\right)\)</span> היא הפונקציה שמתארת את הגבול שמגדיר את הגזירות של <span class="math">\(g\)</span>). הביטוי <span class="math">\(\frac{\left|\Delta g\right|}{\left|t\right|}F\left(\Delta g\right)\)</span> מאתגר קצת יותר. מכיוון ש-<span class="math">\(g\)</span> רציפה, הרי ש-<span class="math">\(\Delta g=g\left(a+t\right)-g\left(a\right)\)</span> שואפת לאפס כאשר <span class="math">\(t\)</span> שואף לאפס, ומכיוון ש-<span class="math">\(F\)</span> שואפת לאפס כשהקלט שלה שואף לאפס (מאותה סיבה של <span class="math">\(G\)</span>) קיבלנו ש-<span class="math">\(F\left(\Delta g\right)\)</span> שואפת לאפס. נשאר רק להראות ש-<span class="math">\(\frac{\left|\Delta g\right|}{\left|t\right|}\)</span> חסומה.</p>
+<p>לצורך כך, זכרו שראינו כי <span class="math">\(\Delta g=\left|t\right|G\left(t\right)+Dg\left(a\right)t\)</span>. ניקח נורמה בשני האגפים ונקבל</p>
+<p><span class="math">\(\left|\Delta g\right|\le\left|t\right|\left|G\left(t\right)\right|+\left|Dg\left(a\right)\right|\left|t\right|=\left|t\right|\left(\left|G\left(t\right)\right|+k\left|Dg\left(a\right)\right|\right)\)</span></p>
+<p>המעבר האחרון עשוי להיות קצת מבלבל עבור מי שלא מכיר. זכרו ש-<span class="math">\(Dg\left(a\right)\)</span> היא <strong>מטריצה</strong> מסדר <span class="math">\(k\times n\)</span> . לכן הביטוי <span class="math">\(\left|Dg\left(a\right)\right|\)</span> עבורה שונה מאשר עבור, נאמר <span class="math">\(\left|t\right|\)</span> - כאן זו <strong>נורמה של מטריצה</strong>. במקרה שלנו, ההגדרה של הנורמה הזו פשוטה - חשבו על המטריצה בתור וקטור ארוך, וקחו את הנורמה הרגילה שלה. כעת, <span class="math">\(Dg\left(a\right)\cdot t\)</span> זו מכפלה שלוקחת וקטור מגודל <span class="math">\(n\)</span> ומחזירה וקטור מגודל <span class="math">\(k\)</span>, שהכניסות שלו הן מכפלות סקלריות של <span class="math">\(t\)</span> עם <span class="math">\(k\)</span> שורות <span class="math">\(Dg\left(a\right)\)</span>. קל לראות, באמצעות שימוש באי-שוויון המשולש, שמתקיים <span class="math">\(\left|Dg\left(a\right)\cdot t\right|\le k\left|Dg\left(a\right)\right|\left|t\right|\)</span>, ומכאן המעבר שלי.</p>
+<p>קיבלנו ש-<span class="math">\(\frac{\left|\Delta g\right|}{\left|t\right|}=\left|G\left(t\right)\right|+k\left|Dg\left(a\right)\right|\)</span>. כעת, <span class="math">\(G\left(t\right)\)</span> רציפה ושואפת לאפס ולכן גם <span class="math">\(\left|G\left(t\right)\right|\)</span>, ולכן היא בוודאי חסומה; ואילו <span class="math">\(k\left|Dg\left(a\right)\right|\)</span> הוא קבוע. זה מסיים את ההוכחה.</p>
+<p>עכשיו אפשר לשכוח מכל המהומה הטכנית הזו ולקטוף באלגנטיות את הפירות. ראינו שהדיפרנציאל של <span class="math">\(s\left(x,y\right)=x+y\)</span> בכל נקודה הוא <span class="math">\(s\)</span> עצמה. כעת, נניח שיש לנו שתי פונקציות <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}\)</span> ו-<span class="math">\(g:\mathbb{R}^{n}\to\mathbb{R}\)</span> ואנחנו רוצים לגזור את <span class="math">\(f+g\)</span>, מה עושים? נשים לב לכך ש-<span class="math">\(h\left(x\right)=\left(f+g\right)\left(x\right)=s\left(f,g\right)\left(x\right)\)</span> (כאן <span class="math">\(f,g\)</span> זו בעצם דרך לתאר פונקציה מ-<span class="math">\(\mathbb{R}^{n}\)</span> אל <span class="math">\(\mathbb{R}^{2}\)</span> ש-<span class="math">\(f,g\)</span> הם רכיביה), ולכן נגזור על פי כלל השרשרת ונקבל</p>
+<p><span class="math">\(Dh\left(a\right)=Ds\left(f\left(a\right),g\left(a\right)\right)D\left(f\left(a\right),g\left(a\right)\right)=s\left(Df\left(a\right),Dg\left(a\right)\right)=Df\left(a\right)+Dg\left(a\right)\)</span></p>
+<p>לא מפתיע, כמובן, אבל נחמד מאוד שזה מתקבל כך. קצת יותר מעניין יהיה לעשות את אותו דבר עבור כפל. שם הדיפרנציאל של <span class="math">\(xy\)</span> בנקודה <span class="math">\(\left(a,b\right)\)</span> היה <span class="math">\(bx+ay\)</span>. אצלנו, הנקודה <span class="math">\(\left(a,b\right)\)</span> היא בעצם <span class="math">\(\left(f\left(a\right),g\left(a\right)\right)\)</span> ולכן נקבל מכלל השרשרת בסופו של דבר את <span class="math">\(g\left(a\right)Df\left(a\right)+f\left(a\right)Dg\left(a\right)\)</span>.</p>
+<p>אם כן, אנחנו יודעים כעת איך מחשבים את הנגזרת של פונקציות מורכבות יחסית - כאלו שמתקבלות מפונקציות פשוטות על ידי חיבור, כפל והרכבה. מה עם חיסור וחילוק? אפשר להרכיב את הפונקציה <span class="math">\(g\left(x\right)=-x\)</span> על כל פונקציה שנרצה ולקבל בקלות ש-<span class="math">\(D\left(-f\right)=-Df\)</span>, ולכן <span class="math">\(D\left(f-g\right)=Df-Dg\)</span>.</p>
+<p>חילוק, כמובן, יהיה בעייתי יותר, כי לא ניתן לחלק באפס. אנחנו רוצים להרכיב את <span class="math">\(g\left(x\right)=\frac{1}{x}\)</span> (שהנגזרת שלה היא <span class="math">\(-\frac{1}{x^{2}}\)</span>, על פי כללי הגזירה הרגילים) על הפונקציה <span class="math">\(f\)</span>, אבל בשביל זה אנחנו צריכים לדרוש ש-<span class="math">\(f\)</span> תהיה שונה מאפס בנקודה שבה אנחנו מחשבים את הנגזרת. כלומר, אם <span class="math">\(f\left(a\right)\ne0\)</span> אז <span class="math">\(D\frac{1}{f}\left(a\right)=D\left(g\left(f\right)\right)\left(a\right)=-\frac{1}{f^{2}\left(a\right)}Df\left(a\right)\)</span>.</p>
+<p>מכאן גם אפשר לקבל את הנגזרת הכללית של מנת שתי פונקציות: <span class="math">\(D\frac{h}{f}=D\left(\frac{1}{f}\cdot h\right)=D\frac{1}{f}h+\frac{1}{f}Dh=-\frac{hDf}{f^{2}}+\frac{1}{f}Dh=\frac{fDh-hDf}{f^{2}}\)</span> - שוב, תחת ההנחה שאנחנו מחשבים את הפונקציות הללו רק בנקודות שבהן <span class="math">\(f\)</span> שונה מאפס.</p>
+<p>כל אלו הן תוצאות נחמדות, כי הן לא שונות, בעצם, ממה שקורה באינפי רגיל במשתנה יחיד, למרות שאצלנו <span class="math">\(Df\)</span> זה יצור הרבה יותר מסובך מאשר הנגזרת הרגילה. זה בהחלט עוזר להרגיש ש"הצלחנו" בהגדרה שלנו. אם כן, הבה ונמשיך במיטב המסורת של אינפי, ונעבור אל הבניה האחרונה שלנו, שגם היא מוכללת בצורה טבעית, אבל הסיפור שלה אצלנו יהיה מסובך הרבה יותר - נגזרת הפונקציה ההפוכה.</p>
+<p>נניח שיש לנו פונקציה <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}^{n}\)</span> (שימו לב - כאן גם התחום וגם הטווח הם מאותו מימד <span class="math">\(n\)</span>). אז <span class="math">\(g:\mathbb{R}^{n}\to\mathbb{R}^{n}\)</span> היא <strong>הפונקציה ההפוכה</strong> ל-<span class="math">\(f\)</span> אם <span class="math">\(f\left(g\left(x\right)\right)=g\left(f\left(x\right)\right)=x\)</span> לכל <span class="math">\(x\in\mathbb{R}^{n}\)</span>. לא תמיד קיימת כזו, כמובן (חשבו על <span class="math">\(f\left(x\right)=0\)</span>). אם קיימת, מסמנים אותה לרוב ב-<span class="math">\(f^{-1}\)</span>. יותר מזה, לעתים קרובות לא קיימת ל-<span class="math">\(f\)</span> הופכית על כל <span class="math">\(\mathbb{R}^{n}\)</span>, אבל אם נגביל את התחום של <span class="math">\(f\)</span> לתת-קבוצה <span class="math">\(A\subseteq\mathbb{R}^{n}\)</span> נקבל משהו הפיך. דוגמה קלאסית היא הפונקציה <span class="math">\(f\left(x\right)=x^{2}\)</span>; היא לא חד-חד-ערכית על הממשיים כי <span class="math">\(f\left(x\right)=f\left(-x\right)\)</span>; מצד שני, על הממשיים האי-שליליים היא כן חד-חד-ערכית והפיכה; ההופכית שלה היא <span class="math">\(g\left(x\right)=\sqrt{x}\)</span> (המוסכמה הרגילה היא ש-<span class="math">\(\sqrt{x}\)</span> כאשר <span class="math">\(x\)</span> ממשי מחזיר את השורש האי-שלילי אם קיימים שני שורשים).</p>
+<p>נניח שגם <span class="math">\(f\)</span> וגם <span class="math">\(f^{-1}\)</span> הן גזירות, ונניח שאנחנו יודעים מה הנגזרת של <span class="math">\(f\)</span>; האם אפשר למצוא ממנה את הנגזרת של <span class="math">\(f^{-1}\)</span>? למשל, אנחנו יודעים שהנגזרת של <span class="math">\(\sin x\)</span> היא מאוד פשוטה: <span class="math">\(\cos x\)</span>. אבל איך אפשר לקבל מזה את הנגזרת של <span class="math">\(\arcsin x\)</span>? אני ממש לא זוכר את הנגזרת הזו בעל פה; בואו נראה אם נצליח לפתח אותה מחדש (כמובן, אנחנו מדברים פה על המקרה של אינפי בסיסי, אבל לא יהיה הבדל אמיתי בינו ובין המקרה הכללי).</p>
+<p>הטריק הוא להשתמש בכלל השרשרת. אם <span class="math">\(f\left(f^{-1}\right)=I\)</span> כאשר <span class="math">\(I\)</span> היא פונקציית הזהות <span class="math">\(I\left(x\right)=x\)</span>, אז מצבנו טוב כי אנחנו יודעים בדיוק מהו <span class="math">\(DI\)</span>: כבר אמרנו שהנגזרת של פונקציה לינארית היא היא עצמה, כלומר <span class="math">\(DI\left(a\right)=I\)</span> לכל <span class="math">\(a\)</span>. נסמן <span class="math">\(b=f^{-1}\left(a\right)\)</span> ועכשיו אפשר להשתמש בכלל השרשרת ולקבל ש-<span class="math">\(I=Df\left(b\right)Df^{-1}\left(a\right)\)</span>. היינו רוצים עכשיו "לחלק" ב-<span class="math">\(Df\left(b\right)\)</span>, אבל צריך להיזהר פה: זה לא מספר שאפשר סתם לחלק בו. זו טרנספורמציה לינארית. "לחלק" בהקשר של טרנספורמציות לינאריות פירושו לכפול בהופכי. לכן אני צריך להניח ש-<span class="math">\(Df\left(b\right)\)</span> הפיכה בכלל, וזה שקול לכך ש-<span class="math">\(\det Df\left(b\right)\ne0\)</span> (מי שלא מכיר את <span class="math">\(\det\)</span> - נו נו נו! אמרתי שצריך אלגברה לינארית. <a href="http://www.gadial.net/2011/11/10/determinants/">הנה הפוסט שלי</a> על דטרמיננטות). במקרה שבו זה נכון, אז נקבל ש-<span class="math">\(Df^{-1}\left(a\right)=\left(Df\left(b\right)\right)^{-1}\)</span> - אלגנטי ויפה.</p>
+<p>כדי להבין את הנוסחה הזו, בואו נפעיל אותה במקרה של <span class="math">\(\mbox{arcsin}\)</span>. עבור פונקציות במשתנה יחיד, זכרו שמה שאנחנו קוראים לו <span class="math">\(Df\left(a\right)\)</span> הוא בעצם הפונקציה הלינארית <span class="math">\(f^{\prime}\left(a\right)x\)</span>. הפונקציה הזו הפיכה אם ורק אם <span class="math">\(f^{\prime}\left(a\right)\ne0\)</span> ואז ההופכית שלה היא פשוט <span class="math">\(\frac{1}{f^{\prime}\left(a\right)}x\)</span>. כלומר, הנוסחה במקרה הזה הופכת להיות <span class="math">\(\left(f^{-1}\right)^{\prime}\left(a\right)=\frac{1}{f^{\prime}\left(b\right)}\)</span>. לכן קיבלנו ש-<span class="math">\(\arcsin^{\prime}\left(a\right)=\frac{1}{\sin^{\prime}\left(\arcsin a\right)}=\frac{1}{\cos\left(\arcsin a\right)}\)</span>. כאן אנחנו לכאורה נתקעים, כי איך מחשבים קוסינוס של ארקסינוס? אבל מספיק לזכור את הזהות הבסיסית ביותר שקשורה לסינוסים וקוסינוסים - שהם מתארים נקודה על מעגל היחידה, ולכן <span class="math">\(\cos^{2}x+\sin^{2}x=1\)</span> לכל <span class="math">\(x\)</span>. מכאן אפשר לחלץ ולקבל ש-<span class="math">\(\cos x=\sqrt{1-\sin^{2}x}\)</span> עבור <span class="math">\(-\frac{\pi}{2}\le x\le\frac{\pi}{2}\)</span> (עבור ערכי <span class="math">\(x\)</span> אחרים צריך לפעמים לקחת את השורש השלילי). כלומר, <span class="math">\(\cos\left(\arcsin\left(a\right)\right)=\sqrt{1-\sin^{2}\left(\arcsin a\right)}=\sqrt{1-a^{2}}\)</span>. מסקנה: <span class="math">\(\arcsin^{\prime}\left(a\right)=\frac{1}{\sqrt{1-a^{2}}}\)</span>.</p>
+<p>משהו כאן בבירור לא עובד כאשר <span class="math">\(a=\pm1\)</span>, כלומר כאשר הקלט ל-<span class="math">\(\sin\)</span> הוא כזה שיחזיר 1 או <span class="math">\(-1\)</span>, כלומר <span class="math">\(\pm\frac{\pi}{2}\)</span>, כלומר הנגזרת שמצאנו עובדת רק עבור <span class="math">\(-\frac{\pi}{2}&lt;a&lt;\frac{\pi}{2}\)</span> ואילו בשתי נקודות הקצה הללו משהו "מתפוצץ" (מה שמסביר, מנקודת מבט שונה, למה נאלצתי להצטמצם לתחום הזה). מה בעצם השתבש? אלו הן בדיוק נקודות המקסימום והמינימום של <span class="math">\(\sin\)</span>; אחרי <span class="math">\(\frac{\pi}{2}\)</span>, למשל, היא מתחילה "ליפול" בעוד שקודם היא עלתה. זה אומר שהיא כבר לא תהיה חד-חד-ערכית ולכן לא הפיכה, ולכן מראש היינו חייבים להצטמצם עם <span class="math">\(\arcsin\)</span> לקטע הזה. עכשיו, דרך נחמדה לדמיין פונקציה הופכית במימד אחד היא לקחת את הגרף של הפונקציה ולסובב אותו ב-90 מעלות נגד כיוון השעון, ואז לשקף ביחס לציר <span class="math">\(y\)</span>; אם אתם לא מאמינים תנסו לעשות את זה עם <span class="math">\(f\left(x\right)=x^{2}\)</span>. מן הסתם כשעושים דבר כזה, אז נקודה שבה המשיק של <span class="math">\(\sin x\)</span> היה אופקי (שיפוע 0) תהפוך לנקודה שבה המשיק של <span class="math">\(\arcsin x\)</span> יהיה אנכי (שיפוע "אינסוף"), מה שמסביר את הפיצוץ הזה.</p>
+<p>אם כן, למדנו דבר מעניין - שאם <span class="math">\(\det Df\left(a\right)\ne0\)</span> אז הנגזרת של <span class="math">\(f^{-1}\)</span> ב-<span class="math">\(a\)</span> שווה ל-<span class="math">\(\left[Df\left(f^{-1}\left(a\right)\right)\right]^{-1}\)</span>. אבל שימו לב לשלוש ההנחות שיש לנו כאן:</p>
+<ol>
+    <li><span class="math">\(Df\left(a\right)\)</span> הפיכה.</li>
+    <li><span class="math">\(f^{-1}\)</span> קיימת.</li>
+    <li><span class="math">\(f^{-1}\)</span> גזירה.</li>
+</ol>
+<p>אם שלוש ההנחות הללו התקיימו, אנחנו יודעים לחשב את הנגזרת של <span class="math">\(f^{-1}\)</span>. אבל האמת היא שמתקיים פה קסם - אם <span class="math">\(f\)</span> היא גזירה ברציפות (כלומר, בעלת נגזרת רציפה) אז די בכך ש-<span class="math">\(Df\left(a\right)\)</span> תהיה הפיכה על מנת להבטיח ש<strong>קיימת</strong> ל-<span class="math">\(f\)</span> הופכית בסביבה של <span class="math">\(a\)</span>, ושההופכית הזו תהיה גזירה (למעשה, אם <span class="math">\(f\)</span> גזירה ברציפות <span class="math">\(r\)</span> פעמים, כך גם הנגזרת של ההופכית). הקסם הזה, שנקרא <strong>משפט הפונקציה ההפוכה</strong>, הוא המשפט הלא טריוויאלי הראשון שאנחנו הולכים לראות, ומייד אחר כך נראה שימוש יפה שלו - <strong>משפט הפונקציות הסתומות</strong>. מכיוון שזה לא הולך להיות קצר או פשוט, נחכה עם זה (כולל הניסוח הפורמלי) עד לפוסט הבא. לעת עתה, טיזר - בואו נבין אינטואיטיבית למה זה עובד כמעט מייד בפונקציות <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span>. אם <span class="math">\(f^{\prime}\left(a\right)\ne0\)</span> והנגזרת רציפה, זה אומר שיש סביבה של <span class="math">\(a\)</span> שבה <span class="math">\(f^{\prime}\left(a\right)\)</span> נמצאת כולה מעל 0 או מתחת ל-0. במקרה הראשון זה אומר ש-<span class="math">\(f\)</span> עולה בסביבה הזו, ובמקרה השני - שהיא יורדת. בכל מקרה, היא <strong>מונוטונית</strong>. פונקציה מונוטונית היא, כמובן, הפיכה (עדיין צריך להוכיח שהיא גזירה, אבל לא נדבר על זה פה). כמובן שעבור פונקציות במימד גבוה יותר העסק כבר לא יהיה כל כך פשוט כי זה שהנגזרת היא טרנספורמציה לינארית הפיכה לא יגרור שהפונקציה היא מונוטונית; בפוסט הבא ניכנס לפרטים המלוכלכים.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2015/08/24/googolplex_end_of_numbers/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">האם גוגולפלקס הוא הסמל של סוף המספרים? (לא)</span>
+            </a>
+            
+            
+            
+            <a href="/2015/07/23/cook_levin_theorem/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">משפט קוק-לוין</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

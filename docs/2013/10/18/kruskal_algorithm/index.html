@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>האלגוריתם של קרוסקל ומבנה הנתונים Union/Find - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>האלגוריתם של קרוסקל ומבנה הנתונים Union/Find</h1>
+            <div class="post-meta">
+                <span class="date">2013-10-18</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/מבני נתונים ואלגוריתמים.html">מבני נתונים ואלגוריתמים</a>
+                    
+                    <a href="/categories/תכנות.html">תכנות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/האלגוריתם של קרוסקל.html">האלגוריתם של קרוסקל</a>
+                    
+                    <a href="/tags/מבנה נתונים Union/Find.html">מבנה נתונים Union/Find</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בשעה טובה הגענו לתיאור האלגוריתם של קרוסקל למציאת עץ פורש מינימלי בגרף. הגרף אפילו לא חייב להיות קשיר; אם הוא אינו קשיר, האלגוריתם ימצא עץ פורש מינימלי לכל רכיב קשירות. הרעיון באלגוריתם הוא זה: למיין את הקשתות לפי משקלן, מהקלה לכבדה ביותר, לעבור עליהן סדרתית ולהוסיף לעץ הפורש אותו בונים כל קשת אשר מחברת שני צמתים שבשלב שבו בודקים אותה שייכים לרכיבי קשירות שונים. את זה שהאלגוריתם עובד ונותן עץ פורש מינימלי כבר נימקנו בפוסט הקודם, שבו תיארנו את הרעיון הגנרי מאחורי האלגוריתם של קרוסקל (רעיון שתקף גם באלגוריתם של פרים למציאת עץ פורש מינימלי). לכן בפוסט הזה נתמקד במימוש. בפרט, בשאלה איך בודקים ששני צמתים שייכים לרכיבי קשירות שונים.</p>
+<p>כפי שהערתי גם בפוסט הקודם, מה שאנחנו מחפשים הוא בעצם מבנה נתונים יעיל שמאפשר לנו לשמור מידע על <strong>יחס שקילות</strong>. גם אם אינכם מכירים יחסי שקילות, זה לא כזה חשוב - רק צריך להבין שיחס שקילות יכול להיות מיוצג על ידי חלוקה של הקבוצה שבה אנו עוסקים (במקרה הזה, צמתי הגרף) לאוסף של תת-קבוצות זרות. באלגוריתם שלנו נרצה לבדוק אם שני צמתים שייכים לשני תת-קבוצות שונות, ונרצה <strong>לאחד</strong> שתי תת-קבוצות אם נוסיף קשת בין צמתים השייכים אליהן. בכל שלב של ריצת האלגוריתם, תתי-הקבוצות מייצגות את רכיבי הקשירות של הגרף שבנוי על הקשתות שהוספנו עד כה לעץ שאנחנו בונים (רכיבי קשירות הם מחלקות שקילות של היחס "יש מסלול בין צומת א' לצומת ב'", אבל זה לא קריטי להבין את זה).</p>
+<p>אם כן, אני רוצה מבנה נתונים שתומך בפעולות של <strong>מציאת נציג</strong> למחלקת שקילות מסויימת (כי אז קל לבדוק אם שני איברים שייכים לאותה מחלקה - יש להם את אותו הנציג), ו<strong>איחוד</strong> של שתי מחלקות שקילות שונות. אני לא צריך, למשל, לתמוך בפעולה של <strong>פירוק</strong> מחלקת שקילות קיימת לכמה תת-מחלקות. זה מאפשר לי לתת מבנה נתונים שיהיה יעיל יותר ומותאם יותר למטרות שלי. למבנה הזה קוראים לפעמים Union/Find, על שם שתי הפעולות שהוא תומך בהן, או סתם Disjoint set data structure על פי מה שהוא בא לייצג.</p>
+<p>ראשית, הערה קטנה על המימוש שתהיה רלוונטית גם לאופן שבו אתאר את מבנה הנתונים - ב-Javascript אפשר לקחת אובייקטים ולהוסיף להם שדות שלפני רגע לא היו קיימים. מה זה שדה? משהו שמכיל מידע ו"מחובר" לאובייקט. הנה דוגמה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">edge</span><span class="p">.</span><span class="nx">weight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4</span>
+</code></pre></div>
+
+
+</div>
+
+<p>כאן לקחתי את האובייקט edge ואמרתי "מעכשיו יש לך שדה שנקרא weight וערכו 4, למקרה שמישהו שואל". בשפות כמו C או Java, צריך להצהיר מראש על כל השדות שיהיו לאובייקט; שפות כמו Javascript או רובי או פייתון הן יותר מקלות בקטע הזה, ולכן אני מעדיף את הגישה שלהן כשאני בא לתאר אלגוריתם בצורה פשוטה. כמובן, זה אומר שמי שרוצה לממש את האלגוריתם ב-C צריך להסתבך קצת יותר עם "בניית פיגומים" שיאפשרו לו לעשות את הדברים שאני עושה כאן, אבל אני סומך על הקורא הנבון שיצליח לעשות את זה ולמצוא את הדרך הנוחה ביותר עבורו; העיקר פה הוא האלגוריתם, לא הקוד הספציפי שלי.</p>
+<p>אז נתחיל עם מה שברור שצריך להתחיל ממנו - פונקציה שבכלל מכניסה אובייקט כלשהו למשחק על ידי כך שהיא "יוצרת" קבוצה שמכילה רק אותו. הקבוצה הזו לא באמת תישמר בשום מקום; כל מה שיישמר הוא מידע בתוך האובייקט עצמו שאומר "כרגע, אתה הנציג של הקבוצה שלך", כי אין אחרים:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">make_set</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
+<span class="w">        </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>אם נראה לכם מוזר ש-x כולל את עצמו בתור שדה, צריך להבין שמה שיש בשדה ההוא של x הוא רק <strong>מצביע</strong> לעצמו; משהו שמצביע על אותה כתובת זכרון שבה x נמצא. זה לא ש-x משוכפל כדי להכניס אותו לשדה של עצמו (ושוב, בשפות כמו C צריך לדאוג לכך באופן יותר מפורש).</p>
+<p>עד כמה הפתרון הזה יעיל? ובכן, להחזיר את הנציג של איבר זה מיידי = פשוט ניגשים אל השדה המתאים אצלו. זה לוקח זמן של <span class="math">\(O(1)\)</span> צעדי חישוב. מצד שני, איחוד היא פעולה בעייתית - אם אנחנו מאחדים את המחלקות של שני איברים, נהיה חייבים לשנות את הנציג שעליו מצביעים <strong>כל</strong> האיברים באחת משתי המחלקות שאנו מאחדים. זה אומר שנצטרך איכשהו לעבור סדרתית על כולם. ברמת הקוד שלי, בכלל לא ברור איך אפשר לעשות את זה כי אני לא שומר את כל האיברים במקום מרכזי אחד (כרגע כל מה שיש לי הוא מידע נוסף בתוך כל איבר), אבל זה מילא, נניח שאני כן שומר אותם במיקום מרכזי. עדיין, צריך לעבור על כל האיברים שבכלל שייכים למבנה הנתונים שלי, לבדוק לכל אחד מהם אם הוא באותה קבוצה כמו אחד מהאיברים שמאחדים, ואם כן - לשנות בהתאם את הנציג שלו. אם יש <span class="math">\(n\)</span> איברים בסך הכל במבנה הנתונים, זה אומר שכל פעולת Union דורשת <span class="math">\(O(n)\)</span> צעדי חישוב. זה לא נשמע כזה גרוע עד שחושבים מה קורה, למשל, בדוגמת המבוך שלנו: אנחנו הולכים לקרוא ל-Union בדיוק <span class="math">\(n-1\)</span> פעמים, עד שכל המחלקות "יתאחדו". אם כל פעם כזו עולה לי <span class="math">\(O(n)\)</span> זמן חישוב, אז זמן החישוב הכולל שאשקיע בביצוע פעולות Union/Find יהיה <span class="math">\(O(n^2)\)</span> - וזמן ריבועי זה לא משהו בכלל. אם יש לנו 1,000 איברים ואנו מבצעים 1,000 פעולות איחוד, זמן הריצה הכולל יהיה בסדר גודל של 1,000,000 - לא טוב!</p>
+<p>זה מוביל אותי לנקודה עדינה שנוגעת לאופן שבו מודדים את הסיבוכיות של מבנה נתונים כמו Union/Find: אפשר למדוד את הסיבוכיות הגרועה ביותר של כל פעולה לכשעצמה, אבל מכיוון שזה מבנה נתונים שהאובייקט שהוא מתאר "אוכל את עצמו" עם הזמן, לפעמים נכון יותר למדוד את הזמן הכולל שלוקח לבצע <strong>סדרת פעולות</strong>, ולבדוק רק מהו זמן הריצה <strong>הממוצע</strong> לביצוע פעולה. סיבוכיות שנמדדת באופן הזה נקראת <strong>משוערכת</strong> (Amortized). זה מדד סיבוכיות קצת שונה ממדידת סיבוכיות "המקרה הגרוע ביותר" הטיפוסית, אבל היא יותר הגיונית בהקשר של מבני נתונים כמו Union/Find, בעיקר עם המימוש שנשתמש בו בסוף ו"משפר את עצמו תוך כדי ריצה".</p>
+<p>אז מה שנעשה הוא כך: נניח שיש במבנה הנתונים <span class="math">\(n\)</span> איברים שכולם הוכנסו אליו כבר בהתחלה (כלומר, בוצעו <span class="math">\(n\)</span> פעולות make_set) ואז מגיעה סדרה של פעולות של Union ו-Find, ונראה מה הזמן המקסימלי שנדרש לביצוע כל הפעולות הללו. בסופו של דבר מדד הסיבוכיות שלנו יהיה תלוי בשני פרמטרים - <span class="math">\(n,m\)</span> כאשר <span class="math">\(m\)</span> מודד את מספר הפעולות הכולל שבוצע על המבנה (נהוג להניח שהוא כולל גם את <span class="math">\(n\)</span> פעולות ה-make_set כדי שהוא יהיה תמיד לפחות <span class="math">\(n\)</span>). כרגע, במימוש הנוכחי שלנו, במקרה הגרוע ביותר שבו כל הפעולות אחרי היצירה הן Union, הזמן הכולל של הריצה יהיה <span class="math">\(O(mn)\)</span> - לא מרשים.</p>
+<p>אז מה עושים? משפרים את המהירות של Union על חשבון Find (בלתי נמנע, כי כרגע Find הוא סופר-יעיל). הרעיון הוא שאיבר לא חייב להצביע ישירות על הנציג שלו; מספיק שהוא יצביע על מישהו אחר מהמחלקה שלו, שהוא זה שמצביע על הנציג. או אפילו שהוא יצביע על מישהו שמצביע על מישהו שמצביע על הנציג. הבנתם את הרעיון. מבחינה פורמלית, אפשר לחשוב על כל מחלקת שקילות בתוך מבנה הנתונים שלנו בתור <strong>עץ</strong> מכוון שבו האבא של צומת הוא הצומת שעליו הוא מצביע, וכל הדרכים מובילות בסופו של דבר לצומת מרכזי אחד - השורש - שמצביע על עצמו. זה כמובן פחות יעיל מאשר שכל צומת יצביע ישירות על הנציג, אבל זה עדיין עובד, ונראה בערך ככה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">find</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">){</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>אני קורא עכשיו לשדה של x בשם disjoint_set_pred ולא disjoint_set_rep כי אנחנו מצביעים כעת לא לנציג, אלא ל"איבר שבא לפני x בעץ".</p>
+<p>עכשיו, כמה קלקלנו? התשובה היא שדי הרבה. מה הסיטואציה הגרועה ביותר שיכולה להתרחש? שיש לנו מחלקת שקילות גדולה מסדר גודל של <span class="math">\(n\)</span> איברים, ואיכשהו יצא שהעץ שבו הם מסודרים הוא "שרוך", כלומר לכל צומת יש בן יחיד, ואנחנו מפעילים Find על העלה של השרוך הזה. אז Find יטפס לו למעלה למעלה בעץ עד שיגיע אל השורש, מה שייקח לו <span class="math">\(n\)</span> צעדים; הקפצנו את המחיר של Find מ-<span class="math">\(O(1)\)</span> ל-<span class="math">\(O(n)\)</span>. מצד שני, שיפרנו את Union פלאים, כי עכשיו כל מה שצריך לעשות כדי לאחד שתי קבוצות של אובייקטים שונים היא לקחת את הנציגים שלהם, ולגרום לאחד הנציגים להצביע אל הנציג השני. בקוד זה הולך להיראות ככה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">union</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>הפונקציה הזו לוקחת זמן של <span class="math">\(O(1)\)</span> כדי לבצע את האיחוד בפועל אחרי שבוצעו שתי פעולות ה-Find, אבל כמובן שכרגע מצבנו לא מזהיר כי פעולות ה-Find עצמן הן יקרות. אז לעת עתה נראה שקלקלנו את זמן הביצוע של Find ללא הצדקה ולא שיפרנו את זמן הביצוע של Union. המחיר של ביצוע סדרה של <span class="math">\(m\)</span> פעולות עדיין יהיה <span class="math">\(O(mn)\)</span>. אז מה עושים? כאן מתחיל הקסם: אנחנו הולכים לתקן קצת את Union בצורה שתבטיח ש-Union יצור עץ מאוזן יחסית ולא משהו שנראה כמו שרוך, ואנחנו הולכים לתקן קצת את Find בצורה שתבטיח שהוא "ידחוס" את העץ שעליו הוא פועל ויעביר אותו לייצוג יעיל יותר עבורנו.</p>
+<p>נתחיל מהאופטימיזציה של Find, שהיא יותר קלה להבנה. אנחנו רוצים שבמצב האופטימלי, כל צומת יצביע ישירות אל הנציג שלו; כל הקטע הזה של הפניה עקיפה (להצביע על מישהו שמצביע על מישהו שמצביע על מישהו שמצביע על הנציג) קיים רק כי פעולת Union תהיה יקרה מדי לביצוע בלעדיו. אבל זה לא אומר שאי אפשר לאפטמז את מבנה הנתונים תוך כדי ביצוע: אם אנחנו הפעלנו Find על איבר x ובסופו של דבר מצאנו את הנציג של x, למה לא לנצל את ההזדמנות הזו כדי לעדכן את המצביע של x כדי שיצביע ישירות על הנציג? בצורה הזו, אפילו אם x אכן היה בקצה של "שרוך" והזמן שנדרש כדי למצוא את הנציג שלו היה <span class="math">\(O(n)\)</span>, קריאות עתידיות ל-Find על אותו x יעלו לנו רק <span class="math">\(O(1)\)</span> זמן.</p>
+<p>זה רעיון טוב, אבל אפשר טוב עוד יותר - לתקן <strong>את כל</strong> הצמתים שנמצאים על המסלול מ-x אל הנציג. ומה שבאמת נחמד - הקוד שעושה את זה הוא פשוט להחריד. אז הנה הקוד של Find בגרסה הסופית שלו, שבה אני משתמש בפועל:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">find</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">){</span>
+<span class="w">            </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>הרעיון הוא פשוט: אם x אינו הנציג של הקבוצה של עצמו, קודם כל מוצאים את הנציג באופן רקורסיבי, אחר כך מעדכנים את x כך שיצביע על הנציג, ולבסוף מחזירים את מי ש-x מצביע עליו. בגלל שהפעלנו את Find באופן רקורסיבי, ה"תיקון" שבו כל איבר מצביע על הנציג עובר גם הלאה, לשאר האיברים במסלול מ-x אל הנציג. פשוט וקל.</p>
+<p>שימו לב שהניתוח של הסיבוכיות של Find אכן קצת חורג מניתוחי סיבוכיות סטנדרטיים של אלגוריתמים - כאן הפעלה אחת משפיעה על הסיבוכיות של ההפעלות שאחריה, ולכן פשוט לא נכון למדוד את הסיבוכיות של הפעלה בודדת במנותק מהשאר, והגישה הנכונה היא לבדוק את הסיבוכיות המשוערכת של מבנה הנתונים על גבי סדרה של פעולות. אבל לפני שנדבר עליה, בואו נציג את האופטימיזציה השניה.</p>
+<p>הרעיון של האופטימיזציה השניה פשוט גם הוא: קודם מימשנו את Union על ידי כך שמצאנו את נציגי שתי הקבוצות שמאחדים, ואז אמרנו לאחד מהם להצביע על השני. איך בחרנו מי יצביע על מי? באופן שרירותי לחלוטין. אולי יש דרך טובה יותר לעשות את זה? איך כדאי לבחור מי יצביע על מי כדי למנוע ככל הניתן היווצרות של "שרוכים"? ובכן, קצת מחשבה מראה שהקריטריון המעניין פה הוא <strong>עומק</strong> העץ של הנציג: אנחנו רוצים שהנציג עם העץ העמוק <strong>פחות</strong> יצביע אל הנציג עם העץ העמוק <strong>יותר</strong> (כי בשביל הנציג עם העץ העמוק יותר, תוספת העץ העמוק פחות <strong>לא משפיעה על העומק</strong> שלו).</p>
+<p>אז בואו נוסיף לכל צומת גם פיסת מידע נוספת, שאקרא לה rank (ולמה לא "עומק"? תכף אסביר, אבל נסו לחשוב בעצמכם) ואיחוד יפעל כך: קודם כל מוצאים את נציגי שתי המחלקות שרוצים לאחד; אחר כך משווים את ה-rank של שניהם; אם ה-rank של אחד מהם גדול מזה של השני, גורמים לשני להצביע על הראשון; אם הם שווים בוחרים אחד באופן שרירותי כדי שיצביע על השני, ומגדילים את ה-rank של זה שמצביעים עליו ב-1. הנה הקוד:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">union</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">find</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="p">){</span>
+<span class="w">            </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">a</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="p">{</span>
+<span class="w">            </span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="p">){</span>
+<span class="w">                </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>אוקיי, ולמה אני קורא בשם rank ולא בשם "עומק" לתכונה הזו? אלמלא האופטימיזציה הראשונה, מה שאני קורא לו rank אכן היה עוקב באופן מדויק אחרי עומק העצים של כל הנציגים; אבל האופטימיזציה הראשונה יכולה לשנות את זה - היא מקטינה ללא הרף את עומק העצים הללו, ולא טורחת לעדכן את ה-rank בהתאם (אם תחשבו על כך קצת תראו שכדי לעשות את זה היא חייבת לעשות טיול בכל העץ - מה שהוא גם מסובך ברמת הקוד וגם יגדיל את זמן הריצה של find). לכן אנחנו "מתפשרים" - rank הוא <strong>חסם מלעיל</strong> על עומק העץ של הנציג, וזה מספיק טוב לנו.</p>
+<p>עכשיו, הניתוח המדויק של האופן שבו שתי האופטימיזציות הללו משפרות את האלגוריתם הוא <strong>קשה</strong>. אני לא הולך להציג אותו כרגע, אבל הוא מוצג במלואו, למשל, בספר האלגוריתמים של Cormen ושות'. אני רוצה להציג רק את השורה התחתונה שלו - הסיבוכיות המשוערכת של מבנה הנתונים. הסיבוכיות הזו היא <span class="math">\(O(m\alpha(n))\)</span>, כאשר הפונקציה <span class="math">\(\alpha(n)\)</span> הוא פונקציה שגדלה מאוד, מאוד, מאוד, מאוד, מאוד לאט. לכל צורך מעשי אי פעם אפשר לחשוב על הערך שלה כחסום על ידי 5. מה שזה אומר הוא שזמן הריצה המשוערך של <span class="math">\(m\)</span> פעולות הוא כמעט לינארי ב-<span class="math">\(m\)</span>, עם קלקול שהוא ממש זניח ולא מורגש בפועל.</p>
+<p>בואו נציג עכשיו את הקוד המלא של כל העסק, אחרי שהכנסתי את הפונקציות המתאימות לתוך משהו שנקרא DisjointSet כדי שלא יזהמו את מרחב השמות הכללי:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">make_set</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
+<span class="w">        </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span>
+<span class="w">        </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="nx">find</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">){</span>
+<span class="w">            </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="nx">union</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="p">){</span>
+<span class="w">            </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">a</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="p">{</span>
+<span class="w">            </span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="p">){</span>
+<span class="w">                </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>מה שאני מחבב מאוד במבנה הנתונים הזה הוא עד כמה הקוד שמטפל בו פשוט, למרות שמבנה הנתונים עצמו מכיל כמה שיפורים מאוד לא טריוויאליים אל מול הגישה הנאיבית.</p>
+<p>ועכשיו אפשר סוף סוף להציג את הפונקציה של קרוסקל, שהיא חלק מהמחלקה של גרף:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">kruskal_min_spanning_tree</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">min_queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">();</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">each_edge</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span><span class="nx">min_queue</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">)});</span>
+<span class="w">        </span><span class="nx">min_queue</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">w</span><span class="p">)})</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">vertices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">();</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">n</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="nx">vertices</span><span class="p">.</span><span class="nx">push</span><span class="p">({});</span>
+<span class="w">            </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">make_set</span><span class="p">(</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">tree_edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">();</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">min_queue</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">){</span>
+<span class="w">            </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">min_queue</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]])</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]])){</span>
+<span class="w">                </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">union</span><span class="p">(</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]],</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]]);</span>
+<span class="w">                </span><span class="nx">tree_edges</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">tree_edges</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>שורות 2-4 בונות רשימה ממויינת של הקשתות, כשהמיון הוא מהקלה ביותר (ראשונה) אל הכבדה ביותר.בשורות 5-9 אני מייצר לכל קודקוד של הגרף אובייקט ומפעיל עליו את make_set כדי ליצור קבוצה שמכילה כרגע רק אותו (אני חייב שכל צומת יהיה מיוצג על ידי אובייקט כדי שאפשר יהיה להפעיל עליו את make_set וכרגע בגרף הצמתים הם רק מספרים - כל זה הוא עניין טכני של ג'אווהסקריפט שלא רלוונטי כל כך באופן כללי). בשורה 10 אני מאתחל את הרשימה שבה נשמור את הקשתות שניקח אל העץ. רק משורה 11 מתחיל האלגוריתם האמיתי: כל עוד יש קשתות ברשימה אני שולף ממנה את הראשונה, בודק האם הצמתים שמחוברים לקשת שייכים לאותה קבוצה, ואם לא - מאחד את הקבוצות שלהם ומוסיף את הקשת לעץ. טריוויאלי, אחרי כל עבודת ההכנה שעשינו.</p>
+<p>ושאלת המחץ - מה הסיבוכיות של האלגוריתם? סיבוכיות של אלגוריתמים על גרפים לרוב מודדים כפונקציה של מספר הצמתים V ומספר הקשתות E. כאן שלב המיון של הקשתות לוקח זמן <span class="math">\(O(E\log E)\)</span> כאשר משתמשים באלגוריתם מיון טוב (נאמר, מיון ערימה). לאחר מכן מבצעים <span class="math">\(O(E)\)</span> פעולות של  Find (לכל קשת אנחנו בודקים את הקצוות שלה), ובנוסף לכך בדיוק <span class="math">\(V-1\)</span> פעולות של Union. מה שאומר שאצלנו <span class="math">\(m=O(V+E)\)</span>. לכן הסיבוכיות הכוללת של השימוש ב-Union/Find היא <span class="math">\(O((V+E)\alpha(V))\)</span>. כדי לא לעצור כאן נניח עוד הנחה - שמספר הקשתות הוא לפחות מסדר גודל של מספר הצמתים (אם הוא קטן יותר מ-<span class="math">\(V-1\)</span> הגרף המקורי לא יהיה קשיר ולכן לא נוכל למצוא לו עץ פורש ממילא; אם כי כפי שאמרתי, במקרה הזה נמצא עץ פורש עבור רכיבי הקשירות). תחת ההנחה הזו, <span class="math">\(V=O(E)\)</span>, אפשר לפשט את הסיבוכיות של שלב ה-Union/Find ל-<span class="math">\(O(E\alpha(E))\)</span>. עכשיו, בגלל ש-<span class="math">\(\alpha\)</span> היא פונקציה שגדלה מאוד לאט, היא בפרט גדלה יותר לאט מאשר לוגריתם (שהיא בעצמה פונקציה שגדלה באופן איטי למדי), כלומר, בניסוח פורמלי, <span class="math">\(\alpha(E)=O(\log E)\)</span>. המסקנה היא שהסיבוכיות של שלב ה-Union/Find חסומה על ידי <span class="math">\(O(E\log E)\)</span> כמו שלב המיון ולכן זו גם הסיבוכיות הכוללת של האלגוריתם (שימו לב לתוצאה המפתיעה - שלב המיון הוא השלב הכי כבד מבחינה חישוביות באלגוריתם!). לרוב נהוג לנסח את הסיבוכיות של האלגוריתם בניסוח <span class="math">\(O(E\log V)\)</span> שהוא אפשרי בגלל שבכל גרף, <span class="math">\(E\)</span> הוא לכל היותר <span class="math">\(V^2\)</span> ולכן הלוגריתמים שלהם מאותו סדר גודל.</p>
+<p>בסך הכל הסיבוכיות היא לא רעה בכלל. למצוא את העץ הפורש המינימלי בזמן שהוא כמו מיון של קבוצת הקשתות? די מרשים, לדעתי.</p>
+<p>בפוסט הבא נעבור לאלגוריתם של פרים, ולמבנה הנתונים (המסובך הרבה יותר מ-Union/Find) שבו הוא משתמש. נראה שהסיבוכיות של פרים יכולה להיות אפילו יותר מוצלחת מאשר של קרוסקל, בגרפים שבהם מספר הקשתות גדול משמעותית יותר ממספר הצמתים.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/11/11/sat_intro/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מה זו בעיית SAT ולמה חשוב לפתור אותה?</span>
+            </a>
+            
+            
+            
+            <a href="/2013/10/05/min_spanning_tree_generic_algorithm/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אלגוריתמים לעץ פורש מינימלי בגרף - מה הרעיון הכללי?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

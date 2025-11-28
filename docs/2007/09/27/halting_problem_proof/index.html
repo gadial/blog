@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הוכחת בעיית העצירה - המכונה הזדונית נגד אליהו הנביא (ואיך זה קשור לפרדוקס ניוקומב ולתוכנות שמדפיסות את הקוד של עצמן) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הוכחת בעיית העצירה - המכונה הזדונית נגד אליהו הנביא (ואיך זה קשור לפרדוקס ניוקומב ולתוכנות שמדפיסות את הקוד של עצמן)</h1>
+            <div class="post-meta">
+                <span class="date">2007-09-27</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוביות.html">חישוביות</a>
+                    
+                    <a href="/categories/משחקים וחידות מתמטיות.html">משחקים וחידות מתמטיות</a>
+                    
+                    <a href="/categories/תכנות.html">תכנות</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בשעה טובה הגענו להוכחה ש<a href="http://he.wikipedia.org/wiki/%D7%91%D7%A2%D7%99%D7%99%D7%AA_%D7%94%D7%A2%D7%A6%D7%99%D7%A8%D7%94">בעיית העצירה</a> אינה כריעה - כלומר, שלא קיימת <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%9B%D7%95%D7%A0%D7%AA_%D7%98%D7%99%D7%95%D7%A8%D7%99%D7%A0%D7%92">מכונת טיורינג</a>, שנסמן באות U, שמקבלת כקלט מכונה M וקלט כלשהו x, ואומרת האם M עוצרת על x.</p>
+<p>כמה אנשים איבדתי במשפט הפתיחה הזה?</p>
+<p>כפי שכבר מסתמן, ההוכחה עלולה להיות מבלבלת. היא אינה קשה, אך מופיעות בה לא פחות מ-3 מכונות טיורינג שונות: אותה U, שאכנה מעכשיו "הקוסם" (כי זוהי מכונה "פלאית" שמצליחה באופן קסום לפתור את בעיית העצירה), המכונה M שהיא פשוט שם כללי למכונה שהקוסם מקבל כקלט, ועוד מכונה זדונית שנסמן, נניח, באות Q: זו המכונה שתראה לנו שיש כאן סתירה, על ידי כך שההתנהגות שלה תהיה בלתי אפשרית. לכן אכנה אותה "המכונה הפרדוקסלית".</p>
+<p>לפני שאתאר את Q, אגלוש אסוציאטיבית לפרדוקס המכונה "<a href="http://he.wikipedia.org/wiki/%D7%94%D7%A4%D7%A8%D7%93%D7%95%D7%A7%D7%A1_%D7%A9%D7%9C_%D7%A0%D7%99%D7%95%D7%A7%D7%95%D7%9E%D7%91">הפרדוקס של ניוקומב</a>". הניסוח פשוט למדי: מראים לכם שתי קופסאות, אחת שקופה והאחת אטומה. בשקופה יש 1,000 שקלים, אבל אין לכם מושג מה יש באטומה. אומרים לכם שמותר לכם לקחת או את הקופסה האטומה בלבד, או את השקופה והאטומה גם יחד, אלא שכמובן שיש עוקץ כאן: על פי מה שמספרים לכם, אתמול בערב ניבא אליהו הנביא האם תיקחו את האטומה בלבד או את השקופה והאטומה גם יחד, ותוכן הקופסה האטומה נקבע על פי הנבואה; אם אליהו ניבא שתיקחו רק את האטומה, הרי ששמו באטומה מיליון שקלים, ואם הוא ניבא שתיקחו את שתי הקופסאות, לא שמו בקופסה האטומה כלום. מה תעשו?</p>
+<p>הנחת היסוד של הפרדוקס היא שאליהו הוא נביא אמת ואתם מאמינים שהוא נביא אמת - אחרת, מה אכפת לכם מהנבואות שלו? אם אתם מניחים שהוא נביא אמת יש לכם דילמה: אם תיקחו רק את הקופסה האטומה, יש לכם מיליון שקלים (כי פעלת כפי שמובטח לכם שאליהו ניבא) ואילו אם תיקחו את שתיהן - רק אלף. לכן ברור שכדאי לקחת את האטומה בלבד. מצד שני, מה אליהו כבר יכול לעשות עכשיו, כרגע? הכסף כבר הונח בשתי התיבות, הוא לא יכול לפתע פתאום להיעלם רק כי ברגע האחרון תשנו את דעתכם ותיקחו את שתי התיבות; חבל לוותר כך סתם על אלף שקלים, זה פשוט לא רציונלי. ברור שהדבר הרציונלי לעשות הוא לקחת את שתי התיבות. אבל אז, מובטח שתישארו רק עם 1,000 שקלים! ומצד שני, אם נשארתם עם אלף שקלים, זה אומר שהתיבה האטומה ריקה ואין שום דרך לשנות את זה (כי ההווה לא משפיע על העבר), ולכן כבר עדיף לקחת את שתי התיבות ולהרוויח קצת. וכו' וכו' וכו'.</p>
+<p>לדעתי הפרדוקס מלמד אותנו שאם קיימת נבואה אמיתית, הרי שבהכרח ההווה צריך להיות מסוגל להשפיע על העבר, או לכל הפחות שלא יהיה קיים <strong>שום</strong> רצון חופשי. הפרדוקס רומז את זה באופן עקיף למדי, ואפשר להציג זאת באופן ישיר הרבה יותר: נניח שאליהו היה בא אלייך ואומר "המילה הבאה שתגיד תהיה 'כן'". מה יקרה? לכאורה, אם יש לך רצון חופשי, אתה יכול להגיד "לא" ולסתור את מה שאליהו - הנביא שתמיד צודק - אמר. לכן לא ייתכן שיהיה לך רצון חופשי, וכו' וכו'.</p>
+<p>בעיית העצירה מוכחת כלא כריעה בדיוק בגלל שאותה Q פרדוקסלית באה אל אליהו ואומרת לו "לא". כדי שהדבר יתבצע בצורה פורמלית יש צורך בהתחכמות קטנה, אבל זה בדיוק הרעיון.</p>
+<p>אם כן, Q מקבלת קלט כלשהו. כפי ש<a href="http://www.gadial.net/2007/09/24/turing_machine_extensions/">אמרנו בעבר</a>, אפשר לקודד כל מכונת טיורינג באמצעות מספר טבעי, ולכן מה ש-Q תעשה יהיה לפענח את הקלט שלה בהתאם, בתור קידוד של מכונת טיורינג M כלשהי. כעת Q תפנה אל "הקוסם", U, ותשאל אותו האם M עוצרת על הקלט x (וכזכור, x=M) - כלומר, האם M עוצרת על הקלט שהוא הקידוד שלה עצמה.</p>
+<p>אם U עונה ש-M עוצרת, אז Q נכנסת מייד ללולאה אינסופית. אם לעומת זאת U עונה ש-M לא עוצרת, אז Q עוצר מייד.</p>
+<p>וכעת, לפרדוקסליות: איך Q תתנהג על הקלט שהוא Q עצמה?</p>
+<p>בואו נעבור על זה צעד צעד: Q היא מכונת טיורינג. לכן יש לה קידוד, שהוא בסה"כ מספר טבעי. נניח ש-Q קיבלה את המספר הטבעי הזה כקלט. כעת, היא מעבירה ל-U (ה"קוסם") שני ערכים, כפי ש-U תמיד אמורה לקבל: קידוד של מכונה M, וקלט x, ו-U אומרת האם M עוצרת על x או שלא. במקרה שלנו, M=Q וגם x=Q, ולכן מה ש-U אומרת הוא "האם Q עוצרת על הקלט שהוא הקידוד Q עצמה".</p>
+<p>כעת, נזכור איך בנינו את Q: אם U אמר "Q עוצרת על הקלט שהוא הקידוד של Q", אז Q מייד נכנסת ללולאה אינסופית - ולא עוצרת. אם U אמר ההפך, ש-Q לא עוצרת, אז על פי הבניה, Q עוצרת מייד. מכיוון שהקלט של Q היה Q עצמה, זו סתירה - כי בכל אחד משני המקרים Q מתנהגת בדיוק הפוך ממה ש-U ניבאה. לא נותר אלא להסיק ש-U אינה מסוגלת לנבא מאום, כלומר שהמכונה הקסומה הזו לא קיימת בכלל.</p>
+<p>אמרתי שיש התחכמות קטנה בהוכחה, ואציג אותה כעת. ייתכן שחלקכם תוהים למה לא הלכתי בדרך הישירה יותר, שבה אני מגדיר את Q כך: מקבלת קלט x כלשהו, ובמקום לחשוב על x כעל מכונה ולשאול את U האם המכונה הזו עוצרת על הקלט שהוא הקידוד של עצמה, פשוט לשאול את U האם Q אמורה לעצור על x ולפעול באופן הפוך לתשובה ש-U נותן. מבחינה מילולית התיאור הזה נשמע מצויין, אבל חבויה בו הנחה סמויה לפיו Q מסוגלת לשאול את U ישירות על עצמה; כדי לעשות זאת, Q צריכה לכתוב את כל התיאור הפורמלי של עצמה על הסרט שלה ואז להפעיל את U עליה. לא ברור איך לעשות את זה, אם זה בכלל אפשרי, במקרה הספציפי של Q. באופן כללי, וייתכן שזה ישמע מפתיע לחלק מכם (אותי זה הפתיע מאוד), תוכנות מחשב שמדפיסות את הקוד של עצמן (באנגלית קיים להן שם נחמד: <a href="http://en.wikipedia.org/wiki/Quine_%28computing%29">Quine</a>) <strong>קיימות</strong>, וזה תרגיל נחמד מאוד לחשוב איך לכתוב תוכנה שכזו (כמובן, שפה חזקה יותר מקלה על העניינים: הנה דוגמה לאיך תוכנית שכזו נראית ב<a href="http://he.wikipedia.org/wiki/%D7%A8%D7%95%D7%91%D7%99">רובי</a>: <em>="</em>=%p;puts <em>%%</em>";puts <em>%</em>). מצד שני, תוכנות שכאלו מתבססות תמיד (למיטב ידיעתי) על "רמאות" בדמות פונקציה מחוכמת שמשתמשים בה להדפסה ואת הקוד שלה עצמה אין צורך להדפיס - בדוגמת הרובי שנתתי זוהי puts. מכונת טיורינג שכותבת את הקידוד של עצמה על הסרט נשמע לי קצת יותר בעייתי לייצר, מהטעם הפשוט שכל ביט שאנו משנים בתיאור המכונה משפיע גם על הפלט שהיא צריכה להוציא.</p>
+<p>התגובה הראשונית הנפוצה לבעיית העצירה (וגם התגובה שלי) היא - נו, אז מה. הוכחנו שעבור מכונה מאוד ספציפית, Q המעצבנת, אי אפשר לפתור את בעיית העצירה. הדבר דומה ל<a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%A4%D7%98_%D7%90%D7%99_%D7%94%D7%A9%D7%9C%D7%9E%D7%95%D7%AA_%D7%A9%D7%9C_%D7%92%D7%93%D7%9C">משפט אי השלמות של גדל</a> - הוכחתו בונה במפורש פסוק מסויים שאי אפשר להוכיח או להפריך במסגרת המערכת שעליה מפעילים את המשפט, אבל הפסוק הזה לכשעצמו הוא "לא מעניין" (הוא בעצם אומר "אי אפשר להוכיח אותי" ותו לא). אני חייב להודות שאין לי תשובת קסם לשאלת ה"נו, אז מה" הזו (אולי בתגובות תהיה כזו); עבור מחלקה מאוד מאוד גדולה של תוכניות, ככל הנראה כל התוכניות שאי פעם יעניינו אותנו באופן מעשי - המחלקה <a href="http://he.wikipedia.org/wiki/PSPACE">PSPACE</a> - אפשר לפתור את בעיית העצירה לכל תוכנית שכזו (איך? ההסבר אינו מסובך; אני מקווה להגיע אליו בפירוט בעתיד. הנקודה המרכזית היא שאם הזיכרון שמותר לך להשתמש בו חסום, הרי שתוכנית שמסמלצת אותך תוכל לזהות לולאה אינסופית אצלך על ידי כך ש"תמונת הזיכרון" שלך תחזור על עצמה פעמיים). עם זאת, חשוב לזכור שאנחנו לא יודעים שיטה כללית להכריע את בעיית העצירה לכל התוכניות מלבד זו הבעייתית; הבעייתית רק רומזת לנו על מה אי אפשר בשום פנים ואופן לעשות - וכפי שנראה בפוסטים הבאים, גם נובע ממנה שלא ניתן לעשות כל מני דברים אחרים.</p>
+<p>ובינינו, אם תפסתם את אליהו פעם בשקר - תמשיכו לסמוך עליו בעתיד?</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2007/09/29/frog_riddle/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חידת צפרדע</span>
+            </a>
+            
+            
+            
+            <a href="/2007/09/26/halting_problem/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">בעיית העצירה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

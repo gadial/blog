@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פונקציות יוצרות - והפעם ברצינות (חלק ב&#39;) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>פונקציות יוצרות - והפעם ברצינות (חלק ב&#39;)</h1>
+            <div class="post-meta">
+                <span class="date">2011-08-13</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/טכני.html">טכני</a>
+                    
+                    <a href="/tags/משפט קיילי.html">משפט קיילי</a>
+                    
+                    <a href="/tags/פונקציות יוצרות.html">פונקציות יוצרות</a>
+                    
+                    <a href="/tags/פונקציית החלוקה.html">פונקציית החלוקה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אני רוצה להמשיך לדבר על פונקציות יוצרות והדברים המגניבים שעושים איתן, ובפוסט הזה ללכת לכיוונים עוד יותר טכניים מהפוסט הקודם (כי ככה זה במתמטיקה - כשמגיעים לדברים מתוחכמים, זה גם נהיה יותר טכני). בפוסט הקודם ראינו כי אם <span class="math">\(A,B\)</span> הן מחלקות של אובייקטים עם פונקציות יוצרות <span class="math">\(a\left(x\right),b\left(x\right)\)</span> אז הפונקציה היוצרת של <span class="math">\(A+B\)</span> (איחוד זר של <span class="math">\(A,B\)</span>) היא <span class="math">\(a\left(x\right)+b\left(x\right)\)</span>; הפונקציה היוצרת של <span class="math">\(A\times B\)</span> היא <span class="math">\(a\left(x\right)b\left(x\right)\)</span>; והפונקציה היוצרת של <span class="math">\(A^{*}\)</span> (סדרות סופיות של איברים מ-<span class="math">\(A\)</span>) היא <span class="math">\(\frac{1}{1-a\left(x\right)}\)</span>. עם שלוש הבניות הללו כבר יצא לנו לפתור בעיה נחמדה באופן לא טריוויאלי (ספירה של עצים) - בואו נוסיף עוד כמה כלים לארסנל ונראה איך הם עוזרים לנו.</p>
+<p>אני רוצה להציג כעת את הפונקציה היוצרת שמתאימה לבעיית החלוקות (חלוקה של מספר <span class="math">\(n\)</span> היא כתיבה של <span class="math">\(n\)</span> כסכום מספרים טבעיים קטנים ממנו, כאשר אין חשיבות לסדר האיברים בחלוקה). זו דוגמה חשובה - אולי החשובה ביותר - לבעיה שבה אין לנו נוסחה מפורשת עבור הפתרון אבל יש לנו פונקציה יוצרת פשוטה מאוד. בואו ניזכר ש-<span class="math">\(\frac{1}{1-x}\)</span> שווה ל-<span class="math">\(1+x+x^{2}+x^{3}+\dots\)</span>; באותו האופן <span class="math">\(\frac{1}{1-x^{k}}\)</span> שווה ל-<span class="math">\(1+x^{k}+x^{2k}+x^{3k}+\dots\)</span> וכן הלאה. עכשיו, מה מיוצג לנו על ידי <span class="math">\(\frac{1}{1-x}\cdot\frac{1}{1-x^{2}}\)</span>? אני טוען שזו הפונקציה היוצרת של הסדרה <span class="math">\(a_{n}\)</span> כך ש-<span class="math">\(a_{n}\)</span> הוא מספר הדרכים לכתוב את <span class="math">\(n\)</span> כסכום של 2 ו-1. מדוע? ובכן, כי</p>
+<p><span class="math">\(\frac{1}{1-x}\cdot\frac{1}{1-x^{2}}=\left(1+x+x^{2}+\dots\right)\left(1+x^{2}+x^{4}+\dots\right)\)</span></p>
+<p>וכשנפתח את הסוגריים, האיבר <span class="math">\(x^{n}\)</span> יתקבל בדיוק כמספר הפתרונות בטבעיים של המשוואה <span class="math">\(y_{1}+2y_{2}=n\)</span> (הסבירו לעצמכם מדוע!)</p>
+<p>כבר אוילר הלך עם החשיבה הזו צעד אחד קדימה ואמר שאם כך, הפונקציה היוצרת עבור חלוקות בכלל, שבהן אין לנו מגבלה על גודל החלקים שאליהם אפשר לפרק את <span class="math">\(n\)</span>, הוא פשוט המכפלה <span class="math">\(\prod_{m=1}^{\infty}\frac{1}{1-x^{m}}\)</span> (הסימן <span class="math">\(\Pi\)</span> מציין מכפלה - אנחנו כופלים את כל האיברים מהצורה <span class="math">\(\frac{1}{1-x^{m}}\)</span>, עבור כל <span class="math">\(m\ge1\)</span> טבעי). מכפלה אינסופית שכזו עשויה לגרום להרמת גבה, אבל כרגיל - טור החזקות שהוא תוצאת הכפל הוא בעל התכונה שכל מקדם שלו נקבע רק על פי מספר סופי של איברים, ולכן אין לנו כאן צורך לדבר על התכנסות בכלל והאינסופים שנכנסים למשחק לא משפיעים עלינו. זה נפנוף ידיים שמסתיר מאחוריו קצת יותר סיבוכים שלא אכנס אליהם.</p>
+<p>הדוגמה הזו היא מקרה פרטי של בניה כללית שאכנה Multiset, ובקיצור - <span class="math">\(\mbox{MS}\)</span>. אם <span class="math">\(A\)</span> היא מחלקה כלשהי, אז פורמלית אפשר להגדיר את <span class="math">\(\mbox{MS}\left(A\right)\)</span> בתור <span class="math">\(\prod_{a\in A}\left\{ a\right\} ^{*}\)</span> כאשר איברים "אינסופיים" מוצאים החוצה (הסבר מדויק יבוא אחרי שנבין מה לעזאזל הולך בהגדרה הבסיסית). בניסוח מילולי, איבר של <span class="math">\(\mbox{MS}\left(a\right)\)</span> מורכב ממספר סופי של סדרות, כשבכל סדרה מופיע איבר כלשהו של <span class="math">\(A\)</span> מספר סופי מסויים של פעמים.</p>
+<p>ברור לי שגם התיאור הזה אבסטרקטי למדי אז הנה דוגמה קונקרטית. אפשר לחשוב על הטבעיים, <span class="math">\(\mathbb{N}=\left\{ 1,2,3,\dots\right\} \)</span>, בתור קבוצה של אובייקטים קומבינטוריים כאשר ה"גודל" של איבר <span class="math">\(t\in\mathbb{N}\)</span> הוא פשוט <span class="math">\(t\)</span> עצמו (כלומר, יש איבר בודד מגודל 1 - המספר 1; ואיבר בודד מגודל 13 - המספר "שלוש עשרה", וכן הלאה). לפורמליסטיים שבכם רק אעיר שאפשר להגדיר את <span class="math">\(\mathbb{N}\)</span> הזו בתור <span class="math">\(\left\{ \bullet\right\} \cdot\left\{ \bullet\right\} ^{*}\)</span>, כאשר <span class="math">\(\bullet\)</span> הוא סימון מוסכם לאיבר מגודל 1 ("אטום").</p>
+<p>כעת, מהו <span class="math">\(\mbox{MS}\left(\mathbb{N}\right)\)</span>? איבר לדוגמה בו ייראה כך: <span class="math">\(\left(\left(1,1,1\right),\left(2,2\right),\left(7\right),\left(13,13\right)\right)\)</span> - זה אוסף של 4 סדרות; בסדרה הראשונה מופיע 1 בדיוק 3 פעמים, 2 מופיע פעמיים, וכדומה. ה"גודל" של האיבר הזה הוא סכום הגדלים של ארבעת הסדרות, והגודל שלהן בתורו הוא סכום הגדלים של האיברים שבהם; מכאן שגודל הסדרה הראשונה הוא 3, גודל הסדרה השניה 4, גודל השלישית 7 וגודל הרביעית 26 ולכן הגודל הכולל של האיבר הזה הוא 40. האיבר הזה, כפי שודאי כבר הבנתם, מייצג חלוקה של המספר 40, ובאופן כללי כל איבר בגודל 40 בתוך <span class="math">\(\mbox{MS}\left(\mathbb{N}\right)\)</span> יתאים לחלוקה של המספר 40. לכן כמות האיברים מגודל 40 ב-<span class="math">\(\mbox{MS}\left(\mathbb{N}\right)\)</span> היא בדיוק מספר החלוקות של 40 - בדיוק מה שרצינו.</p>
+<p>בואו נחזור שניה להגדרה הפורמלית, רק עבור המתמטיקאים בחבורה - מי שהפסקה הזו מטרללת אותו יכול לדלג, זו פורמליסטיקה חשובה אבל לא קריטית להצגה פופולרית כמו פה. <span class="math">\(\prod_{a\in A}\left\{ a\right\} ^{*}\)</span> היא הגדרה בעייתית אם <span class="math">\(A\)</span> אינסופית, כי אין משמעות, למשל, לאיבר שמתקבל מהמכפלה <span class="math">\(\prod_{a\in A}\left\{ a\right\} \)</span> - זה יהיה איבר מגודל אינסופי. כדי למנוע היווצרות של איברים כאלו צריך להשתמש בתעלול נוסף - נשתמש בסימון <span class="math">\(\prod_{a\in A}^{n}\left\{ a\right\} ^{*}\)</span> כדי לתאר את המכפלה המתאימה שבה משתתפים כל אברי <span class="math">\(A\)</span> עד האיבר שמספרו הסידורי הוא <span class="math">\(n\)</span>, תחת איזה סידור מוסכם מראש של אברי <span class="math">\(A\)</span>. כעת אפשר להגדיר <span class="math">\(\mbox{MS}\left(A\right)=\sum_{n=1}^{\infty}\prod_{a\in A}^{n}\left\{ a\right\} ^{*}\)</span> - זה משיג בצורה פורמלית את מה שאני מקווה כבר ברור אינטואיטיבית.</p>
+<p>עכשיו, נניח שאנחנו יודעים את הפונקציה היוצרת <span class="math">\(a\left(x\right)\)</span> של <span class="math">\(A\)</span>; מהי הפונקציה היוצרת של <span class="math">\(\mbox{MS}\left(A\right)\)</span>? כאן העסק מסתבך. ראשית, מה הפונקציה היוצרת של <span class="math">\(\left\{ a\right\} ^{*}\)</span>? על פי מה שראינו בפוסט הקודם, היא <span class="math">\(\frac{1}{1-x^{\left|a\right|}}\)</span> כש-<span class="math">\(\left|a\right|\)</span> הוא הגודל של <span class="math">\(a\)</span>; הפונקציה הזו מתאימה לסדרה שכולה 0-ים פרט למקומות שהם כפולות שלמות של הגודל של <span class="math">\(a\)</span> ובהם יש 1. מכאן, אם נלך עם האינטואיטציה של אוילר, שהפונקציה היוצרת שאנו מחפשים היא <span class="math">\(\prod_{a\in A}\frac{1}{1-x^{\left|a\right|}}\)</span>, שאותה אפשר לכתוב גם כ-<span class="math">\(\prod_{n=1}^{\infty}\left(\frac{1}{1-x^{_{n}}}\right)^{a_{n}}\)</span>, כאשר <span class="math">\(a_{n}\)</span> הוא מספר האיברים מגודל <span class="math">\(n\)</span> ב-<span class="math">\(A\)</span>. זו לא דרך הצגה יפה במיוחד כי המקדמים <span class="math">\(a_{n}\)</span> פזורים להם בכל מקום - אנחנו רוצים תיאור שתופיע בו רק הפונקציה <span class="math">\(a\left(x\right)\)</span> עצמה. לשם כך נשתמש בתעלול ידוע שהופך מכפלות לסכומים - שימוש בלוגריתם. כזכור, <span class="math">\(y=\exp\left(\log y\right)\)</span> כאשר <span class="math">\(\exp\left(t\right)\)</span> זו פשוט דרך תרבותית לכתוב <span class="math">\(e^{t}\)</span> בלי לחרוג מהשורה.</p>
+<p>אם כן: <span class="math">\(\prod_{n=1}^{\infty}\left(\frac{1}{1-x^{_{n}}}\right)^{a_{n}}=\exp\left(\log\prod_{n=1}^{\infty}\left(\frac{1}{1-x^{_{n}}}\right)^{a_{n}}\right)\)</span>, והביטוי הזה מתפשט לו והופך ל:</p>
+<p><span class="math">\(\exp\left(\sum_{n=1}^{\infty}-a_{n}\log\left(1-x^{n}\right)\right)\)</span></p>
+<p>הצעד הבא דורש קצת היכרות עם לוגריתם וזהות סטנדרטית (ושימושית מאוד) מאנליזה: <span class="math">\(\log\left(1-x\right)=-\sum_{n=1}^{\infty}\frac{x^{n}}{n}\)</span>. אחרי שימוש בה, מקבלים:</p>
+<p><span class="math">\(\exp\left(\sum_{n=1}^{\infty}a_{n}\sum_{k=1}^{\infty}\frac{\left(x^{n}\right)^{k}}{k}\right)\)</span></p>
+<p>ועכשיו מגיע טריק סטנדרטי נוסף - שינוי סדר הסכימה:</p>
+<p><span class="math">\(\exp\left(\sum_{k=1}^{\infty}\frac{1}{k}\left(\sum_{n=1}^{\infty}a_{n}\left(x^{k}\right)^{n}\right)\right)\)</span></p>
+<p>וכעת הפאנץ' - מהו <span class="math">\(\sum_{n=1}^{\infty}a_{n}\left(x^{k}\right)^{n}\)</span>? ובכן, על פי ההגדרה ממש, זהו <span class="math">\(a\left(x^{k}\right)\)</span>. לכן קיבלנו:</p>
+<p><span class="math">\(\exp\left(\sum_{k=1}^{\infty}\frac{a\left(x^{k}\right)}{k}\right)\)</span></p>
+<p>וזוהי הפונקציה היוצרת של <span class="math">\(\mbox{MS}\left(A\right)\)</span>.</p>
+<p>כן, אמרתי שזה הולך להיות יותר משוגע בהמשך, כן? (עם זאת, זה עדיין חומר בסיסי למדי...)</p>
+<p>כמובן, כאן צריך לתהות מה זה בכלל <span class="math">\(\exp\)</span> ו-<span class="math">\(\log\)</span> בהקשר של טורי חזקות פורמליים. כדאי לזכור ש-<span class="math">\(\exp\left(t\right)=\sum_{n=0}^{\infty}\frac{t^{n}}{n!}\)</span> הוא משהו שאפשר לתת לו משמעות בכל הקשר שמאפשר דיבורים על סכומים אינסופיים ובו יש משמעות לחזקות של <span class="math">\(t\)</span> וכפל שלו בסקלר. כך מגדירים לעתים אקספוננט של מטריצות, וכך אפשר להגדיר פה אקספוננט של טורי חזקות. אני מקווה שהרעיון ברור כי איני רוצה להרחיב על כך יותר.</p>
+<p>בואו נעבור עכשיו לדבר על משהו שונה. ראינו שהפונקציה היוצרת לחלוקות היא <span class="math">\(\prod_{n=1}^{\infty}\frac{1}{1-x^{n}}\)</span>; זו לא צורה סגורה, וכבר אמרתי שעל נוסחה סגורה למספר החלוקות עצמן (ולא לפונקציה היוצרת) אין בכלל מה לדבר - אז מה יצא לנו מכל זה? איך הפונקציה היוצרת עוזרת לנו? ובכן, היא עוזרת לנו <strong>לחשב</strong> את מספר החלוקות בצורה יעילה בהרבה מכוח גס; וזה, אם חושבים על זה, מה שאנחנו רוצים גם בנוסחה סגורה.</p>
+<p>אם נותנים לנו את <span class="math">\(n\)</span>, איך נגלה כמה חלוקות יש לו? הגישה הנאיבית אומרת שפשוט נתחיל לחלק אותו ונראה כמה תוצאות שונות נקבל. בצורה הזו זמן הריצה שלנו יהיה חסום מלמטה על ידי מספר החלוקות של <span class="math">\(n\)</span> - ואפשר לגלות בסוד שהמספר הזה הוא אקספוננציאלי ב-<span class="math">\(n\)</span> (ניתוח טוב מאוד של המספר הזה הוא אחת מהתוצאות של הארדי ורמנוג'אן). בקיצור, לא אלגוריתם טוב. אפשר להציע לו כמה שיפורים, אבל מה שאני הולך לתאר עכשיו הוא גישה שונה שנותנת תוצאות טובות בהרבה; נוסחת נסיגה פשוטה יחסית שמאפשרת לחשב את מספר החלוקות של <span class="math">\(n\)</span> בהתבסס על כך שאנחנו כבר יודעים את מספר החלוקות של המספרים שקטנים ממנו.</p>
+<p>בואו נשתמש בסימון <span class="math">\(P\left(x\right)=\prod_{n=1}^{\infty}\frac{1}{1-x^{n}}\)</span> (P מלשון Partition - חלוקה), ונסמן ב-<span class="math">\(p_{n}\)</span> את מספר החלוקות של <span class="math">\(n\)</span>. כעת ניקח את <span class="math">\(P\left(x\right)\)</span> ונתעלל בה על ידי לקיחת מה שנקרא "נגזרת לוגריתמית" - זה שם מפוצץ לכך שאנחנו מפעילים לוגריתם על <span class="math">\(P\left(x\right)\)</span> וגוזרים את הכל. מה שמקבלים מזה הוא את <span class="math">\(\frac{P^{\prime}\left(x\right)}{P\left(x\right)}\)</span>; באגף ימין אחרי הפעלת לוגריתם נקבל <span class="math">\(-\sum_{n=1}^{\infty}\log\left(1-x^{n}\right)\)</span> ואחרי גזירה - <span class="math">\(\sum_{n=1}^{\infty}\frac{nx^{n-1}}{1-x^{n}}\)</span>. נכפול את שני האגפים ב-<span class="math">\(x\)</span> וקיבלנו את השוויון:</p>
+<p><span class="math">\(x\frac{P^{\prime}\left(x\right)}{P\left(x\right)}=\sum_{n=1}^{\infty}\frac{nx^{n}}{1-x^{n}}\)</span></p>
+<p>כעת נכפול ב-<span class="math">\(P\left(x\right)\)</span> את שני האגפים, וקיבלנו <span class="math">\(xP^{\prime}\left(x\right)=P\left(x\right)\cdot\sum_{n=1}^{\infty}\frac{nx^{n}}{1-x^{n}}\)</span>. במבט ראשון הנוסחה הזו מעוררת בי רצון לפרוץ בבכי, אבל היא באמת לא נוראה עד כדי כך: אגף שמאל הוא <span class="math">\(\sum_{n=1}^{\infty}np_{n}x^{n}\)</span> (למה? ובכן, <span class="math">\(P\left(x\right)=\sum_{n=0}^{\infty}p_{n}x^{n}\)</span> - מה קורה כשגוזרים איבר-איבר וכופלים ב-<span class="math">\(x\)</span>?). מה שהולך באגף ימין כואב קצת יותר, בכלל ה-<span class="math">\(\frac{1}{1-x^{n}}\)</span> שיש שם. מה שצריך לעשות הוא להשתמש בזהות <span class="math">\(\frac{1}{1-x^{n}}=\sum_{k=0}^{\infty}x^{nk}\)</span>, ואז מקבלים שאגף ימין הוא</p>
+<p><span class="math">\(P\left(x\right)\cdot\sum_{n=1}^{\infty}n\left(\sum_{k=1}^{\infty}x^{nk}\right)=\sum_{k=1}^{\infty}\left(\sum_{n=1}^{\infty}nx^{nk}\right)\)</span></p>
+<p>את הכפל הזה אפשר לבצע על פי חוקי הכפל הרגילים של טורי חזקות. אנחנו רוצים לדעת מהו המקדם של <span class="math">\(x^{n}\)</span>; אז לכל <span class="math">\(j\)</span> מ-<span class="math">\(1\)</span> ועד <span class="math">\(n\)</span>, נניח ש-<span class="math">\(P\left(x\right)\)</span> תורם את האיבר <span class="math">\(p_{n-j}x^{n-j}\)</span> למכפלה ונותר להבין מה המקדם של <span class="math">\(x^{j}\)</span> בטור הימני. בכל פעם שבה <span class="math">\(x^{j}\)</span> מתקבל זה באמצעות מכפלה מהצורה <span class="math">\(j=nk\)</span>, כלומר <span class="math">\(n\)</span> מחלק את <span class="math">\(j\)</span>; ועבור <span class="math">\(n\)</span> הזה הערך שנתרם לסכום של המקדם הוא בדיוק <span class="math">\(n\)</span>. השורה התחתונה - המקדם של <span class="math">\(j\)</span> יהיה בדיוק <span class="math">\(\sigma\left(j\right)\)</span> - סכום המחלקים של <span class="math">\(j\)</span> (כולל <span class="math">\(j\)</span> עצמו). זו פונקציה מוכרת וחשובה בזכות עצמה.</p>
+<p>הבנתם משהו? קל מאוד ללכת לאיבוד כאן, אבל הנה השורה התחתונה?</p>
+<p><span class="math">\(np_{n}=\sum_{j=1}^{\infty}\sigma\left(j\right)p_{n-j}\)</span></p>
+<p>זו נוסחה רקורסיבית שמאפשרת חישוב יעיל למדי של <span class="math">\(p_{n}\)</span> (פורמלית, הסיבוכיות היא <span class="math">\(O\left(n^{2}\right)\)</span> לחישוב כל הערכים <span class="math">\(p_{1},\dots,p_{n}\)</span>). והנוסחה הזו (שלדעתי היא אלגנטית למדי) הופקה באמצעות הפונקציה היוצרת <span class="math">\(P\left(x\right)\)</span>; זו המחשה לסוג הדברים שאפשר להפיק מפונקציות יוצרות בעולם האמיתי (וכפי שאנו רואים, זה לא קל לעיכול מיידי - אף שאין כאן מתמטיקה מחוכמת במיוחד).</p>
+<p>אני רוצה לעבור עכשיו לדבר על סוג אחר של פונקציות יוצרות - פונקציות יוצרות אקספוננציאליות. הפונקציות היוצרות ה"רגילות" שבהן השתמשנו עד כה תופסות היטב מבנים <strong>לא מסומנים</strong>. כך למשל בחלוקות, <span class="math">\(3=1+1+1\)</span> אבל כל ה"1"-ים הללו זהים, ולכן <span class="math">\(1+2=3\)</span> נספר רק פעם אחת ולא שלוש פעמים (אם היה לנו "1 ירוק", "1 אדום" ו"1 כחול" היינו צריכים לספור את <span class="math">\(1+2=3\)</span> לכל אחד משלושת צבעי ה-1-ים הללו). אולי הדוגמה הפשוטה ביותר לבעיה שעוסקת באיברים מסומנים היא <strong>תמורה</strong> שלהם - סידור של <span class="math">\(n\)</span> המספרים מ-1 ועד <span class="math">\(n\)</span> בשורה. אולי התוצאה הבסיסית ביותר שנלמדת בקומבינטוריקה הוא שמספר הסידורים הוא <span class="math">\(n!\)</span>, כך שהפונקציה היוצרת המתאימה היא <span class="math">\(\sum_{n=0}^{\infty}n!x^{n}\)</span>. זו פונקציה יוצרת בעייתית למדי; אם מנסים לחשוב עליה כעל אובייקט אנליטי ולא רק פורמלי, אז לא משנה איזה ערך נציב ב-<span class="math">\(x\)</span> (מתוך המרוכבים), הטור הזה יתכנס רק עבור <span class="math">\(x=0\)</span>. אז במקום להסתבך עם פונקציות כאלו, "מנרמלים".</p>
+<p>פורמלית, הפונקציה היוצרת האקספוננציאלית של <span class="math">\(a_{n}\)</span> היא <span class="math">\(\sum_{n=0}^{\infty}\frac{a_{n}}{n!}x^{n}\)</span>, כלומר מחלקים את המקדם ב-<span class="math">\(n!\)</span>. שינוי קטן, אבל מועיל. תחת ההגדרה הזו, הפונקציה היוצרת עבור תמורות היא <span class="math">\(\sum_{n=0}^{\infty}\frac{n!}{n!}x^{n}=\frac{1}{1-x}\)</span>.</p>
+<p>כמו במקרה של פונקציות יוצרות רגילות, כך גם כאן פעולות אלגבריות על הפונקציות היוצרות הן בעלות משמעות קומבינטורית. חיבור הוא בעל משמעות של איחוד זר, כמקודם; אבל כפל הוא בעל משמעות קצת שונה, שהיא זו שמאפשרת לנו לחשוב על הפונקציות היוצרות האקספוננציאליות בתור ייצוגים טובים ל"מבנים מסומנים". מכפלה היא אוסף של זוגות, כמקודם, אבל כל זוג מתקבל כך: בהינתן <span class="math">\(x\in X\)</span> ו-<span class="math">\(y\in Y\)</span> שהאטומים שלהם מסומנים (נוח לחשוב על <span class="math">\(x,y\)</span> תמיד בתור גרפים עם סימונים לצמתים), בונים מהם את כל הזוגות האפשריים <span class="math">\(\left(x^{\prime},y^{\prime}\right)\)</span> שבהם יש סימון כלשהו שעונה לדרישה שאם מסתכלים רק על הסימונים של <span class="math">\(x^{\prime}\)</span> הם איזומורפיים לאלו של <span class="math">\(x\)</span> מבחינת הסדר ביניהם, וכך גם עבור <span class="math">\(y^{\prime}\)</span> (בנוסף גם דורשים שהמספרים יהיו בטווח <span class="math">\(1,\dots,n\)</span> כאשר <span class="math">\(n\)</span> הוא הגודל הכולל של הזוג; אחרת יווצרו לנו אינסוף זוגות כך עבור <span class="math">\(\left(x,y\right)\)</span>). גם זה מבלבל קצת במבט ראשון אבל לא יהיה קריטי בהמשך.</p>
+<p>בואו נגדיר עוד פעולה אחת ואז ניתן דוגמת מחץ. אם <span class="math">\(A\)</span> היא מחלקה, נגדיר <span class="math">\(\mbox{SET}\left(A\right)\)</span> בתור אוסף כל תת הקבוצות הסופיות של איברים מ-<span class="math">\(A\)</span> (אם <span class="math">\(A\)</span> היא מחלקה של גרפים, אז <span class="math">\(\mbox{SET}\left(A\right)\)</span> היא מחלקה של <strong>קבוצות סופיות</strong> של גרפים). זו פעולה קצת יותר פשוטה מאשר <span class="math">\(\mbox{MS}\)</span> של המקרה הלא מסומן, כי במקרה הלא מסומן היה צריך להתמודד איכשהו עם "אותו איבר שמופיע כמה פעמים" וכאן, בגלל שלכל איבר יש סימון ייחודי, זה לא קורה.</p>
+<p>אם נסמן ב-<span class="math">\(\mbox{SET}_{k}\left(A\right)\)</span> את אוסף כל הקבוצות מגודל <span class="math">\(k\)</span> של איברים ב-<span class="math">\(A\)</span>, את הפונקציה היוצרת של זה קל למצוא בעזרת הלהטוט הבא: אם נספור את כל ה<strong>סדרות</strong> מגודל <span class="math">\(k\)</span>, זה יהיה בדיוק <span class="math">\(A^{k}\)</span> (חזקה מוגדרת כמו קודם); מכיוון שאין חשיבות לסדר, ויש <span class="math">\(k!\)</span> סידורים שונים לסדרה מאורך <span class="math">\(k\)</span>, נקבל שהפונקציה היוצרת המתאימה היא <span class="math">\(\frac{a^{k}\left(x\right)}{k!}\)</span> (אם זה מהיר לכם מדי, תנסו להוכיח זאת לעצמכם). עכשיו אפשר לקבל את <span class="math">\(\mbox{SET}\left(A\right)\)</span> מייד מכך ש-<span class="math">\(\mbox{SET}\left(A\right)=\bigcup_{k=0}^{\infty}A^{k}\)</span>: הפונקציה היוצרת תהיה בדיוק <span class="math">\(\sum_{k=0}^{\infty}\frac{a^{k}\left(x\right)}{k!}\)</span>, ואת זה מסמנים באופן קומפקטי בתור <span class="math">\(\exp\left(a\left(x\right)\right)\)</span>.</p>
+<p>בואו נעבור סוף סוף לדוגמה שלטעמי היא מרשימה למדי - עצים מסומנים עם "שורש". שורש הוא פשוט צומת שנבדל מכל היתר בכך שפרט למספר שלו, הוא גם נקרא "שורש" (יש להבדלה הזו שימושים רבים שלא אכנס אליהם). נסמן ב-<span class="math">\(T\)</span> את המחלקה וב-<span class="math">\(T\left(x\right)\)</span> את הפונקציה היוצרת המתאימה. ב-<span class="math">\(A\)</span> אסמן שוב, כמו בפוסט הקודם, מחלקה בעלת איבר בודד. אז הפאנץ' הוא ש-<span class="math">\(T\)</span> מקיימת את המשוואה הבאה: <span class="math">\(T=A\times\mbox{SET}\left(T\right)\)</span> (הכפל הוא על פי ההגדרה החדשה שנתתי).</p>
+<p>למה? ובכן, ממה מורכב עץ סופי עם שורש? מהשורש (זה <span class="math">\(A\)</span>), כשאליו מצורף מספר סופי כלשהו של עצים (כולם מסומנים) - זה <span class="math">\(\mbox{SET}\left(T\right)\)</span>. השימוש בקבוצה מבהיר שאין חשיבות ל"סדר" שבו תת העצים מחוברים אל השורש (להבדיל ממה שעשינו בפוסט הקודם). זה מניב את הנוסחה הבאה עבור הפונקציה היוצרת: <span class="math">\(T\left(x\right)=x\cdot e^{T\left(x\right)}\)</span>, ולכאורה נתקענו - אין דרך להגיע לייצוג סגור ל-<span class="math">\(T\left(x\right)\)</span> מהנוסחה האלגנטית-אך-מוזרה הזו. אז האם צריך להתייאש?</p>
+<p>לא! מטרת הפוסט הזה היא בראש ובראשונה להראות שאפילו ממשהו שאיננו צורה סגורה אפשר לחלץ מידע קריטי. השפן שאנחנו שולפים עכשיו מהכובע הוא תוצאה באנליזה של לגראנז' ("נוסחת ההיפוך של לגראנז'") שעובדת גם בהקשר הפורמליסטי שלנו. אציג את הניסוח ה"קומבינטורי" שלה (הניסוח הכללי מורכב קצת יותר).</p>
+<p>נניח שיש לנו טור חזקות <span class="math">\(\phi\left(u\right)=\sum_{k=0}^{\infty}\phi_{k}u^{k}\)</span>, ונניח גם ש-<span class="math">\(\phi_{0}\ne0\)</span>, מה שמבטיח שקיים הופכי ל-<span class="math">\(\phi\)</span>. עכשיו, הבה ונתבונן במשוואה <span class="math">\(f\left(x\right)=x\phi\left(f\left(x\right)\right)\)</span>; קיים לה פתרון יחיד, <span class="math">\(f\left(x\right)=\sum_{n=1}^{\infty}a_{n}x^{n}\)</span>. לצורך נוחות הסימון, אני אשתמש ב-<span class="math">\(\left[x^{n}\right]f\left(x\right)\)</span> כדי להגיד "המקדם של <span class="math">\(x^{n}\)</span> ב-<span class="math">\(f\left(x\right)\)</span> (כלומר, <span class="math">\(a_{n}\)</span>) וכך גם עבור <span class="math">\(\phi\)</span> אשתמש בסימון דומה. מה שנוסחת ההיפוך של לגראנז' נותנת לנו הוא המקדמים של <span class="math">\(f\left(x\right)\)</span>:</p>
+<p><span class="math">\(\left[x^{n}\right]f\left(x\right)=\frac{1}{n}\left[u^{n-1}\right]\phi\left(u\right)^{n}\)</span>.</p>
+<p>לפני שתאבדו אותי סופית, נראה איך זה עוזר לנו במקרה של <span class="math">\(T\left(x\right)=xe^{T\left(x\right)}\)</span>. כאן בבירור <span class="math">\(\phi\left(u\right)=e^{u}\)</span> וזו, למזלנו, פונקציה פשוטה למדי. לכן נקבל:</p>
+<p><span class="math">\(\left[x^{n}\right]T\left(x\right)=\frac{1}{n}\left[u^{n-1}\right]e^{un}=\frac{1}{n}\cdot\frac{n^{n-1}}{\left(n-1\right)!}=\frac{n^{n-1}}{n!}\)</span></p>
+<p>זה המקדם של <span class="math">\(T\left(x\right)\)</span>; ומכיוון ש-<span class="math">\(T\left(x\right)\)</span> הוא פונקציה יוצרת אקספוננציאלית, יש להכפיל את המקדם ב-<span class="math">\(n!\)</span> כדי לקבל את המספר האמיתי - <span class="math">\(n^{n-1}\)</span> הוא מספר העצים המסומנים עם שורש. מכיוון שיש <span class="math">\(n\)</span> בחירות אפשריות לשורש, אז על ידי חלוקה ב-<span class="math">\(n\)</span> אנו מקבלים ש-<span class="math">\(n^{n-2}\)</span> הוא מספר העצים המסומנים <strong>בכלל</strong> - וזו תוצאה מפורסמת למדי בקומבינטוריקה - משפט קיילי. לתוצאה יש הוכחות קומבינטוריות מקסימות, אבל העובדה שהיא מתקבלת מיידית כמעט מכלים סטנדרטיים בפונקציות יוצרות היא מרשימה מאוד לדעתי. כמובן שהסיפור לא נגמר כאן ושלל של תוצאות בעלות אופי דומה למשפט קיילי יכול להתקבל גם כן בעזרת טכניקות דומות.</p>
+<p>ובכן, אני מקווה שזרקתי מספיק רעיונות מפוצצים לאוויר כדי שיתקבל הרושם שפונקציות יוצרות הן עולם עשיר בהרבה מהרושם השגוי שעשוי להתקבל לפעמים. כמובן שגירדתי רק את קצה הקרחון, ובפרט לא נכנסתי כלל לעניין הניתוחים האנליטיים שעושים לפונקציות יוצרות, אבל בתור טעימה ראשונה של מה שהולך שם אני מקווה שסיפקתי את הסחורה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/08/14/fermat_last_theorem_overview/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אז מה הקטע עם המשפט האחרון של פרמה?</span>
+            </a>
+            
+            
+            
+            <a href="/2011/08/07/generating_functions_hardcore_1/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">פונקציות יוצרות - והפעם ברצינות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -5,6 +5,8 @@ from generator.post import Post
 from generator.markdown_processor import MarkdownProcessor
 from generator.jekyll_compat import JekyllProcessor
 import shutil
+import sys
+from datetime import datetime
 
 
 class SiteGenerator:
@@ -45,6 +47,10 @@ class SiteGenerator:
         
         # Initialize Jekyll compatibility processor
         self.jekyll_processor = JekyllProcessor(self.site_config)
+        
+        # Initialize log files
+        self.generation_log = []
+        self.warning_log = []
     
     def clean_output(self):
         """Remove all files from output directory."""
@@ -89,8 +95,6 @@ class SiteGenerator:
         Returns:
             Processed Post object
         """
-        print(f"Processing: {post_file.name}")
-        
         # Parse the post
         post = Post(post_file)
         
@@ -100,19 +104,47 @@ class SiteGenerator:
         # Convert markdown to HTML
         post.html_content = self.md_processor.process(processed_content)
         
+        # Check for warnings from markdown processor
+        warnings = self.md_processor.get_warnings()
+        if warnings:
+            for warning in warnings:
+                self.warning_log.append(f"{post_file.name}: {warning}")
+        
         return post
     
-    def render_post(self, post: Post) -> str:
+    def render_post(self, post: Post, prev_post=None, next_post=None) -> str:
         """Render a post using Jinja2 template.
         
         Args:
             post: Post object to render
+            prev_post: Previous post (chronologically older)
+            next_post: Next post (chronologically newer)
             
         Returns:
             Rendered HTML string
         """
         template = self.jinja_env.get_template('post.html')
-        return template.render(post=post.to_dict())
+        
+        # Prepare prev/next post data
+        prev_data = None
+        if prev_post:
+            prev_data = {
+                'title': prev_post.title,
+                'url': f"/{prev_post.date.strftime('%Y/%m/%d')}/{prev_post.slug}/"
+            }
+        
+        next_data = None
+        if next_post:
+            next_data = {
+                'title': next_post.title,
+                'url': f"/{next_post.date.strftime('%Y/%m/%d')}/{next_post.slug}/"
+            }
+        
+        return template.render(
+            post=post.to_dict(),
+            prev_post=prev_data,
+            next_post=next_data
+        )
     
     def get_output_path(self, post: Post) -> Path:
         """Generate output path for a post based on date and slug.
@@ -151,9 +183,9 @@ class SiteGenerator:
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(html)
         
-        # Show relative path for cleaner output
+        # Log to file instead of printing
         rel_path = output_file.relative_to(self.output_dir)
-        print(f"Generated: {rel_path}")
+        self.generation_log.append(f"Generated: {rel_path}")
     
     def generate_post(self, post_file: Path):
         """Process and generate HTML for a single post.
@@ -171,8 +203,6 @@ class SiteGenerator:
         Args:
             posts: List of Post objects to display
         """
-        print("Generating index page...")
-        
         # Sort posts by date (newest first)
         sorted_posts = sorted(posts, key=lambda p: p.date, reverse=True)
         
@@ -197,7 +227,7 @@ class SiteGenerator:
         with open(index_file, 'w', encoding='utf-8') as f:
             f.write(html)
         
-        print(f"Generated: index.html")
+        self.generation_log.append("Generated: index.html")
     
     def generate_post_list(self, posts: list):
         """Generate post list page with search.
@@ -205,8 +235,6 @@ class SiteGenerator:
         Args:
             posts: List of Post objects
         """
-        print("Generating post list page...")
-        
         # Sort posts by date (newest first)
         sorted_posts = sorted(posts, key=lambda p: p.date, reverse=True)
         
@@ -230,7 +258,7 @@ class SiteGenerator:
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(html)
         
-        print(f"Generated: post_list.html")
+        self.generation_log.append("Generated: post_list.html")
     
     def generate_random(self, posts: list):
         """Generate random post redirect page.
@@ -238,8 +266,6 @@ class SiteGenerator:
         Args:
             posts: List of Post objects
         """
-        print("Generating random post page...")
-        
         # Prepare post URLs as JSON
         import json
         posts_data = []
@@ -258,10 +284,12 @@ class SiteGenerator:
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(html)
         
-        print(f"Generated: random.html")
+        self.generation_log.append("Generated: random.html")
     
     def generate_all(self):
         """Generate HTML for all posts in content directory."""
+        start_time = datetime.now()
+        
         print("Starting site generation...")
         print(f"Content directory: {self.content_dir.absolute()}")
         print(f"Output directory: {self.output_dir.absolute()}")
@@ -281,30 +309,96 @@ class SiteGenerator:
             print("No markdown files found in content directory.")
             return
         
-        print(f"Found {len(post_files)} post(s)")
+        total_posts = len(post_files)
+        print(f"Found {total_posts} post(s)")
         print()
         
-        # Process each post and collect them
+        # Process each post and collect them (without rendering yet)
         processed_posts = []
-        for post_file in post_files:
+        print("Processing posts: ", end='', flush=True)
+        
+        for i, post_file in enumerate(post_files, 1):
             try:
                 post = self.process_post(post_file)
-                html = self.render_post(post)
-                self.save_post(post, html)
                 processed_posts.append(post)
+                
+                # Update progress on same line
+                percent = (i * 100) // total_posts
+                sys.stdout.write(f'\rProcessing posts: {percent}% ({i}/{total_posts})')
+                sys.stdout.flush()
+                
             except Exception as e:
-                print(f"Error processing {post_file.name}: {e}")
+                error_msg = f"Error processing {post_file.name}: {e}"
+                self.warning_log.append(error_msg)
         
+        print()  # New line after progress
+        
+        # Sort posts by date for prev/next navigation
+        sorted_posts = sorted(processed_posts, key=lambda p: p.date)
+        
+        # Now render and save with prev/next links
+        print("Rendering posts: ", end='', flush=True)
+        for i, post in enumerate(sorted_posts):
+            try:
+                prev_post = sorted_posts[i - 1] if i > 0 else None
+                next_post = sorted_posts[i + 1] if i < len(sorted_posts) - 1 else None
+                
+                html = self.render_post(post, prev_post, next_post)
+                self.save_post(post, html)
+                
+                # Update progress
+                percent = ((i + 1) * 100) // total_posts
+                sys.stdout.write(f'\rRendering posts: {percent}% ({i + 1}/{total_posts})')
+                sys.stdout.flush()
+                
+            except Exception as e:
+                error_msg = f"Error rendering {post.slug}: {e}"
+                self.warning_log.append(error_msg)
+        
+        print()  # New line after progress
         print()
         
         # Generate special pages
         if processed_posts:
+            print("Generating special pages...")
             self.generate_index(processed_posts)
             self.generate_post_list(processed_posts)
             self.generate_random(processed_posts)
         
         print()
-        print(f"Site generation complete! {len(post_files)} post(s) generated.")
+        
+        # Write logs to files
+        self._write_logs()
+        
+        # Calculate duration
+        duration = datetime.now() - start_time
+        
+        print(f"Site generation complete!")
+        print(f"  Posts generated: {len(processed_posts)}")
+        print(f"  Warnings: {len(self.warning_log)}")
+        print(f"  Duration: {duration.total_seconds():.1f}s")
+        
+        if self.warning_log:
+            print(f"\nSee warnings.log for details")
+    
+    def _write_logs(self):
+        """Write generation and warning logs to files."""
+        # Write generation log
+        with open('generation.log', 'w', encoding='utf-8') as f:
+            f.write(f"Site generation log - {datetime.now()}\n")
+            f.write("=" * 60 + "\n\n")
+            for entry in self.generation_log:
+                f.write(entry + "\n")
+        
+        # Write warnings log
+        with open('warnings.log', 'w', encoding='utf-8') as f:
+            f.write(f"Site generation warnings - {datetime.now()}\n")
+            f.write("=" * 60 + "\n\n")
+            if self.warning_log:
+                for warning in self.warning_log:
+                    f.write(warning + "\n")
+            else:
+                f.write("No warnings\n")
 
 
 def main():

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מטריצות, דירוג מטריצות ומשוואות לינאריות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מטריצות, דירוג מטריצות ומשוואות לינאריות</h1>
+            <div class="post-meta">
+                <span class="date">2011-10-05</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/tags/דירוג מטריצות.html">דירוג מטריצות</a>
+                    
+                    <a href="/tags/מטריצות.html">מטריצות</a>
+                    
+                    <a href="/tags/משוואה לינארית.html">משוואה לינארית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>משוואות לינאריות הן התירוץ המושלם להתחיל לדבר על האובייקט שבאמת מעניין אותנו - כנראה האובייקט המרכזי באלגברה לינארית ובמתמטיקה בכלל: מטריצות. מטריצה היא רשימה דו-ממדית של איברים (בהקשר שלנו, מספרים) אבל היא יותר מזה: היא אובייקט אלגברי שאפשר לבצע עליו מניפולציות אלגבריות: אפשר לחבר שתי מטריצות, אפשר לכפול מטריצה במספר כלשהו, ואפשר לכפול גם שתי מטריצות זו בזו, אבל עם התכונות האלגבריות הללו נחכה טיפה. בפוסט הזה נסתפק בלהבין מהן מטריצות, איך הן הופכות דיבור על משוואות לינאריות לקצת יותר פשוט, ואיך מתארים פתרון משוואות לינאריות ב"שפה" שלהן.</p>
+<p>בואו ניקח לדוגמה מערכת של שתי משוואות לינאריות בשני נעלמים:</p>
+<p><span class="math">\(2x+7y=21\)</span></p>
+<p><span class="math">\(2x-4y=10\)</span></p>
+<p>לאלו שממש ממש במתח, הפתרון של המערכת הוא <span class="math">\(x=7,y=1\)</span>, אבל זה לא מה שמעניין אותנו כרגע, ואפילו לא איך פותרים אותה כי ראינו את השיטה לכך בפוסט הקודם, אלא פשוט איך אפשר לכתוב את המערכת הזו בצורה קצת פחות טרחנית מזו שבה כתבתי אותה. בצורת הכתיבה שלי יש הרבה טקסט מיותר - ה-<span class="math">\(x,y\)</span> מיותרים כי אני יודע שבכל משוואה לינארית יהיו משתנים; וסימן השווה מיותר; וגם הפלוס שלפני ה-7 מיותר למרות שהמינוס שלפני הארבע לא. זה לא נראה כמו משהו גרוע עד כדי כך, אבל צריך לזכור שאנחנו חושבים על פתרון משוואות עוד יותר כלליות, כאלו שיש בהן גם שבעה נעלמים ושבע משוואות. בסיטואציות כאלו כבר מפסיקים לתת אות מיוחדת לכל משתנה ופשוט קוראים להם <span class="math">\(x_{1},x_{2},\dots,x_{7}\)</span> וכדומה. די ברור שהשמות הללו הם חסרי משמעות עבורנו והיינו שמחים להימנע מהצורך להשתמש בהם.</p>
+<p>מה שבאמת מעניין אותנו במערכת משוואות הוא ה<strong>מקדמים</strong> של המשתנים ומה שנמצא אחרי סימן ה"שווה". אלו המספרים שמשתנים ממשוואה למשוואה ומאפיינים אותה. אז מה שעושים הוא פשוט - כותבים <strong>רק</strong> את המספרים הללו:</p>
+<p><span class="math">\(\begin{array}{ccc}2 &amp; 7 &amp; 21\\2 &amp; -4 &amp; 10\end{array}\)</span></p>
+<p>טוב. חייבים להודות שזה לא נראה משהו. אז כדי שיהיה ברור שכל המספרים הללו קשורים אחד לשני, מקיפים אותם בסוגריים:</p>
+<p><span class="math">\(\left[\begin{array}{ccc}2 &amp; 7 &amp; 21\\2 &amp; -4 &amp; 10\end{array}\right]\)</span></p>
+<p>והנה קיבלנו מטריצה. לפעמים, במקרה הפרטי של מטריצה שבאה לייצג משוואה לינארית, מפרידים את העמודה הימנית ביותר מהיתר באיזה קו מקווקו כדי שיהיה ברור איפה המקדמים נגמרים ומה שאחרי השווה מתחיל, אבל ברשותכם אני אוותר על זה ופשוט נזכור את זה.</p>
+<p>פורמלית, עבור מספרים טבעיים <span class="math">\(n,m\)</span>, מטריצה מסדר <span class="math">\(n\times m\)</span> (בעלת <span class="math">\(n\)</span> שורות ו-<span class="math">\(m\)</span> עמודות) היא אוסף של איברים ("איברים", בכל הקשר שנזדקק לו, פירושו כאן "מספרים") כך שלכל איבר יש שני אינדקסים שמציינים באיזו שורה ובאיזו עמודה הוא נמצא במטריצה. למשל, במטריצה שהצגתי למעלה, האיבר בשורה 1 ועמודה 1 הוא 2, וגם האיבר בשורה 2 ועמודה 1 הוא 2; ואילו האיבר בשורה 2 ועמודה 3 הוא 10. לרוב משתמשים באותיות לטיניות גדולות כמו <span class="math">\(A,B,C\)</span> כדי לתאר מטריצות, ואז <span class="math">\(A_{11}\)</span> מסמן את האיבר בשורה 1 ובעמודה 1 במטריצה <span class="math">\(A\)</span> (ה"כניסה" ה-<span class="math">\(1,1\)</span> במטריצה), וכדומה. כלומר, אם</p>
+<p><span class="math">\(A=\left[\begin{array}{ccc}2 &amp; 7 &amp; 21\\2 &amp; -4 &amp; 10\end{array}\right]\)</span></p>
+<p>אז <span class="math">\(A_{12}=-4\)</span> ו-<span class="math">\(A_{23}=10\)</span> וכדומה.</p>
+<p>מה קורה אם יש במטריצה מספר דו ספרתי של שורות או עמודות? ובכן, אפשר לכתוב משהו כמו <span class="math">\(A_{10,3}\)</span> עם פסיק ואז לא יהיו בלבולים. בכל מקרה הסימון שאני מציג כאן הוא לא קדוש ויש עוד הרבה וריאציות עליו שבהן משתמשים.</p>
+<p>בפוסט הקודם הצגתי שתי מניפולציות שאפשר היה לעשות על משוואות במערכת משוואות - לכפול משוואה במספר, ולחבר שתי משוואות - מה שחיש קל הפך ל"לחבר למשוואה אחת משוואה אחרת כשהיא מוכפלת במספר כלשהו". דבר אחד שלא התייחסתי אליו אז כי הוא היה כמעט מובן מאליו הוא שבמערכת משוואות אפשר להחליף את ה<strong>סדר</strong> שבו משוואות מופיעות מבלי לשנות את הפתרונות של המערכת. כל זה מוביל אותנו לשלוש פעולות שאפשר לבצע על מטריצה שמייצגת מערכת משוואות אחת כדי לקבל מטריצה שמייצגת מערכת משוואות שונה עם בדיוק אותם פתרונות:</p>
+<ol>
+    <li> אפשר להחליף שתי שורות.</li>
+    <li> אפשר לכפול שורה במספר שונה מאפס.</li>
+    <li> אפשר להוסיף לשורה אחת שורה אחרת שמוכפלת במספר כלשהו.</li>
+</ol>
+<p>שלוש הפעולות הללו נקראות <strong>פעולות אלמנטריות</strong>. שימו לב שכולן הפיכות - אם החלפנו שתי שורות פשוט נחליף אותן שוב ונחזור למטריצה שממנה התחלנו; אם כפלנו שורה במספר שונה מאפס, אפשר לכפול את השורה גם במספר ההפוך לו ולחזור למטריצה שממנה התחלנו; ואם הוספנו לשורה אחת שורה אחת כפול מספר, אפשר עכשיו להוסיף לה את השורה האחרת כפול מינוס אותו המספר.</p>
+<p>אם אפשר להגיע מהמטריצה <span class="math">\(A\)</span> אל המטריצה <span class="math">\(B\)</span> על ידי מספר סופי של הפעלות של פעולות אלמנטריות, אומרים שהן "שקולות-שורה". מכיוון שהפעולות הפיכות, זה גם אומר שאפשר להגיע מ-<span class="math">\(B\)</span> אל <span class="math">\(A\)</span>. מה שהיינו רוצים הוא להגיע ממטריצה כלשהי <span class="math">\(A\)</span> אל מטריצה <span class="math">\(B\)</span> שהיא פשוטה יחסית, במובן של "הפתרון של המשוואה ש-<span class="math">\(B\)</span> מייצגת הוא מובן מאליו". בואו נראה איך זה קורה עם המטריצה שנתתי כדוגמה:</p>
+<p><span class="math">\(\left[\begin{array}{ccc}2 &amp; 7 &amp; 21\\2 &amp; -4 &amp; 10\end{array}\right]\overset{r_{2}-r_{1}}{\to}\left[\begin{array}{ccc}2 &amp; 7 &amp; 21\\0 &amp; -11 &amp; -11\end{array}\right]\overset{-\frac{1}{11}r_{2}}{\to}\left[\begin{array}{ccc}2 &amp; 7 &amp; 21\\0 &amp; 1 &amp; 1\end{array}\right]\overset{r_{1}-7r_{2}}{\to}\left[\begin{array}{ccc}2 &amp; 0 &amp; 14\\0 &amp; 1 &amp; 1\end{array}\right]\overset{\frac{1}{2}r_{1}}{\to}\left[\begin{array}{ccc}1 &amp; 0 &amp; 7\\0 &amp; 1 &amp; 1\end{array}\right]\)</span></p>
+<p>כשאני כותב <span class="math">\(r_{2}-r_{1}\)</span> אני מתכוון "משנים את <span class="math">\(r_{2}\)</span> - שורה 2 - על ידי כך שמחסירים ממנה את <span class="math">\(r_{1}\)</span>". כשאני כותב "<span class="math">\(-\frac{1}{11}r_{2}\)</span>" אני מתכוון "כופלים את <span class="math">\(r_{2}\)</span> ב-<span class="math">\(-\frac{1}{11}\)</span>", וכדומה. גם זה לא ממש סימון סטנדרטי אבל אני מקווה שהוא מספיק ברור כאן.</p>
+<p>המטריצה שקיבלנו לבסוף, <span class="math">\(\left[\begin{array}{ccc}1 &amp; 0 &amp; 7\\0 &amp; 1 &amp; 1\end{array}\right]\)</span>, מייצגת את מערכת המשוואות הבאה:</p>
+<p><span class="math">\(x=7\)</span></p>
+<p><span class="math">\(y=1\)</span></p>
+<p>שהיא בדיוק הפתרון שהבטחתי בתחילת הפוסט, כך שמה שקרה עם שרשרת המטריצות שהצגתי למעלה הוא פשוט פתרון של המשוואה - אבל פתרון בצורה שיטתית וחסכונית למדי. במערכת של שתי משוואות בשני נעלמים זה אולי עוד נראה מסורבל למדי, אבל כשצריך לעשות את זה, נאמר, על ארבע משוואות בארבעה נעלמים או למעלה מכך היתרון של השיטה המטריציונית הוא ברור. עם זאת, שלא יהיה לכם ספק - עדיין מדובר על עבודה טכנית משעממת ביותר. מה שאנחנו באמת רוצים הוא להבין את העקרונות הכלליים של התהליך כדי שנוכל להגיד למחשב לעשות אותו.</p>
+<p>מדוע המטריצה <span class="math">\(\left[\begin{array}{ccc}1 &amp; 0 &amp; 7\\0 &amp; 1 &amp; 1\end{array}\right]\)</span> היא נקודת סיום טובה כל כך עבורנו? מכיוון שבכל שורה מופיע רק אחד המשתנים, והוא מופיע עם המקדם 1. זה אומר שאותה השורה בעצם אומרת "המשתנה כך וכך שווה ל..." ותו לא. אבל איך הצלחנו להגיע אליה? הפתרון טמון דווקא בעמודות. שימו לב שכבר הפעולה הראשונה שביצעתי בשרשרת המטריצות למעלה יועדה לגרום לכך שבעמודה הראשונה במטריצה, בשורה השניה, יהיה 0. מה שזה אומר בפועל הוא שמחקתי את המשתנה <span class="math">\(x\)</span> מהמשוואה השניה והשארתי אותו רק בראשונה. אחר כך, כשחיברתי את השורה השניה לראשונה, זה כבר לא יכל להשפיע על המשתנה <span class="math">\(x\)</span>, כלומר על העמודה הראשונה, כי בשורה השניה היה שם 0.</p>
+<p>זה מתווה את השיטה הכללית שלנו: אנחנו רוצים לקחת את העמודה הראשונה במטריצה, ולגרום לכך שבשורה הראשונה יהיה שם 1, ובשאר השורות יהיה 0. אחר כך אנחנו רוצים לקחת את העמודה השניה במטריצה ולגרום לכך שבשורה <strong>השניה</strong> יהיה שם 1, ובשאר השורות 0. כך זה במערכת של שתי משוואות בשני נעלמים אבל גם במערכות גדולות יותר.</p>
+<p>אלא מה, לא תמיד אפשר לעשות את זה בכלל. למשל, מה עם המטריצה <span class="math">\(\left[\begin{array}{ccc}1 &amp; 0 &amp; 7\\0 &amp; 0 &amp; 0\end{array}\right]\)</span>? לא משנה מה נעשה, העמודה השניה תמיד תכיל 0. ומה עם המטריצה <span class="math">\(\left[\begin{array}{ccc}1 &amp; 1 &amp; 1\\1 &amp; 1 &amp; 1\end{array}\right]\)</span>? אנחנו לא יכולים לאפס את הכניסה בשורה 2 ועמודה 1 מבלי לאפס גם את הכניסה בשורה 2 ועמודה 2. לכן צריך להיות קצת יותר זהירים ביחס ליעד שלנו. זה המקום שבו צצה ההגדרה של <strong>מטריצה מצומצמת.</strong> זו הגדרה מדויקת של "מה שאנחנו יכולים לצפות לו תמיד מהתהליך שתיארנו", אבל לא קריטי להבין אותה במלואה בינתיים. בכל זאת אביא אותה פה, כמובן. מטריצה היא מצומצמת אם היא מקיימת ש:</p>
+<ol>
+    <li> בכל שורה שלה, הכניסה הראשונה שאיננה 0 היא 1.</li>
+    <li> בכל עמודה שלה, אם יש כניסה שהיא הכניסה הראשונה שאינה 0 בשורה כלשהי, אז שאר הכניסות בעמודה הן 0.</li>
+    <li> כל השורות שמכילות רק אפסים נמצאות מתחת לכל השורות האחרות.</li>
+    <li> בהינתן שתי שורות שאינן שורות אפסים, הכניסה הראשונה שאיננה אפס בשורה העליונה יותר מופיעה בעמודה מוקדמת יותר מאשר הכניסה הראשונה שאיננה אפס בעמודה השניה.</li>
+</ol>
+<p>אולי הכי ברור להבין את ההגדרה הזו על ידי דוגמאות שלא מתאימות לה:</p>
+<p>המטריצה <span class="math">\(\left[\begin{array}{cc}1 &amp; 0\\0 &amp; 2\end{array}\right]\)</span> לא עונה לדרישה 1, כי הכניסה הראשונה שאיננה 0 בשורה 2 היא 2.</p>
+<p>המטריצה <span class="math">\(\left[\begin{array}{cc}1 &amp; 0\\1 &amp; 1\end{array}\right]\)</span> לא עונה לדרישה 2 כי העמודה הראשונה מפירה את התנאי: יש <strong>שתי</strong> כניסות שהן הכניסות הראשונות שאינן 0. גם <span class="math">\(\left[\begin{array}{cc}1 &amp; 1\\0 &amp; 1\end{array}\right]\)</span> מפירה את התנאי בצורה דומה - כאן הכניסה <span class="math">\(A_{12}\)</span> אמנם איננה הכניסה הראשונה שאיננה 0 בשורה הראשונה, אבל <span class="math">\(A_{22}\)</span> היא כן הכניסה הראשונה שאיננה 0 בשורה 2, ולכן שאר העמודה צריכה להכיל אפסים.</p>
+<p>דוגמה נגדית ל-3 זה קל מאוד: <span class="math">\(\left[\begin{array}{cc}0 &amp; 0\\1 &amp; 0\end{array}\right]\)</span>.</p>
+<p>ההגדרה של 4 מסובכת אבל דוגמה נגדית היא פשוטה גם כאן: <span class="math">\(\left[\begin{array}{cc}0 &amp; 1\\1 &amp; 0\end{array}\right]\)</span> היא דוגמה נגדית, כי השורה של ה-01 באה לפני השורה של ה-10 אבל הכניסה הראשונה שאיננה 0 בשורה 01 היא בעמודה 2, ואילו הכניסה הראשונה שאיננה 0 בשורה 10 היא בעמודה 1.</p>
+<p>בוודאי תשאלו, בשביל מה כל התנאים הללו טובים? התשובה פשוטה: לכל מטריצה <span class="math">\(A\)</span> <strong>כלשהי</strong>, קיימת מטריצה מצומצמת אחת ויחידה שאליה ניתן להגיע מ-<span class="math">\(A\)</span> על ידי פעולות אלמנטריות. זה אולי משפט הקיום והיחידות הראשון שבו נתקלים סטודנטים למתמטיקה. זה אומר ש<strong>כל</strong> מערכת משוואות לינארית ניתן להחליף במערכת שקולה לה (שקולה לה במובן זה שיש להן אותן פתרונות) שמתוארת על ידי מטריצה מצומצמת. לתהליך הזה, שבו עוברים ממטריצה כלשהי למטריצה המצומצמת המתאימה לה, קוראים <strong>דירוג מטריצות</strong>.</p>
+<p>כעת אפשר להבין למה כל ארבע התכונות שתיארתי למעלה הן הכרחיות בשביל שהמטריצה המצומצמת תהיה יחידה: כל הדוגמאות הנגדיות שנתתי עונות על כל שלוש הדרישות פרט לדרישה שהן באות לנגוד, כך שאם נשמיט ולו אחת מהדרישות, כבר יהיו שתי מטריצות מצומצמת אפשריות. במקרה הראשון <span class="math">\(\left[\begin{array}{cc}1 &amp; 0\\0 &amp; 2\end{array}\right]\)</span> ניתנת לצמצום אל <span class="math">\(\left[\begin{array}{cc}1 &amp; 0\\0 &amp; 1\end{array}\right]\)</span>; במקרה השני <span class="math">\(\left[\begin{array}{cc}1 &amp; 0\\1 &amp; 1\end{array}\right]\)</span> ניתנת לצמצום אל <span class="math">\(\left[\begin{array}{cc}1 &amp; 0\\0 &amp; 1\end{array}\right]\)</span>; במקרה השלישי <span class="math">\(\left[\begin{array}{cc}0 &amp; 0\\1 &amp; 0\end{array}\right]\)</span> ניתנת לצמצום אל <span class="math">\(\left[\begin{array}{cc}1 &amp; 0\\0 &amp; 0\end{array}\right]\)</span> ובמקרה הרביעי <span class="math">\(\left[\begin{array}{cc}0 &amp; 1\\1 &amp; 0\end{array}\right]\)</span> ניתנת לצמצום אל <span class="math">\(\left[\begin{array}{cc}1 &amp; 0\\0 &amp; 1\end{array}\right]\)</span>.</p>
+<p>כעת, איך מדרגים מטריצה באופן כללי? ובכן, קודם כל מוצאים בעמודה הראשונה את השורה הראשונה שבה לא מופיע 0 (אם בכולן מופיע 0 עוברים מייד לעמודה הבאה). מחליפים את סדר השורות (פעולה אלמנטרית 1) כך שהשורה הזו תופיע הראשונה במטריצה. כופלים את השורה הזו בקבוע מתאים (פעולה אלמנטרית 2) כך שבעמודה הראשונה יופיע בה כעת 1. לבסוף, מחסירים את השורה הזו מכל האחרות כשהיא מוכפלת בכל פעם בקבוע מתאים כדי לאפס את כל שאר הכניסות בעמודה הזו. בואו נראה את התהליך על מטריצה מסדר <span class="math">\(3\times3\)</span>:</p>
+<p><span class="math">\(\left[\begin{array}{ccc}0 &amp; 2 &amp; 1\\2 &amp; 1 &amp; 1\\1 &amp; 3 &amp; 1\end{array}\right]\overset{r_{1}\leftrightarrow r_{2}}{\to}\left[\begin{array}{ccc}2 &amp; 1 &amp; 1\\0 &amp; 2 &amp; 1\\1 &amp; 3 &amp; 1\end{array}\right]\overset{\frac{1}{2}r_{1}}{\to}\left[\begin{array}{ccc}1 &amp; \frac{1}{2} &amp; \frac{1}{2}\\0 &amp; 2 &amp; 1\\1 &amp; 3 &amp; 1\end{array}\right]\overset{r_{3}-r_{1}}{\to}\left[\begin{array}{ccc}1 &amp; \frac{1}{2} &amp; \frac{1}{2}\\0 &amp; 2 &amp; 1\\0 &amp; \frac{5}{2} &amp; \frac{1}{2}\end{array}\right]\)</span></p>
+<p>בסופו של דבר קיבלתי בעמודה 1 מופע בודד של 1 וכל היתר 0. כעת נטפל בצורה דומה בעמודה 2, פרט לכך ששורה 1 היא כבר "מחוץ למשחק" במובן זה שלא מזיזים אותה יותר (אבל כן צריך לאפס בתוכה את עמודה 2 אם מגיעים לשלב הזה).</p>
+<p>כל התהליך הזה, שנקרא <strong>אלימינציה גאוסית</strong>, ניתן לביצוע מהיר מאוד יחסית, והוא לא מצריך מחשבה כמעט כלל. במילים אחרות, זה אלגוריתם מושלם למחשב; כתרגיל לקורא זה קצת יותר משעמם.</p>
+<p>ייתכן שאתם תוהים מה היה הטעם בכל זה. המעבר למטריצות גרם לי לשינוי טרמינולוגיה וסימונים אבל לא הוספתי כאן תוכן מהותי על מה שאמרתי בפוסט הקודם. זה נכון, אבל בפוסט הבא אציג את המושג של כפל מטריצות, וזה יאפשר לתאר את כל מה שעשינו כאן באופן עוד יותר קומפקטי, ויסייע לנו לעבור לשלב הבא, של להבין בדיוק איך פתרונות של מערכות משוואות יכולים להיראות.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/10/06/matrix_product/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">כפל מטריצות - מה, לעזאזל?</span>
+            </a>
+            
+            
+            
+            <a href="/2011/10/04/how_to_solve_linear_equations/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז איך פותרים משוואות לינאריות?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

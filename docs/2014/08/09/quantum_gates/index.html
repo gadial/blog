@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי - טלפורטציה, קידוד צפוף ושערים קוונטיים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי - טלפורטציה, קידוד צפוף ושערים קוונטיים</h1>
+            <div class="post-meta">
+                <span class="date">2014-08-09</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/פיזיקה.html">פיזיקה</a>
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                    <a href="/tags/טלפורטציה קוונטית.html">טלפורטציה קוונטית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>את הפוסט הקודם שלי סיימתי באזכור של משפט בסיסי באינפורמציה קוונטית - משפט ה-No Cloning, שאומר שאין לנו יכולת לשכפל מצב קוונטי כללי. הוכחתי את המשפט בפוסט הקודם - הוא נובע מבחינה מתמטית בצורה פשוטה מאוד מאקסיומות תורת הקוונטים - ועכשיו אפשר לעצור ולחשוב לרגע מה המשמעות שלו. אנחנו רוצים, בסופו של דבר, לדבר על <strong>חישוב קוונטי</strong>; אבל שכפול מידע הוא אחד מהדברים הבסיסיים ביותר שאנחנו יודעים לעשות בחישובים, והנה תורת הקוונטים פונה כנגדנו! ובכן, לא הכל אבוד - אין בעיה ליצור הרבה עותקים של אותו מצב קוונטי, אם אנחנו יודעים איך ליצור אותו; המגבלה היא רק על שכפול של מצב שרירותי שאיננו יודעים בודאות מה הוא. מכיוון שחישוב "רגיל" מסתמך כולו על ביטים, שאפשר לחשוב עליהם בתור קיוביטים במצבי הבסיס הפשוטים, ברור שאנחנו לא מוגבלים כאן יותר מאשר בחישוב רגיל. ועדיין, כשנדבר על חישובים קוונטיים נצטרך להביא את המגבלה הזו בחשבון.</p>
+<p>וכעת נעבור לבעיה אחרת, שהיא גם כן בגבול שבין אינפורמציה קוונטית וחישוב קוונטי. יש לנו את אליס ובוב, כרגיל, אבל הם מרוחקים זה מזו. אין להם ערוץ תקשורת קוונטי, אבל כן יש להם חיבור אינטרנט. בידי אליס מצוי קיוביט במצב כללי כלשהו. האם היא מסוגלת להעביר את הקיוביט הזה לבוב? כמובן, את היצור הפיזיקלי שממדל את הקיוביט אליס לא תוכל להעביר - אין לה, כאמור, ערוץ להעברת אינפורמציה קוונטית - אבל האם היא מסוגלת לעשות קסם בעזרת ערוץ התקשורת הרגיל (שיודע לשלוח רק ביטים) שאחריו יהיה בידי בוב את המצב הקוונטי של אליס?</p>
+<p>ובכן, לא, לא בלי שפן נוסף שאפשר לשלוף מהכובע - והשפן הנוסף הזה הוא משהו שאליס ובוב שיתפו ביניהם לפני שנפרדו - זוג קיוביטים שזורים, במצב <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> החביב עלינו. אני טוען שבעזרת הזוג הזה, וערוץ התקשורת הרגיל ביניהם, אליס יכולה לשלוח לבוב מצב קוונטי <span class="math">\(\left|\psi\right\rangle \)</span> שרירותי לגמרי. איך זה לא סותר את משפט ה-No Cloning? פשוט מאוד - כחלק מתהליך השליחה הזה אליס תתעלל בקיוביט שלה בצורה שתגרום ל<strong>הרס</strong> המצב הקוונטי אצלה.</p>
+<p>התהליך הזה נקרא בשם המאוד מפוצץ "העתקה קוונטית", או "טלפורטציה קוונטית". למה מפוצץ? כי זה גורם לנו לחשוב על המשגר של "מסע בין כוכבים". אבל שימו לב שמדובר על מעבר של אינפורמציה קוונטית בלבד - הקיוביט של אליס לא משתגר לקצה השני של היקום; רק המידע שהיה "מקודד" בו ואבד. אני אשאיר לכם את ההחלטה מה המשמעויות הפילוסופיות של קיום טלפורטציה קוונטית שכזו (אבל קיומה לא שנוי במחלוקת; כבר הצליחו לממש טלפורטציה קוונטית בניסויים).</p>
+<p>איך זה עובד בפועל? הנה התהליך ממעוף הציפור. בהתחלה לאליס יש את <span class="math">\(\left|\psi\right\rangle \)</span> שאסמן <span class="math">\(\left|\psi\right\rangle =a\left|0\right\rangle +b\left|1\right\rangle \)</span> וזאת בנוסף לקיוביטים השזורים שלה ושל בוב, שנמצאים במצב <span class="math">\(\left|\varphi\right\rangle =\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span>. המערכת המשולבת של זוג הקיוביטים הללו יחד עם המצב הקוונטי שיש לאליס היא <span class="math">\(\left|\varphi\right\rangle \otimes\left|\psi\right\rangle \)</span> - כי מכפלה טנזורית היא מה שמתאר את מצב המערכת המשולבת כשאין עדיין קורלציה קוונטית כלשהי בין המערכות השונות.</p>
+<p>בואו נכתוב בצורה מפורשת איך המערכת הזו נראית:</p>
+<p><span class="math">\(\frac{1}{\sqrt{2}}\left(a\left|000\right\rangle +a\left|011\right\rangle +b\left|100\right\rangle +b\left|111\right\rangle \right)\)</span></p>
+<p>הביט הראשון מבין השלושה מתאים לקיוביט שאליס רוצה לשלוח, הביט האמצעי מתאים לקיוביט של אליס, והביט השלישי מתאים לקיוביט של בוב. נסו לוודא לעצמכם שאתם מבינים למה זה אכן מצב המערכת המשולבת.</p>
+<p>הדבר הבא שאליס עושה הוא להפעיל קסם על המערכת. וכשאני אומר "קסם", אני מתכוון לטרנספורמציה אוניטרית שמעבירה את המערכת למצב הבא:</p>
+<p><span class="math">\(\frac{1}{2}\left|00\right\rangle \left(a\left|0\right\rangle +b\left|1\right\rangle \right)+\frac{1}{2}\left|01\right\rangle \left(a\left|1\right\rangle +b\left|0\right\rangle \right)+\)</span></p>
+<p><span class="math">\(\frac{1}{2}\left|10\right\rangle \left(a\left|0\right\rangle -b\left|1\right\rangle \right)+\frac{1}{2}\left|11\right\rangle \left(a\left|1\right\rangle -b\left|0\right\rangle \right)\)</span></p>
+<p>כאן הרשיתי לעצמי "לפרק" ביטוי כמו <span class="math">\(\left|101\right\rangle \)</span> ל-<span class="math">\(\left|10\right\rangle \left|1\right\rangle \)</span>, מתוך מטרה לשמר את הקריאות של הביטוי ושנבין מה הולך פה. השאלה הראשונה שנשאלת, כמובן, היא מה הקסם שבזכותו אליס הצליחה להגיע למצב הזה; בכך נעסוק בהמשך - הרי כל עניין הטלפורטציה מיועד לתת לי מוטיבציה לתאר את הקסם. השאלה השניה היא מה זה עזר לנו.</p>
+<p>עכשיו מגיע הפאנץ': אליס מודדת את שני הקיוביטים שלה. את זה ששזור עם הקיוביט של בוב ("הביט האמצעי") ואת זה שהיא רצתה לשלוח את המצב הקוונטי שלו ("הביט השמאלי"). כל אחת מארבע התוצאות האפשריות - <span class="math">\(\left|00\right\rangle ,\left|01\right\rangle ,\left|10\right\rangle ,\left|11\right\rangle \)</span> היא סבירה באותה מידה, אבל ההסתברות לא מעניינת את אליס; מה שמעניין אותה הוא רק מה היו תוצאות המדידה. התוצאות הללו הן שני ביטים של מידע; את המידע הזה אליס שולחת לבוב באינטרנט.</p>
+<p>עכשיו, נניח שאליס קיבלה <span class="math">\(\left|00\right\rangle \)</span>. מה זה אומר? זה אומר שאחרי המדידה שלה, המערכת קרסה למצב <span class="math">\(\left|00\right\rangle \left(a\left|0\right\rangle +b\left|1\right\rangle \right)\)</span> . בפרט, הקיוביט של בוב הוא עכשיו במצב <span class="math">\( a\left|0\right\rangle +b\left|1\right\rangle \)</span>, שזה בדיוק הקיוביט שהיה לאליס בהתחלה! קסם! בוב בעצם לא צריך לעשות כלום, וסיימנו!</p>
+<p>ונניח שאליס קיבלה <span class="math">\(\left|01\right\rangle \)</span>. מה זה אומר? שהקיוביט של בוב קרס למצב <span class="math">\(a\left|1\right\rangle +b\left|0\right\rangle \)</span>. זה כמעט המצב שרצינו, אבל התפקידים של <span class="math">\(a,b\)</span> התהפכו. העניין הוא שבוב יכול <strong>לתקן</strong> את ההתהפכות הזו על ידי הפעלת טרנספורמציה אוניטרית מתאימה. באופן דומה גם לכל תוצאה אחרת של אליס בוב יוכל לתקן את הקיוביט שלו כך שיהיה זהה לקיוביט שאליס התחילה ממנו - אבל בוב <strong>צריך לדעת</strong> מה משובש בקיוביט שלו - לכן הוא חייב לחכות לתקשורת-דרך-האינטרנט של אליס.</p>
+<p>אם כן, העניין כולו פשוט מאוד למעט ה"קסם" שדיברתי עליו. הקסם הזה הוא דוגמה ל<strong>חישוב קוונטי</strong> - אנחנו מתחילים עם מערכת של כמה קיוביטים, מבצעים עליה מניפולציות ומקבלים פלט שהוא קיוביטים אחרים. השאלה המרכזית היא איך לבצע את החישוב הזה. אפשר פשוט לתת את הטרנספורמציה האוניטרית, אבל מה הכיף בזה? כל הרעיון הוא להציג חישובים באמצעות סדרה של פעולות <strong>בסיסיות</strong>, כאלו שהן שימושיות בהקשרים שונים ומשונים ולא רק כדי לפתור בעיות אד-הוקיות.</p>
+<p>האופן שבו אנחנו רוצים להציג חישובים הוא באמצעות <strong>שערים</strong>. בעולם הקלאסי, שערים לוגיים הם דרך פשוטה ונאה לתאר חישובים מורכבים. כל "שער" שכזה מקבל כמות קטנה מאוד של ביטים כקלט - לרוב ביט בודד או שניים - ומחשב פונקציה כלשהי שלהם (השאלה איך בונים שער כזה ברמה הפיזיקלית היא מעניינת, כמובן, אבל פתורה לגמרי). באמצעות הרכבה של שערים אחד עם השני, מקבלים <strong>מעגל </strong>(למרות שהשם מטעה; אין בו בדרך כלל מעגליות) שמחשב פונקציות מורכבות. דוגמאות לשערים "קלאסיים" הם שער AND שמקבל שני ביטים ומחזיר 1 רק אם שניהם 1, אחרת מחזיר 0; שער OR שמקבל שני ביטים ומחזיר 0 רק אם שניהם 0, אחרת מחזיר 1; ושער NOT שמקבל ביט אחד ומחזיר את ההפך ממנו, כלומר על 0 מחזיר 1 ועל 1 מחזיר 0.</p>
+<p>שערים קוונטיים יהיו דומים באופיים, כמובן - גם הם יקבלו מעט קיוביטים ויחזירו פלט שמחושב בצורה פשוטה מתוכם. אבל כאן יש מגבלות מוזרות שאין בעולם הקלאסי: בתורת הקוונטים, כל מניפולציה על קיוביטים שאינה מדידה חייבת להיות אוניטרית. זה אומר שהיא בפרט חייבת להיות הפיכה. אבל בואו תסתכלו על שער כמו AND - הוא לא הפיך. אנחנו מאבדים אינפורמציה; אם השער החזיר 0, זה לא אומר לנו חד משמעית מה היו ערכי הביטים שנכנסו כקלט - רק שאחד מהם היה 0. אז באופן די מזעזע, שער AND - מהשערים הבסיסיים ביותר במעגלים לוגיים - הוא לא משהו שהולך לקרות בעולם הקוונטי. זה כמובן נשמע איום ונורא על הנייר, אבל כפי שנראה בהמשך, זה ממש לא בעייתי בפועל.</p>
+<p>כדי לתאר שער קוונטי, צריך לתאר את האופרטור האוניטרי שמתאים לו, כלומר לתת מטריצה, או לתת תיאור של האופן שבו האופרטור הזה מטפל, נאמר, בבסיס הסטנדרטי. בואו נתחיל מלהציג את שני השערים שבהם אליס תשתמש ב"קסם" שלה.</p>
+<p>השער הראשון מסומן בתור <span class="math">\(H\)</span>, מלשון "הדמאר" (המתמטיקאי). עזבו אתכם כרגע מהשאלה למה. מה שהוא עושה פשוט למדי, מבחינה רעיונית: הוא מעביר את הבסיס הסטנדרטי לבסיס <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span> שראינו בפוסט הקודם כמה הוא מועיל. למי שלא קרא את הפוסט הקודם, נזכיר את ההגדרות:</p>
+<p><span class="math">\(\left|+\right\rangle =\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span></p>
+<p><span class="math">\(\left|-\right\rangle =\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\)</span></p>
+<p>שני הוקטורים הללו מהווים בסיס אלטרנטיבי למרחב שמתאר את הקיוביט, והבסיס הזה מקיים את התכונה היפה שאם מודדים את <span class="math">\(\left|+\right\rangle \)</span> או את <span class="math">\(\left|-\right\rangle \)</span> ביחס לבסיס הסטנדרטי, כל אחת משתי התוצאות מתקבלת באותה הסתברות. הייתי אומר שהבסיס החדש הזה הוא "מאונך" לבסיס הסטנדרטי אם הייתה לכך משמעות מתמטית כלשהי.</p>
+<p>אז פורמלית, <span class="math">\(H\)</span> מוגדר כך:</p>
+<p><span class="math">\(\left|0\right\rangle \mapsto\left|+\right\rangle \)</span></p>
+<p><span class="math">\(\left|1\right\rangle \mapsto\left|-\right\rangle \)</span></p>
+<p>אינטואיטבית, <span class="math">\(H\)</span> מעביר את <span class="math">\(\left|0\right\rangle \)</span> אל הסופרפוזיציה "הכי סימטרית" שקיימת עבור קיוביט בודד. לכן כשמפעילים את <span class="math">\(H\)</span> על אוסף של כמה קיוביטים התוצאה היא הסופרפוזיציה "הכי סימטרית" עבור המערכת שמורכבת מהקיוביטים הללו. פורמלית:</p>
+<p><span class="math">\(\left(H\otimes H\otimes\dots\otimes H\right)\left|00\dots0\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{x=0}^{2^{n}-1}\left|x\right\rangle \)</span></p>
+<p>כאשר כאן <span class="math">\(\left|x\right\rangle \)</span> הוא סימון מוסכם לכתיב של <span class="math">\(x\)</span> בבסיס בינארי עם בדיוק <span class="math">\(n\)</span> ספרות, עם אפסים מובילים (כלומר, אם <span class="math">\(x=3\)</span> ו-<span class="math">\(n=4\)</span> אז <span class="math">\(\left|x\right\rangle \)</span> הוא סימון מקוצר ל-<span class="math">\(\left|0011\right\rangle \)</span>).</p>
+<p>הסופרפוזיציה הזו תהיה קריטית בהמשך, באלגוריתמים רציניים יותר - זו הדרך שבה בחישוב קוונטי אנחנו מבצעים את ה"חישוב סופר דופר מקבילי" שאוהבים לדבר עליו: אנחנו בונים מערכת שנמצאת בסופרפוזיציה של כל האפשרויות בו זמנית, ואז מחשבים פונקציה כלשהי של כל האפשרויות הללו. אבל אני מקדים את המאוחר (אני רק רוצה להזהיר שוב, כפי שעשיתי בפוסט המבוא, שחישוב קוונטי הוא ממש <strong>לא</strong> סתם "חישוב סופר דופר מקבילי" כפי שזה אולי עשוי להיראות כרגע).</p>
+<p>האופרטור השני שאני רוצה להציג כרגע הוא סוג של שער NOT שמערב שני קיוביטים ולא קיוביט בודד (לא שכחנו מה-NOT של קיוביט בודד והוא יחזור בהמשך). הוא מכונה <span class="math">\(C_{not}\)</span>, קיצור של Controlled not, שכן עקרון הפעולה שלו על אברי בסיס הוא זה: אם הקיוביט הראשון הוא 0 אז לא לעשות כלום, ואם הקיוביט הראשון הוא 1, אז לשמש בתור NOT של הקיוביט השני. פורמלית:</p>
+<p><span class="math">\(\left|00\right\rangle \mapsto\left|00\right\rangle \)</span></p>
+<p><span class="math">\(\left|01\right\rangle \mapsto\left|01\right\rangle \)</span></p>
+<p><span class="math">\(\left|10\right\rangle \mapsto\left|11\right\rangle \)</span></p>
+<p><span class="math">\(\left|11\right\rangle \mapsto\left|10\right\rangle \)</span></p>
+<p>לא קשה לראות שזו טרנספורמציה אוניטרית (היא גם הצמוד של עצמה וגם ההופכית של עצמה).</p>
+<p>עכשיו אפשר לתאר פורמלית את מה שאליס עושה במהלך הטלפורטציה: קודם היא מפעילה <span class="math">\(C_{not}\)</span> על שני הקיוביטים שלה, ואז היא מפעילה <span class="math">\(H\)</span> על הקיוביט שהיא רוצה לשכפל (ולסיום היא מודדת את שני הקיוביטים שלה).</p>
+<p>בואו נראה למה זה עובד. כזכור, בהתחלה מצב המערכת כולה הוא</p>
+<p><span class="math">\(\frac{1}{\sqrt{2}}\left(a\left|000\right\rangle +a\left|011\right\rangle +b\left|100\right\rangle +b\left|111\right\rangle \right)\)</span></p>
+<p>ואז באה אליס ומפעילה את <span class="math">\(C_{not}\)</span>, או ליתר דיוק את <span class="math">\(C_{not}\otimes I\)</span> כי בקיוביט השלישי היא לא נוגעת. אם כן, אנו עוברים למצב</p>
+<p><span class="math">\(\frac{1}{\sqrt{2}}\left(a\left|000\right\rangle +a\left|011\right\rangle +b\left|110\right\rangle +b\left|101\right\rangle \right)\)</span></p>
+<p>עכשיו אליס מפעילה <span class="math">\(H\)</span> על הקיוביט הראשון. זה אומר שכל וקטור כמו <span class="math">\(\left|000\right\rangle \)</span> הולך להתפצל לשני וקטורים, עבור שני הערכים השונים עבור הביט הראשון שלו, ושהכל יוכפל בשורש 2. מכיוון שאין שני וקטורים בסכום ששני הביטים האחרונים שלהם זהים (בזכות הפעלת <span class="math">\(C_{not}\)</span>) נקבל שמונה מחוברים שונים:</p>
+<p><span class="math">\(\frac{1}{2}a\left(\left|000\right\rangle +\left|100\right\rangle +\left|011\right\rangle +\left|111\right\rangle \right)+\)</span></p>
+<p><span class="math">\(\frac{1}{2}b\left(\left|010\right\rangle +\left|110\right\rangle +\left|001\right\rangle +\left|101\right\rangle \right)\)</span></p>
+<p>וכל מה שנשאר לעשות עכשיו הוא קיבוץ איברים שחולקים את שני הביטים הראשונים, ומקבלים את הצירוף שכבר ראינו קודם. הסיבה שבגללה כל המידע הרלוונטי עובר אל הקיוביט של בוב היא שבכל אחד משני זוגות הסוגריים יש בדיוק וקטור אחד עם אותם שני ביטים ראשונים, כך שכל זוג ביטים ראשונים שכזה מוכפל בסכום של משהו מהסוגר הראשון (כלומר, מוכפל ב-<span class="math">\(a\)</span>) עם משהו מהסוגר השני (כלומר, מוכפל ב-<span class="math">\(b\)</span>).</p>
+<p>נשאר לדבר על איך בוב "מתקן" את המצב הקוונטי במקרה שבה הוא לא בדיוק המצב שממנו התחלנו (אבל בוב כן יודע בדיוק איך הוא "השתבש"). הנה שלושת המקרים האפשריים:</p>
+<ul>
+    <li><span class="math">\(b\left|0\right\rangle +a\left|1\right\rangle \)</span></li>
+    <li><span class="math">\(-b\left|0\right\rangle +a\left|1\right\rangle \)</span></li>
+    <li><span class="math">\(a\left|0\right\rangle -b\left|1\right\rangle \)</span></li>
+</ul>
+<p>בשביל המקרה הראשון אנחנו צריכים אופרטור שמחליף בין 0 ו-1, כלומר <span class="math">\(\left|0\right\rangle \mapsto\left|1\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \mapsto\left|0\right\rangle \)</span>. לאופרטור הזה אקרא <span class="math">\(X\)</span>. בשביל המקרה השני אנחנו צריכים לבצע את אותה החלפה אבל גם לכפול ב-<span class="math">\(-1\)</span> את המקדם של <span class="math">\(\left|0\right\rangle \)</span>, כלומר <span class="math">\(\left|0\right\rangle \mapsto-\left|1\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \mapsto\left|0\right\rangle \)</span>. את האופרטור הזה אסמן בתור <span class="math">\(Y\)</span>. לבסוף, במקרה האחרון רק צריך להכפיל ב-<span class="math">\(-1\)</span> את המקדם של <span class="math">\(\left|1\right\rangle \)</span>, כלומר האופרטור יהיה <span class="math">\(\left|0\right\rangle \mapsto\left|0\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \mapsto-\left|1\right\rangle \)</span>. לאופרטור הזה אקרא <span class="math">\(Z\)</span>. השמות של האופרטורים מגיעים ממטריצות פאולי המתאימות - אבל צריך לשים לב שההתאמה הזו לא מדויקת (לאן <span class="math">\(i\)</span> נעלם?) ולא חייבים להבין במטריצות פאולי כאן.</p>
+<p>סיימנו עם טלפורטציה קוונטית, עכשיו בואו נדבר על ההפך. בטלפורטציה קוונטית, אנחנו משתמשים בזוג ביטים "קלאסיים" ובקיוביט שזור אחד כדי לשדר מאליס לבוב קיוביט אחד של מידע. ההפך נקרא <strong>קידוד צפוף</strong>, ובו אנחנו משתמשים בזוג שזור אחד ובקיוביט אחד נוסף על מנת לשדר מאליס לבוב שני ביטים קלאסיים של מידע. כלומר, יש כאן טריידאוף מסויים - אנחנו חוסכים בכמות המידע שצריכה לעבור בזמן אמת מאליס אל בוב (קיוביט אחד לכל שני ביטים של מידע) אבל משלמים על זה במחיר של ניצול משאב משותף שהם שיתפו ביניהם קודם (קיוביטים שזורים).</p>
+<p>ואיך הטריק הזה עובד? שלא במפתיע, די בשערים שכבר יש לנו כדי לתאר אותו, והתיאור דומה מאוד להיפוך של טלפורטציה קוונטית, רק שהפעם המערכת שלנו כוללת רק שני קיוביטים.</p>
+<p>מה שאליס עושה הוא לבדוק מה ערכם של זוג הביטים שהיא רוצה לשדר. בהתאם לערך הזה, היא מפעילה שער כלשהו על הקיוביט שלה - אחד מבין <span class="math">\(I,X,Y,Z\)</span> (<span class="math">\(I\)</span> הוא ה"שער" שלא עושה כלום; אפשר לוותר עליו בפועל, כמובן). אחר כך היא שולחת לבוב את הקיוביט שלה (ההנחה כאן היא שיש לה ערוץ שידור קוונטי, כמובן). כשבוב מקבל את הקיוביט, הוא עושה שלושה דברים - ראשית הוא מבצע <span class="math">\(C_{not}\)</span> על שני הקיוביטים; מודד את הקיוביט <strong>של עצמו</strong> ומקבל מזה מידע כלשהו על מה היו שני הביטים שנשלחו; ואז הוא מפעיל את <span class="math">\(H\)</span> על הקיוביט של אליס, מודד אותו ומקבל את מידע שמאפשר לו לשחזר את שני הביטים. פשוט מאוד.</p>
+<p>בואו נעבור לתיאורים פורמליים והסבר למה זה עובד. בהתחלה המצב הקוונטי שאליס ובוב חולקים הוא <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> הסטנדרטי של זוג שזור. עכשיו בואו נראה מה הוא הופך להיות אחרי שאליס מפעילה עליו את <span class="math">\(I,X,Y,Z\)</span>, בהתאם לזוג הביטים שהיא רוצה לשדר:</p>
+<ul>
+    <li>אם הם <span class="math">\(00\)</span> אז היא מפעילה <span class="math">\(I\)</span> ומקבלת <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הם <span class="math">\(01\)</span> אז היא מפעילה <span class="math">\(X\)</span>ומקבלת <span class="math">\(\frac{\left|10\right\rangle +\left|01\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הם <span class="math">\(10\)</span> אז היא מפעילה <span class="math">\(Y\)</span> ומקבלת <span class="math">\(\frac{-\left|10\right\rangle +\left|01\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הם <span class="math">\(11\)</span> אז היא מפעילה <span class="math">\(Z\)</span> ומקבלת <span class="math">\(\frac{\left|00\right\rangle -\left|11\right\rangle }{\sqrt{2}}\)</span>.</li>
+</ul>
+<p>עכשיו תורו של בוב. הוא מפעיל <span class="math">\(C_{not}\)</span> על המצב הקוונטי כולו, ואנחנו מקבלים:</p>
+<ul>
+    <li>אם הביטים הם <span class="math">\(00\)</span> אנחנו מקבלים <span class="math">\(\frac{\left|00\right\rangle +\left|10\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הביטים הם 01 אנחנו מקבלים <span class="math">\(\frac{\left|11\right\rangle +\left|01\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הביטים הם 10 אנחנו מקבלים <span class="math">\(\frac{-\left|11\right\rangle +\left|01\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הביטים הם 11 אנחנו מקבלים <span class="math">\(\frac{\left|00\right\rangle -\left|10\right\rangle }{\sqrt{2}}\)</span>.</li>
+</ul>
+<p>עכשיו בואו נראה מה קיבלנו. בכל אחד מארבעת המצבים הקוונטיים, אנחנו מקבלים סופרפוזיציה שבה הערך של הקיוביט השני זהה עבור שני המצבים האפשריים. למשל, את <span class="math">\(\frac{\left|11\right\rangle +\left|01\right\rangle }{\sqrt{2}}\)</span> אפשר היה לכתוב גם בתור <span class="math">\(\left(\frac{\left|1\right\rangle +\left|0\right\rangle }{\sqrt{2}}\right)\otimes\left|1\right\rangle \)</span> . כך שמדידה של הקיוביט השני מניבה את התוצאות הבאות:</p>
+<ul>
+    <li>אם הביטים הם 00 המדידה מחזירה 0 והקיוביט של אליס עובר למצב <span class="math">\(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הביטים הם 01 המדידה מחזירה 1 והקיוביט של אליס עובר למצב <span class="math">\( \frac{\left|1\right\rangle +\left|0\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הביטים הם 10 המדידה מחזירה 1 והקיוביט של אליס עובר למצב <span class="math">\(\frac{-\left|1\right\rangle +\left|0\right\rangle }{\sqrt{2}}\)</span>.</li>
+    <li>אם הביטים הם 11 המדידה מחזירה 0 והקיוביט של אליס עובר למצב <span class="math">\( \frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\)</span>.</li>
+</ul>
+<p>במילים אחרות, אחרי המדידה הקיוביט של אליס קרס או למצב <span class="math">\(\left|+\right\rangle \)</span> או למצב <span class="math">\(\left|-\right\rangle \)</span>. כעת, את <span class="math">\(H\)</span> הגדרתי על ידי ההעתקה <span class="math">\(\left|0\right\rangle \mapsto\left|+\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \mapsto\left|-\right\rangle \)</span>, אבל קל לראות על ידי חישוב פשוט שהיא מקיימת <span class="math">\(\left|+\right\rangle \mapsto\left|0\right\rangle \)</span> ו-<span class="math">\(\left|-\right\rangle \mapsto\left|1\right\rangle \)</span>. לכן, אחרי שבוב מפעיל את <span class="math">\(H\)</span> ומודד, הוא מקבל בודאות 0 או 1 (הייתי יכול גם לומר שבוב פשוט מודד לפי הבסיס <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span>, כמובן). נסכם את התוצאות האפשריות:</p>
+<ul>
+    <li>אם הביטים הם 00 המדידה הראשונה מחזירה 0 והשניה מחזירה 0.</li>
+    <li>אם הביטים הם 01 המדידה הראשונה מחזירה 1 והשניה מחזירה 0.</li>
+    <li>אם הביטים הם 10 המדידה הראשונה מחזירה 1 והשניה מחזירה 1.</li>
+    <li>אם הביטים הם 11 המדידה הראשונה מחזירה 0 והשניה מחזירה 1.</li>
+</ul>
+<p>כמובן, שיא האלגנטיות היה אם המדידות <strong>היו מחזירות את הביטים</strong>, אבל הן לא - למשל, עבור 10 אנחנו מקבלים את המדידות 11. זה עדיין לא משנה כלום, כמובן - תוצאות המדידות מאפשרות לבוב לדעת חד משמעית מה היו הביטים שנשלחו. זה סוגר גם את העניין הזה.</p>
+<p>יפה. אז הגדרנו בפוסט הזה שערים קוונטיים וראינו איך מתאים איתם אלגוריתמים בסיסיים ומגניבים. בפוסט הבא נגיע סוף סוף ללב התיאורטי של סדרת הפוסטים הזו - איך מגדירים פורמלית את מחלקת הסיבוכיות הסטנדרטית עבור חישוב קוונטי?</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2014/08/11/quantum_computing_bqp/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חישוב קוונטי - מה זה בדיוק</span>
+            </a>
+            
+            
+            
+            <a href="/2014/08/05/quantum_cryptography/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">קריפטוגרפיה קוונטית</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נעים להכיר - סינוס וקוסינוס (גרסת המשוואה הדיפרנציאלית) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>נעים להכיר - סינוס וקוסינוס (גרסת המשוואה הדיפרנציאלית)</h1>
+            <div class="post-meta">
+                <span class="date">2010-03-31</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/טריגונומטריה.html">טריגונומטריה</a>
+                    
+                    <a href="/tags/משוואות דיפרנציאליות.html">משוואות דיפרנציאליות</a>
+                    
+                    <a href="/tags/סינוס.html">סינוס</a>
+                    
+                    <a href="/tags/קוסינוס.html">קוסינוס</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>שרשרת הפוסטים הקודמים שלי, שהחלה ב<a href="http://www.gadial.net/2010/03/14/happy_pi_day/">יום פאי</a>, יועדה למטרה אחת - הגדרה של סינוס וקוסינוס באופן שהוא לחלוטין בלתי קשור לגאומטריה בשום צורה שהיא - ומכאן גם הכנסה של פאי למשחק המתמטי בדרך שהיא לחלוטין בלתי קשורה לגאומטריה בשום צורה שהיא. <a href="http://www.gadial.net/2010/03/27/exponent/">מנת הפתיחה שלי</a> הייתה הגדרת פונקצית האקספוננט באופן בלתי גאומטרי שכזה, כש<a href="http://www.gadial.net/2010/03/26/radiocarbon_dating_and_math/">המוטיבציה מגיעה</a> מפתרון משוואות דיפרנציאליות; ו<a href="http://www.gadial.net/2010/03/29/from_exponent_to_trigo_via_ode/">בפוסט האחרון</a> הגעתי למשוואה דיפרנציאלית שבה האקספוננט הממשי אינו מסוגל להועיל לנו עוד - המשוואה <span class="math">\(f^{\prime\prime}=-f\)</span>. זוהי נקודת המוצא למה שאעשה בפוסט הזה, שיהיה דומה למדי למה שעשיתי בפוסט על האקספוננט - נתחיל מכך שקיימים פתרונות למשוואה הזו, נחקור את תכונותיהם ובסוף נגיע למסקנה שאלו הם הסינוס והקוסינוס המוכרים לנו זה לא מכבר. חשוב להבהיר שמה שנעשה יהיה לצאת להרפתקאה בג'ונגל - זו לא הדרך הקצרה או הפשוטה ביותר, וגם לא רואים בה את הנוף באופן הטוב ביותר, וגם נשרטים כל הזמן מקוצים וענפים וצריך להיזהר מחיות טרף - אבל אני חושב שזו הרפתקאה טובה שכן היא מעניקה לנו נקודת מבט שונה וזרה על הנושא מזו שניתן לראות כאשר פוסעים בשבילים המוכרים.</p>
+<p>ובכן, הבה וניגש לעבודה. כפי שאמרתי בפוסט הקודם, למשוואות דיפרנציאליות מסדר שני יש משפט קיום ויחידות שמבטיח למשוואה <span class="math">\(f^{\prime\prime}=-f\)</span> קיים פתרון יחיד אם דורשים גם שני תנאי התחלה מהצורה <span class="math">\(f\left(0\right)=a,f^{\prime}\left(0\right)=b\)</span> עבור <span class="math">\(a,b\)</span> ממשיים כלשהם (תנאי ההתחלה לא חייב להיות באפס, אבל זה יהיה הכי נוח עבורנו). כתמיד, נרצה שתנאי ההתחלה יהיו פשוטים ככל הניתן; תנאי ההתחלה <span class="math">\(f\left(0\right)=f^{\prime}\left(0\right)=0\)</span> מניב בבירור את הפתרון <span class="math">\(f\left(x\right)=0\)</span> שאיננו מעניין, ולכן הנסיון הבא יהיה לקבוע את אחד מתנאי ההתחלה להיות 1. נאמר, <span class="math">\(f\left(0\right)=0,f^{\prime}\left(0\right)=1\)</span>. משפט הקיום והיחידות מבטיח שקיימת פונקציה שעונה על תנאים אלו - בואו נסמן אותה בסימון הבלתי צפוי לחלוטין <span class="math">\(f\)</span>. ומה יקרה אם נבחר דווקא תנאי התחלה שב-<span class="math">\(0\)</span> נותן לפונקציה 1, ולנגזרתה יתן <span class="math">\(0\)</span>? אין שום בעיה - נסמן פתרון זה ב-<span class="math">\(g\)</span>. השלב הראשון בהרפתקאה שלנו יהיה להבין את הקשר שבין <span class="math">\(f\)</span> ו-<span class="math">\(g\)</span>.</p>
+<p>הבה ונתבונן רגע על הפונקציה <span class="math">\(f^{\prime}\)</span>. אמנם, הפונקציה הזו היא בראש ובראשונה הנגזרת של <span class="math">\(f\)</span>, אבל יש לה חיים משל עצמה. אם גוזרים אותה מקבלים את <span class="math">\(f^{\prime\prime}\)</span>, שכידוע שווה ל-<span class="math">\(-f\)</span>; ואם גוזרים אותה שוב, מקבלים את <span class="math">\(-f^{\prime}\)</span>. במילים אחרות, גם <span class="math">\(f^{\prime}\)</span> מקיימת את המשוואה הדיפרנציאלית שממנה התחלנו. עם אילו תנאי התחלה היא מקימת אותם? ובכן, <span class="math">\(f^{\prime}\left(0\right)=1\)</span>, כי כך קבענו את <span class="math">\(f\)</span> מלכתחילה; ו-<span class="math">\(\left(f^{\prime}\right)^{\prime}\left(0\right)=f^{\prime\prime}\left(0\right)=-f\left(0\right)=0\)</span> - אבל אלו בדיוק תנאי ההתחלה של <span class="math">\(g\)</span>! מכאן ש-<span class="math">\(f^{\prime}=g\)</span>. כבר צץ הקשר הראשון בין שני הפתרונות ה"מעניינים" של המשוואה עם תנאי ההתחלה הפשוטים ביותר שהצלחנו למצוא.</p>
+<p>הצעד הבא פשוט: <span class="math">\(g^{\prime}=\left(f^{\prime}\right)^{\prime}=f^{\prime\prime}=-f\)</span>. כלומר, בעוד ש-<span class="math">\(g\)</span> הייתה הנגזרת של <span class="math">\(f\)</span>, הרי ש-<span class="math">\(-f\)</span> הוא הנגזרת של <span class="math">\(g\)</span>. שימו לב כמה מעט היינו צריכים להניח בשביל לקבל את "חוק הטבע" הזה ואת הא-סימטריה שטבועה בשתי הפונקציות הללו - האחת מניבה את חברתה, ואילו השניה מניבה את <strong>מינוס </strong>חברתה. לכן כל אחת מהפונקציות מעניינת בזכות עצמה ויש מקום לדבר על שתיהן בבת אחת.</p>
+<p>עכשיו, משיש לנו מידע יותר מלא על מהן כל הנגזרות של <span class="math">\(f\)</span> ו-<span class="math">\(g\)</span>, ניתן לבצע את אותו ניתוח שביצענו גם עבור אקספוננט - מציאת טורי הטיילור המתאימים לפונקציות. כזכור, עבור <span class="math">\(f\)</span> טור הטיילור יהיה טור מהצורה <span class="math">\(\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}\)</span>. החישוב אינו מסובך במיוחד: <span class="math">\(f^{\left(0\right)}\left(0\right)=0\)</span> על פי הגדרה; <span class="math">\(f^{\left(1\right)}\left(0\right)=g\left(0\right)=1\)</span>; <span class="math">\(f^{\left(2\right)}\left(0\right)=-f\left(0\right)=0\)</span>; <span class="math">\(f^{\left(3\right)}\left(0\right)=-g\left(0\right)=-1\)</span>; ואילו <span class="math">\(f^{\left(4\right)}=f\)</span>, ולכן הסדרה תתחיל לחזור על עצמה משם ואילך. במילים אחרות, סדרת הערכים שמתקבלת היא <span class="math">\(0,1,0,-1,0,1,0,-1,\dots\)</span> (להבדיל מאקספוננט, שבה היא הייתה פשוט <span class="math">\(1,1,1,\dots\)</span>). לכן הטור יהיה מהצורה <span class="math">\(x-\frac{x^{3}}{3!}+\frac{x^{5}}{5!}-\frac{x^{7}}{7!}+\dots\)</span>. ניתוח דומה עבור <span class="math">\(g\)</span> מניב את הסדרה <span class="math">\(1,0,-1,0,1,0,-1,0,\dots\)</span> ולכן את הטור<span class="math">\(1-\frac{x^{2}}{2!}+\frac{x^{4}}{4!}-\frac{x^{6}}{6!}+\dots\)</span>. כפי שניתן לראות, שני הטורים "משלימים" זה את זה; בפרט, אם נהפוך את סימני המינוס לפלוס ונחבר את הטורים, נקבל את הטור של <span class="math">\(e^{x}\)</span>. תופעה זו היא שמובילה ל<a href="http://he.wikipedia.org/wiki/%D7%A0%D7%95%D7%A1%D7%97%D7%AA_%D7%90%D7%95%D7%99%D7%9C%D7%A8_%28%D7%90%D7%A0%D7%9C%D7%99%D7%96%D7%94_%D7%9E%D7%A8%D7%95%D7%9B%D7%91%D7%AA%29">נוסחת אוילר</a>, <span class="math">\(e^{i\theta}=\cos\theta+i\sin\theta\)</span>, אך דיה לצרה בשעתה.</p>
+<p>כמובן, זה שכתבנו את טור הטיילור של <span class="math">\(f,g\)</span> עדיין לא אומר שהטור אכן מתכנס אליהן - בשביל זה צריך לדבר על גודל השארית, כמו שעשיתי במקרה של אקספוננט. שם הראיתי שדי להצביע על כך שיש חסם על הערך שכל הנגזרות של <span class="math">\(\exp\)</span>יכולות לקבל בתחום <span class="math">\(\left[0,x_{0}\right]\)</span> כדי להוכיח שהטור מתכנס לפונקציה, וכדי לראות זאת פשוט שמנו לב לכך שגם כאשר גוזרים את <span class="math">\(\exp\)</span> מקבלים אותה עצמה, ולכן חסם על <span class="math">\(\exp\)</span> בתחום הזה (שקיים, כי היא רציפה והתחום סגור) מוביל לחסם על כל הנגזרות. אותו שיקול עובד גם כאן - אמנם, הנגזרת של <span class="math">\(f\)</span> היא <span class="math">\(g\)</span> ושל <span class="math">\(g\)</span> היא <span class="math">\(-f\)</span>, אבל ניתן למצוא חסם על <span class="math">\(g,f\)</span> "בו זמנית", ולכן גם על כל נגזרותיהן. מסקנה: שני הטורים שכתבתי לעיל אכן מתארים נכונה את <span class="math">\(f,g\)</span>. לאלו מכם שמכירים את הטורים הללו כבר בתור הטורים של <span class="math">\(\sin\)</span> ו-<span class="math">\(\cos\)</span> כבר הגענו לקרקע יציבה כלשהי. עבור היתר מה שחשוב כאן הוא רק שמצאנו ביטוי "קונקרטי" לפונקציות הללו, שגם מאפשר לנו לחשב אותן אם נרצה.</p>
+<p>נחזור כעת לציד תכונות מעניינות בג'ונגל, כשהמוטיבציה שלנו מגיעה ממה שאנחנו כבר יודעים על <span class="math">\(\sin\)</span>ו-<span class="math">\(\cos\)</span>. הבה ונתבונן בפונקציה שמוגדרת על ידי <span class="math">\(h=f^{2}+g^{2}\)</span>. אם נגזור אותה, נקבל את הנגזרת <span class="math">\(h^{\prime}=2ff^{\prime}+2gg^{\prime}=2fg-2gf=0\)</span> - במילים אחרות, <span class="math">\(h\)</span> היא פונקציה שנגזרתה היא זהותית אפס, ולכן היא פונקציה קבועה (זהו אחד מהמשפטים הבסיסיים בחשבון אינפיניטסימלי, וגם משפט ברור אינטואיטיבית - הרי נגזרת היא קצב השינוי של פונקציה, ואם קצב השינוי הזה הוא תמיד אפס, הפונקציה בהכרח קבועה). האם אנחנו יודעים לחשב את הערך הקבוע של <span class="math">\(h\)</span>? ודאי - <span class="math">\(h\left(0\right)=f^{2}\left(0\right)+g^{2}\left(0\right)=0+1=1\)</span>. מכאן ש-<span class="math">\(f^{2}\left(x\right)+g^{2}\left(x\right)=1\)</span> לכל <span class="math">\(x\)</span>. נראה מוכר? זה גם מניב דרך נוספת לבטא את <span class="math">\(g\)</span> באמצעות <span class="math">\(f\)</span>: <span class="math">\(g=\pm\sqrt{1-f^{2}}\)</span>. זוהי דרך הצגה "רמאית" במובן מסויים כי איננו יודעים <strong>באמת</strong> את הערך של <span class="math">\(g\left(x\right)\)</span> בהינתן <span class="math">\(f\left(x\right)\)</span>; אנחנו יודעים שהוא <span class="math">\(\pm\sqrt{1-f^{2}\left(x\right)}\)</span> אבל איננו יודעים אם זהו הערך החיובי או השלילי. נצטרך לאמץ דרך שונה לתקוף את השאלה הזו.</p>
+<p>שימו לב למה שנובע מהתכונה שכרגע ראינו - מכיוון ש-<span class="math">\(g,f\)</span> הן פונקציות ממשיות ומוגדרות לכל <span class="math">\(x\)</span>, נובע מכך בהכרח שהערכים ששתיהן מחזירות מצויים תמיד בתחום <span class="math">\(\left[-1,1\right]\)</span>, כי במספרים ממשיים, <span class="math">\(f^{2}\left(x\right)+g^{2}\left(x\right)=1\)</span> מכריח את <span class="math">\(f\left(x\right),g\left(x\right)\)</span> להיות קטנים או שווים ל-1 אחרת אחד מהם יהיה חייב להיות מספר מרוכב. יותר מכך - <span class="math">\(f,g\)</span> רוקדות מעין "ריקוד" יחדיו - כאשר אחת גדולה (בערכה המוחלט), השניה חייבת להיות קטנה. האופן שבו הן משתלבות זו בזו ב"ריקוד" הזה והעובדה שהריקוד הוא מחזורי היא היעד המרכזי שלנו - אבל לצורך כך יש עוד תכונות שעלינו להיווכח בהן.</p>
+<p>כל מי שהיה תלמיד תיכון ודאי זוכר את הנוסחאות המפלצתיות עבור <span class="math">\(\sin\left(x+y\right)\)</span> ו-<span class="math">\(\cos\left(x+y\right)\)</span>. הבה וננסה לגזור נוסחאות שכאלו עבור <span class="math">\(f,g\)</span> באמצעות הכלים שיש לנו עד כה (דהיינו, בלי שום גאומטריה). לצורך כך הבה וניזכר במשהו מהפוסט הקודם - אמרתי שבהינתן משוואה דיפרנציאלית מסדר שני (בלי מקדם חופשי) ושני פתרונות "בלתי תלויים" עבורה, אפשר לבנות כל פתרון אחר כצירוף לינארי של שני הפתרונות הללו, כשהמקדמים נקבעים על פי תנאי ההתחלה. כפי שניתן לנחש, <span class="math">\(f,g\)</span> הם שני פתרונות "בלתי תלויים" שכאלו, ונראה זאת במפורש. נניח אם כן כי <span class="math">\(h\)</span> היא פונקציה אשר מקיימת <span class="math">\(h^{\prime\prime}=-h\)</span> וכמו כן <span class="math">\(h\left(0\right)=a\)</span> ו-<span class="math">\(h^{\prime}\left(0\right)=b\)</span>. כעת נתבונן בפונקציה <span class="math">\(bf+ag\)</span>; בבירור אם נציב בה 0 נקבל <span class="math">\(a\)</span> (כי <span class="math">\(f\)</span> יתאפס ואילו <span class="math">\(g\)</span> יהפוך ל-1). אם נגזור אותה, נקבל <span class="math">\(bf^{\prime}+ag^{\prime}=bg-af\)</span>, וכשמציבים 0 בנגזרת זו מקבלים בבירור את <span class="math">\(b\)</span>. כמו כן ברור כי <span class="math">\(bf+ag\)</span> מקיימת את המשוואה הדיפרנציאלית המקורית שכן היא צירוף לינארי של <span class="math">\(f,g\)</span>. מסקנה ממשפט הקיום והיחידות? <span class="math">\(h=bf+ag\)</span>.</p>
+<p>בואו ניקח כעת <span class="math">\(y\)</span> ממשי כלשהו, ונגדיר פונקציה חדשה: <span class="math">\(h\left(x\right)=f\left(x+y\right)\)</span>. מכללי הגזירה הסטנדרטיים עולה ש-<span class="math">\(h^{\prime\prime}\left(x\right)=f^{\prime\prime}\left(x+y\right)=-f\left(x+y\right)=-h\left(x\right)\)</span>, כך שאת <span class="math">\(h\)</span> אפשר לייצג כצירוף לינארי של <span class="math">\(f,g\)</span>. מהם המקדמים? <span class="math">\(a=h\left(0\right)=f\left(y\right)\)</span>, ו-<span class="math">\(b=h^{\prime}\left(0\right)=f^{\prime}\left(y\right)=g\left(y\right)\)</span>. מסקנה: <span class="math">\(f\left(x+y\right)=f\left(x\right)g\left(y\right)+g\left(x\right)f\left(y\right)\)</span>. נראה מוכר? באופן דומה אפשר להראות כי <span class="math">\(g\left(x+y\right)=g\left(x\right)g\left(y\right)-f\left(x\right)f\left(y\right)\)</span>. אני מאוד אוהב את ההוכחה הזו כי היא נותנת תובנה יפה על הנוסחאות הללו - הן לא סתם ערב רב של סינוסים וקוסינוסים שהושלכו באקראי, אלא צירוף לינארי של <span class="math">\(\sin x,\cos x\)</span> כשהמקדמים מבוססים על <span class="math">\(\sin y,\cos y\)</span>.</p>
+<p>מכאן הדרך להוכחה ש-<span class="math">\(f,g\)</span> מחזוריות קצרה יחסית, אבל עדיין יש צעד מרכזי אחד שטרם ביצענו - עלינו להראות כי <span class="math">\(g\)</span> מתאפסת היכן שהוא. הבה נניח בשלילה כי <span class="math">\(g\left(x\right)&gt;0\)</span> לכל <span class="math">\(x\ge0\)</span> (עבור <span class="math">\(x=0\)</span> אנו יודעים כי זה נכון: <span class="math">\(g\left(0\right)=1\)</span>). מכיוון ש-<span class="math">\(f^{\prime}=g\)</span>, נובע מכך ש-<span class="math">\(f\)</span> היא מונוטונית עולה עבור <span class="math">\(x\ge0\)</span>, דהיינו <span class="math">\(f\left(x\right)&gt;0\)</span> לכל <span class="math">\(x&gt;0\)</span>. כעת, מכיוון ש-<span class="math">\(g^{\prime}=-f\)</span>, עולה מכך כי <span class="math">\(g\)</span> היא מונוטונית יורדת לכל <span class="math">\(x&gt;0\)</span>. עד כאן, שום דבר מפתיע - זהו בדיוק ה"ריקוד" של <span class="math">\(f,g\)</span> שעליו דיברתי - כשהאחת עולה, השנייה יורדת. האינטואיציה כאן היא שקצב הירידה של <span class="math">\(g\)</span>, אם היא אינה מתאפסת אף פעם, חייב להתמתן עוד ועוד עם הזמן. קצב הירידה הזה הוא נגזרתה של <span class="math">\(g\)</span>, כלומר <span class="math">\(-f\)</span>, ולכן הטענה היא שהערך של <span class="math">\(-f\)</span> חייב <strong>לגדול</strong> עם הזמן (הוא <strong>שלילי</strong> כל הזמן, ולכן כשאני אומר שהוא "גדל", הכוונה היא דווקא לכך שערכו המוחלט קטן - בהתחלה הוא <span class="math">\(-1\)</span>, אחר כך <span class="math">\(-0.5\)</span> וכן הלאה). אלא שהערך של <span class="math">\(-f\)</span> בתחילת ה"ריקוד" היה 0, ולכן הסיטואציה חייבת להיות כזו: ראשית ערכו של <span class="math">\(-f\)</span> <strong>קטן</strong>, ואז פתאום המצב "מתהפך" וערכו מתחיל "לגדול". בפרט זה אומר שיש ל-<span class="math">\(-f\)</span>נקודת מינימום בריקוד הזה, אבל <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%A4%D7%98_%D7%A4%D7%A8%D7%9E%D7%94_%28%D7%9C%D7%A0%D7%A7%D7%95%D7%93%D7%95%D7%AA_%D7%A7%D7%99%D7%A6%D7%95%D7%9F%29">משפט בסיסי</a> מחשבון אינפיניטסימלי אומר שבנקודת המינימום הזו הנגזרת של <span class="math">\(-f\)</span> תתאפס - ונגזרת זו היא בדיוק <span class="math">\(-g\)</span>...</p>
+<p>למרות שהטיעון הזה נשמע חצי נפנוף-ידיימי, הוא למעשה מאוד קונקרטי ולא נדרשת הרבה עבודה כדי לפרמל אותו לגמרי. השורה התחתונה היא מה שמעניין אותנו - קיימת נקודה <span class="math">\(t&gt;0\)</span> כך ש-<span class="math">\(g\left(t\right)=0\)</span>, ו-<span class="math">\(t\)</span> הוא הערך הקטן ביותר שגדול מ-0 שמקיים זאת. מהו ערכה של <span class="math">\(f\)</span> בנקודה זו? ובכן, <span class="math">\(f\left(t\right)=\pm\sqrt{1-g^{2}\left(t\right)}=\pm1\)</span>. אלא שלא ייתכן ש-<span class="math">\(f\)</span> שלילי בנקודה זו, כי ב-0 התקיים <span class="math">\(f\left(0\right)=0\)</span> ומאותו רגע והלאה <span class="math">\(g\)</span> - הנגזרת של <span class="math">\(f\)</span> - הייתה חיובית (כי <span class="math">\(t\)</span> הנקודה המינימלית שבה <span class="math">\(g\)</span> מתאפסת), ולכן <span class="math">\(f\)</span> רק <strong>עלתה</strong>. מכאן ש-<span class="math">\(f\left(t\right)=1\)</span>. כעת אפשר להגיע למסקנה מעניינת מאוד: <span class="math">\(f\left(x+t\right)=f\left(x\right)g\left(t\right)+g\left(x\right)f\left(t\right)=g\left(x\right)\)</span>. במילים אחרות, <span class="math">\(g\)</span> מתנהגת <strong>בדיוק כמו </strong><span class="math">\(f\)</span>, פרט לכך שהיא "מקדימה" אותה בדיוק ב-<span class="math">\(t\)</span> "צעדים" (כלומר, אם נזיז את הגרף של <span class="math">\(f\)</span> <span class="math">\(t\)</span> יחידות ימינה, הוא יזדהה עם הגרף של <span class="math">\(g\)</span>).</p>
+<p>כעת הניתוח נעשה פשוט בהרבה. מה קורה לפונקציות בקטע <span class="math">\(\left[t,2t\right]\)</span>? בתחילתו, כזכור, <span class="math">\(g\left(t\right)=0\)</span> ואילו <span class="math">\(f\left(t\right)=1\)</span>. מכיוון ש-<span class="math">\(f\)</span> מתנהגת בקטע הזה כמו ש-<span class="math">\(g\)</span> התנהגה בקטע <span class="math">\(\left[0,t\right]\)</span> הרי ש-<span class="math">\(f\)</span> פשוט תרד עד ל-<span class="math">\(0\)</span>: <span class="math">\(f\left(2t\right)=0\)</span>. בזמן הזה <span class="math">\(g\)</span> היא בעלת נגזרת שלילית לכל אורך הדרך (כי הנגזרת שלה היא <span class="math">\(-f\)</span> ו-<span class="math">\(f\)</span> הרי חיובית בקטע זה) ולכן <span class="math">\(g\)</span> תהיה מונוטונית יורדת בכל הקטע. עד להיכן היא תרד? כאן אפשר להשתמש בנוסחת הסכום: <span class="math">\(g\left(2t\right)=g^{2}\left(t\right)-f^{2}\left(t\right)=-1\)</span>. אם כן, הריקוד ממשיך - בקטע מ-<span class="math">\(t\)</span> אל <span class="math">\(2t\)</span>, שתי הפונקציות יורדות מטה מרחק של יחידה אחת.</p>
+<p>ומה קורה ב-<span class="math">\(\left[2t,3t\right]\)</span>? ובכן, <span class="math">\(f\)</span> כרגיל מחקה את <span class="math">\(g\)</span>: יורדת עד ל-<span class="math">\(-1\)</span> (<span class="math">\(f\left(3t\right)=-1\)</span>). על כן הנגזרת של <span class="math">\(g\)</span> היא <strong>חיובית</strong> בכל הקטע ולכן <span class="math">\(g\)</span> עולה בכל הקטע ומגיעה עד ל-0, שהרי <span class="math">\(g\left(3t\right)=g\left(2t\right)g\left(t\right)-f\left(2t\right)f\left(t\right)=0-0=0\)</span>.</p>
+<p>ולבסוף, בקטע <span class="math">\(\left[3t,4t\right]\)</span> <span class="math">\(f\)</span> ממשיכה לחקות את <span class="math">\(g\)</span> ועולה בעצמה ל-0, ואילו <span class="math">\(g\)</span> ממשיכה לעלות (כי נגזרתה חיובית) ומגיעה עד ל-1: <span class="math">\(g\left(4t\right)=g^{2}\left(2t\right)-f^{2}\left(2t\right)=1\)</span>. זה אומר שב-<span class="math">\(4t\)</span> חזרנו להתחלה - שוב <span class="math">\(f\)</span> מאופסת ו-<span class="math">\(g\)</span> מחזירה 1. מזה נובע מיידית ש-<span class="math">\(4t\)</span> הוא מחזור של שתי הפונקציות הללו: <span class="math">\(f\left(x+4t\right)=f\left(x\right)g\left(4t\right)+f\left(4t\right)g\left(x\right)=f\left(x\right)\)</span>, ובדומה <span class="math">\(g\left(x+4t\right)=g\left(x\right)g\left(4t\right)-f\left(x\right)f\left(4t\right)=g\left(x\right)\)</span> - וזה נכון <strong>לכל</strong> <span class="math">\(x\)</span>, כולל השליליים. הוכחנו (בלי שום גאומטריה) את המחזוריות של <span class="math">\(f,g\)</span>. יותר מכך - המעקב המדוקדק שלנו אחרי ההתנהגות של <span class="math">\(f,g\)</span> מעלה שהסיטואציה הזו (<span class="math">\(f\)</span> מקבלת 0, <span class="math">\(g\)</span> מקבלת 1) התרחשה <strong>לראשונה</strong> ב-<span class="math">\(4t\)</span> לאחר ההתרחשות שלה ב-0, ומכאן ש-<span class="math">\(4t\)</span> הוא המחזור <strong>המינימלי</strong> של שתי הפונקציות הללו.</p>
+<p>זהו - הוכחנו כרגע את התכונה החשובה ביותר של שתי הפונקציות. שימו לב כמה אנחנו כבר יכולים לומר: למשל, מניתוח ההתנהגות שביצענו ל-<span class="math">\(f\)</span> ברור כי היא מתאפסת רק בערכים מהצורה <span class="math">\(k\cdot2t\)</span> עבור <span class="math">\(k\)</span> שלם; לכן אם נשתמש <a href="http://www.gadial.net/2010/03/14/happy_pi_day/">בהוכחה של אוילר</a> לחישוב <span class="math">\(\sum\frac{1}{n^{2}}\)</span> שהצגתי בעבר, נקבל שהסכום הזה הוא <span class="math">\(\frac{\left(2t\right)^{2}}{6}\)</span>. במילים אחרות, הצלחנו לחשב את סכום הטור בלי שום גאומטריה. זו נקודה טובה לעצור ולהודות באמת: <span class="math">\(f\left(x\right)\)</span> הוא פשוט שם מיתמם ל-<span class="math">\(\sin\left(x\right)\)</span>, <span class="math">\(g\left(x\right)\)</span> הוא שם מיתמם ל-<span class="math">\(\cos\left(x\right)\)</span>, ואילו <span class="math">\(\pi=2t\)</span>. אך לא ניתן לעשות זאת "סתם", שהרי <span class="math">\(\sin\left(x\right),\cos\left(x\right),\pi\)</span> כולם יצורים גאומטריים ואי אפשר "להשתלט" עליהם ככה בלי להגיד כלום על גאומטריה. לכן, אם מתעקשים, אפשר להיפגש באמצע - עם קצת אנליזה (והגבול <span class="math">\(\lim_{x\to0}\frac{\sin x}{x}=1\)</span> והוכחתו <strong>הגאומטרית</strong> <a href="http://www.gadial.net/2008/01/20/lim_sin_x_over_x/">הידועה לשמצה</a>) אפשר להראות כי <span class="math">\(\sin^{\prime}\left(x\right)=\cos\left(x\right)\)</span> ו-<span class="math">\(\cos^{\prime}\left(x\right)=-\sin\left(x\right)\)</span> ומכאן חיש קל אפשר להראות ש-<span class="math">\(\sin,\cos\)</span> הם הפתרונות למשוואה הדיפרנציאלית שעליה דיברתי. האם יש דרך אחרת? ובכן, אפשר להגדיר את <span class="math">\(\sin,\cos\)</span> בצורה מעט שונה מהצורות שאנו מכירים - צורה שהיא מעין פשרה בין ההגדרה הגאומטרית ובין ההגדרות האנליטיות, ומשתמשת בפונקציה אנליטית המתארת שטח של עיגול. הניתוח של הפונקציה הזו כולל קצת אינפי "מלוכלך", ואיני רוצה להיכנס אליו כעת; אבל גם בו היעד המרכזי שמגיעים אליו, שהחל ממנו הכל ממשיך כרגיל, הוא נוסחאות הגזירה של סינוס וקוסינוס. דבר זה מראה כי במובן מסויים, הגישה שאני הצגתי היא ה"ישירה" ביותר, שכן ממנה נוסחאות הגזירה נובעות בצורה מיידית לחלוטין.</p>
+<p>בפוסט הבא אפרע את החוב מהפוסט הקודם - אראה כיצד נפתרת בעזרת סינוס וקוסינוס המשוואה הדיפרנציאלית הכללית שהצגתי, ואכניס לתמונה סוף סוף את נוסחת אוילר.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/04/01/math_and_values/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חינוך לערכים במתמטיקה</span>
+            </a>
+            
+            
+            
+            <a href="/2010/03/29/from_exponent_to_trigo_via_ode/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הדרך מהאקספוננט לטריגונומטריה רצופה משוואות דיפרנציאליות מסדר שני</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רקורסיה - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>רקורסיה</h1>
+            <div class="post-meta">
+                <span class="date">2015-11-03</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תכנות.html">תכנות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/רקורסיה.html">רקורסיה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="/img/2015/11/escher_hands.jpg"><img class="aligncenter size-full wp-image-3304" alt="escher_hands" src="/img/2015/11/escher_hands.jpg" width="259" height="194" /></a></p>
+<p>הבדיחה הידועה אומרת שבמילון ההגדרה של רקורסיה היא "עיין ערך רקורסיה". אבל כנראה שזה לא מספיק טוב, כי ביקשו ממני פוסט על רקורסיות, וספציפית על רקורסיות במדעי המחשב. כך שהפוסט הזה הולך להיות עם מבוא כללי לא טכני, ואחר כך עם גלישה לפסים טכניים שיכולים להיות מאוד מעניינים עבור מי שמתעניין בדברים הללו ועוד לא מכיר.</p>
+<p>אין הגדרה כללית למה זו בדיוק רקורסיה, אבל הרעיון הוא תמיד זהה - משהו שמתואר/מוגדר/מחושב איכשהו באמצעות עצמו. לרוב באמצעות גרסה קצת יותר פשוטה של עצמו, וכמעט תמיד עם בסיס כלשהו לתיאור/הגדרה/חישוב שהוא ישיר ולא דורש את ההפניה העצמית הזו. דוגמה נפוצה בארץ היא ההגדרה (הפשטנית במתכוון) ליהודי - "יהודי הוא מי שנולד לאם יהודיה". כאן הבירור האם פלוני הוא יהודי מתבצע על ידי הפעלת אותו בירור על אמו של הפלוני. באיזה מובן האם היא "גרסה קצת יותר פשוטה"? התשובה היא שעץ המשפחה שלה קצר יותר. אם נמשיך ונעלה בעץ המשפחה נגיע בסופו של דבר למקרה קצה - מישהו שהיה יהודי למרות שאמו לא הייתה יהודיה - זה מקרה בסיס שלא נכלל בהגדרה הפשטנית שנתתי אבל ההכרח של הקיום שלו מובלע בה. את דוגמת עץ המשפחה אפשר לנצל לעוד רקורסיות - למשל, שני אנשים הם קרובים אם יש להם הורה משותף (זה מקרה בסיס), או אם הורה של אחד מהם הוא קרוב של הורה של השני (זו "הפעלה" של הרקורסיה).</p>
+<p>בואו נעבור לדוגמה קלאסית מתחום המתמטיקה - סדרת פיבונאצ'י. הכלל שמגדיר את הסדרה הזו הוא שכל איבר בה שווה לסכום שני האיברים שלפניו, פרט לשני האיברים הראשונים ששניהם פשוט 1 (או לפעמים 0 ו-1 או לפעמים 1 ו-2, זה לא חשוב). זו בבירור הגדרה רקורסיבית: כל איבר בסדרה מוגדר בעזרת איברים "פשוטים" ממנו, כאשר "פשטות" כאן פירושה קרבה גדולה יותר לתחילת הסדרה. למה בעצם שזה ייחשב "פשוט יותר"? כי כדי לחשב את הערך של האיבר השישי בסדרה באמצעות הנוסחה הרקורסיבית נצטרך בסופו של דבר לחשב את ערכם של חמישה איברים אחרים, אלו שלפניו; אבל בשביל לחשב את הערך של האיבר השביעי נצטרך לחשב את ערכם של שישה איברים אחרים, וכן הלאה.</p>
+<p>אם כן, כשאני אומר "פשוט יותר" אני לא מתכוון לפי איזה מדד אבסולוטי של פשטות, אלא לפי מעין רמת קרבה לאחד ממקרי הבסיס שבהם החישוב לא דורש הפעלה נוספת של הרקורסיה. עוד דוגמה מתמטית פשוטה היא פונקציית העצרת: !n הוא מכפלת כל המספרים הטבעיים מ-1 ועד n, כאשר מטעמי נוחות מגדירים ש-!0 שווה ל-1. זה מוביל להגדרה רקורסיבית פשוטה: <span class="math">\( n!=\begin{cases} 1 & n=0\\ n\cdot\left(n-1\right)! & n&gt;0 \end{cases} \)</span></p>
+<p>כמובן, כל הדוגמאות הללו לא מספקות לנו הגדרה חד משמעית של מהי רקורסיה, וברור שיש גמישות באופן שבו אנחנו נותנים את השם הזה לדברים שונים. הביטו בשלט הבא: האם מה שמתואר בו הוא בעל אופי רקורסיבי? <a href="/img/2015/11/hulda_recursion.jpg"><img class="aligncenter size-large wp-image-3303" alt="hulda_recursion" src="/img/2015/11/hulda_recursion.jpg" width="584" height="328" /></a> יש לנו כאן רחוב שנקרא על שם ישוב שנקרא על שם נביאה (שנקראה על שם בעל חיים? קרוב לודאי שלא, אבל זה משעשע יותר כך). האם זאת רקורסיה? הטהרנים יטענו שלא, כי רקורסיה תהיה רק סיטואציה של "ישוב שנקרא על שם ישוב שנקרא על שם ישוב", אבל לדעתי אין הכרח כזה. חשבו על תהליך "בירור שם" של דבר מה - אם המשהו קרוי על שם משהו אחר, מבררים מהיכן הגיע שמו של המשהו האחר.</p>
+<p>ציור הידיים של אשר, שבראש הפוסט, גם הוא סוג של דוגמה לרקורסיה, למרות שאחת מופרעת שאין לה תנאי עצירה ושרשרת ההפעלות שלה היא לולאה. זה לא משהו מציאותי במיוחד, אבל אשר מעולם לא התיימר להיות מציאותי.</p>
+<p>דוגמה אחרת ומבדרת למדי לרקורסיה קיבלנו לפני כמה שנים בקולנוע, בסרט Inception של כריסטופר נולאן. מבלי להיכנס לפרטי עלילה מיותרים, הסרט עוסק בחלומות שמתרחשים בתוך חלומות שמתרחשים בתוך חלומות... ומה שקורה ברמה אחת עשוי להשפיע על מה שקורה ברמה אחרת. כמובן, הרעיון של סיפור שמתרחש במספר "רמות" שונות הוא נפוץ למדי בספרות, לפחות כשמדובר על שתי רמות (זה מה שמכונה "סיפור מסגרת"). ב"גדל, אשר, באך" של דגלאס הופשטטר יש שימוש בסיפור שמתרחש בכמה רמות שונות בדיוק בשביל להדגים את הרעיון של רקורסיה.</p>
+<p>בקיצור, אנחנו מכירים רקורסיות משלל הקשרים שונים והן דבר מבדר למדי תמיד. אבל מה זה אומר במדעי המחשב, ספציפית בתכנות (כי יש מושג של "פונקציה רקורסיבית" גם במדעי המחשב התיאורטיים והמושג הזה שונה לגמרי מהמושג המקביל בתכנות)? בתכנות "פונקציה רקורסיבית" היא פונקציה שקוראת לעצמה. ובואו נסביר את המושג הזה לטובת מי שלא בעניינים. כמובן, אני לא מכיר את כל שפות התכנות בעולם וייתכן שאני לא מתאר את הדבר הכללי ביותר; אבל לשפות תכנות כמו ++C או Ruby התיאור הוא פחות או יותר מדויק.</p>
+<p>מושג עיקרי בתכנות הוא <strong>פונקציה</strong>: פונקציה היא קטע קוד שמקבל קלטים מסויימים ועושה איתם כל מני דברים ומחזירה פלט. לפעמים אפילו אין צורך בקלט או בפלט מפורשים, והפונקציה שואבת את הקלטים שלה ממקורות אחרים (למשל, משתנים גלובליים; אבל שימוש בהם הוא פשע!) או שהיא פשוט פועלת באותה הצורה בכל פעם; ולפעמים אין צורך בפלט אלא אנחנו מריצים את הפונקציה בשביל "תופעות הלוואי" של הריצה שלה (למשל, שינוי של משתנים מסויימים שהפונקציה קיבלה כקלט, או של משתנים גלובליים - אבל משתנים גלובליים זה פשע! - או הדפסה למסך, וכדומה).<strong> </strong> מה שחשוב בפונקציה הוא שמרגע שבו כתבנו אותה, אנחנו יכולים להפעיל אותה מכל מקום - "להריץ אותה". זה אומר שאם הקוד שלנו הגיע לשורה שבה אנחנו מריצים פונקציה, הוא שוכח באופן זמני מהאיזור בקוד שבו הוא רץ, ועובר לרוץ על איזור אחר בקוד - האיזור שבו הפונקציה שלנו כתובה. עם סיום הפונקציה הוא חוזר לאיזור המקורי שבו הוא היה.</p>
+<p>אנלוגיה פשוטה לדבר הזה יש לנו בקריאת ספר: נניח שנתקלנו במילה לא מוכרת בספר; אנחנו עוצרים, שמים סימניה, פותחים מילון ומחפשים בו את המילה הלא מוכרת (קראנו לפונקציה "הפעל מילון" עם הקלט של המילה הלא מוכרת), קוראים את הפירוש או מתעצבים על כך שלא מצאנו פירוש, ואז סוגרים את המילון, שמים אותו בצד, חוזרים לספר שלנו ומוצאים את המקום שהיינו בו בספר בעזרת הסימניה. עכשיו, בואו נניח שהגענו בספר שלנו למילה קשה, ופתחנו את המילון, וקראנו את ההגדרה, <strong>וגם בתוך ההגדרה</strong> הייתה מילה קשה שלא הצלחנו להבין. מה עושים? שמים סימניה גם במילון, ופותחים שוב את המילון, עם חיפוש של ההגדרה הקשה, וכדומה. הבנתם את הרעיון. זו בדיוק הייתה קריאה רקורסיבית, ועכשיו יש לנו <strong>שתי</strong> סימניות להתעסק איתן.</p>
+<p>בואו ניקח את זה צעד אחד קדימה בעזרת אנלוגיה מודרנית למדי - ויקיפדיה. להרבה אנשים מוכרת היטב התופעה שבה הם קוראים ערך בויקיפדיה, ובאמצע הקריאה נתקלים בקישור לערך מעניין אחר. ואז הם לוחצים על הקישור אליו, מתחילים לקרוא את הערך המעניין האחר, וכשהם מסיימים הם לוחצים על back כדי לחזור לערך המקורי. אבל לרוב בקריאת הערך המעניין האחר מגיעים ל<strong>עוד</strong> קישור שנכנסים אליו, וכן הלאה. התוצאה היא שנוצרת "שרשרת" של ערכים ששמורה בזיכרון של הדפדפן. זה בדיוק גם מה שעשוי לקרות בתכנות - מקבלים <strong>שרשרת קריאות</strong> לפונקציות, ולכל קריאה כזו צריך לשמור את המידע של "איפה היינו". כפי שכבר ברור, המידע הזה חייב להיות רשימה באורך לא מוגבל, כי אין לנו הגבלה עקרונית לכמות הקריאות-בתוך-קריאות שאפשר לעשות. הרשימה הזו כוללת לא רק את רשימת ה"מקומות שבהם היינו" אלא גם מידע על המשתנים המקומיים של הפונקציות - מה הערכים שהם הכילו. באנלוגיית ויקיפדיה, דמיינו שאתם לא רק לוחצים על הלינק אלא ממש פותחים אותו בטאב חדש - תקבלו סדרה של טאבים של ערכים שונים. בכל טאב שמורה הכתובת של הערך, אבל גם התוכן של הערך. לרשימה הזו, של "המידע הרלוונטי של הפונקציות, מסודר לפי סדר הקריאות להן" קוראים <strong>המחסנית</strong>.</p>
+<p>אין צורך להיכנס יותר מדי לפרטים; כשתוכנית מחשב רצה, יש כמה איזורים עיקריים בזכרון שבהם היא משתמשת, והמחסנית היא אחד מהם. קוראים לה "המחסנית" בגלל האופי שבו מוסיפים ומורידים ממנה דברים; הכלל הוא שהפונקציה האחרונה שהתווספה למחסנית תהיה גם הראשונה שתסולק משם, אחרי שנסיים את הריצה שלה ונצא ממנה (זה לא אומר בשום פנים ואופן שאין לנו דרך לקרוא משהו שאיננו בראש המחסנית, כפי שלפעמים תופסים "מחסנית" במדעי המחשב באופן שגוי). ברקורסיה הפונקציה קוראת לעצמה, אבל ההתנהגות של המחסנית היא זהה - מבחינתה יהיו עליה הרבה עותקים של כתובת חזרה (כשכתובות החזרה יצביעו כולן לתוך הפונקציה הרקורסיבית, למעט הכתובת שנשמרה עם הקריאה הראשונה לפונקציה הרקורסיבית ומצביעה על המקום שבו קראו לה), ולכל עותק של הרקורסיה יהיו המשתנים המקומיים שלו.</p>
+<p>אפשרי, כמובן, שיהיה סוג עקיף יותר של רקורסיה: במקום פונקציה A שקוראת לעצמה, פונקציה A שקוראת לפונקציה B שקוראת לפונקציה C שקוראת שוב ל-A - הבנתם את הרעיון. גם כזה דבר מכונה רקורסיה, אבל הוא קצת פחות נפוץ.</p>
+<p>בואו נתחיל לראות קוד (קוד רובי, כי זו השפה שאני אוהב). הנה פונקציה רקורסיבית שמחשבת עצרת:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+</div>
+
+<p>השורה הראשונה היא מקרה הבסיס - החזר 1 עבור הקלט 0; והשורה השניה היא הקריאה הרקורסיבית. ועכשיו הנה ההזדמנות לדברי כפירה - הפונקציה הרקורסיבית הזו <strong>מיותרת</strong>. הנה מימוש לא רקורסיבי:</p>
+<div class="code-block">
+```rubydef factorial(n)
+    result = 1
+    for k in 1..n do
+        result *= k
+    end
+    return result
+end```
+</div>
+
+<p>(קצת סירבלתי, אפשר לעשות את זה פשוט יותר ברובי, אבל זה לא פוסט רובי). איזה משני המימושים עדיף? חד משמעית, השני. אבל למה? הראשון הרי נראה אלגנטי יותר! ובכן, השני <strong>יקר פחות</strong>. אתם מבינים, כשמפעילים רקורסיה, מאחורי הקלעים קורים דברים - המהומות הרגילות של קריאה לפונקציה, דחיפת מידע למחסנית, וכדומה. זה לוקח זמן, וזה גוזל מקום. לכל בעיה כזו כדאי להתייחס בנפרד. מבחינת זמן, ההבדל בזמן הריצה בין שתי הגרסאות שלי עשוי להיות ממש זניח עבור הרצה בודדת של הפונקציה, אבל צריך לזכור כשכותבים קוד שלעתים קרובות אחרי שנכתב קוד, קורה האסון שאנשים אשכרה משתמשים בו. אולי כחלק מדברים אחרים שהם כותבים. ופונקציה תמימה לכאורה עשויה להיקרא מיליארדי פעמים. ובעיה "קלה" בזמן ריצה הופכת לבעיה חמורה, וכדומה. לא פעם ולא פעמיים בעבר כבר חיסלתי פונקציה רקורסיבית והמרתי אותה בפונקציה לא רקורסיבית שקולה פשוט כדי לחסוך זמן והחסכון היה משמעותי.</p>
+<p><strong>מקום</strong> הוא בעיה אפילו יותר רלוונטית. תחשבו שאנחנו רוצים לחשב את 1000 עצרת - אנחנו הולכים לשמור על המחסנים 1,000 עותקים של הרקורסיה. יש למחסנית כמות מקום מוגבלת. מתישהו היא תיגמר והתוכנית תקרוס, בזמן הריצה. הודעת השגיאה הרלוונטית, stack overflow, היא כל כך נפוצה ומוכרת שהיא הפכה לשמו של אתר שאלות ותשובות בנושאי תכנות סופר-פופולרי. במימוש איטרטיבי באמצעות לולאה לרוב אפשר להסתפק בכמות <strong>קבועה</strong> של מקום, בלי תלות בכמות האיטרציות שלנו (וגם כשאי אפשר, לרוב עדיין יש חסכון כלשהו). לכן כלל ברזל ברקורסיות הוא: זה אחלה להשתמש בהן, אבל תוודאו בינכם לבין עצמכם שאתם באמת צריכים את זה, או שאין שום סכנה של "התפוצצות" עם קלטים גדולים. והנה עוד דוגמה שממחישה סכנה גדולה אפילו עוד יותר - חישוב מספרי פיבונאצ'י:</p>
+<div class="code-block">
+```rubydef fib(n)
+    return 0 if n == 0
+    return 1 if n == 1
+    return fib(n-1) + fib(n-2)
+end```
+</div>
+
+<p>&lt;\pre&gt; הפונקציה הקטנה והחביבה הזו היא <strong>אסון מוחלט</strong>. היא אחד מקטעי הקוד הגרועים ביותר שניתן להציג. למה? כי היא עושה המון עבודה כפולה. כדי לחשב את מספר פיבונאצ'י עבור 5, הפונקציה קוראת רקורסיבית לחישוב של 4. כחלק מהחישוב של 4 היא מחשבת גם את 3 ו-2, וכן הלאה. אחרי שהיא סיימה היא חוזרת לחישוב של 5 עם הערך של 4, ואז קוראת לחישוב של 3. <strong>אבל כבר חישבנו את 3 קודם</strong>! המידע פשוט לא שמור בשום מקום והלך לאיבוד. ככל שמספר פיבונאצ'י שאנחנו רוצים לחשב גדל, מספר ה"חישובים הכפולים" שלנו גדל אקספוננציאלית. התוצאה היא בזבוז עצום של זמן ריצה. אל תנסו את זה בבית. אז מה עושים? כמובן, במקרה הנוכחי אפשר פשוט לתת פתרון איטרטיבי:</p>
+<div class="code-block">
+```rubydef fib(n)
+    return 0 if n == 0
+    a, b = 0, 1
+    for k in 2..n do
+        a, b = b, a + b
+    end
+    return b
+end```
+</div>
+
+<p>ובמקרים מורכבים יותר, כשבכל זאת רוצים סוג של קריאה רקורסיבית? אז משתמשים במבנה נתונים שנגיש לכל הקריאות של הפונקציה (למשל, כי מעבירים מצביע אליו בכל קריאה של הפונקציה) שבו מאחסנים את המידע של תוצאות הביניים כדי שלא נחשב אותן מחדש בכל פעם. מה שנקרא "תכנון דינמי" זה בדיוק הדבר הזה. לפעמים זה אפילו לא עניין של מידע שכבר חושב, אלא סתם לדעת ש"כבר היינו כאן". למשל, אלגוריתם סטנדרטי למציאת יציאה ממבוך הוא DFS: כשמריצים DFS על משבצת במבוך, אם היא איננה היציאה, אנחנו מריצים DFS על כל אחד מהשכנים של המשבצת. מן הסתם חייבים לסמן איכשהו שכנים שבהם כבר ביקרנו אחרת עוד יצא שנלך ימינה-שמאלה בין אותן שתי משבצות עד אינסוף (ליתר דיוק, עד שנקבל stack overflow). כשהייתי קטן ובניתי משחק של "סוגר שטחים", זה בדיוק מה שקרה לי - כשנסגר שטח ניסיתי לצבוע את כל המשבצות שבתוכו על ידי אלגוריתם רקורסיבי שצובע משבצת ואז מטפל רקורסיבית בשכניה; ברוב חוכמתי פשוט אמרתי "צבע את המשבצת" ולא "אם המשבצת צבועה, אל תעשה כלום; אחרת...". כמובן שקיבלתי stack overflow והייתי מאוד עצוב לראות שאפילו על כמות קטנה של משבצות הרקורסיה שלי מתה ללא סיבה.</p>
+<p>פרט לכל אלו, יש שפות תכנות, בעיקר כאלו שבהן מסתמכים באופן מאוד חזק על רקורסיות כדוגמת Haskell, שבהן דברים מטופלים אוטומטית. למשל, מקרה ידוע לשמצה במיוחד של רקורסיה נקרא "רקורסיית זנב". ברקורסיית זנב, הקריאה הרקורסיבית היא הדבר האחרון שמתרחש בתוך הפונקציה הרקורסיבית, והפלט של הרקורסיה הוא הפלט של ההפעלה הרקורסיבית הזו. במקרה הזה ברור שיכלנו לשחרר את המשאבים של הרקורסיה הנוכחית לפני שהפעלנו את הרקורסיה הפנימית, ובכך לחסוך מקום; אבל זה לא קורה אוטומטית בהכרח. קומפיילר חכם כן יודע לעשות דברים כאלו, וגם מתוחכמים יותר (למשל, לטפל בפונקציית העצרת שהראיתי למעלה, שבה הרקורסיה היא "כמעט רקורסיית זנב". לא אכנס לפרטים הללו כאן.</p>
+<p>בואו נעבור לראות כמה דוגמאות מעניינות יותר, שהן עדיין ברמת התרגיל אבל הן בכל זאת נחמדות. הדוגמא הראשונה היא משהו שהזכרתי בראשית ימי הבלוג - <a href="http://www.gadial.net/2007/09/07/towers_of_hanoi/">מגדלי האנוי</a>. מגדלי האנוי הם משחק נחמד שבו יש לנו שלושה "מגדלים" שאפשר להשחיל עליהם טבעות בגדלים שונים. בתחילת המשחק כל הטבעות מסודרות לפי גודל על אחד המגדלים, והמטרה היא להעביר את כולן, מסודרות לפי גודל, למגדל אחר. החוקים: מותר להעביר רק טבעת אחת בפעם, ואסור לשים טבעת גדולה על טבעת שקטנה ממנה. זו הסיבה שבגללה יש שלושה מגדלים - המגדל השלישי הוא "מגדל עזר" שמסייע בהעברת הטבעות. מה שיפה כאן הוא שמספיקים שלושה מגדלים ולא משנה כמה טבעות יש.</p>
+<p>הפתרון הרקורסיבי כאן הוא מקסים, כי הוא מציג במדויק את כוחה של החשיבה הרקורסיבית. הוא מחלק את הפתרון לשלושה שלבים: קודם כל נשים הצידה לרגע את כל הטבעות <strong>מלבד התחתונה</strong> (כלומר, נשים במגדל העזר); אחר כך נעביר את התחתונה אל מגדל היעד שלנו; ואחר כך ניקח את כל הטבעות ששמנו בצד ונעביר למגדל היעד. את הפעולה האמצעית אנחנו יודעים איך לבצע כי היא כוללת רק העברת טבעת אחת, אבל איך אנחנו יכולים להעביר את כל הטבעות "בבת אחת" ממגדל המקור אל מגדל העזר, וממגדל העזר למגדל היעד? ובכן, פשוט מאוד - נפעיל רקורסיבית את הפתרון שלנו... זה אומר שלרגע פשוט נשכח מכך שיש את הטבעת הגדולה שמסתובבת אי שם ונשחק כאילו היא לא קיימת; מכיוון שהיא הגדולה ביותר, היא לא יכולה להפריע לאחרות ולכן מבחינת ההפעלה הרקורסיבית היא באמת לא קיימת. הנה הקוד הפשוט מאוד.</p>
+<div class="code-block">
+```rubydef solve_hanoi(n, source_tower, aux_tower, goal_tower)
+    return if n == 0
+    solve_hanoi(n-1, source_tower, goal_tower, aux_tower)
+    goal_tower.push source_tower.pop
+    solve_hanoi(n-1, aux_tower, source_tower, goal_tower)
+end```
+</div>
+
+<p>הקוד הזה הוא דוגמה לסיבה שבגללה בחרתי לכתוב דווקא ברובי - הוא כמעט פסאודו-קוד, אבל כזה שעובד ואפשר להריץ. הרעיון הוא שה"מגדלים" נתונים בתור מערכים ברובי, וככאלה הם תומכים בפעולות pop (הוצא את האיבר האחרון והחזר אותו) ו-push (דחוף לסוף המערך). כמו כן, צריך להיות מודעים לכך שמשתנים ברובי תמיד מועברים לפונקציה By Reference; כלומר, לא נוצר עותק נפרד שלהם אלא המשתנה שהפונקציה עובדת איתו הוא בדיוק אותו משתנה שמי שקרא לפונקציה עבד איתו, ולכן שינויים במשתנה שמתרחשים בתוך הפונקציה משפיעים גם מחוצה לה.</p>
+<p>ברקורסיה הנוכחית התכונה הזו מנוצלת בצורה חכמה כדי "להחליף תפקידים" בין המגדלים השונים. בקריאה הרקורסיבית הראשונה, מי שהיה מגדל העזר הופך למגדל היעד, ומי שהיה מגדל היעד הופך למגדל העזר. בקריאה השניה החלפה דומה מתבצעת בין מגדל העזר ומגדל המקור. ה"חוכמה" של הפתרון מקופלת כולה בשרשרת החלפות התפקידים הללו שמתבצעת (נסו לעקוב אחרי האופן שבו רצה רקורסיה עבור n שווה 5 כדי לראות כמה החלפות תפקידים כאלו מתבצעות עוד לפני שמזיזים את הטבעת הראשונה). כמובן, אם תרוצו להריץ את התוכנית הזו תתאכזבו נורא כי היא לא עושה שום דבר שאתם מסוגלים לראות. אין הדפסה של המגדלים או משהו דומה. אז למי שרוצה את זה, הנה קוד יותר מלא שגם מדפיס וגם מאתחל וגם הכל:</p>
+<div class="code-block">
+```rubyclass Hanoi
+    def initialize(n)
+        @source_tower = (1..n).to_a
+        @aux_tower = []
+        @goal_tower = []
+        print_state
+        solve(n, @source_tower, @aux_tower, @goal_tower)
+    end
+    def print_state
+        puts @source_tower.inspect
+        puts @aux_tower.inspect
+        puts @goal_tower.inspect
+        puts
+    end
+    def solve(n, source_tower, aux_tower, goal_tower)
+            return if n == 0
+            solve(n-1, source_tower, goal_tower, aux_tower)
+            goal_tower.push source_tower.pop
+            print_state
+            solve(n-1, aux_tower, source_tower, goal_tower)
+    end
+end
+Hanoi.new(4)
+
+<div class="highlight"><pre><span></span><code><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+
+<span class="n">נעבור</span><span class="w"> </span><span class="n">עכשיו</span><span class="w"> </span><span class="n">לדוגמה</span><span class="w"> </span><span class="n">אחרת</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ייצור</span><span class="w"> </span><span class="n">פרמוטציות</span><span class="p">.</span><span class="w"> </span><span class="n">פרמוטציה</span><span class="w"> </span><span class="n">של</span><span class="w"> </span><span class="n">מערך</span><span class="w"> </span><span class="n">היא</span><span class="w"> </span><span class="n">מערך</span><span class="w"> </span><span class="n">אחר</span><span class="w"> </span><span class="n">שכולל</span><span class="w"> </span><span class="n">את</span><span class="w"> </span><span class="n">אותם</span><span class="w"> </span><span class="n">איברים</span><span class="w"> </span><span class="n">בדיוק</span><span class="p">,</span><span class="w"> </span><span class="n">אבל</span><span class="w"> </span><span class="n">בסדר</span><span class="w"> </span><span class="n">שונה</span><span class="w"> </span><span class="p">(</span><span class="n">לצורך</span><span class="w"> </span><span class="n">העניין</span><span class="w"> </span><span class="n">נניח</span><span class="w"> </span><span class="n">שכל</span><span class="w"> </span><span class="n">האיברים</span><span class="w"> </span><span class="n">שונים</span><span class="w"> </span><span class="n">זה</span><span class="w"> </span><span class="n">מזה</span><span class="p">).</span><span class="w"> </span><span class="n">לא</span><span class="w"> </span><span class="n">קשה</span><span class="w"> </span><span class="n">להראות</span><span class="w"> </span><span class="n">שאם</span><span class="w"> </span><span class="n">במערך</span><span class="w"> </span><span class="n">יש</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="n">איברים</span><span class="p">,</span><span class="w"> </span><span class="n">אז</span><span class="w"> </span><span class="n">מספר</span><span class="w"> </span><span class="n">הפרמוטציות</span><span class="w"> </span><span class="n">שלו</span><span class="w"> </span><span class="n">הוא</span><span class="w"> </span><span class="err">!</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">כך</span><span class="w"> </span><span class="n">שפונקציה</span><span class="w"> </span><span class="n">שמוציאה</span><span class="w"> </span><span class="n">את</span><span class="w"> </span><span class="n">כל</span><span class="w"> </span><span class="n">הפרמוטציות</span><span class="w"> </span><span class="n">של</span><span class="w"> </span><span class="n">מערך</span><span class="w"> </span><span class="n">תצטרך</span><span class="w"> </span><span class="n">לעבוד</span><span class="w"> </span><span class="n">קשה</span><span class="w"> </span><span class="n">רק</span><span class="w"> </span><span class="n">כדי</span><span class="w"> </span><span class="n">לכתוב</span><span class="w"> </span><span class="n">את</span><span class="w"> </span><span class="n">כולן</span><span class="w"> </span><span class="n">עבור</span><span class="w"> </span><span class="n">ערכים</span><span class="w"> </span><span class="n">גדולים</span><span class="w"> </span><span class="n">של</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="w"> </span><span class="n">לכן</span><span class="w"> </span><span class="n">די</span><span class="w"> </span><span class="n">מתבקש</span><span class="w"> </span><span class="n">להשתמש</span><span class="w"> </span><span class="n">בפתרון</span><span class="w"> </span><span class="n">רקורסיבי</span><span class="w"> </span><span class="n">פה</span><span class="w"> </span><span class="n">ממילא</span><span class="p">,</span><span class="w"> </span><span class="n">כל</span><span class="w"> </span><span class="n">עוד</span><span class="w"> </span><span class="n">הוא</span><span class="w"> </span><span class="n">לא</span><span class="w"> </span><span class="n">לוקה</span><span class="w"> </span><span class="n">בבזבוז</span><span class="w"> </span><span class="n">משווע</span><span class="p">.</span>
+
+<span class="n">הרעיון</span><span class="w"> </span><span class="n">הנאיבי</span><span class="w"> </span><span class="n">הוא</span><span class="w"> </span><span class="nl">זה</span><span class="p">:</span><span class="w"> </span><span class="n">תעברו</span><span class="w"> </span><span class="n">על</span><span class="w"> </span><span class="n">המערך</span><span class="w"> </span><span class="n">איבר</span><span class="w"> </span><span class="n">איבר</span><span class="p">.</span><span class="w"> </span><span class="n">לכל</span><span class="w"> </span><span class="n">איבר</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">הוציאו</span><span class="w"> </span><span class="n">אותו</span><span class="w"> </span><span class="n">מהמערך</span><span class="p">,</span><span class="w"> </span><span class="n">בנו</span><span class="w"> </span><span class="n">רקורסיבית</span><span class="w"> </span><span class="n">את</span><span class="w"> </span><span class="n">כל</span><span class="w"> </span><span class="n">הפרמוטציות</span><span class="w"> </span><span class="n">של</span><span class="w"> </span><span class="n">המערך</span><span class="w"> </span><span class="n">שנשאר</span><span class="p">,</span><span class="w"> </span><span class="n">והוסיפו</span><span class="w"> </span><span class="n">את</span><span class="w"> </span><span class="n">האיבר</span><span class="w"> </span><span class="n">שהוצאתם</span><span class="w"> </span><span class="n">לכולן</span><span class="p">.</span><span class="w"> </span><span class="n">הנה</span><span class="w"> </span><span class="n">קוד</span><span class="w"> </span><span class="n">שעושה</span><span class="w"> </span><span class="n">את</span><span class="w"> </span><span class="nl">זה</span><span class="p">:</span>
+
+<span class="o">&lt;</span><span class="n">div</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;code-block&quot;</span><span class="o">&gt;</span>
+<span class="err">```</span><span class="n">ruby</span>
+<span class="n">def</span><span class="w"> </span><span class="n">permutations</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">length</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">[</span><span class="n">a</span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="mf">0.</span><span class="p">..</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="n">do</span>
+<span class="w">        </span><span class="n">temp_elem</span><span class="p">,</span><span class="w"> </span><span class="n">temp_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">0...i</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">i+1...n</span><span class="o">]</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">permutations</span><span class="p">(</span><span class="n">temp_a</span><span class="p">)</span><span class="w"> </span><span class="n">do</span>
+<span class="w">            </span><span class="k">result</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="p">(</span><span class="o">[</span><span class="n">temp_elem</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p</span><span class="p">)</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">result</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+</div>
+
+<p>הקוד הזה הוא בבירור בזבזני - אנחנו יוצרים עותק חדש של המערך על כל הפעלה של הרקורסיה שאנחנו מבצעים. זה אמנם טוב לצורך הדגמת האופן שבו רקורסיה מנצלת את זה שבכל קריאה שלה היא מקבלת מקום נפרד עבור המשתנים שהיא מגדירה, אבל כאן זה מרגיש בזבזני. האם אפשר היה לעשות משהו טוב יותר? התשובה חיובית, אבל לא לגמרי קל לעלות על האלגוריתם או להבין למה הוא עובד. האלגוריתם הזה נקרא "Heap's Algorithm" והרעיון שבו הוא שמספיק לבצע שינויים <strong>בתוך המערך</strong> שקיבלנו כקלט , וליצור עותק מהמערך רק כשאנחנו מקבלים פרמוטציה שאנחנו רוצים להוסיף לפלט הסופי. הנה איך שזה נראה בקוד:<strong><br />
+</strong></p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">permutations_heap</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">[</span><span class="n">a</span><span class="o">.</span><span class="n">dup</span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="o">...</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">        </span><span class="n">result</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">permutations_heap</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+<span class="w">        </span><span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+</div>
+
+<p>בואו נעבור עכשיו לדבר על סוג שונה של בעיות - בעיות הכרעה, ובעיות ספירה נלוות. בבעיות הכרעה מהסוג הנפוץ יש לנו קלט שהוא אובייקט כלשהו שאנחנו תוהים אם הוא מקיים או לא מקיים תכונה מסויימת. בבעיות ספירה גם רוצים לדעת בכמה דרכים שונות התכונה מתקיימת. הנה הדוגמה שאני הולך לפתור - הקלט הוא מערך של מספרים חיוביים ומספר "יעד" כלשהו, והשאלה היא אם אפשר לסכום חלק מאברי המערך כדי להגיע אל היעד - ושאלת ההמשך היא בכמה דרכים שונות אפשר לעשות את זה. הבעיה הזו נקראת Subset Sum וזו בעיה NP-שלמה מפורסמת, למי שהביטוי הזה אומר לו משהו. התכל'ס של מה שזה אומר הוא שלא סביר שנצליח למצוא פתרון שהוא ממש יעיל, אז יאללה, בואו נתפרע עם רקורסיה.</p>
+<p>אלגוריתם רקורסיבי כאן כותב כמעט את עצמו. אנחנו צריכים להגיע למספר יעד כלשהו; אנחנו בוחנים את המספר הראשון במערך. או שנוסיף אותו לסכום, או שלא. עבור כל אחת משתי האפשרויות הללו אנחנו מבצעים קריאה רקורסיבית על יתר המערך; במקרה שבו הוספנו את המספר לסכום, אנחנו מפחיתים אותו מה"יעד". העובדה שאני מניח שהמספרים הם כולם חיוביים עוזרת לי "להפסיק באמצע" בלי לבזבז זמן על חלק מהחישובים המיותרים - אם מספר היעד הפך להיות 0 פתאום, אני יודע שכבר הצלחתי ואני מסיים עם הפתרון הנוכחי (אני לא הולך להוסיף לו עוד שום דבר, מן הסתם). אם מספר היעד הופך להיות שלילי אני יודע שנכשלתי. לרקורסיה מסוג זה, שמסוגלת לזהות הצלחה או כשלון לפעמים "באמצע" ולחזור בהתאם קוראים Backtracking.</p>
+<p>עם קצת להטוטי רובי אפשר לכתוב את הפתרון בשלוש שורות:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">subset_sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">[]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">a</span><span class="o">.</span><span class="n">empty?</span><span class="p">)</span><span class="w"> </span><span class="c1">#empty solution set</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">[]</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">#one solution - no elements</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">subset_sum</span><span class="p">(</span><span class="n">a</span><span class="o">[</span><span class="mi">1</span><span class="o">..-</span><span class="mi">1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">subset_sum</span><span class="p">(</span><span class="n">a</span><span class="o">[</span><span class="mi">1</span><span class="o">..-</span><span class="mi">1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span><span class="o">|</span><span class="n">sol</span><span class="o">|</span><span class="w"> </span><span class="o">[</span><span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sol</span><span class="p">}</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+</div>
+
+<p>השורה השלישית אולי נראית קצת מפחידה. אני בסך הכל אומר לקחת את כל הפתרונות לגודל n שמערבים את המערך בלי האיבר הראשון, ולהוסיף להם את כל הפתרונות שמערבים את המערך בלי האיבר הראשון, עבור הסכום n פחות האיבר הראשון, כשאני לוקח כל פתרון כזה ומוסיף לו בהתחלה את האיבר הראשון.</p>
+<p>האם כאן אני יכול לתת פתרון איטרטיבי קצר? ובכן, לא ממש! אין לי רעיון איך לעשות פתרון שיהיה גם קצר וגם קריא וגם יעשה backtracking דומה. כמובן, תמיד אפשר לייצר סדרתית את כל המספרים מ-0 ועד 2 בחזקת גודל המערך פחות 1, להסתכל על הייצוג הבינארי שלהם ולסכום את האיברים שמתאימים למקומות שבהם כתוב 1; אבל זה כבר מסורבל למדי (אם כי פרקטי יותר, לפעמים; כאן, לא חושב) ואני לא רואה דרך נחמדה לשמר כך את תכונת ה-backtracking.</p>
+<p>ואיך אפשר בלי פתרון מבוך. אני מניח שהמבוך נתון על ידי מערך דו ממדי שבו 0 מייצג משבצת פנויה ו-1 מייצג קיר, ושהמטרה היא להגיע אל 0,0. אני מרשה לעצמי "לקשקש" על המבוך - לכתוב 2 כדי לתאר משבצת שכרגע היא פוטנציאל למסלול היציאה, ו-3 למשבצת שכבר ויתרנו עליה. כך, אם נמצא מסלול ליציאה, הוא יהיה כתוב בתוך המבוך על ידי המשבצות שבהן כתוב 2:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">solve_maze</span><span class="p">(</span><span class="n">maze</span><span class="p">,</span><span class="w"> </span><span class="n">row</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kp">false</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="n">maze</span><span class="o">.</span><span class="n">length</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="n">maze</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">length</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">maze</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">col</span><span class="o">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">maze</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">col</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kp">true</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">neighbors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="n">row</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="n">row</span><span class="p">,</span><span class="w">  </span><span class="n">col</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="n">row</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="n">neighbors</span><span class="o">.</span><span class="n">each</span><span class="p">{</span><span class="o">|</span><span class="n">row</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">|</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kp">true</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">solve_maze</span><span class="p">(</span><span class="n">maze</span><span class="p">,</span><span class="w"> </span><span class="n">row</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="p">)}</span>
+<span class="w">    </span><span class="n">maze</span><span class="o">[</span><span class="n">row</span><span class="o">][</span><span class="n">col</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kp">false</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+</div>
+
+<p>ולמי שרוצה לראות את זה בפועל, הנה עוד קצת קוד שמאפשר לצייר מבוך ואת המסלול ליציאה שבתוכו, אם יש, ודוגמת הרצה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">print_maze</span><span class="p">(</span><span class="n">maze</span><span class="p">)</span>
+<span class="w">    </span><span class="n">sym</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="w"> </span><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="s2">&quot;+&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">}</span>
+<span class="w">    </span><span class="n">maze</span><span class="o">.</span><span class="n">map</span><span class="p">{</span><span class="o">|</span><span class="n">row</span><span class="o">|</span><span class="w"> </span><span class="n">row</span><span class="o">.</span><span class="n">map</span><span class="p">{</span><span class="o">|</span><span class="n">v</span><span class="o">|</span><span class="w"> </span><span class="n">sym</span><span class="o">[</span><span class="n">v</span><span class="o">]</span><span class="p">}}</span><span class="o">.</span><span class="n">each</span><span class="p">{</span><span class="o">|</span><span class="n">row</span><span class="o">|</span><span class="w"> </span><span class="nb">puts</span><span class="w"> </span><span class="n">row</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)}</span>
+<span class="k">end</span>
+<span class="n">maze</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span>
+<span class="w">       </span><span class="o">]</span>
+
+<span class="n">print_maze</span><span class="p">(</span><span class="n">maze</span><span class="p">)</span>
+<span class="nb">puts</span>
+<span class="n">solve_maze</span><span class="p">(</span><span class="n">maze</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">print_maze</span><span class="p">(</span><span class="n">maze</span><span class="p">)</span>
+</code></pre></div>
+
+
+</div>
+
+<p>ואפשר להמשיך ולתת עוד ועוד דוגמאות, אבל נראה לי שהבנו את הרעיון ואפשר לעצור כאן. למרות שאם אתם עדיין לא מרוצים, נסו לקרוא את הפוסט שלי <a href="http://www.gadial.net/2015/11/03/recusrion/">כאן</a>.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2015/11/09/d-dimensional_integrals/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אינטגרלים כפולים, משולשים ו-d-ממדיים</span>
+            </a>
+            
+            
+            
+            <a href="/2015/10/29/inverse_and_implicit_function/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">משפט הפונקציה ההפוכה ומשפט הפונקציות הסתומות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה זה מרחב וקטורי? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז מה זה מרחב וקטורי?</h1>
+            <div class="post-meta">
+                <span class="date">2011-10-16</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/tags/מרחב וקטורי.html">מרחב וקטורי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בשעה טובה ומוצלחת הגענו לפוסט שיתאר במדויק את האובייקט המרכזי של האלגברה הלינארית - מרחב וקטורי. אפשר פשוט לתת את ההגדרה שהיא בעיקר רשימת מכולת של כל מני תכונות אלגבריות, אבל אני מעדיף להתחיל מלהיזכר מה ראינו עד כה.</p>
+<p>בפוסט הקודם התעסקתי באוספי פתרונות של מערכות משוואות הומוגניות. מערכת משוואות שכזו הייתה מהצורה <span class="math">\(Ax=0\)</span> כאשר <span class="math">\(A\)</span> מטריצה כלשהי והערכים שאנחנו מציבים במקום <span class="math">\(x\)</span> הם <strong>וקטורים</strong>: כל וקטור היה סדרה של מספרים (או, אם תרצו, מטריצה בעלת עמודה אחת). בפוסט הקודם שמנו לב לכך שסכום של שני פתרונות של אותה המשוואה גם הוא פתרון של אותה המשוואה, ושכפל של פתרון בסקלר (כלומר, במספר) נותן גם הוא פתרון של המשוואה. כלומר, אוסף הפתרונות היה <strong>סגור לחיבור וכפל בסקלר</strong>. אמרתי כבר אז שאלו התכונות המהותיות שמגדירות מרחב וקטורי: מרחב וקטורי מכיל איברים, "וקטורים", שניתן לחבר, וניתן לכפול בסקלר.</p>
+<p>הבה ונראה עוד דוגמה: מטריצות. גם שתי מטריצות מאותם ממדים אנחנו יודעים לחבר (כל כניסה במטריצה שמתקבלת מהחיבור היא סכום האיברים בכניסות המתאימות במטריצות שמחברים) ואנחנו יודעים לכפול בסקלר (פשוט כופלים את כל הכניסות במטריצה באותו סקלר). זה הופך את המטריצות מסדר <span class="math">\(n\times m\)</span> למרחב וקטורי (לכל <span class="math">\(n,m\)</span>), ומאפשר לנו להצביע כבר עכשיו על בלבול טרמינולוגי שעשוי להיווצר: מצד אחד, אמרתי שוקטור הוא פשוט מטריצה חד ממדית; מצד שני, הנה ראינו ש<strong>כל</strong> מטריצה היא איבר של מרחב וקטורי מתאים. כדי למנוע את הבלבול הזה נזכור שלמטריצות חד-ממדיות קראתי "וקטור עמודה" ו"וקטור שורה" ואת המילה "וקטור" נייחד לדיבור על איבר של מרחב וקטורי כלשהו, כשברור על איזה מרחב וקטורי מדובר.</p>
+<p>עבור מטריצות גם ראינו פעולת כפל בין זוגות של מטריצות - משהו שונה מהותית מכפל בסקלר. מרחבים וקטוריים לא מתעניינים בשאלה אם יש או אין כפל בין הוקטורים עצמם, אבל במתמטיקה עוסקים רבות גם במרחבים וקטוריים שבהם אכן קיימת פעולת כפל כזו. מרחב וקטורי שיש כפל בין איבריו נקרא <strong>אלגברה</strong>, אך בשלב הזה אין טעם לדבר עליו. כמו כן, יש סוג אחר של פעולת כפל בין וקטורים - "מכפלה פנימית" - שמחזיר סקלר ולא וקטור; זה מושג חשוב מאוד באלגברה לינארית אך גם עליו לא נדבר עדיין. בינתיים אנחנו חושבים רק על פעולות החיבור והכפל בסקלר.</p>
+<p>לפני שנתקדם עוד, אני רוצה לדבר קצת יותר על מהו סקלר, בעצם. עד כה השתמשתי בהגדרה המעורפלת של "סקלר הוא מספר" ותמיד חשבנו על הסקלרים שלנו בתור מספרים ממשיים. המספרים הממשיים הם קבוצה "נחמדה" במובן זה שהיא סגורה ביחס לארבע פעולות החשבון הבסיסיות - חיבור, חיסור, כפל וחילוק (רק חילוק ב-0 הוא פעולה בלתי אפשרית; כל יתר הפעולות הן חוקיות). בנוסף, בממשיים יש את המספר 0 שהוא נחמד במובן זה שהוא נייטרלי לחיבור (<span class="math">\(0+x=x\)</span> לכל איקס) ואת 1 שהוא נחמד במובן זה שהוא נייטרלי לכפל (<span class="math">\(1\times x=x\)</span> לכל <span class="math">\(x\)</span>). לבסוף, החיבור והכפל מקיימים את חוקי החילוף, הקיבוץ והפילוג. כל התכונות הללו הופכות את הממשיים לקבוצה שמאוד נחמד לעשות בה חשבון, ולקבוצות כאלו יש שם מיוחד: <strong>שדה</strong>. כתבתי על שדות <a href="http://www.gadial.net/2011/07/11/fields_and_how_can_they_be_finite/">פוסט לא מזמן</a>, אבל בואו נזכיר את ההגדרה לכל מקרה: שדה <span class="math">\(\mathbb{F}\)</span> הוא קבוצה שקיימים בה איברים שמסומנים ב-<span class="math">\(0,1\)</span> ומוגדרות עליה פעולות חיבור וכפל כך שמתקיים:</p>
+<ol>
+    <li> חוק החילוף: <span class="math">\(a+b=b+a\)</span> ו-<span class="math">\(ab=ba\)</span>.</li>
+    <li> חוק הקיבוץ: <span class="math">\(\left(a+b\right)+c=a+\left(b+c\right)\)</span> ו-<span class="math">\(\left(ab\right)c=a\left(bc\right)\)</span>.</li>
+    <li> חוק הפילוג: <span class="math">\(a\left(b+c\right)=ab+ac\)</span>.</li>
+    <li> נייטרליות ביחס לחיבור וכפל של 0 ו-1: <span class="math">\(x+0=x\)</span> ו-<span class="math">\(x\cdot1=x\)</span> לכל <span class="math">\(x\in\mathbb{F}\)</span>.</li>
+    <li> קיום נגדי חיבורי: אם <span class="math">\(x\in\mathbb{F}\)</span> אז קיים ב-<span class="math">\(\mathbb{F}\)</span> איבר שמסומן כ-<span class="math">\(-x\)</span> כך ש-<span class="math">\(x+\left(-x\right)=0\)</span>.</li>
+    <li> קיום הופכי כפלי: אם <span class="math">\(x\in\mathbb{F}\)</span> ו-<span class="math">\(x\ne0\)</span> אז קיים איבר שמסומן כ-<span class="math">\(x^{-1}\)</span> כך ש-<span class="math">\(xx^{-1}=1\)</span>.</li>
+</ol>
+<p>שתי הדרישות האחרונות מאפשרות לנו להגדיר חיסור וחילוק בעזרת חיבור וכפל: לחסר ממישהו מספר זה בעצם לחבר לו את הנגדי של אותו המספר, ולחלק אותו במספר זה בעצם לכפול אותו בהופכי של אותו המספר.</p>
+<p>יפה, אז זו ההגדרה לשדה. <span class="math">\(\mathbb{R}\)</span> הוא שדה, וגם <span class="math">\(\mathbb{C}\)</span> (המרוכבים) הוא שדה, וגם <span class="math">\(\mathbb{Q}\)</span> (הרציונליים) הוא שדה ויש עוד ועוד. את רוב מה שנעשה בעתיד הקרוב אפשר לתאר מעל כל שדה ולכן נשתמש ב-<span class="math">\(\mathbb{F}\)</span> כדי לתאר שדה כלשהו.</p>
+<p>כעת, כשנעסוק במרחב וקטורי תמיד יהיה שדה כלשהו ברקע, וכשנגיד "סקלר" נתכוון תמיד לאיבר של אותו השדה.</p>
+<p>עכשיו, כדי לא למתוח אתכם יותר, בואו נביא את ההגדרה הפורמלית למרחב וקטורי ואז נדבר קצת. קבוצה <span class="math">\(V\)</span> היא מרחב וקטורי מעל השדה <span class="math">\(\mathbb{F}\)</span> אם קיימת פעולת חיבור בין איברי <span class="math">\(V\)</span> ופעולת "כפל בסקלר" בין איבר של <span class="math">\(\mathbb{F}\)</span> ואיבר של <span class="math">\(V\)</span> (נהוג לכתוב את האיבר של <span class="math">\(\mathbb{F}\)</span> מצד שמאל ואת האיבר של <span class="math">\(V\)</span> מימין) שמחזירה איבר של <span class="math">\(V\)</span> כך שפעולת החיבור של <span class="math">\(V\)</span> מקיימת את חוקי החילוף והקיבוץ, יש ב-<span class="math">\(V\)</span> איבר נייטרלי לחיבור 0 ולכל איבר קיים איבר נגדי חיבורי - את כל אלו אנחנו כבר מכירים מההגדרה של שדה, אבל ב-<span class="math">\(V\)</span> אין כפל של איברים ולכן הוא אינו שדה.</p>
+<p>גם פעולת הכפל בסקלר צריכה "להתנהג יפה", וזה בא לידי ביטוי בכך שהיא מקיימת גרסה מתאימה של חוק הקיבוץ וחוק הפילוג. אני אסמן ב-<span class="math">\(\lambda,\tau\)</span> איברים של <span class="math">\(\mathbb{F}\)</span> (סקלרים) וב-<span class="math">\(v,u\)</span> איברים של <span class="math">\(V\)</span> (וקטורים), ועכשיו אפשר לכתוב פורמלית את הדרישות הללו. חוק הקיבוץ נראה כך:</p>
+<p><span class="math">\(\left(a\times b\right)\cdot v=a\cdot\left(b\cdot v\right)\)</span></p>
+<p>כאן אני מסמן בנקודה את פעולת הכפל בסקלר, וב-<span class="math">\(\times\)</span> את פעולת הכפל של השדה <span class="math">\(\mathbb{F}\)</span>. כך קצת יותר ברור למה דרישת האסוציאטיביות איננה טריוויאלית; אני בעצם דורש שפעולת הכפל בסקלר תכבד במובן חזק למדי את פעולת הכפל בתוך השדה <span class="math">\(\mathbb{F}\)</span>. זה מקשה עלינו מאוד להמציא מרחבים וקטוריים מטורללים עם פעולות כפל בסקלר מוזרות (ולכן אחראי במידה רבה לכך שהאלגברה הלינארית היא "פשוטה" שכזו).</p>
+<p>מכיוון שיש לנו חיבור הן ב-<span class="math">\(\mathbb{F}\)</span> והן ב-<span class="math">\(V\)</span> ואלו שתי פעולות שונות, יש לנו גם שני חוקי פילוג:</p>
+<p><span class="math">\(\left(a+b\right)v=av+bv\)</span></p>
+<p><span class="math">\(a\left(v+u\right)=av+au\)</span></p>
+<p>לבסוף, צריך לדרוש במפורש שתתקיים התכונה הטבעית למדי לפיה אם כופלים את איבר היחידה של <span class="math">\(\mathbb{F}\)</span> בוקטור כלשהו הוא אינו משתנה: <span class="math">\(1\cdot v=v\)</span>.</p>
+<p>זו כל ההגדרה. <strong>אל</strong> תחשבו עליה בתור "מישהו ישב והמציא רשימת תכונות מוזרה ועכשיו הוא משחק איתן ורואה מה יוצא". מה שקורה פה הוא שזיהינו את התכונות ה<strong>מהותיות</strong> שהופיעו באוסף הפתרונות של משוואות הומוגניות, ובמטריצות, ובדוגמאות שעוד רגע אביא, ועכשיו אנחנו מנסים להבין עד כמה התכונות הספציפיות הללו אחראיות למבנה ה"יפה" של המבנים המתמטיים הללו. כל דבר שנוכיח עבור מרחב וקטורי כללי יהיה נכון אוטומטית גם עבור כל הדוגמאות שנצליח לחשוב עליהן - וזה בדיוק מקור הכוח של הגישה האבסטרקטית שאנחנו נוקטים בה כאן.</p>
+<p>בואו נעבור לדוגמה אחרת למרחב וקטורי שגם אותה הזכרתי כבר - המישור האוקלידי. במישור הזה כל נקודה היא וקטור, שמתואר על ידי זוג מספרים ממשיים בסוגריים: <span class="math">\(\left(3,2\right)\)</span> הוא וקטור שמתאים לנקודה שקואורדינטת ה-<span class="math">\(x\)</span> שלה היא 3 וקואורדינטת ה-<span class="math">\(y\)</span> שלה היא 2. לרוב כשמדברים על נקודה כזו בתור "וקטור" נהוג לצייר חץ מראשית הצירים אליה ולחשוב על החץ הזה בתור הוקטור. יש לגישה הזו יתרון בכך שלפעמים נוח לחשוב על הוקטור לא במונחים של קואורדינטות <span class="math">\(x\)</span> ו-<span class="math">\(y\)</span> אלא של גודל (אורך החץ) וכיוון (הזווית של החץ עם ציר <span class="math">\(x\)</span>) אבל לא נזדקק לגישה הזו.</p>
+<p>חיבור וקטורים מתבצע על ידי כך שלוקחים את אחד החצים ומדביקים אותו כך שהזנב שלו נמצא על הראש של השני. כעת מציירים חץ חדש מראשית הצירים אל הנקודה שאליה הראש של החץ הראשון הגיע. מבחינה גאומטרית זה נראה מתוסבך, אבל מבחינה מעשית זה פשוט לחבר את הקואורדינטות של שני הוקטורים: <span class="math">\(\left(3,2\right)+\left(1,1\right)=\left(4,3\right)\)</span>.</p>
+<p>כפל בסקלר של וקטור מתבצע על ידי כפל בסקלר של הקואורדינטות, כלומר <span class="math">\(\frac{1}{2}\left(3,2\right)=\left(\frac{3}{2},1\right)\)</span>. המשמעות הגאומטרית של פעולה כזו היא "מתיחה" או "כיווץ" של הוקטור - שינוי הגודל שלו תוך שמירה על הזווית. עם שתי הפעולות הללו, המישור האוקלידי הוא מרחב וקטורי מעל <span class="math">\(\mathbb{R}\)</span>.</p>
+<p>באופן דומה גם <strong>המרחב</strong> האוקלידי הוא מרחב וקטורי, רק שהפעם כל וקטור הוא שלשה של קואורדינטות, אבל חוקי החיבור והכפל בסקלר זהים. מכאן מייד עולה השאלה - אם עשינו את זה עבור 2 ו-3, למה לא לעשות את זה באופן כללי? ואכן, המרחב האוקלידי ה-<span class="math">\(n\)</span> ממדי הוא אוסף <span class="math">\(n\)</span>-יות של מספרים ממשיים, כש-<span class="math">\(n\)</span>-יה של מספרים ממשיים זו פשוט דרך מפוצצת להגיד "סדרה של <span class="math">\(n\)</span> מספרים ממשיים", עם פעולות חיבור וכפל בסקלר על פי קואורדינטות. את המרחב הזה מסמנים ב-<span class="math">\(\mathbb{R}^{n}\)</span>, ולכן המישור האוקלידי מסומן בפרט כ-<span class="math">\(\mathbb{R}^{2}\)</span> והמרחב האוקלידי התלת ממדי ב-<span class="math">\(\mathbb{R}^{3}\)</span>.</p>
+<p>לבסוף אפשר לבצע עוד אבסטרקציה אחת: אם <span class="math">\(\mathbb{F}\)</span> הוא שדה כלשהו, אז <span class="math">\(\mathbb{F}^{n}\)</span>, אוסף ה-<span class="math">\(n\)</span>-יות עם איברים מתוך <span class="math">\(\mathbb{F}\)</span>, הוא מרחב וקטורי מעל <span class="math">\(\mathbb{F}\)</span> עם אותן הגדרות לחיבור וכפל בסקלר. אותו <span class="math">\(\mathbb{F}^{n}\)</span> הוא אולי הדוגמה החשובה ביותר למרחב וקטורי - בהמשך נראה שאפשר לחשוב על <strong>כל</strong> מרחב וקטורי סוף-ממדי בתור <span class="math">\(\mathbb{F}^{n}\)</span> ("סוף-ממדי" הוא מושג שיובהר בהמשך) עם <span class="math">\(\mathbb{F}\)</span>ו-<span class="math">\(n\)</span> מסויימים, וזו אולי הדרך הפשוטה ביותר שאני מכיר לחשוב על מרחבים וקטוריים.</p>
+<p>בואו נראה תכף ומייד איך זה קורה על ידי דוגמא אחרת למרחבים וקטוריים - פולינומים. פולינום הוא ביטוי מהצורה <span class="math">\(a_{n}x^{n}+a_{n-1}x^{n-1}+\dots+a_{1}x+a_{0}\)</span> כאשר <span class="math">\(a_{0},a_{1},.\dots,a_{n}\)</span> נקראים "מקדמים" ו-<span class="math">\(x\)</span> הוא "משתנה". בנוסף, אנחנו מניחים ש-<span class="math">\(a_{n}\ne0\)</span> (אחרת לא היה טעם לכתוב את <span class="math">\(a_{n}x^{n}\)</span> מלכתחילה) ו-<span class="math">\(n\)</span> נקרא <strong>מעלת הפולינום</strong>. למשל, <span class="math">\(x^{2}+1\)</span> הוא פולינום ממעלה שניה ו-<span class="math">\(x^{5}+x^{4}+18x\)</span> הוא פולינום ממעלה חמישית.</p>
+<p>בהקשר שלנו, המקדמים תמיד נלקחים מעל שדה נתון מסויים; ב-<span class="math">\(\mathbb{F}\left[x\right]\)</span> מסומן אוסף הפולינומים עם מקדמים מתוך <span class="math">\(\mathbb{F}\)</span>. החיבור והכפל בסקלר מוגדרים בצורה הטבעית, "מקדם-מקדם". למשל, <span class="math">\(\left(a_{1}x+a_{0}\right)+\left(b_{2}x^{2}+b_{1}x+b_{0}\right)=b_{2}x^{2}+\left(a_{1}+b_{1}\right)x+\left(a_{0}+b_{0}\right)\)</span>. קיבלנו מרחב וקטורי שאגלה כבר עכשיו שאיננו סוף-ממדי. מה שכן, אפשר לדבר גם על "תת-מרחבים" (מושג שעוד יחזור לו בהמשך) של "כל הפולינומים ממעלה קטנה מ-<span class="math">\(n\)</span>". מרחב כזה מסומן ב-<span class="math">\(\mathbb{F}_{n}\left[x\right]\)</span>. למשל, <span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> הוא מרחב כל הפולינומים ממעלה קטנה מ-2 במקדמים ממשיים, כלומר כל הפולינומים מהצורה <span class="math">\(a_{1}x+a_{0}\)</span> כאשר הפעם <span class="math">\(a_{1}\)</span> יכול להיות אפס. הסימון הזה טיפה מבלבל כי היינו מצפים ש-<span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> יהיה מרחב כל הפולינום ממעלה שניה, אבל במחשבה שניה הוא דווקא הגיוני כי כל פולינום ב-<span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> מתואר על ידי <strong>זוג</strong> של מספרים: <span class="math">\(a_{1},a_{0}\)</span>. אם היינו מרשים פולינומים ממעלה שניה, כבר היינו מדברים על שלשות של מספרים.</p>
+<p>כעת, שימו לב שבמקום לכתוב <span class="math">\(a_{1}x+a_{0}\)</span> הייתי יכול לכתוב <span class="math">\(\left(a_{0},a_{1}\right)\)</span>, וזה בעצם איבר של <span class="math">\(\mathbb{R}^{2}\)</span>. כלומר, אפשר לחשוב על איבר של <span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> גם בתור איבר של <span class="math">\(\mathbb{R}^{2}\)</span>. יותר מכך: <span class="math">\(\left(a_{1}x+a_{0}\right)+\left(b_{1}x+b_{0}\right)=\left(a_{1}+b_{1}\right)x+\left(a_{0}+b_{0}\right)\)</span>, ומצד שני <span class="math">\(\left(a_{0},a_{1}\right)+\left(b_{0},b_{1}\right)=\left(a_{0}+b_{0},a_{1}+b_{1}\right)\)</span>, מה שאומר שאברי <span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> ואברי <span class="math">\(\mathbb{R}^{2}\)</span> נראים אותו דבר גם אחרי הפעלת פעולת חיבור, ובאופן דומה גם אחרי כפל בסקלר. כל זה מוביל אותנו למסקנה ש-<span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> ו-<span class="math">\(\mathbb{R}^{2}\)</span> הם <strong>אותו מרחב וקטורי</strong> עד כדי הבדל בשיטת הסימון שלנו לאברי המרחב הוקטורי הזה. בלשון מתמטית אומרים ש-<span class="math">\(\mathbb{R}^{2}\)</span> ו-<span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> הם מרחבים <strong>איזומורפיים</strong>.</p>
+<p>אמרנו כבר שמטריצות הן דוגמה למרחב וקטורי, אבל אני רוצה לחדד את זה - גם קבוצה של <strong>חלק</strong> מהמטריצות יכולה להוות מרחב וקטורי. למשל, הבה ונתבונן על מטריצות מסדר <span class="math">\(2\times2\)</span> שבהן האיברים שאינם על האלכסון הראשי הם אפס: למטריצה כזו יש צורה כללית <span class="math">\(\left[\begin{array}{cc}a_{0} & 0\\0 & a_{1}\end{array}\right]\)</span>. כעת מתגלה - הפתעה הפתעה! - שאוסף המטריצות הזה הוא מרחב וקטורי, וכזה שאיזומורפי ל-<span class="math">\(\mathbb{R}^{2}\)</span> ול-<span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span>. זו גם הזדמנות מצויינת לחדד נקודה עדינה: למרות שמרחב המטריצות הנ"ל ו-<span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span> הם איזומורפיים כמרחבים וקטוריים, זה לא אומר שהם זהים באופן מוחלט; זה אומר שהם זהים רק ביחס ל<strong>מה שמהווה מרחב וקטורי</strong>, כלומר פעולות החיבור והכפל בסקלר. ביחס לפעולות אחרות המרחבים הללו עשויים להיות שונים לגמרי. למשל, הכרנו פעולה של כפל מטריצות; במקרה שלנו מתקיים <span class="math">\(\left[\begin{array}{cc}a_{0} & 0\\0 & a_{1}\end{array}\right]\left[\begin{array}{cc}b_{0} & 0\\0 & b_{1}\end{array}\right]=\left[\begin{array}{cc}a_{0}b_{0} & 0\\0 & a_{1}b_{1}\end{array}\right]\)</span>. לעומת זאת, אם נכפול את הפולינומים <span class="math">\(a_{1}x+a_{0}\)</span> ו-<span class="math">\(b_{1}x+b_{0}\)</span> נקבל בכלל <span class="math">\(a_{1}b_{1}x^{2}+\left(a_{1}b_{0}+a_{0}b_{1}\right)x+a_{1}a_{0}\)</span> שלא ממש מזכיר את המטריצה שהתקבלה מהכפל (וחמור מכך, הוא בכלל פולינום ממעלה שניה, כלומר לא איבר של <span class="math">\(\mathbb{R}_{2}\left[x\right]\)</span>). כלומר, מרחב המטריצות ומרחב הפולינומים לא מתנהגים אותו דבר ביחס לפעולת כפל בין איברים, אלא רק ביחס לפעולת כפל בסקלר.</p>
+<p>מרחב המטריצות הזה הוא מה שנקרא <strong>תת מרחב </strong>וקטורי. באופן כללי, אם <span class="math">\(V\)</span> הוא מרחב וקטורי ו-<span class="math">\(U\)</span> היא תת-קבוצה של <span class="math">\(V\)</span> שהיא עצמה מהווה מרחב וקטורי אם שוכחים מ-<span class="math">\(V\)</span>, אז <span class="math">\(U\)</span> מכונה תת-מרחב של <span class="math">\(V\)</span>. בהינתן <span class="math">\(V\)</span> שאנו יודעים שהוא מרחב וקטורי ותת קבוצה <span class="math">\(U\)</span> שלו, די קל לבדוק אם <span class="math">\(U\)</span> מהווה מרחב וקטורי - לא צריך לבדוק אם כל חוקי הפילוג/קיבוץ/חילוף מתקיימים כי אנחנו יודעים שהם מתקיימים עבור כל אברי <span class="math">\(V\)</span> ואברי <span class="math">\(U\)</span> הם בפרט איברים של <span class="math">\(V\)</span>; מה שכן צריך לבדוק הוא ש-<span class="math">\(U\)</span> סגור לחיבור וכפל בסקלר ומזה ינבע כל היתר. במקרה של המטריצות, למשל, צריך לוודא שאחרי שמחברים אותן או כופלים אותן בסקלר עדיין מתקבלת מטריצה עם אפסים בכניסות שאינן על האלכסון הראשי, מה שאכן קורה; אבל "קבוצת כל המטריצות <span class="math">\(2\times2\)</span> שיש בהן 1 איפה שהוא" בוודאי אינה סגורה לכפל בסקלר (למעשה, יש לכל היותר 4 סקלרים שבהם ניתן לכפול מטריצה מהמרחב ועדיין להישאר בתוכו; מהם?) ולכן איננה תת-מרחב.</p>
+<p>עכשיו אפשר לעבור לדוגמה נוספת. הבה ונתבונן על <span class="math">\(\mathbb{C}\)</span> - שדה המרוכבים. נשכח לרגע מכך שיש פעולת כפל בין אברי <span class="math">\(\mathbb{C}\)</span> ונחשוב רק על פעולת החיבור, וכעת הבה ונגדיר פעולה של "כפל בסקלר" עם איבר של <span class="math">\(\mathbb{R}\)</span>, הממשיים. מה תהיה הפעולה הזו? בדיוק פעולת הכפל הרגילה של <span class="math">\(\mathbb{C}\)</span>, רק ש"צמצמנו" אותה ואנחנו מרשים כפל רק בין איבר של <span class="math">\(\mathbb{R}\)</span> ואיבר של <span class="math">\(\mathbb{C}\)</span>. עם פעולות החיבור והכפל בסקלר הללו <span class="math">\(\mathbb{C}\)</span> מהווה מרחב וקטורי מעל <span class="math">\(\mathbb{R}\)</span>.</p>
+<p>את הרעיון הזה אפשר להכליל בקלות: נניח ש-<span class="math">\(F\)</span> הוא שדה ו-<span class="math">\(E\)</span> הוא שדה שמכיל את <span class="math">\(F\)</span>. אז יש פעולת כפל שמוגדרת באופן טבעי בין איברי <span class="math">\(F\)</span> ואברי <span class="math">\(E\)</span> - פעולת הכפל הרגילה של <span class="math">\(E\)</span>. כאשר מצמצמים את הפעולה הזו רק לאברי <span class="math">\(F\)</span>, מקבלים ש-<span class="math">\(E\)</span> הוא מרחב וקטורי מעל <span class="math">\(F\)</span>, לכל זוג שדות <span class="math">\(E\supseteq F\)</span>. האבחנה הזו היא הבסיס לתחום המתמטי המרתק של <strong>תורת השדות</strong>. שימו לב ש-<span class="math">\(F\)</span> הוא בפרט מרחב וקטורי מעל <span class="math">\(F\)</span>, ולכן <span class="math">\(F\)</span> הוא גם תת-מרחב וקטורי של <span class="math">\(E\)</span> במקרה הזה.</p>
+<p>והנה עוד דוגמה למרחב וקטורי: פונקציות ממשיות, <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span>. "חיבור" של שתי פונקציות <span class="math">\(f,g\)</span> יניב פונקציה <span class="math">\(f+g\)</span> שמוגדרת כך: <span class="math">\(\left(f+g\right)\left(x\right)=f\left(x\right)+g\left(x\right)\)</span>, וכפל בסקלר של <span class="math">\(f\)</span> יניב פונקציה <span class="math">\(\lambda f\)</span> שמוגדרת כך: <span class="math">\(\left(\lambda f\right)\left(x\right)=\lambda\cdot f\left(x\right)\)</span>. תחת ההגדרות הללו קיבלנו מרחב וקטורי, וכמובן שאפשר להכליל את ההגדרה לסוגים רבים ושונים של פונקציות. כך למשל פונקציות ממשיות <strong>רציפות</strong> הן תת-מרחב וקטורי של מרחב הפונקציות שתיארתי כרגע.</p>
+<p>והנה עוד דוגמה: הבה ונסתכל על נוסחת הנסיגה <span class="math">\(x_{n}=x_{n-1}+x_{n-2}\)</span>. "פתרון" של הנוסחה הזו הוא סדרת אינסופית של מספרים <span class="math">\(a_{0},a_{1},a_{2},\dots\)</span> שמקיימים את הנוסחה, כלומר <span class="math">\(a_{n}=a_{n-1}+a_{n-2}\)</span> (עבור <span class="math">\(n\ge2\)</span>). כעת, אם ניקח שתי סדרות כאלו ונחבר אותן, או ניקח סדרה ונכפול אותה בסקלר, עדיין נקבל פתרון של נוסחת הנסיגה - זה מראה שאוסף כל הפתרונות של נוסחת הנסיגה <span class="math">\(x_{n}=x_{n-1}+x_{n-2}\)</span> הוא תת-מרחב וקטורי של מרחב שאסמן ב-<span class="math">\(\mathbb{R}^{\omega}\)</span> - מרחב כל הסדרות האינסופיות של ממשיים עם חיבור וכפל על פי קואורדינטות. לאבחנה שמרחב הפתרונות הזה הוא מרחב וקטורי <a href="http://www.gadial.net/2009/07/01/finding_fibonacci_formula/">יש חשיבות לא קטנה</a> כאשר פותרים נוסחאות נסיגה מעין אלה.</p>
+<p>אפשר להמשיך ולתת עוד דוגמאות, אבל אני מקווה שהרעיון הבסיסי הובן. בפוסט הבא נעבור לדבר על המושג המרכזי שמתקשר למרחבים וקטוריים - בסיס.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/10/18/vector_space_basis/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מוסיפים בסיס לדיון על אלגברה לינארית</span>
+            </a>
+            
+            
+            
+            <a href="/2011/10/12/linear_equations_final/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">משוואות לינאריות - הקרב האחרון</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

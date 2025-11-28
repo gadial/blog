@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אלגוריתם גרובר - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אלגוריתם גרובר</h1>
+            <div class="post-meta">
+                <span class="date">2014-08-16</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגוריתם גרובר.html">אלגוריתם גרובר</a>
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אלגוריתם גרובר הוא הדוגמה הראשונה שכדאי להראות כשמתחילים להראות אלגוריתמים בחישוב קוונטי, מכיוון שהוא פשוט יחסית, עובד בצורה מאוד אינטואיטיבית וציורית, ויש לו יתרון מוכח על אלגוריתמים קלאסיים שפותרים את אותה הבעיה. ומה הבעיה הזו? בעיה של <strong>חיפוש</strong> במבנה נתונים לא מסודר.</p>
+<p>ברוב מבני הנתונים בעולם יש סדר וארגון כלשהם שמאפשרים לנו לחפש בהם איברים בצורה נוחה. דוגמה קלאסית היא מערך ממויין - במערך כזה, שבו אפשר להשוות כל זוג איברים והם ממויינים מהקטן אל הגדול, אפשר למצוא איבר בזמן <span class="math">\(\log N\)</span> כאשר <span class="math">\(N\)</span> הוא מספר האיברים הכולל במערך, באמצעות <strong>חיפוש בינארי</strong>. אבל מה קורה במערך בלי שום סדר וארגון? אין לנו ברירה אלא לבצע <span class="math">\(N\)</span> שאילתות - לעבור איבר איבר ולבדוק אם הוא מתאים לקריטריון החיפוש שלנו. כלומר, זמן הריצה שלנו הוא <span class="math">\(O\left(N\right)\)</span> האלגוריתם של גרובר פותר את הבעיה בזמן ריצה שהוא <span class="math">\(O\left(\sqrt{N}\right)\)</span> - כלומר, יש לאלגוריתם זמן ריצה <strong>טוב יותר</strong> אסימפטוטית מהאלגוריתם הקלאסי הטוב ביותר שיכול להיות. זו המחשה ליתרון אמיתי של חישוב קוונטי על פני חישוב רגיל.</p>
+<p>איך קורה הקסם הזה? איך אלגוריתם קוונטי מחפש במבנה נתונים לא מסודר כל כך מהר? התשובה היא שבדיוק כפי שמתואר חישוב קוונטי בספרי מדע פופולרי: האלגוריתם איכשהו מריץ את השאילתה "האם אתה האיבר שאני מחפש?" על כל אברי המערך בו זמנית, באמצעות הסתמכות על העובדה שהוא מחזיק מעין <strong>סופרפוזיציה</strong> של כל אברי המערך. אבל לעשות את זה, זה עדיין לא מספיק טוב - מדידה של הסופרפוזיציה הזו תניב את האיבר שאנחנו מחפשים רק בהסתברות נמוכה. לכן גרובר מבצע תהליך של <strong>הגברה</strong> - מניפולציה של המצב הקוונטי שחוזרת על עצמה שוב ושוב, ומבטיחה שאם האיבר שאנחנו מחפשים בכלל קיים במערך, אז לאט לאט ההסתברות שמדידה תחזיר אותו הולכת וגדלה. מספיק לחזור על התהליך הזה <span class="math">\(O\left(\sqrt{N}\right)\)</span> פעמים כדי לקבל הסתברות מצויינת למצוא את האיבר שאנחנו מחפשים.</p>
+<p>בפוסט המבוא שלי לנושא החישוב הקוונטי אמרתי ש"עדיין אין לנו הוכחה מתמטית שחישוב קוונטי הוא אכן חזק מבחינת סיבוכיות יותר מחישוב רגיל", מה שלכאורה נסתר על ידי האלגוריתם של גרובר, ולכן צריך להבהיר את הכוונה ב"חזק מבחינת סיבוכיות". בואו נדבר למשל על מכונות טיורינג - המודל הפשוט ביותר הוא <strong>חד סרטי</strong> אבל יש גם מודל <strong>דו סרטי</strong> ועוד שלל וריאציות. ההבדלים בין המודלים הללו מוסיפים כוח חישובי כלשהו; יש בעיות שהמודל הדו סרטי יפתור בזמן <span class="math">\(T\)</span> אך למודל החד סרטי יידרש זמן <span class="math">\(T^{2}\)</span> כדי לפתור, כלומר המודל הדו סרטי פותר את הבעיה בזמן ריצה שורש של זמן הריצה שנדרש למודל החד סרטי, בדיוק כמו השיפור של אלגוריתם גרובר.</p>
+<p>ההבדלים הללו יכולים להיות חשובים בחיים האמיתיים, אבל בחיים האמיתיים יש אינסוף פרטי מימוש אחר שצריכים לדבר עליהם - מה שפותרים איתו בעיות הוא מחשב, ולא מכונת טיורינג, והמחשב מתבסס על מעבד, ובמעבד יש אופטימיזציות, ויש סט מורכב של פקודות לוגיות. ויש ענייני תזמון וניהול אנרגיה, ויש מטמון (Cache), ויש הרצת פקודות שלא על פי הסדר המתואר בתוכנית, ויש ניבוי של קפיצות בפקודות if ויש עוד אינסוף דברים שכולם קריטיים לחלוטין עבור תכנות בחיים האמיתיים. ואני לא רוצה שיתקבל רושם שגוי - אלו דברים <strong>ממש מגניבים</strong>, ובהחלט מתחשבים בהם במציאות. אבל כשאנחנו מתעסקים בסיבוכיות, כדי לא לטבוע בפרטים כאלו, אנחנו מנסים להתרחק מהכל ולדבר בצורה "נקיה" ככל האפשר.</p>
+<p>ומכיוון שהמודל הדו סרטי והמודל החד סרטי שונים זה מזה מבחינת הסיבוכיות שלהם, אנחנו מאמצים רזולוציה שבה הם נראים אותו דבר. זה מה שמוביל להגדרה של "חישוב יעיל" ככזה שמתבצע בזמן <strong>פולינומי</strong>, ולהגדרת מחלקת הסיבוכיות <span class="math">\(\mbox{P}\)</span>. גם הגדרת מחלקת הסיבוכיות של חישוב קוונטי יעיל, BQP, הונעה משיקולים דומים. מה שאמרתי בפוסט הראשון הוא שאין לנו הוכחה מתמטית לכך ש-<span class="math">\(\mbox{P}\ne\mbox{BQP}\)</span> (הוכחה שכזו תהיה, למשל, הוכחה לכך שפירוק לגורמים לא ניתן לביצוע בזמן פולינומי; זאת מכיוון שנראה בהמשך את אלגוריתם שור שהוא אלגוריתם קוונטי יעיל לפירוק לגורמים). האלגוריתם של גרובר לא מהווה שיפור בסדר גודל מספיק כדי שיהיו לו השלכות של ממש על שאלת <span class="math">\(\mbox{P}\ne\mbox{BQP}\)</span> המדוברת. אגב, באותה פסקה בפוסט המבוא אמרתי גם "יש דברים שאפשר להוכיח שבהם חישוב קוונטי עוזר לנו יותר מאשר בחישוב רגיל ואציג דוגמה אחת לפחות בפוסטים הבאים" - האלגוריתם של גרובר הוא בדיוק דוגמה שכזו.</p>
+<p>בואו נעבור לניסוח קצת יותר פורמלי של הבעיה. אני מתאר את הבעיה בתור "חיפוש במסד נתונים", אבל אנחנו מעדיפים לשמור את "מסד הנתונים" הזה אבסטרקטי ככל הניתן כדי שהאלגוריתם לא יהיה תלוי בפרטים הטכניים שלו. האופן שבו אוהבים בתורת הסיבוכיות לבצע אבסטרקציות כאלו היא בעזרת <strong>אורקל</strong>. אורקל הוא פרוצדורה חישובית כלשהי שאנחנו מתייחסים אליה כאל "קופסה שחורה" - לא יודעים איך היא ממומשת, ומניחים שזמן הריצה שלה הוא זניח. האלגוריתם שלנו ימדד, בין היתר, על בסיס השאלה "כמה קריאות לאורקל ביצעת?"</p>
+<p>במקרה שלנו אנחנו רוצים לייצג את אברי מסד הנתונים פשוט בתור מספרים מ-1 עד <span class="math">\(N\)</span>, והאורקל יקבל כקלט מספר ויגיד האם המספר הזה הוא האיבר שאנחנו מחפשים. הנה דרך לפרמל את זה: נניח כי <span class="math">\(N=2^{n}\)</span> עבור מספר טבעי <span class="math">\(n\)</span> כלשהו, ונייצג כל איבר במסד הנתונים באמצעות סדרה של <span class="math">\(n\)</span> ביטים (אז פורמלית אנחנו מתארים פה את המספרים מ-0 עד <span class="math">\(N-1\)</span>). האורקל במקרה הנוכחי יהיה אופרטור קוונטי <span class="math">\(O\)</span>, שלא מבצע מדידה אבל עושה את הדבר הבא: אם <span class="math">\(\left|x\right\rangle \)</span> הוא מצב קוונטי שאינו מייצג את האיבר שאנו מחפשים, אז <span class="math">\(\left|x\right\rangle \mapsto\left|x\right\rangle \)</span>, ואם הוא כן מייצג את האיבר שאנו מחפשים, אז <span class="math">\(\left|x\right\rangle \mapsto-\left|x\right\rangle \)</span>. פורמלית אפשר לדבר על פונקציה <span class="math">\(f\left(x\right)\)</span> שמחזירה 1 על איברים שמתאימים לקריטריון החיפוש שלנו ו-0 אחרת, ואז <span class="math">\(\left|x\right\rangle \mapsto\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \)</span> הוא האופרטור.נחזור בסוף הפוסט לשאלה איך אפר להניח שיש לנו אורקל שמבצע כזה חישוב, אבל נעזוב את זה לבינתיים - העיקר הוא שיש לנו אינדיקטור כלשהו שמצביע על האיבר ה"נכון".</p>
+<p>האלגוריתם מתחיל כשאנחנו נמצאים במצב של סופרפוזיציה סימטרית של כל המצבים האפשריים. אבל אין צורך להניח שזה המצב ההתחלתי; אפשר להגיד שהמצב ההתחלתי הוא <span class="math">\(\left|00\dots0\right\rangle \)</span> ושאנחנו עוברים למצב הסופרפוזיציה הסימטרית על ידי הפעלה של האופרטור <span class="math">\(H\otimes H\otimes\dots\otimes H\)</span>. כזכור, <span class="math">\(H\)</span> הוא שער קוונטי שפועל על קיוביט בודד באופן הבא: <span class="math">\(\left|0\right\rangle \mapsto\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span> ו-<span class="math">\(\left|1\right\rangle \mapsto\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\)</span>. כעת, <span class="math">\(H\otimes H\otimes\dots\otimes H\)</span> הוא אופרטור שפועל על כל <span class="math">\(n\)</span> הקיוביטים של הרגיסטר הקוונטי שלנו; בפוסט הקודם לא הרשיתי משהו כזה אלא דרשתי ששער קוונטי יפעל על שלושה קיוביטים לכל היותר. האפקט הזה מושג על ידי <strong>שרשור</strong> <span class="math">\(n\)</span> עותקים של <span class="math">\(H\)</span>, שכל אחד פועל על קיוביט אחר (כלומר, בעצם אני מפעיל סדרתית את <span class="math">\(H\otimes I\otimes\dots\otimes I\)</span> ואז <span class="math">\(I\otimes H\otimes\dots\otimes I\)</span> וכן הלאה). בהמשך אני אניח שהעניין הזה ברור לכם וכשאציין אופרטור שפועל על כל הקיוביטים "בבת אחת" נבין שמדובר על שרשור של כמה שערים (למרות שאולי לא תמיד ברור <strong>איך</strong> להציג את האופרטור כשרשור כזה). מכיוון שזה מסורבל לכתוב <span class="math">\(H\otimes H\otimes\dots\otimes H\)</span> אני אשתמש בסימון <span class="math">\(H^{\otimes n}\)</span> שהוא למען האמת אינפורמטיבי יותר כי <span class="math">\(n\)</span> מופיע בו במפורש.</p>
+<p>כעת, בואו נסמן <span class="math">\(\left|\psi\right\rangle =H^{\otimes n}\left|0\dots0\right\rangle =\frac{1}{\sqrt{N}}\sum_{x=0}^{N-1}\left|x\right\rangle \)</span>. בעזרת <span class="math">\(\left|\psi\right\rangle \)</span> אפשר להגדיר אופרטור חדש: <span class="math">\(2\left|\psi\right\rangle \left\langle \psi\right|-I\)</span>. האם אפשר לממש את האופרטור הזה עם שערים קוונטיים? כן, ונדבר על זה בהמשך. עכשיו אפשר לשרשר את האופרטור הזה לאופרטור <span class="math">\(O\)</span> של האורקל, ולקבל אופרטור <span class="math">\(G=\left(2\left|\psi\right\rangle \left\langle \psi\right|-I\right)O\)</span>. עכשיו סוף סוף אפשר לתאר פורמלית את האלגוריתם של גרובר:</p>
+<ol>
+    <li>התחילו עם הרגיסטר <span class="math">\(R=\left|0\dots0\right\rangle \)</span>.</li>
+    <li>חשבו את <span class="math">\(R\leftarrow H^{\otimes n}R\)</span>.</li>
+    <li>בצעו במשך <span class="math">\(\sqrt{N}\)</span> פעמים:
+<ol>
+    <li><span class="math">\(R\leftarrow G\left(R\right)\)</span></li>
+</ol>
+</li>
+    <li>מדדו את <span class="math">\(R\)</span> והחזירו את התוצאה.</li>
+</ol>
+<p>וזהו. בהסתברות טובה המדידה תיתן לנו <span class="math">\(x\)</span> כך ש-<span class="math">\(f\left(x\right)=1\)</span>. זה נראה כמו קסם, כמובן; עיקר הפוסט יוקדש לשאלה למה הקסם הזה עובד, אם כי את האינטואיציה כבר הסברתי.</p>
+<p>אפשר להתחיל לנתח אלגברית את <span class="math">\(G\)</span>, אבל הדרך המקובלת לנתח אותי היא בצורה <strong>גאומטרית</strong>. אני איום ונורא בגאומטריה ועדיין הצלחתי להבין את הרעיון הזה, אז בואו ותשתפו איתי פעולה. בואו נניח לצורך פשטות שקיים רק <span class="math">\(a\)</span> יחיד כך ש-<span class="math">\(f\left(a\right)=1\)</span>. נסתכל על הוקטורים <span class="math">\( \left|\psi\right\rangle \)</span> ו-<span class="math">\(\left|a\right\rangle \)</span> - כנראה יעזור לכם לדמיין אותם במרחב כך ש-<span class="math">\(\left|a\right\rangle \)</span> שוכב על הרצפה, ואילו <span class="math">\(\left|\psi\right\rangle \)</span> נמצא בזווית כלשהי מעליו. בהתחלה <span class="math">\(R\)</span> שלנו זהה ל-<span class="math">\(\left|\psi\right\rangle \)</span>. הרעיון הוא שבכל הפעלה של <span class="math">\(G\)</span>, <span class="math">\(R\)</span> הולך "להימשך" לכיוון <span class="math">\(\left|a\right\rangle \)</span> שעל הרצפה. אני גרוע בציורים תלת ממדיים אז הנה איור דו ממדי של "מבט מהצד" על מה שקורה:</p>
+<p><strong><a href="/img/2014/08/grover_operation.png"><img class="aligncenter size-full wp-image-3171" alt="grover_operation" src="/img/2014/08/grover_operation.png" width="450" height="545" /></a></strong></p>
+<p>אם כן, כל הפעלה של <span class="math">\(G\)</span> <strong>מסובבת</strong> את <span class="math">\(R\)</span> קצת בתוך המישור שנפרש על ידי <span class="math">\(\left|\psi\right\rangle \)</span> ו-<span class="math">\(\left|a\right\rangle \)</span>. נסובב מספיק, ו-<span class="math">\(R\)</span> יהיה קרוב ל-<span class="math">\(\left|a\right\rangle \)</span> כך שמדידה של <span class="math">\(R\)</span> תניב את <span class="math">\(\left|a\right\rangle \)</span> בהסתברות טובה. נסובב יותר מדי - ו-<span class="math">\(R\)</span> יחלוף על פני <span class="math">\(\left|a\right\rangle \)</span> ויתחיל להתרחק ממנו, אז לסובב יותר מדי זה גם כן לא רעיון טוב.</p>
+<p>בואו ננסה עכשיו להיות קצת יותר פורמליים. אני רוצה לדבר על גאומטריה וזוויות וכאלה. במרחבי מכפלה פנימית נהוג <strong>להגדיר</strong> זווית באמצעות המכפלה הפנימית: אם <span class="math">\(a,b\)</span> הם וקטורים, אז מאי שוויון קושי שוורץ נובע ש-<span class="math">\(\left|\left\langle a,b\right\rangle \right|\le\|a\|\|b\|\)</span>. זה אומר ש-<span class="math">\(0\le\frac{\left|\left\langle a,b\right\rangle \right|}{\|a\|\|b\|}\le1\)</span> ולכן יש למשוואה <span class="math">\(\cos\alpha=\frac{\left|\left\langle a,b\right\rangle \right|}{\|a\|\|b\|}\)</span> פתרון יחיד עם <span class="math">\(\alpha\in\left[0,\frac{\pi}{2}\right]\)</span>. ה-<span class="math">\(\alpha\)</span> הזו מוגדרת להיות הזווית בין <span class="math">\(a,b\)</span>. כדי שיתקבל <span class="math">\(\alpha=\frac{\pi}{2}\)</span> צריך שיתקיים <span class="math">\(\left|\left\langle a,b\right\rangle \right|=0\)</span>, כלומר ש-<span class="math">\(a,b\)</span> יהיו אורתוגונליים.</p>
+<p>כעת, מהו <span class="math">\(\left|\left\langle a,\psi\right\rangle \right|\)</span>? ובכן, זה קל. <span class="math">\(\left|\psi\right\rangle =\frac{1}{\sqrt{N}}\sum_{x=0}^{N-1}\left|x\right\rangle \)</span> ו-<span class="math">\(\left|a\right\rangle \)</span> הוא אחד מהאיברים בצירוף הלינארי הזה. מכיוון שהצירוף הזה הוא של בסיס אורתונורמלי, נקבל ש-<span class="math">\(\left|\left\langle a,\psi\right\rangle \right|=\frac{1}{\sqrt{N}}\)</span>. זה מספר חיובי, ולכן <span class="math">\(\alpha\ne\frac{\pi}{2}\)</span>, ומכאן שניתן לכתוב את <span class="math">\(\alpha\)</span> כך: <span class="math">\(\alpha=\frac{\pi}{2}-\theta\)</span> כאשר <span class="math">\(\theta\)</span> היא זווית חיובית.</p>
+<p>למה לטרוח כל כך עם הסימון המסורבל הזה? מכיוון ש-<span class="math">\(\theta\)</span> מאפשרת לנו לדבר במדויק על "כמה סיבוב" מבצעת <span class="math">\(G\)</span> - בכל פעם שבה היא מופעלת, היא מקטינה את הזווית ב-<span class="math">\(2\theta\)</span>. כלומר, אם הזווית בין <span class="math">\(R\)</span> ובין <span class="math">\(\left|a\right\rangle \)</span> הייתה <span class="math">\(\beta\)</span> בשלב מסויים של האלגוריתם, אז אחרי הפעלת <span class="math">\(G\)</span> הזווית תהיה <span class="math">\(\beta-2\theta\)</span>. זה אומר שאחרי <span class="math">\(k\)</span> הפעלות של האלגוריתם נהיה בזווית <span class="math">\(\frac{\pi}{2}-\left(2k+1\right)\theta\)</span>. נניח שהיעד שלנו הוא להגיע לזווית <span class="math">\(\frac{\pi}{4}\)</span>, אז אנחנו רוצים שיתקיים <span class="math">\(\frac{\pi}{2}-\left(2k+1\right)\theta=\frac{\pi}{4}\)</span>, כלומר <span class="math">\(2k+1=\frac{\pi}{4\theta}\)</span>, כלומר <span class="math">\(k=\frac{\pi}{8\theta}=O\left(\frac{1}{\theta}\right)\)</span>. זווית <span class="math">\(\frac{\pi}{4}\)</span> היא מספיק טובה לנו, כי פירושה הוא שהמכפלה הפנימית היא לפחות <span class="math">\(\frac{1}{2}\)</span>, ולכן ההסתברות לקבל את <span class="math">\(a\)</span> היא לפחות <span class="math">\(\frac{1}{4}\)</span>, וזה מספיק טוב לנו (זה אומר שבתוחלת, נזדקק לארבע הפעלות של האלגוריתם כדי להשיג את הפתרון, וזה מצויין).</p>
+<p>איך ה-<span class="math">\(O\left(\frac{1}{\theta}\right)\)</span> מתבטא בפרמטרים של הבעיה? הפרמטר שלנו הוא <span class="math">\(N\)</span>; מה הקשר ביניהם? אנחנו יודעים ש-<span class="math">\(\cos\alpha=\frac{1}{\sqrt{N}}\)</span>, ואנחנו מכירים את הזהות הטריגונומטרית <span class="math">\(\cos\left(\frac{\pi}{2}-x\right)=\sin x\)</span>, כלומר <span class="math">\(\cos\alpha=\sin\theta\)</span> ולכן <span class="math">\(\theta\ge\sin\theta=\frac{1}{\sqrt{N}}\)</span>. מכאן ש-<span class="math">\(\frac{1}{\theta}\le\sqrt{N}\)</span> ולכן מספר ההפעלות של האלגוריתם שנדרשות לנו הוא אכן <span class="math">\(O\left(\sqrt{N}\right)\)</span> המובטח.</p>
+<p>רק מה, עדיין לא הבנו <strong>למה</strong> <span class="math">\(G\)</span> מסובב את הוקטור בכל פעם בעוד <span class="math">\(2\theta\)</span> אל עבר <span class="math">\(\left|a\right\rangle \)</span>. כאן האינטואיציה הגאומטרית נכנסת לתמונה במלוא כוחה: הרעיון הוא שאת פעולת ה<strong>סיבוב</strong> הזו ניתן להציג בתור הרכבה של שתי פעולות <strong>שיקוף</strong>. קצת קשה (לטעמי) להרגיש אינטואיטיבית איך קורה הקסם הזה ששתי פעולות שיקוף שמבוצעות בזו אחר זו שקולות לפעולת סיבוב; כנראה הכי טוב שתעשו ניסויים בעצמכם כדי לקבל תחושה. אינטואיציה כלשהי אפשר בכל זאת לקבל מכך שהאיזומטריות היחידות במרחב הן סיבובים, שיקופים והזזות, ואם משקפים ביחס לראשית הצירים ראשית הצירים משתמרת (כך שאי אפשר לקבל הזזה) ושיקוף-של-שיקוף לא יכול להיות שיקוף בעצמו כי השיקוף השני "מתקן" את ההיפוך (כמו במראה) שהשיקוף הראשון יוצר. אז אנחנו חייבים לקבל סיבוב.</p>
+<p>עוד אינטואיציה אפשר לקבל על ידי תמונה, באדיבות ויקיפדיה האנגלית:</p>
+<p><strong><a href="/img/2014/08/500px-Simx2rotOK.svg_.png"><img class="aligncenter size-full wp-image-3170" alt="500px-Simx2=rotOK.svg" src="/img/2014/08/500px-Simx2rotOK.svg_.png" width="500" height="500" /></a></strong></p>
+<p>בואו ניזכר לרגע איך אפשר לתאר שיקוף, פורמלית, ואז גם יהיה לנו קל לראות למה הכל יוצא כמו שאנחנו רוצים. ראשית, אני ארצה לדבר ספציפית על תיאור של שיקוף ב<strong>מישור</strong>, כלומר במרחב וקטורי ממימד 2. ה"בעיה" היא שהמרחב שלנו הוא ממימד <span class="math">\(N\)</span>, אז מה עושים? מצטמצים לתת-מרחב: זה שנפרש על ידי <span class="math">\(\left|a\right\rangle \)</span> ו-<span class="math">\(\left|\psi\right\rangle \)</span> (הוקטור שאנחנו מחפשים והוקטור שמתאר סופרפוזיציה אחידה). בהמשך כל הוקטורים שאדבר עליהם יהיו שייכים לתת המרחב הזה.</p>
+<p>כעת בואו נדבר על שיקוף במישור. שיקוף (כפי שאפשר לראות בתמונה) הוא תמיד <strong>ביחס לציר</strong> כלשהו. לוקחים נקודה. מעבירים אנך ממנה אל הציר, ואז ממשיכים את האנך הזה לצד השני באותו האורך - תוצאת השיקוף היא הנקודה שבקצה האנך הזה. אבל יש עוד דרך לחשוב על הפעולה הזו: ראשית, אל תחשבו על "נקודה" אלא על וקטור (כלומר, קו שמחבר את ראשית הצירים עם הנקודה); שנית, קחו את הוקטור ותחברו אליו את השיקוף שלו (תדביקו את הוקטור של השיקוף הזה על הנקודה) ותחברו אל השיקוף את הוקטור - תקבלו מעוין. אחד האלכסונים של המעוין הוא הישר שדרכו משקפים. מה אורכו? פעמיים ההיטל של הוקטור על הישר. אם כן, ראינו שלחבר את הוקטור עם השיקוף שלו נותן לנו את פעמיים ההיטל שלו. זה נותן לנו את המשוואה הכללית הבאה: אם <span class="math">\(v\)</span> הוא וקטור, ואם <span class="math">\(a\)</span> הוא וקטור יחידה בכיוון הישר שדרכו משקפים, אז <span class="math">\(\mbox{Ref}\left(v\right)+v=2\left\langle v,a\right\rangle a\)</span>, כלומר <span class="math">\(\mbox{Ref}\left(v\right)=2\left\langle v,a\right\rangle a-v\)</span>.</p>
+<p><strong><a href="/img/2014/08/reflection.png"><img class="aligncenter size-full wp-image-3172" alt="reflection" src="/img/2014/08/reflection.png" width="429" height="405" /></a></strong></p>
+<p>במילים אחרות, <strong>אופרטור השיקוף ביחס לציר</strong> <span class="math">\(a\)</span><strong> </strong>(כאשר <span class="math">\(a\)</span> הוא וקטור יחידה)<strong> </strong>הוא האופרטור <span class="math">\(2\left|a\right\rangle \left\langle a\right|-I\)</span>. נראה מוכר? בוודאי! השתמשנו באופרטור <span class="math">\(2\left|\psi\right\rangle \left\langle \psi\right|-I\)</span>, כשהוא משורשר עם <span class="math">\(O\)</span>, בבנייה של <span class="math">\(G\)</span> שלנו. אם כן, אחת משתי הפעולות שמרכיבות את <span class="math">\(G\)</span> היא שיקוף - במקרה הנוכחי, שיקוף ביחס לציר <span class="math">\(\left|\psi\right\rangle \)</span> שמתאר את הסופרפוזיציה האחידה.</p>
+<p>מה עם <span class="math">\(O\)</span>?</p>
+<p>ובכן, הנה עוד דרך לחשוב על שיקופים. שיקוף הוא טרנספורמציה לינארית, ולכן מספיק לדעת איך הוא מתנהג על אברי בסיס של המרחב. כרגיל, נדבר על שיקוף ביחס לציר <span class="math">\(a\)</span>. איך השיקוף פועל על <span class="math">\(a\)</span> עצמו? ובכן, הוא לא מזיז אותו בכלל, כלומר <span class="math">\(a\mapsto a\)</span>. לעומת זאת, איך השיקוף פועל על וקטור ש<strong>מאונך</strong> ל-<span class="math">\(a\)</span>, נסמנו <span class="math">\(b\)</span>? קל לראות שהסכום של <span class="math">\(b\)</span> והשיקוף שלו יהיה 0, ולכן <span class="math">\(b\mapsto-b\)</span>. ניתוח מדויק של זה יש <a href="http://www.gadial.net/2011/11/29/eigenvalues_intro/">בפוסט שלי על ערכים עצמיים</a>, שמשתמש בשיקוף בתור דוגמה - הערכים העצמיים הם 1 ו-<span class="math">\(-1\)</span>, והוקטורים העצמיים הם הציר שדרכו משקפים והציר שמאונך לו.</p>
+<p>ובכן, את האופרטור <span class="math">\(O\)</span> הצגתי בדיוק באופן הזה: אם <span class="math">\(x\)</span> הוא הוקטור שנותן <span class="math">\(f\left(x\right)=1\)</span> אז <span class="math">\(x\mapsto-x\)</span> ואילו אם <span class="math">\(x\)</span> הוא כל וקטור בסיס אחר, אז <span class="math">\(x\mapsto x\)</span>. תזכרו שאנחנו מדברים על המרחב שנפרש על ידי <span class="math">\(\left|\psi\right\rangle \)</span> ו-<span class="math">\(\left|a\right\rangle \)</span>; במרחב הזה, הוקטור העצמי של 1 הוא בדיוק <span class="math">\(\sum_{x\ne a}\left|x\right\rangle \)</span> (צירוף אחיד של כל הוקטורים במרחב, חוץ מ-<span class="math">\(\left|a\right\rangle \)</span>). אחרי נרמול נקבל את הוקטור <span class="math">\(\left|e\right\rangle =\frac{1}{\sqrt{N-1}}\sum_{x\ne a}\left|x\right\rangle \)</span>.</p>
+<p>אז הסכמנו ש-<span class="math">\(G\)</span> מבצעת שתי פעולות שיקוף ולכן היא אכן מבצעת פעולת סיבוב. אבל סיבוב של כמה מעלות? ובכן, בתמונה מויקיפדיה שהבאתי למעלה מראים גם שהזווית שבה מסובבים היא פעמיים הזווית שבין הצירים שמשקפים ביחס אליהם. זה דורש הוכחה פורמלית, כמובן, אבל היא לא קשה במיוחד אלא בעיקר טכנית (אני לא חושב על משהו יותר מוצלח מאשר לכתוב את המטריצות המייצגות של הטרנספורמציות ולכפול אותן) ולכן אדלג עליה כאן. מה הזווית במקרה שלנו <strong>אמורה</strong> לצאת כבר ברור - <span class="math">\(2\theta\)</span>. אז רק נותר להסביר למה הזווית בין צירי השיקוף היא <span class="math">\(\theta\)</span>.</p>
+<p>נסמן <span class="math">\(\cos\gamma=\left|\left\langle e,\psi\right\rangle \right|\)</span>. החישוב הוא קל למדי: <span class="math">\(\left|\left\langle e,\psi\right\rangle \right|=\frac{1}{\sqrt{N}\sqrt{N-1}}\sum_{x\ne a}1=\sqrt{\frac{\left(N-1\right)^{2}}{N\left(N-1\right)}}=\sqrt{\frac{N-1}{N}}\)</span>. בואו ניזכר בזהות <span class="math">\(\sin^{2}x+\cos^{2}x=1\)</span>, כלומר <span class="math">\(\sin x=\sqrt{1-\cos^{2}x}\)</span>. נקבל: <span class="math">\(\sin\gamma=\sqrt{1-\frac{N-1}{N}}=\frac{1}{\sqrt{N}}=\cos\alpha=\sin\theta\)</span> - הפלא, ופלא, קיבלנו בדיוק את התוצאה המבוקשת!</p>
+<p>האם סיימנו? בוודאי שלא!</p>
+<p>הצלחנו להבין למה האלגוריתם עובד, ולטעמי ההסבר הזה היה אלגנטי ונפלא ורק בשבילו כל סדרת הפוסטים הזו הייתה שווה. אבל עדיין לא הסברנו איך אפשר לממש את האלגוריתם! השתמשתי בשתי פעולות שיקוף, אבל עבור אף אחד מהן לא הסברתי למה בכלל סביר שנוכל להפעיל אותה ברמת החישוב הקוונטי, שבו מותר לנו להשתמש בשערים קוונטיים על לא יותר מדי קיוביטים בבת אחת. אני אסביר עכשיו את הרעיון הבסיסי, אבל עדיין לא אסביר בדיוק איך אפשר לבנות את השערים הקוונטיים הרלוונטיים - זה עניין לפוסט נפרד - אבל נבין אילו שערים בערך צריך.</p>
+<p>נתחיל עם <span class="math">\(2\left|\psi\right\rangle \left\langle \psi\right|-I\)</span>. היצור הזה הוא שיקוף ביחס ל-<span class="math">\(\left|\psi\right\rangle \)</span>, ולכן כפי שכבר ראינו <span class="math">\(\left|\psi\right\rangle \)</span> הוא וקטור עצמי של האופרטור הזה עם ערך עצמי 1, ואילו כל <span class="math">\(\left|x\right\rangle \)</span> שניצב לו הוא וקטור עצמי עם ערך עצמי <span class="math">\(-1\)</span>. הבעיה היא שהוקטורים הללו הם מסובכים והשערים הקוונטיים שלנו לא יודעים איך לפעול עליהם. אז משתמשים בהתחכמות הישנה ביותר בספר - <strong>מלכסנים</strong>. מבצעים שינוי בסיס. אם נכפול במטריצה <span class="math">\(H^{\otimes n}\)</span>, נעביר את <span class="math">\(\left|\psi\right\rangle \)</span> לוקטור <span class="math">\(\left|00\dots0\right\rangle \)</span>, וכל וקטור שניצב ל-<span class="math">\(\left|\psi\right\rangle \)</span> יעבור לוקטור בסיס אחר של אפסים ואחדים, רק ש-1 יופיע בוקטור לפחות פעם אחת. כעת אפשר יהיה לתאר את הפעולה באופן הבא:</p>
+<p><span class="math">\(\left|00\dots0\right\rangle \mapsto-\left|00\dots0\right\rangle\)</span></p>
+<p><span class="math">\(\left|x\right\rangle \mapsto\left|x\right\rangle \)</span> אם <span class="math">\(\left|x\right\rangle \ne\left|00\dots0\right\rangle \)</span></p>
+<p>מבחינה אלגוריתמית קלאסית זה חישוב די פשוט: עבור ביט-ביט, ואם מצאת 1, החזר את הקלט המקורי; אחרת, בסיום, החזר את שלילת הקלט המקורי. איך מבצעים את זה בעולם הקוונטי? זה, כאמור, עניין לפוסט ייעודי בנושא.</p>
+<p>אחרי שמבצעים את הפעולה הזו, צריך לחזור לבסיס המקורי - מבצעים את זה על ידי כפל נוסף ב-<span class="math">\(H^{\otimes n}\)</span>. זה מסיים את התיאור של האופרטור <span class="math">\(2\left|\psi\right\rangle \left\langle \psi\right|-I\)</span>.</p>
+<p>מה עם האופרטור <span class="math">\(O\)</span>? על פניו אפשר לומר שהוא נתון על ידי אורקל וחסל, אבל ההנחה שיש אורקל שעושה בדיוק את מה שאנחנו רוצים - הטלה - היא הנחה קצת חזקה מדי. מה אם כל מה שהאורקל יודע לעשות, בהינתן <span class="math">\(x\)</span>, הוא לחשב את <span class="math">\(f\left(x\right)\)</span> ולשים לנו בקיוביט כלשהו? ובכן, "לשים בקיוביט" זה מונח בעייתי בחישוב קוונטי כי פירושו הוא "למחוק את התוכן הקודם של הקיוביט ולכתוב משהו חדש במקומו" וזו פעולה לא הפיכה, ולכן לא כזו שאפשר לממש. לכן תיאור יותר סביר של אורקל קוונטי הוא זה: המצב הקוונטי שלנו (החלקים ממנו שמעניינים אותנו) יהיה מצורה <span class="math">\(\left|x\right\rangle \left|q\right\rangle \)</span> כאשר <span class="math">\(\left|q\right\rangle \)</span> הוא קיוביט בודד שהאורקל יודע להתעסק בו. מה שהאורקל עושה הוא לבצע את החישוב הבא:</p>
+<p><span class="math">\(\left|x\right\rangle \left|q\right\rangle \mapsto\left|x\right\rangle \left|q\oplus f\left(x\right)\right\rangle \)</span></p>
+<p>כאשר <span class="math">\(\oplus\)</span> היא פעולת ה-XOR ההפיכה. כלומר, האורקל מחשב את <span class="math">\(f\left(x\right)\)</span> ואם <span class="math">\(f\left(x\right)=0\)</span> לא נוגע ב-<span class="math">\(q\)</span>; אחרת, אם <span class="math">\(f\left(x\right)=1\)</span>, הוא הופך את וקטורי הבסיס בצירוף הלינארי שמגדיר את <span class="math">\(\left|q\right\rangle \)</span>, דהיינו <span class="math">\(a\left|0\right\rangle +b\left|1\right\rangle \mapsto b\left|0\right\rangle +a\left|1\right\rangle \)</span>. זה, כאמור, הדבר הכי קרוב ל"חשב את <span class="math">\(f\left(x\right)\)</span> וכתוב את התוצאה בקיוביט" שנוכל לצפות לו בחישוב קוונטי.</p>
+<p>איך עוברים מזה אל האפקט של <span class="math">\(O\)</span> שאנחנו רוצים, דהיינו <span class="math">\(\left|x\right\rangle \mapsto\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \)</span> ? ובכן, אנחנו יכולים להניח שאנחנו יודעים את הערך של <span class="math">\(\left|q\right\rangle \)</span> בתחילת החישוב או אפילו קובעים אותו; אז אפשר יהיה להפעיל אופרטור קוונטי שיעביר את <span class="math">\(\left|q\right\rangle \)</span> להיות <span class="math">\(\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\)</span> (למשל, אם בהתחלה <span class="math">\(\left|q\right\rangle =\left|0\right\rangle \)</span> אז נפעיל עליו NOT ולאחר מכן <span class="math">\(H\)</span>).</p>
+<p>כעת, מה קורה ל-<span class="math">\(\left|x\right\rangle \left(\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\right)\)</span> כשמפעילים עליו את האורקל? אם <span class="math">\(f\left(x\right)=0\)</span> אז מקבלים את אותו מצב, כצפוי. אחרת, אם <span class="math">\(f\left(x\right)=1\)</span>, הקיוביט של האורקל הופך ל-<span class="math">\(\left(\frac{-\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)=-\left(\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\right)\)</span>, ולכן מקבלים <span class="math">\(-\left|x\right\rangle \left(\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\right)\)</span>, וזהו בדיוק האפקט שרצינו!</p>
+<p>זה מסיים עם האלגוריתם של גרובר. עכשיו, בנוסף להיכרות עם אלגוריתם מגניב בפני עצמו, אני מקווה שאנחנו מבינים קצת יותר טוב את אופי הפעולות שאנחנו צריכים לבצע בחישוב קוונטי; בפוסט הבא נדון בשאלת המימוש שלהן.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2014/08/19/quantum_circuits_intro/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">שערים ומעגלים קוונטיים - מבוא על קצה המזלג</span>
+            </a>
+            
+            
+            
+            <a href="/2014/08/11/quantum_computing_bqp/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי - מה זה בדיוק</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

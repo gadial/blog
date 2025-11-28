@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה זה אינטגרל? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז מה זה אינטגרל?</h1>
+            <div class="post-meta">
+                <span class="date">2010-11-27</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אינטגרל.html">אינטגרל</a>
+                    
+                    <a href="/tags/חשבון אינפיניטסימלי.html">חשבון אינפיניטסימלי</a>
+                    
+                    <a href="/tags/מתמטיקה תיכונית.html">מתמטיקה תיכונית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>מה השטח של עיגול שרדיוסו באורך 1? אלו מכם שלמדו נוסחאות בבית הספר אולי זוכרים שזה צריך להיות <span class="math">\(\pi\)</span>, אבל למה? איך מגיעים לזה? הבעיה הזו - מדידת שטח של צורות מסובכות - העסיקה את המתמטיקאים עוד משחר היוולדה של המתמטיקה, ובפרט אצל היוונים הקדמונים. הפתרון הראשון לבעיה הופיע אצל מי שהיה ככל הנראה גדול המתמטיקאים של העת העתיקה - ארכימדס. <a href="http://he.wikipedia.org/wiki/%D7%A9%D7%99%D7%98%D7%AA_%D7%94%D7%9E%D7%99%D7%A6%D7%95%D7%99">בשיטה שלו</a> ניתן לראות את ניצני החשבון האינפיניטסימלי, אך מכיוון שאני לא כותב כרגע פוסט היסטורי לא אכנס לפרטים.</p>
+<p>בעיה מתמטית נוספת, שצצה בהקשר מודרני יותר, היא הבעיה של מדידת האנרגיה שמועברת לגוף עליו פועל כוח. במכניקה הקלאסית, כוח שפועל על גוף גורם לשינוי במהירות שלו (או יותר במדויק, <strong>בתנע</strong> שלו, אבל לא כולם מכירים את המושג הזה). אלא ששינוי במהירות אינו בהכרח שינוי באנרגיה של הגוף - ייתכן שהכוח יגרום לשינוי <strong>כיוון</strong> המהירות אך לא גודלה (זה המצב, למשל, בתנועה מעגלית). אם כן, השינוי באנרגיה נמדד ביחס לאותו חלק מהכוח שפועל בכיוון התנועה של הגוף. מה שמעניין כאן הוא שאין צורך להכניס את מושג הזמן לתמונה: אין צורך להשתמש בטיעון בסגנון "הפעלתי כוח של כך-וכך למשל חמש שניות ולכן העברתי לגוף אנרגיה כזו וכזו", אלא מספיק לדבר על "הפעלתי כוח של כך-וכך תוך כדי שהגוף עבר מרחק של כך-וכך, ולכן העברתי לגוף אנרגיה כזו וכזו". במילים אחרות, אם הפעלתי על גוף כוח קבוע <span class="math">\(F\)</span> בכיוון תנועתו, והוא עבר מרחק של <span class="math">\(\Delta x\)</span>, אז האנרגיה שהועברה לו היא <span class="math">\(F\cdot\Delta x\)</span>. לגודל הזה קוראים <strong><a href="http://he.wikipedia.org/wiki/%D7%A2%D7%91%D7%95%D7%93%D7%94_%28%D7%A4%D7%99%D7%96%D7%99%D7%A7%D7%94%29">העבודה</a></strong> של הכוח על הגוף.</p>
+<p>אלא שייתכן שהכוח שפועל על גוף <strong>תלוי</strong> במיקום שלו ואינו קבוע לכל אורך תנועתו של הגוף. דוגמה קלאסית לכך היא גוף שנמצא בנפילה חופשית מעל כוכב לכת מסויים - ככל שהגוף יתקרב יותר לכוכב הלכת כך כוח המשיכה של אותו כוכב יתגבר. במילים אחרות, ייתכן ש-<span class="math">\(F\left(x\right)\)</span> הוא פונקציה לא קבועה, ואז איך נחשב את העבודה של הכוח?</p>
+<p>שתי הבעיות הללו הן למעשה אותה הבעיה, ובשתיהן הפתרון שמציע החשבון האינפיניטסימלי הוא לבצע סכום ממושקל כלשהו, שמובן מסויים יהיה "סכום על מספר לא בן מניה של איברים". סכום שכזה נקרא <strong>אינטגרל</strong>. כדי להבין לאן אני חותר, בואו נחזור אל בעיית חישוב השטח של עיגול. עיגול הוא צורה מסובכת ואין לנו מושג איך למדוד את השטח שלו, אז לאיזו צורה אנחנו כן יודעים למדוד שטח? הצורה הפשוטה ביותר היא ככל הנראה מלבן. מלבן שאורכו <span class="math">\(a\)</span> ורוחבו <span class="math">\(b\)</span> הוא בעל שטח של <span class="math">\(a\cdot b\)</span> - זוהי הנחת היסוד בכל הדיון הזה. האינטגרל הוא דרך לקחת את הגדרת השטח הזו ובאמצעות מושג הגבול להחיל אותה לפחות או יותר כל צורה נורמלית שתוכלו לחשוב עליה - רק עבור מקרים "לא נחמדים" יחסית נקבל צורות שלא ניתן למדוד להן שטח באופן הזה.</p>
+<p>בואו נניח לצורך פשטות שאפשר לצייר את הצורה שאנחנו רוצים למדוד באופן הבא: מצד אחד, היא תחומה מלמטה על ידי הישר <span class="math">\(y=0\)</span> ("ציר ה-<span class="math">\(x\)</span>"). מצד שני, היא תחומה מלמעלה באמצעות עקומה כלשהי שמתוארת באמצעות פונקציה <span class="math">\(f\left(x\right)\)</span>, שלכל ערך של <span class="math">\(x\)</span> בתחום מסויים (נניח לבינתיים שבין 0 ל-1) מתארת את גובה העקומה. לכאורה זו דרך הצגה קצת מגבילה, כי לא ניתן לתאר כך עיגול, למשל (העקומה שמגדירה עיגול אינה ניתנת לתיאור באמצעות פונקציה כזו כי למרבית ערכי ה-<span class="math">\(x\)</span>, העקומה שמקיפה את העיגול אינה פונקציה - יש לה שני ערכים שונים), אבל במקרה של עיגול אין בעיה אמיתית (כי <strong>רבע</strong> עיגול כן ניתן לתאר כך בקלות: העקומה <span class="math">\(f\left(x\right)=\sqrt{1-x^{2}}\)</span> כש-<span class="math">\(x\)</span> בין 0 ו-1 מתארת בדיוק את רבע עיגול היחידה; גם חצי עיגול ניתן לתאר בקלות אם מרשים ל-<span class="math">\(x\)</span> לרוץ בין מינוס 1 ו-1).</p>
+<p>הרעיון כעת הוא פשוט ומבריק - בואו <strong>נקרב</strong> את הצורה שאנחנו רוצים למדוד באמצעות מלבנים, שאת שטחם אנו יודעים למדוד במדויק. אפשר לחלק את הקטע שבין 0 ו-1 ל-<span class="math">\(n\)</span> מקטעים זהים שאורך כל אחד מהם <span class="math">\(\frac{1}{n}\)</span>, ולבנות בכל מקטע שכזה מלבן שרוחב בסיסו הוא <span class="math">\(\frac{1}{n}\)</span>, וגובהו נקבע לפיה גובה הפונקציה באותו קטע. כאן מגיע קסם מסויים - <strong>לא באמת אכפת לנו</strong> איזה גובה לבחור למלבן שלנו, כל עוד זה יהיה גובה של אחת מהנקודות של הפונקציה בקטע; כל עוד הפונקציה "מתנהגת נחמד" לא תהיה עם זה שום בעיה. התוצאה? קירוב, אולי גס, לשטח שלוכדת הפונקציה באותו מקטע.</p>
+<p>פורמלית ניתן להגדיר זאת כך: לכל <span class="math">\(1\le k\le n\)</span> ניקח נקודה <span class="math">\(x_{k}\)</span> בתוך המקטע <span class="math">\(\left[\frac{k-1}{n},\frac{k}{n}\right]\)</span>, ונקבע את גובה המלבן להיות <span class="math">\(f\left(x_{k}\right)\)</span>. כעת שטח המלבן לאותו מקטע יהיה <span class="math">\(f\left(x_{k}\right)\cdot\frac{1}{n}\)</span>, ולכן סכום השטחים של כל המלבנים יהיה <span class="math">\(\sum_{k=1}^{n}f\left(x_{k}\right)\cdot\frac{1}{n}\)</span>.</p>
+<p><a href="/img/2010/11/600px-Riemann_sum_convergence.png"><img class="alignnone size-full wp-image-873" title="600px-Riemann_sum_convergence" src="/img/2010/11/600px-Riemann_sum_convergence.png" alt="המחשות לסכומי רימן" width="600" height="600" /></a></p>
+<p>אותו תעלול בדיוק יכול לשמש אותנו גם ככלי להעריך את העבודה שכוח מבצע על גוף בתנועה. נניח שהגוף נע מהנקודה 0 לנקודה 1, ושהכוח שפועל עליו מתואר על ידי הפונקציה <span class="math">\(F\left(x\right)\)</span>. נחלק את הקטע <span class="math">\(\left[0,1\right]\)</span> למקטעים מגודל <span class="math">\(n\)</span> ונניח את ההנחה המקלה שבכל מקטע הכוח שפועל על הגוף קבוע ושווה לערך של <span class="math">\(F\)</span> באחת מהנקודות במקטע, נאמר <span class="math">\(x_{k}\)</span>; אז אנחנו יודעים בדיוק מה העבודה על הגוף באותו מקטע - היא בדיוק <span class="math">\(F\left(x_{k}\right)\cdot\frac{1}{n}\)</span>. לכן סכום העבודה הכולל הוא <span class="math">\(\sum_{k=1}^{n}f\left(x_{k}\right)\cdot\frac{1}{n}\)</span>. שתי הבעיות השונות שלנו הפכו לבעיה אחת (עם הבדל אחד - בבעיה שמדבר על כוח, הפונקציה יכולה להיות גם שלילית, אבל הפתרון שנציג עובד גם במקרה זה).</p>
+<p>בשני המקרים אנחנו מקבלים קירוב גס בלבד. מתי, אם כן, הסכום יניב את הערך המדויק? ובכן, כאשר לא נקרב את השטח באמצעות מלבנים, אלא באמצעות "מקלות" חסרי רוחב. אלא מה, הכלים המתמטיים הרגילים שלנו לא מאפשרים לנו לתאר מקרים שכאלו - למקלות חסרי רוחב יש שטח 0, ויש מספר לא בן מניה שלהם. אין דרך הגיונית לבצע סכום שלהם באמצעות הכלים שמוכרים לנו. אבל אם אותם מקלות יתרחבו, אפילו טיפ-טיפה, ויהיו בעלי רוחב <span class="math">\(\Delta x\)</span> קטן ככל שנרצה, אז אפשר יהיה לבצע את חישוב השטח של הקירוב הזה בשיא הקלות, כי יש לנו מספר סופי של מחוברים שכולם מלבנים. אם כן, אנחנו מקבלים סדרה אינסופית של קירובים, והשאלה שאנו שואלים את עצמנו היא - האם הסדרה הזו <strong>שואפת</strong> למשהו? האם יש לה גבול? אם כן, הגבול הזה תופס בדיוק את מושג ה"סכום לא בן מניה של המקלות חסרי הרוחב"; והסכום הזה נקרא <strong>האינטגרל</strong> של <span class="math">\(f\left(x\right)\)</span> בקטע <span class="math">\(\left[0,1\right]\)</span>. פורמלית: <span class="math">\(\int_{0}^{1}f\left(x\right)dx=\lim_{n\to\infty}\sum_{k=1}^{n}f\left(x_{k}^{n}\right)\cdot\frac{1}{n}\)</span>, כש-<span class="math">\(n\)</span> ב-<span class="math">\(x_{k}^{n}\)</span> בא לציין שלכל <span class="math">\(n\)</span> יש אוסף נקודות שונה שאנו עשויים לבחור כדי לקרב את <span class="math">\(f\left(x\right)\)</span>.</p>
+<p>בואו נדבר רגע על הסימון <span class="math">\(\int_{0}^{1}f\left(x\right)dx\)</span>. ה-<span class="math">\(\int\)</span>, שהוא הסימן המוסכם לאינגטרל, הוא מעין גרסה מוארכת של האות <span class="math">\(S\)</span>, מלשון "סכום" (Sum). ה-<span class="math">\(0,1\)</span> שרואים למטה ולמעלה הם ה"גבולות" של האינטגרל. ה-<span class="math">\(dx\)</span> שבפנים הוא חסר משמעות מעשית. אינטואיטיבית, הרעיון שמאחוריו הוא זה: מכיוון שאינטגרל הוא הכללה של סכום <strong>סופי </strong>מהצורה <span class="math">\(\sum f\left(x_{k}\right)\Delta x\)</span>, כש-<span class="math">\(\Delta x\)</span> מייצג יחידת מרחק קטנה (בדוגמה שלנו, <span class="math">\(\frac{1}{n}\)</span> כש-<span class="math">\(n\)</span> קטן עוד ועוד), הרי שכשעוברים ל"סכום אינסופי על מספר לא בן מניה של איברים" צריך לעשות שינוי בסימונים שיבהיר את האופי השונה של הסכימה. כשם שאת <span class="math">\(\sum\)</span> הופכים ל-<span class="math">\(\int\)</span>, כך גם את <span class="math">\(\Delta x\)</span> הופכים ל-<span class="math">\(dx\)</span> שמציין, אינטואיטיבית "יחידת מרחק קטנה באופן אינפיניטסימלי". בפועל אין לזה משמעות (כי חישוב של אינטגרל מתבצע באופן שונה מחישוב של סכום סופי - לא באמת כופלים ביחידות שטח אינפיניטסימליות) ולכן ה-<span class="math">\(dx\)</span> בעיקר מסייע להבהיר מי המשתנה שרלוונטי לאינטגרציה, במקרה שבו <span class="math">\(f\)</span> היא פונקציה של כמה משתנים. בבתי הספר משתמשים באותו <span class="math">\(dx\)</span> גם בתור תירוץ טוב להוריד נקודות למי ששכח אותו.</p>
+<p>זה שהגדרנו מה זה אינטגרל ממש לא אומר שההגדרה עובדת - האם לכל פונקציה <span class="math">\(f\)</span> אכן קיים הגבול שכתבתי לעיל? התשובה היא שממש, ממש לא. למעשה, העובדה שהשארתי את שאלת "איך בכלל בוחרים את הנקודות <span class="math">\(x_{n}^{k}\)</span> הללו" פתוחה מאפשרת לכל מי שרוצה לעשות צרות "להנדס" סדרה של נקודות שעבורה הגבול הנ"ל בכלל לא יתכנס. דוגמה קלאסית לפונקציה שאין לה אינטגרל היא פונקצית דיריכלה, שמוגדרת להיות 1 על המספרים הרציונליים ו-0 על האי רציונליים. המלכוד הוא בכך שכל קטע שהוא מכיל גם רציונליים וגם לא רציונליים. לכן על ידי בחירה מתאימה של נקודות אני יכול לגרום לכך ש-<span class="math">\(\sum_{k=1}^{n}f\left(x_{k}\right)\cdot\frac{1}{n}\)</span> יהיה שווה 0 (נבחר רק נקודות אי רציונליות בתור <span class="math">\(x_{k}\)</span>) או ש-<span class="math">\(\sum_{k=1}^{n}f\left(x_{k}\right)\cdot\frac{1}{n}\)</span> יהיה שווה 1 (נבחר רק נקודות רציונליות) מה שיחבל בהגדרה של <span class="math">\(\lim_{n\to\infty}\sum_{k=1}^{n}f\left(x_{k}^{n}\right)\cdot\frac{1}{n}\)</span>: אוכל לקבל שהגבול הוא 0, או 1, או כלל לא קיים - הכל תלוי בשאלה איך אני בכלל בוחר את הנקודות <span class="math">\(x_{k}^{n}\)</span>. לכן הדיון באינטגרלים צריך להתחיל בשאלה - עבור אילו פונקציות ההגדרה בכלל עובדת, ותמיד מספקת את אותו המספר, בלי ליצור בעיות?</p>
+<p>מחלקה אחת של פונקציות שעבורה ההגדרה עובדת היא הפונקציות הרציפות שהזכרתי בפוסט קודם. הרציפות של הפונקציה אומרת שהיא מתנהגת "מאוד נחמד" כשמצמצמים אותה לקטעים קטנים - אם אבחר נקודה <span class="math">\(x_{k}\)</span> בתוך קטע, אז <span class="math">\(f\left(x_{k}\right)\)</span> תהיה קרובה מאוד לכל הערכים האפשריים של הפונקציה באותו הקטע, ולכן גודל השגיאה שלי לא יכול להיות משמעותי. למעשה, ההוכחה טיפה יותר מתוחכמת ומסתמכת על תכונה מעט יותר חזקה מ"סתם" רציפות - תכונה שנקראת רציפות במידה שווה - אך מכיוון שזה פוסט מבוא לא אציג לא את התכונה ולא את ההוכחה (אבל כן אעיר שרציפות במידה שווה תמיד מתקיימת עבור פונקציות רציפות בקטע סגור - גם זה משפט לא טריוויאלי לחלוטין שיש להוכיח - ולכן לא באמת שיקרתי לכם).</p>
+<p>פונקציות רציפות הן לא סוף הסיפור. ההגדרה עובדת גם עבור פונקציות כלליות יותר, גם אם יש להן מספר נקודות אי רציפות. למשל, כל פונקציה בעלת מספר סופי של נקודות אי רציפות - עובדת. גם מספר אינסופי אך בן מניה של נקודות אי רציפות עובד. הקריטריון הכללי ביותר שניתן לתת מנוסח בעזרת מושג שלא הגדרתי: לפונקציה יש אינטגרל במובן שתיארתי לעיל אם ורק אם קבוצת נקודות אי הרציפות שלה היא <a href="http://he.wikipedia.org/wiki/%D7%A7%D7%91%D7%95%D7%A6%D7%94_%D7%9E%D7%9E%D7%99%D7%93%D7%94_%D7%90%D7%A4%D7%A1">ממידה אפס</a>. מה פירוש "ממידה אפס"? לא ניכנס לכך כרגע.</p>
+<p>מושג האינטגרל שתיארתי למעלה נקרא <strong>אינטגרל רימן</strong>, על שם המתמטיקאי בן המאה ה-19. זה נראה קצת מוזר, כי אינטגרלים היו בשימוש כבר על ידי ניוטון ולייבניץ במאה ה-17; העניין הוא בכך שהתיאור הפורמלי באמצעות גבולות לא היה קיים עד למאה ה-19, אז נוסח מחדש החשבון האינפיניטסימלי באופן מדויק ופורמלי יותר. ההגדרה של רימן איננה ההגדרה היחידה - קיימת הגדרה נוספת של דארבו שבה במקום לבחור נקודה "אקראית" מתוך כל קטע כדי לקבוע את גובה המלבן שייבנה עליו, בוחרים את הנקודות הגבוהה והנמוכה ביותר, בונים כך שני קירובים שונים לפונקציה (אחד גדול יותר והשני קטן יותר) ואז משווים ביניהם ורואים האם הם שואפים לאותו הדבר ככל שמעדנים את החלוקה של הקטע. לא השתמשתי בדרך ההצגה הזו כאן כי לדעתי היא מעט פחות אינטואיטיבית (למרות שגם לה יתרונות לא מעטים) ומכיוון שהיא לא מאפשרת לכתוב הגדרה קצרה ונאה כמו <span class="math">\(\lim_{n\to\infty}\sum_{k=1}^{n}f\left(x_{k}^{n}\right)\cdot\frac{1}{n}\)</span>.</p>
+<p>למעשה, גם ההגדרה של אינטגרל רימן שנתתי ניתנת להכללה כלשהי. אף אחד לא באמת דורש ממני לבצע את החישוב רק על הקטע <span class="math">\(\left[0,1\right]\)</span>; אותו רעיון עובד לכל קטע סופי. אף אחד גם לא דורש ממני לפרק את הקטע לחלקים בגודל שווה - העיקר שהוא מפורק ל-<span class="math">\(n\)</span> קטעים כלשהם, ושכשאנחנו משאיפים את <span class="math">\(n\)</span> לאינסוף, גודלם של כל הקטעים שואף לאפס. וכמובן, הסיפור לא נגמר גם כאן. אפשר להגדיר אינטגרלים דו, תלת ו-<span class="math">\(d\)</span>-ממדיים, לכל <span class="math">\(d\)</span>; ואפשר להגדיר אינטגרלים על תנועה לאורך מסלול (זו ההגדרה הכללית שבה משתמשים בחישוב עבודה), ואפשר להגדיר אינטגרלים על משטחים; ואפשר להגדיר אינטגרלים על קטעים אינסופיים; וכל זה רק על ידי וריאציות פשוטות על ההגדרה של אינטגרל רימן. יש אינטגרלים יותר מתוחכמים שמוגדרים באופן שמכליל את אינטגרל רימן ופותר חלק מהבעיות שבו - ככל הנראה האינטגרל המפורסם ביותר שמכליל את אינטגרל רימן הוא אינטגרל לבג. כך למשל פונקצית דיריכלה שהצגתי קודם היא אינטגרבילית לבג בצורה פשוטה מאוד (ערך האינטגרל הוא 0, מה שמתאים לאינטואיציה שלנו שה-1-ים שתורמים המספרים הרציונליים הם כאין וכאפס בהתחשב בכך שהרציונליים הם רק בני מניה ואילו כל הקטע <span class="math">\(\left[0,1\right]\)</span> איננו בן מניה). כל המושגים הללו ראויים לפוסטים משל עצמם; אני בפוסט הזה בסך הכל מציג את הבסיס של הבסיס של הבסיס.</p>
+<p>אולי אתם מרגישים קצת מרומים - לא הראיתי לכם בסופו של דבר איך מחשבים את השטח של עיגול היחידה עם המושג החדש שהמצאתי. הסיבה לכך היא שטרם הסברתי איך <strong>מחשבים</strong> את האינטגרל. לצורך כך צריך להכניס לתמונה מושג חדש - האינטגרל הלא מסויים - ולקשר בין מושג האינטגרל למושג הנגזרת. לכך אגיע בהמשך, בפוסט על <a href="http://www.gadial.net/2011/01/02/fundemental_theorem_of_calculus/">המשפט היסודי של החדו"א</a>.</p>
+<p>לסיכום, גם למי שאיבד את עצמו בסבך הפרטים, הסבר קצר: אינטגרל רימן של פונקציה <span class="math">\(f\left(x\right)\)</span> על קטע <span class="math">\(\left[a,b\right]\)</span> הוא מעין סכום משוקלל אינסופי של כל ערכי <span class="math">\(f\left(x\right)\)</span> בקטע. כאשר <span class="math">\(f\left(x\right)\)</span> חיובית, זה יוצא בדויק השטח שכלוא בין ציר ה-<span class="math">\(x\)</span> ובין גרף הפונקציה באותו קטע. האופן שבו מתבצע חישוב הסכום המשוקלל הזה הוא באמצעות בניית סדרה אינסופית של סכומים משוקללים <strong>סופיים</strong> ושימוש במושג הגבול כדי לראות לאן הקירובים מתכנסים. ומה שמדהים כל כך כאן הוא שהקירוב הזה <strong>עובד</strong>. אנחנו מצליחים לחשב <strong>במדויק</strong> שטחים של צורות מסובכות למדי באמצעות ההגדרה-מבוססת-הקירוב הזו, כמו <a href="http://www.gadial.net/2010/11/21/derivative/">במקרה של נגזרת</a>, שבה קירבנו "מהירות רגעית" באמצעות סדרה של "מהירויות ממוצעות" על גבי פרקי זמן הולכים וקטנים. זה לטעמי הקסם הגדול ביותר בחשבון האינפיניטסימלי, ואחד מהקסמים הגדולים במתמטיקה: היכולת להפוך את הקירוב הלא מדויק לתשובה סופית מדויקת לחלוטין. לשמחתי זכיתי למספר רב של רגעי "וואו" מתמטיים שבהם נפל לי אסימון והותיר אותי חסר נשימה לרגע. ההוכחה של קנטור לקיום גדלים שונים של אינסוף היא הדוגמה הראשונה שאני חושב עליה תמיד; אבל הקירוב-שהוא-מדויק של אינטגרלים ונגזרות נמצא במקום השני.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/12/01/deriving_ourselves_to_death/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">היה זה תענוג לגזור</span>
+            </a>
+            
+            
+            
+            <a href="/2010/11/24/beauty_and_the_polynomial/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">ובתפקיד היפה והחנון - פולינומים ומרוכבים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

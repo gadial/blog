@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הסבר בזמן (O(n על סימונים אסימפטוטיים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הסבר בזמן (O(n על סימונים אסימפטוטיים</h1>
+            <div class="post-meta">
+                <span class="date">2012-07-06</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/מבני נתונים ואלגוריתמים.html">מבני נתונים ואלגוריתמים</a>
+                    
+                    <a href="/categories/תכנות.html">תכנות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגוריתמים.html">אלגוריתמים</a>
+                    
+                    <a href="/tags/סיבוכיות.html">סיבוכיות</a>
+                    
+                    <a href="/tags/סימון אסימפטוטי.html">סימון אסימפטוטי</a>
+                    
+                    <a href="/tags/סימונים מתמטיים.html">סימונים מתמטיים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>כל מי שמתחיל ללמוד מדעי המחשב נתקל חיש קל בסימון האסימפטוטי <span class="math">\(O\left(n\right)\)</span>. המשפט הזה נשמע לכם כמו ג'יבריש מוחלט? מצויין! הפוסט הזה מיועד בעיקר לכם, ובפרט לאלו מכם שהעניין הזה הבהיל אותם מלהתעסק במדעי המחשב. השורה התחתונה היא שזה סימון מתמטי פשוט יחסית, שמטרתו לעשות את החיים <strong>קלים</strong> לכל העוסקים במלאכה; בואו ננסה להבין למה בכלל צריך לעשות את החיים קלים, ואיך הסימון הזה עושה אותם כאלה.</p>
+
+<p>נתחיל בניתוץ המיתוס הבסיסי. אנשים מגיעים משום מה למסקנה שמתמטיקאים הם אנשים מאוד מדויקים, ושהם אנשים מאוד חרוצים. לא נכון! מתמטיקאים הם עצלנים והם מאוד אוהבים קירובים והזנחות. הם פשוט עושים אותם <strong>נכון</strong>. בעוד שהפיזיקאי יגיד "הממ... עבור ערכים קרובים לאפס של <span class="math">\(x\)</span> מתקיים ש-<span class="math">\(x\)</span> ו-<span class="math">\(\sin x\)</span> זה בערך אותו דבר" ואז יחליף כל מופע במשוואה של <span class="math">\(\sin x\)</span> ל-<span class="math">\(x\)</span>, המתמטיקאי יגיד "הממ, כאשר <span class="math">\(x\to0\)</span> אז <span class="math">\(\sin x=x+o\left(1\right)\)</span>". המטרה היא לתת למשוואה השניה משמעות מדויקת ופורמלית, למרות שהיא מתארת קירוב והזנחה.</p>
+
+<p>במדעי המחשב קירובים שכאלו הופכים להיות צורך אקוטי למדי. חלק ניכר מהמתמטיקה של מדעי המחשב עוסקת בניתוח זמן הריצה של אלגוריתמים (מהו אלגוריתם? חשבו עליו כעל תוכנית מחשב. מהי תוכנית מחשב? אה...). עכשיו, אפילו אלגוריתמים פשוטים הם עדיין בעייתיים לניתוח מדויק. ראשית כל צריך להגדיר מהו "צעד בסיסי" שהאלגוריתם מבצע, וזה כבר אסון: האם פעולה חשבונית היא צעד בסיסי? אבל אנו יודעים שחיבור לוקח זמן קצר בהרבה מאשר כפל או, חס ושלום, חילוק. אבל מצד שני, במחשבים שבהם מספרים מיוצגים בצורה סטנדרטית, כפל או חלוקה ב-2 הם דווקא קלים מאוד לביצוע על ידי הזזה של ביט בודד; ברמת החומרה אפשר אולי לממש את זה אפילו יותר מהר מאשר חיבור! בנוסף, הזמן שדורשות פעולות בסיסיות עשוי להשתנות ממעבד למעבד; הוא עשוי להיות תלוי בתנאים הפיזיים שבהם המעבד פועל באותו הרגע; והאלגוריתם עצמו עשוי לרוץ על מעבד שמבצע אופטימיזציות מתוחכמות (למשל Brach prediction או Out-of-order execution). בקיצור, כאשר מנתחים את זמן הריצה של אלגוריתמים, מראש ברור לכולם שאנחנו לא יכולים לקבל מספר מדויק אלא רק הערכה; לכן השימוש בקירובים הוא כל כך טבעי.</p>
+
+<p>מכיוון שאין משמעות למספרים מדוייקים, מה שאנחנו רוצים לדעת הוא את <strong>ההתנהגות האסימפטוטית של זמן הריצה</strong>. מה זה אומר? בדרך כלל אלגוריתם נבנה כך שיהיה מסוגל לעבוד על קלטים מכל גודל שהוא. אז אפשר לדבר על פונקציה <span class="math">\(f\left(n\right)\)</span> שמקבלת את גודל הקלט (גם "גודל הקלט" הוא מושג שנתון לכמה פרשנויות) ומחזירה את זמן הריצה של האלגוריתם על אותו קלט, כאשר זמן הריצה הזה הוא פשוט "מספר הצעדים הבסיסיים" של האלגוריתם (זכרו - "צעד בסיסי" תלוי באלגוריתם עצמו ובמה שאנו מוכנים לקרוא לו צעד בסיסי; ובהחלט ייתכן ששתי פעולות שונות, שלוקחות פרק זמן שונה, עדיין יחשבו שתיהן ל"צעד בסיסי"). לחשב את <span class="math">\(f\left(n\right)\)</span> בצורה מדויקת זה כאב ראש, אבל אפשר <strong>להשוות</strong> את <span class="math">\(f\left(n\right)\)</span> לפונקציות פשוטות, למשל <span class="math">\(n^{2}\)</span>. אם למשל לכל <span class="math">\(n\)</span> טבעי מתקיים <span class="math">\(f\left(n\right)&lt;n^{2}\)</span>, אז אנחנו יודעים שזמן הריצה של האלגוריתם שמיוצג על ידי <span class="math">\(f\)</span> הוא לא גדול <strong>מדי</strong> - הוא לכל היותר ריבועי בגודל הקלט.</p>
+
+<p>הבעיה היא שחסם כזה לעתים קרובות לא עובד. בואו נחשוב על תוכנית מחשב שמקבלת כקלט רשימה בעלת <span class="math">\(n\)</span> איברים שהם מספרים טבעיים, ומוצאת את את המספר המקסימלי והמינימלי ברשימה. הדרך הפשוטה לעשות זאת: לתחזק שני משתני עזר ששניהם מאותחלים להיות האיבר הראשון ברשימה; לאחר מכן לעבור סדרתית על הרשימה ולהשוות כל איבר ברשימה הן למקסימום והן למינימום הנוכחיים. אם האיבר החדש גדול מהמקסימום הנוכחי, משנים את המקסימום כך שישתווה לו; אם האיבר החדש קטן מהמינימום הנוכחי, משנים את המינימום כך שישתווה לו. בסיום המעבר על הרשימה המשתנים של המקסימום והמינימום יחזיקו את הערך הנכון. הנה פונקציה בשפת Ruby שעושה את זה:</p>
+
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_min_max</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+<span class="w">  </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">...</span><span class="n">list</span><span class="o">.</span><span class="n">length</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">min</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">]</span>
+<span class="w">    </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">]</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="o">[</span><span class="n">min</span><span class="p">,</span><span class="w"> </span><span class="n">max</span><span class="o">]</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+</div>
+
+<p>(למה רובי? כי זו אחת מהשפות הללו שבהן הקוד נראה פשוט כמעט כמו פסאודו-קוד ויש לו את היתרון שהוא גם עובד בפועל. אני לא בהכרח כותב בצורה שהכי מתאימה לרובי, כי המטרה היא ליצור קוד קריא גם למי שלא בקיאים בטריקים של השפה).</p>
+
+<p>אז מה יש לנו כאן? שתי פעולות אתחול, ועוד <span class="math">\(2n-2\)</span> פעולות השוואה (כש-<span class="math">\(n\)</span> הוא הגודל של list) שאם כל אחת מהן מצליחה, יש לנו עוד פעולת השמה. במקרה הגרוע ביותר (שהוא מה שבדרך כלל אנו מתעניינים בו) כל פעולת השוואה "תצליח" ולכן תסתיים בהשמה, כך שיהיו לנו עוד <span class="math">\(2n-2\)</span> פעולות השמה (בפועל זה לא יכול לקרות אף פעם - למה?). סך הכל: <span class="math">\(4n-2\)</span> פעולות בסיסיות של השוואה והשמה. אז חסם עבור האלגוריתם הוא <span class="math">\(f\left(n\right)&lt;4n\)</span>, אבל בשביל מה צריך את ה-4 שם? אין לו חשיבות אסימפטוטית גדולה במיוחד, במובן זה שאפילו <span class="math">\(100n\)</span> זה עדיין יותר מהיר עבור ערכים גדולים של <span class="math">\(n\)</span> מאשר, נאמר, <span class="math">\(n^{2}\)</span>. חוץ מזה, בגלל שהשוואה והשמה לא לוקחות אותו פרק זמן, ה-4 הזה הוא ממילא שקר: אם, למשל, פעולה של השוואה לוקחת פי 2 יותר זמן מפעולה של השמה אז נכון לחשוב על השוואה כשתי פעולות בסיסיות ואז נקבל <span class="math">\(2n+2\left(2n-2\right)=6n-4\)</span> פעולות בסיסיות, כלומר חסם של <span class="math">\(f\left(n\right)&lt;6n\)</span> - שינוי בקבוע שבו מוכפל ה-<span class="math">\(n\)</span>. לכן אנחנו מעדיפים להשתמש בסימון שממילא לא מתעניין בקבועים הללו ולומר ש-<span class="math">\(f\left(n\right)=O\left(n\right)\)</span>.</p>
+
+<p>בהערת אגב, לפעמים כן רוצים לשפר את הקבועים למרות שזה לא יבוא לידי ביטוי בסימון האסימפטוטי. כדאי להבהיר את הנקודה הזו מראש. יש תעלול נחמד שחוסך בערך רבע מהבדיקות עבור מציאת המינימום והמקסימום - במקום לבדוק כל פעם את האיבר הבא במערך, בודקים את <strong>שני</strong> האיברים הבאים; קודם משווים אותם זה לזה, ואז משווים את הגדול שבהם למקסימום, והקטן שבהם למינימום. באופן הזה במקום לבצע 4 בדיקות במקרה הגרוע ביותר (2 עבור כל אחד משני האיברים) מבצעים רק 3. הנה הקוד:</p>
+
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">faster_find_min_max</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+<span class="w">  </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+<span class="w">  </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">list</span><span class="o">.</span><span class="n">length</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)?(</span><span class="mi">1</span><span class="p">):(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">list</span><span class="o">.</span><span class="n">length</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="o">]</span><span class="p">)</span>
+<span class="w">      </span><span class="n">min_candidate</span><span class="p">,</span><span class="w"> </span><span class="n">max_candidate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="o">]</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="n">min_candidate</span><span class="p">,</span><span class="w"> </span><span class="n">max_candidate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="o">[</span><span class="n">k</span><span class="o">]</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_candidate</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">max_candidate</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">max</span>
+<span class="w">    </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min_candidate</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">min_candidate</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">min</span>
+
+<span class="w">    </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="o">[</span><span class="n">min</span><span class="p">,</span><span class="w"> </span><span class="n">max</span><span class="o">]</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+</div>
+
+<p>שימו לב שהקוד מתחיל באיזו בדיקה האם הרשימה זוגית או אי זוגית באורכה כדי להמנע מחריגה מגבולות הרשימה לקראת הסוף. לכאורה כאן הוספתי עבודה ביחס לאלגוריתם הקודם, אבל זו בדיקה <strong>חד פעמית</strong> - הזמן שנדרש לבצע אותה לא תלוי באורך הרשימה, ולכן בדרך כלל אנחנו רק חוסכים כאן פעולות. החסכון לא נראה מהותי במיוחד כרגע, אבל באלגוריתמים כאלו תמיד צריך לזכור שבסופו של דבר התוכנית לא תרוץ בפני עצמה אלא בתור תת-תוכנית שבתוך תת-תוכנית שבתוך תת-תוכנית שבתוך תת-תוכנית של איזו תוכנית מורכבת שעושה חישובים מתוחכמים, ורצה על קלטים שהם רשימות שמכילות מיליוני איברים, ועושה את זה אלפי פעמים, כל הזמן. בסופו של דבר יש סיכוי טוב שקטע הקוד הקצרצר שלמעלה יהיה החלק העמוס ביותר בתוכנית שכוללת מיליוני שורות קוד, ושיפור כלשהו בקטע הקוד הזה - אפילו מינורי - יגרום לתוכנית לרוץ משמעותית מהר יותר.</p>
+
+<p>עם זאת, חשוב לזכור שזה <strong>לרוב לא ככה</strong>. לא תמיד כדאי לכתוב קוד אופטימלי בכוח מלכתחילה (מה שעשוי לגרום לשגיאות רבות יותר או אפילו להיות איטי יותר בסיטואציות מסוימות). לרוב עדיף פשוט לכתוב קוד פשוט שעובד, ואחר כך, אם רואים שצוואר הבקבוק של התןכנית הוא בדיוק בקטע הקוד הזה, לשפר אותו (כמובן שיש סיטואציות שבהן <strong>ברור</strong> שתהיה בעיה עם קוד מסויים ואז כותבים את הגרסה האופטימלית שלו מראש - אין כללים מוחלטים כאן).</p>
+
+<p>יפה. כל המבוא הזה בא לתת תחושה של למה צריך סימונים אסימפטוטיים. עכשיו בואו נסביר באופן מדויק מה הם אומרים.</p>
+
+<p>ראשית כל, צריך להבהיר מה "שדה המשחק" שלנו. אנחנו מדברים על פונקציות <span class="math">\(f:\mathbb{N}\to\mathbb{N}\)</span> שמקבלות מספרים טבעיים ומחזירות מספרים טבעיים. אפשר לדבר על סימונים אסימפטוטיים גם בהקשרים אחרים ואתן דוגמאות לכך, אבל אז נצהיר במפורש על שינוי שדה המשחק. בניתוח סיבוכיות של אלגוריתמים פונקציות מטבעיים לטבעיים הן מה שצץ באופן טבעי, כי אורך קלט ומספר צעדי ריצה הם בדרך כלל מספרים טבעיים (אפשר להתקטנן כאן. בואו לא נעשה את זה).</p>
+
+<p>הסימון הפופולרי ביותר הוא <span class="math">\(f\left(n\right)=O\left(g\left(n\right)\right)\)</span> (קרי: "<span class="math">\(f\)</span> היא או-גדול של <span class="math">\(g\)</span>"), כאשר <span class="math">\(f\left(n\right),g\left(n\right)\)</span> הן פונקציות כלשהן. את הסימון הזה יש לקרוא בתור "<span class="math">\(f\left(n\right)\)</span> קטן או שווה אסימפטוטית ל-<span class="math">\(g\left(n\right)\)</span>". פורמלית, זה אומר שקיים קבוע <span class="math">\(c>0\)</span> (שיכול להיות כל מספר ממשי) ומספר טבעי <span class="math">\(n_{0}\)</span> כך ש-<span class="math">\(f\left(n\right)&lt;c\cdot g\left(n\right)\)</span> עבור כל <span class="math">\(n>n_{0}\)</span>. למי שבקיא בחשבון אינפיניטסימלי זה בוודאי קצת מזכיר את הגדרת הגבול; ואכן, אם <span class="math">\(\lim_{n\to\infty}\frac{f\left(n\right)}{g\left(n\right)}&lt;c\)</span> אז <span class="math">\(f\left(n\right)=O\left(g\left(n\right)\right)\)</span> (אבל ההפך לא נכון כי לא מובטח שהגבול יהיה קיים).</p>
+
+<p>ההגדרה הזו עושה שני דברים: ראשית, היא מתעלמת מקבועים, בכך שהיא מרשה ל-<span class="math">\(g\left(n\right)\)</span> להיות מוכפל בקבוע כלשהו; שנית, היא מתעלמת מערכים קטנים של <span class="math">\(n\)</span> בכך שהיא מרשה לאי השוויון להתקיים רק החל מ-<span class="math">\(n_{0}\)</span> כלשהו. זה אומר שאנחנו מתעניינים רק ב"התנהגות לטווח ארוך" של הפונקציה, מה שכמובן פותח פתח לאנומליות של אלגוריתם א' שטוב יותר אסימפטוטית מאלגוריתם ב', אבל רק עבור קלטים שהגודל שלהם גדול ממספר האטומים ביקום. כן, זה קורה. כן, כל מדעני המחשב מודעים לזה. כן, זה לא מפריע לנו אם אנחנו לא מסיקים מחסמים אסימפטוטיים שכאלו יותר מאשר צריך להסיק מהם.</p>
+
+<p>עד כאן הכל טוב. הבעיה היא שלפעמים רוצים להשתמש בסימון <span class="math">\(O\)</span> גם באגף שמאל של המשוואה, ואז All hell breaks loose. למשל, הביטו במשוואה הבאה:</p>
+
+<p><span class="math">\(n^{2}+O\left(n\right)=O\left(n^{2}\right)\)</span></p>
+
+<p>המשוואה רוצה לומר את הדבר הבא - קחו את הפונקציה <span class="math">\(n^{2}\)</span> ותוסיפו לה פונקציה <strong>כלשהי</strong> <span class="math">\(h\left(n\right)\)</span> שמקיימת <span class="math">\(h\left(n\right)=O\left(n\right)\)</span>, והתוצאה הכוללת תהיה <span class="math">\(O\left(n^{2}\right)\)</span>. במילים אחרות, משמעותו הפורמלית של השוויון שלמעלה היא "לכל <span class="math">\(h\left(n\right)=O\left(n\right)\)</span> מתקיים <span class="math">\(n^{2}+h\left(n\right)=O\left(n^{2}\right)\)</span>".</p>
+
+<p>טוב ויפה, אבל כדי לראות איך זה מסתבך, שימו לב לכך שאפשר היה להיפטר לגמרי מה-<span class="math">\(n^{2}\)</span> ולהיוותר עם ה"משוואה" הבאה:</p>
+
+<p><span class="math">\(O\left(n\right)=O\left(n^{2}\right)\)</span></p>
+
+<p>עכשיו, אנחנו נוהגים לחשוב על שוויון כיחס סימטרי. כלומר, אם <span class="math">\(O\left(n\right)=O\left(n^{2}\right)\)</span> אז היינו מצפים שיתקיים גם <span class="math">\(O\left(n^{2}\right)=O\left(n\right)\)</span>. רק שזה לא נכון, כי <span class="math">\(n^{2}\)</span> לא מקיימת <span class="math">\(n^{2}=O\left(n\right)\)</span> (לא קשה להוכיח את זה). מכאן שהשימוש בסימן השוויון כאן הוא בעייתי. לי עצמי אין בעיה גדולה עם ויתור על הסימטריה של השוויון - אני חושב על <span class="math">\(a=b\)</span> בהקשר הזה כאומרת "<span class="math">\(a\)</span> הוא <span class="math">\(b\)</span>, אפילו אם לא בהכרח <span class="math">\(b\)</span> הוא <span class="math">\(a\)</span>" אבל לאנשים רבים זה כן מפריע. למי שזה מפריע לו אני יכול להגיד בעיקר - זה סימון. מטרתו לעשות את החיים קלים יותר. הוא מאוד מועיל כשרוצים לעשות שרשרת של שוויונות (מה שקורה כאשר מפשטים באופן הדרגתי ביטוי מסובך כלשהו). חבל לוותר עליו.</p>
+
+<p>בגלל הבעייתיות הזו לפעמים מגדירים את <span class="math">\(O\left(g\left(n\right)\right)\)</span> בתור מחלקת כל הפונקציות שמקיימות את התכונה שסימנתי כ-<span class="math">\(f\left(n\right)=O\left(g\left(n\right)\right)\)</span> (במילים אחרות, <span class="math">\(f\left(n\right)\in O\left(g\left(n\right)\right)\)</span> אם ורק אם קיימים <span class="math">\(c,n_{0}\)</span> כך ש-<span class="math">\(f\left(n\right)&lt;cg\left(n\right)\)</span> לכל <span class="math">\(n>n_{0}\)</span>). עם זאת, בפועל אני לא מכיר מקומות שמשתמשים ב-<span class="math">\(\in\)</span> בהקשר הזה אלא תמיד בסימן השוויון המושמץ. התרגלתי.</p>
+
+<p>נסכם: אפשר להשתמש ב-<span class="math">\(O\)</span> בחופשיות בתוך משוואות, אבל אם הוא מופיע בהן צריך לזכור שהמשוואה אינה סימטרית. למשל, במשוואה <span class="math">\(n+O\left(n^{2}\right)=n^{2}+O\left(n\right)\)</span>, מה שצריך להבין הוא ש<strong>לכל</strong> פונקציה <span class="math">\(h\left(n\right)\in O\left(n^{2}\right)\)</span>, <strong>קיימת</strong> פונקציה <span class="math">\(h^{\prime}\left(n\right)\in O\left(n\right)\)</span> כך ש-<span class="math">\(n+h\left(n\right)=n^{2}+h^{\prime}\left(n\right)\)</span>. כך זה באופן כללי, גם כשיש יותר מסימון אסימפטוטי אחד בכל אגף - לכל השמה של ערכים מתאימים לסימונים האסימפטוטיים באגף שמאל, קיימת השמה לסימונים באגף ימין כך שיתקיים שוויון.</p>
+
+<p>בואו נעבור להיכרות עם שאר הסימנים האסימפטוטיים. עכשיו, משהבנו את הרעיון, יתר הסימנים יהיו ברורים כמעט מייד. נתחיל מאו-קטן: <span class="math">\(f\left(n\right)=o\left(g\left(n\right)\right)\)</span> פירושו ש-<span class="math">\(f\)</span> קטנה <strong>ממש</strong> אסימפטוטית מ-<span class="math">\(g\left(n\right)\)</span>. פורמלית, זה אומר ש<strong>לכל</strong> <span class="math">\(c>0\)</span> קיים <span class="math">\(n_{0}\)</span> כך ש-<span class="math">\(f\left(n\right)&lt;c\cdot g\left(n\right)\)</span> לכל <span class="math">\(n>n_{0}\)</span>. בלשון גבולות, אם מתקיים <span class="math">\(\lim_{n\to\infty}\frac{f\left(n\right)}{g\left(n\right)}=0\)</span> אז <span class="math">\(f\left(n\right)=o\left(g\left(n\right)\right)\)</span>.</p>
+
+<p>סימונים דומים יש עבור חסמים תחתונים: <span class="math">\(f\left(n\right)=\Omega\left(g\left(n\right)\right)\)</span> אם <span class="math">\(g\left(n\right)=O\left(f\left(n\right)\right)\)</span>, ו-<span class="math">\(f\left(n\right)=\omega\left(g\left(n\right)\right)\)</span> אם <span class="math">\(g\left(n\right)=o\left(f\left(n\right)\right)\)</span>. הסימון האחרון, <span class="math">\(\Theta\)</span>, בא לציין חסם הדוק אסימפטוטית - חסם שהוא גם עליון וגם תחתון בו זמנית. <span class="math">\(f\left(n\right)=\Theta\left(g\left(n\right)\right)\)</span> פירושו ש-<span class="math">\(f\left(n\right)=O\left(g\left(n\right)\right)\)</span> וגם <span class="math">\(f\left(n\right)=\Omega\left(g\left(n\right)\right)\)</span>, או באופן מפורש שקיימים קבועים <span class="math">\(c_{1},c_{2}\)</span> ו-<span class="math">\(n_{0}\)</span> כך ש-<span class="math">\(c_{1}\cdot g\left(n\right)\le f\left(n\right)\le c_{2}\cdot g\left(n\right)\)</span> לכל <span class="math">\(n>n_{0}\)</span>.</p>
+
+<p>סימון אחד שכדאי להתייחס אליו במפורש הוא הסימון <span class="math">\(f\left(n\right)=O\left(1\right)\)</span>. כאשר <span class="math">\(1\)</span> בא לציין את הפונקציה הקבועה 1, ומה ש-<span class="math">\(f\left(n\right)=O\left(1\right)\)</span> אומר הוא ש-<span class="math">\(f\left(n\right)\)</span> חסומה על ידי קבוע (קיים <span class="math">\(c\)</span> כך ש-<span class="math">\(f\left(n\right)&lt;c\)</span> לכל <span class="math">\(n\)</span>). בדומה, <span class="math">\(f\left(n\right)=o\left(1\right)\)</span> בא לציין פונקציה ששואפת לאפס כאשר <span class="math">\(n\)</span> שואף לאינסוף - עבור פונקציות מטבעיים לטבעיים זה לא ממש קורה, אבל בהקשרים אחרים זה בהחלט יכול לקרות. בואו נראה דוגמה פשוטה: הפונקציה <span class="math">\(f\left(x\right)=\frac{1}{x}\)</span> מקיימת <span class="math">\(f\left(x\right)=o\left(1\right)\)</span> כאשר <span class="math">\(x\)</span> שואף לאינסוף. כמו כן, <span class="math">\(f\left(x\right)=x\)</span> מקיימת <span class="math">\(f\left(x\right)=o\left(1\right)\)</span> כאשר <span class="math">\(x\)</span> שואף לאפס. כפי שאתם רואים, חשוב שיהיה ידוע ברקע לאן <span class="math">\(x\)</span> שואף.</p>
+
+<p>עכשיו אפשר להבין את הסימון מתחילת הפוסט. משפט ידוע במתמטיקה, ש<a href="http://www.gadial.net/2008/01/20/lim_sin_x_over_x/">כבר הקדשתי לו פוסט בעבר</a>, הוא שמתקיים <span class="math">\(\lim_{x\to0}\frac{\sin x}{x}=1\)</span>. אפשר לנסח את זה בתור <span class="math">\(\sin x=O\left(x\right)\)</span> עבור <span class="math">\(x\)</span> שואף לאפס. אפשר גם יותר טוב מזה - אנחנו יודעים שטור הטיילור של <span class="math">\(\sin x\)</span> מתחיל כך: <span class="math">\(\sin x=x-\frac{x^{3}}{3!}+\frac{x^{5}}{5!}-\dots\)</span>. אפשר לכתוב את זה גם כך: <span class="math">\(\sin x=x+o\left(1\right)\)</span>, פשוט כי <span class="math">\(\left(-\frac{x^{3}}{3!}+\frac{x^{5}}{5!}-\dots\right)=o\left(1\right)\)</span> כאשר <span class="math">\(x\)</span> שואף לאפס. למעשה, אפשר גם לכתוב <span class="math">\(\sin x=x+O\left(x^{3}\right)\)</span> וזה יהיה חסם אפילו יותר טוב (זכרו - כשאיקס שואף לאפס, חזקה גדולה יותר של איקס תיתן לנו משהו קטן יותר). זו דוגמה קטנה לאופן שבו הסימון הזה מופיע בחלקי מתמטיקה שאינם מדעי המחשב - כדאי לציין שהוא עתיק הרבה יותר ממדעי המחשב עצמם.</p>
+
+<p>ועכשיו לבחון את עצמכם! האם, אחרי קריאת הפוסט, אתם מבינים מה לכל הרוחות ניסיתי לומר בכותרת שלו? אם כן, סימן שהצלחתי! </p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2012/07/10/all_sorts_of_slow_sorts/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מיון מהיר של מיונים איטיים</span>
+            </a>
+            
+            
+            
+            <a href="/2012/06/23/alan_turing_is_100/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">יום הולדת 100 לאלן טיורינג!</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

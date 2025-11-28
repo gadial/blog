@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>החלפת משתנים בחשבון דיפרנציאלי ואינטגרלי - המשפט הכללי - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>החלפת משתנים בחשבון דיפרנציאלי ואינטגרלי - המשפט הכללי</h1>
+            <div class="post-meta">
+                <span class="date">2016-04-12</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חלוקת יחידה.html">חלוקת יחידה</a>
+                    
+                    <a href="/tags/משפט החלפת המשתנים.html">משפט החלפת המשתנים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אחרי <a href="http://www.gadial.net/2015/12/31/calculus_change_of_variables/">פוסט המבוא </a>בנושא, אנחנו רוצים להוכיח את משפט החלפת המשתנים הכללי בחדו"א, עבור אינטגרלים <span class="math">\(n\)</span>-ממדיים. לפני הכל נתחיל בלהזכיר מה המשפט אומר: אם <span class="math">\(g:A\to B\)</span> היא דיפאומורפיזם של קבוצות פתוחות ב-<span class="math">\(\mathbb{R}^{n}\)</span> ו-<span class="math">\(f:B\to\mathbb{R}\)</span> רציפה, אז <span class="math">\(f\)</span> אינטגרבילית מעל <span class="math">\(B\)</span> אם ורק אם <span class="math">\(\left(f\circ g\right)\left|\det Dg\right|\)</span> אינטגרבילית מעל <span class="math">\(A\)</span> ובמקרה זה מתקיים:</p>
+<p><span class="math">\(\int_{B}f=\int_{A}\left(f\circ g\right)\left|\det Dg\right|\)</span></p>
+<p>מכיוון שטרם עשיתי זאת, הגיע הזמן להסביר מה זה דיפאומורפיזם. כמו כל שאר שלל ה"מורפיזמים" במתמטיקה, זה שם לפונקציה ש<strong>משמרת מבנה</strong> מסויים, רק שטרם הסברתי בשום שלב מה המבנה וגם עכשיו אני עדיין דוחה את זה; רק אומר למי שתוהה שזה מבנה של <strong>יריעה חלקה</strong> שיש ל-<span class="math">\(A,B\)</span>, אבל לא אסביר מה זו יריעה חלקה. פורמלית, <span class="math">\(g:A\to B\)</span> היא דיפאומורפיזם מסדר <span class="math">\(r\)</span> אם היא חד-חד-ערכית ועל, כלומר הפיכה, ואם גם <span class="math">\(g\)</span> וגם <span class="math">\(g^{-1}\)</span> הן ב-<span class="math">\(C^{r}\)</span>, כלומר גזירות ברציפות <span class="math">\(r\)</span> פעמים. למי שמכיר את ההגדרה של <strong>הומיאומורפיזם</strong> בטופולוגיה, זו נראית מעין הרחבה של ההגדרה (בהומיאומורפיזם דורשים את הדרישה החלשה יותר ש-<span class="math">\(g\)</span> ו-<span class="math">\(g^{-1}\)</span> יהיו רציפות, ואז <span class="math">\(g\)</span> משמרת את המבנה הטופולוגי של המרחב שהיא פועלת עליו). האינטואיציה למשפט, אם כן, היא זו: האינטגרל של <span class="math">\(f\)</span> בקבוצה <span class="math">\(B\)</span> ניתן לחישוב גם מעל הקבוצה <span class="math">\(A\)</span> שהיא "פחות או יותר <span class="math">\(B\)</span>", אבל עדיין נדרש תיקון מסויים - התיקון הזה הוא ההכפלה ב-<span class="math">\(\left|\det Dg\right|\)</span>, שמתאר במובן מסויים עד כמה <span class="math">\(g\)</span> "מעוותת" את המרחב (למשל, אם היא מנפחת את המרחב פי 2, כפי שעושה הפונקציה <span class="math">\(g\left(x\right)=2x\)</span>, ברור שנצטרך לכפול ב-2). שימו לב שהתיקון הזה הוא לא איזה קבוע שבו כופלים את הערך הכולל של האינטגרל וזהו - זה תיקון <strong>נקודתי</strong>. בכל נקודה <span class="math">\(a\in A\)</span> אנחנו בודקים מהי הנגזרת של <span class="math">\(g\)</span> בנקודה הזו, לוקחים את הערך המוחלט של הדטרמיננטה של המטריצה של הנגזרת בנקודה הזו, וזה ה"תיקון" שאנחנו מצמידים לערך ש-<span class="math">\(f\)</span> מחזירה על <span class="math">\(g\left(a\right)\)</span>. זה שינוי של הפונקציה שעליה אנחנו מבצעים אינטגרציה, מ-<span class="math">\(f\)</span>-מופעלת-על-התמונה-של-<span class="math">\(g\)</span> למשהו קצת יותר מסובך.</p>
+<p>עכשיו, משאנחנו מבינים את המשפט, אפשר לגשת להוכחה שלו. ההוכחה כבדה למדי, אבל זה לא אומר שהיא לא יפה או מעניינת. כמו כן, אני אנצל את העובדה שאני כותב פוסט לבלוג כדי להציג אותה בגישת Top-down, דהיינו קודם נציג את ההוכחה בלי להיכנס בהכרח לכל הפרטים ולהוכחה של טענות ספציפיות, שאותן נדחה להמשך או נוותר עליהן בכלל. בספרים בדרך כלל קודם כל מבצעים עבודת הכנה לא קטנה עד שניגשים להוכחת המשפט, וזה יכול להיות מעייף למדי (אם כי זו הדרך הנכונה לנקוט בה בספרי לימוד, לטעמי).</p>
+<p>ראשית כל נשים לב לכך שהמשפט מנוסח בתור "אם ורק אם", ולכן צריך להוכיח שני כיוונים: גם להוכיח שאם <span class="math">\(f\)</span> אינטגרבילית מעל <span class="math">\(B\)</span> אז <span class="math">\(\left(f\circ g\right)\left|\det Dg\right|\)</span> אינטגרבילית מעל <span class="math">\(A\)</span>, וגם להוכיח שאם <span class="math">\(\left(f\circ g\right)\left|\det Dg\right|\)</span> אינטגרבילית מעל <span class="math">\(A\)</span> אז <span class="math">\(f\)</span> אינטגרבילית מעל <span class="math">\(B\)</span>, וזאת לכל <span class="math">\(g\)</span> שהיא דיפאומורפיזם. אלא שאם נוכיח את הכיוון הראשון, הכיוון השני מאוד קל כי אפשר לחשוב עליו בתור "המקרה הראשון" עבור <span class="math">\(g^{-1}\)</span>. פורמלית: <span class="math">\(g^{-1}:B\to A\)</span> היא דיפאומורפיזם של קבוצות פתוחות, ונתונה לנו פונקציה <span class="math">\(F:B\to\mathbb{R}\)</span> שהיא אינטגרבילית; זה אומר שגם <span class="math">\(\left(F\circ g^{-1}\right)\left|\det Dg^{-1}\right|\)</span> אינטגרבילית מעל <span class="math">\(A\)</span>. אבל מהי <span class="math">\(F\)</span> הזו? כמובן, <span class="math">\(F=\left(f\circ g\right)\left|\det Dg\right|\)</span> - זו פונקציה רציפה מעל <span class="math">\(B\)</span> ש<strong>נתון</strong> לי שהיא אינטגרבילית (כי אני בכיוון השני של המשפט, שזה הנתון בו). עכשיו יש לנו סתם חשבון פשוט כדי לראות ש-<span class="math">\(\left(F\circ g^{-1}\right)\left|\det Dg^{-1}\right|\)</span> זו דרך מפוצצת לכתוב <span class="math">\(f\)</span>:</p>
+<p><span class="math">\(\left(F\circ g^{-1}\right)\left|\det Dg^{-1}\right|\left(y\right)=F\left(g^{-1}\left(y\right)\right)\left|\det Dg^{-1}\left(y\right)\right|=\)</span></p>
+<p><span class="math">\(=f\left(g\left(g^{-1}\left(y\right)\right)\right)\cdot\left|\det Dg\left(g^{-1}\left(y\right)\right)\right|\cdot\left|\det Dg^{-1}\left(y\right)\right|\)</span></p>
+<p><span class="math">\(=f\left(y\right)\left|\det Dg^{-1}\left(y\right)\right|^{-1}\left|\det Dg^{-1}\left(y\right)\right|=f\left(y\right)\)</span></p>
+<p>שימו לב למעבר <span class="math">\(\left|\det Dg\left(g^{-1}\left(y\right)\right)\right|=\left|\det Dg^{-1}\left(y\right)\right|^{-1}\)</span> שעשוי לבלבל - זו תוצאה ישירה של הפעלת כלל השרשרת על פונקציות הפיכות; הראיתי את זה <a href="http://www.gadial.net/2015/08/19/multivariable_derivative_properties/">כאן</a>.</p>
+<p>סיימנו את הכיוון הזה. נשאר לנו רק העיקר - להראות שאם <span class="math">\(f\)</span> אינטגרבילית, כך גם <span class="math">\(\left(f\circ g\right)\left|\det Dg\right|\)</span>, ושהאינטגרלים שווים. כדי לעשות לעצמנו את החיים קלים, משתמשים ב<strong>שלוש </strong>טכניקות פישוט סטנדרטיות: ראשית, משתמשים באינדוקציה על המימד <span class="math">\(n\)</span> של המרחב. מקרה הבסיס, כש-<span class="math">\(n=1\)</span>, כבר טופל חלקית <a href="http://www.gadial.net/2015/12/31/calculus_change_of_variables/">בפוסט על שיטת ההצבה</a>; עוד מעט אסביר למה המקרה הזה בכל זאת כללי קצת יותר, ואראה איך מוכיחים אותו.</p>
+<p>שנית, אנחנו מניחים ש-<span class="math">\(g\)</span> היא <strong>מאוד</strong> נחמדה, במובן זה שהיא <strong>קבועה</strong> על הקואורדינטה ה-<span class="math">\(n\)</span>-ית במרחב. דהיינו, <span class="math">\(g\left(x_{1},\dots,x_{n}\right)=\left(y_{1},\dots,y_{n-1},x_{n}\right)\)</span>. העובדה ש-<span class="math">\(g\)</span> טריוויאלית לגמרי על הקואורדינטה ה-<span class="math">\(n\)</span>-ית מאפשרת לנו להשתמש יחסית בקלות בהנחת האינדוקציה כדי להוכיח את הנדרש. לדיפאומורפיזם כזה שהוא קבוע על אחת מהקואורדינטות קוראים <strong>דיפאומורפיזם פרימיטיבי</strong>. אבל למה שאוכל להניח ש-<span class="math">\(g\)</span> היא כזו? נדרשת לא מעט עבודה כדי להוכיח שכל דיפאומורפיזם ניתן להיבנות כהרכבה של של דיפאומורפיזמים פרימיטיביים (מכאן המילה "פרימיטיבי"), ושהרכבה כזו משמרת את נכונות המשפט על החלפת המשתנים. אבל נשמור את זה לאחר כך.</p>
+<p>הדבר האחרון שאני מניח הוא שכדי להוכיח שהמשפט מתקיים עבור <span class="math">\(g:A\to B\)</span> מספיק להוכיח שהוא מתקיים <strong>מקומית</strong> עבור <span class="math">\(g\)</span> ועבור פונקציות <span class="math">\(f\)</span> עם <strong>תומך קומפקטי</strong>, כאשר "תומך" כאן הוא הסגור הטופולוגי של קבוצת הנקודות עליהן <span class="math">\(f\)</span> אינה מתאפסת (כלומר, קבוצת הנקודות הזו ועוד כל נקודות השפה שלה). המשמעות הפורמלית היא זו: אם לכל <span class="math">\(x\in A\)</span> קיימת סביבה <span class="math">\(U\)</span> של <span class="math">\(x\)</span> (כלומר, קבוצה פתוחה <span class="math">\(U\subseteq A\)</span> כך ש-<span class="math">\(x\in U\)</span>) שנסמן את תמונתה בתור <span class="math">\(V=g\left(U\right)\)</span>, כך שלכל פונקציה <span class="math">\(f:V\to\mathbb{R}\)</span> עם תומך קומפקטי המשפט מתקיים - אז המשפט מתקיים עבור <span class="math">\(f:B\to\mathbb{R}\)</span> כלשהי. כאן המשמעות של "תומך קומפקטי" היא שקבוצת הערכים ב-<span class="math">\(V\)</span> שעליהם <span class="math">\(f\)</span> לא מתאפסת היא חסומה (קבוצה קומפקטית ב-<span class="math">\(\mathbb{R}^{n}\)</span> אם ורק אם היא סגורה וחסומה, וכאן אנחנו לוקחים מראש את התומך להיות קבוצה סגורה). זה בעצם מחזיר אותנו למושג האינטגרל שממנו התחלנו - כזה של פונקציה שמוגדרת על קבוצה סגורה וחסומה, לפני שעברתי לדבר על אינטגרלים מוכללים.</p>
+<p>הנה סיכום זריז של השלבים:</p>
+<ol>
+    <li>נראה את נכונות המשפט עבור <span class="math">\(n=1\)</span> תוך שימוש בהנחה שמספיק להוכיח את המשפט <strong>מקומית</strong>.</li>
+    <li>נראה איך נובעת מכך נכונות המשפט עבור <span class="math">\(n\)</span> כלשהו תוך שימוש בהנחה שמספיק להוכיח את המשפט עבור <span class="math">\(g\)</span> <strong>פרימיטיבית</strong>.</li>
+    <li>נראה למה אם המשפט נכון עבור שני דיפאומורפיזמים הוא נכון גם להרכבה שלהם ונסביר למה כל דיפאומורפיזם ניתן לתיאור כהרכבת דיפאומורפיזמים פרימיטיביים, מה שיצדיק את ההנחה שלנו בשלב 2.</li>
+    <li>נראה שמספיק להוכיח את המשפט מקומית, מה שיצדיק את ההנחה שלנו בשלב 1.</li>
+</ol>
+<p>חלקים 1-2 מן הסתם כוללים את הלב הרעיוני של ההוכחה, בעוד שחלקים 3-4 הם יותר טכניים באופיים ולכן אני דוחה אותם לסוף, למרות שהסדר התקין יותר להצגה שלהם הוא בהתחלה.</p>
+<p>אם תבקשו ממני לתת אינטואיציה <strong>כלשהי</strong> לאיך ההוכחה עובדת, אני חושש שגם עכשיו אין לי משהו טוב יותר מנפנוף הידיים המופרע הבא: "אם חותכים את המרחב כולו לפיסות קטנות קטנות קטנות קטנות קטנטנות ממש ממש ממש ממש אז בכל פיסה כזו נראה ש-<span class="math">\(g\)</span> רק טיפה מכווצת או מותחת את המרחב בציר אחד ואז פשוט צריך לכפול בקבוע המתאים שמתקן את אפקט העיוות הזה".</p>
+<p>אני חושב שהפוסט הזה הוא דוגמה נפלאה לאופן שבו המתמטיקה מפרמלת את הצורה לטיעון מנופנף ידיים כזה.</p>
+<h1>שלב 1: בסיס האינדוקציה: n=1</h1>
+<p>השלב הזה הוא בבסיסו פשוט שיטת ההצבה שכבר הצגתי והוכחתי <a href="http://www.gadial.net/2015/12/31/calculus_change_of_variables/">בפוסט קודם</a>. שם ההוכחה התבססה על תותח כבד יחסית - המשפט היסודי של החדו"א - אבל כל זה הוא חומר של חדו"א בסיסי ולא של אנליזה וקטורית. עם זאת, בגלל האופן שבו ניסחתי את שיטת ההצבה הכללית עבור אינטגרלים מוכללים, ההוכחה ההיא לא מספיקה, כי היא מתייחסת רק לאינטגרלים רגילים שמוגדרים על קטעים, לא על קבוצות פתוחות. לכן משתמשים בכך שמספיק להוכיח את המשפט באופן מקומי. דהיינו, ניקח <span class="math">\(x\in A\)</span> וניקח קטע סגור כלשהו <span class="math">\(I\subseteq A\)</span> כך ש-<span class="math">\(x\in I\)</span>. התמונה של קטע סגור על ידי פונקציה ממשית רציפה גם היא קטע סגור (זה נובע מ<strong>משפט ערך הביניים </strong>עם עוד קצת עבודה) ולכן <span class="math">\(J=g\left(I\right)\)</span> הוא קטע סגור ב-<span class="math">\(B\)</span>, ואז אפשר להשתמש במשפט החלפת המשתנים כדי לקבל ש-<span class="math">\(\int_{J}f=\int_{I}f\circ g\left|g^{\prime}\right|\)</span>, וזה בדיוק מה שאנחנו רוצים.</p>
+<h1>שלב 2: צעד האינדוקציה</h1>
+<p>גם כאן מתחילים מלפשט את מה שבכלל צריך להוכיח.מכיוון שמספיק להוכיח את המשפט מקומית, אז לוקחים נקודה <span class="math">\(x\in A\)</span> ומחפשים סביבה "נחמדה" שלה: לוקחים תיבה <span class="math">\(Q\subseteq B\)</span> שמכילה את <span class="math">\(g\left(x\right)\)</span> ומסמנים ב-<span class="math">\(U=g^{-1}\left(Q\right)\)</span> את המקור שלה, וזו תהיה הקבוצה הפתוחה שלנו; אם כן, די להוכיח את המשפט עבור <span class="math">\(f\)</span> רציפה שמוגדרת על התיבה <span class="math">\(Q\)</span> ויש לה תומך קומפקטי בתיבה הזו. מכיוון ש-<span class="math">\(f\)</span> רציפה ויש לה תומך קומפקטי, היא אינטגרבילית על <span class="math">\(Q\)</span>, כלומר אפשר לדבר על <span class="math">\(\int_{Q}f\)</span>; ובאופן דומה גם <span class="math">\(g\circ f\left|\det Dg\right|\)</span> היא פונקציה רציפה (כי הרכבה וכפל של פונקציות רציפות הם רציפים, ודטרמיננטה של הנגזרת היא פונקציה רציפה, וערך מוחלט הוא רציף) וגם לה יש תומך קומפקטי מעל <span class="math">\(U\)</span> (המקור של התומך הקומפקטי של <span class="math">\(f\)</span> על פי <span class="math">\(g\)</span>), ולכן היא אינטגרבילית שם, כלומר <span class="math">\(\int_{U}\left(f\circ g\right)\left|\det Dg\right|\)</span>. האתגר הוא להוכיח ש-<span class="math">\(\int_{U}\left(f\circ g\right)\left|\det Dg\right|=\int_{Q}f\)</span>.</p>
+<p>הרעיון עכשיו הוא מתבקש למדי: אנחנו לא באמת יודעים לחשב אינטגרלים על קבוצות במספר גדול של ממדים "בבת אחת"; אנחנו משתמשים במשפט פוביני כדי לחלק את האינטגרל ה"גדול" לאינטגרל חד-ממדי שמופעל על אינטגרל על קבוצה פחות במימד אחד פחות, שעליה אפשר להשתמש בהנחת האינדוקציה. פורמלית, בואו נסמן <span class="math">\(F=\left(f\circ g\right)\left|\det Dg\right|\)</span>, כלומר אנחנו רוצים להוכיח <span class="math">\(\int_{U}F=\int_{Q}f\)</span>, ונפרק את התיבה <span class="math">\(Q\)</span> לתת-תיבה ממימד קטן ב-1 כפול קטע חד ממדי: <span class="math">\(Q=D\times I\)</span>. איך זה משפיע על <span class="math">\(U\)</span>? כאן נכנסת לתמונה ההנחה שלנו ש-<span class="math">\(g\)</span> היא <strong>פרימיטיבית</strong>, כלומר לא משנה את הקואורדינטה האחרונה; זה אומר ש-<span class="math">\(U\subseteq E\times I\)</span> כאשר <span class="math">\(E\)</span> היא תיבה ו-<span class="math">\(I\)</span> הוא אותו קטע כמו ב-<span class="math">\(D\times I\)</span>.</p>
+<p>המשוואה שאנחנו רוצים להוכיח כעת היא <span class="math">\(\int_{E\times I}F=\int_{D\times I}f\)</span>. את זה נפתח על פי משפט פוביני:</p>
+<p><span class="math">\(\int_{t\in I}\int_{y\in D}F\left(y,t\right)=\int_{t\in I}\int_{x\in E}f\left(x,t\right)\)</span></p>
+<p>שני האינטגרלים הפנימיים הולכים לתת לנו פונקציה של <span class="math">\(t\)</span>. מכיוון שהאינטגרציה החיצונית היא על אותו קטע בדיוק, מספיק להראות ששני האינטגרלים הפנימיים שווים:</p>
+<p><span class="math">\(\int_{y\in D}F\left(x,t\right)=\int_{x\in E}f\left(y,t\right)\)</span></p>
+<p>וזאת לכל <span class="math">\(t\)</span>, כשחושבים על <span class="math">\(t\)</span> בתור פרמטר. כמובן, צריך להיות טיפה זהירים לפני שצועקים פה "הנחת האינדוקציה!" - ההנחה הזו תקפה עבור פונקציות במימד נמוך ב-1, ועדיין לא הצגנו אותן במפורש. אני יכול להגדיר <span class="math">\(h_{t}\left(x\right)=f\left(x,t\right)\)</span> כדי לטפל באגף ימין, אבל מה בדיוק קורה באגף שמאל? שם יש לנו את <span class="math">\(g\left(x,t\right)\)</span> שגם התחום שלה וגם התמונה שלה צריכים לרדת במימד שלהם. אז אני אגיד שמכיוון ש-<span class="math">\(g\)</span> פרימיטיבית, ניתן לכתוב את התמונה שלה כך: <span class="math">\(g\left(x,t\right)=\left(r\left(x,t\right),t\right)\)</span>, ולכן אני יכול להגדיר <span class="math">\(k_{t}\left(x\right)=r\left(x,t\right)\)</span>. צריך להוכיח שזה דיפאומורפיזם, כמובן.</p>
+<p>עכשיו, מהו <span class="math">\(Dk_{t}\)</span>? זו פשוט תת-המטריצה של <span class="math">\(Dh\)</span> שמתקבלת כשמעיפים את השורה והעמודה האחרונות. אני אסמן את זה בתור <span class="math">\(\frac{\partial r}{\partial x}\)</span>. עם הסימונים הללו אנחנו מגיעים סוף סוף לשימוש בהנחת האינדוקציה:</p>
+<p><span class="math">\(\int h_{t}\left(y\right)=\int h_{t}\left(k_{t}\left(x\right)\right)\left|\det\frac{\partial r}{\partial x}\right|\)</span></p>
+<p>וכאן <span class="math">\(f\left(y,t\right)=h_{t}\left(y\right)\)</span> ו-<span class="math">\(F\left(x,t\right)=h_{t}\left(k_{t}\left(x\right)\right)\)</span>, אז רק נשאר להבין למה <span class="math">\(\left|\det Dg\right|=\left|\det\frac{\partial r}{\partial x}\right|\)</span>. בשביל זה, בואו נכתוב במפורש את המטריצה של <span class="math">\(Dg\)</span> בתור מטריצת בלוקים:</p>
+<p><span class="math">\(Dg=\left[\begin{array}{cc}\partial r/\partial x & \partial r/\partial t\\0\dots0 & 1\end{array}\right]\)</span></p>
+<p>למי שזוכר איך מחשבים דטרמיננטות ברור שהדטרמיננטה של המטריצה הזו היא <span class="math">\(\det\frac{\partial r}{\partial x}\)</span>. אבל למה השורה האחרונה נראית כפי שהיא נראית? ובכן, בדיוק בגלל ש-<span class="math">\(g\)</span> פרימיטיבית ולכן לינארית במשתנה האחרון (והנגזרת שלה היא 1 בו) וקבועה ביתר המשתנים (ולכן הנגזרת שלה היא 0 בהם).</p>
+<p>אז סיימנו את השלב הזה, אבל כפי שאנחנו רואים, ההנחה ש-<span class="math">\(g\)</span> פרימיטיבית היא חזקה מאוד ופחות או יותר חוסכת לנו את כל העבודה. לכן זה הדבר הבא שחייבים לדבר עליו.</p>
+<h1>שלב 3: מדיפאומורפיזמים פרימיטיביים לכלליים</h1>
+<p>הרעיון הכללי כאן הוא זה: ניקח דיפאומורפיזם כללי <span class="math">\(g\)</span>. נראה שאפשר לכתוב אותו בתור <strong>הרכבה</strong> של דיפאומורפיזמים <span class="math">\(g_{1},g_{2},\dots,g_{k}\)</span> שהם כולם <strong>פרימיטיביים</strong> (פועלים כמו הזהות על קואורדינטה אחת), ונשתמש בכך שאם משפט החלפת המשתנים נכון עבור שני דיפאומורפיזמים, הוא נכון עבור ההרכבה שלהם. את הטענה האחרונה הזו על הההרכבה די קל לראות. נניח ש-<span class="math">\(g,h\)</span> הם דיפאומורפיזמים שמקיימים את המשפט, אז זה אומר ש:</p>
+<p><span class="math">\(\int f=\int\left(f\circ g\right)\left|\det Dg\right|=\int\left(\left(f\circ g\right)\circ h\right)\left|\left(\det Dg\right)\circ h\right|\left|\det Dh\right|\)</span></p>
+<p>כלומר, אני משתמש פה במשפט החלפת המשתנים פעמיים. פעם אחת עבור הדיפאומורפיזם <span class="math">\(g\)</span> והפונקציה הרציפה <span class="math">\(f\)</span>, ובפעם השניה עבור הדיפאומורפיזם <span class="math">\(h\)</span> והפונקציה הרציפה המסובכת יותר <span class="math">\(\left(f\circ g\right)\left|\det Dg\right|\)</span>. אם זה מבלבל, צריך לזכור מה <span class="math">\(\left(f\circ g\right)\left|\det Dg\right|\)</span> אומר בכלל. זו פונקציה שלוקחת קלט <span class="math">\(x\in\mathbb{R}^{n}\)</span> ועושה איתו שני דברים: ראשית, מחשבת את <span class="math">\(f\left(g\left(x\right)\right)\)</span> ושומרת בצד את התוצאה; ושנית, מחשבת <strong>טרנספורמציה לינארית </strong>שהיא הדיפרנציאל של <span class="math">\(g\)</span> בנקודה <span class="math">\(x\)</span>, ואז היא מחשבת את הערך המוחלט של הדטרמיננטה של הטרנספורמציה הלינארית הזו, וכופלת את התוצאה ב-<span class="math">\(f\left(g\left(x\right)\right)\)</span> שחושב קודם.</p>
+<p>אם אני לוקח את כל הפונקציה הזו ומרכיב אותה על <span class="math">\(h\)</span>, זה אומר שצריך להחליף את <span class="math">\(x\)</span> בתיאור הקודם ב-<span class="math">\(h\left(x\right)\)</span>. כלומר, אני לוקח את הפונקציה שמחשבת ערך-מוחלט-של-דטרמיננטה-של-הדיפרנציאל של <span class="math">\(g\)</span> ומרכיב אותה על <span class="math">\(h\)</span>. זה נראה קצת מבלבל בגלל האופן שבו אנחנו כותבים ערך מוחלט לא כפונקציה אלא בתור שני קווים, אבל זה בסדר גמור - העובדה ש-<span class="math">\(h\)</span> נמצאת בתוך הקווים של הערך המוחלט מעידה על כך שהערך המוחלט פועל אחרון בפונקציה המורכבת שמקבלים.</p>
+<p>מה אנחנו <strong>רוצים</strong> להראות? ש-<span class="math">\(\int f=\int f\circ\left(g\circ h\right)\left|\det D\left(g\circ h\right)\right|\)</span>. האסוציאטיביות של הרכבת פונקציות נותנת לנו מייד ש-<span class="math">\(f\circ\left(g\circ h\right)=\left(f\circ g\right)\circ h\)</span>; מה שחסר כאן הוא רק שוויון עבור קבוע ה"תיקון", כלומר חסר להראות ש-</p>
+<p><span class="math">\(\left|\det D\left(g\circ h\right)\right|=\left|\left(\det Dg\right)\circ h\right|\left|\det Dh\right|\)</span></p>
+<p>וזה כנראה מזכיר לכם כבר את כלל השרשרת שממנו התוצאה הזו נובעת מייד (יחד עם תכונת ה<strong>כפליות</strong> של הדטרמיננטה, כמובן).</p>
+<p>אם כן, האתגר האמיתי בשלב הזה הוא להראות שדיפאומורפיזם <span class="math">\(g\)</span> כללי ניתן לכתיבה כהרבה של דיפאומורפיזמים פרימיטיביים. נתחיל מכך שזה כנראה <strong>לא אפשרי</strong> ואנחנו לא ננסה לעשות את זה: מה שנעשה הוא להראות שזה ניתן לביצוע <strong>באופן מקומי</strong>. כלומר, נקבע נקודה כלשהי <span class="math">\(a\)</span> ונראה שקיימת סביבה <span class="math">\(U\)</span> של <span class="math">\(a\)</span> שבה <span class="math">\(g\)</span> מתפרקת כך להרכבה של דיפאומורפיזמים פרימיטיביים (שתלויים ב-<span class="math">\(a\)</span>). כזכור, אנחנו הולכים בהמשך לדבר על למה מספיק להוכיח את משפט החלפת המשתנים מקומית כדי שהוא יהיה נכון באופן כללי, ולכן אנחנו יכולים לעשות זאת. עדיין, גם באופן מקומי, איך מפרקים כך את <span class="math">\(g\)</span>?</p>
+<p>האינסטינקט הראשוני שלי הוא לכתוב את <span class="math">\(g\)</span> בתור הרכבה של פונקציות שכל אחת מהן פועלת על רכיב בודד ולכן משמרת את כל היתר: למשל, אם <span class="math">\(g\left(x,y\right)=\left(2x+y,2y+x\right)\)</span> אז נגדיר <span class="math">\(g_{1}\left(x,y\right)=\left(x,2y+x\right)\)</span> ו-<span class="math">\(g_{2}\left(x,y\right)=\left(2x+\left(\frac{y-x}{2}\right),y\right)\)</span>. אבל שימו לב שזה היה קצת אד-הוקי - נאלצתי איכשהו "לשחזר" את <span class="math">\(y\)</span> המקורי ב-<span class="math">\(g_{2}\)</span>. מי אומר שתמיד אפשר לעשות את זה? ואיך אפשר לוודא שהפירוקים שלנו יהיו דיפאומורפיזמים?</p>
+<p>אז עושים את זה בשלבים. מתחילים מהמקרה הפרטי שבו <span class="math">\(g\)</span> היא טרנספורמציה לינארית. זה זמן טוב עבורכם לעצור ולנסות להוכיח את הטענה בעצמכם עבור טרנספורמציות לינאריות כדי להרגיש מה בעצם אנחנו מנסים לעשות פה ולמה זה טיפה מאתגר. כאשר <span class="math">\(g\)</span> היא טרנספורמציה לינארית שהיא דיפאומורפיזם המידע הנוסף שיש לנו עליה הוא שהיא הפיכה (כי דיפאומורפיזם חייב להיות הפיך) - הגזירות של <span class="math">\(g\)</span> ושל ההופכית שלה נובעת מכך שכל טרנספורמציה לינארית היא גזירה. עכשיו, אחד הדברים הראשונים שרואים באלגברה לינארית הוא שכל טרנספורמציה לינארית אפשר להציג בתור הרכבה של טרנספורמציות לינאריות <strong>אלמנטריות</strong> - בשלב הזה עוד קוראים לטרנספורמציה לינארית "מטריצה" ומדברים על כך שכל מטריצה היא מכפלה של מטריצות אלמנטריות.</p>
+<p>טרנספורמציה אלמנטרית שפועלת על וקטור <span class="math">\(\left(x_{1},\dots,x_{n}\right)\)</span> עושה אחד משלושה דברים: או כופלת כניסה אחת (נאמר, את הראשונה, אבל באותה מידה אפשר גם את היתר) בסקלר, כלומר מקבלים את הוקטור <span class="math">\(\left(\lambda x_{1},x_{2}\dots,x_{n}\right)\)</span>; זו בבירור טרנספורמציה פרימיטיבית כי לא שינינו את שאר הכניסות. או שמוסיפים לאחת הכניסות את המכפלה של אחרת בסקלר, כלומר מקבלים את הוקטור <span class="math">\(\left(x_{1},x_{2}+\lambda x_{1},\dots,x_{n}\right)\)</span>, וגם פה לא שינינו את שאר הכניסות; או שמחליפים שתי כניסות, למשל מקבלים <span class="math">\(\left(x_{2},x_{1},\dots,x_{n}\right)\)</span>. כאן יכולה להיות בעיה אם <span class="math">\(n=2\)</span>, אבל הנה תעלול נחמד! אפשר "לסמלץ" החלפה של שתי שורות גם בעזרת טרנספורמציות משני הסוגים הראשונים! בואו תראו את זה כך:</p>
+<p><span class="math">\(\left(a,b\right)\mapsto\left(a,b-a\right)\mapsto\left(b,b-a\right)\mapsto\left(b,-a\right)\mapsto\left(b,a\right)\)</span></p>
+<p>אני מניח שתוכלו לנחש בעצמכם מה ביצעתי בכל שלב.</p>
+<p>עכשיו, משאנחנו חמושים בנכונות של הטענה על הפירוק עבור טרנספורמציות לינאריות, בואו נוכיח אותן עבור איזומטריה פשוטה ש<strong>אינה</strong> טרנספורמציה לינארית - הזזה. <span class="math">\(g\left(x\right)=x+c\)</span> עם <span class="math">\(c\)</span> קבוע; זו כנראה הפונקציה הפשוטה ביותר שאיננה טרנספורמציה לינארית שיש טעם לדבר עליה. וכמובן, די בבירור אפשר לפרק אותה כי פשוט נזיז לא בכל <span class="math">\(c\)</span> בבת אחת אלא נחכה קצת עם אחד הצירים. דהיינו, אם <span class="math">\(c=\left(c_{1},\dots,c_{n}\right)\)</span> בואו נגדיר <span class="math">\(g_{1}\left(x_{1},\dots,x_{n}\right)=\left(x_{1}+c_{1},x_{2}+c_{2},\dots,x_{n-1}+c_{n-1},x_{n}\right)\)</span> ו-<span class="math">\(g_{2}\left(x_{1},\dots,x_{n}\right)=\left(x_{1},x_{2},\dots,x_{n-1},x_{n}+c_{n}\right)\)</span>, וקיבלנו ש-<span class="math">\(g\)</span> היא הרכבה של שני דיפאומורפיזמים פרימיטיביים.</p>
+<p>בשני המקרים הללו הפירוק היה <strong>גלובלי</strong> - לא הייתי צריך להתייחס לכך שאני מפרק בסביבה של נקודה <span class="math">\(a\)</span> מסויימת ונעזר במה שאני יודע עליה. הסיבה שטרחתי להתעסק במפורש עם שני המקרים הללו היא שאני הולך להיעזר בהם כדי לקחת דיפאומורפיזם <strong>כללי</strong> ולהעביר אותו לצורה פשוטה יחסית, שבה אני יכול לטפל באופן מפורש. בואו נראה עכשיו את הצורה הזו: אני מניח ש-<span class="math">\(a=0\)</span> פשוט כדי שהסימונים יהיו פשוטים ככל הניתן, וש-<span class="math">\(g\left(0\right)=0\)</span> וש-<span class="math">\(Dg\left(0\right)=I\)</span>. תחת ההנחות הללו הרעיון האינטואיטיבי שנתתי קודם - שאפשר יהיה "לשחזר" קואורדינטות מתוך הפלט החלקי של <span class="math">\(g\)</span> ולכן לבצע את <span class="math">\(g\)</span> בשלבים - באמת עובד. בואו ונראה במפורש איך.</p>
+<p>אני אתאר את <span class="math">\(g\left(x_{1},\dots,x_{n}\right)\)</span> כאילו הוא מורכבת מ-<span class="math">\(n\)</span> פונקציות ממשיות ב-<span class="math">\(n\)</span> משתנים, כלומר <span class="math">\(g\left(x_{1},\dots,x_{n}\right)=\left(g_{1}\left(x_{1},\dots,x_{n}\right),\dots,g_{n}\left(x_{1},\dots,x_{n}\right)\right)\)</span>, ואראה שאפשר לפרק את <span class="math">\(g\)</span> להרכבה <span class="math">\(g=k\circ h\)</span>. נתחיל עם <span class="math">\(h\)</span>, שתהיה פשוט הפעלה של <span class="math">\(g\)</span> לכל הקואורדינטות מלבד האחרונה, שאותה משמרים. כלומר, <span class="math">\(h\left(x_{1},\dots,x_{n}\right)=\left(g_{1}\left(x_{1},\dots,x_{n}\right),\dots,g_{n-1}\left(x_{1},\dots,x_{n}\right),x_{n}\right)\)</span>. מכיוון שמשמרים את הקואורדינטה האחרונה הרי שאם <span class="math">\(h\)</span> היא דיפאומורפיזם אז היא דיפאומורפיזם פרימיטיבי - אבל מאיפה לנו ש-<span class="math">\(h\)</span> היא דיפאומורפיזם, כלומר גזירה, הפיכה ועם הופכית שגזירה כמו <span class="math">\(h\)</span> עצמה?</p>
+<p>גזירות זה קל - <span class="math">\(h\)</span> גזירה אם ורק אם כל הקואורדינטות שלה גזירות, וכולן הן פונקציות מהצורה <span class="math">\(g_{i}\)</span> שאנחנו יודעים שהן גזירות פרט לקואורדינטה האחרונה, שהיא פונקציית הזהות שהיא בוודאי גזירה. אם נגזור את <span class="math">\(h\)</span> בנקודה כלשהי, נקבל מטריצה שכל השורות שלה פרט לאחרונה זהות לאלו של <span class="math">\(Dg\)</span>, ואילו השורה האחרונה בה תהיה פשוט <span class="math">\(\left[0,0,0,\dots,1\right]\)</span> בנקודה <span class="math">\(a=0\)</span> אנחנו יודעים ש-<span class="math">\(Dg\left(0\right)=I\)</span> ולכן נקבל גם ש-<span class="math">\(Dh\left(0\right)=I\)</span>. זה אומר שאנחנו עומדים בתנאי <strong>משפט הפונקציה ההפוכה</strong>: הנגזרת של <span class="math">\(h\)</span> בנקודה 0 היא הפיכה, מה שאומר שקיימת סביבה <span class="math">\(U\)</span> של <span class="math">\(0\)</span> שבה קיים ל-<span class="math">\(h\)</span> הופכי שהוא גזיר כמו <span class="math">\(h\)</span>. קיבלנו שבסביבה <span class="math">\(U\)</span> הזו, <span class="math">\(h\)</span> היא אכן דיפאומורפיזם.</p>
+<p>זה המקום שבו כל עניין ה"סביבה" נכנס לתמונה, באופן מהותי: משפט הפונקציה ההפוכה <strong>לא נכון</strong> באופן גלובלי - הוא תמיד מבטיח לנו הפיכות רק בסביבה של הנקודה שבה הנגזרת הפיכה. בשל המגבלה הזו, נצטרך לבלות את החלק האחרון של הפוסט עם "הדבקה" של כל התוצאות הגלובליות יחד. אבל צעד צעד.</p>
+<p>עכשיו נשאלת השאלה - איך להגדיר את <span class="math">\(k\)</span> כך שנקבל <span class="math">\(g=h\circ k\)</span>? בבירור, על <span class="math">\(n-1\)</span> הקואורדינטות הראשונות <span class="math">\(k\)</span> לא תעשה כלום (ולכן תהיה בעצמה דיפאומורפיזם פרימיטיבי), אבל על האחרונה <span class="math">\(k\)</span> צריכה להחזיר את <span class="math">\(g_{n}\left(x_{1},\dots,x_{n}\right)\)</span>, כשה"בעיה" שלה היא שהיא לא מקבלת כקלט את <span class="math">\(x_{1},\dots,x_{n}\)</span> אלא את <span class="math">\(y=h\left(x_{1},\dots,x_{n}\right)\)</span>. לכן היא צריכה "לשחזר" את הקלט, ואת זה היא יכולה לעשות כי מקומית, <span class="math">\(h\)</span> הפיכה. כלומר, <span class="math">\(k\)</span> רוצה לחשב את <span class="math">\(g_{n}\left(h^{-1}\left(y\right)\right)\)</span>, וזו תהיה ההגדרה שלה:</p>
+<p><span class="math">\(k\left(y_{1},\dots,y_{n}\right)=\left(y_{1},\dots,y_{n-1},g_{n}\left(h^{-1}\left(y_{1},\dots,y_{n}\right)\right)\right)\)</span></p>
+<p>כמובן, <span class="math">\(k\)</span> מוגדרת רק על הסביבה <span class="math">\(U\)</span> של <span class="math">\(a\)</span> שבה <span class="math">\(h^{-1}\)</span> קיימת, אבל זה לא מפריע לנו. צריך עדיין להראות שגם היא דיפאומורפיזם, אז מחשבים את <span class="math">\(Dk\left(0\right)\)</span> ומקבלים מטריצה ש-<span class="math">\(n-1\)</span> השורות הראשונות בה יוצרות את מטריצת היחידה מסדר <span class="math">\(n-1\)</span>, ואילו השורה האחרונה היא הנגזרת של <span class="math">\(g_{n}\left(h^{-1}\left(y_{1},\dots,y_{n}\right)\right)\)</span>. כלל השרשרת יתן לנו את המכפלה של הנגזרת של <span class="math">\(g_{n}\)</span> ב-<span class="math">\(0\)</span> עם הנגזרת של <span class="math">\(h^{-1}\)</span> ב-<span class="math">\(0\)</span>; אבל הנגזרת של <span class="math">\(h^{-1}\)</span> היא ההופכית של הנגזרת של <span class="math">\(h\)</span>, כלומר היא מטריצת היחידה. נשארנו עם הנגזרת של <span class="math">\(g_{n}\)</span>, שהיא פשוט הוקטור <span class="math">\(\left[0,0,0,\dots,1\right]\)</span> כפי שאמרנו קודם (בזכות ההנחה שלנו שהנגזרת של <span class="math">\(g\)</span> ב-<span class="math">\(0\)</span> היא מטריצת היחידה) ולכן סיימנו (אני מחפף פה עבודה טכנית של למצוא את הקבוצה הפתוחה המדוייקת שעליה <span class="math">\(g\)</span> מתפרקת).</p>
+<p>עכשיו בואו נסיים עם החלק הזה. ניקח דיפאומורפיזם כללי <span class="math">\(g\)</span> ונקודה כללית <span class="math">\(a\)</span>. עכשיו בואו נגדיר שלוש פונקציות כך:</p>
+<p><span class="math">\(t_{1}\left(x\right)=x+a\)</span></p>
+<p><span class="math">\(t_{2}\left(x\right)=x-g\left(a\right)\)</span></p>
+<p><span class="math">\(T\left(x\right)=C^{-1}x\)</span> כאשר <span class="math">\(Dg\left(a\right)=C\)</span></p>
+<p>ועכשיו בואו נגדיר דיפאומורפיזם חדש:</p>
+<p><span class="math">\(h=T\circ t_{2}\circ g\circ t_{1}\)</span></p>
+<p>וכעת, מהו <span class="math">\(h\left(0\right)\)</span>? קל לחשב: <span class="math">\(h\left(0\right)=C^{-1}\left(g\left(a\right)-g\left(a\right)\right)=C^{-1}0=0\)</span></p>
+<p>וכמו כן, על פי כלל השרשרת, <span class="math">\(Dh\)</span> היא המכפלה של הנגזרות של ארבע הפונקציות הללו; הנגזרות של ההזזות הן מטריצות היחידה, אז מקבלים <span class="math">\(C^{-1}\cdot C=I\)</span>. כלומר, <span class="math">\(h\)</span> עונה על התנאים שטיפלנו בהם לפני רגע. כל מה שנותר לעשות הוא לשים לב לכך ש-<span class="math">\(g=t_{2}^{-1}\circ T^{-1}\circ h\circ t^{-1}\)</span> וסיימנו - זו הרכבה של דיפאומורפיזמים שכבר ראינו עבור כולם שניתן לפרק אותם להרכבה של דיפאומורפיזמים פרימיטיביים. זה מסייים את החלק הזה של ההוכחה.</p>
+<h1>שלב 4: ממקומי לגלובלי</h1>
+<p>טוב, אני מניח שבשלב הזה כבר ברור שקל העסק הזה לא יהיה, נכון? הסתמכנו כל כך חזק על הלוקליות שנדמה שיהיה צריך איזה שהוא נס כדי לעבור לטענה גלובלית - כדי "לתפור" את כל התעלולים המקומיים שאנחנו עושים למשהו שעובד בכל מקום. את ה"נס" הזה אני הולך לספק באמצעות כלי טכני שלא הזכרתי עד כה שנקרא <strong>חלוקת יחידה</strong> (Partition of Unity). בספרי הלימוד המושג הזה מוזכר ומוסבר לעומק הרבה לפני שמגיעים להוכחת משפט החלפת המשתנים, אבל זו בדיוק הבעיה המרכזית - לא ברור <strong>בשביל מה צריך את זה</strong> עד שלא מגיעים לשימוש כמו זה שלנו. ומכיוון שלהבין מה זו חלוקת יחידה, ולמה היא קיימת בכלל, זה לא הכי קל בעולם, מוטיבציה היא דבר מאוד חשוב כאן. אז אני הולך להציג את המושג הזה עכשיו ולהראות למה הוא מסיים לנו את ההוכחה, ואז בתור בונוס אני גם אוכיח שהוא בכלל קיים.</p>
+<p>אז מה זו חלוקת יחידה? בואו נניח ש-<span class="math">\(A\)</span> היא קבוצה פתוחה. חלוקת יחידה היא אוסף פונקציות רציפות <span class="math">\(\phi_{1},\phi_{2},\dots\)</span> שכולן מ-<span class="math">\(A\)</span> לממשיים בין אפס ואחד, <span class="math">\(\phi:A\to\left[0,1\right]\)</span>, וכמו כן מתקיימים התנאים הבאים:</p>
+<ol>
+    <li><span class="math">\(\sum\phi\left(x\right)=1\)</span> לכל <span class="math">\(x\in A\)</span>, כשהסכום נלקח על כל ה-<span class="math">\(\phi\)</span> באוסף. זה מבהיר איפה פה ה"חלוקה" של היחידה.</li>
+    <li>לכל נקודה של <span class="math">\(A\)</span> קיימת סביבה שחותכת רק מספר סופי של תומכים של <span class="math">\(\phi\)</span> מתוך החלוקה (כלומר, עבור כל ה-<span class="math">\(\phi\)</span> בקבוצה פרט למספר סופי, הן מתאפסות על הנקודה הזו וכל הסביבה שלה).</li>
+</ol>
+<p>מהכתיב שלי עשוי להתקבל הרושם שחלוקת יחידה חייבת להיות סדרה <strong>בת מניה</strong> של פונקציות. כך אמנם יהיה במקרה הנוכחי, אבל באופן כללי אפשר גם לדבר על קבוצות לא בנות מניה. זה עשוי להיראות מוזר במבט ראשון כי תנאי 1 עוסק בסכום שנלקח, לכאורה, על כל הפונקציות; אבל תנאי 2 מבטיח שכל האיברים בסכום הזה יהיו 0 פרט למספר סופי, כך שאין פה שום בעיה - אפילו אין צורך לדבר על התכנסות טורים של מספר בן מניה אינסופי של איברים.</p>
+<p>בינתיים אין בהגדרה הזו שום דבר מרגש - אפילו הפונקציה <span class="math">\(\phi\left(x\right)=1\)</span> מקיימת את התכונה הזו לבדה. לכן בדרך כלל מוסיפים דרישות נוספות על חלוקת היחידה. בפרט, מגבילים את ה<strong>תומך</strong> של כל פונקציה <span class="math">\(\phi\)</span>, שהוא כזכור הסגור של אוסף הנקודות ש-<span class="math">\(\phi\)</span> שונה מאפס עליהן. דרישה אפשרית אחת היא שהתומך יהיה <strong>קומפקטי</strong> (בהקשר שלנו, סגור וחסום), מה שלא מתקיים עבור <span class="math">\(\phi\left(x\right)=1\)</span> אם <span class="math">\(A\)</span> אינה קבוצה קומפקטית; דרישה אפשרית נוספת צצה אם יש לנו הצגה של <span class="math">\(A\)</span> כאיחוד של קבוצות פתוחות, והדרישה מחלוקת היחידה היא שהתומך של כל <span class="math">\(\phi\)</span> יהיה מוכל כולו באחת מהקבוצות הפתוחות - על זה אומרים שהחלוקה <strong>נשלטת</strong> על ידי אוסף הקבוצות הפתוחות. אנחנו נדרוש את שתי הדרישות הללו, ובנוסף - כי אנחנו מתעסקים פה באנליזה - נדרוש גם שכל ה-<span class="math">\(\phi\)</span> יהיו גזירות אינסוף פעמים.</p>
+<p>השימושיות של חלוקת יחידה עבורנו כאן נובעת מכך שהיא מאפשרת לנו לפרק אינטגרל של פונקציה מורכבת לסכום אינטגרלים של פונקציות פשוטות יותר, באופן הבא: אם יש לנו חלוקת יחידה מעל <span class="math">\(A\)</span> עם תומכים קומפקטיים, ואם <span class="math">\(f\)</span> היא פונקציה ממשית רציפה מעל <span class="math">\(A\)</span>, אז האינטגרל של <span class="math">\(f\)</span> קיים אם ורק אם האינטגרל <span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}\left|f\right|\)</span> קיים, ובמקרה הזה מתקיים</p>
+<p><span class="math">\(\int_{A}f=\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span></p>
+<p>כאשר הסכום נלקח על כל ה-<span class="math">\(\phi\)</span>-ים בחלוקת היחידה - כאן כן הכרחי שהחלוקה תכיל רק מספר בן מניה של פונקציות או שלא היינו יכולים לבצע סכימה כזו.</p>
+<p>נו, מה תגידו, הנה <strong>עוד</strong> טענה כבדת משקל שאני אדחה את ההוכחה שלה להמשך. קודם כל נראה איך היא עוזרת לנו.</p>
+<p>כזכור, מה שאנחנו צריכים להוכיח כאן הוא את הדבר הבא: נתון לנו דיפאומורפיזם <span class="math">\(g:A\to B\)</span>. אנחנו יודעים שלכל נקודה <span class="math">\(x\in A\)</span> קיימת סביבה <span class="math">\(U_{x}\)</span>, כך שמשפט החלפת המשתנים תקף עליה עבור כל פונקציה רציפה עם תומך קומפקטי. דהיינו, נסמן <span class="math">\(V_{x}=g\left(U_{x}\right)\)</span>, ניקח פונקציה <span class="math">\(f:V_{x}\to\mathbb{R}\)</span> רציפה עם תומך קומפקטי, אז <span class="math">\(\int_{V_{x}}f=\int_{U_{x}}\left(f\circ g\right)\left|\det Dg\right|\)</span>.</p>
+<p>זה הנתון, ומה שאנחנו רוצים להוכיח הוא שלכל <span class="math">\(f:B\to\mathbb{R}\)</span> רציפה מתקיים <span class="math">\(\int_{B}f=\int_{A}\left(f\circ g\right)\left|\det Dg\right|\)</span>. הרעיון יהיה לחלק את <span class="math">\(f\)</span> הזו בעזרת חלוקת היחידה להרבה תת-פונקציות פשוטות שעבור כל אחת מהן אפשר להשתמש במשפט החלפת המשתנים. כמובן, השלב הראשון הוא לומר איזו חלוקת יחידה אנחנו לוקחים בכלל; ניקח אחת עם תומכים קומפקטיים שנשלטת על ידי קבוצת ה-<span class="math">\(V_{x}\)</span>-ים, כלומר שלכל פונקציה <span class="math">\(\phi\)</span> בחלוקה, התומך שלה הוא תת-קבוצה של <span class="math">\(V_{x}\)</span> עבור <span class="math">\(x\in A\)</span> כלשהו.</p>
+<p>בהינתן החלוקה הזו, וההנחה ש-<span class="math">\(f\)</span> אינטגרבילית מעל <span class="math">\(B\)</span>, אפשר לכתוב</p>
+<p><span class="math">\(\int_{B}f=\sum_{i=1}^{\infty}\int_{B}\phi_{i}f\)</span></p>
+<p>עכשיו, מכיוון ש-<span class="math">\(\phi_{i}\)</span> היא בעלת תומך קומפקטי שמוכל ב-<span class="math">\(V_{x}\)</span>, כל מה שבאינטגרנד מתאפס לכל נקודה מחוץ ל-<span class="math">\(V_{x}\)</span>, ומכאן ש-<span class="math">\(\int_{B}\phi_{i}f=\int_{V_{x}}\phi_{i}f\)</span>. מכיוון ש-<span class="math">\(\phi_{i}f\)</span> היא פונקציה רציפה אפשר להשתמש במשפט החלפת המשתנים (שימו לב! כאן זה השימוש ב<strong>כל</strong> מה שעשינו עד כה!) ולקבל</p>
+<p><span class="math">\(\int_{V_{x}}\phi_{i}f=\int_{U_{x}}\left(\phi_{i}f\right)\circ g\left|\det Dg\right|\)</span></p>
+<p>את אגף ימין יותר נוח לכתוב בתור</p>
+<p><span class="math">\(\int_{U_{x}}\left(\phi_{i}\circ g\right)\left(f\circ g\right)\left|\det Dg\right|\)</span></p>
+<p>עכשיו, אני רוצה לטעון שהתומך של <span class="math">\(\phi_{i}\circ g\)</span> מוכל כולו ב-<span class="math">\(U_{x}\)</span>. אם לא הייתי מניח כלום על <span class="math">\(g\)</span> זה לא היה נכון, כי אמנם אני יודע שהתומך של <span class="math">\(\phi_{i}\)</span> מוכל כולו ב-<span class="math">\(V_{x}=g\left(U_{x}\right)\)</span> אבל זה <strong>לא אומר</strong> שאין נקודות מחוץ ל-<span class="math">\(U_{x}\)</span> שהתמונה של <span class="math">\(g\)</span> עליהן שייכת ל-<span class="math">\(V_{x}\)</span>. במקרה שלנו זה כן נכון, כי <span class="math">\(g\)</span> היא דיפאומורפיזם ולכן בפרט חח"ע ועל - אין נקודות מחוץ ל-<span class="math">\(U_{x}\)</span> שמחזירות נקודות בתוך <span class="math">\(V_{x}\)</span>.</p>
+<p>מכיוון שהתומך של <span class="math">\(\phi_{i}\circ g\)</span> מוכל כולו ב-<span class="math">\(U_{x}\)</span> אפשר להרחיב את האינטגרל לכל <span class="math">\(A\)</span>:</p>
+<p><span class="math">\(\int_{A}\left(\phi_{i}\circ g\right)\left(f\circ g\right)\left|\det Dg\right|\)</span></p>
+<p>ועכשיו תראו מה קיבלנו!</p>
+<p><span class="math">\(\int_{B}\phi_{i}f=\int_{A}\left(\phi_{i}\circ g\right)\left(f\circ g\right)\left|\det Dg\right|\)</span></p>
+<p>התחלנו עם חתיכות של <span class="math">\(f\)</span> שפזורות על חתיכות של <span class="math">\(B\)</span>; עכשיו אנחנו עדיין מדברים על חתיכות של <span class="math">\(f\)</span> אבל הן מוגדרות על <strong>כל</strong> <span class="math">\(B\)</span>. כדי לחזור אל <span class="math">\(f\)</span> המקורית, בואו נחבר את כל החתיכות:</p>
+<p><span class="math">\(\int_{B}f=\sum_{i=1}^{\infty}\int_{B}\phi_{i}f=\sum_{i=1}^{\infty}\int_{A}\left(\phi_{i}\circ g\right)\left(f\circ g\right)\left|\det Dg\right|\)</span></p>
+<p>חסר לנו רק הצעד האחרון:</p>
+<p><span class="math">\(\sum_{i=1}^{\infty}\int_{A}\left(\phi_{i}\circ g\right)\left(f\circ g\right)\left|\det Dg\right|=\int_{A}\left(f\circ g\right)\left|\det Dg\right|\)</span></p>
+<p>רגע, מה ההבדל בין זה ובין <span class="math">\(\int_{B}f=\sum_{i=1}^{\infty}\int_{B}\phi_{i}f\)</span>? ובכן, שאנחנו עובדים עכשיו מעל <span class="math">\(A\)</span> וה"חלוקה" שלנו היא לא הפונקציות <span class="math">\(\phi_{i}\)</span> אלא הפונקציות <span class="math">\(\phi_{i}\circ g\)</span>. צריך להוכיח שהן מהוות חלוקת יחידה עבור <span class="math">\(A\)</span>, אבל זו הוכחה ישירה ופשוטה למדי למדי - החלק היחיד שאינו מיידי לחלוטין הוא ההוכחה שהתומכים של הפונקציות הללו הם קומפקטיים, וזה נובע מכך שהם המקורות של קבוצות קומפקטיות (התומכים של ה-<span class="math">\(\phi_{i}\)</span>-ים המקוריים) על ידי הפונקציה הרציפה <span class="math">\(g\)</span>.</p>
+<p>זה מסיים את משפט החלפת המשתנים, ומשאיר לנו רק לדבר עוד קצת על חלוקות יחידה.</p>
+<h1>שלב 5 (בונוס!): לדבר עוד קצת על חלוקות יחידה</h1>
+<p>נשארו שני דברים: להוכיח שקיימת חלוקת יחידה מהסוג שבה השתמשנו קודם, ולהוכיח שבאמת אפשר לפרק אינטגרלים איתה לסכומים, כפי שעשינו קודם.</p>
+<h2>עוד</h2>
+<p>נתחיל עם קיום, ועם בעיה פשוטה קצת יותר. נניח שמביאים לנו תיבה <span class="math">\(Q\)</span> ב-<span class="math">\(\mathbb{R}^{n}\)</span>. האם אנחנו יודעים לבנות פונקציה אי-שלילית גזירה אינסוף פעמים שמתאפסת מחוץ ל-<span class="math">\(Q\)</span> וגדולה מאפס בתוך <span class="math">\(Q\)</span> למעט על השפה של <span class="math">\(Q\)</span>? אם נצליח לבנות פונקציה כזו, יהיה קל לראות איך מקבלים מפונקציות כאלו את חלוקת היחידה שאנחנו רוצים - אחרי שנעשה עוד להטוט שבכלל לא מערב פונקציות.</p>
+<p>בואו נתחיל אפילו יותר פשוט: פונקציה ב-<span class="math">\(\mathbb{R}\)</span> שמתאפסת מחוץ לקבוצה קומפקטית כלשהי, והיא עדיין רציפה וגזירה כמה פעמים שנרצה. אם סתם ניקח פונקציה כמו <span class="math">\(f\left(x\right)=9-x^{2}\)</span> שהיא אי שלילית בקבוצה <span class="math">\(\left[-3,3\right]\)</span> ונגדיר אותה להיות 0 מחוץ לקבוצה הזו אמנם נקבל פונקציה רציפה אבל היא לא תהיה גזירה בקצוות - צריך משהו "חלק" יותר. אבל אין כאן רעיון גאוני במיוחד - מה שבדרך כלל עובד בסיטוציות כאלו הוא וריאציה כלשהי על אקספוננט. זה מה שנעשה כאן. נגדיר <span class="math">\(f\left(x\right)=\begin{cases}e^{-\frac{1}{x}} & x&gt;0\\0 & x\le0\end{cases}\)</span> ונקבל פונקציה אי שלילית שרציפה וגזירה בכל מקום והיא מתאפסת מחוץ לקטע <span class="math">\(\left(0,\infty\right)\)</span>. זה לא קטע קומפקטי, אז נגדיר <span class="math">\(g\left(x\right)=f\left(x\right)f\left(1-x\right)\)</span> והופס - הפונקציה הזו עדיין נחמדה כמו <span class="math">\(f\)</span>, אבל מתאפסת בכל מקום מלבד הקטע <span class="math">\(\left(0,1\right)\)</span> (ולכן היא אפס בכל מקום מלבד בתוך הקבוצה הקומפטית <span class="math">\(\left[0,1\right]\)</span>).</p>
+<p>עכשיו, זו פונקציה במשתנה יחיד. אנחנו רוצים משהו ב-<span class="math">\(\mathbb{R}^{n}\)</span> שמתאפס מחוץ לתיבה <span class="math">\(Q=\left[a_{1},b_{1}\right]\times\dots\times\left[a_{n},b_{n}\right]\)</span>. זה ממש פשוט: בואו נגדיר <span class="math">\(\varphi\left(x\right)=g\left(\frac{x_{1}-a_{1}}{b_{1}-a_{n}}\right)\cdots g\left(\frac{x_{n}-a_{n}}{b_{n}-a_{n}}\right)\)</span>. מה הולך פה? כל גורם מהצורה <span class="math">\(\frac{x-a_{k}}{b_{k}-a_{k}}\)</span> נע בין 0 ל-1 כאשר <span class="math">\(x_{k}\)</span> נע מ-<span class="math">\(a_{k}\)</span> אל <span class="math">\(b_{k}\)</span>, לכן אם <span class="math">\(x_{k}\notin\left[a_{k},b_{k}\right]\)</span> אז ה-<span class="math">\(g\)</span> של הגורם הזה יתאפס ולכן הפונקציה כולה. כלומר, <span class="math">\(\varphi\left(x\right)\)</span> מתאפסת מחוץ ל-<span class="math">\(Q\)</span>. גזירות קל לבדוק והיא נובעת מהגזירות של <span class="math">\(g\)</span>, וכך גם אי-שליליות.</p>
+<p>כל הפונקציות בחלוקת היחידה שלנו יוגדרו באמצעות <span class="math">\(\varphi\)</span> כזו, פשוט על תיבות שונות ומשונות, ועם עוד נורמליזציה שנתייחס אליה בסוף שתבטיח שסכום הערכים של כולן יהיה 1 בכל מקום. לעת עתה השאלה שלנו היא בכלל אילו תיבות אני רוצה לבחור. הסיטואציה היא ש-<span class="math">\(A\)</span> נתונה לנו כאיחוד של קבוצות פתוחות, <span class="math">\(A=\bigcup U_{\alpha}\)</span> - זה אוסף קבוצות פתוחות שיכול גם להיות לא בן מניה בכלל. אנחנו רוצים למצוא מספר בן מניה של תיבות, <span class="math">\(Q_{1},Q_{2},\dots\)</span> שאיחודן יכסה את כל <span class="math">\(A\)</span>, שכל אחת מהן תהיה מוכלת באחת מה-<span class="math">\(U_{\alpha}\)</span> הללו, ושכל נקודה ב-<span class="math">\(A\)</span> תהיה בעלת סביבה שחותכת רק מספר סופי של <span class="math">\(Q\)</span>-ים מתוך הסדרה.</p>
+<p>מה שהולך לקרות עכשיו יהיה גלישה זריזה לטופולוגיה פשוטה יחסית. נתחיל מכך שקל למצוא סדרה <span class="math">\(D_{1},D_{2},\dots\)</span> של קבוצות קומפקטיות שהאיחוד שלהן נותן בדיוק את <span class="math">\(A\)</span> וכל קבוצה מוכלת בפנים של הבאה אחריה - נבחר למשל את <span class="math">\(D_{n}\)</span> להיות החיתוך בין הכדור הסגור (והחסום) ברדיוס <span class="math">\(n\)</span> סביב הראשית, ובין אוסף הנקודות ב-<span class="math">\(A\)</span>שמרחקן משפת <span class="math">\(A\)</span> הוא לכל הפחות <span class="math">\(\frac{1}{n}\)</span>. זה חיתוך בין שתי קבוצות סגורות שאחת מהן חסומה, כך שזו קבוצה קומפקטית. פורמלית:</p>
+<p><span class="math">\(D_{n}=\left\{ x\in A\ |\ \left|x\right|\le n\wedge d\left(x,\mathbb{R}^{n}\backslash A\right)\ge\frac{1}{n}\right\} \)</span></p>
+<p>דבר כזה נקרא Exhaustion by compact sets. עכשיו ניקח את ה-<span class="math">\(D\)</span>-ים הללו ונתעלל בהן קצת עד שנקבל את התיבות שאנחנו רוצים. ראשית נקבל מהן קבוצות שמתארות רק את "הדברים החדשים שקיבלנו":</p>
+<p><span class="math">\(B_{n}=D_{n}\backslash\mbox{Int}D_{n-1}\)</span> (אני מסמן ב-<span class="math">\(D\)</span> עם אינדקס שלילי את הקבוצה הריקה). שימו לב שזו בעצמה קבוצה קומפקטית. עכשיו, לא מובטח לנו שהיא זרה ל-<span class="math">\(D_{n-1}\)</span> כי העפנו רק את הפנים של <span class="math">\(D_{n-1}\)</span>, אבל מובטח לנו שהיא <strong>כן</strong> זרה ל-<span class="math">\(D_{n-2}\)</span>, כי <span class="math">\(D_{n-2}\)</span> היה מוכל כולו בפנים של <span class="math">\(D_{n-1}\)</span>. זה יהיה מספיק טוב עבורנו.</p>
+<p>אפשר לדמיין את מה שהולך כאן כך: <span class="math">\(D_{n}\)</span> הם עיגולים; <span class="math">\(B_{n}\)</span> הן טבעות; ועכשיו נכסה כל טבעת על ידי אוסף סופי של תיבות קטנות. אז לכל <span class="math">\(x\in B_{n}\)</span> ניקח תיבה כלשהי שמכילה את <span class="math">\(x\)</span> בפנים שלה והיא קטנה מספיק כדי להיות מוכלת כולה ב-<span class="math">\(A\)</span> (אפשרי, כי <span class="math">\(A\)</span> קבוצה פתוחה) ולמעשה, היא קטנה מספיק כדי להיות מוכלת כולה באחת מהקבוצות <span class="math">\(U_{\alpha}\)</span> שמכסות את <span class="math">\(A\)</span> (שוב אפשרי, כי <span class="math">\(x\)</span> שייך לפחות לאחת מהקבוצות הללו, ואלו קבוצות פתוחות) וכמו כן היא קטנה מספיק כדי להיות זרה ל-<span class="math">\(D_{n-2}\)</span> (זה אפשרי כי <span class="math">\(x\)</span> לא שייך ל-<span class="math">\(D_{n-2}\)</span> ו-<span class="math">\(D_{n-2}\)</span> היא קבוצה <strong>סגורה</strong>, כלומר המשלימה שלה פתוחה).</p>
+<p>ועכשיו מגיע הקסם שבטופולוגיה. אמרנו שה-<span class="math">\(B_{n}\)</span>-ים הללו הן קבוצות <strong>קומפקטיות</strong>. בשבילנו, המתעסקים ב-<span class="math">\(\mathbb{R}^{n}\)</span>, קומפקטיות זה כינוי נרדף ל"סגור וחסום". אבל בעולם הטופולוגי הגדול, קומפקטיות פירושה "לכל כיסוי של הקבוצה באמצעות קבוצות פתוחות קיים תת-כיסוי <strong>סופי</strong> שעדיין מכסה את הקבוצה". ב-<span class="math">\(\mathbb{R}^{n}\)</span> התכונה הזו שקולה לסגירות וחסימות - זה מה שנקרא "משפט היינה-בורל". אצלנו, הפנים של התיבות שלקחנו לכל <span class="math">\(x\)</span> היווה כיסוי פתוח שכזה של <span class="math">\(B_{n}\)</span> ולכן קיים לו תת-כיסוי סופי. לכן, אם ניקח את כל התיבות של כל תתי-הכיסויים הסופיים של כל ה-<span class="math">\(B_{n}\)</span>-ים נקבל קבוצה בת מניה (איחוד בן מניה של קבוצות סופיות) של תיבות שהאיחוד של כולן מכסה את כל ה-<span class="math">\(B_{n}\)</span>-ים ולכן את כל <span class="math">\(A\)</span>, וכל תיבה בו מוכלת ב-<span class="math">\(U_{\alpha}\)</span> כלשהו, ורק צריך להסביר עוד למה תכונת החיתוכים הסופיים מתקיימת.</p>
+<p>אם כן, ניקח <span class="math">\(x\in A\)</span> כלשהו ונחפש סביבה פתוחה שלו שחותכת רק מספר <strong>סופי</strong> של תיבות. אנחנו יודעים ש-<span class="math">\(x\in B_{n}\)</span> עבור <span class="math">\(n\)</span> כלשהו. ניקח אם כן סביבה של <span class="math">\(x\)</span> שמוכלת בפנים של <span class="math">\(B_{n}\)</span>. אנחנו גם יודעים שכל תיבה שמכסה את <span class="math">\(B_{k}\)</span>, עבור <span class="math">\(k\ge n+2\)</span>, <strong>לא</strong> חותכת את <span class="math">\(B_{n}\)</span> ולכן לא חותכת את הסביבה של <span class="math">\(x\)</span> שלקחנו. מי אם כן התיבות ה"בעייתיות" מבחינתנו? כל התיבות שמכסות את <span class="math">\(B_{1},B_{2},\dots,B_{n},B_{n+1}\)</span>. אבל כפי שכבר אמרנו, לכל <span class="math">\(B_{k}\)</span> שכזו לקחנו רק מספר <strong>סופי</strong> של תיבות, ויש לנו רק מספר <strong>סופי</strong> של <span class="math">\(B_{k}\)</span>-ים בעייתיים, ולכן הסביבה של <span class="math">\(x\)</span> חותכת רק מספר סופי של תיבות, וסיימנו.</p>
+<p>רגע, מה סיימנו? איפה חלוקת היחידה? כבר שכחנו שהיה אמור להיות דבר כזה. כזכור, הראיתי קודם איך בהינתן תיבה <span class="math">\(Q_{i}\)</span> אפשר להגדיר פונקציה <span class="math">\(\varphi_{i}\)</span> שהיא חיובית על הפנים של <span class="math">\(Q_{i}\)</span>, אפס בכל מקום אחר, וגזירה כמה פעמים שרק נרצה. עכשיו, נתונה לנו קבוצה <span class="math">\(A\)</span> שאנחנו רוצים למצוא חלוקת יחידה עבורה, ו-<span class="math">\(A\)</span> מכוסה על ידי קבוצות פתוחות <span class="math">\(U_{\alpha}\)</span> שאנחנו רוצים שישלטו על חלוקת היחידה שלנו, אז ניקח את ה-<span class="math">\(Q_{i}\)</span>-ים שלנו להיות כמו שהראיתי למעלה, וניקח את ה-<span class="math">\(\varphi_{i}\)</span> המתאימים, והדבר הזה הוא כבר כמעט חלוקת יחידה: לכל <span class="math">\(\varphi_{i}\)</span> התומך של <span class="math">\(\varphi_{i}\)</span> הוא <span class="math">\(Q_{i}\)</span> שמוכל באחת מהקבוצות <span class="math">\(U_{\alpha}\)</span>, ולכל <span class="math">\(x\in A\)</span> קיימת ל-<span class="math">\(x\)</span> סביבה שחותכת רק מספר סופי של <span class="math">\(Q_{i}\)</span>, כלומר רק מספר סופי של תומכים של פונקציות בחלוקת היחידה. הדבר היחיד שבינתיים לא עובד הוא שיתקיים <span class="math">\(\sum_{i=1}^{\infty}\varphi_{i}\left(x\right)=1\)</span> לכל <span class="math">\(x\in A\)</span>. הסכום הזה אמנם מוגדר היטב תמיד, כי תכונת החיתוך הסופי אומרת שהוא כולל רק מספר סופי של מחוברים ששונים מאפס, אבל הוא לאו דווקא שווה ל-1. אז מה עושים? מנרמלים. נגדיר פונקציה <span class="math">\(\lambda\left(x\right)=\sum_{i=1}^{\infty}\varphi_{i}\left(x\right)\)</span>, וכעת נגדיר <span class="math">\(\phi_{i}\left(x\right)\triangleq\frac{\varphi_{i}\left(x\right)}{\lambda\left(x\right)}\)</span>. כמובן, צריך להשתכנע ש-<span class="math">\(\lambda\left(x\right)\ne0\)</span> לכל <span class="math">\(x\)</span>; זה נובע מכך שאנחנו יודעים שהפנים של ה-<span class="math">\(Q_{i}\)</span>-ים מכסים את <span class="math">\(A\)</span> ולכן <span class="math">\(x\)</span> שייך לפנים של לפחות <span class="math">\(Q_{i}\)</span> אחד ומכאן ש-<span class="math">\(\varphi_{i}\left(x\right)\ne0\)</span> (וכל ה-<span class="math">\(\varphi_{i}\)</span> הן אי-שליליות ולכן לא יכולות לאפס זו את זו).</p>
+<h2>קצת</h2>
+<p>הגענו סוף סוף אל הדבר האחרון בפוסט: הראינו שחלוקת יחידה קיימות, ועכשיו נשאר להראות שאפשר להשתמש בהן לפירוק אינטגרלים לסכומים.</p>
+<p>כזכור, מה שאנחנו רוצים להוכיח הוא זה: אם <span class="math">\(\phi_{1}\phi_{2},\dots\)</span> היא חלוקת יחידה עם תומכים קומפקטיים של קבוצה פתוחה <span class="math">\(A\)</span>, ויש לנו פונקציה <span class="math">\(f:A\to\mathbb{R}\)</span> שהיא רציפה, אז היא אינטגרבילית מעל <span class="math">\(A\)</span> אם ורק אם הטור <span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}\left|f\right|\)</span> מתכנס, ובמקרה זה מתקיים ש-<span class="math">\(\int_{A}f=\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span>.</p>
+<p>כמו שקורה לפעמים באינטגרלים, ההוכחה תתחיל בלהתעסק בפונקציות <span class="math">\(f\)</span> שהן אי-שליליות ואחר כך תתרחב בהתאם.</p>
+<p>אם <span class="math">\(f\)</span> היא אי-שלילית מעל <span class="math">\(A\)</span>, אז <span class="math">\(\left|f\right|=f\)</span> ולכן בעצם כל מה שצריך להראות הוא את השוויון <span class="math">\(\int_{A}f=\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span> משני הכיוונים. נעשה את זה בצורה קצת מתחכמת. ראשית, נניח שהטור באגף ימין מתכנס, ונוכיח שהאינטגרל באגף שמאל מתכנס, ושערכו חסום מלמעלה על ידי אגף ימין. אחר כך נניח שאגף שמאל מתכנס ונוכיח שאגף ימין מתכנס ושערכו חסום מלמעלה על ידי אגף שמאל. שני אלו ביחד נותנים לנו את הטענה כולה.</p>
+<p>נתחיל עם אגף ימין. כלומר, נניח שהטור <span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span> מתכנס (שימו לב לכך ש-<span class="math">\(\int_{A}\phi_{i}f\)</span> <strong>תמיד</strong> קיים כי <span class="math">\(\phi_{i}f\)</span> היא פונקציה רציפה בעלת תומך קומפקטי, וראינו שפונקציות כאלו הן תמיד אינטגרביליות, כך שהסכום תמיד מוגדר היטב והשאלה היחידה היא האם הוא מתכנס). נוכיח ש-<span class="math">\(f\)</span> אינטגרבילית מעל <span class="math">\(A\)</span> והאינטגרל שלה קטן או שווה לסכום הזה. לשם כך, בואו נזכור איך הוגדר אינטגרל מוכלל <span class="math">\(\int_{A}f\)</span>: זה הסופרמום של <span class="math">\(\int_{D}f\)</span> על כל הקבוצות <span class="math">\(D\subseteq A\)</span> שהן קומפקטיות ומדידות ז'ורדן. תהא <span class="math">\(D\)</span> קבוצה כזו. כעת נשתמש בקסם של חלוקת יחידה: לכל נקודה <span class="math">\(x\in D\)</span> קיימת סביבה שבה מתאפסות כל ה-<span class="math">\(\phi_{i}\)</span> פרט למספר סופי. איחוד כל הסביבות הללו מכסה את <span class="math">\(D\)</span>, ומכיוון ש-<span class="math">\(D\)</span> קומפקטית, אפשר לקחת <strong>מספר סופי</strong> שלהן שעדיין יכסה את <span class="math">\(D\)</span>. קיבלנו אוסף סופי של סביבות כך שלכל סביבה רק מספר סופי של <span class="math">\(\phi_{i}\)</span>-ים הוא לא זהותית אפס, ומכאן שעל כל <span class="math">\(D\)</span> רק מספר סופי של <span class="math">\(\phi_{i}\)</span>-ים אינו זהותית אפס. כלומר, קיים איזה שהוא <span class="math">\(N\)</span> טבעי כך שלכל <span class="math">\(i&gt;N\)</span> מתקיים <span class="math">\(\phi_{i}\left(x\right)=0\)</span> לכל <span class="math">\(x\in A\)</span>. דהיינו, <span class="math">\(\sum_{i=1}^{N}\phi_{i}\left(x\right)=1\)</span> ולכן <span class="math">\(f\left(x\right)=\sum_{i=1}^{N}f\left(x\right)\phi_{i}\left(x\right)\)</span>. הסופיות של הסכום הזה מאפשרת לנו להשתמש בתכונה נחמדה מאוד של אינטגרלים - <strong>לינאריות</strong>. לא הוכחתי את זה בפוסטים הללו, אבל לא קשה לראות ש-<span class="math">\(\int_{A}\left(\alpha f+\beta g\right)=\alpha\int_{A}f+\beta\int_{A}g\)</span> עבור <span class="math">\(f,g\)</span> פונקציות ו-<span class="math">\(\alpha,\beta\in\mathbb{R}\)</span> סקלרים - זה נובע ישירות מההגדרות. כמובן, אם זה עובד עבור שני מחוברים, זה עובד עבור כל מספר <strong>סופי</strong> של מחוברים, ולכן:</p>
+<p><span class="math">\(\int_{D}f=\int_{D}\sum_{i=1}^{N}\phi_{i}f=\sum_{i=1}^{N}\int_{D}\phi_{i}f\)</span></p>
+<p>עכשיו, לא קשה לראות ש-<span class="math">\(\int_{D}\phi_{i}f\le\int_{A}\phi_{i}f\)</span>, פשוט כי אנחנו מרחיבים את התחום שעליו אנחנו מבצעים אינטגרציה לפונקציה אי-שלילית (מ-<span class="math">\(D\)</span> אל כל <span class="math">\(A\)</span> - או ליתר דיוק, אל כל התומך של <span class="math">\(\phi_{i}\left(x\right)\)</span> ב-<span class="math">\(A\)</span>). לכן נקבל:</p>
+<p><span class="math">\(\int_{D}f\left(x\right)\le\sum_{i=1}^{N}\int_{A}\phi_{i}f\le\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span></p>
+<p>כלומר, קיבלנו שלכל <span class="math">\(D\)</span>, <span class="math">\(\int_{D}f\)</span> הוא חסום; מכאן בפרט שלקבוצה של כל ה-<span class="math">\(\int_{D}f\)</span> הללו קיים חסם עליון ולכן <span class="math">\(\int_{A}f\)</span> מוגדר, ושווה לו. אנחנו גם יודעים שהחסם העליון הזה הוא לכל היותר <span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span>, כלומר קיבלנו את הכיוון הראשון שרצינו.</p>
+<p>בכיוון השני, אנחנו מניחים ש-<span class="math">\(f\)</span> (עדיין אי שלילית) אינטגרבילית ורוצים להוכיח ש-<span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span> מתכנס וחסום על ידי <span class="math">\(\int_{A}f\)</span>; מן הסתם מכיוון שזה טור אי-שלילי מספיק להוכיח את החסימות. שוב, התעלול הוא לעבור לדבר על סכום סופי - מספיק אם נוכיח ש-<span class="math">\(\sum_{i=1}^{N}\int_{A}\phi_{i}f\le\int_{A}f\)</span> לכל <span class="math">\(N\)</span> טבעי. בהינתן <span class="math">\(N\)</span> כזה, אפשר להסתכל על איחוד כל התומכים של <span class="math">\(\phi_{1},\dots,\phi_{N}\)</span> - זה איחוד סופי של קבוצות קומפקטיות ולכן הוא בעצמו קבוצה קומפקטית, <span class="math">\(D\subseteq A\)</span>. מן הסתם מספיק להוכיח ש-<span class="math">\(\sum_{i=1}^{N}\int_{A}\phi_{i}f\le\int_{D}f\)</span>.</p>
+<p>כעת, <span class="math">\(\sum_{i=1}^{N}\int_{A}\phi_{i}f=\sum_{i=1}^{N}\int_{D}\phi_{i}f\)</span> (כי מחוץ ל-<span class="math">\(D\)</span> ממילא כל ה-<span class="math">\(\phi_{i}\)</span> הרלוונטיות מתאפסות), ומלינאריות נקבל <span class="math">\(\sum_{i=1}^{N}\int_{D}\phi_{i}f=\int_{D}\sum_{i=1}^{N}\phi_{i}f\)</span>. מכיוון שלכל <span class="math">\(x\)</span> מתקיים <span class="math">\(\sum_{i=1}^{N}\phi_{i}f\left(x\right)\le f\left(x\right)\)</span> נקבל ש-<span class="math">\(\int_{D}\sum_{i=1}^{N}\phi_{i}f\le\int_{D}f\)</span>, וזה מה שרצינו.</p>
+<p>זה מסיים את הוכחת טענת האם-ורק-אם. כי למשל, אם נניח ש-<span class="math">\(\int_{A}f\)</span> קיים, אז נקבל מייד ש-<span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\le\int_{A}f\)</span> וכמו כן ש-<span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span> מתכנס. אבל אם <span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span> מתכנס אז נובע מהכיוון השני של ההוכחה ש-<span class="math">\(\int_{A}f\le\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span> ולכן קיבלנו ששני האגפים שווים.</p>
+<p>נשאר רק לטפל בפונקציה <span class="math">\(f\)</span> כללית, לאו דווקא אי שלילית. זה דווקא השלב הפשוט ביותר שמבוסס על תעלול שכבר ראינו בפוסט הקודם - כותבים את <span class="math">\(f\)</span> בתור הפרש של שתי פונקציות אי-שליליות, <span class="math">\(f=f_{+}-f_{-}\)</span>, כאשר <span class="math">\(f_{-}\left(x\right)=\max\left\{ -f\left(x\right),0\right\} \)</span>, וכעת:</p>
+<p><span class="math">\(\int_{A}f=\int_{A}f_{+}-\int_{A}f_{-}\)</span></p>
+<p>זוהי, כזכור, ההגדרה של אינטגרל מוכלל עבור פונקציות כלליות. עכשיו נשתמש במה שכבר ראינו ונקבל</p>
+<p><span class="math">\(\int_{A}f_{+}-\int_{A}f_{-}=\sum_{i=1}^{\infty}\int_{A}\phi_{i}f_{+}-\sum_{i=1}^{\infty}\int_{A}\int_{A}\phi_{i}f_{-}=\sum_{i=1}^{\infty}\int_{A}\phi_{i}\left(f_{+}-f_{-}\right)=\sum_{i=1}^{\infty}\int_{A}\phi_{i}f\)</span></p>
+<p>כאשר המעבר האמצעי, מהפרש שני סכומים לסכום בודד, דורש כמובן הצדקה - אפשר לבצע חיבור כזה רק אם שני הסכומים <strong>מתכנסים</strong>. הדרישה הכללית לכך שהטור <span class="math">\(\sum_{i=1}^{\infty}\int_{A}\phi_{i}\left|f\right|\)</span> מבטיחה בדיוק את זה, ובכך מסתיימת הוכחת החלק הזה, והוכחת כל מה שרציתי להוכיח בפוסט הזה.</p>
+<h1>דברי סיכום ופרידה</h1>
+<p>הפוסט הזה היה ארוך מאוד כי התעקשתי לדחוף לתוכו אינסוף דברים שונים, שבספרי לימוד לרוב מקבלים כמה פרקים משל עצמם ולא רציתי להקדיש להם פוסטים נפרדים. עדיין, אני חושב שלא כל כך קשה לראות את התמונה הגדולה פה, אלא שאלו הפרטים הקטנים שעושים את המשפט הזה. זה מרגיש לי כמו מכונה ענקית שבה כל רגע משהו עלול להתרסק וברגע האחרון אנחנו ניצלים מחורבן גמור כי היי תראו! קומפקטיות אומרת שהופס הנה יש לנו כיסוי סופי ובדיוק בנקודה של הקצה של הצ'ופצ'יק פה אנחנו חייבים שמשהו יהיה סופי!</p>
+<p>אז תשמעו, ככה זה. אם הולכים מספיק רחוק במתמטיקה, בכל כיוון שהוא, מגיעים למשפטים כאלו - והמשפט הזה הוא יחסית פשוט. אני חושב שהפרטים הטכניים כאן מעניינים, אבל מן הסתם אם מישהו לא מצליח לצלוח את כולם, אפשר להסתדר גם בלעדיהם. בינתיים.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2016/04/19/line_integral/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אינטגרל קווי</span>
+            </a>
+            
+            
+            
+            <a href="/2016/03/29/prime_distribution_and_papers/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">שני דברים מתפלגים אחיד: ראשוניים וטעויות בעיתונים (ואני לא בטוח בקשר לראשוניים)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

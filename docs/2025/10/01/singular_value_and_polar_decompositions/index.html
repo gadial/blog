@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פירוק SVD והפירוק הפולארי של מטריצות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>פירוק SVD והפירוק הפולארי של מטריצות</h1>
+            <div class="post-meta">
+                <span class="date">2025-10-01</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/פירוק SVD.html">פירוק SVD</a>
+                    
+                    <a href="/tags/פירוק פולארי.html">פירוק פולארי</a>
+                    
+                    <a href="/tags/מטריצות.html">מטריצות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>בפוסט הזה אני רוצה לדבר על פירוק SVD, שהוא תוצאה מרהיבה באלגברה לינארית שבמובן מאוד מסויים מכלילה תוצאה מרהיבה אחרת של האלגברה הלינארית שעליה כתבתי <a href="https://gadial.net/2025/09/06/unitary_diagonalization/">ממש לא מזמן</a>: לכסון אוניטרי. אמרנו שמטריצה <span class="math">\(A\)</span> ניתנת ללכסון אוניטרי אם אפשר לכתוב <span class="math">\(A=UDU^{*}\)</span> כאשר <span class="math">\(U\)</span> היא <strong>מטריצה אוניטרית</strong> ואילו <span class="math">\(D\)</span> היא <strong>מטריצה אלכסונית</strong>. המשפט שהוכחנו אמר ש:</p>
+<ul> 
+<li>מעל <span class="math">\(\mathbb{R}\)</span>, <span class="math">\(A\)</span> היא לכסינה אוניטרית אם ורק אם <span class="math">\(A=A^{*}\)</span> ("A צמודה לעצמה").</li>
+
+
+<li>מעל <span class="math">\(\mathbb{C}\)</span>, <span class="math">\(A\)</span> היא לכסינה אוניטרית אם ורק אם <span class="math">\(A^{*}A=AA^{*}\)</span> ("A נורמלית").</li>
+
+</ul>
+
+<p>אפשר לחשוב על לכסון אוניטרי גם בצורה שונה: מטריצה אוניטרית <span class="math">\(U\)</span> מסדר <span class="math">\(n\times n\)</span> מעל <span class="math">\(\mathbb{F}\)</span> היא בעצם אוסף <span class="math">\(\left\{ u_{1},\ldots,u_{n}\right\} \)</span> של <strong>וקטורים</strong> ב-<span class="math">\(\mathbb{F}^{n}\)</span>: כל <strong>עמודה</strong> שלה היא וקטור שכזה. דרישת האוניטריות שקולה לכך שהוקטורים הללו יהיו <strong>בסיס אורתונורמלי</strong>, כלומר וקטורים בלתי תלויים המקיימים <span class="math">\(\left\langle u_{i},u_{j}\right\rangle =\delta_{ij}\)</span> כאשר המכפלה הפנימית היא המכפלה הסטנדרטית מעל <span class="math">\(\mathbb{F}\)</span>. כדי לראות שזה עובד פשוט נסתכל על השוויון <span class="math">\(U^{*}U=I\)</span> שמגדיר אוניטריות: באופן כללי, כאשר כופלים שתי מטריצות <span class="math">\(A,B\)</span> אז הכניסה ה-<span class="math">\(ij\)</span> במכפלה שווה ל<strong>שורה</strong> ה-<span class="math">\(i\)</span> של <span class="math">\(A\)</span> שמוכפלת סקלרית ב<strong>עמודה</strong> ה-<span class="math">\(j\)</span> של <span class="math">\(B\)</span>; במכפלה <span class="math">\(U^{*}U\)</span>, השורה ה-<span class="math">\(i\)</span> של <span class="math">\(U^{*}\)</span> היא בעצם העמודה ה-<span class="math">\(i\)</span> של <span class="math">\(U\)</span>, אחרי שביצענו לאבריה הצמדה. המכפלה הפנימית הסטנדרטית מעל <span class="math">\(\mathbb{F}\)</span> היא בדיוק "בצעו הצמדה לאחד הוקטורים ואז כפלו אותם סקלרית", מה שנותן לנו את המעבר החלק מלשון מטריצות ללשון וקטורים. בנוסף, העמודות של <span class="math">\(U\)</span> הן בלתי תלויות לינארית כי <span class="math">\(U\)</span> היא מטריצה הפיכה - כל זה חומר סטנדרטי של אלגברה לינארית שאני לא אוכיח שוב.</p>
+<p>את השוויון <span class="math">\(A=UDU^{*}\)</span> אפשר להבין גם כן בלשון וקטורית. בואו נסמן</p>
+<p><span class="math">\(D=\left(\begin{array}{cccc} \lambda_{1}\\  & \lambda_{2}\\  &  & \ddots\\  &  &  & \lambda_{n} \end{array}\right)\)</span></p>
+<p>כלומר <span class="math">\(D\)</span> היא מטריצה אלכסונית עם הערכים <span class="math">\(\lambda_{1},\ldots,\lambda_{n}\)</span>. עכשיו, ניקח את <span class="math">\(A=UDU^{*}\)</span>, נכפול מימין ב-<span class="math">\(U\)</span> ונקבל</p>
+<p><span class="math">\(AU=UD\)</span></p>
+<p>מה קורה פה? אמרתי שהכניסה ה-<span class="math">\(ij\)</span> של <span class="math">\(AU\)</span> היא מכפלת השורה ה-<span class="math">\(i\)</span> של <span class="math">\(A\)</span> בעמודה ה-<span class="math">\(j\)</span> של <span class="math">\(U\)</span>; אם נסתכל על כל <strong>העמודה</strong> ה-<span class="math">\(j\)</span> של <span class="math">\(AU\)</span> (כלומר, על הכניסות <span class="math">\(1j,2j,\ldots,nj\)</span>) אז יוצא שהעמודה הזו שווה למכפלה של <span class="math">\(A\)</span> בוקטור העמודה ה-<span class="math">\(j\)</span>-י של <span class="math">\(U\)</span>. סימנו את הוקטור הזה כזכור ב-<span class="math">\(u_{j}\)</span> אז אפשר לסכם שהעמודה ה-<span class="math">\(j\)</span> של <span class="math">\(AU\)</span> היא פשוט <span class="math">\(Au_{j}\)</span>.</p>
+<p>עכשיו, מה זו <span class="math">\(UD\)</span>? הכניסה ה-<span class="math">\(ij\)</span> של <span class="math">\(UD\)</span> שווה למכפלת השורה ה-<span class="math">\(i\)</span> של <span class="math">\(U\)</span> בעמודה ה-<span class="math">\(j\)</span> של <span class="math">\(D\)</span>. בעמודה ה-<span class="math">\(j\)</span> של <span class="math">\(D\)</span> יש רק איבר אחד שאולי שונה מאפס: <span class="math">\(\lambda_{j}\)</span>, שנמצא בשורה ה-<span class="math">\(j\)</span> של העמודה. אז מכל השורה ה-<span class="math">\(i\)</span>-ית של <span class="math">\(U\)</span>, הולך להישאר רק האיבר במקום <span class="math">\(ij\)</span>, והוא יוכפל ב-<span class="math">\(\lambda_{j}\)</span>. במילים אחרות: העמודות של <span class="math">\(UD\)</span> הן בדיוק העמודות של <span class="math">\(U\)</span>, רק שבנוסף העמודה ה-<span class="math">\(j\)</span> של <span class="math">\(U\)</span> מוכפלת ב-<span class="math">\(\lambda_{j}\)</span>, כלומר היא שווה ל-<span class="math">\(\lambda_{j}u_{j}\)</span>.</p>
+<p>השוויון <span class="math">\(AU=UD\)</span> אומר לנו, אם כן, ש-<span class="math">\(Au_{j}=\lambda_{j}u_{j}\)</span>, כלומר ש-<span class="math">\(u_{j}\)</span> הוא <strong>וקטור עצמי</strong> של <span class="math">\(A\)</span> עם ערך עצמי <span class="math">\(\lambda_{j}\)</span>. זה מוביל לניסוח שקול של מה זה לכסון אוניטרי: שיהיה לנו בסיס <strong>אורתונורמלי</strong> למרחב שמורכב כולו מוקטורים עצמיים של <span class="math">\(A\)</span>. לבסוף, אם לוקחים טרנספורמציה לינארית כללית <span class="math">\(T:V\to V\)</span> עבור מרחב סוף-ממדי <span class="math">\(V\)</span> מעל <span class="math">\(\mathbb{R}\)</span> או <span class="math">\(\mathbb{C}\)</span> אז אפשר לקחת בסיס אורתונורמלי למרחב הזה (תהליך גרם-שמידט מבטיח שקיים כזה), ולהשתמש בבסיס הזה כדי לעבור לדבר על <span class="math">\(\mathbb{F}^{n}\)</span> ולקבל את כל המושגים שדיברנו עליהם כאן גם בהקשר של טרנספורמציות כלליות. מכיוון שאני מניח שהטריק הזה מוכר, בפוסט הזה אני לא ממש אדבר עליו - לכאורה נדבר רק על המקרה הקונקרטי של <span class="math">\(\mathbb{F}^{n}\)</span> ושל מטריצות, אבל ברקע הדברים צריך לזכור שזה פשוט התכל'ס הטכני של תוצאה שתקפה לכל מרחב מכפלה פנימית סוף-ממדי.</p>
+<p>עכשיו אפשר לעבור לדבר סוף סוף על מה פירוק SVD אומר. עד כה נראה שסתם ניסחתי מחדש בצורה מסורבלת דברים שכל מי שקורא פוסט כזה כבר אמור להכיר, אבל לא ניסחתי את זה ככה סתם: נצטרך את הכל כדי להבין את האופן הספציפי שבו SVD מכליל את מה שראינו.</p>
+<h2>מה זה פירוק SVD?</h2>
+
+<p>לכסון אוניטרי זה משהו שקיים לחלק מהמטריצות הריבועיות. לעומתו, פירוק SVD (ראשי תיבות של Singular Value Decomposition, "פירוק ערכים סינגולריים" ואוטוטו נראה מהם הערכים הללו) זה משהו שקיים <strong>לכל</strong> מטריצה <span class="math">\(A\in M_{n,m}\left(\mathbb{F}\right)\)</span> מעל <span class="math">\(\mathbb{F}\)</span> שהוא הממשיים או המרוכבים (בדרך כלל לא אטרח לכתוב אותו), גם אם <span class="math">\(A\)</span> היא בכלל לא ריבועית. זה הפירוק הבא:</p>
+<p><span class="math">\(A=U\Sigma V^{*}\)</span></p>
+<p>כאשר <span class="math">\(U\in M_{n,n}\)</span> ו-<span class="math">\(V\in M_{m,m}\)</span> הן מטריצות אוניטריות ואילו <span class="math">\(\Sigma\in M_{n,m}\)</span> (כלומר, מטריצה לא בהכרח ריבועית, מאותו סדר כמו <span class="math">\(A\)</span>) היא "אלכסונית" במובן זה שהערכים היחידים שלה שעשויים להיות שונים מאפס הם הערכים מהצורה <span class="math">\(\Sigma_{ii}\)</span> (עבור <span class="math">\(1\le i\le\min\left\{ n,m\right\} \)</span>). יותר מזה: אם נסמן את הערכים על האלכסון הזה ב-<span class="math">\(\sigma_{1},\sigma_{2},\ldots,\sigma_{k}\)</span> אז <strong>כולם</strong> מספרים ממשיים, ומתקיים <span class="math">\(\sigma_{1}\ge\sigma_{2}\ge\ldots\ge\sigma_{k}\ge0\)</span>. כלומר, בניגוד ללכסון אוניטרי שבו היה "חופש בחירה" עבור <span class="math">\(D\)</span> איך הערכים העצמיים יהיו מסודרים בה, כאן יש הצגה קנונית יחידה של המטריצה <span class="math">\(\Sigma\)</span> (אבל לא של <span class="math">\(U,V\)</span>). ויותר מכך: ערכי ה-<span class="math">\(\sigma\)</span> ששונים מאפס הם בדיוק הערכים <span class="math">\(\sigma_{1},\ldots,\sigma_{r}\)</span>, כאשר <span class="math">\(r\)</span> היא <strong>הדרגה</strong> של המטריצה <span class="math">\(A\)</span>.</p>
+<p>הערכים <span class="math">\(\sigma_{1},\sigma_{2},\ldots,\sigma_{k}\)</span> הללו נקראים <strong>הערכים הסינגולריים</strong> של <span class="math">\(A\)</span>. קל להגיד מה הם: אם נסתכל על <span class="math">\(AA^{*}\)</span> נקבל את מה שקראתי לו <a href="https://gadial.net/2025/09/21/positive_semidefinite_matrices/">בפוסט הקודם</a> <strong>מטריצה חיובית</strong> (Positive Definite) והערכים העצמיים של המטריצות הללו הם ממשיים אי-שליליים ולכן אפשר להוציא להם שורש ריבועי ולקבל ממשיים אי-שליליים; הערכים הסינגולריים הם בדיוק השורשים הללו.</p>
+<p>בואו ננסה להבין את SVD ברמת הוקטורים. אני אסמן את העמודות של <span class="math">\(U\)</span> ב-<span class="math">\(\left\{ u_{1},\ldots,u_{n}\right\} \)</span>ושל <span class="math">\(V\)</span> ב-<span class="math">\(\left\{ v_{1},\ldots,v_{m}\right\} \)</span>, אז מכיוון שאלו מטריצות אוניטריות, שני אלו הם בסיסים אורתונורמליים (למרחבים שהם אולי שונים; הראשון ל-<span class="math">\(\mathbb{F}^{n}\)</span> והשני ל-<span class="math">\(\mathbb{F}^{m}\)</span>). עכשיו, נכפול את <span class="math">\(A=U\Sigma V^{*}\)</span> ב-<span class="math">\(V\)</span> מימין ונקבל</p>
+<p><span class="math">\(AV=U\Sigma\)</span></p>
+<p>וכמו שהסברתי במבוא, זה אומר שמתקיים</p>
+<p><span class="math">\(Av_{j}=\sigma_{j}u_{j}\)</span></p>
+<p>זה מאוד מזכיר וקטורים עצמיים, חוץ מהקטע של ה"עצמי". מכפלה ב-<span class="math">\(A\)</span> מעבירה את <span class="math">\(v_{j}\)</span> אל מכפלה של <span class="math">\(u_{j}\)</span> ב-<span class="math">\(\sigma_{j}\)</span>, כלומר אנחנו עוברים מהקבוצה <span class="math">\(\left\{ v_{1},\ldots,v_{m}\right\} \)</span> אל <span class="math">\(\left\{ u_{1},\ldots,u_{n}\right\} \)</span>. זה ה"מחיר" שאנחנו משלמים: מצד אחד הפירוק קיים לכל מטריצה, מצד שני אין לנו בסיס אחד לאותו מרחב ש-<span class="math">\(A\)</span> מעבירה אותו לעצמו; יש לנו שני בסיסים למרחבים שונים ש-<span class="math">\(A\)</span> מעבירה אותנו מאחד מהם לשני, אבל עדיין בצורה פשוטה יחסית: היא לא מעבירה איבר בסיס ל<strong>צירוף לינארי</strong> של שני וקטורים או יותר, אלא רק למכפלה בסקלר של וקטור אחד.</p>
+<h2>מקבלים פירוק שהוא כמעט, אבל לא בדיוק, שונה לגמרי מ-SVD</h2>
+
+<p>ההוכחה שפירוק SVD תמיד קיים היא לא מסובכת במיוחד, אבל אני הולך בכוונה לסבך אותה טיפה כי אם מתחילים ממשפט יותר כללי, אפשר לקבל ממנו גם את פירוק SVD אבל גם את הפירוק הפולארי של מטריצות שהזכרתי בפוסט הקודם: שכל מטריצה <span class="math">\(A\)</span> ניתן לכתוב בתור <span class="math">\(A=PU\)</span> כך ש-<span class="math">\(P\)</span> היא מטריצה חיובית ו-<span class="math">\(U\)</span> היא מטריצה אוניטרית. למעשה, גם כאן זה עובד אפילו למטריצות לא ריבועיות: אם <span class="math">\(A\in M_{n,m}\)</span> כך ש-<span class="math">\(n\le m\)</span> (מספר השורות לא גדול ממספר העמודות) אז קיימת <span class="math">\(P\in M_{n,n}\)</span> חיובית מאותה דרגה כמו <span class="math">\(A\)</span>, ו-<span class="math">\(U\in M_{n,m}\)</span> כך ש-<span class="math">\(A=PU\)</span>, ו-<span class="math">\(U\)</span> היא "אוניטרית" במובן הבא: <span class="math">\(UU^{*}=I_{n\times n}\)</span>. כלומר, <strong>השורות</strong> של <span class="math">\(U\)</span> הן אורתונורמליות.</p>
+<p>נראה קשור אל SVD? לא? לי זה בכלל לא נראה קשור ממבט ראשון אבל תוך שניה הכל יתבהר, ולמעשה כבר הזכרתי את טיעון המפתח המרכזי: זה לא משנה איזו מטריצה היא <span class="math">\(A\)</span> - הפיכה, לא הפיכה, ריבועית, לא ריבועית - אני <strong>תמיד</strong> מקבל ש-<span class="math">\(AA^{*}\)</span> היא מטריצה חיובית, ולכן אפשר לקחת את הערכים העצמיים שלה ולהוציא להם שורש ולקבל את הערכים הסינגולריים. זה האופן שבו מטריצות חיוביות נדחפות לתוך ההוכחה, ואם יש לנו מטריצות חיוביות ומטריצות כמו-אוניטריות, כבר יש לנו את הפירוק הפולארי.</p>
+<p>אוקיי, אז מה עושים? עכשיו נעבוד מסודר ומדוקדק. התחלנו עם <span class="math">\(A\in M_{n,m}\)</span> שמקיימת <span class="math">\(n\le m\)</span>. ביצענו את הכפל <span class="math">\(AA^{*}\)</span> וקיבלנו מטריצה <span class="math">\(n\times n\)</span> שהיא חיובית, ולכן עם ערכים עצמיים <span class="math">\(\lambda_{1}\ge\lambda_{2}\ge\ldots\ge\lambda_{n}\ge0\)</span>. הערכים העצמיים לאו דווקא שונים זה מזה, אבל שימו לב שכל <span class="math">\(n\)</span> הערכים העצמיים <strong>קיימים</strong>, וזה כי <span class="math">\(AA^{*}\)</span> היא בפרט מטריצה צמודה לעצמה ולכן לכסינה. מכיוון שכל ערך עצמי הוא ממשי אי שלילי אני יכול להגדיר <span class="math">\(\sigma_{i}=\sqrt{\lambda_{i}}\)</span> ולקבל סדרה חדשה של מספרים ממשיים אי שליליים <span class="math">\(\sigma_{1}\ge\sigma_{2}\ge\ldots\ge\sigma_{n}\ge0\)</span>. המספרים הללו הם מה שנקרא <strong>הערכים הסינגולריים</strong> של <span class="math">\(A\)</span>. לפעמים קוראים "ערכים סינגולריים" רק לאותם <span class="math">\(\sigma_{i}\)</span>-ים שגדולים ממש מאפס; אני לא אעשה את ההפרדה הזו כרגע, אבל אני כן אכניס סימון חדש לתמונה: <span class="math">\(r\)</span> יהיה המספר של הערכים הסינגולריים שגדולים מאפס, כלומר <span class="math">\(\sigma_{1}\ge\ldots\ge\sigma_{r}>0\)</span> ו-<span class="math">\(\sigma_{r+1}=\ldots=\sigma_{n}=0\)</span>. בהמשך נראה ש-<span class="math">\(r=\text{rank}A\)</span>, אבל ההוכחה לא מיידית אז נחכה עם זה קצת.</p>
+<p>עכשיו אנחנו יכולים לבנות מטריצה אלכסונית <span class="math">\(n\times n\)</span> עם הערכים הסינגולריים על האלכסון:</p>
+<p><span class="math">\(\Lambda=\left(\begin{array}{cccc} \sigma_{1}\\  & \sigma_{2}\\  &  & \ddots\\  &  &  & \sigma_{n} \end{array}\right)\)</span></p>
+<p>עכשיו, <span class="math">\(AA^{*}\)</span> לא סתם לכסינה אלא לכסינה <strong>אוניטרית</strong>, כלומר יש לנו בסיס של וקטורים עצמיים אורתונורמליים <span class="math">\(x_{1},\ldots,x_{n}\)</span> שאפשר לסדר יפה בתור עמודות ולקבל מטריצה אוניטרית <span class="math">\(X\in M_{n,n}\)</span>. אני רוצה למצוא פירוק של <span class="math">\(A\)</span> שהוא מהצורה <span class="math">\(A=X\Lambda Y\)</span>, אבל מהי <span class="math">\(Y\)</span> הזו? ראשית, <span class="math">\(X\Lambda\in M_{n,n}\)</span> ולכן צריך שיתקיים <span class="math">\(Y\in M_{n,m}\)</span> כדי שכפל המטריצות יהיה מוגדר ונקבל ממנו מטריצה מאותם ממדים כמו <span class="math">\(A\)</span>. אבל חוץ מזה, מה אנחנו יודעים עליה? אם <span class="math">\(\Lambda\)</span> היא <strong>הפיכה</strong> אז הסיטואציה פשוטה: <span class="math">\(Y=\Lambda^{-1}X^{*}A\)</span>, אבל זה עובד רק אם <span class="math">\(\Lambda\)</span> הפיכה, כלומר אם כל הערכים העצמיים גדולים מאפס (כלומר אם <span class="math">\(r=n\)</span>). אחרת? המצב קצת מסובך יותר אבל עדיין אפשר לבנות <span class="math">\(Y\)</span> מתאימה. בשביל לעשות את זה, אני קודם אניח ש-<span class="math">\(\Lambda\)</span> כן הפיכה ואראה מה אני יכול להגיד על המבנה של <span class="math">\(Y\)</span>:</p>
+<p>יהיה לי קצת יותר נוח לבנות את <span class="math">\(Y^{*}\)</span> ולקבל ממנו את <span class="math">\(Y\)</span>, אז נתחיל עם לחשב</p>
+<p><span class="math">\(Y^{*}=\left(\Lambda^{-1}X^{*}A\right)^{*}=A^{*}X\Lambda^{-1}\)</span></p>
+<p>כשאני משתמש כאן בכך ש-<span class="math">\(\Lambda^{-1}\)</span> היא מטריצה ממשית אלכסונית ולכן <span class="math">\(\left(\Lambda^{-1}\right)^{*}=\Lambda^{-1}\)</span>.</p>
+<p>עכשיו, באופן כללי כשיש לנו מכפלת מטריצות <span class="math">\(AB\)</span> אפשר לחשוב על העמודה ה-<span class="math">\(i\)</span> של המכפלה בתור <span class="math">\(Ab_{i}\)</span>, כלומר המכפלה של כל <span class="math">\(A\)</span> בעמודה ה-<span class="math">\(i\)</span> של <span class="math">\(B\)</span>. זה אומר שהעמודה ה-<span class="math">\(i\)</span> של <span class="math">\(A^{*}X\)</span> היא פשוט <span class="math">\(A^{*}x_{i}\)</span>. עכשיו, עוד דרך לחשוב על העמודות של המכפלה <span class="math">\(AB\)</span> היא שהעמודה ה-<span class="math">\(i\)</span> במכפלה היא <strong>צירוף לינארי</strong> של העמודות של <span class="math">\(A\)</span> עם המקדמים שנמצאים בעמודה ה-<span class="math">\(i\)</span> של <span class="math">\(B\)</span>. כך שאם <span class="math">\(B\)</span> היא אלכסונית עם הערך <span class="math">\(b_{ii}\)</span> על האלכסון, אז העמודה ה-<span class="math">\(i\)</span> של <span class="math">\(AB\)</span> תכיל את העמודה ה-<span class="math">\(i\)</span>של <span class="math">\(A\)</span> כשהיא מוכפלת ב-<span class="math">\(\lambda_{ii}\)</span> ותו לא. במקרה שלנו זה אומר שהעמודה ה-<span class="math">\(i\)</span> של <span class="math">\(A^{*}X\Lambda^{-1}\)</span> תהיה <span class="math">\(\sigma_{i}^{-1}A^{*}x_{i}\)</span>. לכן, במטריצה <span class="math">\(Y\)</span> שאנחנו בונים, <strong>השורה</strong> ה-<span class="math">\(i\)</span> תהיה הוקטור <span class="math">\(y_{i}=\left(\sigma_{i}^{-1}A^{*}x_{i}\right)^{*}=\sigma_{i}^{-1}x_{i}^{*}A\)</span>. כל זה נכון במקרה שבו <span class="math">\(\Lambda\)</span> הפיכה, אבל גם אם לא - אנחנו יכולים להשתמש בו כדי <strong>להגדיר</strong> את השורות של <span class="math">\(Y\)</span>, כל עוד <span class="math">\(\sigma_{i}\ne0\)</span>, כלומר עבור הערכים הסינגולריים שסימנתי ב-<span class="math">\(\sigma_{1},\ldots,\sigma_{r}\)</span>.קיבלנו את השורות <span class="math">\(y_{1},\ldots,y_{r}\)</span>, כלומר <span class="math">\(r\)</span> השורות הראשונות במטריצה <span class="math">\(Y\)</span> שאמורה לכלול סך הכל <span class="math">\(n\)</span> שורות שכל אחד מהן היא באורך <span class="math">\(m\)</span> (כי היא מסדר <span class="math">\(n\times m\)</span>).</p>
+<p>ה-<span class="math">\(y_{i}\)</span>-ים הללו מקיימים תכונה מהותית אחת - גם הם אורתונורמליים. כדי לראות את זה, בואו נכפול אותם פנימית. אם <span class="math">\(x,y\)</span> הם שני וקטורים ב-<span class="math">\(\mathbb{F}^{n}\)</span>, המכפלה הפנימית הסטנדרטית שלהם היא <span class="math">\(\left\langle x,y\right\rangle =y^{*}x\)</span>, אבל זה נכון לוקטורי <strong>עמודה. </strong>אם יש לנו וקטורי שורה, להסתכל על <span class="math">\(xy^{*}\)</span> ישיג את אותו אפקט (מצמיד את אברי <span class="math">\(y\)</span> ומסדר את הממדים כך שכפל שני הוקטורים יניב סקלר). לכן</p>
+<p><span class="math">\(\left\langle y_{i},y_{j}\right\rangle =\left(\sigma_{i}^{-1}x_{i}^{*}A\right)\left(\sigma_{j}^{-1}x_{j}^{*}A\right)^{*}=\left(\sigma_{i}\sigma_{j}\right)^{-1}x_{i}^{*}AA^{*}x_{j}\)</span></p>
+<p>עכשיו, כזכור <span class="math">\(x_{j}\)</span> הוא וקטור עצמי של <span class="math">\(AA^{*}\)</span> עם ערך עצמי <span class="math">\(\lambda_{j}=\sigma_{j}^{2}\)</span> כך שקיבלנו</p>
+<p><span class="math">\(\left(\sigma_{i}\sigma_{j}\right)^{-1}x_{i}^{*}AA^{*}x_{j}=\left(\sigma_{i}\sigma_{j}\right)^{-1}\sigma_{j}^{2}x_{i}^{*}x_{j}=\frac{\sigma_{j}}{\sigma_{i}}\left\langle x_{j},x_{i}\right\rangle =\frac{\sigma_{j}}{\sigma_{i}}\delta_{ij}=\delta_{ij}\)</span></p>
+<p>המעבר האחרון נובע מכך שאם <span class="math">\(i\ne j\)</span> אז <span class="math">\(\frac{\sigma_{j}}{\sigma_{i}}\delta_{ij}=0\)</span> ואילו אם <span class="math">\(\delta_{ij}=1\)</span> אז ברכיב <span class="math">\(\frac{\sigma_{j}}{\sigma_{i}}\)</span> יש לנו את אותו איבר ולכן הוא מתבטל.</p>
+<p>עכשיו, אם יש לנו קבוצה <span class="math">\(\left\{ y_{1},\ldots,y_{r}\right\} \)</span> של וקטורים אורתונורמליים בלתי תלויים במרחב <span class="math">\(\mathbb{F}_{m}\)</span>, כאשר <span class="math">\(r\le n\le m\)</span>, אז אפשר <strong>להרחיב</strong> אותה לקבוצה <span class="math">\(\left\{ y_{1},\ldots,y_{r},y_{r+1},\ldots,y_{n}\right\} \)</span> של וקטורים אורתונורמליים בלתי תלויים בשיטות הסטנדרטיות של השלמה לבסיס וביצוע גרם-שמידט (רק שכאן אנחנו לא צריכים להגיע ל-<span class="math">\(m\)</span> וקטורים אלא יכולים להסתפק ב-<span class="math">\(n\)</span> כאלו). שימו לב שההרחבה הזו לא נקבעת בצורה יחידה, אז זו כבר הנקודה השניה שבה משהו לא נקבע באופן יחיד: גם <span class="math">\(X\)</span> לא נקבעה באופן יחיד, ועכשיו אנחנו רואים שאם לא כל הערכים הסינגולריים שונים מאפס אז גם <span class="math">\(Y\)</span> לא נקבעת באופן יחיד בהינתן <span class="math">\(X\)</span>.</p>
+<p>קיבלנו מטריצה <span class="math">\(Y\)</span>, אבל צריך להראות ש-<span class="math">\(A=X\Lambda Y\)</span>, או באופן שקול ש-<span class="math">\(X^{*}A=\Lambda Y\)</span>. אפשר להראות ששתי המטריצות הללו שוות, שורה-שורה. עבור <span class="math">\(r\)</span> השורות הראשונות, השורות של <span class="math">\(Y\)</span> הן מהצורה</p>
+<p><span class="math">\(y_{i}=\sigma_{i}^{-1}x_{i}^{*}A\)</span></p>
+<p>ולכן השורות של <span class="math">\(\Lambda Y\)</span> הן מהצורה <span class="math">\(x_{i}^{*}A\)</span>, וזו בדיוק הצורה של שורה של <span class="math">\(X^{*}A\)</span> (שני אלו מאותם שיקולים על איך נראות העמודות של מכפלה שהזכרתי קודם, רק כשמפעילים אותם על שורות בתיקונים המתאימים).</p>
+<p>עבור שורה <span class="math">\(y_{k}\)</span> שהיא מעבר ל-<span class="math">\(r\)</span> הראשונות, הסקלר המתאים ב-<span class="math">\(\Lambda\)</span> שבו כופלים את השורה ה-<span class="math">\(k\)</span> הוא <span class="math">\(\sigma_{k}=0\)</span>, ולכן מקבלים ב<span class="math">\(\Lambda Y\)</span>- את שורת האפס. מצד שני, השורה המתאימה בצד שמאל היא <span class="math">\(x_{k}^{*}A\)</span>. אל מה היא שווה? ובכן, מכיוון שהערך הסינגולרי <span class="math">\(\sigma_{k}=0\)</span> אז גם <span class="math">\(\lambda_{k}=0\)</span>, כלומר <span class="math">\(\left(AA^{*}\right)x_{k}=\lambda_{k}x_{k}=0\)</span>.</p>
+<p>עכשיו אפשר להשתמש בטריק. נכפול את <span class="math">\(\left(AA^{*}\right)x_{k}\)</span> משמאל ב-<span class="math">\(x_{k}^{*}\)</span>. מכיוון ש-<span class="math">\(\left(AA^{*}\right)x_{k}\)</span> הוא וקטור האפס, אחרי הכפל ב-<span class="math">\(x_{k}^{*}\)</span> נקבל את סקלר האפס. מצד שני, אפשר להשתמש בפלא של האסוציאטיביות של כפל מטריצות כדי להפוך את המכפלה הזו למכפלה פנימית:</p>
+<p><span class="math">\(0=x_{k}^{*}\left(AA^{*}\right)x_{k}=\left(x_{k}^{*}A\right)\left(A^{*}x_{k}\right)=\left(A^{*}x_{k}\right)^{*}\left(A^{*}x_{k}\right)=\left\langle A^{*}x_{k},A^{*}x_{k}\right\rangle \)</span></p>
+<p>ולהשתמש בכך שמכפלה פנימית היא חיובית, כך שמכפלה פנימית של איבר בעצמו יצאה 0, האיבר הוא 0, כלומר <span class="math">\(A^{*}x_{k}=0\)</span>, ולכן גם <span class="math">\(0=\left(A^{*}x_{k}\right)^{*}=x_{k}^{*}A\)</span>, כמו שרצינו להראות. זה מסיים את ההוכחה.</p>
+<p>בואו נציין שוב במפורש את מה שמצאנו: <strong>לכל</strong> מטריצה <span class="math">\(A\)</span>, תהא אשר תהא (חוץ מההנחה שמספר השורות בה לא גדול ממספר העמודות) קיים פירוק <span class="math">\(A=X\Lambda Y\)</span> כך ש-<span class="math">\(\Lambda\)</span> היא המטריצה האלכסונית של הערכים הסינגולריים של <span class="math">\(A\)</span>, <span class="math">\(X\)</span> היא מטריצה אוניטרית, ואילו <span class="math">\(Y\)</span> היא מטריצה בעלת שורות אורתונורמליות. </p>
+<p>נקודה אחת שעוד לא ראינו היא ש-<span class="math">\(\Lambda\)</span> נקבעת בצורה <strong>יחידה</strong>, במובן הבא: אם <span class="math">\(\Lambda\)</span> היא מטריצה אלכסונית <strong>כלשהי</strong> מסדר <span class="math">\(n\times n\)</span> שהכניסות על האלכסון שלה הן <span class="math">\(\tau_{1}\ge\tau_{2}\ge\ldots\ge\tau_{n}\)</span> ויש פירוק <span class="math">\(A=X\Lambda Y\)</span> עם תכונות האורתונורמליות של <span class="math">\(X,Y\)</span> שציינתי קודם, אז <span class="math">\(\tau_{i}=\sigma_{i}\)</span>, כלומר <span class="math">\(\Lambda\)</span> היא המטריצה של הערכים הסינגולריים. אין פירוק אחר שבו באמצע יש מטריצה עם ערכים <strong>ממשיים</strong> שמסודרים בסדר יורד. כדי לראות את זה, נניח ש-<span class="math">\(A=X\Lambda Y\)</span> ונחשב את <span class="math">\(AA^{*}\)</span>:</p>
+<p><span class="math">\(AA^{*}=\left(X\Lambda Y\right)\left(X\Lambda Y\right)^{*}=X\Lambda YY^{*}\Lambda X^{*}=X\Lambda^{2}X^{*}\)</span></p>
+<p>כאן השתמשנו בכך ש-<span class="math">\(YY^{*}=I\)</span> בזכות האורתונורמליות של שורות <span class="math">\(Y\)</span>.</p>
+<p>עכשיו, מכיוון ש-<span class="math">\(X\)</span> היא מטריצה אוניטרית, המשוואה <span class="math">\(AA^{*}=X\Lambda^{2}X^{*}\)</span> אומרת ש-<span class="math">\(\Lambda^{2}\)</span> היא מה שמתקבל מלכסון אוניטרי של <span class="math">\(AA^{*}\)</span>, כלומר הכניסות של <span class="math">\(\Lambda^{2}\)</span> הן הערכים העצמיים של <span class="math">\(AA^{*}\)</span>: <span class="math">\(\tau_{i}^{2}=\lambda_{i}=\sigma_{i}^{2}\)</span>, ומכיוון שגם <span class="math">\(\sigma_{i}\)</span> וגם <span class="math">\(\tau_{i}\)</span> הם ממשיים אי שליליים, אפשר להוציא שורש ולקבל <span class="math">\(\tau_{i}=\sigma_{i}\)</span>.</p>
+<h2>מקבלים את הפירוק הפולארי ואת פירוק SVD</h2>
+
+<p>המטרה של הפוסט היא להראות איך מקבלים את פירוק SVD אבל עם מה שכבר ראינו כל כך קל לקבל את הפירוק הפולארי שיהיה מגוחך להתעלם מזה. אנחנו לוקחים מטריצה <span class="math">\(A\)</span> כלשהי מסדר <span class="math">\(n\times m\)</span> כך ש-<span class="math">\(n\le m\)</span> ועל פי מה שכבר ראינו, מקבלים עבורה פירוק</p>
+<p><span class="math">\(A=X\Lambda Y\)</span></p>
+<p>עכשיו נשתמש בטריק הכי עתיק בספר - נתקע באמצע הביטוי את <span class="math">\(X^{*}X\)</span> ששווה למטריצת היחידה, ונשתמש באסוציאטיביות. נקבל:</p>
+<p><span class="math">\(A=\left(X\Lambda X^{*}\right)\left(XY\right)\)</span></p>
+<p>נסמן <span class="math">\(P=X\Lambda X^{*}\)</span> ו-<span class="math">\(U=XY\)</span> וקיבלנו פירוק <span class="math">\(A=PU\)</span>. עכשיו, מה אמרתי על הפירוק הזה קודם? שקיימת <span class="math">\(P\in M_{n,n}\)</span> חיובית מאותה דרגה כמו <span class="math">\(A\)</span>, ו-<span class="math">\(U\in M_{n,m}\)</span> כך ש-<span class="math">\(A=PU\)</span>, ו-<span class="math">\(U\)</span> היא "אוניטרית" במובן הבא: <span class="math">\(UU^{*}=I_{m\times m}\)</span>. כלומר, <strong>השורות</strong> של <span class="math">\(U\)</span> הן אורתונורמליות. האם שני אלו נכונים?</p>
+<p>ראשית, הממדים מתאימים: <span class="math">\(X\Lambda X^{*}\)</span> היא באמת מסדר <span class="math">\(n\times n\)</span>, ואילו <span class="math">\(XY\)</span> היא מסדר <span class="math">\(n\times m\)</span>. שנית, </p>
+<p><span class="math">\(UU^{*}=XYY^{*}X^{*}=XIX^{*}=XX^{*}=I\)</span></p>
+<p>מה שמשאיר רק להבין למה <span class="math">\(P\)</span> היא חיובית - אבל אנחנו יודעים שמטריצה היא חיובית אם ורק אם הערכים העצמיים שלה הם ממשיים אי שליליים, ו-<span class="math">\(X\Lambda X^{*}\)</span> הוא לכסון אוניטרי, הערכים העצמיים כבר כתובים במפורש ב-<span class="math">\(\Lambda\)</span> והם כולם ממשיים אי שליליים. זה מסיים את ההוכחה - אמרתי שזה יהיה פשוט!</p>
+<p>עוד דבר שקל יחסית לראות הוא מתי הפירוק הפולארי הוא <strong>יחיד</strong>. ראשית, מה זו <span class="math">\(P\)</span>? אנחנו יודעים ש-<span class="math">\(P^{2}=\left(X\Lambda X^{*}\right)\left(X\Lambda X^{*}\right)=X\Lambda^{2}X^{*}\)</span>. אבל מי אלו <span class="math">\(X,\Lambda\)</span>? הן לא מטריצות שבאו משום מקום, הן הגיעו מכך שמצאנו לכסון אוניטרי של <span class="math">\(AA^{*}\)</span>, ובלכסון האוניטרי הזה <span class="math">\(AA^{*}\)</span> הייתה דומה למטריצה <span class="math">\(\Lambda^{2}\)</span> והמטריצה המלכסנת הייתה <span class="math">\(X\)</span>. במילים אחרות, <span class="math">\(P^{2}=AA^{*}\)</span> ולכן <span class="math">\(P\)</span> נקבעת בצורה <strong>יחידה</strong>, כי בפוסט הקודם ראינו שהשורש החיובי של מטריצה חיובית הוא יחיד.</p>
+<p>האם זה קובע באופן יחיד את <span class="math">\(U\)</span>? לא בהכרח, אבל אם <span class="math">\(P\)</span> <strong>הפיכה</strong> אז כן, כי אז פשוט נקבל <span class="math">\(U=AP^{-1}\)</span> (בפוסט הקודם אמרתי שזה מאוד אנלוגי למה שקורה עם ההצגה הפולארית של מספרים מרוכבים - שם המספר היחיד שאין לו הצגה יחידה הוא 0, שאינו הפיך).</p>
+<p>עכשיו בואו נעבור אל SVD. מה שקורה כאן הוא ש-<span class="math">\(A=X\Lambda Y\)</span> הוא לא פירוק מתאים, כי בפירוק <span class="math">\(A=U\Sigma V^{*}\)</span> שאנחנו מחפשים גם <span class="math">\(U\)</span> וגם <span class="math">\(V\)</span> הן ריבועיות ואוניטריות ואילו <span class="math">\(\Sigma\)</span> עלולה להיות לא ריבועית, בזמן שבפירוק <span class="math">\(A=X\Lambda Y\)</span> אמנם <span class="math">\(X\)</span> הוא ריבועית ואוניטרית, אבל <span class="math">\(Y\)</span> לא ריבועית (למרות שהיא כן סוג של אוניטרית במובן הזה ש-<span class="math">\(YY^{*}=I\)</span>) ודווקא <span class="math">\(\Lambda\)</span> היא ריבועית. אז איך עוברים מפירוק אחד לשני? באופן די ישיר, למען האמת.</p>
+<p>ראשית, <span class="math">\(X\in M_{n,n}\)</span> היא כבר ריבועית ואוניטרית, אז מה יש לשנות כאן? נגדיר <span class="math">\(U=X\)</span>.</p>
+<p>שנית, <span class="math">\(\Lambda\in M_{n,n}\)</span> כבר מכילה את הערכים הסינגולריים על האלכסון. הדבר היחיד שמבדיל בינה ובין <span class="math">\(\Sigma\)</span> שתיארנו קודם, הוא ש-<span class="math">\(\Sigma\)</span> יכולה להיות ארוכה יותר - כלומר, עם יותר עמודות. ליתר דיוק, <span class="math">\(\Sigma\in M_{n,m}\)</span> ובכל החלל הריק הנוסף הזה יש רק אפסים. אז ככה נגדיר אותה; פורמלית, מסמנים <span class="math">\(\Sigma=\left[\Lambda|0\right]\)</span> או משהו בסגנון כדי לתאר את המטריצה שמתקבלת מ-<span class="math">\(\Lambda\)</span> על ידי "הדבקה מימין" של מטריצת אפסים מסדר <span class="math">\(n\times\left(m-n\right)\)</span>.</p>
+<p>האתגר הגדול יותר הוא <span class="math">\(V\)</span>. אי אפשר להשתמש סתם ב-<span class="math">\(Y\)</span> כי <span class="math">\(Y\)</span> היא מסדר <span class="math">\(n\times m\)</span>. זכרו ש-<span class="math">\(n\le m\)</span> ולכן ייתכן ש"חסרות לה שורות" כדי להיות ריבועית. אבל כמו שעשינו קודם, אפשר <strong>להרחיב</strong>. אם נסתכל על איך קיבלנו את <span class="math">\(Y\)</span> מלכתחילה, הגדרנו שורות מסוימות שלה במפורש באמצעות ביטוי שעירב את <span class="math">\(A\)</span>, את העמודות של <span class="math">\(X\)</span> ואת הערכים הסינגולריים, ואז הוספנו עוד שורות שהיו בלתי תלויות ואורתונורמליות לשורות הקודמות, רק שאז עצרנו באופן שרירותי אחרי שהיו לנו <span class="math">\(n\)</span> שורות, למרות שיכלנו להמשיך (בטכניקות הרגילות של השלמה לבסיס וגרם-שמידט) ולקבל <span class="math">\(m\)</span> שורות כאלו. אז נשלים את ההרחבה; נסמן את המטריצה של השורות הנוספות שהוספנו ב-<span class="math">\(S\)</span> ועכשיו נשים לב שמה שאני רוצה שיהיה איפה ש-<span class="math">\(Y\)</span> נמצאת כרגע הוא לא <span class="math">\(V\)</span> אלא <span class="math">\(V^{*}\)</span>, אז נגדיר את <span class="math">\(V\)</span> בתור הפעלת הצמדה על הכל: <span class="math">\(V=\left[Y^{*}|S^{*}\right]\)</span>. זו מטריצה מסדר <span class="math">\(m\times m\)</span>, אבל האם באמת מתקיים <span class="math">\(A=U\Sigma V^{*}\)</span>? בואו נראה שמתקיים <span class="math">\(U\Sigma V^{*}=X\Lambda Y=A\)</span> ובכך נסיים את זה.</p>
+<p>ראשית, <span class="math">\(X=U\)</span> אז המשוואה שצריך להראות היא מהצורה <span class="math">\(U\Sigma V^{*}=U\Lambda Y\)</span> ועל ידי כפל ב-<span class="math">\(U^{*}\)</span> של שני האגפים נקבל שצריך להראות <span class="math">\(\Sigma V^{*}=\Lambda Y\)</span>.</p>
+<p>נסמן את השורות של <span class="math">\(Y\)</span> ב-<span class="math">\(y_{1},\ldots,y_{r}\)</span> כמו קודם, ואת השורות החדשות, שנמצאות ב-<span class="math">\(S\)</span>, ב-<span class="math">\(y_{r+1},\ldots,y_{m}\)</span>. אפשר לתאר באופן סכמטי את שני כפלי המטריצות בתור</p>
+<p><span class="math">\(\Sigma V^{*}=\left(\begin{array}{ccccccc} \sigma_{1} &  &  &  & 0 & \cdots & 0\\  & \sigma_{2}\\  &  & \ldots\\  &  &  & \sigma_{n} & 0 & \cdots & 0 \end{array}\right)\left(\begin{array}{c} y_{1}\\ y_{2}\\ \vdots\\ y_{m} \end{array}\right)=\left(\begin{array}{c} \sigma_{1}y_{1}\\ \sigma_{2}y_{2}\\ \vdots\\ \sigma_{n}y_{n} \end{array}\right)\)</span></p>
+<p><span class="math">\(\Lambda Y=\left(\begin{array}{cccc} \sigma_{1}\\  & \sigma_{2}\\  &  & \ldots\\  &  &  & \sigma_{n} \end{array}\right)\left(\begin{array}{c} y_{1}\\ y_{2}\\ \vdots\\ y_{n} \end{array}\right)=\left(\begin{array}{c} \sigma_{1}y_{1}\\ \sigma_{2}y_{2}\\ \vdots\\ \sigma_{n}y_{n} \end{array}\right)\)</span></p>
+<p>כאן ה"וקטור" של ה-<span class="math">\(y\)</span>-ים הוא לא וקטור, הוא מטריצה - מה שמקבלים כשכותבים במקום כל <span class="math">\(y\)</span> כזה את כל השורה שהוא מייצג (ולכן <span class="math">\(\sigma_{i}y_{i}\)</span> הוא כפל של כל אברי השורה <span class="math">\(y_{i}\)</span> בסקלר <span class="math">\(\sigma_{i}\)</span>). לי אישית הכי קשה לעכל כאן את זה ש-<span class="math">\(\Sigma V^{*}\)</span> כולל כפל ב"וקטור" של <span class="math">\(y_{1},\ldots,y_{m}\)</span> אבל התוצאה מגיעה רק עד <span class="math">\(y_{n}\)</span>; אבל זה ברור אם חושבים על זה רגע כי יש לנו שורה בתוצאה רק לכל שורה של <span class="math">\(\Sigma\)</span>, לא מעבר לכך. ה-<span class="math">\(y\)</span>-ים שמעבר ל-<span class="math">\(y_{n}\)</span> שב-<span class="math">\(V^{*}\)</span> לא מקבלים הזדמנות לבוא לידי ביטוי כי הם מוכפלים תמיד בחלק של ה-<span class="math">\(0\cdots0\)</span> של <span class="math">\(\Sigma\)</span>. הסיבה שבגללה הם קיימים היא כדי ש-<span class="math">\(V\)</span> תהיה מטריצה אוניטרית בעצמה, לא יותר מכך.</p>
+<h2>בואו נכניס את הדרגה לתמונה</h2>
+
+<p>יש עוד היבט מעניין של SVD שעוזר להבין מה בעצם הוא אומר: אפשר לחשוב עליו בתור פירוק של <span class="math">\(A\)</span> לצירוף לינארי של מטריצות מדרגה 1, כשמקדמי הצירוף הם בדיוק הערכים הסינגולריים - ולכן בעצם יש לנו פירוק של <span class="math">\(A\)</span> לרכיבים בסיסיים על פי "סדר חשיבות" (ככל שהערך הסינגולרי גדול יותר, הרכיב "יבוא יותר לידי ביטוי").</p>
+<p>קודם כל אולי כדאי שאזכיר מה זו דרגה של מטריצה, שאני מסמן ב-<span class="math">\(\text{rank}A\)</span>. ההגדרה שלי היא שזה המימד של <strong>מרחב העמודות</strong> של <span class="math">\(A\)</span> - כלומר, אם <span class="math">\(A\in M_{n,m}\)</span> אז אני לוקח את <span class="math">\(m\)</span> העמודות של <span class="math">\(A\)</span> ולוקח כל צירוף לינארי אפשרי שלהן ובודק מה הגודל של בסיס למרחב הזה. זה הולך להיות מספר בין 0 ל-<span class="math">\(m\)</span>, כש-0 פירושו שהמטריצה <span class="math">\(A\)</span> כולה אפסים ואילו <span class="math">\(m\)</span> פירושו שכל העמודות של <span class="math">\(A\)</span> הן בלתי תלויות, וזה שקול לכך ש-<span class="math">\(A\)</span> <strong>הפיכה</strong>. אם כן, אפשר לחשוב על דרגה של מטריצה בתור כמות "דרגות החופש" שיש בה - כמה אינפורמציה היא מכילה.</p>
+<p>יש עוד אפיונים שקולים לדרגה. ראשית, הדרגה שווה גם למימד של <strong>מרחב השורות</strong> של המטריצה. זו תוצאה לא טריוויאלית, אבל לא אוכיח אותה כאן; זה גם אומר שהדרגה של מטריצה לא יכולה להיות גדולה מ-<span class="math">\(\min\left\{ n,m\right\} \)</span>. עכשיו, כשכופלים את <span class="math">\(A\)</span> בוקטור <span class="math">\(v\)</span> כלשהו, אז <span class="math">\(Av\)</span> הוא וקטור שהוא צירוף לינארי של <strong>עמודות</strong> <span class="math">\(A\)</span> - ולכן אם אנחנו כופלים את <span class="math">\(A\)</span> בכל הוקטורים האפשריים, נקבל בדיוק את מרחב העמודות של המטריצה; ומצד שני נקבל בדיוק את מה שנקרא <strong>התמונה</strong> של <span class="math">\(A\)</span> ומסומן <span class="math">\(\text{Im}A\triangleq\left\{ Av\ |\ v\in\mathbb{F}^{m}\right\} \)</span>, כך שיוצא ש-<span class="math">\(\text{rank}A=\dim\text{Im}A\)</span>. </p>
+<p>עכשיו, נסתכל על פירוק ה-SVD של <span class="math">\(A\)</span>, <span class="math">\(A=U\Sigma V^{*}\)</span>. מה אנחנו יודעים על הדרגות של המטריצות המעורבות? מכיוון ש-<span class="math">\(U,V\)</span> הן הפיכות הן מדרגה מקסימלית ביחס לגודל שלהן, ומה שחשוב כאן הוא שכפל במטריצה כזו <strong>לא משנה את הדרגה</strong> של התוצאה. כלומר, זה שאני כופל את <span class="math">\(\Sigma\)</span> משמאל ב-<span class="math">\(U\)</span> ומימין ב-<span class="math">\(V\)</span> לא ישפיע על הדרגה, והדרגה של <span class="math">\(U\Sigma V^{*}\)</span> (כלומר של <span class="math">\(A\)</span>) תהיה זהה לדרגה של <span class="math">\(\Sigma\)</span>. ומה זו הדרגה הזו? <span class="math">\(\Sigma\in M_{n,m}\)</span> ואנחנו יודעים ש-<span class="math">\(n\le m\)</span> אז הדרגה של <span class="math">\(\Sigma\)</span> היא לכל היותר <span class="math">\(n\)</span>, אבל היא יכולה להיות קטנה יותר. יש ב-<span class="math">\(\Sigma\)</span> עמודות שכל אחת מהן כוללת ערך סינגולרי יחיד <span class="math">\(\sigma_{i}\)</span>, ולכן מספר העמודות השונות מאפס ב-<span class="math">\(\Sigma\)</span> <strong>זהה</strong> למספר הערכים הסינגולריים ששונים מאפס. כלומר, <span class="math">\(\text{rank}A=r\)</span> אם ורק אם הערכים הסינגולריים הגדולים מאפס של <span class="math">\(A\)</span> הם <span class="math">\(\sigma_{1},\ldots,\sigma_{r}\)</span>.</p>
+<p>עכשיו בואו נחזור לתחביב שלי "להציג מטריצות כאילו הן וקטורים". אני אסמן <span class="math">\(U=\left(u_{1}\ u_{2}\ \ldots\ u_{n}\right)\)</span> כאשר כל <span class="math">\(u_{i}\)</span> הוא וקטור עמודה; ואסמן <span class="math">\(V=\left(v_{1}\ v_{2}\ \ldots\ v_{m}\right)\)</span> עם אותו רעיון בדיוק. עכשיו אפשר להציג את <span class="math">\(U\Sigma V^{*}\)</span> כמו כפל של מטריצה בוקטורים מימין ומשמאל, כמו בתבנית בילינארית:</p>
+<p><span class="math">\(U\Sigma V^{*}=\left(u_{1}\ u_{2}\ \ldots\ u_{n}\right)\left(\begin{array}{ccccccc} \sigma_{1} &  &  &  & 0 & \cdots & 0\\  & \sigma_{2}\\  &  & \ldots\\  &  &  & \sigma_{n} & 0 & \cdots & 0 \end{array}\right)\left(\begin{array}{c} v_{1}^{*}\\ v_{2}^{*}\\ \vdots\\ v_{m}^{*} \end{array}\right)=\left(u_{1}\ u_{2}\ \ldots\ u_{n}\right)\left(\begin{array}{c} \sigma_{1}v_{1}^{*}\\ \sigma_{2}v_{2}^{*}\\ \vdots\\ \sigma_{n}v_{n}^{*} \end{array}\right)=\sum_{i=1}^{n}\sigma_{i}u_{i}v_{i}^{*}\)</span></p>
+<p>כזכור, <span class="math">\(u_{i}\)</span> הוא וקטור <strong>עמודה</strong> מסדר <span class="math">\(n\times1\)</span> ואילו <span class="math">\(v_{i}^{*}\)</span> הוא וקטור <strong>שורה</strong> מסדר <span class="math">\(1\times m\)</span>. לכן המכפלה <span class="math">\(u_{i}v_{i}^{*}\)</span> היא מטריצה מסדר <span class="math">\(n\times m\)</span>, בדיוק כמו <span class="math">\(A\)</span> המקורית, אבל מכיוון שהיא מכפלה של שתי מטריצות מדרגה 1 גם היא מדרגה 1 לכל היותר (באופן כללי מכפלה של מטריצות יכולה רק להוריד את הדרגה או להותיר אותה ללא שינוי - אי אפשר ליצור אינפורמציה יש מאין). לכן <span class="math">\(\sum_{i=1}^{n}\sigma_{i}u_{i}v_{i}^{*}\)</span> הוא בדיוק מה שרצינו - הצגה של <span class="math">\(A\)</span> בתור צירוף לינארי של מטריצות מדרגה 1. אפשר גם לכתוב <span class="math">\(\sum_{i=1}^{r}\sigma_{i}u_{i}v_{i}^{*}\)</span> כדי להדגיש שמעניינות אותנו רק המטריצות שמתאימות לערכים הסינגולריים החיוביים.</p>
+<h2>בשביל מה זה טוב...?</h2>
+
+<p>אוקיי, תפסתם אותי, אני לא באמת יודע בשביל מה זה טוב - יש לכל זה הרבה שימושים בתחומים שאני לא כל כך מכיר אז אני לא אוכל להיכנס לזה בפוסט הזה. אבל אני כן אדבר על שימוש אחד שנתקלתי בו והוא חביב ודי קל להצגה (ההקשר היה חישוב קוונטי, ספציפית בנייה של מעגלים קוונטיים יעילים כדי לייצור אופרטורים אוניטריים כלליים; אבל זה לא באמת חשוב להמשך): בהינתן מטריצה ריבועית <span class="math">\(A\in M_{n,n}\)</span> ייתכן שהיא לא אוניטרית, אבל אפשר לשאול מי המטריצה האוניטרית "הכי קרובה" אליה. בהקשר שבו נתקלתי בזה, זה היה שימושי בסיטואציות שבהן ביצענו חישוב שהיא <strong>אמור</strong> להניב מטריצה אוניטרית, אבל בגלל בעיות נומריות נכשל; במקרה כזה סביר להניח שהמטריצה שהייתה אמורה לצאת היא האוניטרית הקרובה ביותר למה שקיבלנו בפועל, אז אם נוכל למצוא אותה נחליף את המטריצה הנוכחית בה.</p>
+<p>הטריק הוא מאוד פשוט: אם נמצא את הפירוק הפולארי <span class="math">\(A=PU\)</span>, אז <span class="math">\(U\)</span> היא הקירוב האוניטרי הזה. באופן שקול, אם <span class="math">\(A=U\Sigma V^{*}\)</span> הוא פירוק SVD של <span class="math">\(A\)</span> אז המטריצה האוניטרית הקרובה ביותר היא <span class="math">\(UV^{*}\)</span> (כזכור, התחלנו מ-<span class="math">\(A=X\Lambda Y\)</span>; במקרה של הפירוק הפולארי הגדרנו <span class="math">\(U=XY\)</span> ואילו במקרה של SVD הגדרנו <span class="math">\(U=X\)</span> וכאשר <span class="math">\(A\)</span> היא ריבועית, ההגדרה של <span class="math">\(V\)</span> יוצאת פשוט <span class="math">\(V=Y^{*}\)</span> ולכן <span class="math">\(UV^{*}=XY\)</span>).</p>
+<p>בואו נוכיח את זה, אבל קודם כל צריך להסביר מה זה בכלל אומר "הכי קרובה". כדי לדבר על קרבה של מטריצות צריך להכניס לתמונה <strong>מטריקה</strong>, פונקציה כלשהי שמודדת מרחק; למרבה המזל עבור מטריצות יש אחת פשוטה למדי.</p>
+<p>עבור וקטור <span class="math">\(a=\left(a_{1},\ldots,a_{n}\right)\)</span>, מכפלה פנימית שלנו בעצמו מחזירה לנו את <strong>הנורמה</strong> <span class="math">\(\|a\|^{2}=\sum_{i=1}^{n}\left|a_{i}\right|^{2}\)</span>. יש עוד דרכים להגדיר נורמות על וקטורים, אז נהוג לפעמים לסמן את הנורמה הזו עם "2" כדי לציין את זה שאנחנו מעלים בחזקת 2 את אברי המטריצה (אחרי שלקחנו את הערך המוחלט שלהם) ובסוף מוציאים שורש ריבועי כדי לקבל את הנורמה: <span class="math">\(\|a\|_{2}=\sqrt{\sum_{i=1}^{n}\left|a_{i}\right|^{2}}\)</span>. עבור מטריצות אפשר להגדיר את אותו הדבר בדיוק: ניקח את הכניסות של המטריצה, לכל אחת נחשב את הריבוע של הערך המוחלט, נחבר את הכל ונוציא שורש ריבועי. לדבר הזה קוראים לפעמים <strong>נורמת פרובניוס</strong> ולפעמים סתם נורמה-2 ואני סתם אשתמש בסימן הנורמה:</p>
+<p><span class="math">\(\|A\|=\sqrt{\sum_{i,j}\left|A_{ij}\right|^{2}}\)</span></p>
+<p>יש דרך קצת יותר נקייה לתאר את הנורמה הזו. כזכור, <span class="math">\(AA^{*}\)</span> שכבר ראינו כמה פעמים היא מטריצה שבה הכניסה ה-<span class="math">\(ij\)</span> היא מכפלה של השורה ה-<span class="math">\(i\)</span> בהצמדה של השורה ה-<span class="math">\(j\)</span> של <span class="math">\(A\)</span>. בפרט, אם נסתכל על <strong>האלכסון</strong> של <span class="math">\(AA^{*}\)</span>, מה שיש שם הוא את המכפלה של השורה ה-<span class="math">\(i\)</span> בהצמדה של <strong>עצמה</strong>, מה שנותן בדיוק את נורמת-2 בריבוע של וקטור השורה הזו. אז אם <strong>נחבר</strong> את כל אברי האלכסון, נקבל בדיוק את סכום כל הכניסות במטריצה, בערך מוחלט, בריבוע. וכשמדברים על מטריצות, יש שם וסימון פשוטים לסכום אברי האלכסון של המטריצה: "עקבה", trace. במילים אחרות,</p>
+<p><span class="math">\(\|A\|^{2}=\text{tr}\left(AA^{*}\right)\)</span></p>
+<p>זה מקרה פרטי של המכפלה הפנימית הכללית: <span class="math">\(\left\langle A,B\right\rangle =\text{tr}\left(AB^{*}\right)\)</span>.</p>
+<p>למעבר לשימוש ב-<span class="math">\(\text{tr}\)</span> יש יתרונות לא זניחים, כי זו פונקציה שאנחנו מכירים יפה אותה ואת המוזרויות שלה. מוזרות שימושית במיוחד נקראת <strong>התכונה הציקלית</strong> של העקבה. היא אומרת שאם יש לנו מטריצות <span class="math">\(A,B,C,D\)</span> אז </p>
+<p><span class="math">\(\text{tr}\left(ABCD\right)=\text{tr}\left(DABC\right)\)</span></p>
+<p>כלומר, הזזנו את <span class="math">\(D\)</span> "ימינה" באופן ציקלי - כלומר, היא יצאה מימין ונכנסה חזרה משמאל. כמובן, זה יכול לעבוד רק כשהממדים של המטריצות מאפשרים את המכפלות הללו, אבל כשזה עובד זה די מרהיב.</p>
+<p>אוקיי, בואו נחזור לעניין שלנו. אפשר להשתמש בנורמת פרובניוס כדי להגדיר <strong>מרחק</strong> בין שתי מטריצות על ידי <span class="math">\(\|A-B\|\)</span>. בהקשר שלנו, השאלה היא זו: נתונה לנו <span class="math">\(A\in M_{n,n}\)</span> ריבועית ואנחנו רוצים למצוא מטריצה <span class="math">\(U\in M_{n,n}\)</span> אוניטרית כך ש-<span class="math">\(\|A-U\|\)</span> יהיה מינימלי (כשהמינימום נלקח על פני כל הערכים האפשריים של <span class="math">\(U\in M_{n,n}\)</span> האוניטריות).</p>
+<p>בשביל למצוא <span class="math">\(U\)</span> כזו, בואו נתייחס אל <span class="math">\(\|A-U\|\)</span> בתור מכפלה פנימית ונשתמש בחוקי החשבון הרגילים של מכפלות פנימיות:</p>
+<p><span class="math">\(\|A-U\|=\left\langle A-U,A-U\right\rangle =\left\langle A,A\right\rangle -\left\langle A,U\right\rangle -\left\langle U,A\right\rangle +\left\langle U,U\right\rangle \)</span></p>
+<p><span class="math">\(=\|A\|^{2}-\left\langle A,U\right\rangle -\overline{\left\langle A,U\right\rangle }+\|U\|^{2}=\|A\|^{2}-2\text{Re}\left\langle A,U\right\rangle +\|U\|^{2}\)</span></p>
+<p>עכשיו, <span class="math">\(\|A\|^{2}\)</span> הוא מספר קבוע (כי <span class="math">\(A\)</span> קבועה) ואילו <span class="math">\(\|U\|^{2}=n\)</span>, כי <span class="math">\(U\)</span> אוניטרית ולכן </p>
+<p><span class="math">\(\|U\|^{2}=\left\langle U,U\right\rangle =\text{tr}\left(UU^{*}\right)=\text{tr}\left(I\right)\)</span></p>
+<p>אז הדבר היחיד שיכול להשתנות בערך של <span class="math">\(\|A-U\|\)</span> כשאנחנו עוברים על ה-<span class="math">\(U\)</span> האוניטריות הוא החלק <span class="math">\(-2\text{Re}\left\langle A,U\right\rangle \)</span>. אם אנחנו רוצים להקטין את <span class="math">\(\|A-U\|\)</span> ככל הניתן, אנחנו רוצים למקסם את <span class="math">\(\text{Re}\left\langle A,U\right\rangle \)</span> ככל הניתן. עכשיו,</p>
+<p><span class="math">\(\text{Re}\left\langle A,U\right\rangle =\text{Re}\text{tr}\left(AU^{*}\right)\)</span></p>
+<p>עכשיו אפשר להכניס לתמונה את התותח הכבד שלנו: ניקח פירוק SVD של <span class="math">\(A\)</span>, <span class="math">\(A=V\Sigma W^{*}\)</span> (אני לא משתמש ב-<span class="math">\(U\)</span> כמו בדרך כלל כי הוא כבר תפוס). אז קיבלנו</p>
+<p><span class="math">\(\text{Re}\text{tr}\left(AU^{*}\right)=\text{Re}\text{tr}\left(V\Sigma W^{*}U^{*}\right)=\text{Re}\text{tr}\left(\Sigma W^{*}U^{*}V\right)\)</span></p>
+<p>כשהמעבר האחרון הוא התכונה הציקלית הידועה לשמצה. זה טוב לנו, כי עכשיו <span class="math">\(\Sigma\)</span> היא בהתחלה, והיא מטריצה אלכסונית עם אלכסון של הערכים הסינגולריים <span class="math">\(\left(\sigma_{1},\ldots,\sigma_{n}\right)\)</span>. כזכור, לכפול משמאל במטריצה אלכסונית מכפיל את <strong>השורות</strong> של מה שמימין בסקלרים של המטריצה האלכסונית. אז אם נסמן <span class="math">\(T=W^{*}U^{*}V\)</span> אז נקבל</p>
+<p><span class="math">\(\text{tr}\left(\Sigma T\right)=\sum_{i=1}^{n}\sigma_{i}t_{ii}\)</span></p>
+<p>ומכיוון שהערכים הסינגולריים הם ממשיים, אפשר להכניס את ה-<span class="math">\(\text{Re}\)</span> פנימה:</p>
+<p><span class="math">\(\text{Re}\text{tr}\left(\Sigma T\right)=\sum_{i=1}^{n}\sigma_{i}\text{Re}\left(t_{ii}\right)\)</span></p>
+<p>עכשיו, <span class="math">\(T\)</span> היא מכפלה של <strong>שלוש</strong> מטריצות אוניטריות, ולכן גם היא עצמה אוניטרית. זה בפרט אומר שהעמודות של <span class="math">\(T\)</span> הן אורתונורמליות, כלומר מנורמה 1. לכן <span class="math">\(\sum_{i=1}^{n}\left|t_{ij}\right|^{2}=1\)</span> ובפרט <span class="math">\(\text{Re}\left(t_{ii}\right)\le\left|t_{ii}\right|^{2}\le1\)</span>. לכן הסכום <span class="math">\(\sum_{i=1}^{n}\sigma_{i}\text{Re}\left(t_{ii}\right)\)</span> יקבל את ערכו המקסימלי אם <span class="math">\(\text{Re}\left(t_{ii}\right)=1\)</span> לכל <span class="math">\(1\le i\le n\)</span>, מה שקורה אם <span class="math">\(T=I\)</span>, כלומר אם <span class="math">\(W^{*}U^{*}V=I\)</span> כלומר אם <span class="math">\(U^{*}=WV^{*}\)</span>, כלומר אם <span class="math">\(U=VW^{*}\)</span>, וזו בדיוק התוצאה שהבטחתי.</p>
+<p>מה שאני אוהב כאן הוא שבעזרת SVD אנחנו מקבלים הוכחה פשוטה מאוד לטענה הזו, ובעזרת הפירוק הפולארי אנחנו גם יכולים לקבל אינטואיציה: במספרים מרוכבים, אם היינו רוצים את המספר המרוכב מנורמה <span class="math">\(1\)</span> הקרוב ביותר אל <span class="math">\(z\)</span> היינו מותחים קו ישר מ-<span class="math">\(z\)</span> אל ראשית הצירים ובודקים איפה הוא חותך את מעגל היחידה- כלומר, היינו מייצגים את <span class="math">\(z\)</span> בתור <span class="math">\(z=re^{i\theta}\)</span> ואז פשוט היינו מציבים <span class="math">\(r=1\)</span> ונשארים עם <span class="math">\(e^{i\theta}\)</span>. זה בעצם גם מה שאנחנו עושים כאן, כשאנחנו מוצאים את <span class="math">\(A=PU\)</span> ואז מחליפים את <span class="math">\(P\)</span> ב-<span class="math">\(I\)</span>. אלגברה לינארית זה כיף.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2025/10/03/cake_cutting_riddle/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">עוגה עוגה עוגה (נתהפכה כל היום עד אשר נמצא מקום)</span>
+            </a>
+            
+            
+            
+            <a href="/2025/09/21/positive_semidefinite_matrices/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מטריצות חיוביות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

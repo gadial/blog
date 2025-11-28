@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דמיון מטריצות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>דמיון מטריצות</h1>
+            <div class="post-meta">
+                <span class="date">2011-10-30</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/tags/דמיון מטריצות.html">דמיון מטריצות</a>
+                    
+                    <a href="/tags/מטריצות.html">מטריצות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסט הקודם דיברתי על ייצוג טרנספורמציות לינאריות באמצעות מטריצות. מה שאולי לא הובלט מספיק שם היה שאת אותה טרנספורמציה לינארית אפשר לייצג באמצעות המון מטריצות, וכל מטריצה מייצגת המון טרנספורמציות לינאריות; מה שקובע חד משמעית את הקשר בין טרנספורמציות ומטריצות הוא בחירה של בסיסים עבור המרחבים שמעורבים בטרנספורמציה. מכאן עולות כמה שאלות - ראשית, האם כל מטריצה יכולה לייצג כל טרנספורמציה לינארית, או שמראש טרנספורמציה יכולה להיות מיוצגת רק על ידי תת-קבוצה מסויימת של מטריצות, וכל מטריצה יכולה לייצג רק תת-קבוצה מסויימת של טרנספורמציות? שנית, איך אפשר, בהינתן מטריצה שמייצגת טרנספורמציה על ידי בסיס אחד, לעבור למטריצה שמייצגת אותה על ידי בסיס אחר? ושלישית, האם קיימים בסיסים שבהם יותר "נוח" לייצג טרנספורמציה מאשר בסיסים אחרים? לשאלות הללו יש תשובות לא רעות בכלל שאני רוצה להציג.</p>
+<p>נתחיל בדוגמה שמבהירה מייד מה התשובה לאחת השאלות - מטריצת האפס, זו שכולה אפסים, תמיד מייצגת את טרנספורמציית האפס, כי כשכופלים אותה בוקטור כלשהו תמיד מקבלים אפס. בדומה, טרנספורמציית האפס (שמעבירה כל איבר לאפס) תמיד תהיה מיוצגת על ידי מטריצת האפס. אז ברור שלא כל מטריצה יכולה לייצג כל טרנספורמציה. למעשה, התכונות של המטריצה יכולות ללמד אותנו דברים על התכונות של כל הטרנספורמציות שיכולות להיות מיוצגות על ידה. אז נתחיל בלהבין את הקשר בין מטריצות שונות שמייצגות את אותה הטרנספורמציה, והצעד הראשון בדרך לשם הוא המושג של <strong>מטריצת מעבר בין בסיסים</strong>.</p>
+<p>נניח שיש לנו מרחב וקטורי <span class="math">\(V\)</span> ויש לו שני בסיסים סדורים <span class="math">\(B=\left\{ b_{1},\dots,b_{n}\right\} \)</span> ו-<span class="math">\(C=\left\{ c_{1},\dots,c_{n}\right\} \)</span>. נניח גם שיש לנו וקטור <span class="math">\(v\)</span>, שנתון לנו על ידי וקטור הקואורדינטות שלו לפי <span class="math">\(B\)</span>: <span class="math">\(\left[v\right]_{B}\)</span>. האם יש לנו דרך נוחה לקבל את וקטור הקואורדינטות שלו על פי <span class="math">\(C\)</span>? כמובן, אפשר לתת תשובות לשאלה הזו שהן ספציפיות למרחב הוקטורי שבו אנו עובדים - אפשר לקחת את וקטור הקואורדינטות <span class="math">\(\left[v\right]_{B}\)</span>, לחשב ממנו ייצוג מפורש נוח כלשהו עבור <span class="math">\(v\)</span> ואז לחשב מהייצוג המפורש הזה את <span class="math">\(\left[v\right]_{C}\)</span>. אלא שלא באמת צריך את זה. בואו נזכור שלכל טרנספורמציה <span class="math">\(T:V\to V\)</span> אפשר לדבר על המטריצה <span class="math">\(\left[T\right]_{B}^{C}\)</span> שמייצגת את <span class="math">\(T\)</span> על פי הבסיסים <span class="math">\(B,C\)</span>. כאן קורה משהו טיפה מוזר - <span class="math">\(T\)</span> היא ממרחב כלשהו אל עצמו, ועם זאת אנו מתעקשים להשתמש בשני בסיסים שונים - אבל הפורמליזם תקין, ומתקיים <span class="math">\(\left[T\right]_{B}^{C}\left[v\right]_{B}=\left[T\left(v\right)\right]_{C}\)</span>. כעת, בואו נבחר בתור <span class="math">\(T\)</span> טרנספורמציה פשוטה במיוחד: טרנספורמציית הזהות, <span class="math">\(I\)</span>, שמקיימת <span class="math">\(I\left(v\right)=v\)</span> לכל <span class="math">\(v\in V\)</span>. כעת מה יקרה? <span class="math">\(\left[I\right]_{B}^{C}\left[v\right]_{B}=\left[v\right]_{C}\)</span> ממש על פי הגדרה, כלומר <span class="math">\(\left[I\right]_{B}^{C}\)</span> היא מטריצה שההכפלה בה עושה בדיוק את מה שרצינו. למטריצה כזו אני קורא <strong>מטריצת המעבר</strong> מהבסיס <span class="math">\(B\)</span> לבסיס <span class="math">\(C\)</span>, ואולי כדאי להזהיר מראש שיש ספרים שדווקא קוראים לה מטריצה המעבר מ-<span class="math">\(C\)</span> אל <span class="math">\(B\)</span>, אלוהים יודע למה.</p>
+<p>את מטריצת המעבר הזו קל לחשב: פשוט לוקחים את אברי <span class="math">\(B\)</span>, מוצאים את וקטורי הקואורדינטות שלהם לפי הבסיס <span class="math">\(C\)</span> ואלו עמודות מטריצת המעבר, שאסמן <span class="math">\(M_{B}^{C}\)</span> לצורך פשטות.</p>
+<p>כעת, כמו שהגדרתי את <span class="math">\(M_{B}^{C}\)</span> אני יכול באותה מידה בדיוק להגדיר את <span class="math">\(M_{C}^{B}\)</span> שמעבירה מהבסיס <span class="math">\(C\)</span> לבסיס <span class="math">\(B\)</span>. כעת עולה מאליה השאלה מהי המטריצה <span class="math">\(M_{C}^{B}M_{B}^{C}\)</span>, והתשובה האולי לא מפתיעה היא שמדובר על מטריצת היחידה <span class="math">\(I\)</span> (כן, אותו סימון לטרנספורמציה ומטריצה! אהההה!) שבה יש 1-ים על האלכסון הראשי ו-0-ים בכל מקום אחר. למטריצת היחידה התכונה הנחמדה שאם כופלים אותה בוקטור כלשהו הוא אינו משתנה, כך שהיא מייצגת את הטרנספורמציה "לא משנים כלום, אפילו לא את הקואורדינטות" שהיא בדיוק גם הטרנספורמציה ש-<span class="math">\(M_{C}^{B}M_{B}^{C}\)</span> מבצעת (אם העברנו קואורדינטות מ-<span class="math">\(B\)</span> אל <span class="math">\(C\)</span> אבל אז חזרנו מ-<span class="math">\(C\)</span> אל <span class="math">\(B\)</span> אז לא עשינו כלום). בדומה גם <span class="math">\(M_{B}^{C}M_{C}^{B}=I\)</span>.</p>
+<p>באופן כללי אם יש לנו שתי מטריצות <span class="math">\(P,Q\)</span> מסדר <span class="math">\(n\times n\)</span> - כלומר, ריבועיות, כך ש-<span class="math">\(PQ=QP=I\)</span> אומרים על שתיהן שהן <strong>הפיכות</strong> ומסמנים <span class="math">\(Q=P^{-1}\)</span>. מה שראינו כרגע הוא שמטריצות המעבר בין בסיסים הן הפיכות וראינו גם מה ההופכי שלהן. איך כל זה קשור לשאלה המקורית שלי על מטריצות שונות שמייצגות את אותה טרנספורמציה? טוב ששאלתם.</p>
+<p>תהא לה <span class="math">\(T:V\to V\)</span> טרנספורמציה ממרחב אל עצמו (לפעמים קוראים בשם "אופרטור" לכזו טרנספורמציה, אבל זה לא קשר מחייב) ויהיו <span class="math">\(B,C\)</span> בסיסים של <span class="math">\(V\)</span>. לצורך פשטות אסמן את <span class="math">\(\left[T\right]_{B}^{B}\)</span> פשוט כ-<span class="math">\(\left[T\right]_{B}\)</span>(כלומר, אם אותו בסיס משמש גם בתור הבסיס של המקור וגם בתור הבסיס של היעד - מה שאפשרי רק עבור אופרטורים - כותבים אותו רק פעם אחת) וכעת השאלה שלי היא מה טיב הקשר בין <span class="math">\(\left[T\right]_{B}\)</span> ובין <span class="math">\(\left[T\right]_{C}\)</span>. הפתרון טמון באבחנה הבאה: להפעיל את <span class="math">\(\left[T\right]_{C}\)</span> על וקטור קואורדינטות על פי <span class="math">\(C\)</span> זה אותו דבר בדיוק כמו לקחת וקטור קואורדינטות על פי <span class="math">\(C\)</span>, להמיר אותו לוקטור קואורדינטות על פי <span class="math">\(B\)</span>, להפעיל את <span class="math">\(\left[T\right]_{B}\)</span> על התוצאה, ואת התוצאה הזו להמיר חזרה לבסיס <span class="math">\(C\)</span>. בנוסחה:</p>
+<p><span class="math">\(\left[T\right]_{C}=M_{B}^{C}\left[T\right]_{B}M_{C}^{B}\)</span></p>
+<p>ובניסוח טיפה שונה: אם <span class="math">\(P\)</span> היא מטריצת המעבר מהבסיס <span class="math">\(C\)</span> לבסיס <span class="math">\(B\)</span>, אז <span class="math">\(\left[T\right]_{C}=P^{-1}\left[T\right]_{B}P\)</span>. זה מראה שאם אנחנו רוצים לעשות שינוי במערכת הקואורדינטות שבה אנו מייצגים את המרחב, כל שעלינו לעשות הוא לחשב את מטריצת המעבר בין שתי מערכות הקואורדינטות, ואז נוכל לתקן בהתאם את הכל - גם וקטורים, וגם מטריצות שמתארות טרנספורמציות מורכבות.</p>
+<p>באופן לא ממש מפתיע, כפי שקורה בדרך כלל באלגברה לינארית, גם הכיוון השני נכון. כלומר, אם <span class="math">\(P\)</span> היא מטריצה הפיכה כלשהי, אפשר לחשוב עליה כעל מטריצת מעבר בין בסיסים, ולכן אם יש לנו שתי מטריצות ריבועיות <span class="math">\(A,B\)</span> כך ש-<span class="math">\(A=P^{-1}BP\)</span> אז <span class="math">\(A,B\)</span> מייצגות את אותה הטרנספורמציה בבסיסים שונים.</p>
+<p>באופן כללי במתמטיקה, לא רק באלגברה לינארית, צצה לפעמים סיטואציה שבה שני איברים <span class="math">\(a,b\)</span> קשורים ביניהם על ידי משוואה מהצורה <span class="math">\(a=x^{-1}bx\)</span>. דוגמה קלאסית היא <strong>תמורות</strong> בתורת החבורות; לא אכנס לכך כעת, אבל כדאי לדעת שזה קיים. אם <span class="math">\(a=x^{-1}bx\)</span> אז אומרים ש-<span class="math">\(a\)</span> התקבל מ-<span class="math">\(b\)</span> על ידי <strong>הצמדה</strong> על ידי <span class="math">\(x\)</span>; במקרה של מטריצות, אם מטריצה <span class="math">\(A\)</span> מתקבלת ממטריצה <span class="math">\(B\)</span> על ידי הצמדה, אומרים ש-<span class="math">\(A\)</span> <strong>דומה</strong> ל-<span class="math">\(B\)</span>.</p>
+<p>שימו לב לכך ש-<span class="math">\(A=I^{-1}AI\)</span> ולכן כל מטריצה דומה לעצמה; לכך שאם <span class="math">\(A=P^{-1}BP\)</span> אז <span class="math">\(B=PAP^{-1}\)</span> ולכן <span class="math">\(B\)</span> דומה ל-<span class="math">\(A\)</span> (על ידי הצמדה ב-<span class="math">\(P^{-1}\)</span>); ואם <span class="math">\(A=P^{-1}BP\)</span> ו-<span class="math">\(B=Q^{-1}CQ\)</span> אז <span class="math">\(A=\left(QP\right)^{-1}C\left(QP\right)\)</span> (התוצאה האחרונה נובעת מהטענה הטכנית שלא הוכחתי לפיה <span class="math">\(\left(AB\right)^{-1}=B^{-1}A^{-1}\)</span> לכל זוג מטריצות הפיכות <span class="math">\(A,B\)</span>). שלוש הטענות הללו יחד מראות כי דמיון מטריצות הוא <strong>יחס שקילות</strong>: אפשר לחלק את מרחב כל המטריצות לקבוצות כך שבכל קבוצה כל המטריצות דומות זו לזו. מסקנה אחת מכך היא שאם יש לי שתי טרנספורמציות שמיוצגות (כל אחת בבסיס אחר) על ידי אותה מטריצה, הן מיוצגות בדיוק על ידי אותן מטריצות. זה בפרט מראה שתכונות מסויימות של הטרנספורמציה שבאות לידי ביטוי במטריצות שמייצגות אותה חייבות להישמר על ידי הצמדה. אולי הדוגמה הכי בולטת היא הפיכות - אם טרנספורמציה היא הפיכה (כלומר, חח"ע ועל) אז גם כל המטריצות שמייצגות אותה חייבות להיות הפיכות, ולכן הצמדה של מטריצה הפיכה גם היא הפיכה. למעשה, יש עוד מספר תכונות חשובות שנשמרות אבל כדי להציג אותן יש צורך להתעסק קצת יותר לעומק במטריצות וזאת טרם עשיתי.</p>
+<p>השאלה הבאה היא האם לכל מטריצה יש ייצוג "נוח", כלומר האם כל מטריצה דומה למטריצה פשוטה כלשהי. זה כמובן מעלה את השאלה מהי מטריצה פשוטה; תשובה אפשרית אחת היא מטריצה אלכסונית, כי במטריצה כזו פעולת הכפל מתנהגת באופן פשוט מאוד. התשובה היא שמטריצות רבות אכן דומות למטריצה אלכסונית, אך לא כולן; הזיהוי של הסיטואציה שבה יש דמיון למטריצות אלכסוניות הוא אחד מהנושאים שאני מתכוון לדבר עליהם. למרות שלא כל המטריצות דומות למטריצות אלכסוניות אפשר להראות ש<strong>כל</strong> מטריצה דומה למטריצה שהיא "כמעט אלכסונית" - <strong>צורת ז'ורדן</strong>, אבל לשם כך יש צורך שהשדה שמעליו אנו עובדים יהיה <strong>סגור אלגברית</strong> - עוד מושג שעליו אדבר בהמשך. לעת עתה נעזוב את ענייני דמיון המטריצות שכן עדיין חסר לנו מושג או שניים לפני שנוכל להתמודד איתם.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/11/02/linear_functionals/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">פונקציונלים לינאריים והדואלי של הדואלי של הדואלי של הדואלי</span>
+            </a>
+            
+            
+            
+            <a href="/2011/10/27/coordinates_transformations_matrices/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">קואורדינטות, טרנספורמציות, מטריצות וחיות אחרות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

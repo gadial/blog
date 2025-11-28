@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מה זה אומר ש-MIP*=RE? (חלק א&#39;: מה זה אומר RE?) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מה זה אומר ש-MIP*=RE? (חלק א&#39;: מה זה אומר RE?)</h1>
+            <div class="post-meta">
+                <span class="date">2020-01-23</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מערכת הוכחה אינטראקטיבית.html">מערכת הוכחה אינטראקטיבית</a>
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>ממש לא מזמן התבשרנו על תוצאה בתורת הסיבוכיות שמנוסחת בפשטות בתור <span class="math">\(\text{MIP}^{*}=\text{RE}\)</span>. התגובה הראשונה שלי לתוצאה הייתה "מה?" והתגובה השניה שלי לתוצאה הייתה "מה?!?!". בפוסט הזה אנסה להסביר מה.</p>
+<p>ראשית המאמר עצמו זמין <a href="https://arxiv.org/abs/2001.04383">כאן</a> ואפשר לקרוא אותו. אני לא קראתי אותו מלבד את הפתיחה שלו - הוא כולל 165 עמודים ואין לי סיכוי להבין את הפרטים הטכניים שלו לעומק - אבל אני מקווה שאני מבין מספיק טוב את הרקע כדי להסביר בערך מה המשפט אומר ולמה הוא מעניין. בפשטות, הוא אומר ש<strong>מערכת הוכחה</strong> מסויימת שמתבססת בצורה כלשהי על אפקטים קוונטיים, היא חזקה <strong>בצורה מטורפת ממש</strong> ביחס למערכת הוכחה הדומה לה מאוד שאינה מתבססת על אפקטים קוונטיים. זה משהו שהפתיע קצת את אלו שהכירו את התחום וידעו שהמערכת הזו חזקה בצורה מטורפת; אותי, שבכלל לא ידע על כל זה, זה פשוט הדהים.</p>
+<p>אז בואו ננסה להבין מה הולך כאן. לאט.</p>
+<p>הפעם אני אסביר מה זו <span class="math">\(\text{RE}\)</span>. <a href="https://gadial.net/2007/09/18/r_and_re/">יש לי פוסט על זה</a> מראשית ימי הבלוג, אבל אני אנסה הפעם להציג את המושג מכיוון קצת שונה, שיעזור לנו גם בהמשך כשנדבר על <span class="math">\(\text{MIP}^{*}\)</span>, כך שאני חושב ששווה לנסות לקרוא גם אם כבר מכירים את <span class="math">\(\text{RE}\)</span>.</p>
+<p>בואו נתחיל עם משחק הסודוקו שאני מקווה שמוכר ואהוב על כולנו. או לפחות מוכר.</p>
+<p><img src="/img/2020/01/Sudoku.jpg" alt=""/></p>
+<p>הרעיון בסודוקו פשוט יחסית: נתון לוח של <span class="math">\(9\times9\)</span> משבצות שמחולק גם ל-9 תת-לוחות, כל אחד של <span class="math">\(3\times3\)</span>. בלוח מופיעים כל מני מספרים בין 1 ל-9, והמטרה היא להשלים את הלוח כך שבכל משבצת יהיה מספר בין 1 ל-9 ובנוסף לכך בכל שורה, עמודה ותת-לוח כל המספרים שמופיעים יהיו שונים זה מזה. זה משחק פאזלים חביב בפני עצמו, אבל אני אוהב אותו מאוד בעיקר בגלל שהוא נותן לנו דוגמא יפה לבעיה מהסוג שאנחנו אוהבים לדבר עליהן במדעי המחשב התיאורטיים: בעיה ש<strong>קשה לפתור</strong> אבל <strong>קל לוודא</strong>.</p>
+<p>בסודוקו המטרה היא למצוא את הפתרון של הלוח, אבל גם אפשר להצטמצם לבעיה פשוטה יותר: נותנים לכם לוח סודוקו - כלומר, לוח <span class="math">\(9\times9\)</span> שהוא כבר מלא חלקית במספרים - ושואלים אתכם אם הוא פתיר או לא. <strong>לא כל לוח ממולא חלקית הוא פתיר</strong>! שאלת "כן/לא" כזו נקראת במדעי המחשב <strong>בעיית הכרעה</strong> וזה מה שאנחנו בדרך כלל מעדיפים לדבר עליו, ולא על <strong>בעיית החיפוש</strong> של למצוא את הפתרון, כי על פי רוב אם יש לנו פתרון נחמד לבעיית ההכרעה אפשר גם לבנות בעזרתו פתרון לבעיית החיפוש. במקרה של סודוקו, למשל: בהינתן לוח תבדקו אם הוא פתיר - אם לא פתיר, אפשר לוותר על הכל. אם כן פתיר, אז פשוט תנסו למלא מספרים במשבצות ובכל פעם כזו תשאלו אם הלוח נשאר פתיר גם אחרי המילוי - אם לא, אתם יודעים שהמהלך האחרון שביצעתם היה שגוי וצריך לנסות אחר. זה יוביל אתכם די מהר לפתרון.</p>
+<p>עכשיו, להכריע האם לוח סודוקו הוא פתיר יכול להיות עניין קשה לפעמים. יש היוריסטיקות טובות כדי למצוא פתרון, אבל בלוחות "קשים" יהיה צורך להתחיל לנחש איזה ערכים כדאי לשים במשבצות, ואם הניחוש היה לא מוצלח ייתכן שנצטרך לחזור הרבה אחורה בבדיקה שלנו כדי לתקן את זה, וכן הלאה. אז זו בעיית הכרעה ש<strong>קשה לפתור</strong> לעומת זאת, אם מישהי באה אליכם וטוענת שהיא פתרה את הלוח כבר, קל לה מאוד <strong>להוכיח</strong> לכם את זה: היא פשוט תיתן לכם את הלוח הפתור. אתם תסתכלו על הלוח ותבצעו תהליך של <strong>וידוא</strong> שהלוח באמת חוקי (בכל שורה/עמודה/תת-לוח יש את כל המספרים מ-1 עד 9) ושהוא באמת מרחיב את הלוח שיש לכם (כל מספר שהופיע בלוח שלכם מופיע גם בלוח של הפתרון). זה לוקח מעט זמן יחסית. אם כן, <strong>לודא</strong> שמשהו הוא פתרון של הלוח - זה קל.</p>
+<p>כשאני אומר "קשה" ו"קל", למה אני מתכוון? עבורי לפתור סודוקו זה כאב ראש במוח - מרוב דברים לזכור או לרשום בצד, המוח שלי מתפוצץ. אבל עבור מחשב אין הרבה מה לרשום בצד ואין בעיה לזכור דברים - ה"משאב" שהמחשב משקיע הוא <strong>זמן</strong>. זה המשאב המרכזי שעליו מדברים בתורת הסיבוכיות - כמה צעדי חישוב בערך נדרשים בשביל לפתור בעיה.</p>
+<p>יש עוד נקודה מהותית בהגדרה של "קל/קשה". אם נסתכל על סודוקו של <span class="math">\(9\times9\)</span>, זו כנראה בעיה פתורה וסגורה כבר בימינו. אפילו במקרים הקשים ביותר, מחשב עם אלגוריתם סביר כנראה יוכל לפתור הכל (אני אומר "כנראה" כי אני מנחש, לא בטוח). מה שמעניין אותנו במדעי המחשב התיאורטיים הוא מה קורה <strong>ככל שמגדילים את הבעיה</strong>. קל להגדיל סודוקו - במקום לשחק אותו על לוח של <span class="math">\(9\times9\)</span>, לשחק אותו על לוח <span class="math">\(n^{2}\times n^{2}\)</span> כללי (סודוקו רגיל הוא המקרה <span class="math">\(n=3\)</span>). אותם אלגוריתם שעובדים בלוח <span class="math">\(9\times9\)</span> יעבדו גם בלוחות גדולים יותר, אבל ייקח להם יותר זמן. השאלה <strong>כמה</strong> יותר זמן. אם נכפיל את גודל הלוח פי 10, האם הזמן יגדל פי 10? פי 100? פי <span class="math">\(2^{10}\)</span>? אפשר לתת פונקציה <span class="math">\(f\left(n\right)\)</span> שאומרת בערך מה זמן הריצה כפונקציה של גודל הקלט. אם זמן הריצה הוא בערך פולינום, אז אומרים שהאלגוריתם <strong>יעיל</strong>, ואם הוא גדול יותר מפולינום, נניח <span class="math">\(2^{n}\)</span>, אומרים שהוא <strong>לא יעיל</strong>. אפשר להעלות הרבה השגות לגבי הגישה הזו אבל לא ניכנס לזה כאן - גם לא חייבים להבין עד הסוף את מה שאמרתי פה כדי להבין את ההמשך.</p>
+<p>אני רוצה להכניס קצת פורמליזם לתמונה. בעיית הכרעה אני מסמן לרוב באות <span class="math">\(L\)</span>, ואת האלגוריתם שמנסה לפתור אותה אני מסמן ב-<span class="math">\(M\)</span>. ל-<span class="math">\(M\)</span> נותנים קלט <span class="math">\(x\)</span> כלשהו והוא עונה עליו "כן/לא", מה שאסמן ב-<span class="math">\(M\left(x\right)=\text{T}\)</span> ו-<span class="math">\(M\left(x\right)=\text{F}\)</span>. כדי לומר ש-<span class="math">\(M\)</span> <strong>פותר</strong> את בעיית ההכרעה <span class="math">\(L\)</span> אני רוצה שיתקיימו שני דברים שאני קורא להם "שלמות" ו"נאותות":</p>
+<ol> <li>(שלמות) אם <span class="math">\(x\in L\)</span> אז <span class="math">\(M\left(x\right)=\text{T}\)</span>.</li>
+
+
+<li>(נאותות) אם <span class="math">\(x\notin L\)</span> אז <span class="math">\(M\left(x\right)=\text{F}\)</span>.</li>
+
+</ol>
+
+<p>אם יש לנו <span class="math">\(M\)</span> יעיל כזה, אומרים שהבעיה שייך ל-P (האות P היא מהמילה Polynomial)</p>
+<p>לעומת זאת, <strong>מוודא</strong> <span class="math">\(V\)</span> הוא משהו שקצת יותר קל לו בחיים: הוא מקבל קלט שהוא <strong>זוג</strong> <span class="math">\(\left(x,\pi\right)\)</span>. ה-<span class="math">\(x\)</span> הוא כמו קודם, משהו שצריך לבדוק אם <span class="math">\(x\in L\)</span> או לא. אבל <span class="math">\(\pi\)</span> זו ה"הוכחה" לכך ש-<span class="math">\(x\in L\)</span>. <span class="math">\(\pi\)</span> לא חייב להיות כתוב כמו הוכחה; אין שום דרישה על המבנה של <span class="math">\(\pi\)</span>, אבל כן יש דרישה שהוא לא יהיה ארוך מדי - האורך שלו צריך להיות פולינומי באורך של <span class="math">\(x\)</span> אחרת מוודא שרץ בזמן פולינומי לא יוכל לקרוא את כולו ממילא.</p>
+<p>כדי להגיד ש-<span class="math">\(V\)</span> הוא מוודא תקין צריך שיתקיימו שני דברים:</p>
+<ol> <li>(שלמות) אם <span class="math">\(x\in L\)</span> אז <strong>קיים</strong> <span class="math">\(\pi\)</span> כך ש-<span class="math">\(V\left(x,\pi\right)=\text{T}\)</span>.</li>
+
+
+<li>(נאותות) אם <span class="math">\(x\notin L\)</span> אז <strong>לכל</strong> <span class="math">\(\pi\)</span> מתקיים <span class="math">\(V\left(x,\pi\right)=\text{F}\)</span>.</li>
+
+</ol>
+
+<p>במילים אחרות, מוודא טוב הוא זה שמשתכנע <strong>מכל הוכחה נכונה</strong> אבל אם הטענה שגויה, <strong>שום הוכחה שקרית לא תשכנע אותו</strong>.</p>
+<p>אם יש מוודא יעיל עבור <span class="math">\(L\)</span> אומרים ש-<span class="math">\(L\)</span> שייכת ל-<span class="math">\(\text{NP}\)</span> (האותיות הללו הן מלשון Nondeterministic Polynomial שמגיעות מניסוח שקול ופחות מעניין של הגדרת המחלקה).</p>
+<p>אחת השאלות הפתוחות המעניינות במדעי המחשב היא האם P=NP. האמונה של רובנו היא שזה לא נכון, אבל לא ארחיב על זה כאן. <a href="https://gadial.net/2010/08/15/p_vs_np_overview/">יש לי פוסט בנושא</a>, למעוניינים.</p>
+<p>עכשיו, אחרי שסיימנו להבין מה זה קל/קשה ומה זה P ו-NP. אני רוצה <strong>לזרוק את זה לפח לרגע</strong>. מה אם אנחנו לא מגבילים את משאבי החישוב שלנו בכלל? יש לנו רק דרישה אחת ויחידה מהאלגוריתם שלנו, אבל אחת שהיא עדיין משמעותית למדי - <strong>שיעצור מתישהו עם תשובה</strong>. כי אלגוריתמים שלא עוצרים בכלל זה עסק קצת בעייתי מבחינתנו. עכשיו, כזכור, מטרת האלגוריתם היא <strong>לוודא</strong> בעיית הכרעה כלשהי.</p>
+<p>ההגדרות נשארות זהות למה שאמרתי קודם. אחזור עליהן כדי לחדד. <span class="math">\(L\)</span> היא בעיית הכרעה כלשהי, <span class="math">\(x\)</span> הוא קלט אליה, <span class="math">\(\pi\)</span> הוא "הוכחה" ו-<span class="math">\(V\)</span> הוא מוודא. אני <strong>משמיט</strong> את הדרישות שהזכרתי קודם על הסיבוכיות: <span class="math">\(V\)</span> לא חייב לרוץ בזמן פולינומי, ו-<span class="math">\(\pi\)</span> לא צריך להיות מוגבל באורכו בשום צורה.</p>
+<p>עם ההגדרות הללו, כדי להגיד ש-<span class="math">\(V\)</span> הוא מוודא תקין צריך שיתקיימו שני דברים:</p>
+<ol> <li>(שלמות) אם <span class="math">\(x\in L\)</span> אז <strong>קיים</strong> <span class="math">\(\pi\)</span> כך ש-<span class="math">\(V\left(x,\pi\right)=\text{T}\)</span>.</li>
+
+
+<li>(נאותות) אם <span class="math">\(x\notin L\)</span> אז <strong>לכל</strong> <span class="math">\(\pi\)</span> מתקיים <span class="math">\(V\left(x,\pi\right)=\text{F}\)</span>.</li>
+
+</ol>
+
+<p>אם יש מוודא כזה עבור <span class="math">\(L\)</span> אומרים ש-<span class="math">\(L\)</span> שייכת למחלקה <span class="math">\(\text{RE}\)</span>. כן, זו ה-<span class="math">\(\text{RE}\)</span> שבשוויון <span class="math">\(\text{MIP}^{*}=\text{RE}\)</span>. לא הגדרה כל כך קשה, נכון? הנה הגדרה אלטרנטיבית, שהיא אולי הנפוצה יותר: <span class="math">\(L\)</span> שייכת ל-<span class="math">\(\text{RE}\)</span> אם קיים אלגוריתם <span class="math">\(M\)</span> כך ש:</p>
+<ol> <li>(שלמות) אם <span class="math">\(x\in L\)</span> אז <span class="math">\(M\left(x\right)=\text{T}\)</span>.</li>
+
+
+<li>(נאותות חלקית) אם <span class="math">\(x\notin L\)</span> אז או ש-<span class="math">\(M\left(x\right)=\text{F}\)</span> או ש-<span class="math">\(M\)</span> לא עוצרת על <span class="math">\(x\)</span>.</li>
+
+</ol>
+
+<p>שימו לב מה השתנה פה: <span class="math">\(M\)</span> היא לא מוודא אלא משהו שמנסה לפתור את הבעיה בלי לבדוק "הוכחה" כלשהי; אבל אנחנו מקלים מאוד את החיים של <span class="math">\(M\)</span> בכך שאנחנו <strong>כן</strong> מרשים לו לא לעצור על קלטים מסויימים - כאלו שהתשובה להם היא "לא". אם הייתי דורש נאותות מלאה - כלומר ש-<span class="math">\(M\)</span> תעצור תמיד על קלט <span class="math">\(x\notin L\)</span> ויתקבל <span class="math">\(\left(x\right)=\text{F}\)</span><span class="math">\(M\)</span>, אז זה היה מגדיר מחלקה אחרת, <span class="math">\(\text{R}\)</span>, שהיא האנלוג של <span class="math">\(\text{P}\)</span> רק ללא דרישות סיבוכיות. </p>
+<p>בניגוד לשאלת P=NP הפתוחה, שאלת R=RE אינה פתוחה כלל - אנחנו <strong>יודעים</strong> שהתשובה שלילית כי למשל טיורינג הוכיח את זה פשוט על ידי הדגמה מפורשת של בעיה ששייכת ל-RE אבל לא שייכת ל-R: "בעיית העצירה".</p>
+<p>בבעיית העצירה אנחנו מקבלים בתור קלט אלגוריתם <span class="math">\(M\)</span> כלשהו (תניחו שהוא כתוב בשפת התכנות החביבה שלכם, או מתואר בתור מכונת טיורינג - זה לא משנה) וצריכים לקבוע האם כשמריצים אותו הוא עוצר או לא. רגע אחד, אפשר לשאול - מריצים את <span class="math">\(M\)</span> על מה? בדרך כלל נותנים למשהו כמו <span class="math">\(M\)</span> קלט. ובכן, מספיק לי לדבר על הוריאנט של בעיית העצירה שבו אין קלט (או שהקלט "ריק"). <a href="https://gadial.net/2007/09/26/halting_problem/">יש לי פוסט</a> שמסביר מדוע בעיית העצירה לא שייכת ל-R ולא אחזור על זה כאן, אבל להראות שהיא שייכת ל-RE עם ההגדרה-מבוססת-מוודא שנתתי כאן, זה קל: <span class="math">\(V\)</span> יקבל קלט <span class="math">\(\left(M,\pi\right)\)</span>. אם <span class="math">\(\pi\)</span> הוא מספר טבעי <span class="math">\(n\)</span>, אז <span class="math">\(V\)</span> יריץ את <span class="math">\(M\)</span> במשך <span class="math">\(n\)</span> צעדי חישוב. אם בפרק הזמן הזה <span class="math">\(M\)</span> עצרה, נפלא! <span class="math">\(V\)</span> יעצור ויגיד <span class="math">\(\text{T}\)</span>. אם לעומת זאת <span class="math">\(M\)</span> לא עצרה, <span class="math">\(V\)</span> יעצור ויגיד <span class="math">\(\text{F}\)</span>. עכשיו, מה קורה כאן?</p>
+<p>אם <span class="math">\(M\)</span> עוצרת, כלומר <span class="math">\(M\in L\)</span>, אז <strong>קיים</strong> <span class="math">\(n\)</span> טבעי שהוא מספר הצעדים שנדרשים ל-<span class="math">\(M\)</span> כדי לעצור. אז <strong>קיים</strong> <span class="math">\(\pi\)</span> כך ש-<span class="math">\(V\left(x,\pi\right)=\text{T}\)</span> - פשוט <span class="math">\(\pi\)</span> שהוא מספר הצעדים <span class="math">\(n\)</span>. לעומת זאת, אם <span class="math">\(M\notin L\)</span> אז <strong>לכל</strong> מספר צעדים שהוא, הרצת <span class="math">\(V\)</span> על <span class="math">\(M\)</span> לא תסתיים ולכן <span class="math">\(V\)</span> תמיד תעצור ותחזיר <span class="math">\(\text{F}\)</span> <strong>לכל</strong> <span class="math">\(\pi\)</span>, כולל <span class="math">\(\pi\)</span>-ים שהם ג'יבריש ולא מספרים.</p>
+<p>בואו נקבל שניה אינטואיציה למה בעיית העצירה היא <strong>עד כדי כך</strong> חזקה עד שהגיוני שלא יהיה אפשר לפתור אותה אלגוריתמית. ניקח לדוגמא את השערת גולדבך: לכל מספר זוגי <span class="math">\(n\ge4\)</span> קיימים שני ראשוניים <span class="math">\(p,q\)</span> כך ש-<span class="math">\(n=p+q\)</span>. ההשערה הזו קיימת כבר מאות שנים וטרם נמצאה לה הוכחה או הפרכה. אם היינו יכולים לפתור את בעיית העצירה היינו מסוגלים להשתמש בפתרון הזה כדי לדעת האם השערת גולדבך נכונה או לא: היינו כותבים אלגוריתם <span class="math">\(M\)</span> שפשוט רץ סדרתית על כל ה-<span class="math">\(n\ge4\)</span> הזוגיים, ולכל אחד מהם רץ על כל הראשוניים <span class="math">\(p<n\)</span> ובודק האם <span class="math">\(n-p\)</span> גם ראשוני. אם <span class="math">\(M\)</span> מגלה <span class="math">\(n\)</span> שעבורו <strong>לא קיים</strong> הפירוק <span class="math">\(n=p+q\)</span> הזה, <span class="math">\(M\)</span> עוצר. אחרת הוא עובר ל-<span class="math">\(n\)</span> הבא בתור. כעת, אפשר לתת את <span class="math">\(M\)</span> בתור קלט לבעיית העצירה. אם <span class="math">\(M\in L\)</span> זה אומר ש-<span class="math">\(M\)</span> <strong>עוצר</strong> ולכן השערת גולדבך <strong>לא נכונה</strong> (כי <span class="math">\(M\)</span> מצא לה דוגמא נגדית). אחרת, אם <span class="math">\(M\notin L\)</span>, זה אומר ש-<span class="math">\(M\)</span> <strong>לא עוצר</strong> ולכן השערת גולדבך <strong>נכונה</strong>. באופן דומה אפשר לנצל את בעיית העצירה כדי לפתור עוד בעיות; למעשה, אפשר להראות שכל בעיה ב-<span class="math">\(\text{RE}\)</span> ניתנת לתרגום לא מסובך לבעיית העצירה, כך שאם נוכל לפתור את בעיית העצירה, נוכל לפתור כל בעיה אחרת ב-<span class="math">\(\text{RE}\)</span> (בלשון שאולי אתם מכירים מתורת הסיבוכיות, בעיית העצירה היא <span class="math">\(\text{RE}\)</span>-שלמה, בדומה לבעיות שהן <span class="math">\(\text{NP}\)</span>-שלמות).</p>
+<p>למה אני מדבר כל כך הרבה על בעיית העצירה? כי עיקר מה שעושים במאמר של <span class="math">\(\text{MIP}^{*}=\text{RE}\)</span> הוא להוכיח את השייכות של בעיית העצירה ל-<span class="math">\(\text{MIP}^{*}\)</span>, מה שגורר כמעט מיידית את השוויון <span class="math">\(\text{MIP}^{*}=\text{RE}\)</span>. אם כן, הגיע הזמן שנדבר על מהי <span class="math">\(\text{MIP}^{*}\)</span>. זה מה שנעשה בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2020/01/24/what_is_mipstar_equals_re_part_2/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מה זה אומר ש-MIP*=RE? (חלק ב&#39;: מה זה אומר MIP*?)</span>
+            </a>
+            
+            
+            
+            <a href="/2020/01/20/what_are_percents/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז מה הקטע עם אחוזים?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

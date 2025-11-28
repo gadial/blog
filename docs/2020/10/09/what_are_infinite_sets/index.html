@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תורת הקבוצות - מה זו בעצם קבוצה אינסופית? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תורת הקבוצות - מה זו בעצם קבוצה אינסופית?</h1>
+            <div class="post-meta">
+                <span class="date">2020-10-09</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/קבוצה סופית.html">קבוצה סופית</a>
+                    
+                    <a href="/tags/קבוצה אינסופית.html">קבוצה אינסופית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>חלק ראשון, שבו אנחנו מגדירים מהי קבוצה אינסופית</h2>
+
+<p>בסדרת הפוסטים שלי על תורת הקבוצות התחלתי ממושג אחד בודד - <strong>קבוצה</strong>. מתוך המושג הזה בניתי הרבה מושגים מתמטיים אחרים, ובפרט את המושג של <strong>פונקציה</strong>. כל זה היה כיף ונחמד, אבל במשך כל הזמן הזה נשאר פיל גדול במרכז החדר שהתעלמתי ממנו - אולי דיברתי פה ושם על "קבוצה סופית" ו"קבוצה אינסופית", אבל לא הגדרתי את המושג הזה בשום צורה. ומכיוון שהרגע שבו מתחילים לדבר על קבוצות אינסופית הוא הרגע שבו דברים <strong>ממש מגניבים</strong> מתחילים לקרות, כדאי שנעשה את זה.</p>
+<p>האתגר שלנו הוא לפרמל מושג אינטואיטיבי, של <strong>גודל</strong> של קבוצה. בואו נסתכל למשל על הקבוצה <span class="math">\(\left\{ \pi,e,\sqrt{2}\right\} \)</span> - מה הגודל שלה? האינטואיציה שלנו אומרת שהגודל שלה הוא 3 כי יש בה שלושה איברים. האינטואיציה אומרת שלקבוצה הריקה <span class="math">\(\emptyset\)</span> יש 0 איברים ושלקבוצה <span class="math">\(\mathbb{N}=\left\{ 0,1,2,\ldots\right\} \)</span> יש <span class="math">\(\infty\)</span> ("אינסוף") איברים. אבל אנחנו רוצים לפרמל את האינטואיציה הזו כי זה מה שעושים במתמטיקה.</p>
+<p>אם נותנים לנו קבוצה, איך בעצם אנחנו יודעים כמה איברים יש בה? אנחנו <strong>סופרים</strong> אותם. אני לוקח את האיבר <span class="math">\(\pi\)</span> ואומר "1", ואז אני לוקח את <span class="math">\(e\)</span> ואומר "2" ואז אני לוקח את <span class="math">\(\sqrt{2}\)</span> ואומר "3" ובכך זה נגמר כי לא נשארו איברים בקבוצה. את מה שעשיתי כאן אפשר לתאר פורמלית בעזרת <strong>פונקציה</strong>: אני הגדרתי פונקציה <span class="math">\(f:\left\{ \pi,e,\sqrt{2}\right\} \to\left\{ 1,2,3\right\} \)</span> כך ש-</p>
+<p><span class="math">\(f\left(\pi\right)=1\)</span></p>
+<p><span class="math">\(f\left(e\right)=2\)</span></p>
+<p><span class="math">\(f\left(\sqrt{2}\right)=3\)</span></p>
+<p>הייתי יכול, כמובן, גם לספור את האיברים בסדר שונה, ואז הייתי מקבל פונקציה אחרת, נאמר <span class="math">\(g:\left\{ \pi,e,\sqrt{2}\right\} \to\left\{ 1,2,3\right\} \)</span> שמוגדרת על ידי</p>
+<p><span class="math">\(g\left(\sqrt{2}\right)=1\)</span></p>
+<p><span class="math">\(g\left(\pi\right)=2\)</span></p>
+<p><span class="math">\(g\left(e\right)=3\)</span></p>
+<p>אבל זה לא משנה כלום - הפונקציה <span class="math">\(g\)</span> היא אינדיקציה לכך שהקבוצה היא מגודל 3 בדיוק כפי שהפונקציה <span class="math">\(f\)</span> היא אינדיקציה שכזו.</p>
+<p>אם כן, אולי יש לנו הגדרה כללית? נאמר, הקבוצה <span class="math">\(A\)</span> היא מגודל 3 אם קיימת פונקציה <span class="math">\(f:A\to\left\{ 1,2,3\right\} \)</span>? די קל לראות שההגדרה הזו <strong>לא עובדת</strong> כמות שהיא. למשל, בואו ניקח את הקבוצה <span class="math">\(A=\left\{ e,\pi\right\} \)</span> שיש בה רק <strong>שני</strong> איברים, אז נביט בפונקציה <span class="math">\(f:\left\{ e,\pi\right\} \to\left\{ 1,2,3\right\} \)</span> שמוגדרת כך:</p>
+<p><span class="math">\(f\left(\pi\right)=1\)</span></p>
+<p><span class="math">\(f\left(e\right)=2\)</span></p>
+<p>זו בעצם אותה פונקציה בדיוק כמו קודם, אז מה השתבש עכשיו? שהאיבר <span class="math">\(3\)</span> הוא "מיותר"; בכלל לא השתמשנו בו. באותה מידה יכלנו להגדיר <span class="math">\(f:\left\{ e,\pi\right\} \to\left\{ 1,2\right\} \)</span> וגם זה היה עובד. נראה די ברור איך אפשר לתקן את הבעיה הזו - צריך לדרוש ש<strong>כל</strong> האיברים של <span class="math">\(\left\{ 1,2,3\right\} \)</span> "יהיו בשימוש", או בניסוח מתמטי - הפונקציה <span class="math">\(f:A\to\left\{ 1,2,3\right\} \)</span> צריכה להיות <strong>על</strong>.</p>
+<p>לרוע המזל, זה עדיין לא מספיק. הנה עוד דוגמא ששוברת את האינטואיציה שלנו, שתתבסס על קבוצה בת <strong>ארבעה </strong>איברים, <span class="math">\(\left\{ \pi,e,\sqrt{2},42\right\} \)</span>: נגדיר <span class="math">\(f:\left\{ \pi,e,\sqrt{2},42\right\} \to\left\{ 1,2,3\right\} \)</span> על ידי</p>
+<p><span class="math">\(f\left(\pi\right)=1\)</span></p>
+<p><span class="math">\(f\left(e\right)=2\)</span></p>
+<p><span class="math">\(f\left(\sqrt{2}\right)=3\)</span></p>
+<p><span class="math">\(f\left(42\right)=3\)</span></p>
+<p>ושוב - זו אותה פונקציה כמו קודם, רק עם התוספת החדשה <span class="math">\(f\left(42\right)=3\)</span>. מה השתבש הפעם? כמובן, הפעם השתמשתי ב-3 <strong>יותר מדי</strong> פעמים: גם <span class="math">\(\sqrt{2}\)</span> וגם 42 הלכו אליו. אם הייתי מבצע ספירה בקול רם, מה שהיינו שומעים הוא "אחד, שתיים, שלוש, שלוש...". זו רמאות ברורה וגם הפתרון ברור - לאסור על <span class="math">\(f\)</span> להחזיר את אותו פלט לשני קלטים שונים. או בניסוח מתמטי: הפונקציה <span class="math">\(f:A\to\left\{ 1,2,3\right\} \)</span> צריכה להיות <strong>חד-חד-ערכית</strong>.</p>
+<p>אפשר לעשות את זה טיפה יותר אלגנטי. <a href="http://gadial.net/2019/10/19/what_is_set_theory/">כזכור</a>, הגדרה אפשרית למספרים הטבעיים הלכה ככה: <span class="math">\(0\)</span> מוגדר להיות הקבוצה הריקה <span class="math">\(\emptyset\)</span>, <span class="math">\(1\)</span> מוגדר להיות הקבוצה <span class="math">\(\left\{ 0\right\} \)</span> וכן הלאה. באופן כללי, <span class="math">\(n\)</span> מוגדר להיות <span class="math">\(\left\{ 0,1,2,\ldots,n-1\right\} \)</span>. אז אם אני מתחיל את המספור שלי מ-0 במקום מ-1, אני יכול לומר ש-<span class="math">\(A\)</span> היא קבוצה מגודל 3 אם קיימת פונקציה חח"ע ועל <span class="math">\(f:A\to3\)</span> (כלומר, <span class="math">\(f:A\to\left\{ 0,1,2\right\} \)</span>). מכאן אפשר להגדיר קבוצות סופיות: קבוצה <span class="math">\(A\)</span> היא <strong>סופית</strong> אם קיים מספר טבעי <span class="math">\(n\)</span> כך שקיימת פונקציה חח"ע ועל <span class="math">\(f:A\to n\)</span>, ובמקרה זה מסמנים את <strong>הגודל</strong> של <span class="math">\(A\)</span> בתור <span class="math">\(\left|A\right|=n\)</span>.</p>
+<p>ועכשיו אפשר להגדיר גם קבוצות אינסופיות, סוף כל סוף, וזו אחת ההגדרות האהובות עלי במתמטיקה! קבוצה היא <strong>אינסופית</strong> אם היא... לא סופית.</p>
+<p>לא ראינו את זה בא, מה?</p>
+<h2>חלק שני, שבו אנחנו משווים עוצמות</h2>
+
+<p>בהגדרה שלי של קבוצה סופית הכלי שבו השתמשתי היה <strong>פונקציה חח"ע ועל</strong> מהקבוצה <span class="math">\(A\)</span> אל קבוצה ספציפית אחרת של מספרים טבעיים. אבל למה לעצור כאן? האינטואיציה היא שאם קיימת <span class="math">\(f:A\to B\)</span> חח"ע ועל עבור שתי קבוצות <span class="math">\(A,B\)</span> כלשהן, אז הגודל שלהן הוא שווה. הרי מה <span class="math">\(f\)</span> עושה בסך הכל? <strong>משנה את השמות</strong> של אברי <span class="math">\(A\)</span> כך שמתקבלים <strong>כל </strong>אברי <span class="math">\(B\)</span> (כולם, כי <span class="math">\(f\)</span> על), ושינוי השמות הזה לא "מאבד" איברים כי <span class="math">\(f\)</span> חח"ע ולכן שני איברים שונים לא "יתמזגו לאחד" אחרי שינוי השמות שלהם.</p>
+<p>עבור קבוצות סופיות, ההגדרה הזו עובדת מצוין. בואו ניקח שתי קבוצות סופיות כלשהן, <span class="math">\(A,B\)</span>, כך ש-<span class="math">\(\left|A\right|=n\)</span> ו-<span class="math">\(\left|B\right|=m\)</span>. נניח עכשיו שקיימת פונקציה חח"ע ועל <span class="math">\(f:A\to B\)</span>. מכך ש-<span class="math">\(\left|A\right|=n\)</span> אפשר להסיק שקיימת <span class="math">\(g:n\to A\)</span> חח"ע ועל (ההגדרה אומרת שקיימת פונקציה מ-<span class="math">\(A\)</span> אל <span class="math">\(n\)</span>, אבל אפשר לקחת את ההופכי שלה) ומכך ש-<span class="math">\(\left|B\right|=m\)</span> אפשר להסיק שקיימת <span class="math">\(h:B\to m\)</span> חח"ע ועל. ההרכבה <span class="math">\(hfg:n\to m\)</span> נותנת לנו פונקציה חח"ע ועל בין <span class="math">\(n\)</span> ו-<span class="math">\(m\)</span>. אז אנחנו נשארים רק עם הצורך להוכיח שאם יש פונקציה חח"ע ועל <span class="math">\(f:n\to m\)</span> אז <span class="math">\(n=m\)</span>. בואו נניח בלי הגבלת הכלליות ש-<span class="math">\(n\le m\)</span> ונוכיח באינדוקציה על הגודל של <span class="math">\(n\)</span>.</p>
+<p>אם <span class="math">\(n=0\)</span>, כלומר <span class="math">\(n=\emptyset\)</span>, אז הפונקציה <span class="math">\(f:n\to m\)</span> היחידה שקיימת היא הפונקציה הריקה (כלומר, פונקציה שפורמלית היא יחס שהוא הקבוצה הריקה). אם <span class="math">\(m\ne\emptyset\)</span> הפונקציה הזו לא תהיה על, ולכן <span class="math">\(m=\emptyset=n\)</span>.</p>
+<p>נניח אם כן שעבור <span class="math">\(n\)</span> הטענה נכונה ונוכיח אותה עבור <span class="math">\(n+1\)</span>. כלומר, נניח שקיימת פונקציה <span class="math">\(f:n+1\to m\)</span> כך ש-<span class="math">\(n+1\le m\)</span> ונוכיח ש-<span class="math">\(n+1=m\)</span>. כזכור, <span class="math">\(n+1\)</span> זו פשוט הקבוצה <span class="math">\(\left\{ 0,1,\ldots,n\right\} \)</span> ואילו <span class="math">\(m\)</span> היא הקבוצה <span class="math">\(\left\{ 0,1,\ldots,m-1\right\} \)</span>.</p>
+<p>מכיוון ש-<span class="math">\(f\)</span> היא על <span class="math">\(m\)</span>, קיים <span class="math">\(k\in\left\{ 0,1,\ldots,n\right\} \)</span> כך ש-<span class="math">\(f\left(k\right)=m-1\)</span>. בואו נבנה מ-<span class="math">\(f\)</span> הזו פונקציה <span class="math">\(g:n\to m-1\)</span> על ידי כך שניקח את <span class="math">\(f\)</span>, נתעלם מהפעולה שלה על <span class="math">\(n\)</span>, ואם צריך לתקן את מי ש-<span class="math">\(k\)</span> עבור אליו, נתקן כך:</p>
+<p><span class="math">\(g\left(x\right)=\begin{cases} f\left(n\right) & x=k\\ f\left(x\right) & x\ne k \end{cases}\)</span></p>
+<p>קיבלנו ש-<span class="math">\(g\)</span> הזו היא פונקציה חח"ע ועל מ-<span class="math">\(n\)</span> אל <span class="math">\(m-1\)</span> ומהנחת האינדוקציה נובע ש-<span class="math">\(n=m-1\)</span>, כלומר <span class="math">\(n+1=m\)</span> וזה מסיים את ההוכחה.</p>
+<p>בואו נתפקס עכשיו על מה שהייתה המטרה שלנו פה - הוכחנו שאם קיימת <span class="math">\(f:A\to B\)</span> חח"ע ועל כאשר <span class="math">\(A,B\)</span> הן קבוצות סופיות, אז הגודל שלהן שווה. הנכונות הזו נותנת לנו אומץ לקפוץ אל השלב הבא ולתת הגדרה שהיא תמימה למראה וכמעט ריקה מאינפורמציה, אבל היא מה שינחה אותנו מכאן ואילך: אנחנו אומרים שאם קיימת <span class="math">\(f:A\to B\)</span> חח"ע ועל אז <span class="math">\(A,B\)</span> הן <strong>שוות עוצמה</strong> ומסמנים זאת <span class="math">\(\left|A\right|=\left|B\right|\)</span> או לפעמים סתם <span class="math">\(A\sim B\)</span>. שימו לב שכאן אני <strong>לא מניח</strong> ש-<span class="math">\(A,B\)</span> סופיות; במילים אחרות, נתתי הגדרה פורמלית לאופן שבו בודקים אם שתי קבוצות אינסופיות הן "מאותו גודל אינסופי".</p>
+<p>נשמע הגיוני ומתבקש? <strong>זה לא צריך להיות הגיוני ומתבקש</strong> כי דברים מוזרים קורים פה. למעשה, דברים שהיו מוזרים מספיק כדי למשוך את תשומת לבו של גלילאו גלילאי. בספרו האחרון, "שני מדעים חדשים", הוא מביא (בצורה של דיאלוג, שאוותר עליה) את האבחנה הבאה, שנקראת לרוב "הפרדוקס של גלילאו" כי גלילאו עצמו התייחס אל זה בתור סיבה להפסיק לדבר על קבוצות אינסופיות: הקבוצות <span class="math">\(A=\left\{ 0,1,2,3,4,\ldots\right\} \)</span> של הטבעים ו-<span class="math">\(B=\left\{ 0,1,4,9,16,\ldots\right\} \)</span> של <strong>ריבועים</strong> של מספרים טבעיים הן שוות עוצמה - הפונקציה <span class="math">\(f:A\to B\)</span> המוגדרת בתור <span class="math">\(f\left(n\right)=n^{2}\)</span> היא בבירור חח"ע ועל. אבל מצד שני, <span class="math">\(B\subsetneq A\)</span> - קיימים ב-<span class="math">\(A\)</span> איברים שלא מופיעים ב-<span class="math">\(B\)</span>, כך שאינטואיטיבית, <span class="math">\(B\)</span> <strong>קטנה יותר</strong> מאשר <span class="math">\(A\)</span>. אז מה הולך כאן?</p>
+<p>אני אוהב להתמודד עם הפרדוקס הזה באופן הבא: תשכחו לרגע מריבועים. נניח שאני מגדיר פונקציה <span class="math">\(f\)</span> שתחומה <span class="math">\(A\)</span> ופועלת כך: <span class="math">\(f\left(n\right)=n^{\prime}\)</span>. מה זה <span class="math">\(n^{\prime}\)</span>? זה פשוט המספר <span class="math">\(n\)</span> כשהוספתי איזה לכלוך ("תג") מעליו. זה לא מספר שונה, זו <strong>מחרוזת</strong> שונה. שיטת סימון שונה לאותו מספר. כך למשל <span class="math">\(f\left(15\right)=15^{\prime}\)</span>. מה הטווח של <span class="math">\(f\)</span>? בואו נכתוב את שתי הקבוצות זו מעל זו:</p>
+<p><span class="math">\(A=\left\{ 0,1,2,3,\ldots\right\} \)</span></p>
+<p><span class="math">\(B=\left\{ 0^{\prime},1^{\prime},2^{\prime},3^{\prime},\ldots\right\} \)</span></p>
+<p>הקבוצה <span class="math">\(B\)</span> הזו היא בסך הכל "<span class="math">\(A\)</span> עם לכלוכים קטנים בקצה". האם יש הבדל מהותי? לא. סתם שיטת סימון משונה, אבל "ברור" שהגודל לא משתנה כתוצאה ממנה.</p>
+<p>אה-הא! כעת, הבה ונחליף את הלכלוך הזה של תג בלכלוך שנראה טיפה שונה אבל גם הוא לכלוך: הספרה 2. נקבל:</p>
+<p><span class="math">\(B=\left\{ 0^{2},1^{2},2^{2},3^{2},\ldots\right\} \)</span></p>
+<p>ובעצם קיבלנו פה שוב את <span class="math">\(B\)</span> המקורית, רק עם שיטת כתיב טיפה שונה לאיברים. אז איפה הבעיה מתחילה? אולי הבעיה מתחילה כשמפסיקים להתייחס ל-<span class="math">\(2\)</span> בתור "לכלוך" ומתחילים להתייחס אליו בתור "הוראות הפעלה" של איך לחשב את הערכים של אברי <span class="math">\(B\)</span>? אבל למה שתהיה פה בעיה? הרי הערכים השונים שמתקבלים עקב כך לא מתנגשים.</p>
+<p>אז זהו, שאני באמת לא רואה פה בעיה, וכל שאר הפוסטים שלי על תורת הקבוצות יתבססו על ההנחה שאין בעיה. אבל זה שאני חושב שאין בעיה לא אומר שצריך להיות תמימים לגבי הסיכוי לבעיה שכזו. אני תמיד אוהב להזכיר את <a href="https://gadial.net/2010/04/10/riemann_series_theorem/">משפט רימן לטורים</a>: אם תיקחו טור אינסופי שהוא מתכנס אבל לא מתכנס בהחלט, אז אפשר על ידי שינוי <strong>סדר הסכימה</strong> של האיברים שלו לגרום לו להתכנס לכל מספר שנרצה, או להתבדר, או להיות בעל ערך לא מוגדר. רק שינוי הסדר! אז גם אם משהו נראה לנו טבעי ומובן מאליו, לכו תדעו איזה מוקש מתחבא מתחתיו.</p>
+<p>עדיין, הביטוי "<span class="math">\(A,B\)</span> הן שוות<strong> עוצמה</strong>" מאפשר לנו להתייחס לעניין בספקנות ההכרחית. מה זו "עוצמה" (Cardinality באנגלית)? זו מילה חדשה שהכנסנו לדיון בדיוק כדי שנוכל לדבר על "גדלים" של קבוצות אינסופיות. אין לנו מחוייבות לאינטואיציה שהמילה "גודל" נושאת איתה. מצד שני, עכשיו גם קצת פחות ברור על מה אנחנו מדברים - בזמן ש"גודל" הוא מספר טבעי, מה זו "עוצמה"? בינתיים הגדרתי רק מה זה אומר ששתי קבוצות הן <strong>בעלות אותה עוצמה</strong>, אבל לא מה זו ה"עוצמה" הזו מלכתחילה!</p>
+<p>התשובה היא שיש למושג הזה הגדרה פורמלית לגמרי, אבל הוא לא יגיד לנו כלום כרגע; פורמלית זה "סודר שאינו שווה עוצמה לאף סודר קטן ממנו", אבל המילה <strong>סודר</strong> עוד לא מוכרת לנו. אז נחכה עם זה להמשך; לא צריך את זה כרגע.</p>
+<p>דבר נחמד ושימושי במיוחד ששוויון עוצמה מקיים הוא התכונות של יחסי שקילות. כלומר:</p>
+<ul> <li>לכל קבוצה <span class="math">\(A\)</span> מתקיים <span class="math">\(A\sim A\)</span> (כאן <span class="math">\(f:A\to A\)</span> החח"ע ועל תהיה פונקציית הזהות)</li>
+
+
+<li>אם <span class="math">\(A\sim B\)</span> אז <span class="math">\(B\sim A\)</span> (כי אם יש <span class="math">\(f:A\to B\)</span> חח"ע ועל אז <span class="math">\(f^{-1}:B\to A\)</span> היא חח"ע ועל)</li>
+
+
+<li>אם <span class="math">\(A\sim B\)</span> וגם <span class="math">\(B\sim C\)</span> אז <span class="math">\(A\sim C\)</span> (כי אם יש <span class="math">\(f:A\to B\)</span> ו-<span class="math">\(g:B\to C\)</span> חח"ע ועל אז גם ההרכבה <span class="math">\(gf:A\to C\)</span> חח"ע ועל)</li>
+
+</ul>
+
+<p>נשתמש בתכונות הללו בחופשיות מכאן ואילך.</p>
+<h2>חלק שלישי, שבו אנחנו מגלים עוד הגדרה לקבוצה אינסופית, ורואים מיהו האינסוף "הקטן ביותר"</h2>
+
+<p>בואו נחזור לרגע אל הפרדוקס של גלילאו. מה שהיה מוזר בו הוא שגילינו ש-<span class="math">\(A\sim B\)</span> עבור סיטואציה שבה <span class="math">\(B\)</span> היא תת-קבוצה <strong>ממש</strong> של <span class="math">\(A\)</span> - שכל איבר של <span class="math">\(B\)</span> שייך ל-<span class="math">\(A\)</span>, אבל חלק מהאיברים של <span class="math">\(A\)</span> <strong>חסרים</strong>. תופעה כזו לא יכולה להתרחש בקבוצות <strong>סופיות</strong> - כבר ראינו שאם ל-<span class="math">\(B\)</span> יש פחות איברים מ-<span class="math">\(A\)</span> כששתיהן סופיות, אז לא קיימת <span class="math">\(f:A\to B\)</span> שהיא חח"ע ועל. אם כן, נראה שיש פה דרך חדשה להגדיר קבוצה אינסופית: קבוצה <span class="math">\(A\)</span> היא אינסופית אם ורק אם קיימת לה תת-קבוצה ממש <span class="math">\(B\subsetneq A\)</span> כך ש-<span class="math">\(A\sim B\)</span>. ההגדרה הזו נקראת "אינסופיות דדקינד" על שם המתמטיקאי ריכארד דדקינד שהמציא אותה, והיא יפה כי היא בכלל לא מסתמכת על המספרים הטבעיים כדי להגדיר "גודל" של קבוצות.</p>
+<p>אז אם הכל טוב, מה הבעיה? כי בטח הרגשתן שיש פה בעיה שאני חותר אליה. ובכן, הבעיה היא שהמושג הזה של אינסופיות הוא לא בדיוק שקול למושג הרגיל של אינסופיות - לא בלי הנחה נוספת. ההנחה הנוספת הזו היא <strong>אקסיומת הבחירה</strong> שהזכרתי בפוסט שלי על <a href="https://gadial.net/2020/06/20/general_cartesian_products/">מכפלות קרטזיות כלליות</a>.</p>
+<p>בשביל לראות למה צריך את ההנחה הזו ומה זה בכלל אומר שצריכים אותה, בואו ננסה להוכיח שאינסופיות "רגילה" גוררת את אינסופיות דדקינד, וההפך. אם קבוצה <span class="math">\(A\)</span> היא אינסופית דדקינד, אז קיימת <span class="math">\(B\subsetneq A\)</span> כך ש-<span class="math">\(A\sim B\)</span>. עכשיו, אם <span class="math">\(A\)</span> סופית במובן הרגיל, כלומר <span class="math">\(A\sim n\)</span> עבור <span class="math">\(n\)</span> טבעי כלשהו, אז מה שקורה הוא ש-<span class="math">\(B\sim A\sim n\)</span>. מצד שני, אם ניקח את הפונקציה שמראה ש-<span class="math">\(A\sim n\)</span> ונצמצם את התחום שלה ל-<span class="math">\(B\)</span> נקבל התאמה חח"ע ועל בין <span class="math">\(B\)</span> ובין תת-קבוצה ממש של <span class="math">\(n\)</span> (זו תת-קבוצה <strong>ממש</strong> כי יש <span class="math">\(a\in A\backslash B\)</span> שאת התמונה שלו אף איבר ב-<span class="math">\(B\)</span> לא מקבל, אחרת ההתאמה שמראה ש-<span class="math">\(A\sim n\)</span> לא הייתה חח"ע). במילים אחרות, עברנו מלדבר על <span class="math">\(A,B\)</span> כלליות לדבר על כך שלא ייתכן ש-<span class="math">\(n\)</span> שוות עוצמה לתת-קבוצה ממש של עצמה. את זה אפשר להוכיח באינדוקציה על <span class="math">\(n\)</span> בצורה דומה למה שעשינו קודם.</p>
+<p>אם כן, ראינו שאם קבוצה היא אינסופית-דדקינד אז היא גם אינסופית במובן הרגיל. אבל האם ההפך נכון? אני אוכיח את זה בדרך עקיפה, בעזרת טענה אחרת שהיא שימושית באופן כללי, ואותה אוכיח בנפנוף ידיים שמסתמך ברמה כלשהי על אקסיומת הבחירה: אם <span class="math">\(A\)</span> היא קבוצה אינסופית (במובן הרגיל) אז, אינטואיטיבית, היא מכילה "משהו שנראה כמו הטבעיים" ופורמלית: קיימת פונקציה <span class="math">\(f:\mathbb{N}\to A\)</span> שהיא חד-חד-ערכית (<strong>לא</strong> בהכרח על). לפונקציה כזו קוראים <strong>שיכון</strong>.</p>
+<p>למה הטענה הזו מספיקה כדי להראות שאם <span class="math">\(A\)</span> אינסופית, אז היא אינסופית-דדקינד? כי אם <span class="math">\(A\)</span> אינסופית ו-<span class="math">\(f\)</span> כזו קיימת, אפשר לתאר את התמונה שלה בתור <span class="math">\(\left\{ a_{0},a_{1},a_{2},\ldots\right\} \)</span>, ואז אפשר לעשות את התעלול הבא: להגדיר פונקציה <span class="math">\(g:A\to A\)</span> על ידי</p>
+<p><span class="math">\(g\left(x\right)=\begin{cases} a_{k+1} & x=a_{k}\\ x & \text{else} \end{cases}\)</span></p>
+<p>כלומר, מה ש-<span class="math">\(g\)</span> עושה על אברי <span class="math">\(A\)</span> הוא זה: על רובם היא לא עושה כלום ומשאירה אותם ללא שינוי; אבל אם היא מקבלת איבר מתוך <span class="math">\(\left\{ a_{0},a_{1},a_{2},\ldots\right\} \)</span>, היא מחזירה את האיבר הבא בתור. קל לראות ש-<span class="math">\(g\left(A\right)=A\backslash\left\{ a_{0}\right\} \)</span> וש-<span class="math">\(g\)</span> היא חח"ע, ולכן קיבלנו תת-קבוצה ממש של <span class="math">\(A\)</span> (כל <span class="math">\(A\)</span> למעט <span class="math">\(a_{0}\)</span>) ששקולה ל-<span class="math">\(A\)</span> - אינסופיות-דדקינד בפעולה.</p>
+<p>אוקיי, אז איך מוכיחים שאם <span class="math">\(A\)</span> אינסופית אפשר לשכן את <span class="math">\(\mathbb{N}\)</span> בתוכה? הנה הוכחה בנפנוף ידיים: מכיוון ש-<span class="math">\(A\)</span> לא ריקה, יש בה איבר, נקרא לו <span class="math">\(a_{0}\)</span>. אז נגדיר <span class="math">\(f\left(0\right)=a_{0}\)</span>. עכשיו, גם <span class="math">\(A\backslash\left\{ a_{0}\right\} \)</span> לא ריקה (כי <span class="math">\(A\)</span> אינסופית, לא ייתכן ש-<span class="math">\(a_{0}\)</span> היה האיבר היחיד בה) אז קיים איבר <span class="math">\(a_{1}\in A\backslash\left\{ a_{0}\right\} \)</span> ואפשר להגדיר <span class="math">\(f\left(1\right)=a_{1}\)</span>. ככה אפשר להמשיך: נניח שכבר הגדרתי את <span class="math">\(f\)</span> עד לערך <span class="math">\(n\)</span>, אז נתבונן ב-<span class="math">\(A\backslash\left\{ a_{0},\ldots,a_{n}\right\} \)</span>. זו קבוצה לא ריקה כי אם הייתה ריקה, <span class="math">\(A\)</span> הייתה שווה לקבוצה <strong>הסופית</strong> <span class="math">\(\left\{ a_{0},\ldots,a_{n}\right\} \)</span>, ולכן קיים בקבוצה הזו איבר <span class="math">\(a_{n+1}\)</span> ואפשר להגדיר <span class="math">\(f\left(n+1\right)=a_{n+1}\)</span>, וכך זה נמשך עד אינסוף.</p>
+<p>נשמע סביר? בהחלט. אז למה זו הוכחה בנפנוף ידיים? כי כזכור, בתורת הקבוצות צריך לבנות דברים באופן מסודר, מתוך אקסיומות, ולא סתם לומר "אני יכול לתאר את זה ולכן זה קיים", מה שמביא עלינו זוועות כמו הפרדוקס של ראסל. כאן אני בונה פונקציה <span class="math">\(f\)</span>, שהיא בעצם קבוצה של זוגות סדורים מהצורה <span class="math">\(\left(n,a_{n}\right)\)</span>. אנחנו יודעים לבנות זוגות סדורים, ועבור כל זוג סדור אנחנו גם יודעים לבנות את הקבוצה שהוא האיבר היחיד שלה, ואנחנו יודעים לאחד מספר <strong>סופי</strong> של קבוצות - אבל ב-<span class="math">\(f\)</span> צריך להיות מספר <strong>אינסופי</strong> של זוגות סדורים, ואת זה אנחנו כבר לא יודעים לעשות מהאקסיומות הבסיסיות.</p>
+<p>בניה מחוכמת יותר, בעזרת אקסיומות מחוכמות יותר, כבר דורשת שנתבסס על משהו קיים. אני לא יכול סתם כך להגיד "<span class="math">\(A\)</span> לא ריקה אז יש בה איזה איבר ונקרא לו <span class="math">\(a_{0}\)</span>"; בשביל <strong>לבנות פורמלית</strong> את <span class="math">\(f\)</span> אני צריך משהו קיים ש<strong>נותן לי במפורש</strong> את <span class="math">\(a_{0}\)</span> ואני יכול להסתמך עליו. המשהו הזה הוא, ובכן, פונקציה: פונקציה <span class="math">\(g\)</span> שיודעת לקבל תת-קבוצות של <span class="math">\(A\)</span> ולהחזיר איברים שנמצאים בהן. זה <strong>בדיוק</strong> מה שאקסיומת הבחירה מדברת עליו. אקסיומת הבחירה אומרת במפורש את הדבר הזה: אם <span class="math">\(\left\{ A_{i}\right\} _{i\in\Lambda}\)</span> היא משפחה של קבוצות כך ש-<span class="math">\(A_{i}\ne\emptyset\)</span> לכל <span class="math">\(i\in\Lambda\)</span> אז קיימת <span class="math">\(g:\Lambda\to\bigcup_{i\in\Lambda}A_{i}\)</span> כך ש-<span class="math">\(g\left(i\right)\in A_{i}\)</span> לכל <span class="math">\(i\in\Lambda\)</span>. במקרה שלנו, משפחת הקבוצות היא פשוט <span class="math">\(\mathcal{P}\left(A\right)\backslash\left\{ \emptyset\right\} \)</span> - כל תתי-הקבוצות של <span class="math">\(A\)</span> למעט הקבוצה הריקה.</p>
+<p>עכשיו, במקום לומר "<span class="math">\(A\backslash\left\{ a_{0},\ldots,a_{n}\right\} \)</span> לא ריקה אז קיים בה <span class="math">\(a_{n+1}\)</span> ולכן נגדיר <span class="math">\(f\left(n+1\right)=a_{n+1}\)</span>" אני יכול להגיד משהו פשוט יותר: "נגדיר <span class="math">\(f\left(a_{n+1}\right)=g\left(A\backslash\left\{ a_{0},\ldots,a_{n}\right\} \right)\)</span>". זו כבר הגדרה מאוד קונקרטית שניתן לבצע - אבל בשביל זה צריך שהפונקציה <span class="math">\(g\)</span> תתקיים מלכתחילה.</p>
+<p>אפשר היה לעשות את זה פשוט יותר. לא חייבים את אקסיומת הבחירה המלאה בכל עוצמתה - אפשר להחליף אותה במשהו שנקרא "אקסיומת הבחירה התלויה" (Axiom of dependent choice). לא אכנס לזה הפעם. אבל בלי סוג כלשהו של אקסיומת הבחירה, זה פשוט לא עובד. זה לא שאם אין לנו את אקסיומת הבחירה ו-<span class="math">\(A\)</span> אינסופית אז אין בה עותק של המספרים הטבעיים; זה שאם אין לנו את אקסיומת הבחירה אנחנו פשוט לא מסוגלים <strong>לבנות פורמלית</strong> את הפונקציה ש<strong>מראה לנו את השיכון הזה</strong>. גם בהגדרה של אינסופיות-דדקינד, מה ש"נשבר" ללא אקסיומת הבחירה הוא לא שלא <strong>קיימת</strong> תת-קבוצה <span class="math">\(B\)</span> שהיא "מאותו הגודל" של <span class="math">\(A\)</span>, אלא שאין לנו דרך <strong>לבנות פורמלית</strong> את הפונקציה שמראה לנו ש-<span class="math">\(A\sim B\)</span> (ובלי פונקציה כזו פשוט <strong>אין משמעות</strong> לאמירה ששתי הקבוצות הן "מאותו הגודל"; הרי מהגדרת "אותו הגודל" בהתבסס על קיום פונקציה שכזו התחלנו).</p>
+<p>זה מקום טוב לעצור בו, אבל לפני כן, בואו נחדד עוד קצת את המשמעות של מה שהוכחנו. ראינו שאם <span class="math">\(A\)</span> היא קבוצה אינסופית <strong>כלשהי</strong>, אז היא מכילה עותק של <span class="math">\(\mathbb{N}\)</span>, כלומר אינטואיטיבית, <span class="math">\(A\)</span> גדולה "לפחות כמו" <span class="math">\(\mathbb{N}\)</span>. כלומר, אינטואטיבית, <span class="math">\(\mathbb{N}\)</span> היא הקבוצה האינסופית "הקטנה ביותר". איך מפרמלים את הרעיון הזה עד הסוף? את זה כבר כדאי לדחות לפעם הבאה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2020/10/28/diagonalizations_and_infinite_sets/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת הקבוצות - לכסונים, או למה יש אינסוף אינסופים?</span>
+            </a>
+            
+            
+            
+            <a href="/2020/08/27/hai_hamsa/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אילו מספרים ניתן לקבל באמצעות חי וחמסה?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

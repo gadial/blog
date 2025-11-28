@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז איך פותרים משוואות (ממעלה ראשונה בנעלם יחיד)? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז איך פותרים משוואות (ממעלה ראשונה בנעלם יחיד)?</h1>
+            <div class="post-meta">
+                <span class="date">2020-06-06</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/כללי.html">כללי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/משוואות.html">משוואות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>הרי לכם תרחיש בדוי מהראש שאינו מבוסס על חוויה אישית מטופשת שלי בכלל בשום צורה: נניח שנתקלתי בחולצה שנראית לי מגניבה ממש ואני רוצה להזמין אותה מהאתר היחיד באינטרנט שמוכר אותה. החולצה עולה 50 ש"ח. טוב ויפה, אבל האתר דורש קניה של מינימום 200 ש"ח כדי שאוכל לבצע הזמנה. אני מחליט למלא את יתר ההזמנה בחולצות פשוטות יותר, שעולות רק 30 ש"ח כל אחת. כמה חולצות כאלו אני צריך לקנות כדי שאוכל להגיע למחיר המינימום להזמנה?</p>
+<p>התשובה היא "חמש", והדרך הפשוטה ביותר להגיע לתשובה הזו היא פשוט <strong>לנסות</strong>. לבחור עוד ועוד חולצות עד שבסוף רואים שהגעתי למינימום ההזמנה. זה גם מה שהייתי עושה, אם לא היה לי איזה אינסטינקט בראש שגורם לי לבצע אוטומטית את החישוב ולהגיע אל "חמש" עוד לפני הניסוי וטעיה. האינסטינקט הזה שם כי בבית הספר התעקשו שאלמד <strong>לפתור משוואות</strong>, וזו דוגמא למשוואה מהסוג הנדיר שאפשר לפתור כמעט ללא מחשבה.</p>
+<p>בפוסט הזה אני רוצה לדבר על פתרון של משוואות. כפי שדי ברור מהדוגמא המונפצת שלי, שאלת ה"בשביל מה צריך את זה" היא סיפור נפרד ואני לא הולך לנסות לענות עליה ברצינות כאן. לפעמים זה מועיל; לפעמים זה מגניב; לפעמים זה חשוב; ייתכן שעבורכם זה יהיה נטול חשיבות לחלוטין ואתם לומדים את זה רק כי בבית הספר מכריחים אתכם. אני אישית אוהב מתמטיקה כי זה כיפי ומעניין - אני מקווה שאפילו משהו כמו פתרון משוואות יכול להיות כיפי ומעניין (מה שבטוח הוא שזה אכן צעד ראשון בדרך להיכרות עם דברים כיפיים ומעניינים אחרים במתמטיקה).</p>
+<p>אז מה זו משוואה? הכי פשוט להראות דוגמא, והסיפור עם החולצות אכן נותן דוגמא כזו - את המשוואה <span class="math">\(30x+50=200\)</span>. כאן אנחנו רואים מה משוואה כוללת. ראשית כל, היא כוללת את סימן השוויון, "=". מה שנמצא מימין לסימן הזה נקרא <strong>אגף ימין של המשוואה</strong> ומה שנמצא משמאל לסימן הזה נקרא <strong>אגף שמאל של המשוואה</strong>. המשוואה עצמה היא הטענה "מה שבאגף ימין שווה למה שבאגף שמאל". לכתוב <span class="math">\(3+5=8\)</span> זה לכתוב משוואה; גם לכתוב <span class="math">\(3\times5=7+8\)</span> זה לכתוב משוואה. גם לכתוב <span class="math">\(4=4\)</span> זה לכתוב משוואה. אפילו לכתוב <span class="math">\(3=4\)</span> זה לכתוב משוואה, רק שבמקרה של <span class="math">\(3=4\)</span> המשוואה <strong>לא נכונה</strong> (לפחות לא במערכת המספרים הרגילה שלנו) ומה שנכון לכתוב במקרה הזה הוא <span class="math">\(3\ne4\)</span>.</p>
+<p>בדרך כלל מה שאנחנו עושים עם משוואות הוא <strong>לפתור</strong> אותן. במשוואה כמו <span class="math">\(3\times5=7+8\)</span> אין ממש מה לפתור; אולי רק אם אנחנו רוצים לוודא שאגף ימין ושמאל באמת שווים. לרוב הסיטואציה היא כמו ב-<span class="math">\(30x+50=200\)</span>: פרט למספרים, המשוואה כוללת גם <strong>נעלמים</strong>, כלומר סימונים שמייצגים מספרים אבל אנחנו לא לגמרי החלטנו אילו מספרים הם אמורים לייצג. במשוואה <span class="math">\(30x+50=200\)</span> יש נעלם יחיד: <span class="math">\(x\)</span>. "לפתור את המשוואה" פירושו לענות על השאלה - אילו מספרים אפשר להציב במקום <span class="math">\(x\)</span> כך שהמשוואה תהיה נכונה? כלומר, ש-30 כפול המספר שהצבנו באיקס, כל זה ועוד 50, יהיה שווה 200.</p>
+<p>למשוואות לא חייב להיות פתרון; למשל, למשוואה <span class="math">\(0\cdot x=1\)</span> אין פתרון (אין מספר שכאשר מכפילים אותו באפס נותן 1 כי כל מספר כפול אפס שווה אפס) ולפעמים יכולים להיות למשוואה כמה פתרונות שונים. זו שאלה כללית ומרתקת במתמטיקה: מהי קבוצת הפתרונות של משוואה? איך היא מתנהגת? איך בודקים שייכות של איבר אליה? וכבר עבור משוואות פשוטות "יחסית" התשובות יכולות להיות מורכבות מאוד (למשל, המשוואה <span class="math">\(y^{2}=x^{3}+ax+b\)</span> שמכונה "עקום אליפטי" היא בעלת מרחב פתרונות מורכב מאוד שהבנה שלו דורשת מתמטיקה עמוקה מאוד). לכן אנחנו מתחילים מלדעת איך פותרים משוואות פשוטות <strong>מאוד</strong>, מתקדמים אל לדעת לפתור משוואות <strong>טיפה</strong> פחות פשוטות, ועוצרים שם; ההמשך הוא במתמטיקה מתקדמת יותר.</p>
+<p>אני אדבר פה רק על משוואות פשוטות, למרות שהטכניקות שאני אראה רלוונטיות גם למשוואות מסובכות יותר.</p>
+<p>אז איך פותרים את המשוואה <span class="math">\(30x+50=200\)</span>? קודם נראה את הצעדים ואז ננסה להבין מה בעצם עשיתי בהם.</p>
+<p>ראשית, אני "מעביר את 50 אגף". זה אומר שאני עובר מהמשוואה <span class="math">\(30x+50=200\)</span> אל המשוואה <span class="math">\(30x=200-50\)</span>. ה-<span class="math">\(50\)</span> שהיה באגף שמאל עבר אל אגף ימין, וה"מחיר" של המעבר הזה הוא שהסימן שלו השתנה מפלוס אל מינוס (למה? עוד רגע אסביר את הנימוקים). עכשיו אני מבצע את פעולת החיסור ומקבל את המשוואה הבאה:</p>
+<p><span class="math">\(30x=150\)</span></p>
+<p>עכשיו אני <strong>מחלק את שני האגפים</strong> במספר 30 ומקבל <span class="math">\(x=\frac{150}{30}\)</span>. אחרי ביצוע החלוקה באגף ימין אני מקבל <span class="math">\(x=5\)</span> וזה הפתרון של המשוואה. פשוט? כן! וזו <strong>רוב</strong> הטכניקה שנדרשת כדי לפתור משוואות.</p>
+<p>בואו ננסה להבין מה בעצם עשיתי כאן. התחלתי עם משוואה אחת, ואז יצרתי מין "שרשרת" של משוואות שהאחרונה בהן היא פתרון של המשוואה. בואו נכתוב במפורש את כל השרשרת:</p>
+<ul> <li><span class="math">\(30x+50=200\)</span></li>
+
+
+<li><span class="math">\(30x=200-50\)</span></li>
+
+
+<li><span class="math">\(30x=150\)</span></li>
+
+
+<li><span class="math">\(x=\frac{150}{30}\)</span></li>
+
+
+<li><span class="math">\(x=5\)</span></li>
+
+</ul>
+
+<p>הרעיון המרכזי מאחורי השרשרת הזו, ומאחורי פתרון משוואות בכלל, הוא שכל המשוואות פה הן <strong>שקולות</strong> אחת לשניה. מה זה אומר? שתי משוואות הן שקולות אם בכל פעם שבו אחת מהן היא נכונה, גם השניה היא נכונה. כלומר: אם אני מציב ערך כלשהו ב-<span class="math">\(x\)</span> ויוצא שאחת מהמשוואות היא נכונה, אז מובטח לי שגם השניה תהיה נכונה עם אותו ערך של <span class="math">\(x\)</span>; ואם עבור הצבה כלשהי ב-<span class="math">\(x\)</span> המשוואה הייתה לא נכונה, גם השניה תהיה לא נכונה.</p>
+<p>בואו נראה דוגמא פשוטה לסיטואציה שבה זה <strong>לא</strong> המצב; שבה יש לנו שתי משוואות שאינן שקולות. הנה הן:</p>
+<ul> <li><span class="math">\(5x=4x\)</span></li>
+
+
+<li><span class="math">\(5=4\)</span></li>
+
+</ul>
+
+<p>המשוואה השניה בבירור היא תמיד לא נכונה; המשוואה הראשונה היא לא נכונה אם מציבים באיקס את 1, למשל, אבל אם מציבים באיקס את 0 אז המשוואה דווקא נכונה. כלומר, קיימת סיטואציה שבה המשוואה הראשונה נכונה, ולעומת זאת במשוואה השניה גם אם "נציב באיקס אפס" המשוואה תהיה לא נכונה - איקס בכלל לא מופיע בה, מה זה חשוב מה אנחנו "מציבים" בו?</p>
+<p>זוג המשוואות הזה חשוב כי האופן שבו עברתי מהראשונה אל השניה היה על ידי ביצוע חלוקה - חילקתי באיקס. הלקח הוא שצריך להיזהר - לא כל פעולה שאני מבצע על המשוואה מייצרת משוואה ששקולה לה. אבל לא צריך להיזהר <strong>יותר מדי</strong> - רוב הפעולות שבהן נרצה להשתמש מייצרות משוואות שקולות וקל לזהות את המקרים שבהם זה לא קורה.</p>
+<p>בואו נסתכל על המעבר הראשון שביצעתי במשוואות למעלה - למה הוא תקין?</p>
+<ul> <li><span class="math">\(30x+50=200\)</span></li>
+
+
+<li><span class="math">\(30x=200-50\)</span></li>
+
+</ul>
+
+<p>כיניתי את המעבר הזה "העברת אגף" אבל אני בעצם עושה בו משהו קצת יותר פשוט: אני <strong>מחבר לשני האגפים את אותו מספר</strong>. במקרה הנוכחי, אני מחבר לשניהם <span class="math">\(-50\)</span>. הייתי יכול להוסיף פה "שלב ביניים":</p>
+<ul> <li><span class="math">\(30x+50-50=200-50\)</span></li>
+
+</ul>
+
+<p>אחרי שלב הביניים הזה ה-<span class="math">\(+50-50\)</span> נעלם כי הסכום של שניהם שווה לאפס. גם זה סוג של צעד, שאני גם עושה בהמשך - להחליף את אחד מאגפי המשוואה במשהו ששווה לו נותן לנו משהו שקול למשוואה המקורית. זה גם מה שאני עושה במעבר הבא:</p>
+<ul> <li><span class="math">\(30x=200-50\)</span></li>
+
+
+<li><span class="math">\(30x=150\)</span></li>
+
+</ul>
+
+<p>כאן החלפתי את <span class="math">\(200-150\)</span> ב-<span class="math">\(50\)</span> ששווה לו וקיבלתי משוואה שקולה.</p>
+<p>הסוג הנוסף של מעבר שביצעתי היה <strong>כפל של שני האגפים באותו מספר</strong>:</p>
+<ul> <li><span class="math">\(30x=150\)</span></li>
+
+
+<li><span class="math">\(x=\frac{150}{30}\)</span></li>
+
+</ul>
+
+<p>ושוב, קפצתי על צעד. אני כופל את שני האגפים במספר <span class="math">\(\frac{1}{30}\)</span> ("מחלק ב-30") ולכן שלב הביניים היה <span class="math">\(\frac{1}{30}\cdot30x=\frac{1}{30}\cdot150\)</span>. את הצמצום <span class="math">\(\frac{30}{30}=1\)</span> ביצעתי בלי לכתוב אותו במפורש.</p>
+<p>אז אילו פעולות היו לנו שמייצרות משוואה שקולה מתוך משוואה קיימת?</p>
+<ul> <li>להחליף אגף אחד של המשוואה באגף אחר ששווה לו.</li>
+
+
+<li>לחבר את אותו מספר לשני אגפי המשוואה.</li>
+
+
+<li>להכפיל באותו מספר את שני אגפי המשוואה.</li>
+
+</ul>
+
+<p>את הפעולה השלישית צריך לסייג. זה <strong>לא עובד</strong> אם המספר שבו כופלים הוא אפס. אם יש לי את המשוואה <span class="math">\(x=x+1\)</span>, לא קשה לראות על ידי חיסור <span class="math">\(x\)</span> משני האגפים שמקבלים <span class="math">\(0=1\)</span> וזו משוואה נטולת פתרון. עם זאת, אם נכפול ב-0 את שני אגפי המשוואה נקבל <span class="math">\(0=0\)</span> שהיא משוואה נכונה ("כל איקס הוא פתרון"). זה היוצא מן הכלל היחיד - אם לא כופלים באפס (או מנסים לחלק באפס) תמיד מקבלים משוואה שקולה.</p>
+<p>למה בעצם?</p>
+<p>הסוד כאן טמון בשאלה אם הפעולה שאנחנו מבצעים על אגפי המשוואה היא <strong>פעולה הפיכה</strong> או לא. אני אתנסח פורמלית: נניח שיש לי את המשוואה <span class="math">\(a=b\)</span> כש-<span class="math">\(a\)</span> ו-<span class="math">\(b\)</span> הם מספרים כלשהם. אז אני מבצע <strong>פעולה</strong> כלשהי על שני האגפים ומקבל משוואה חדשה, <span class="math">\(f\left(a\right)=f\left(b\right)\)</span> כש-<span class="math">\(f\)</span> מייצגת את הפעולה שביצעתי. בלשון מתמטית אומרים ש-<span class="math">\(f\)</span> היא <strong>פונקציה</strong> שהפעלתי על שני האגפים. הרעיון הוא שאם <span class="math">\(a\)</span> אכן היה שווה ל-<span class="math">\(b\)</span> (אותו ערך מספרי בדיוק) אז הפעלת <span class="math">\(f\)</span> על שני האגפים תחזיר את אותו ערך מספרי. כלומר, אם המשוואה <span class="math">\(a=b\)</span> מתקיימת <strong>אז</strong> גם המשוואה <span class="math">\(f\left(a\right)=f\left(b\right)\)</span> מתקיימת. שימו לב שזה משהו שקורה גם עם פעולה "בעייתית" כמו הכפל ב-<span class="math">\(0\)</span>: אם התחלתי מ-<span class="math">\(3=1+2\)</span> וכפלתי את שני האגפים ב-0 אקבל את <span class="math">\(0=0\)</span> שגם היא מתקיימת, פשוט "משהו הלך לאיבוד" בדרך.</p>
+<p>עכשיו, <span class="math">\(f\)</span> יכולה להיות בעלת התכונה הבאה: לכל <span class="math">\(a,b\)</span>, אם <span class="math">\(a\ne b\)</span> אז <span class="math">\(f\left(a\right)\ne f\left(b\right)\)</span>. או בניסוח אחר: אם <span class="math">\(f\left(a\right)=f\left(b\right)\)</span> אז <span class="math">\(a=b\)</span> (התכונה הזו נקראת "חד-חד-ערכיות"). אם <span class="math">\(f\)</span> היא בעלת התכונה הזו, אז בהינתן המשוואה <span class="math">\(f\left(a\right)=f\left(b\right)\)</span> אפשר "לשחזר" מתוכה את המשוואה המקורית <span class="math">\(a=b\)</span>.</p>
+<p>למשל, אם <span class="math">\(f\left(a\right)=a+3\)</span>, אז נקבל מ-<span class="math">\(a=b\)</span> את המשוואה <span class="math">\(a+3=b+3\)</span>. כדי "לשחזר" את המשוואה המקורית, נפעיל על המשוואה החדשה את הפעולה <span class="math">\(g\left(a\right)=a-3\)</span> ש"הופכת" את <span class="math">\(f\)</span>. דבר דומה קורה גם עבור כפל: אם <span class="math">\(f\left(a\right)=3a\)</span> אז ה"היפוך" של הפונקציה הזו הוא <span class="math">\(g\left(a\right)=\frac{a}{3}\)</span>. רק עבור כפל באפס אין פעולה הופכית שכזו, כי אי אפשר לחלק באפס, וכפל באפס הוא בבירור לא פעולה חד-חד-ערכית (כי למשל עבור <span class="math">\(1\ne2\)</span> אחרי כפל באפס נקבל <span class="math">\(0=0\)</span>).</p>
+<p>אז חיבור וכפל במשהו שאינו אפס הן פעולות הפיכות ולכן הן משמרות שקילות של משוואות. מה עם הפעולה השלישית, של "להחליף אגף אחד של המשוואה באגף אחר ששווה לו"? הפעולה הזו לא משנה את <strong>הערך המספרי</strong> של האגף, רק את איך שהערך המספרי הזה כתוב בו; פורמלית, זה כאילו הפעלנו על האגף את הפונקציה <span class="math">\(f\left(a\right)=a\)</span> שהיא בבירור חד-חד-ערכית. לכן גם הפעולה הזו משמרת שקילות של משוואות.</p>
+<p>מצוידים בכל הידע הזה, אפשר ללכת ולפתור משוואות "אמיתיות"! כלומר... כאלו שמופיעות בספרי לימוד. למשל, <span class="math">\(4x+7=19\)</span>. כדי לפתור את המשוואה הזו, נעביר את 7 אגף ונקבל <span class="math">\(4x=12\)</span> ואז נחלק ב-4 ונקבל <span class="math">\(x=3\)</span>. מה שהלך כאן היה בעצם זהה לגמרי לפתרון המשוואה <span class="math">\(30x+50=200\)</span> שממנה התחלתי; רק המספרים היו שונים. שיטת הפתרון הייתה זהה. אז אולי אפשר לנסח את השיטה הזו בצורה כללית?</p>
+<p>נניח שיש לי משוואה מהצורה הבאה: <span class="math">\(ax+b=c\)</span> כאשר <span class="math">\(a,b,c\)</span> הם מספרים ואני מניח ש-<span class="math">\(a\ne0\)</span> (אחרת איקס לא באמת משתתף במשוואה). אז כדי לפתור אותה אני מעביר את <span class="math">\(b\)</span> אגף ומחלק ב-<span class="math">\(a\)</span> ומקבל את הפתרון <span class="math">\(x=\frac{c-b}{a}\)</span>. לרוב מעדיפים לנסח את הסיטואציה בצורה טיפה <strong>פחות</strong> כללית: אומרים - נניח שיש לנו משוואה מהצורה <span class="math">\(ax+b=0\)</span>, הבה ונפתור אותה. הפתרון במקרה הזה הוא פשוט <span class="math">\(x=-\frac{b}{a}\)</span> (תציבו <span class="math">\(c=0\)</span> בפתרון הקודם ותקבלו את זה). זה מתווה לנו דרך פעולה לפתרון משוואות כאלו באופן כללי: קודם כל לסדר אותן כך שיהיו מהצורה <span class="math">\(ax+b=0\)</span>, ואז להשתמש בנוסחה הזו, שעכשיו אנחנו מבינים מאיפה הגיעה.</p>
+<p>כמובן, לא צריך ללכת למחוזות אבסורדיים. אם למשל נותנים לנו את המשוואה <span class="math">\(2x=10\)</span> אנחנו פשוט נחלק ב-<span class="math">\(2\)</span> ונקבל <span class="math">\(x=5\)</span>; לא קודם כל נעביר את 10 אגף כדי לקבל <span class="math">\(2x-10=0\)</span> ונגיד "אה-הא! הנה משוואה עם <span class="math">\(a=2\)</span> ו-<span class="math">\(b=-10\)</span> ולכן על פי הנוסחה הפתרון הוא <span class="math">\(x=-\frac{b}{a}=-\frac{-10}{2}=5\)</span>". הגיון פשוט הוא תמיד משהו שעדיף להסתמך עליו כשפותרים משוואות; פשוט לא חייבים.</p>
+<p>הנה דוגמא קצת יותר מסובכת: המשוואה <span class="math">\(\frac{1}{1-x}=2\)</span>. כדי לפשט את המשוואה הזו, צריך לכפול ב-<span class="math">\(1-x\)</span> שבמכנה של אגף שמאל. אבל בניגוד למה שעשינו עד כה, לכפול ב-<span class="math">\(1-x\)</span> זה לא בדיוק לכפול במספר - זה לכפול <strong>במספר שתלוי</strong> ב-<span class="math">\(x\)</span>. אנחנו יודעים שאסור לכפול ב-0, ולכן אסור לכפול ב-<span class="math">\(1-x\)</span> במקרה שבו <span class="math">\(1-x=0\)</span>, כלומר במקרה שבו <span class="math">\(x=1\)</span>. אז מה עושים? מטפלים במקרה הזה בנפרד. ראשית כל שמים לב לכך שאם <span class="math">\(x=1\)</span> אז <span class="math">\(\frac{1}{1-x}\)</span> הוא ביטוי לא מוגדר כי אסור לחלק באפס, ולכן בוודאי שאינו שווה 2, ולכן <span class="math">\(x=1\)</span> לא יכול להיות פתרון של המשוואה. כעת אנחנו אומרים במפורש "נניח ש-<span class="math">\(x\ne1\)</span>" ואז נכפול ב-<span class="math">\(1-x\)</span> ונקבל <span class="math">\(1=2\left(1-x\right)\)</span>, כלומר <span class="math">\(1=2-2x\)</span>. נעביר את <span class="math">\(2x\)</span> ואת <span class="math">\(1\)</span> אגפים ונקבל <span class="math">\(2x=1\)</span>, כלומר <span class="math">\(x=\frac{1}{2}\)</span>, וזה פתרון המשוואה.</p>
+<p>האם זה סוף הסיפור? לא, זה סוף השלב הראשון בלבד. למשוואה מהצורה <span class="math">\(ax+b=0\)</span> (ומשוואות דומות ששקולות לה בקלות כמו <span class="math">\(ax+b=c\)</span>) קוראים <strong>משוואה ממעלה ראשונה</strong>. למה? כי הנה למשל דוגמא למשוואה ממעלה <strong>שניה</strong>: <span class="math">\(x^{2}+2x+1=0\)</span>. כאן <span class="math">\(x\)</span> מופיע גם בחזקה שניה, ומכאן מגיעה ה"מעלה שניה". לפתור משוואות כאלו זה כבר יותר מסובך ולכן צריך לדבר על זה בפוסט נפרד. משוואות ממעלה יותר גבוהה כמו <span class="math">\(x^{3}+3x+3+1=0\)</span> זה כבר סיפור <strong>הרבה</strong> יותר מסובך ואין פתרון כללי נחמד שאותו אפשר ללמד, אבל יש טריקים שעוזרים מאוד במקרים מסויימים. וחוץ מכל זה, אפשר לדבר גם על משוואות עם <strong>יותר מנעלם אחד</strong>, למשל <span class="math">\(x+y=5\)</span>, ואז יכולים להיות למשוואה הרבה פתרונות שונים, ולעתים קרובות מדברים על <strong>מערכת של משוואות</strong> שבה יש יותר ממשוואה אחת שצריך לפתור בו זמנית.</p>
+<p>במילים אחרות, העולם של פתרון המשוואות הוא גדול ועשינו בו רק את הצעד הראשון, אבל זה צעד חשוב; הטכניקה הזו של "לבצע את אותה פעולה על שני האגפים" ממשיכה לעזור לנו גם בסיטואציות המורכבות יותר.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2020/06/08/what_are_logarithms/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מה זה לוגריתמים ובשביל מה זה טוב?</span>
+            </a>
+            
+            
+            
+            <a href="/2020/05/31/function_and_relation_composition/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">תורת הקבוצות - הרכבת פונקציות ויחסים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

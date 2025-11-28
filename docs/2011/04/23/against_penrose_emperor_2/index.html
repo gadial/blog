@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המותר האדם מן האלגוריתם, חלק 2 - הנקמה? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>המותר האדם מן האלגוריתם, חלק 2 - הנקמה?</h1>
+            <div class="post-meta">
+                <span class="date">2011-04-23</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/הגיגים מתמטיים כלליים.html">הגיגים מתמטיים כלליים</a>
+                    
+                    <a href="/categories/חישוביות.html">חישוביות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיית.html">בעיית</a>
+                    
+                    <a href="/tags/המותר האדם מן האלגוריתם?.html">המותר האדם מן האלגוריתם?</a>
+                    
+                    <a href="/tags/יותר מדי לא מדויק.html">יותר מדי לא מדויק</a>
+                    
+                    <a href="/tags/רוג&#39;ר פנרוז.html">רוג&#39;ר פנרוז</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>כפי שקיוויתי, <a href="http://www.gadial.net/2011/04/21/against_penrose_emperor_1/">הפוסט הקודם שלי</a> על הספר של רוג'ר פנרוז עורר כמה תגובות מעניינות (לאו דווקא כתגובות לפוסט עצמו) והייתי רוצה להקדיש פוסט למחשבה עליהן. מחשבה, כי גם אני עצמי לא יודע מה נכון ומה לא בכל העניין הזה.</p>
+<p>בראש ובראשונה, טענו כי אני מרמה לקראת הסוף, כאשר אני מדבר על כך ש"אם האדם יחוייב להשתתף במשחק ולענות, אז הוא יפסיד מייד כי אפשר יהיה לבנות מכונה ששואלת אותו שאלות ו...". זו אכן רמאות ותיקנתי קצת את הפוסט כדי להבהיר זאת, אבל אולי כדאי לחדד את הנקודה ולמה זו אולי לא באמת רמאות. לפני כן אני רוצה לחדד קצת את הנקודה של פנרוז.</p>
+<p>כזכור, לב הטיעון של פנרוז היה כזה: בהינתן <span class="math">\(H\)</span> שמנסה לפתור את בעיית העצירה (אם היא עוצרת היא עונה נכון, אבל לפעמים היא לא עוצרת) אפשר להציג מכונה <span class="math">\(Q\)</span> שכאשר <span class="math">\(H\)</span> רצה "עליה", <span class="math">\(H\)</span> לא יכולה לענות תשובה נכונה ולכן חייבת לא לעצור, ומכך נובע שהיא "לא מכריעה" את בעיית העצירה על <span class="math">\(Q\)</span>, אבל אנחנו בני האדם יודעים ש-<span class="math">\(Q\)</span> בהכרח לא עוצרת (כי חלק ממה ש-<span class="math">\(Q\)</span> עושה הוא להריץ את <span class="math">\(H\)</span> "על עצמה").</p>
+<p>פנרוז תיאר את העסק בצורה יותר מסובכת עם ביטויים כמו <span class="math">\(M_{k}\left(k\right)=1+M_{k}\left(k\right)\times H\left(k,k\right)\)</span>, אבל זה מיותר לגמרי, כפי שאמרתי בפוסט הקודם; לצורך פשטות מספיק לתאר את <span class="math">\(Q\)</span> באופן הבא: <span class="math">\(Q\)</span> מריצה את <span class="math">\(H\)</span> על הקוד של <span class="math">\(Q\)</span> (<span class="math">\(Q\)</span> יכולה לדעת מה הקוד של <span class="math">\(Q\)</span>; זהו משפט הרקורסיה של קלייני) ואם <span class="math">\(H\)</span> אמרה ש-<span class="math">\(Q\)</span> עוצרת, אז <span class="math">\(Q\)</span> לא עוצרת; ואם <span class="math">\(H\)</span> אמרה ש-<span class="math">\(Q\)</span> לא עוצרת, אז <span class="math">\(Q\)</span> עוצרת. זהו. שימו לב שכאן אין התייחסות בכלל לקלט של <span class="math">\(Q\)</span>; אפשר לחשוב עליה כעל מכונה שלא מקבלת קלט, או שההתנהגות שלה לכל הקלטים היא אותו דבר ו-<span class="math">\(H\)</span> נשאלת על ההתנהגות של <span class="math">\(Q\)</span> על קלט ספציפי, וכדומה. אני חושב שדרך ההצגה שלי מזקקת את לב הבעיה.</p>
+<p>איפה הטיעון שלי נכשל? בואו נניח ש-<span class="math">\(P\)</span> הוא בן אדם שמנסה לפתור את בעיית העצירה (האות <span class="math">\(H\)</span> מתאימה יותר כאן, כמובן, אבל פנרוז כבר תפס לנו אותה; כמו כן, במהלך הפוסט <span class="math">\(P\)</span> יהיה זכר בעוד שמכונות טיורינג יהיו נקבות; אתם מוזמנים להאשים אותי בשוביניזם ואמונה בעליונות החישובית של גברים על נשים-שהן-רובוטים). אני אומר - אם <span class="math">\(P\)</span> עונה, אז אפשר לבנות <span class="math">\(Q\)</span> ששואלת את האדם על הקוד של עצמה ומתנהגת הפוך. הבעיה היא של-<span class="math">\(Q\)</span> אין את <span class="math">\(P\)</span> זמין לידה לשאלות בכל פעם שהיא רצה; היא צריכה <strong>לסמלץ</strong> אותו איכשהו. גם קודם, בבניה המקורית, <span class="math">\(Q\)</span> ביצעה סימולציה של <span class="math">\(H\)</span>. לכן כדי שהבניה שלי תעבוד אני צריך להניח, לכל הפחות, ש-<span class="math">\(Q\)</span> מסוגלת לגלות איכשהו מה תהיה התשובה של <span class="math">\(P\)</span> על הקוד של <span class="math">\(Q\)</span>. אם <span class="math">\(Q\)</span> כזו קיימת, אז <span class="math">\(P\)</span> "הפסיד", כי אפשר לבנות מכונת טיורינג שעל אותו <span class="math">\(Q\)</span> ספציפי עונה נכון, ואז היא הביסה את <span class="math">\(P\)</span> לפחות על קלט אחד.</p>
+<p>הכוונה שלי בטיעון (כוונה שלא הועברה טוב בפוסט) היא זו: אם <span class="math">\(Q\)</span> <strong>לא</strong> מסוגלת לגלות מה תהיה התשובה של <span class="math">\(P\)</span> על הקוד של <span class="math">\(Q\)</span>, הנה מצאנו מטלה חישובית ש-<span class="math">\(P\)</span> מסוגל לבצע ו-<span class="math">\(Q\)</span> לא; ומכיוון שהיינו יכולים לבנות את <span class="math">\(Q\)</span> כרצוננו, בעצם הטענה היא זו: <strong>קיים</strong> <span class="math">\(P\)</span> אנושי כך ש<strong>לכל</strong> מכונת טיורינג <span class="math">\(Q\)</span>, <strong>קיים</strong> קלט ש-<span class="math">\(P\)</span> אומר את התשובה עליו ו-<span class="math">\(Q\)</span> לא. זה טיעון חזק; לטעמי טיעון כזה כבר אומר מפורשות שהאדם, כמודל חישובי, חזק יותר ממכונת טיורינג. במילים אחרות, כדי שהטיעון "שלי" ייכשל, צריך להניח מראש שהאדם חזק חישובית ממכונת טיורינג. לכן אמרתי בפוסט שהטיעון של פנרוז, כשמקלפים ממנו את כל הקליפות, הוא למעשה "אם האדם חזק מהמכונה, אז האדם חזק מהמכונה". אבל פנרוז צריך להוכיח שהאדם חזק מהמכונה <strong>בלי</strong> שום הנחות מוקדמות!</p>
+<p>אם אכן מישהו יצליח למצוא הוכחה לטענה שנתתי למעלה, זה יהיה ממש נפלא לדעתי. הוכחה מתמטית טהורה לכך שהאדם הוא מודל חישובי חזק ממכונת טיורינג? זה יהיה פנטסטי, בעיקר עבור מישהו כמוני שמאמין (ללא הוכחה, כמובן) בכך שכמודל חישובי האדם אינו חזק יותר. אבל כפי שאנו רואים, הטענה הזו שונה למדי ממה שפנרוז ניסה בכלל לעשות באותו פרק בספר: פנרוז הראה רק ש<strong>לכל</strong> מכונת טיורינג <span class="math">\(Q\)</span>, <strong>קיים</strong> <span class="math">\(P\)</span> אנושי ו<strong>קיים</strong> קלט ש-<span class="math">\(P\)</span> אומר ("יודע") את התשובה הנכונה עליו ו-<span class="math">\(Q\)</span> לא. יש כאן מה שנקרא "היפוך של סדר הכמתים" - במקום "קיים-לכל-קיים", פנרוז מראה "לכל-קיים-קיים" שהיא טענה <strong>חלשה</strong> הרבה יותר (מה חזק יותר? "לכל מספר טבעי <span class="math">\(a\)</span> קיים מספר טבעי <span class="math">\(b\)</span> הגדול ממנו" שהיא טענה שכל ילד יודע, או "קיים מספר טבעי <span class="math">\(b\)</span> הגדול מכל מספר טבעי <span class="math">\(a\)</span>" שהיא כמובן שגויה?). בלבול דומה קיים הרבה פעמים גם בניסוח משפט אי השלמות הראשון של גדל: במקום לומר "<strong>לכל</strong> תורה פורמלית שמקיימת כך-וכך <strong>קיים</strong> פסוק שאותה תורה לא יכולה להוכיח או להפריך" אומרים "<strong>קיים</strong> פסוק כך ש<strong>כל</strong> תורה פורמלית לא יכולה להוכיח או להפריך אותו". אגב, מהבלבול הזה פנרוז דווקא נמנע (וטוב שכך, אחרת הייתם צריכים לסבול פוסט נוסף שבו אני מקטר על העניין הזה).</p>
+<p>אם כן, היפוך סדר הכמתים פה ממחיש שפנרוז לא באמת הראה את עליונות האדם על המכונה עם הטיעון שלו. פנרוז גם לא מנסה לטעון שם דבר שכזה באופן חד משמעי - הניסוח שלו לגבי המסקנה מהטיעון שלו הוא מעורפל למדי וכבר ציטטתי אותו בפוסט הקודם.</p>
+<p>אבל רגע, למה הטיעון של פנרוז הופך את הכמתים? על פניו, נראה שאותו <span class="math">\(P\)</span> "מנצח" את כל המכונות <span class="math">\(H\)</span>. זו עוד נקודה שלא הבהרתי מספיק בפוסט הקודם. פנרוז בונה את <span class="math">\(P\)</span> הזה בנפנופי ידיים לא מתמטיים (קצת אבסורדי, בהתחשב בכך שהוא מקדיש קודם לכן עמודים על גבי עמודים לבניות פורמליות מתישות של מכונות עבור מטלות חישוביות זוטרות), וכשיש כל הזמן איזו <span class="math">\(H\)</span> ספציפית ברקע, וכל הייעוד של <span class="math">\(P\)</span> הוא לנצח את <span class="math">\(H\)</span> על קלט אחד מסויים. אם באמת רוצים לבנות <span class="math">\(P\)</span> שטוב מכל מכונה, צריך להגיד מה היא עושה על כל קלט, בלי התייחסות לאף <span class="math">\(H\)</span> ספציפית, ו<strong>אחרי</strong> ש-<span class="math">\(P\)</span> נבנתה, להראות שלכל <span class="math">\(H\)</span> ספציפית, <span class="math">\(P\)</span> מביסה אותה. אבל האם לא ניתן לבנות <span class="math">\(P\)</span> שכזו?</p>
+<p>בואו ננסה לעשות את הבניה הטבעית ביותר: <span class="math">\(P\)</span> על מכונה <span class="math">\(M\)</span> בודקת קודם כל אם <span class="math">\(M\)</span> יכולה להתקבל כ-<span class="math">\(Q\)</span> של <strong>איזו</strong> מכונה <span class="math">\(H\)</span>, ואם היא יכולה, אז <span class="math">\(P\)</span> אומרת ש-<span class="math">\(M\)</span> לא עוצרת... רגע, רגע, הויסה. יש לנו שתי טעויות גסות בשורה האחרונה.</p>
+<p>ראשית, יש אינסוף מכונות <span class="math">\(H\)</span>, אז רק שלב הבדיקה אם <span class="math">\(M\)</span> היא <span class="math">\(Q\)</span> של <span class="math">\(H\)</span> <strong>כלשהי</strong> יכול להימשך לנצח. אם <span class="math">\(M\)</span> אינה מתאימה לאף <span class="math">\(H\)</span>, אז החיפוש הזה לא יסתיים אף פעם. אפשר לנסות ולעקוף את הבעיה הזו כך - במקביל לביצוע החיפוש, <span class="math">\(P\)</span> גם יבצע הרצה של <span class="math">\(M\)</span>. אם <span class="math">\(M\)</span> עוצרת, אז <span class="math">\(P\)</span> תענה ש-<span class="math">\(M\)</span> כן עוצרת. אפשר גם לזרוק פנימה בדיקות קצת יותר מחוכמות האם <span class="math">\(M\)</span> עוצרת או לא. הנקודה היא שהבדיקה אם <span class="math">\(M\)</span> היא "מכונה שמכשילה <span class="math">\(H\)</span> כלשהו" יכולה להתבצע במקביל ובאופן בלתי תלוי לשאר הבדיקות; זה סתם עוד כלי נשק של <span class="math">\(P\)</span>. אם כן, לכל מכונה <span class="math">\(H\)</span> שפותרת את בעיית העצירה באופן חלקי, <span class="math">\(P\)</span> בריצתו על <span class="math">\(Q\)</span> יגיד בודאות ש-<span class="math">\(Q\)</span> לא עוצרת (כי הוא יגלה ש-<span class="math">\(Q\)</span> היא המכונה שמכשילה את <span class="math">\(H\)</span> הספציפי הזה; הוא יגיע אל <span class="math">\(H\)</span> במהלך הבדיקה שלה).</p>
+<p>אז מה הבעיה כאן? ובכן, הטעות הגסה השניה שעוד לא ציינתי, שהיא כנראה לב העניין: <span class="math">\(P\)</span> בכלל לא פותר חלקית את בעיית העצירה. <span class="math">\(P\)</span>, חד משמעית, <strong>טועה</strong> על קלטים מסויימים, וזה בדיוק מה שאסור לו לעשות. על אילו קלטים הוא טועה? על <span class="math">\(M\)</span> שהם <span class="math">\(Q\)</span> של איזו מכונה <span class="math">\(H\)</span>, כאשר אותה <span class="math">\(H\)</span> <strong>לא</strong> פותרת את בעיית העצירה.</p>
+<p>בואו ניקח כדוגמה <span class="math">\(H\)</span> שעוצרת תמיד עם הפלט 0. אז ה-<span class="math">\(Q\)</span> המתאימה לה (שכזכור, מריצה את <span class="math">\(H\)</span> ועושה הפוך ממה שהיא אומרת) תעצור מייד. זה מראה ש-<span class="math">\(H\)</span> לא פותרת את בעיית העצירה כי היא טועה על הקלט <span class="math">\(Q\)</span>; אבל גם <span class="math">\(P\)</span> לא פותר את בעיית העצירה כי גם הוא יגיד ש-<span class="math">\(Q\)</span> אינה עוצרת, ולכן יטעה. כדי ש-<span class="math">\(P\)</span> יעבוד בהצלחה, הוא חייב לבדוק האם <span class="math">\(M\)</span> היא <span class="math">\(Q\)</span> של איזו מכונה <span class="math">\(H\)</span> רק עבור מכונות <span class="math">\(H\)</span> ש<strong>פותרות חלקית את בעיית העצירה</strong>. אבל, וזו הנקודה המרכזית, למיטב ידיעתנו אין ל-<span class="math">\(P\)</span> יכולת לעשות זאת! לא קשה להוכיח שהבעיה של "זיהוי האם <span class="math">\(H\)</span> פותרת חלקית את בעיית העצירה" היא קשה עוד יותר מפתרון בעיית העצירה (פורמלית, זו בעיה שאפילו אינה ב-RE). לכן, רק להראות ש-<span class="math">\(P\)</span> מסוגלת לבצע את אותו שלב בדיקה כבר דורש מאיתנו להראות ש-<span class="math">\(P\)</span> חזקה יותר מכל מכונת טיורינג. שוב - "אם האדם חזק מהמכונה, אז האדם חזק מהמכונה".</p>
+<p>סיכום קצר למי שאיבד אותי בים הסימונים: ניסיתי להציע בניה שנראתה לי טבעית ומבוססת על הרעיונות של פנרוז. היא נכשלה באופן חרוץ. זה לא אומר שאין בניה שעובדת - אשמח מאוד לשמוע הצעות - אבל אני לא חושב שמה שפנרוז מציע מקדם אותנו לקראת בניה שעובדת. כל מה שפנרוז מציע הוא טענת "לכל-קיים-קיים", שהיא כאמור חלשה למדי.</p>
+<p>למעשה, לא ברור איפה פנרוז משתמשת ביכולותיו של האדם בכל הסיפור הזה - כפי שכבר ראינו, את <span class="math">\(Q\)</span> אפשר לבנות מ-<span class="math">\(H\)</span> באופן אלגוריתמי. כך שאפשר לנסח את מה שפנרוז מראה גם בתור "לכל <span class="math">\(H\)</span> שמנסה לפתור את בעיית העצירה קיימת <span class="math">\(H^{\prime}\)</span> שפותרת את בעיית העצירה יותר טוב ממנה". אז איפה מותר האדם מן המכונה פה?</p>
+<p>פנרוז מציין במפורש שאותה <span class="math">\(H^{\prime}\)</span> משופרת קיימת, אבל הוא מעיר בהערת שוליים שגם אותה אפשר להביס עם טיעון דומה (והוא צודק), ושגם את <span class="math">\(H^{\prime}\)</span> אפשר יהיה לשפר עם איזו <span class="math">\(H^{\prime\prime}\)</span> (והוא צודק), ושהוא ידון ב"סוג השיקולים שהתהליך האיטרטיבי הזה מוביל אותנו אליו" בפרק שעוסק במשפטי גדל. הוא אכן עושה זאת שם, אבל רק בהקשר של תורות פורמליות ולא של מכונות טיורינג, והוא לא נכנס לעובי הקורה; הוא מתאר קצת איך אפשר להמשיך עוד ועוד את הבניה (ומערב בתמונה אורדינלים) ממלמל משהו על כך שתהליך הבניה האיטרטיבי מוביל אותנו ל"שיקולים מתמטיים קשים שלא ניתן להיכנס לפרטיהם כאן" ומפנה למאמר (מרתק ובלתי קריא) של טיורינג בנושאים הללו. אנסה כנראה להקדיש פוסט לאותו מאמר מתישהו; אבל עבור פנרוז העיסוק בנושא נגמר כאן פחות או יותר (אלא אם הוא חוזר אליו בפרקים מאוחרים יותר) מבלי שהוא הסיק מתמטית שום מסקנה חד משמעית. בהמשך הוא מציג עוד מושגים יפים מחישוביות וכמה בעיות לא כריעות מפורסמות (הבעיה העשירית של הילברט, בעיית המילה, בעיית הריצוף) אבל לחזור מתמטית לכל עניין ה"האדם יודע לפתור את בעיית העצירה יותר טוב מכל מכונה"? לא.</p>
+<p>לסיכום, אני לא שולל את הרעיונות של פנרוז. הם נשמעים מרתקים למדי. אבל אני ממש לא רואה איך מה שהוא כותב בפרקים אותם קראתי בספר מוביל לעליונות האדם על המכונה. יותר מכך, אני לא רואה איך הבניות הפורמליות תקפות לאדם אך <strong>לא</strong> למכונות; ובקיצור, אני לא חושב שיש תוכן כלשהו למה שהוא כותב שם, והסיבה שנראה שיש היא הניסוחים המילוליים המעורפלים שלו שבאים אחרי התוכן המתמטי.</p>
+<p>זה מוביל אותי לנקודה האחרונה - הדיבורים שלי בפוסט הקודם על ההבדל בין "יודעת" ו"אומרת". כשניסיתי להבין איפה בטיעון של פנרוז נכנס ההבדל בין אדם ומכונה (כי אם בשום מקום לא נכנס הבדל כזה, פנרוז מוכיח כי המכונה חזקה מהמכונה), ההבדל היחיד שראיתי הוא בין הדרישה שלו שהמכונה "תכריע" את בעיית העצירה, ושהאדם רק "ידע" את התשובה. טענתי ש-<span class="math">\(H\)</span>, כשהיא רצה על <span class="math">\(Q\)</span>, יכולה לדעת מייד ש-<span class="math">\(Q\)</span> היא "מכונה רמאית", שתתנהג הפוך ממה ש-<span class="math">\(H\)</span> תאמר בסוף. לא הגדרתי במפורש את ה"יודעת" הזו כי גם פנרוז לא הגדיר מה זה "לדעת" והנחתי שניתן להסתמך כאן על האינטואיציה. אבל בטיעון שלי יש כשל מהותי: לא משנה איך אני אגדיר "לדעת" באופן פורמלי, מכיוון ש-<span class="math">\(Q\)</span> מסוגלת לבצע סימולציה אחד-לאחד של <span class="math">\(H\)</span> (ממש ברמה של לדעת כל צעד ש-<span class="math">\(H\)</span> מבצעת, את תוכן תאי הזכרון שלה וכדומה), אז <span class="math">\(Q\)</span> תוכל לזהות את הרגע המדוייק שבו מתגשמת ב-<span class="math">\(H\)</span> ה"ידיעה" ש-<span class="math">\(Q\)</span> אינה עוצרת - ואז כמובן ש-<span class="math">\(Q\)</span> תעצור ותראה שאפילו הידיעה ההיא של <span class="math">\(H\)</span> הייתה טעות.</p>
+<p>האדם יכול לחמוק מהפסד כאן אם נוכל להראות שלא ניתן לסמלץ את המוח שלו בצורה כזו ש"ידיעה" תהיה ניתנת לזיהוי (זה כבר משהו הרבה יותר סביר מאשר ההתאמה בין קלט לפלט שדיברתי עליה קודם; בהתאמה כזו לא חייבים לסמלץ אחד-לאחד את המוח, אולי יש דרך אחרת לדעת איזה פלט האדם יענה על קלט נתון). אבל כרגיל, זה בדיוק מה שאנחנו רוצים להוכיח.</p>
+<p>מה שאי אפשר לקחת מ-<span class="math">\(H\)</span>, לדעתי, הוא את הידיעה ש-<span class="math">\(Q\)</span> מנסה להכשיל אותה - כאמור, <span class="math">\(H\)</span> יכולה לגלות זאת על ידי משחק עם הקידוד שלה עצמה. במילים אחרות, <span class="math">\(H\)</span> לא יכולה לדעת מה <span class="math">\(Q\)</span> תעשה, אבל <strong>היא יכולה לדעת שהיא לא יכולה לדעת</strong> מה <span class="math">\(Q\)</span> תעשה. בשלב הזה בוודאי מדגדג לחלקכם לבנות <span class="math">\(Q\)</span> שדווקא <strong>כן</strong> מתנהגת כמו ש-<span class="math">\(H\)</span> מצפה שהיא תתנהג, ובכך מראה ש-<span class="math">\(H\)</span> לא באמת יודעת שהיא לא יכולה לדעת מה <span class="math">\(Q\)</span> תעשה; וזה בדיוק השלב שבו אני חש שאין טעם להמשיך עם הכיוון הזה בלי לתת הגדרות מדוייקות של "לדעת" ולראות מה יוצא מהן, אבל אני לא חושב שיצא מהן משהו מעניין במיוחד ולא אנסה ללכת בכיוון הזה.</p>
+<p>אני מקווה שבכך אפשר לסגור את הדיון על הטיעון הספציפי הזה של פנרוז; אשמח מאוד לקיים דיונים על טיעונים אחרים שפנרוז מעלה (בחלקים אחרים של הספר/בספר ההמשך/במקום אחר כלשהו) או על ניסוחים יותר פורמליים ומדוייקים של הטיעון של פנרוז שמהם כן עולה שהאדם חזק מהמכונה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/05/02/damn_stupid_equation/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מה האסוציאציה שלכם ל-?=(1+2)2÷6?</span>
+            </a>
+            
+            
+            
+            <a href="/2011/04/21/against_penrose_emperor_1/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">המותר האדם מן האלגוריתם?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

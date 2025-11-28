@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מכונת טיורינג, 2: הנקמה (המסובכת) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מכונת טיורינג, 2: הנקמה (המסובכת)</h1>
+            <div class="post-meta">
+                <span class="date">2007-12-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2007/12/05/complexity_intro/">עד עכשיו</a> ניסיתי לדבר על סיבוכיות של <a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%92%D7%95%D7%A8%D7%99%D7%AA%D7%9D"><strong>אלגוריתמים</strong></a>, במונחים של "הזמן שלוקח לאלגוריתם לרוץ". זה מדד די אידיוטי. הרי אלגוריתם זה יצור מופשט לגמרי, להבדיל מתוכנית מחשב - ובטח שלא לוקח זמן שנמדד בשניות כדי "להריץ" אלגוריתם. אם כך, איך ניתן להעריך את כמות הזמן שייקח לאלגוריתם לרוץ?</p>
+<p>למרבה המזל, אלגוריתם מורכב ממספר סופי של צעדים בסיסיים. אפשר להניח שכל אחד מהצעדים הללו לוקח פרק זמן קבוע כלשהו - לא חשוב כמה במדוייק - וכל מה שנותר לעשות הוא לחשב כמה פעמים יופעל כל צעד. למשל, הנה אלגוריתם לבדיקת ראשוניות של מספר n:</p>
+<ol>
+    <li>אתחל את i להיות 2.</li>
+    <li>חלק את n ב-i ובדוק האם התקבלה שארית.
+<ol>
+    <li>אם לא, סיים ופלוט "n אינו ראשוני".</li>
+</ol>
+</li>
+    <li>הגדל את i ב-1.</li>
+    <li>בדוק האם i שווה ל-n.
+<ol>
+    <li>אם כן, סיים ופלוט "n ראשוני"</li>
+    <li>אחרת, חזור ל-2.</li>
+</ol>
+</li>
+</ol>
+<p>צעד האתחול לוקח פרק זמן קבוע כלשהו <span class="math">\(c_1\)</span> - אבל לעולם לא נחזור אליו בהמשך. צעד החילוק ובדיקת השארית לוקח <span class="math">\(c_2\)</span> פעמים ובמקרה הגרוע ביותר נחזור עליו <span class="math">\(n-1\)</span> פעמים. כך גם עבור הגדלת i ובדיקת השוויון ל-n. בסך הכל נקבל שהאלגוריתם לוקח את המספר הבא של צעדים:</p>
+<p><span class="math">\(c_1+(n-1)(c_2+c_3+c_4)\)</span></p>
+<p>כלומר, קבוע ועוד פונקציה שהיא "כמעט" n, כפול עוד קבוע. כל העסק הזה הוא, בסיכומו של דבר, <span class="math">\(O(n)\)</span>, וזו גם סיבוכיות האלגוריתם (שימו לב - אני מרמה כאן ומחשב את הסיבוכיות על פי ערכו של n ולא על פי גודל הייצוג שלו). אם כן, לא מעניין אותנו כמה זמן כל צעד ייקח בפועל - מעניין אותנו רק כמה צעדים (מכל סוג שהוא) יהיו לאלגוריתם, פחות או יותר. נקודת המבט הזו היא בסדר גמור לרוב הצרכים המעשיים, אבל כשנכנסים ברצינות לתיאוריה (וזה מה שאני מקווה לעשות כאן) זה לא מספיק. הבעיה היא בכך שאלגוריתמים בכל זאת מחביאים בתוכם דברים מסובכים שעליהם אולי לא חשבנו. למשל, אמרתי ש"חלק את n ב-i ובדוק את השארית" הוא צעד בסיסי. האמנם? לפחות מבחינה נאיבית, כדי לבצע חלוקה של מספר בגודל n, נדרש פרק זמן שהוא פונקציה של n - בערך כמספר הספרות של n. כלומר, הצעד ה"בסיסי" הזה מחביא בתוכו צעדים שאינם בסיסיים ושתלויים בגודל הקלט.</p>
+<p>הדרך לפתור את הבעיה היא להגדיר סט של פעולות שהן כן יסודיות - למשל, במחשב, כל פעולה שמתבצעת ב-<a href="http://he.wikipedia.org/wiki/CPU">CPU</a> יכולה להיחשב בסיסית. מכיוון שה-CPU יודע לעבד רק מספרים עד גודל מסויים, עיבוד של n גדול יהיה חייב להתבצע במספר פעולות, בזו אחר זו - ולכן נקבל שהחילוק אכן דורש מספר פעולות CPU. הבעיה כאן היא שהגישה הזו אינה מופשטת <strong>מספיק</strong>; CPU יכול להיות דבר מאוד מסובך ולא כדאי להיכנס לניתוח המדוייק של איך אלגוריתם שמתורגם לתוכנית מחשב יבוצע בו.</p>
+<p>לכן חוזרים אל המודל האלמנטרי ביותר למחשב שאנו מכירים - <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%9B%D7%95%D7%A0%D7%AA_%D7%98%D7%99%D7%95%D7%A8%D7%99%D7%A0%D7%92">מכונת טיורינג</a>. מכונת טיורינג מבוססת על "צעדים", שבכל אחד מהם זזים תא אחד על פני הסרט ועוברים ממצב פנימי אחד לאחר. הרי לנו מדד סיבוכיות זמן מצויין - מספר הצעדים שהמכונה מבצעת. באותה הזדמנות מגיע גם מדד סיבוכיות זיכרון טוב - כמות הסרט שבו השתמשה המכונה (ההגדרה המדוייקת לסיבוכיות זיכרון קצת יותר מחוכמת, אך לא אכנס אליה כעת).</p>
+<p>אלא שכאן מגיעה בעיה חדשה. מכונת טיורינג, במודל הפשוט ביותר שלה, היא, אה.. <strong>פשוטה</strong>. מצד אחד זה טוב, כי קל לנתח אותה במדוייק, אבל מצד שני זה רע, כי קשה מאוד לתאר אלגוריתים באמצעות מכונת טיורינג. לכן מחפשים מודל שקול, שיהיה יותר נוח לתאר באמצעותו אלגוריתמים, אבל זמן הריצה (האסימפטוטי) הן עליו והן במכונת הטיורינג ה"פשוטה" יהיה זהה. לרוע המזל, אם אנחנו דבקים בהשארת זמן הריצה ללא שינוי מהותי, המודלים ה"חזקים יותר" שנקבל גם כן לא יהיו נוחים למדי. צריך לעשות פשרה כלשהי; הפשרה המקובלת במדעי המחשב בימינו היא ההכרזה על כל אלגוריתם שעל מכונת טיורינג רץ על קלט מגודל n מספר צעדים שהוא <a href="http://he.wikipedia.org/wiki/%D7%A4%D7%95%D7%9C%D7%99%D7%A0%D7%95%D7%9D">פולינום</a> ב-n כעל אלגוריתם "יעיל".</p>
+<p>למה פולינומים? ראשית, כי זמן ריצה של n על קלט בגודל n נחשב מצויין. לכן בוודאי שהוא יהיה זמן יעיל - והוא כבר פולינום, פשוט (ממעלה 1). כעת, מעבר ממודל אחד של מכונת טיורינג למודל מורכב יותר עשוי לגרום לזמן הריצה לגדול ולהפוך לפולינום של זמן הריצה המקורי - למשל, לעלות בריבוע. כלומר, אלגוריתם שעל המודל המורכב לוקח רק n צעדים ייקח <span class="math">\(n^2\)</span> צעדים במודל הבסיסי. לכן הפשרה היא לקבל אל חיקנו את <strong>כל</strong> הפולינומים.</p>
+<p>אם הפולינומים נחשבים "יעילים" (איך לעזאזל <span class="math">\(n^{100}\)</span> יכול להיחשב זמן יעיל?), מה לא יעיל? הדוגמה האלמנטרית היא הפונקציות האקספוננציאליות - <span class="math">\(2^{n}\)</span>, למשל. פונקציות שבהן n אינו "למטה" (בבסיס החזקה) אלא "למעלה" (במעריך החזקה). עד כמה ש-<span class="math">\(n^{100}\)</span> נראה לא יעיל, <span class="math">\(2^{n}\)</span> עובר אותו מהר יחסית (עבור n=1,000, למשל - ואם המספר הזה נראה לכם גדול תחשבו על אלגוריתם חיפוש שרץ על טקסט באורך מיליוני תווים, ותזכרו שאלגוריתם <a href="http://he.wikipedia.org/wiki/RSA">RSA</a> בימינו עובד עם מספרים בני 1,024 ביטים). יש פונקציות לא יעילות שהן קטנות וגדולות מהאקספוננציאליות, אבל לא נרחיב עליהן את הדיבור יותר מדי. החשיבות היא בכך שכעת תמונת העולם שלנו מחלוקת לשלושה חלקים - יש את הבעיות האלגוריתמיות שכלל אינן כריעות. הבעיות שכן כריעות מסומנות ב-R, אבל כרגע חילקנו אותן שוב - לבעיות שהן כריעות אבל לא ניתנות לפתרון יעיל (כלומר, <strong>כל</strong> אלגוריתם שפותר אותן אינו יעיל), ובעיות שהן כריעות וניתנות לפתרון יעיל. את אוסף הבעיות הזה מסמנים ב-<a href="http://he.wikipedia.org/wiki/P_%28%D7%9E%D7%93%D7%A2%D7%99_%D7%94%D7%9E%D7%97%D7%A9%D7%91%29">P</a> (מלשון Polynomial, פולינומי - על שם זמן הריצה), וזו ככל הנראה מחלקת הבעיות החשובה ביותר במדעי המחשב התיאורטיים.</p>
+<p>כל זה עסק במדדי זמן. גם למדדי זיכרון יש מחלקה דומה - המחלקה PSPACE (מלשון Polynomial Space). שתי המחלקות הללו - P ו-PSPACE מדברות רק על בעיות הכרעה, כאלו שבהן צריך להגיד "כן" או "לא". עבור פונקציות יש מחלקות דומות, אך לא נעסוק בהן לעת עתה.</p>
+<p>די בבירור, P מוכל ב-PSPACE - הרי מודדים צריכת זיכרון על ידי כמות הסרט שהמכונה משתמשת בה (ופירוש הדבר, גם אם איני מסביר פורמלית איך עושים זאת, בכמות הסרט שהמכונה "עוברת עליו" בשלב כלשהו של ריצתה). כלומר - על כל יחידת זכרון שצורכים בסרט, חייבים להשקיע לפחות יחידת זמן אחת (כדי לנוע אליה), ומכאן שתמיד צורכים פחות זיכרון מאשר זמן - ולכן מה שנפתר בזמן יעיל, בטח שגם ייפתר בזיכרון יעיל. ההפך אינו ידוע - ייתכן שיש בעיות שניתן לפתור בעזרת זיכרון יעיל, אבל לא באמצעות זמן יעיל (ידועות בעיות רבות שקיים להן פתרון בזיכרון יעיל אך לא ידוע פתרון בזמן יעיל) - ולמעשה, רוב "שדה המשחק" שבו עוסקת תורת הסיבוכיות נמצא בדיוק בין P לבין PSPACE - כלומר, רוב המחלקות (לפחות אלו הבסיסיות) שבהן עוסקים מכילות את P ומוכלות ב- (או שוות ל-) PSPACE.</p>
+<p>דבר מעניין שכדאי לשים אליו לב ב-PSPACE הוא שכלל לא חייבים לדרוש שמכונה שמשתמשת בכמות סופית של זיכרון תפסיק את ריצה מתישהו. היא יכולה "לזגזג" שוב ושוב בין מצבים ומקומות על הסרט שהיא כבר קראה, וכלל לא לעצור. עם זאת, לכל מכונה כזו ניתן לבנות מכונה שקולה שמחקה את פעולתה, אך מסוגלת לזהות מתי היא נכנסה ל"לולאה אינסופית" שכזו ולכן לעצור. הדרך לעשות זאת היא כדלהלן: מכיוון שכמות הזיכרון שבה משתמשת המכונה המקורית היא חסומה, לוקחים חסם עליה (כמובן, צריך לדעת <strong>מה</strong> החסם אם רוצים לבנות בפועל מכונה שקולה שכזו - אך גם אם לא יודעים מה החסם, עדיין <strong>קיימת</strong> מכונה שקולה שכזו). כעת, ניתן לאפיין את החישוב של המכונה בתור סדרה של <strong>קונפיגורציות</strong> (כבר הזכרתי את המושג בעבר) - תיאורים רגעיים של תוכן הסרט הרלוונטי, המצב הפנימי של המכונה והמיקום של הראש הקורא. מכיוון שמספר המצבים של המכונה סופי, ומכיוון שכמות הסרט שבה משתמשים סופית, יש רק מספר סופי של קונפיגורציות, כך שהמכונה המסמלצת יכולה לשמור בצד מערך שלכל קונפיגורציה היא מסמנת "כבר היינו כאן". אם מגלים שהיינו באותה קונפיגורציה פעמיים, פירוש הדבר הוא שנכנסנו ללולאה אינסופית - ולכן עוצרים מייד ומחזירים "כישלון".</p>
+<p>מה עשינו כאן, בעצם? פתרנו את <a href="http://www.gadial.net/2007/09/26/halting_problem/">בעיית העצירה</a> לכל מכונה ב-PSPACE (וגם במחלקות זיכרון חסום גדולות יותר). בפרט, מחשבים הם <strong>תמיד</strong> בעלי זיכרון חסום, כך שתמיד ניתן לפתור בעיות עצירה עבור מחשבים ספציפיים. הנה כי כן אנו עוזבים את העולם התיאורטי לחלוטין של תורת החישוביות, ומגיעים לעולם ה"מלוכלך" יותר של הסיבוכיות - אך בכמה מובנים, גם המורכב והמעניין פי כמה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2007/12/16/np_haystack/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">על הבעיה המסובכת של מציאת מחט בערימת שחת</span>
+            </a>
+            
+            
+            
+            <a href="/2007/12/05/complexity_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">למה גם מה שפתיר לא פתיר (זה מסובך)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

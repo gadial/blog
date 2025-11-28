@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז איך פותרים אינטגרלים בתיכון? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז איך פותרים אינטגרלים בתיכון?</h1>
+            <div class="post-meta">
+                <span class="date">2020-07-25</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אינטגרלים.html">אינטגרלים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>ביקשו ממני לכתוב פוסט על איך פותרים תרגילים עם אינטגרלים ברמת תיכון, ואני מאוד שמח לעשות את זה כי זה נושא שחביב עלי מאוד מסיבה פשוטה: לחשב אינטגרלים זה <strong>קשה</strong>. בגלל שזה קשה, פשוט <strong>אי אפשר</strong> לתת בתיכון תרגילים קשים <strong>באמת</strong> שמערבים אינטגרלים, ולכן מה שכן נותנים הוא את הדברים הפשוטים יחסית שאפשר לפתור בצורה די מסודרת אחרי שמבינים מה בעצם הולך שם, מה זה אינטגרלים ואיך ניגשים לטכניקה שלהם.</p>
+<p>נתחיל מ"מה זה אינטגרלים". חלק מהסיבה שבגללה אינטגרלים זה עסק מבלבל הוא שאנחנו משתמשים ב"אינטגרל" כדי לתאר שני דברים שנראים במבט ראשון שונים לגמרי, אבל אחת מהתוצאות היפות במתמטיקה ("המשפט היסודי של החשבון הדיפרנציאלי והאינטגרלי") מראה שהם קשורים בצורה חזקה. ראשית, אינטגרלים מוצגים בתור "ההפך <strong>מנגזרת</strong>", כלומר בתור מושג שכדי להבין אותו צריך קודם כל להבין את המושג המרכזי השני בחשבון דיפרנציאלי ואינטגרלי - הנגזרת. יש לי <a href="https://gadial.net/2010/11/21/derivative/">פוסטים</a> על נגזרות ו<a href="https://gadial.net/2010/12/01/deriving_ourselves_to_death/">על איך מחשבים אותן</a>, כך שבפוסט הזה אניח היכרות בסיסית עם הנושא; אבל אני <strong>כן</strong> הולך להזכיר כל דבר רלוונטי לפני שאני משתמש בו.</p>
+<p>לאינטגרל שהוא "ההפך מנגזרת" קוראים "אינטגרל לא מסויים". יש גם מושג אחר, של "אינטגרל מסויים", שבכלל עוסק בחישוב של שטחים, נפחים וכל מני דברים מספריים אחרים. זו, מבחינה היסטורית, הנקודה שבה מושג האינטגרל נולד, ו<a href="https://gadial.net/2010/11/27/integral/">יש לי פוסט</a> שמסביר את מושג האינטגרל מנקודת המבט הזו. אלא שהפוסט הנוכחי הולך להיות טכני ברמת תיכון, מה שאומר שלא נצטרך לדבר הרבה על אינטגרל מסויים. ההגדרה הפורמלית שלו? דורשת טכניקה שלא נלמדת בתיכון. האינטואיציה הכללית מאחוריו? דורשת רעיונות שלא נלמדים בתיכון. מה שנשאר זה רק איך מחשבים אותו בהקשרים ספציפיים, וזה קל ונגיע לזה. החישוב הוא תמיד "תחשבו את האינטגרל <strong>הלא מסויים</strong> ואז תעשו איתו דברים", כך שהמושג הטכני שרלוונטי לנו הוא אינטגרל לא מסויים.</p>
+<h2>פרק ראשון, שבו נספר על נגזרות ואינטגרלים של פולינומים</h2>
+
+<p>אם נלך לדף הנוסחאות בבגרות ונלך אל "אינטגרלים", נראה קודם כל את הנוסחה המייאשת הבאה:</p>
+<ul> <li><span class="math">\(\int x^{t}dx=\frac{x^{t+1}}{t+1}+C\)</span> (<span class="math">\(t\)</span> ממשי, <span class="math">\(t\ne-1\)</span>)</li>
+
+</ul>
+
+<p>אחרי שנבין אותה, נעבור כבר יותר מחצי מהדרך אל הבנת אינטגרלים באופן כללי. אבל כדי להבין אותה, צריך לדבר קודם כל על <strong>נגזרת</strong>. נגזרת זה משהו שעושים לפונקציות, כשאצלנו פונקציה היא משהו שמקבל <strong>קלט</strong> <span class="math">\(x\)</span> ומוציא <strong>פלט</strong> שכותבים בתור איזו שהיא נוסחה שמערבת את <span class="math">\(x\)</span>. למשל <span class="math">\(2x^{3}+5\)</span> זו דרך מקוצרת לכתוב את הפונקציה <span class="math">\(y=2x^{3}+5\)</span> (או <span class="math">\(f\left(x\right)=2x^{3}+5\)</span>; מה שיטות הסימון של הצעירים בימינו?). הנגזרת של פונקציה אמורה לייצג את "קצב ההשתנות" שלה עבור ערכים שונים ומשונים של <span class="math">\(x\)</span>; זה שייך לתיאוריה שלא רלוונטית לפוסט הטכני הזה. הנקודה הרלוונטית היא ש<strong>הנגזרת של פונקציה היא בעצמה פונקציה</strong> ושגזירה של פונקציה היא משהו שיש לנו דרך שיטתית מאוד לבצע.</p>
+<p>הדברים שהכי קל לגזור הם פונקציות שנקראות <strong>פולינומים</strong>. פולינומים הם יצורים כמו <span class="math">\(2x^{3}+5\)</span>: סכום של איברים שכל איבר הוא מהצורה "מספר כלשהו כפול חזקה שלמה של <span class="math">\(x\)</span>" (בדוגמא שלי <span class="math">\(5\)</span> מוכפל בחזקה <span class="math">\(x^{0}\)</span> של <span class="math">\(x\)</span>). הנה הנגזרות של כמה פולינומים ממש פשוטים:</p>
+<ul> <li>הנגזרת של הפולינום <span class="math">\(1\)</span> היא 0.</li>
+
+
+<li>הנגזרת של הפולינום <span class="math">\(x\)</span> היא 1.</li>
+
+
+<li>הנגזרת של הפולינום <span class="math">\(x^{2}\)</span> היא <span class="math">\(2x\)</span>.</li>
+
+
+<li>הנגזרת של הפולינום <span class="math">\(x^{3}\)</span> היא <span class="math">\(3x^{2}\)</span>.</li>
+
+
+<li>הנגזרת של הפולינום <span class="math">\(x^{4}\)</span> היא <span class="math">\(4x^{3}\)</span>.</li>
+
+</ul>
+
+<p>ונראה לי שכבר הבנו את הרעיון, לא? באופן כללי את כל אלו אפשר לתאר על ידי "הנגזרת של <span class="math">\(x^{t}\)</span> היא <span class="math">\(tx^{t-1}\)</span>", וזה יהיה נכון לכל מספר ממשי <span class="math">\(t\)</span>, גם אם הוא לא מספר שלם בכלל (למשל, הנגזרת של <span class="math">\(x^{\pi}\)</span> היא <span class="math">\(\pi x^{\pi-1}\)</span>). זה זמן טוב להציג את הסימון של נגזרת - משתמשים במשהו שנקרא "תג" ובקושי אפשר לראות אותו, כי למה לא לבלבל אנשים אם אפשר. הנה איך נראית הנוסחה הכללית שראינו כשמסמנים אותה עם תג:</p>
+<ul> <li><span class="math">\(\left(x^{t}\right)^{\prime}=tx^{t-1}\)</span></li>
+
+</ul>
+
+<p>גם זו נוסחה שמופיעה בדף הנוסחאות, וזו נקודת המוצא שלנו. בואו נבין איך היא מתקשרת לנוסחה המוזרה עבור אינטגרלים שראינו קודם ואנחנו עדיין לא מבינים.</p>
+<p>כזכור, אינטגרל <strong>לא מסויים</strong> הוא "ההפך מנגזרת". אם הנגזרת של <span class="math">\(x^{2}\)</span> היא <span class="math">\(2x\)</span>, זה אומר שהאינטגרל הלא מסויים של <span class="math">\(2x\)</span> יהיה <span class="math">\(x^{2}\)</span>. באופן דומה, האינטגרל הלא מסויים של <span class="math">\(3x^{2}\)</span> יהיה <span class="math">\(x^{3}\)</span> וכן הלאה. פרט לכך, כשכותבים אינטגרל לא מסויים תמיד מוסיפים לו <span class="math">\(+C\)</span> בסוף. כלומר, אני כותב <span class="math">\(\int2xdx=x^{2}+C\)</span> ו-<span class="math">\(\int3x^{2}dx=x^{3}+C\)</span>. הסיבה לכך היא שאותה נגזרת יכולה להתקבל <strong>מכמה פונקציות שונות</strong>, שההבדל ביניהן הוא חיבור של מספר קבוע. למשל, גם הנגזרת של <span class="math">\(x^{3}+5\)</span> היא <span class="math">\(3x^{2}\)</span>; בהמשך גם נבין למה. מבחינה טכנית, המשמעות היא זו: בשביל למצוא אינטגרל לא מסויים של פונקציה <span class="math">\(f\)</span> מספיק למצוא פונקציה <span class="math">\(F\)</span> <strong>אחת</strong> כך ש-<span class="math">\(F^{\prime}=f\)</span>, ואז האינטגרל הלא מסויים הכללי הוא פשוט <span class="math">\(F+C\)</span>, כלומר כותבים <span class="math">\(\int fdx=F+C\)</span>.</p>
+<p>עכשיו, לחישוב נגזרת יש שתי תכונות נחמדות <strong>מאוד</strong> שנקראות ביחד "הלינאריות של הנגזרת". התכונה הראשונה היא ש-<span class="math">\(\left(f+g\right)^{\prime}=f^{\prime}+g^{\prime}\)</span>, כלומר כדי לחשב את הנגזרת של סכום שתי פונקציות מספיק לחשב את הנגזרת של כל אחת בנפרד, ורק אז לחבר; והתכונה השניה היא ש-<span class="math">\(\left(c\cdot f\right)^{\prime}=c\cdot f^{\prime}\)</span> עבור מספר ממשי <span class="math">\(c\)</span>. כלומר, כדי לחשב את הנגזרת של "קבוע כפול פונקציה" מספיק לחשב את הנגזרת של הפונקציה, ואז לכפול בקבוע הזה.</p>
+<p>עכשיו אפשר לחשב בקלות את הנגזרת של כל פולינום: למשל, מה הנגזרת של <span class="math">\(5\)</span>? מכיוון ש-<span class="math">\(5=5\cdot1\)</span> ואנחנו יודעים ש-<span class="math">\(\left(1\right)^{\prime}=0\)</span> נקבל ש-<span class="math">\(\left(5\right)^{\prime}=5\cdot\left(1\right)^{\prime}=5\cdot0=0\)</span> ("הנגזרת של כל קבוע היא אפס"). ומה הנגזרת של <span class="math">\(2x^{3}\)</span>? מכיוון שהנגזרת של <span class="math">\(x^{3}\)</span> היא <span class="math">\(3x^{2}\)</span>, נקבל ש-<span class="math">\(\left(2x^{3}\right)^{\prime}=2\left(3x^{2}\right)=6x^{2}\)</span>. ועכשיו, מה הנגזרת של <span class="math">\(2x^{3}+5\)</span>? נשתמש בתכונה עם החיבור ונקבל ש-<span class="math">\(\left(2x^{3}+5\right)^{\prime}=\left(2x^{3}\right)^{\prime}+\left(5\right)^{\prime}=6x^{2}+0=6x^{2}\)</span>. הנה לנו ההסבר לעניין ה-<span class="math">\(+C\)</span>; באופן כללי, <span class="math">\(\left(f+C\right)^{\prime}=f^{\prime}+0=f^{\prime}\)</span> ולכן כל הפונקציות מהצורה <span class="math">\(f+C\)</span> עבור כל <span class="math">\(C\)</span> ממשי יתנו את אותה הנגזרת.</p>
+<p>איך זה עוזר לנו לחשב אינטגרלים?</p>
+<p>ובכן, אם <span class="math">\(\left(x^{2}\right)^{\prime}=2x\)</span>, אז אפשר עכשיו <strong>לחלק ב-</strong><strong>2</strong> את שני האגפים ולקבל <span class="math">\(\left(\frac{1}{2}x^{2}\right)^{\prime}=x\)</span>. באופן דומה אפשר לטפל ב-<span class="math">\(x^{3}\)</span>: אם <span class="math">\(\left(x^{3}\right)^{\prime}=3x^{2}\)</span> אז <span class="math">\(\left(\frac{1}{3}x^{3}\right)^{\prime}=x^{2}\)</span>, וכך גם לנגזרות אחרות. בואו נכתוב את זה בעזרת סימונים של אינטגרלים:</p>
+<p><span class="math">\(\int xdx=\frac{1}{2}x^{2}+C\)</span></p>
+<p><span class="math">\(\int x^{2}dx=\frac{1}{3}x^{3}+C\)</span></p>
+<p>ומה קורה באופן כללי? ובכן, <span class="math">\(\left(x^{t}\right)^{\prime}=tx^{t-1}\)</span>, ולכן נקבל:</p>
+<p><span class="math">\(\int x^{t-1}dx=\frac{1}{t}x^{t}+C\)</span></p>
+<p>אלא שכאן <strong>צריך להיזהר</strong>. כאשר <span class="math">\(t=0\)</span>, יש לנו בביטוי הזה חלוקה באפס - זה פשוט לא עובד! המקרה הזה מגיע מהנוסחה הבאה: <span class="math">\(\left(x^{0}\right)^{\prime}=0\cdot x^{-1}\)</span>. במקרה הזה, אי אפשר לחלק בקבוע <span class="math">\(0\)</span> שבו מוכפל <span class="math">\(x^{-1}\)</span> ולכן לא ניתן "לחלץ" אותו - זה מקרה פרטי מיוחד שנדבר עליו בהמשך.</p>
+<p>עכשיו, בואו ניקח את הנוסחה <span class="math">\(\int x^{t-1}dx=\frac{1}{t}x^{t}+C\)</span> ונשנה אותה טיפה. בדרך כלל כשאני רוצה למצוא אינטגרל עבור משהו, זה לא עבור <span class="math">\(x^{t-1}\)</span> אלא עבור <span class="math">\(x^{t}\)</span> (כלומר, אני לא כותב את החזקה בתור "משהו פחות 1"). אז בואו נעשה "החלפת משתנה": נסמן <span class="math">\(s=t-1\)</span>, כלומר <span class="math">\(t=s+1\)</span>, ואז נקבל את הנוסחה <span class="math">\(\int x^{s}dx=\frac{1}{s+1}x^{s+1}+C\)</span>. מכיוון ש-<span class="math">\(s\)</span> זה סתם סימון, אפשר "לחזור" אל <span class="math">\(t\)</span>, ובאותה הזדמנות קצת לכווץ את אגף ימין, ולקבל</p>
+<ul> <li><span class="math">\(\int x^{t}dx=\frac{x^{t+1}}{t+1}+C\)</span></li>
+
+</ul>
+
+<p>זו הנוסחה שהזכרנו קודם. שימו לב מה עכשיו המקרה ה"אסור": קודם זה היה <span class="math">\(t=0\)</span>, אבל אחרי החלפת המשתנים זה עבר להיות המקרה <span class="math">\(t=-1\)</span> (קל לראות את זה - זה מה שיגרום למכנה באגף ימין להתאפס). לכן מסייגים את הנוסחה ההיא בכך ש-<span class="math">\(t\ne-1\)</span>.</p>
+<p>עכשיו אפשר להשתמש בנוסחה הזו כדי לחשב אינטגרלים קצת יותר מורכבים, כשאנחנו נעזרים בתכונה משמחת אחת: בזכות העובדה שנגזרת היא <strong>לינארית</strong>, גם אינטגרל הוא כזה. כלומר: <span class="math">\(\int\left(f+g\right)dx=\int fdx+\int gdx\)</span> ו-<span class="math">\(\int cfdx=c\int fdx\)</span>. לכן, אם למשל אני רוצה לחשב את האינטגרל של <span class="math">\(2x^{3}+5\)</span>, אני משתמש בלינאריות ומקבל: </p>
+<p><span class="math">\(\int\left(2x^{3}+5\right)dx=2\int x^{3}dx+5\int1\cdot dx=\frac{2x^{4}}{4}+5x+C=\frac{x^{4}}{2}+5x+C\)</span></p>
+<p>אפשר לעצור לסיכום ביניים קצר: אנחנו מבינים (אני מקווה!) את הנוסחה המוזרה מדף הנוסחאות, ואיך אפשר להשתמש בה כדי לחשב אינטגרל עבור <strong>כל</strong> פולינום, חוץ מהמקרה המעצבן הזה של <span class="math">\(x^{-1}\)</span> שאין לנו מושג מה לעשות בו. אפשר עכשיו לעבור לדברים מתוחכמים קצת יותר.</p>
+<h2>פרק שני, שבו אנחנו עוברים לדברים מתוחכמים קצת יותר</h2>
+
+<p>יודעות מה? בעצם לא. אולי לא כדאי לשפוך את כל מהומת האינטגרלים הלא מסויימים על הראש בבת אחת. במקום זה, בואו נראה איך משתמשים במה שכבר יש לנו כדי לטפל באינטגרלים <strong>מסויימים</strong>, ברמה שמספיקה לפתור שאלות מהבגרות. אם כן:</p>
+<h2>פרק שני האמיתי באמת שבו אנחנו עוברים לחשב שטחים</h2>
+
+<p>היי, תראו, הנה שאלה אמיתית מבגרות!</p>
+<p><img src="/img/2020/07/IntegralQuestion1.PNG" alt=""/></p>
+<p>בשאלה הזו מעורבות שתי פונקציות שהן <strong>פולינומים</strong>, כלומר שאנחנו כבר יודעים לטפל בהן. פונקציה אחת היא <span class="math">\(f\left(x\right)=x^{2}-6x+5\)</span>, והשניה היא <span class="math">\(g\left(x\right)=x^{2}-10x+a\)</span> כאשר <span class="math">\(a\)</span> הוא "פרמטר" שבעצם תחילת השאלה עוסקת במציאת הערך המדויק שלו. אין פה משהו מעניין - אומרים ששתי הפונקציות הללו נחתכות בדיוק בנקודה שקואורדינטת ה-<span class="math">\(x\)</span> שלה היא <span class="math">\(4\)</span>. זה אומר שאם נציב <span class="math">\(4\)</span> בשני הפולינומים, הערך שאנחנו מקבלים אמור להיות שווה, כלומר <span class="math">\(f\left(x\right)=g\left(x\right)\)</span>. בואו נפשט את השוויון ובסוף נציב <span class="math">\(x=4\)</span>:</p>
+<p><span class="math">\(x^{2}-6x+5=x^{2}-10x+a\)</span> (זה <span class="math">\(f\left(x\right)=g\left(x\right)\)</span>)</p>
+<p><span class="math">\(4x+5=a\)</span> (העברתי את <span class="math">\(x^{2}-10x\)</span> לאגף שמאל)</p>
+<p><span class="math">\(4\cdot4+5=a\)</span> (הצבתי <span class="math">\(x=4\)</span>)</p>
+<p><span class="math">\(a=21\)</span> (זו המסקנה)</p>
+<p>כלומר, <span class="math">\(g\left(x\right)=x^{2}-10x+21\)</span>. אגב, נקודת החיתוך של שני הפולינומים היא <span class="math">\(\left(4,-3\right)\)</span>.</p>
+<p>עכשיו צריך למצוא את השטח ש"מוגבל על ידי הגרפים של שתי הפונקציות", אבל בשביל לעשות את זה קודם כל צריך להבין איך בכלל משתמשים באינטגרל כדי למצוא שטחים, ולשם כך בואו נתחיל מהמקרה הכי פשוט שמתואר באיור הבא:</p>
+<p><img src="/img/2020/07/Integral1.PNG" alt=""/></p>
+<p>כאן יש לנו פונקציה <span class="math">\(f\left(x\right)\)</span> שאני מסתכל עליה אך ורק בין שתי נקודות <span class="math">\(a,b\)</span>. כלומר, אני מצייר את <span class="math">\(f\left(x\right)\)</span> רק עבור <span class="math">\(a\le x\le b\)</span>. אני מותח שני קווים אנכיים, אחד בנקודה <span class="math">\(a\)</span> (עד לגובה <span class="math">\(f\left(a\right)\)</span>) והשני בנקודה <span class="math">\(b\)</span> (עד לגובה <span class="math">\(f\left(b\right)\)</span>), ואז אני צובע בתכלת את האיזור ש"כלוא" בין ארבעה קווים: שני הקווים האנכיים הללו שציירתי, ציר ה-<span class="math">\(x\)</span> (הקו האופקי מ-<span class="math">\(\left(a,0\right)\)</span> עד <span class="math">\(\left(b,0\right)\)</span>) ולסיום, ה"קו" (ליתר דיוק, ה<strong>עקום</strong>) למעלה שמתאים ל-<span class="math">\(f\)</span>. שימו לב לכך ש-<span class="math">\(f\left(x\right)\)</span> היא <strong>אי-שלילית</strong> בכל הקטע הזה.</p>
+<p>בהינתן כל אלו, השטח שצבעתי בתכלת שווה למה שנקרא <strong>האינטגרל המסויים</strong> של <span class="math">\(f\)</span> בין <span class="math">\(a\)</span> ל-<span class="math">\(b\)</span>. הדבר הזה מסומן ב-<span class="math">\(\int_{a}^{b}f\left(x\right)dx\)</span>. קישרתי קודם לפוסט שלי שבו אני מסביר מה זה אינטגרל מסויים <strong>באמת</strong> (אפשר לחשוב עליו בתור סוג מתוחכם של סכום <strong>מאוד אינסופי</strong>), אבל אנחנו לא צריכים את ההגדרה הזו כדי לחשב שטחים, רק להבין איך אפשר להיעזר באינטגרל המסויים כדי לחשב אותם.</p>
+<p>אז... איך אני מחשב את המספר <span class="math">\(\int_{a}^{b}f\left(x\right)dx\)</span>? פשוט מאוד, בעזרת האינטגרל <strong>הלא מסויים</strong>. נניח ש-<span class="math">\(\int f\left(x\right)dx=F\left(x\right)+C\)</span>, כלומר <span class="math">\(F\)</span> היא פונקציה שכאשר גוזרים אותה מקבלים את <span class="math">\(f\)</span>. אז מתקיים הקשר הבא, שבעיני הוא מדהים ומרהיב ואחד מהדברים הנפלאים במתמטיקה: <span class="math">\(\int_{a}^{b}f\left(x\right)dx=F\left(b\right)-F\left(a\right)\)</span>. כלומר, כדי לחשב את האינטגרל המסויים של <span class="math">\(f\)</span> (ובדוגמא שלנו, את השטח ה"מופרע" בצבע תכלת), צריך לחשב את הערך של <span class="math">\(F\)</span> <strong>בשתי נקודות בלבד</strong>, אלו של קצוות הקטע שעליו עושים אינטגרל ואז לחסר את הערך הראשון מהשני. הדבר הנפלא הזה הוא תוצאה של מה שמכונה "המשפט היסודי של החדו"א" והאינטואיציה פה היא שהאינטגרל המסוים (השטח בתכלת) מייצג בדיוק את "כמה שינוי <span class="math">\(F\)</span> צריכה להשתנות החל מהנקודה <span class="math">\(a\)</span> כדי להגיע לערכה בנקודה <span class="math">\(b\)</span>", אבל לא קריטי להבין את האינטואיציה הזו לצרכים הטכניים.</p>
+<p>הכל טוב ויפה, אבל עכשיו - איך משתמשים בזה כדי לפתור את השאלה שהצגתי לעיל? שם מבקשים שטח שכלוא בין <strong>שתי</strong> עקומות, ובנוסף לכך אחד מהתנאים שהזכרתי קודם לא מתרחש - אני דרשתי מ-<span class="math">\(f\left(x\right)\)</span> להיות חיובית בכל הקטע שעליו עושים אינטגרל, אבל זה לא קורה בשאלה למעלה.</p>
+<p>בואו נסתכל על דוגמא אחרת - פונקציה שנראית כמו פרבולה, כמו בשאלה שלעיל, כך שיש לפרבולה חלק שבו היא נמצאת מתחת לציר <span class="math">\(x\)</span> (החלק בין הנקודות <span class="math">\(b\)</span> ו-<span class="math">\(c\)</span>):</p>
+<p><img src="/img/2020/07/Integral2.PNG" alt=""/></p>
+<p>אני מסמן בתכלת את השטח שכלוא בין הפונקציה וציר <span class="math">\(x\)</span> בקטעים שבהם היא חיובית, ובירוק את השטח שכלוא בינה לבין ציר <span class="math">\(x\)</span> כשהיא שלילית. כדי לחשב את השטח הירוק, אני צריך לקחת את <strong>מינוס</strong> האינטגרל של הפונקציה בקטעים הללו. כלומר, השטח הכולל של ירוק + תכלת הולך להיות <strong>סכום</strong> של שלושה אינטגרלים מסויימים:</p>
+<p><span class="math">\(\int_{a}^{b}f\left(x\right)dx-\int_{b}^{c}f\left(x\right)dx+\int_{c}^{d}f\left(x\right)dx\)</span></p>
+<p>מה בעצם הרעיון פה? למה לוקחים את <strong>מינוס</strong> האינטגרל כדי לקבל את השטח הירוק? ובכן, כי האינטואיציה מאחורי אינטגרל מסויים היא לא "שטח" אלא "סכום", וכשהפונקציה שלילית, מה שקורה הוא שסוכמים הרבה ערכים שליליים ולכן הסכום שלהם יוצא שלילי. כדי לקבל שטח מתוך אינטגרל מסויים צריך לחשב את <strong>הערך המוחלט</strong> <span class="math">\(\int_{a}^{b}\left|f\left(x\right)\right|dx\)</span> והמשמעות של זה בפועל היא בדיוק מה שהצגתי - חלוקה לאיזורים חיוביים ושליליים ולקיחת מינוס האינטגרל עבור האיזורים השליליים.</p>
+<p>ועכשיו אפשר להגיע אל המקרה <strong>הכללי ביותר והמועיל ביותר</strong>, שמדבר על הסיטואציה שבה יש לנו <strong>שתי פונקציות</strong> ואנחנו מחשבים את השטח שכלוא בין שתיהן ובין שני קווים אנכיים. זה נראה ככה:</p>
+<p><img src="/img/2020/07/Integral3.PNG" alt=""/></p>
+<p>הסיטואציה היא זו: יש לנו שתי פונקציות <span class="math">\(f\left(x\right),g\left(x\right)\)</span> כך ש-<span class="math">\(g\left(x\right)\le f\left(x\right)\)</span> לכל <span class="math">\(a\le x\le b\)</span>. במקרה הזה אפשר להוכיח, כבר מההגדרה הבסיסית של אינטגרל מסויים (שאני לא מציג כאן...), שהשטח הירוק בתמונה שווה בדיוק ל-<span class="math">\(\int_{a}^{b}\left(f\left(x\right)-g\left(x\right)\right)dx\)</span>.</p>
+<p>מה שנחמד בתוצאה הזו הוא ששתי התוצאות הקודמות שתיארתי נובעות ממנה: בשתי הדוגמאות הקודמות הפונקציה <span class="math">\(g\left(x\right)\)</span> השתתפה בצורה סמויה - היא פשוט הייתה הפונקציה <span class="math">\(g\left(x\right)=0\)</span> הידועה גם בשם "ציר <span class="math">\(x\)</span>". כשחישבתי את <span class="math">\(\int_{a}^{b}f\left(x\right)dx\)</span> בעצם חישבתי את <span class="math">\(\int_{a}^{b}\left(f\left(x\right)-0\right)dx\)</span>, ולכן חישבתי את השטח שכלוא בין <span class="math">\(f\)</span> ובין <span class="math">\(g\)</span>, כלומר בין <span class="math">\(f\)</span> ובין ציר <span class="math">\(x\)</span>. במקרה שבו <span class="math">\(f\left(x\right)\le0\)</span> אז חישבתי בעצם את <span class="math">\(\int_{a}^{b}\left(0-f\left(x\right)\right)dx\)</span> ומכאן צץ המינוס.</p>
+<p>זו בעצם התורה כולה - כל היתר הוא פשוט משחק ב"אילו שטחים אנחנו רוצים לחשב". בואו נראה את המשחק הזה עבור השאלה שאנחנו רוצים לפתור:</p>
+<p><img src="/img/2020/07/Integral4.PNG" alt=""/></p>
+<p>השטח הירוק שבתמונה <strong>לא</strong> מתאים לתיאורים שנתתי עד כה, בגלל הצורה המורכבת שלו. החלק <strong>התחתון</strong> שלו הוא כל הזמן הפונקציה <span class="math">\(f\left(x\right)\)</span>, אבל החלק <strong>העליון</strong> שלו מתחיל בתור קו אופקי, ואז פתאום הופך להיות הפונקציה <span class="math">\(g\left(x\right)\)</span>. אז מה שנעשה יהיה למתוח קווים אנכיים, שאסמן בצבע כחול, בכל הנקודות המעניינות - תחילת וסוף השטח הירוק, והנקודה שבה החלק העליון של השטח משתנה:</p>
+<p><img src="/img/2020/07/Integral5.PNG" alt=""/></p>
+<p>בשביל לפתור את התרגיל, נצטרך את הדברים הבאים:</p>
+<ul> <li>למצוא את המשוואה של הקו האופקי העליון (המשוואה היא בסך הכל <span class="math">\(h\left(x\right)=a\)</span> עבור <span class="math">\(a\)</span> קבוע כלשהו; האתגר הוא למצוא את <span class="math">\(a\)</span>).</li>
+
+
+<li>למצוא את המשוואות של שלושת הקווים האנכיים הכחולים (שניים בעצם כבר מצאנו, כפי שאראה עוד רגע).</li>
+
+
+<li>למצוא את האינטגרלים המסויימים עבור שני השטחים - הירוק והתכלת.</li>
+
+</ul>
+
+<p>בואו ניזכר מה הפונקציות <span class="math">\(f,g\)</span> היו בעצם:</p>
+<p><span class="math">\(f\left(x\right)=x^{2}-6x+5\)</span></p>
+<p><span class="math">\(g\left(x\right)=x^{2}-10x+21\)</span></p>
+<p>עכשיו, לישר האופקי: הוא עובר דרך הנקודה שבה <span class="math">\(f\)</span> חותכת את ציר <span class="math">\(y\)</span>, כלומר דרך הנקודה שהגובה שלה הוא <span class="math">\(f\left(0\right)=0^{2}-6\cdot0+5=5\)</span>. כלומר המשוואה של הישר הזה היא <span class="math">\(h\left(x\right)=5\)</span>. זה היה קל! עכשיו, לקווים האנכיים הכחולים. הראשון הוא בעצם הקו האנכי <span class="math">\(x=0\)</span>, מה שנקרא "ציר <span class="math">\(y\)</span>". ה<strong>שלישי</strong> עובר דרך נקודת החיתוך שמצאנו קודם - כלומר, הוא הקו <span class="math">\(x=4\)</span>. נשאר רק הקו האמצעי - הקו הזה עובר דרך נקודת החיתוך של הישר האופקי <span class="math">\(h\left(x\right)=5\)</span> עם הפונקציה <span class="math">\(g\left(x\right)\)</span>, כלומר בנקודה <span class="math">\(x\)</span> שמקיימת <span class="math">\(g\left(x\right)=5\)</span>, כלומר בפתרון של המשוואה <span class="math">\(x^{2}-10x+21=5\)</span>, כלומר בפתרון של המשוואה <span class="math">\(x^{2}-10x+16=0\)</span>.</p>
+<p>איך פותרים משוואה כזו? ובכן, אפשר עם נוסחת השורשים, אבל איפה הכיף פה? משהו שתמיד אפשר לעשות: לבדוק האם את המקדם החופשי, במקרה שלנו המספר 16, אפשר לכתוב בתור מכפלה של שני איברים שהסכום שלהם הוא <strong>מינוס</strong> המקדם האמצעי. במקרה שלנו, אפשר: <span class="math">\(16=2\cdot8\)</span>. אז נוקטים בתעלול הבא: מפרקים את המחובר האמצעי ומקבלים</p>
+<p><span class="math">\(x^{2}-2x-8x+16=0\)</span></p>
+<p>מוציאים גורמים משותפים ומקבלים</p>
+<p><span class="math">\(x\left(x-2\right)-8\left(x-2\right)=0\)</span></p>
+<p>ולבסוף:</p>
+<p><span class="math">\(\left(x-8\right)\left(x-2\right)=0\)</span></p>
+<p>זה בעצם אומר לנו שהפתרונות הם <span class="math">\(x=2,8\)</span>. אנחנו מחפשים את הפתרון הקטן יותר, שמתאים לנקודת החיתוך <strong>הראשונה</strong>, ולכן <span class="math">\(x=2\)</span> הוא מה שחיפשנו. בואו נוסיף לתמונה את כל המספרים שמצאנו:</p>
+<p><img src="/img/2020/07/Integral6.PNG" alt=""/></p>
+<p>ועכשיו - לאינטגרלים! השטח הירוק כלוא בין הפונקציה <span class="math">\(h\left(x\right)=5\)</span> והפונקציה <span class="math">\(f\left(x\right)\)</span> בקטע <span class="math">\(0\le x\le2\)</span> ולכן הוא שווה ל-</p>
+<p><span class="math">\(\int_{0}^{2}\left[5-\left(x^{2}-6x+5\right)\right]dx=\int_{0}^{2}\left(6x-x^{2}\right)dx\)</span></p>
+<p>האינטגרל הלא מסויים של <span class="math">\(6x-x^{2}\)</span> הוא <span class="math">\(3x^{2}-\frac{x^{3}}{3}\)</span>, מכללי האינטגרלים שכבר ראינו. אם מציבים בזה 0 מקבלים 0, ולכן הערך שאנחנו מחפשים הוא מה שקורה כשמציבים בכל זה 2: </p>
+<p><span class="math">\(3\cdot2^{2}-\frac{2^{3}}{3}=12-\frac{8}{3}=\frac{36-8}{3}=\frac{28}{3}=9\frac{1}{3}\)</span></p>
+<p>עכשיו נעבור אל שטח התכלת: זה השטח שכלוא בין <span class="math">\(g\left(x\right)\)</span> (מלמעלה) ו-<span class="math">\(f\left(x\right)\)</span> (מלמטה) בקטע <span class="math">\(2\le x\le4\)</span>, ולכן:</p>
+<p><span class="math">\(\int_{2}^{4}\left(g\left(x\right)-f\left(x\right)\right)dx=\int_{2}^{4}\left[\left(x^{2}-10x+21\right)-\left(x^{2}-6x+5\right)\right]dx=\)</span></p>
+<p><span class="math">\(=\int_{2}^{4}\left(16-4x\right)dx\)</span></p>
+<p>האינטגרל הלא מסויים שלנו הפעם הוא <span class="math">\(16x-2x^{2}\)</span>, וכשמציבים <span class="math">\(4\)</span> ו-<span class="math">\(2\)</span> ומחסרים, מקבלים:</p>
+<p><span class="math">\(\left(16\cdot4-2\cdot4^{2}\right)-\left(16\cdot2-2\cdot2^{2}\right)=64-32-32+8=8\)</span></p>
+<p>נוסיף לזה את ה-<span class="math">\(9\frac{1}{3}\)</span> שחישבנו קודם, <strong>והפתרון לתרגיל כולו </strong>הוא <span class="math">\(17\frac{1}{3}\)</span>.</p>
+<h2>עצירת ביניים כדי לראות מה עשינו עד כה</h2>
+
+<p>ובכן, מה למדנו פה? אני מרגיש שבעצם כל מה שעשינו אי פעם מאז תחילת היקום היה לצייר שטחים בכל מני צבעים, אבל למעשה עברנו כברת דרך לא רעה להבנת "איך פותרים דברים עם אינטגרלים". הנה תקציר:</p>
+<ol> <li>ראינו שאינטגרל לא מסויים הוא "ההפך מנגזרת" ואיך בדיוק לחשב אותו עבור כל פולינום אפשרי (חוץ מ-<span class="math">\(x^{-1}\)</span> המעצבן הזה).</li>
+
+
+<li>ראינו שאינטגרל מסויים קשור לאינטגרל לא מסויים בעזרת הנוסחה הקסומה <span class="math">\(\int_{a}^{b}f\left(x\right)dx=F\left(b\right)-F\left(a\right)\)</span></li>
+
+
+<li>ראינו שאפשר להשתמש באינטגרל מסויים כדי לחשב שטחים שכלואים בצורה נחמדה בין שתי פונקציות ושני קווים מאונכים.</li>
+
+
+<li>ראינו איך אפשר לחשב שטחים שכלואים בצורות מסובכות יותר על ידי פירוק שלהם לתת-שטחים שקל יותר לחשב וחיבור בהתאם.</li>
+
+</ol>
+
+<p>רוב התרגיל שפתרנו היה בכלל תרגיל של מציאת נקודות חיתוך של פונקציות עם צירים - ובמקרה הזה, הטכניקה הייתה פתרון משוואות ממעלה שניה, שהיא כלי בסיסי (וחשוב!) באופן כללי. האינטגרלים באו כמעט כלאחר יד, אבל ככה זה תמיד פה - כאמור, אינטגרלים אמיתיים זה <strong>קשה</strong>, ולכן תרגילים על אינטגרלים לרוב מתבססים על משהו קל בהרבה.</p>
+<p>אבל עדיין, מה עוד אנחנו יכולים לומר על חישוב אינטגרלים לא מסויימים?</p>
+<h2>פרק שלישי ובו עוד כמה אינטגרלים לא מסויימים</h2>
+
+<p>במתמטיקה יש כמה פונקציות נפוצות שטרם הזכרתי - סינוס, קוסינוס, טנגנס אקספוננט ולוגריתם. הן כל כך נפוצות שהן מופיעות בדף הנוסחאות עבור נגזרות, אז אני אזכיר מה מקבלים מהנגזרת שלהן - וננסה להבין מזה מה אנחנו יכולים לומר על אינטגרלים.</p>
+<ul> <li><span class="math">\(\left(\sin x\right)^{\prime}=\cos x\)</span> מלמד אותנו ש-<span class="math">\(\int\cos xdx=\sin x+C\)</span></li>
+
+
+<li><span class="math">\(\left(\cos x\right)^{\prime}=-\sin x\)</span> מלמד אותנו ש-<span class="math">\(\int\sin xdx=-\cos x+C\)</span></li>
+
+
+<li><span class="math">\(\left(\tan x\right)^{\prime}=\frac{1}{\cos^{2}x}\)</span> מלמד אותנו ש-<span class="math">\(\int\frac{1}{\cos^{2}x}dx=\tan x+C\)</span></li>
+
+
+<li><span class="math">\(\left(a^{x}\right)^{\prime}=a^{x}\cdot\ln a\)</span> מלמד אותנו ש-<span class="math">\(\int a^{x}dx=\frac{a^{x}}{\ln a}+C\)</span></li>
+
+
+<li><span class="math">\(\left(\log_{a}x\right)^{\prime}=\frac{1}{x\ln a}\)</span> מלמד אותנו ש-<span class="math">\(\int\frac{1}{x}dx=\ln a\cdot\ln_{a}x+C\)</span></li>
+
+</ul>
+
+<p>את כל אלו אנחנו מסיקים ישר מדף הנוסחאות וממה שכבר למדנו על חישוב אינטגרלים לא מסויימים. אבל אני רוצה להתעכב שניה על שני האחרונים. ראשית, מה זה <span class="math">\(\ln\)</span>? זה מקרה פרטי של לוגריתם (<a href="https://gadial.net/2020/06/08/what_are_logarithms/">בדיוק כתבתי פוסט</a> על לוגריתמים!) שבו הבסיס הוא מספר מיוחד שמסומן <span class="math">\(e=2.7182\ldots\)</span>. נוסאות הגזירה מראות לנו בדיוק למה <span class="math">\(e\)</span> הזה הוא כל כך מיוחד שטורחים לתת לו שם: מכיוון ש-<span class="math">\(\ln x=\log_{e}x\)</span> אז <span class="math">\(\ln e=1\)</span> ולכן <span class="math">\(\left(e^{x}\right)^{\prime}=e^{x}\)</span>. כלומר, מבין כל הבסיסים האפשריים לפונקציית האקספוננט <span class="math">\(f\left(x\right)=a^{x}\)</span>, הבסיס <span class="math">\(e\)</span> הוא היחיד שעבורו גזירה של הפונקציה <strong>לא משנה אותה</strong>. לכן האינטגרל של הפונקציה הזו הוא פשוט במיוחד: <span class="math">\(\int e^{x}dx=e^{x}+C\)</span>.</p>
+<p>באופן דומה, אפשר לקחת את נוסחת הגזירה של לוגריתם, שעובדת לכל בסיס <span class="math">\(a>1\)</span>, ולהשתמש בה עבור <span class="math">\(e\)</span> כדי לקבל <span class="math">\(\left(\ln x\right)^{\prime}=\frac{1}{x}\)</span>, ולכן לקבל את האינטגרל <span class="math">\(\int x^{-1}dx=\ln x+C\)</span>. זה מטפל <strong>סוף כל סוף</strong> גם ב-<span class="math">\(x^{-1}\)</span> שלא ידענו מה לעשות איתו עד כה; למעשה, זה טיפול כל כך טוב שלפעמים <strong>מגדירים</strong> את פונקציית הלוגריתם בעזרת האינטגרל הזה (עם עוד עניינים טכניים שלא אכנס אליהם). רק שימו לב שלוגריתם לא מוגדר בכלל עבור מספרים לא חיוביים, ולכן גם הנוסחה <span class="math">\(\int x^{-1}dx=\ln x+C\)</span> לא נכונה לכל מספר אלא רק עבור <span class="math">\(x>0\)</span>.</p>
+<p>דף הנוסחאות מלמד אותנו עוד משהו על נגזרות, שנקרא <strong>כלל השרשרת</strong> אבל לא מצוין בשם הזה שם במפורש אלא נקרא "נגזרת של פונקציה מורכבת". הוא אומר:</p>
+<p><span class="math">\(\left[f\left(u\left(x\right)\right)\right]^{\prime}=f^{\prime}\left(u\right)\cdot u^{\prime}\left(x\right)\)</span></p>
+<p>ואת זה הכי קל להסביר עם דוגמא. נאמר ש-<span class="math">\(f\left(t\right)=\cos t\)</span> וש-<span class="math">\(u\left(x\right)=x^{2}+3x\)</span>, ועכשיו אני תוקע את <span class="math">\(u\left(x\right)\)</span> במקום <span class="math">\(t\)</span> , כלומר אני מקבל את הפונקציה המורכבת</p>
+<p><span class="math">\(\cos\left(x^{2}+3x\right)\)</span></p>
+<p>ואת הפונקציה הזו אני גוזר על פי <span class="math">\(x\)</span>. אז כדי לקבל את התוצאה, אני עושה שני דברים:</p>
+<ul> <li>גוזר את <span class="math">\(f\left(t\right)=\cos t\)</span> על פי <span class="math">\(t\)</span>, ומקבל <span class="math">\(f^{\prime}\left(t\right)=-\sin t\)</span></li>
+
+
+<li>גוזר את <span class="math">\(u\left(x\right)=x^{2}+3x\)</span> על פי <span class="math">\(x\)</span> ומקבל <span class="math">\(u^{\prime}\left(x\right)=2x+3\)</span></li>
+
+</ul>
+
+<p>עכשיו, אני לוקח את <span class="math">\(f^{\prime}\left(t\right)\)</span> שקיבלת בשלב הראשון ומציב בו את <span class="math">\(u\left(x\right)=x^{2}+3x\)</span> <strong>בלי שום שינוי</strong>, כלומר אני מקבל <span class="math">\(-\sin\left(x^{2}+3x\right)\)</span>. את זה אני כופל ב-<span class="math">\(u^{\prime}\left(x\right)\)</span> מהשלב השני, ובסך הכל אני מקבל:</p>
+<p><span class="math">\(-\sin\left(x^{2}+3x\right)\left(2x+3\right)\)</span></p>
+<p>זה הרעיון מאחורי שימוש בכלל השרשרת, והמשמעות היא שאם נזהרים מספיק אפשר גם "להפוך" אותו כשעושים אינטגרל. מעשית, אם <span class="math">\(F^{\prime}\left(x\right)=f\left(x\right)\)</span> ו-<span class="math">\(u\left(x\right)\)</span> היא פונקציה כלשהי, אז:</p>
+<p><span class="math">\(F^{\prime}\left(u\left(x\right)\right)=f\left(u\left(x\right)\right)u^{\prime}\left(x\right)\)</span></p>
+<p>כי זה כלל השרשרת בפעולה, ולכן:</p>
+<p><span class="math">\(\int f\left(u\left(x\right)\right)u^{\prime}\left(x\right)dx=F\left(u\left(x\right)\right)+C\)</span></p>
+<p>זה מופיע בדף הנוסחאות, אבל להשתמש בזה בפועל - זה יכול להיות מאוד טריקי, כי כשיש ביטוי חשבוני צריך איכשהו לזהות שהוא מורכבת מנגזרת של משהו, כפול המשהו המקורי כשהוא תקוע בתוך פונקציה אחרת. זה לא קל. לכן אני מנחש שאין הרבה תרגילים שמתבססים על זה, אבל אולי אני טועה?</p>
+<p>בדף הנוסחאות יש גם מקרה פרטי פשוט במיוחד של הסיפור הזה: כש-<span class="math">\(u\left(x\right)=mx+b\)</span> (זה פשוט פולינום ממעלה ראשונה) אז <span class="math">\(u^{\prime}=m\)</span> ולכן <span class="math">\(F^{\prime}\left(mx+b\right)=f\left(mx+b\right)\cdot m\)</span> (זה כלל השרשרת בפעולה שוב), ולכן כשעוברים לאינטגרל, מקבלים <span class="math">\(\int f\left(mx+b\right)dx=\frac{1}{m}F\left(mx+b\right)+C\)</span>.</p>
+<p>וזהו, אלו כל הנוסחאות שקשורות לאינטגרלים בדף הנוסחאות. מקווה שעכשיו הן קצת יותר ברורות ויותר קל להבין איך לחשב אינטגרלים לא מסויימים.</p>
+<p>בעולם "האמיתי", כאן רק מתחיל הסיפור; יש עוד המון נוסחאות של אינטגרלים בסיסיים; יש שיטות אינטגרציה נחמדות שעוזרות לפתור מקרים יותר מסובכים, כמו למשל <strong>אינטגרציה בחלקים</strong> שמבוססת על החוק עבור נגזרת של מכפלה, שלא הצגתי פה. ויש פונקציות שפשוט <strong>לא קיים</strong> להן אינטגרל לא מסויים שאפשר להציג בצורה פשוטה בעזרת פונקציות אלמנטריות. למשל הפונקציה <span class="math">\(e^{x^{2}}\)</span>.</p>
+<h2>פרק רביעי ובו אנו מסיימים בנימה אופטימית עם תרגיל מבגרות שכל מה שלמדנו לא עוזר בו בכלל</h2>
+
+<p>לסיום, אני רוצה להראות תרגיל מבגרות של השנה:</p>
+<p><img src="/img/2020/07/IntegralQuestion2.PNG" alt=""/></p>
+<p>השאלה הזו היא <strong>קצת</strong> יותר מתוחכמת מהסטנדרט, אבל יש פיצוי הולם על כך - רובה מתבסס על לתת הנחיה גדולה מה בעצם לעשות. השאלה היא בעצם זו: אם <span class="math">\(f\left(x\right)=e^{x}\left(x-5\right)\)</span>, מהו <span class="math">\(\int f\left(x\right)dx\)</span>? זו לבדה שאלה די טריקית - הרי <span class="math">\(e^{x}\left(x-5\right)\)</span> היא פונקציה מסובכת - מכפלה של שתי פונקציות שלא נראית כמו אף אחת מנוסחאות האינטגרלים שאנחנו מכירים. הדבר היחיד עם מכפלה שראינו היה הנוסחה שקשורה לכלל השרשרת, אבל לא נראה שאפשר להשתמש בה כאן. אז מה עושים?</p>
+<p>בעולם האמיתי משתמשים במה שנקרא "אינטגרציה בחלקים", אבל זה לא אפשרי כאן. אז מה שקורה כאן הוא ש<strong>נותנים לתלמידים את הפתרון על מגש של כסף</strong>; הסעיפים הראשונים בשאלה אמורים להנחות את התלמידים אל עבר הפתרון.</p>
+<p>ראשית, למה הנגזרת של <span class="math">\(f\)</span> יוצאת מה שהיא יוצאת? בשביל זה צריך להיזכר במפורש במה שקורה כשגוזרים <strong>מכפלה</strong> של פונקציות. אם <span class="math">\(f\left(x\right)=g\left(x\right)h\left(x\right)\)</span> אז</p>
+<p><span class="math">\(f^{\prime}\left(x\right)=g^{\prime}\left(x\right)h\left(x\right)+g\left(x\right)h^{\prime}\left(x\right)\)</span></p>
+<p>כלומר, גוזרים כל אחת מהפונקציות במכפלה בנפרד וכופלים אותה בפונקציה השניה <strong>הלא גזורה</strong> ומחברים. במקרה שלנו <span class="math">\(g\left(x\right)=e^{x}\)</span> שהיא פשוטה במיוחד כי <span class="math">\(g^{\prime}\left(x\right)=e^{x}\)</span> גם כן, ואילו <span class="math">\(h\left(x\right)=x-5\)</span> ולכן <span class="math">\(h^{\prime}\left(x\right)=1\)</span>, ונקבל:</p>
+<p><span class="math">\(f^{\prime}\left(x\right)=e^{x}\left(x-5\right)+e^{x}\cdot1=e^{x}\left(x-5+1\right)=e^{x}\left(x-4\right)\)</span></p>
+<p>שימו לב שהמספר 5 לא באמת שיחק תפקיד בנגזרות, ולכן אותו דבר קורה גם כשגוזרים שוב ושוב - בכל פעם הערך שמפחיתים מ-<span class="math">\(x\)</span> הולך <strong>וקטן</strong>. התרגיל <strong>נותן במפורש את החוקיות הכללית</strong> של הנגזרת ומבקש מהתלמידים לוודא אותה.</p>
+<p>אז מה עושים בסעיף ד'? צריך להבין שאפשר לקחת את החוקיות הזו וללכת איתה גם <strong>צעד אחד אחורה</strong>. כלומר, במקום שהמספר שמחסרים מ-<span class="math">\(x\)</span> <strong>יקטן </strong>ב-1, הוא צריך <strong>לגדול</strong> ב-1. כלומר, <span class="math">\(F\left(x\right)=e^{x}\left(x-6\right)\)</span>. אם נגזור את <span class="math">\(F\left(x\right)\)</span> נראה שזה עובד.</p>
+<p>אבל רגע, שניה, לא סיימנו. מה שהמבחן בודק הוא שהתלמידים באמת מבינים את הרעיון של אינטגרל לא מסויים עד הסוף - בפרט, את זה שלאותה פונקציה <span class="math">\(f\)</span> יש <strong>אינסוף</strong> פונקציות קדומות אפשריות. המבחן דורש בצורה מפורשת שמבין האינסוף הללו, ניתן את זו שעוברת <strong>בראשית הצירים</strong>. המשמעות היא שאנחנו צריכים למצוא <span class="math">\(F\)</span> כזו שמקיימת <span class="math">\(F\left(0\right)=0\)</span>.</p>
+<p>כמובן, קל לעשות את זה: הצורה הכללית של פונקציה קדומה שכזו היא <span class="math">\(F\left(x\right)=e^{x}\left(x-6\right)+C\)</span>. אם נציב <span class="math">\(x=0\)</span> נקבל את המשוואה <span class="math">\(e^{0}\left(0-6\right)+C=0\)</span>, כלומר <span class="math">\(C=6\)</span>. לכן הפונקציה הקדומה שאנחנו מחפשים היא <span class="math">\(F\left(x\right)=e^{x}\left(x-6\right)+6\)</span>, וסיימנו.</p>
+<p>האם זה מסיים את סיפור האינטגרלים? ובכן, אני משער שיש עוד הרבה סוגי שאלות שלא לגמרי כיסיתי פה. אתן מוזמנות להפגיז איתן בתגובות ואולי אכתוב פוסט המשך.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2020/08/26/rock_paper_scissors_lizard_spock_pokemon/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אבן נייר ומספרים ולטאה וספוק ובלבאוזר וצ&#39;רמנדר וגרפים איזומורפיים</span>
+            </a>
+            
+            
+            
+            <a href="/2020/06/20/general_cartesian_products/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">תורת הקבוצות - מכפלות קרטזיות כלליות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

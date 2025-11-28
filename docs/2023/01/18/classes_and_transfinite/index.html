@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תורת הקבוצות - מחלקות, אקסיומת ההחלפה ואינדוקציה ורקורסיה על-סופיות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תורת הקבוצות - מחלקות, אקסיומת ההחלפה ואינדוקציה ורקורסיה על-סופיות</h1>
+            <div class="post-meta">
+                <span class="date">2023-01-18</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/סודרים.html">סודרים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מה זו מחלקה ולמה זו לא רמאות</h2>
+
+<p><a href="https://gadial.net/2023/01/14/ordinal_arithmetic/">בפוסט הקודם</a> הצגתי את ההגדרות לאריתמטיקה של סודרים. הכל היה (בתקווה) די פשוט ואינטואיטיבי, אבל הזהרתי שאני לא פורמלי עד הסוף, כי ההגדרה שלי הייתה רקורסיבית ולא נתתי עדיין נימוק למה "מותר" להשתמש בהגדרות כאלו. בפוסט הזה אני רוצה לדבר על הגדרות רקורסיביות, ועל הוכחות באינדוקציה שדרושות בשבילן ובשביל שלל דברים נוספים, בהקשר של הסודרים. בהקשר הזה קוראים להן "אינדוקציה על-סופית" ו"רקורסיה על-סופית" (Transfinite באנגלית). אלא שאי אפשר לדבר על הדברים הללו בלי להגיע סוף סוף לעניין קצת מלוכלך שטאטאתי עד כה מתחת לשטיח כי העדפתי לא להסביר בלי דוגמא צמודה, והגענו בדיוק אל הדוגמא הזו. המשהו המלוכלך זה מה שנקרא <strong>מחלקות</strong>, ובשמיעה ראשונה עליו יכול להישמע כמו רמאות גדולה במיוחד, ודי קריטי שנבין למה זו לא רמאות לפני שנמשיך.</p>
+<p>כבר <a href="https://gadial.net/2019/10/19/what_is_set_theory/">כשהתחלתי לדבר</a> על תורת הקבוצות הצגתי את <strong>הפרדוקס של ראסל</strong>. הפרדוקס הזה מלמד אותנו שאי אפשר סתם לקרוא בשם "קבוצה" לכל אוסף של איברים; אינטואיטיבית, יש אוספים שהם גדולים מדי מכדי להיחשב קבוצות, וההנחה שהן קבוצות מובילה לפרדוקסים. כפועל יוצא מכך הגיעו אקסיומות צרמלו-פרנקל שמדברות בדיוק על איך נראות קבוצות ואיך אפשר לבנות אותן זו מזו.</p>
+<p>עכשיו, בואו נסתכל על אוסף כל הסודרים, שאני מכנה <span class="math">\(\text{Ord}\)</span>. האם הוא קבוצה? ובכן, ראינו בפוסט מוקדם יותר שאם יש לנו קבוצה <span class="math">\(A\)</span> של סודרים, גם <span class="math">\(\bigcup A\)</span> היא סודר. כלומר, גם <span class="math">\(\bigcup\text{Ord}\)</span> צריך להיות סודר. אבל אם הוא סודר, יש לו עוקב, <span class="math">\(\bigcup\text{Ord}+1\)</span>. מכיוון שגם העוקב הזה הוא סודר, הוא שייך לקבוצת כל הסודרים, <span class="math">\(\text{Ord}\)</span>, ולכן נקבל <span class="math">\(\bigcup\text{Ord}+1\in\text{Ord}\subseteq\bigcup\text{Ord}\)</span>, כלומר <span class="math">\(\bigcup\text{Ord}+1<\bigcup\text{Ord}\)</span> ומצד שני <span class="math">\(\bigcup\text{Ord}<\bigcup\text{Ord}+1\)</span> וזה כמובן בלתי אפשרי. קיבלנו סתירה בסגנון הפרדוקס של ראסל שמראה לנו ש-<span class="math">\(\text{Ord}\)</span> לא יכול להיות קבוצה. אז מה הוא <strong>כן</strong>?</p>
+<p>ובכן, אנחנו קוראים לאוסף הזה <strong>מחלקה</strong> (Class). זה השם ה"רשמי" שלנו כדי לתאר אוסף <strong>שאנחנו מסוגלים לתאר</strong> אבל הוא לא בהכרח קבוצה בעצמו (משתמשים ב-Proper Class כדי לתאר מחלקה שאכן איננה קבוצה, ואני ככל הנראה אשתמש חופשי ב"מחלקה" כדי לומר "מחלקה שאיננה קבוצה"). מה זאת אומרת "מסוגלים לתאר", בעזרת מה? בלי להסביר את זה בצורה הכי מדוקדקת שאפשר זה נשמע כאילו אני מרמה. התשובה היא - בעזרת <strong>לוגיקה מסדר ראשון</strong>. ספציפית, בעזרת התורה מסדר ראשון של קבוצות.</p>
+<p><a href="https://gadial.net/2012/06/17/first_order_logic/">יש לי פוסטים</a> על לוגיקה מסדר ראשון, ולכן כאן אני אסתפק בתיאור קצר יחסית. האובייקט הבסיסי בלוגיקה מסדר ראשון הוא <strong>נוסחה</strong>, שהיא סדרה סופית של תווים. יש לנו תווים שמתארים <strong>משתנים</strong>, למשל <span class="math">\(x,y,z,A,B,C\)</span> וכדומה (אפשר להניח שיש לנו אינסוף כאלו). בין כל שני משתנים אפשר לכתוב אחד משני סימני יחס: או לכתוב <span class="math">\(x=y\)</span> או לכתוב <span class="math">\(x\in y\)</span>. שני הביטויים הללו הם <strong>נוסחאות הבסיס</strong> שלנו - כלומר, כל נוסחת בסיס <span class="math">\(\varphi\)</span> מורכבת משני משתנים עם אחד משני סימני היחס ביניהם. הרעיון בנוסחאות בסיס הוא שבהינתן <strong>השמה למשתנים</strong> כל נוסחת בסיס מקבלת ערך שהוא או "אמת", T או "שקר", F; אם שמנו במשתנה <span class="math">\(x\)</span> את הקבוצה <span class="math">\(a\)</span> ושמנו במשתנה <span class="math">\(y\)</span> את הקבוצה <span class="math">\(b\)</span>, אז הנוסחה <span class="math">\(x=y\)</span> מקבלת ערך "אמת" רק אם <span class="math">\(a,b\)</span> הן אותה קבוצה בדיוק, ו-<span class="math">\(x\in y\)</span> מקבלת ערך "אמת" רק אם הקבוצה <span class="math">\(a\)</span> היא איבר של הקבוצה <span class="math">\(b\)</span>.</p>
+<p>מנוסחאות בסיס אפשר לבנות נוסחאות מורכבות יותר בעזרת <strong>קשרים לוגיים</strong>: <span class="math">\(\neg\varphi,\varphi\wedge\psi,\varphi\vee\psi,\varphi\to\psi,\varphi\leftrightarrow\psi\)</span>. הקשרים הללו הם פונקציות על ערכי אמת: <span class="math">\(\neg\)</span> ("שלילה") הופך T ל-F ו-F ל-T; <span class="math">\(\wedge\)</span> ("וגם") מחזיר T רק אם שני הקלטים היו T; <span class="math">\(\vee\)</span> ("או") מחזיר F רק אם שני הקלטים היו F, <span class="math">\(\to\)</span> ("גרירה") מחזיר F רק אם הקלט השמאלי היה T והימני היה F; ו-<span class="math">\(\leftrightarrow\)</span> ("שקילות") מחזיר T רק אם שני הקלטים שווים.</p>
+<p>המרכיב האחרון בבניית נוסחת הוא <strong>כמתים</strong>. אם <span class="math">\(\varphi\)</span> היא נוסחה, אז גם <span class="math">\(\forall x\varphi\)</span> ("לכל <span class="math">\(x\)</span> מתקיים <span class="math">\(\varphi\)</span>") ו-<span class="math">\(\exists x\varphi\)</span> ("קיים <span class="math">\(x\)</span> שעבורו מתקיים <span class="math">\(\varphi\)</span>") הן נוסחאות. <span class="math">\(\forall x\varphi\)</span> מקבלת ערך T רק אם לכל קבוצה שמציבים במקום <span class="math">\(x\)</span> בנוסחה <span class="math">\(\varphi\)</span> מקבלים ערך T, ו-<span class="math">\(\exists x\varphi\)</span> מקבלת ערך T רק אם קיימת קבוצה שאם מציבים אותה במקום <span class="math">\(x\)</span> בנוסחה <span class="math">\(\varphi\)</span> מקבלים ערך T.</p>
+<p>החלק המוזר בכל הסיפור הזה הוא האמירה שלי "קיימת קבוצה" כי אני לא מסביר - קיימת קבוצה <strong>איפה</strong>? וכאן הסיפור באמת מתחיל להסתבך. כשיש לי אוסף של נוסחאות מסדר ראשון, מה שאני קורא לו <strong>תורה</strong>, ואני בא להבין מה ערכי האמת של נוסחאות מסדר ראשון, צריך להתחיל עם <strong>פרשנות</strong> לסימונים שמופיעים בה. כאן אנחנו מניחים במובלע קיום של יקום מתמטי שממנו נלקחות הקבוצות שאפשר להציב בתוך המשתנים, אבל אנחנו לא יכולים לשלול את הקיום של <strong>כמה יקומים שונים</strong> כאלו, ובפרט לא לשלול את אפשרות הקיום של יקומי "צעצוע" שהם קטנים למדי ביחס ליקום המפלצתי שאנחנו חושבים עליו. למשל, אפשר לקחת בתור יקום מתמטי את <span class="math">\(\omega\)</span> עצמו; זה אומר שכל קבוצה שנציב במשתנים שלנו תהיה איבר של <span class="math">\(\omega\)</span> ושום דבר חוץ מזה. אם זה יהיה היקום שלנו, נראה מהר מאוד שבניסוח הפורמלי של אקסיומות צרמלו-פרנקל, כל האקסיומות מתקיימות יפה מאוד, למעט אחת: אקסיומת האינסוף. כלומר, מנקודת המבט הזו אקסיומת האינסוף לא מראה לנו שמשהו קיים, אלא <strong>שוללת פרשנות</strong> אפשרית אחת לתורה שלנו. זו דרך מאוד מועילה לחשוב על אקסיומות - בתור "פילטרים" שמסננים פרשנויות לא מתאימות של התורה שלנו. עוד נחזור לכל העניינים הללו בהמשך.</p>
+<p>כרגע, אבל, אני לא מניח עוד הנחות על היקום המתמטי שלנו חוץ מזה שכל איבריו הם קבוצות. אני מסמן אותו ב-<span class="math">\(V\)</span> וחסל. כזכור, <span class="math">\(V\)</span> הזה לא יכול להיות קבוצה ("קבוצת כל הקבוצות" לא קיימת), אבל קל לתת נוסחה ש"מתארת" אותו: <span class="math">\(x=x\)</span>. הנוסחה הזו נכונה <strong>לכל</strong> איבר של <span class="math">\(V\)</span>, ולכן אפשר לתאר את <span class="math">\(V\)</span> בתור "אוסף כל האיברים שמקיימים <span class="math">\(x=x\)</span>", או אפילו להתחצף ולכתוב <span class="math">\(V=\left\{ x\ |\ x=x\right\} \)</span>. הכתיב הזה הוא חצוף משתי סיבות: ראשית, כי אני מערבב בין <span class="math">\(x\)</span> שהוא סימן של משתנה (מה שמופיע בנוסחה <span class="math">\(x=x\)</span>) ובין <span class="math">\(x\)</span> שהוא סימון של איבר קונקרטי של <span class="math">\(V\)</span> (מה שמופיע בצד שמאל) אבל זה לא נורא. מה שבאמת נורא הוא שאני משתמש בכתיב הסוגריים המסולסלים שמשמש אותנו להגדיר קבוצות, למרות ש-<span class="math">\(V\)</span> היא לא קבוצה. ומה ש<strong>הכי</strong> נורא זה שאני אשתמש בסימון כמו <span class="math">\(x\in V\)</span> כדי לתאר שייכות למחלקה. כל זה נראה לגמרי כאילו אני מתייחס למחלקות בתור קבוצות. אז למה זה בסדר? ובכן, כי כל מה שאני עושה עם מחלקות זה בסך הכל <strong>כתיב מקוצר</strong>. אני יכול להעלים את הכתיב המקוצר הזה ולהישאר במקומו עם נוסחאות לוגיות והכל יעבוד באותה מידה בדיוק.</p>
+<p>בואו נראה דוגמא יותר קונקרטית - הסודרים. כשאני כותב <span class="math">\(\alpha\in\text{Ord}\)</span>, כלומר "<span class="math">\(\alpha\)</span> הוא סודר", למה אני מתכוון? אם נחזור להגדרה, סודר הוא קבוצה שהיא 1) טרנזיטיבית ו-2) סדורה בסדר מלא על ידי <span class="math">\(\in\)</span>. את שני אלו אפשר לנסח באמצעות נוסחה לוגית:</p>
+<p><span class="math">\(\forall\beta\forall\gamma\left(\left(\gamma\in\beta\wedge\beta\in\alpha\right)\to\gamma\in\alpha\right)\wedge\forall\beta\forall\gamma\left(\left(\beta\in\alpha\wedge\gamma\in\alpha\right)\to\left(\beta\in\gamma\vee\gamma\in\beta\right)\right)\)</span></p>
+<p>במקום לכתוב את כל הנוסחה הזו, אפשר לכתוב פשוט <span class="math">\(\alpha\in\text{Ord}\)</span>; זה סימון מקוצר מוסכם. זה לא אומר ש-<span class="math">\(\text{Ord}\)</span> היא קבוצה; כלומר, זה לא אומר שיש איבר ביקום שהאיברים שלו הם בדיוק האיברים של <span class="math">\(\text{Ord}\)</span>. הטענה שיש כזה איבר מנוסחת כך:</p>
+<p><span class="math">\(\exists A\left(\alpha\in A\leftrightarrow\alpha\in\text{Ord}\right)\)</span></p>
+<p>כאשר כאמור, ה-<span class="math">\(\alpha\in\text{Ord}\)</span> הוא פשוט העתק-הדבק של הנוסחה הגדולה מקודם. עכשיו, מה שראינו הוא שהנוסחה הזו של ה-<span class="math">\(\exists A\)</span> היא <strong>שקר</strong>, כלומר לא קיימת <span class="math">\(A\)</span> כזו. זו הסיבה שאנחנו אומרים ש-<span class="math">\(\text{Ord}\)</span> היא "מחלקה ממש".</p>
+<p>מוזר? כן, אז בואו נעבור לראות עוד שימוש של המושג הזה. איך אמר ג'ון פון-נוימן? "במתמטיקה לא מבינים דברים, במתמטיקה מתרגלים לדברים". אחרי שמתרגלים גם קל יותר להבין.</p>
+<h2>אקסיומת ההחלפה</h2>
+
+<p>מבין כל האקסיומות של צרמלו-פרנקל שתיארתי בסדרת הפוסטים הזו, אקסיומת ההחלפה היא זו שהכי חיפפתי וטרם הצגתי בצורה פורמלית, למרות השימושיות הרבה שלה. סוף סוף הגיע הזמן להציג אותה פורמלית, אז כמובן שכדאי להתחיל מהצגה לא פורמלית: בהצגה הזו, אקסיומת ההחלפה אומרת שאם מחלקה <span class="math">\(F\)</span> היא פונקציה ו-<span class="math">\(A\)</span> היא קבוצה, אז <span class="math">\(F\left(A\right)\)</span> היא קבוצה.</p>
+<p>אבל רגע, מה זאת אומרת "מחלקה <span class="math">\(F\)</span> היא פונקציה"? הרי "פונקציה" הוגדרה בתור סוג של יחס, שהוא קבוצה. איך משהו שאיננו קבוצה יכול להיות פונקציה? אנחנו שוב מותחים את השימוש בשפה שלנו. מה שקורה בפועל הוא ש-<span class="math">\(F\)</span> כזו היא סימון מקוצר לנוסחה <span class="math">\(\varphi\left(x,y,a_{1},\ldots,a_{n}\right)\)</span>. הכתיב הזה עם הסוגריים אומר "יש בנוסחה <span class="math">\(\varphi\)</span> את המשתנים החופשיים <span class="math">\(x,y,a_{1},\ldots,a_{n}\)</span>" כש"משתנה חופשי" הוא משתנה שלא נופל תחת הטווח של כמת עם השם שלו. למשל בנוסחה <span class="math">\(\forall x\left(x=y\right)\)</span> המשתנה <span class="math">\(y\)</span> חופשי והמשתנה <span class="math">\(x\)</span> לא (אם ההגדרות הללו לא ברורות באמת שכדאי לקרוא קודם על לוגיקה מסדר ראשון, זה לא כזה קשה!)</p>
+<p>בנוסחה <span class="math">\(\varphi\left(x,y,a_{1},\ldots,a_{n}\right)\)</span> הזו אני חושב על <span class="math">\(x,y\)</span> בתור האיברים של הזוג ש-<span class="math">\(\varphi\)</span> מגדירה, ועל <span class="math">\(a_{1},\ldots,a_{n}\)</span> בתור "פרמטרים" שמאפיינים את <span class="math">\(\varphi\)</span>. למשל, הנוסחה שהמשתנים שלה הם רק <span class="math">\(x,y\)</span> (בלי פרמטרים)</p>
+<p><span class="math">\(x\in y\wedge\forall z\in x\left(z\in y\right)\wedge\forall z\in y\left(z=x\vee z\in x\right)\)</span></p>
+<p>מה היא אומרת? ש-<span class="math">\(y=x\cup\left\{ x\right\} \)</span> (מה שעבור סודרים סימנתי ב-<span class="math">\(y=x+1\)</span> אבל כאן אנחנו עוסקים בקבוצות כלליות, לאו דווקא סודרים). כלומר, <span class="math">\(\varphi\left(x,y\right)\)</span> מקבלת ערך T אם ורק אם <span class="math">\(y=x\cup\left\{ x\right\} \)</span>. אפשר גם לסמן את זה <span class="math">\(\left(x,y\right)\in F\)</span>, כפי שכבר עשיתי קודם עם מחלקות.</p>
+<p>עכשיו, קל להוכיח שאם <span class="math">\(\varphi\left(x,y_{1}\right)\)</span> מקבלת ערך T וגם <span class="math">\(\varphi\left(x,y_{2}\right)\)</span> מקבלת ערך T (עבור הצבות קונקרטיות של קבוצות <span class="math">\(x,y_{1},y_{2}\)</span> למשתנים) אז <span class="math">\(y_{1}=y_{2}\)</span>; זו בדיוק התכונה שאנחנו דורשים מפונקציות. אז אפשר להשתמש בסימון <span class="math">\(F\left(x\right)\)</span> כדי לציין את <span class="math">\(y\)</span>, ואפשר לכתוב <span class="math">\(F\left(x\right)=x\cup\left\{ x\right\} \)</span> ויהיה ברור אל מה הכוונה אפילו אם <span class="math">\(F\)</span> איננה קבוצה. ואם <span class="math">\(A\)</span> היא כן קבוצה, אני יכול לחשוב על הקבוצה <span class="math">\(F\left(A\right)=\left\{ F\left(a\right)\ |\ a\in A\right\} \)</span>, אבל "לחשוב על הקבוצה" לא מוכיח שהיא קיימת; בשביל זה אני צריך את אקסיומת ההחלפה.</p>
+<p>פורמלית, אקסיומת ההחלפה היא לא אקסיומה בודדת, כלומר פסוק אחד ויחיד; יש לנו אקסיומת החלפה לכל נוסחה <span class="math">\(\varphi\left(x,y,a_{1},\ldots,a_{n}\right)\)</span> אפשרית (לכן לפעמים מדברים על <strong>סכמת</strong> אקסיומת ההחלפה - מין תבנית כזו שיוצקים לתוכה את ה-<span class="math">\(\varphi\)</span> ומקבלים אקסיומה), ועבור <span class="math">\(\varphi\)</span> הזה אקסיומת ההחלפה היא</p>
+<p><span class="math">\(\forall x\forall y\forall z\left(\varphi\left(x,y,a_{1},\ldots,a_{n}\right)\wedge\varphi\left(x,z,a_{1},\ldots,a_{n}\right)\to y=z\right)\to\)</span></p>
+<p><span class="math">\(\to\forall A\exists B\forall y\left(y\in B\leftrightarrow\left(\exists x\in A\right)\varphi\left(x,y,a_{1},\ldots,a_{n}\right)\right)\)</span></p>
+<p>החצי הראשון של האקסיומה אומר "<strong>אם</strong> <span class="math">\(\varphi\)</span> מתארת פונקציה" והחצי השני אומר "<strong>אז</strong> לכל קבוצה <span class="math">\(A\)</span> שעליה מפעילים את הפונקציה, קיימת קבוצה <span class="math">\(B\)</span> שהיא התמונה של <span class="math">\(A\)</span>".</p>
+<p>עכשיו אפשר סוף סוף לעשות עם זה משהו: אינדוקציה ורקורסיה על-סופיות. אבל מה זה אומר בכלל?</p>
+<h2>אינדוקציה על-סופית</h2>
+
+<p>במתמטיקה הרבה פעמים משתמשים בחופשיות במושגים "אינדוקציה" ו"רקורסיה" בתור מילים נרדפות, אבל עמוק בפנים יש להן משמעות פורמלית שונה. <strong>אינדוקציה</strong> מתארת את האופן שבו <strong>מוכיחים</strong> משהו בתהליך של הסקה מהפרט אל הכלל; <strong>רקורסיה</strong> מתארת את האופן שבו <strong>מגדירים</strong> משהו על קלט מסוים מתוך גרסאות פשוטות יותר של אותו הקלט. זה מה שצריך להיות לנו בראש - עם רקורסיה מגדירים, עם אינדוקציה מוכיחים.</p>
+<p>כשאני מדבר על אינדוקציה או רקורסיה "על-סופיות" ("טרנספיניטיות") אני מתכוון לכאלו שמסתמכות על כלל הסודרים; ככה אפשר להבדיל מסוגים אחרים של אינדוקציה ורקורסיה. למשל, האינדוקציה ה"רגילה" מתבססת רק על המספרים הטבעיים.</p>
+<p>בואו ניזכר איך אינדוקציה רגילה עובדת: יש לנו טענה <span class="math">\(P\)</span> שיכולה להיות נכונה או שגויה עבור מספרים טבעיים שונים ומשונים. אנחנו כותבים <span class="math">\(P\left(n\right)\)</span> כדי לומר "הטענה <span class="math">\(P\)</span> מתקיימת עבור המספר הטבעי <span class="math">\(n\)</span>". הוכחה באינדוקציה פירושה להוכיח ש-<span class="math">\(P\)</span> מתקיימת <strong>לכל</strong> הטבעיים, וזאת על ידי הוכחה של שתי טענות:</p>
+<ol> <li><span class="math">\(P\left(0\right)\)</span> (הטענה מתקיימת עבור המספר הטבעי 0)</li>
+
+
+<li><span class="math">\(P\left(n\right)\to P\left(n+1\right)\)</span> (<strong>אם</strong> הטענה מתקיימת עבור המספר הטבעי <span class="math">\(n\)</span> <strong>אז</strong> היא מתקיימת עבור המספר הטבעי <span class="math">\(n+1\)</span>).</li>
+
+</ol>
+
+<p>שני אלו ביחד, כאמור, מוכיחים שהטענה מתקיימת לכל הטבעיים, כלומר <span class="math">\(\forall nP\left(n\right)\)</span> כשהכמת <span class="math">\(\forall\)</span> ("לכל") רץ על כל הטבעיים.</p>
+<p>לפעמים אוהבים קצת לחסוך בכתיבה ולנסח אינדוקציה מתמטית בצורה הבאה:</p>
+<p><span class="math">\(\forall n\left(\forall k<n\left(P\left(k\right)\right)\to P\left(n\right)\right)\to\forall nP\left(n\right)\)</span></p>
+<p>הזוועה הזו אומרת "אם לכל <span class="math">\(n\)</span> טבעי זה נכון שאם לכל <span class="math">\(k<n\)</span> מתקיים <span class="math">\(P\left(k\right)\)</span> נובע מכך ש-<span class="math">\(P\left(n\right)\)</span>, אז <span class="math">\(P\)</span> נכון לכל הטבעיים". הניסוח הזה נקרא <strong>אינדוקציה שלמה</strong> והוא שקול לאינדוקציה "רגילה" אבל לפעמים יותר נוח, כי כדי להוכיח ש-<span class="math">\(P\left(n\right)\)</span> מתקיים אפשר להשתמש ישירות בכך ש-<span class="math">\(P\left(k\right)\)</span> מתקיים לכל <span class="math">\(k<n\)</span> ולא רק למספר שבא מייד לפני <span class="math">\(n\)</span>. לפעמים הניסוח הזה לא חוסך הרבה; עדיין צריך להוכיח בנפרד את המקרה עבור 0, וכשמוכיחים לאיבר כללי מספיק להסתמך על זה שהטענה מתקיימת לזה שלפניו.</p>
+<p>מה שנחמד בניסוח של אינדוקציה שלמה זה שהוא עובד בדיוק באותה מידה עבור סודרים:</p>
+<p><span class="math">\(\forall\alpha\left(\forall\beta<\alpha\left(P\left(\beta\right)\right)\to P\left(\alpha\right)\right)\to\forall\alpha P\left(\alpha\right)\)</span></p>
+<p>כלומר, דרך להוכיח שטענה מתקיימת לכל הסודרים (כולם! אפילו שראינו שמחלקת כל הסודרים גדולה מכדי להיות קבוצה!) היא להוכיח שלכל סודר, אם הטענה מתקיימת לכל הסודרים הקטנים ממנו, היא מתקיימת גם עבורו.</p>
+<p>איך מוכיחים שאינדוקציה כזו באמת עובדת? ובכן, נניח ש-<span class="math">\(P\)</span> מקיימת את התכונה שתיארתי: לכל <span class="math">\(\alpha\)</span>, אם <span class="math">\(P\left(\beta\right)\)</span> לכל <span class="math">\(\beta<\alpha\)</span> נובע מכך ש-<span class="math">\(P\left(\alpha\right)\)</span>, ועכשיו בואו נניח ש-<span class="math">\(P\)</span> <strong>לא</strong> מתקיימת לכל הסודרים, אז קיים סודר מינימלי <span class="math">\(\alpha\)</span> שעבורו היא לא מתקיימת, אבל המינימליות שלו פירושה שלכל <span class="math">\(\beta<\alpha\)</span> <strong>כן</strong> מתקיים <span class="math">\(P\left(\beta\right)\)</span>, ומכאן שגם <span class="math">\(P\left(\alpha\right)\)</span> עצמו מתקיים.</p>
+<p>בהוכחה הזו השתמשתי די בחופשיות בכך שבכל מחלקה של סודרים (לאו דווקא קבוצה) יש איבר מינימלי. זה לא נראה מובן מאליו אבל זה די פשוט: ניקח סודר <strong>כלשהו</strong> ששייך למחלקה; אז אנחנו יודעים שא) הסודר הזה הוא <strong>כן</strong> קבוצה, וקבוצה סדורה היטב, כלומר בכל תת-קבוצה שלו יש איבר מינימלי; וב) הסודר הזה מכיל את כל הסודרים שקטנים ממנו, ובפרט את כל האיברים באוסף שקטנים ממנו. לכן או שהוא האיבר המינימלי, או שאפשר לשלוף מתוכו את האיבר המינימלי.</p>
+<p>יופי, אז הוכחנו שאינדוקציה על-סופית "עובדת", אבל אני עדיין רוצה לנסח אותה באופן שמזכיר אינדוקציה "רגילה" ולא אינדוקציה שלמה. בשביל זה אני צריך מושג חדש. השלב שבו אינדוקציה על מספרים טבעיים מפסיקה לעבוד הוא כשמגיעים אל <span class="math">\(\omega\)</span>; זה סודר שהוא לא עוקב מיידי של אף מספר טבעי (כלומר, לא שווה <span class="math">\(n+1\)</span> לאף טבעי <span class="math">\(n\)</span>) ולכן האינדוקציה לא "מגיעה" אליו. אנחנו צריכים חוק חדש שמדבר על <span class="math">\(\omega\)</span> וסודרים שדומים לו.</p>
+<p>אז אני מגדיר <strong>סודר גבולי</strong> בתור סודר שהוא לא עוקב מיידי של אף סודר אחר, כלומר הוא לא מהצורה <span class="math">\(\alpha+1\)</span> עבור אף סודר (כזכור, <span class="math">\(\alpha+1\triangleq\alpha\cup\left\{ \alpha\right\} \)</span>). הסודר הגבולי הראשון הוא 0, והשני הוא <span class="math">\(\omega\)</span> וכן הלאה.</p>
+<p>עכשיו אפשר לנסח אינדוקציה על-סופית בצורה יותר "קלאסית". נניח שיש לנו טענה <span class="math">\(P\)</span> על סודרים שמקיימת</p>
+<ol> <li><span class="math">\(P\left(0\right)\)</span></li>
+
+
+<li>אם <span class="math">\(P\left(\alpha\right)\)</span> אז <span class="math">\(P\left(\alpha+1\right)\)</span></li>
+
+
+<li>אם <span class="math">\(\alpha\ne0\)</span> הוא סודר גבולי ולכל <span class="math">\(\beta<\alpha\)</span> מתקיים <span class="math">\(P\left(\beta\right)\)</span>, אז <span class="math">\(P\left(\alpha\right)\)</span></li>
+
+</ol>
+
+<p>אז אפשר להסיק ש-<span class="math">\(P\)</span> מתקיימת לכל <span class="math">\(\alpha\)</span>.</p>
+<p>עכשיו אפשר לעבור לדבר על רקורסיה, סוף סוף.</p>
+<h2>רקורסיה על-סופית</h2>
+
+<p>כמו עם אינדוקציה, גם כאן כדאי להתחיל עם דוגמא מעולם המספרים הטבעיים. איזו דוגמא מפורסמת יש למשהו שמוגדר ברקורסיה? זה קל: <strong>סדרת פיבונאצ'י</strong> היא ללא ספק הסדרה הרקורסיבית המפורסמת בעולם. בואו נזכיר מהי: זו סדרה <span class="math">\(F_{0},F_{1},F_{2},\ldots\)</span> שמוגדרת על ידי הכללים:</p>
+<ul> <li><span class="math">\(F_{0}=0\)</span></li>
+
+
+<li><span class="math">\(F_{1}=1\)</span></li>
+
+
+<li><span class="math">\(F_{n}=F_{n-1}+F_{n-2}\)</span> לכל <span class="math">\(n>1\)</span></li>
+
+</ul>
+
+<p>הכללים הללו בעצם נחלקים לשני סוגים: יש לנו <strong>תנאי התחלה</strong>, שהם ערכים מפורשים של <span class="math">\(F\)</span> עבור איברים ספציפיים, במקרה שלנו <span class="math">\(F_{0},F_{1}\)</span>, ויש לנו <strong>כלל רקורסיבי</strong> שמאפשר לקבל את <span class="math">\(F_{n}\)</span> מתוך ערכים קודמים בסדרה. אנחנו רוצים להכליל את הרעיון הזה גם לסודרים, אבל בסודרים הסיטואציה קצת יותר מסובכת בגלל שיש לנו סודרים גבוליים שלא נוכל לכתוב <span class="math">\(\alpha-1\)</span> וכדומה עבורם. אז בואו נשתמש בניסוח קצת שונה, וקצת יותר מסורבל למראה במבט ראשון, גם עבור מספרים טבעיים.</p>
+<p>הרעיון הוא כזה. מה זו בעצם "סדרה"? אנחנו חושבים עליה בתור פונקציה <span class="math">\(F:\mathbb{N}\to A\)</span> עבור קבוצה <span class="math">\(A\)</span> כלשהי; כלומר, דרך כלשהי להתאים לכל מספר טבעי איבר של <span class="math">\(A\)</span>. בסדרה רקורסיבית, כל איבר נבנה בצורה כלשהי מהאיברים הקודמים; פורמלית, יש פונקציה <span class="math">\(G\)</span> שמקבלת סדרה <span class="math">\(G\left(a_{0},a_{1},\ldots,a_{n-1}\right)\)</span> ומוציאה כפלט את <span class="math">\(a_{n}\)</span>, שהוא האיבר הבא שאמור להופיע בסדרה בתנאי שהאיברים הקודמים היו <span class="math">\(a_{0},\ldots,a_{n}\)</span>. עכשיו, כשאנחנו בונים את הסדרה <span class="math">\(F\)</span>, אנחנו עושים את זה על ידי הפעלות של <span class="math">\(G\)</span> שמקבלת בכל פעם את האיברים של <span class="math">\(F\)</span> שכבר נבנו; אפשר לסמן את זה <span class="math">\(F|_{n}\)</span> - הצמצום של התחום של <span class="math">\(F\)</span> מהקבוצה <span class="math">\(\mathbb{N}\)</span> לקבוצה <span class="math">\(n=\left\{ 0,1,2,\ldots,n-1\right\} \)</span>, ואז מה שקורה הוא</p>
+<p><span class="math">\(F\left(n\right)=G\left(F|_{n}\right)\)</span></p>
+<p>כלומר, הסדרה ה<strong>אינסופית</strong> <span class="math">\(F\)</span> נבנית איכשהו מתוך פונקציה <span class="math">\(G\)</span> שהקלטים שלה הן סדרות <strong>סופיות</strong>.</p>
+<p>מסורבל? כן, אבל מה שנחמד פה הוא שזה עובד באותה מידה גם עבור הסודרים. אבל צריך להיזהר קצת. אם אנחנו רוצים ש-<span class="math">\(F\)</span> תהיה סדרה על-סופית, כלומר פונקציה שתוכל לקבל כקלט כל סודר, זה אומר שהתחום של <span class="math">\(F\)</span> הוא אוסף כל הסודרים - והאוסף הזה, כבר אמרתי, גדול מכדי להיות קבוצה. לכן <span class="math">\(F\)</span> היא מחלקה. כבר ראינו שמחלקה יכולה לתאר פונקציה, אז אני מקווה שאנחנו בסדר עם זה; כל החלק הראשון של הפוסט היה מיועד כדי שלא נתקומם כאן.</p>
+<p>אם כן, הרעיון הוא שאם נתונה לי פונקציה <span class="math">\(G\)</span> (וגם זו "פונקציה" במובן של מחלקה) שמוגדרת על מחלקת כל הקבוצות <span class="math">\(V\)</span>, אני יכול להשתמש בה כדי ליצור סדרה על-סופית אחת ויחידה <span class="math">\(F\)</span>, שמקיימת</p>
+<p><span class="math">\(F\left(\alpha\right)=G\left(F|_{\alpha}\right)\)</span></p>
+<p>לכל הסודרים, כאשר <span class="math">\(F|_{\alpha}\)</span> הוא הצמצום של <span class="math">\(F\)</span> לאיברי הסודר <span class="math">\(\alpha\)</span>, דהיינו הסדרה <span class="math">\(\left\{ F_{\beta}\right\} _{\beta<\alpha}\)</span> (הסדרה הזו היא <strong>כן</strong> קבוצה בזכות אקסיומת ההחלפה, שמחליפה את אברי הסודר <span class="math">\(\alpha\)</span> בזוגות <span class="math">\(\left(\beta,F_{\beta}\right)\)</span>, ולכן קלט לגיטימי של <span class="math">\(G\)</span>).</p>
+<p>את הטענה שבאמת קיימת סדרה אחת ויחידה <span class="math">\(F\)</span> כזו צריך להוכיח; אז בונים את <span class="math">\(F\)</span> בתור נוסחה לוגית <span class="math">\(\varphi\)</span> עם שני משתנים, <span class="math">\(\alpha,x\)</span>, כך ש-<span class="math">\(\varphi\left(\alpha,x\right)\)</span> בודקת שקיימת סדרה <span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha}\)</span> כך שהדברים הללו מתקיימים</p>
+<ol> <li>לכל <span class="math">\(\beta<\alpha\)</span> מתקיים <span class="math">\(a_{\beta}=G\left(\left\{ a_{\gamma}\right\} _{\gamma<\beta}\right)\)</span></li>
+
+
+<li><span class="math">\(x=G\left(\left\{ a_{\beta}\right\} _{\beta<\alpha}\right)\)</span></li>
+
+</ol>
+
+<p>כדי להראות שזה עובד, משתמשים באינדוקציה על-סופית. ראשית, אנחנו רוצים להראות ש-<span class="math">\(F\)</span> היא באמת פונקציה, כלומר שלכל <span class="math">\(\alpha\)</span>, אם קיימים <span class="math">\(x_{1},x_{2}\)</span> כך ש-<span class="math">\(\varphi\left(\alpha,x_{1}\right)\)</span> וגם <span class="math">\(\varphi\left(\alpha,x_{2}\right)\)</span> שניהם T אז <span class="math">\(x_{1}=x_{2}\)</span>. מה אנחנו יודעים על <span class="math">\(x_{1},x_{2}\)</span>? אנחנו יודעים שעבור <span class="math">\(x_{1}\)</span> קיימת סדרה <span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha}\)</span> שמקיימת את תנאי 1, ובנוסף <span class="math">\(x_{1}=G\left(\left\{ a_{\beta}\right\} _{\beta<\alpha}\right)\)</span>; ואנחנו יודעים שעבור <span class="math">\(x_{2}\)</span> קיימת סדרה <span class="math">\(\left\{ b_{\beta}\right\} _{\beta<\alpha}\)</span> שמקיימת את תנאי 1 ובנוסף <span class="math">\(x_{2}=G\left(\left\{ a_{\beta}\right\} _{\beta<\alpha}\right)\)</span>. אז מכיוון שאנחנו יודעים ש-<span class="math">\(G\)</span> פונקציה, אם נראה ש-<span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha}=\left\{ b_{\beta}\right\} _{\beta<\alpha}\)</span>, ינבע מכך <span class="math">\(x_{1}=x_{2}\)</span>. ואיך נראה ששתי הסדרות הללו שוות? בעזרת תנאי 1, ובעזרת אינדוקציה.</p>
+<p>אנחנו משתמשים באינדוקציה על <span class="math">\(\beta\)</span> ומראים ש-<span class="math">\(a_{\beta}=b_{\beta}\)</span> לכל <span class="math">\(\beta<\alpha\)</span>: הבסיס הוא <span class="math">\(\beta=0\)</span> ועבורו <span class="math">\(a_{0}=G\left(\emptyset\right)=b_{0}\)</span> (כי במקרה זה לא קיים <span class="math">\(\gamma<\beta\)</span> ולכן הסדרה של תנאי 1 ריקה). לכל סודר אחר, גבולי או עוקב, אנחנו מניחים שלכל <span class="math">\(\gamma<\beta\)</span> כבר מתקיים <span class="math">\(a_{\gamma}=b_{\gamma}\)</span>, ומכאן שהסדרות <span class="math">\(\left\{ a_{\gamma}\right\} _{\gamma<\beta},\left\{ b_{\gamma}\right\} _{\gamma<\beta}\)</span> שוות, ולכן </p>
+<p><span class="math">\(a_{\beta}=G\left(\left\{ a_{\gamma}\right\} _{\gamma<\beta}\right)=G\left(\left\{ b_{\gamma}\right\} _{\gamma<\beta}\right)=b_{\beta}\)</span></p>
+<p>וזה מסיים את ההוכחה באינדוקציה. די פשוט!</p>
+<p>יפה, אז מה שהשגנו עד כה הוא להראות ש-<span class="math">\(F\)</span> היא באמת פונקציה. אבל עדיין צריך להראות ש-<span class="math">\(F\)</span> מוגדרת <strong>לכל</strong> סודר <span class="math">\(\alpha\)</span>, כלומר שתמיד קיים <span class="math">\(x\)</span> כך ש-<span class="math">\(\varphi\left(\alpha,x\right)\)</span> היא בעלת ערך T; זה לא מתחייב ממה שראינו עד כה. גם את זה נוכיח, כמה מפתיע, באינדוקציה על <span class="math">\(\alpha\)</span>.</p>
+<p>עבור <span class="math">\(\alpha=0\)</span>, בוודאי ש-<span class="math">\(x=G\left(\emptyset\right)\)</span> ישיג את המטרה ש-<span class="math">\(\varphi\left(0,x\right)\)</span> תקבל T; הסדרה של ה"קיימת סדרה" במקרה הזה היא בהכרח ריקה (כי האינדקסים שלה הם <span class="math">\(\beta<0\)</span> ואין כאלו) ולכן תנאי 1 מתקיים באופן ריק ותנאי 2 הוא בדיוק <span class="math">\(x=G\left(\emptyset\right)\)</span>. אז זה הבסיס.</p>
+<p>עבור <span class="math">\(\alpha+1\)</span>, אנו מניחים שהטענה נכונה עבור <span class="math">\(\alpha\)</span>, כלומר קיים איבר שאסמן <span class="math">\(a_{\alpha}\)</span> וקיימת סדרה <span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha}\)</span> שמקיימת את תנאי 1 ובנוסף <span class="math">\(a_{\alpha}=G\left(\left\{ a_{\beta}\right\} _{\beta<\alpha}\right)\)</span>. נרחיב את הסדרה הזו לסדרה <span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha+1}\)</span> על ידי הוספת <span class="math">\(a_{\alpha}\)</span> בתור האיבר האחרון שלה. נסמן <span class="math">\(x=G\left(\left\{ a_{\beta}\right\} _{\beta<\alpha+1}\right)\)</span> (קיים <span class="math">\(x\)</span> כזה כי <span class="math">\(G\)</span> היא פונקציה) ועכשיו ברור ש-<span class="math">\(\varphi\left(\alpha+1,x\right)\)</span> הוא T.</p>
+<p>אם <span class="math">\(\alpha\)</span> הוא סודר גבולי, אנחנו מניחים שהטענה נכונה לכל <span class="math">\(\beta<\alpha\)</span>. עכשיו מגיע החלק הטריקי והטכני ביותר בהוכחה: אני רוצה לבנות את הסדרה <span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha}\)</span>. אם אני אבנה אותה, אני אוכל להגדיר <span class="math">\(x=G\left(\left\{ a_{\beta}\right\} _{\beta<\alpha}\right)\)</span> ואז <span class="math">\(\varphi\left(\alpha,x\right)\)</span> יתקיים וכולנו נשמח. אבל בשביל זה צריך להראות שהסדרה <span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha}\)</span> <strong>קיימת</strong>. לא קיימת במובן הנפנוף-ידיימי של מחלקות; קיימת בתור אובייקט מתמטי קונקרטי - קבוצה - ביקום שלנו.</p>
+<p>אז ראשית כל, אינטואיציה. אם יש לנו <span class="math">\(\beta_{1}<\beta_{2}<\alpha\)</span>, אנחנו יודעים שהסדרה עד <span class="math">\(\beta_{1}\)</span> היא תת-סדרה של הסדרה עד <span class="math">\(\beta_{2}\)</span>. פורמלית, מכיוון ש-<span class="math">\(\beta_{1}\)</span> מקיימת את הנחת האינדוקציה קיימת עבורה סדרה, <span class="math">\(\left\{ a_{\gamma}\right\} _{\gamma\le\beta_{1}}\)</span> שמקיימת את תכונות 1-2. בדומה עבור <span class="math">\(\beta_{2}\)</span> קיימת סדרה <span class="math">\(\left\{ b_{\gamma}\right\} _{\gamma\le\beta_{2}}\)</span> שכזו. אפשר להוכיח באינדוקציה, כמו שעשינו קודם, שעבור <span class="math">\(\gamma\le\beta_{1}\)</span> מתקיים <span class="math">\(a_{\gamma}=b_{\gamma}\)</span> - שתי הסדרות זהות עד שהסדרה הקצרה ביותר נגמרת. זה נכון לכל זוג <span class="math">\(\beta_{1}<\beta_{2}<\alpha\)</span>, ולכן אם נחשוב לרגע על שתי הסדרות הללו בתור קבוצות של זוגות סדורים:</p>
+<p><span class="math">\(\left\{ \left(0,a_{0}\right),\left(1,a_{1}\right),\ldots,\left(\beta_{1},a_{\beta_{1}}\right)\right\} \)</span></p>
+<p><span class="math">\(\left\{ \left(0,a_{0}\right),\left(1,a_{1}\right),\ldots,\left(\beta_{1},a_{\beta_{1}}\right),\ldots,\left(\beta_{2},a_{\beta_{2}}\right)\right\} \)</span></p>
+<p>אז אחרי שנאחד את שתי הקבוצות הללו נקבל את הגדולה יותר, בלי "איברים מיותרים" נוספים.</p>
+<p>על פי אותו הגיון, אם תהיה לנו קבוצה שהאיברים שלה הן <strong>כל הסדרות</strong> שמתאימות לכל אחד מה-<span class="math">\(\beta<\alpha\)</span> האפשריים, איחוד של כל אברי הקבוצה הזו יתן לנו בדיוק את הסדרה <span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha}\)</span> המבוקשת: לכל <span class="math">\(\beta<\alpha\)</span> אכן יהיה בדיוק איבר אחד בסדרה, והסדרה תקיים את החוקיות של דרישה (1). רק צריך להראות שקיימת קבוצה שהאיברים שלה הן <strong>כל הסדרות</strong>. הקבוצה הזו מתקבלת <strong>מאקסיומת ההחלפה</strong> כשמפעילים אותה על <span class="math">\(\alpha\)</span> ומחליפים כל <span class="math">\(\beta\)</span> בסדרה <span class="math">\(\left\{ a_{\gamma}\right\} _{\gamma\le\beta_{1}}\)</span> . השימוש הזה באקסיומת ההחלפה דורש בעצמו עבודה טכנית - להראות שיש פסוק שמקבל זוג של <span class="math">\(\beta\)</span> וסדרה <span class="math">\(\left\{ a_{\gamma}\right\} _{\gamma\le\beta}\)</span> ומוודא שהסדרה <span class="math">\(\left\{ a_{\gamma}\right\} _{\gamma\le\beta}\)</span> מקיימת את תנאים 1-2 ושהיא כוללת את כל הסודרים עד וכולל <span class="math">\(\beta\)</span>, וש-<span class="math">\(\beta\)</span> הוא בכלל סודר... הבנו את הרעיון, זה הזמן להתחיל לחפף.</p>
+<p>לסיום, בואו נוכיח יחידות: נניח ש-<span class="math">\(F,F^{\prime}\)</span> הן שתי פונקציות שמקיימות שתיהן <span class="math">\(F\left(\alpha\right)=G\left(F|_{\alpha}\right)\)</span> ו-<span class="math">\(F^{\prime}\left(\alpha\right)=G\left(F^{\prime}|_{\alpha}\right)\)</span> ונוכיח ש-<span class="math">\(F\left(\alpha\right)=F^{\prime}\left(\alpha\right)\)</span> לכל סודר <span class="math">\(\alpha\)</span> (כאן אנחנו נעזרים בכך שאנחנו כבר יודעים ש-<span class="math">\(F,F^{\prime}\)</span> מוגדרות לכל סודר). איך? באינדוקציה, כמובן! ההוכחה טריוויאלית, כי <span class="math">\(F|_{\alpha}=F^{\prime}|_{\alpha}\)</span> אם אנחנו מניחים את נכונות הטענה לכל <span class="math">\(\beta<\alpha\)</span> (כי צמצמנו את שתי הפונקציות הללו אל תחום שבו הן שוות) ולכן <span class="math">\(F\left(\alpha\right)=G\left(F|_{\alpha}\right)=G\left(F^{\prime}|_{\alpha}\right)=F^{\prime}\left(\alpha\right)\)</span>, מה שמסיים את ההוכחה.</p>
+<h2>דוגמא מועילה במיוחד: ההיררכייה המצטברת</h2>
+
+<p>אינדוקציה ורקורסיה על-סופיות הן דבר מועיל, ואנחנו מתעסקים בקבוצות, אז מה יותר מועיל מלהוכיח דברים באינדוקציה על-סופית על קבוצות, ולהגדיר קבוצות בעזרת רקורסיה על-סופית? הבעיה היא ששתיהן דורשת <strong>סדרה</strong>, וקבוצות לא מסודרות בסדרה, הן... בלאגן אחד גדול. אבל יש טריק פשוט שמאפשר לנו לעבור מרמת הקבוצה לרמת הסדרה - מה שנקרא <strong>ההיררכייה המצטברת</strong>, שהוא דרך להתאים לכל קבוצה "דרגה" שהיא מספר סודר כלשהו, כך שלכל קבוצה - הדרגות של כל האיברים שלה קטנות יותר. זה מאפשר לנו להוכיח באינדוקציה דברים על קבוצות: מוכיחים באינדוקציה על-סופית על הדרגות, ואז בכל פעם שיש לנו קבוצה שצריך להוכיח עליה משהו, אפשר להניח שאותו משהו כבר מתקיים לכל איבריה.</p>
+<p>אם כן, הרעיון הוא שקיימת סדרה על-סופית <span class="math">\(V_{0},V_{1},V_{2},\ldots\)</span> של קבוצות כך שלכל קבוצה קיימת <span class="math">\(V_{\alpha}\)</span> בהיררכייה שהיא שייכת אליה. דרך אפשרית אחת להגדיר את ההיררכייה היא בתור <span class="math">\(V_{\alpha}=\mathcal{P}\left(\bigcup_{\beta<\alpha}V_{\beta}\right)\)</span>, מה שנותן</p>
+<p><span class="math">\(V_{0}=\mathcal{P}\left(\emptyset\right)=\left\{ \emptyset\right\} \)</span></p>
+<p><span class="math">\(V_{1}=\mathcal{P}\left(\left\{ \emptyset\right\} \right)=\left\{ \emptyset,\left\{ \emptyset\right\} \right\} \)</span></p>
+<p><span class="math">\(V_{2}=\mathcal{P}\left(\left\{ \emptyset,\left\{ \emptyset\right\} \right\} \right)=\left\{ \emptyset,\left\{ \emptyset\right\} ,\left\{ \left\{ \emptyset\right\} \right\} \left\{ \emptyset,\left\{ \emptyset\right\} \right\} \right\} \)</span></p>
+<p>וכן הלאה וכן הלאה. אז הדרגה של <span class="math">\(\emptyset\)</span> היא 0 ושל <span class="math">\(\left\{ \emptyset,\left\{ \emptyset\right\} \right\} \)</span> היא 2 וכן הלאה.</p>
+<p>למה כל קבוצה שייכת לדרגה כלשהי בהיררכייה? ובכן, זה לא לגמרי מובן מאליו - כדי להוכיח את זה אני אשתמש באחת מהאקסיומות של ZFC שאני לא בטוח אם הצגתי עד כה - <strong>אקסיומת היסוד</strong>. אדבר עליה בפירוט בהמשך; לעת עתה מה שצריך לדעת הוא שהיא באה למנוע סיטואציות הזויות כמו קבוצות <span class="math">\(A\)</span> שמקיימות <span class="math">\(A\in A\)</span>, ופורמלית אני מגדיר אותה באופן הבא: לכל קבוצה לא ריקה <span class="math">\(A\)</span>, קיים ב-<span class="math">\(A\)</span> איבר מינימלי ביחס ל-<span class="math">\(\in\)</span> (כלומר קיים <span class="math">\(x\in A\)</span> כך שלכל <span class="math">\(y\in A\)</span> מתקיים <span class="math">\(y\notin x\)</span>).</p>
+<p>בואו ניקח קבוצה <span class="math">\(A\)</span> כלשהי ונניח שלכל <span class="math">\(x\in A\)</span>, קיים סודר <span class="math">\(\alpha_{x}\)</span> כך ש-<span class="math">\(x\in V_{\alpha_{x}}\)</span>. אז נגדיר סודר חדש, <span class="math">\(\overline{\alpha}=\bigcup\left\{ \alpha_{x}+1\ |\ x\in A\right\} \)</span>. קיבלנו סודר כך ש-<span class="math">\(\alpha_{x}<\overline{\alpha}\)</span> לכל <span class="math">\(x\in A\)</span>, אז <span class="math">\(\bigcup_{\beta<\overline{\alpha}}V_{\beta}\)</span> כוללת את כל ה-<span class="math">\(x\in A\)</span>-ים, ולכן <span class="math">\(A\in V_{\overline{\alpha}}=\mathcal{P}\left(\bigcup_{\beta<\overline{\alpha}}V_{\beta}\right)\)</span>. אז זה מסביר למה, באופן לא מפתיע, אם כל האיברים של קבוצה שייכים להיררכייה אז היא עצמה שייכת להיררכייה; אבל למה אפשר תמיד להניח שכל האיברים של קבוצה יהיו שייכים להיררכייה?</p>
+<p>בבירור מסתתר כאן טיעון כלשהו שמדבר לא רק על קבוצה והאיברים שלה אלא גם על האיברים של האיברים שלה והאיברים-של-האיברים-של-האיברים שלה וכן הלאה. צריך לפרמל את זה איכשהו, אז אפשר לדבר על <strong>הסגור הטרנזיטיבי</strong> של קבוצה שהוא מה שמכיל את כל הדברים הללו. בשביל הגדרה פורמלית, נגדיר <span class="math">\(A^{\prime}=\bigcup_{x\in A}x\)</span>: זו הקבוצה שאבריה הם כל האיברים-של-איברים של <span class="math">\(A\)</span>. עכשיו אפשר להגדיר סגור טרנזיטיבי על ידי <span class="math">\(A^{*}=A\cup A^{\prime}\cup A^{\prime\prime}\cup\ldots\)</span>. נשאר להוכיח את הטענה שבהינתן <span class="math">\(A\)</span>, לכל <span class="math">\(x\in A^{*}\)</span> מתקיים ש-<span class="math">\(x\)</span> שייך להיררכייה המצטברת. זו טענה חזקה יותר מהטענה הקודמת, כי <span class="math">\(A\subseteq A^{*}\)</span> ולכן אם הטענה נכונה עבור <span class="math">\(A^{*}\)</span> היא בוודאי נכונה עבור <span class="math">\(A\)</span>; אבל היתרון בכך שהיא חזקה יותר הוא שעכשיו יש לנו גם יותר לעבוד איתו ב"צעד האינדוקציה" (במרכאות, כי אנחנו לא באמת מבצעים פה אינדוקציה).</p>
+<p>בואו נניח עכשיו בשלילה שב-<span class="math">\(A^{*}\)</span> יש איברים ש<strong>אינם</strong> שייכים להיררכייה המצטברת. אז בזכות אקסיומת היסוד, אני יכול להניח שיש ביניהם איבר מינימלי <span class="math">\(x\)</span>. אם כל האיברים של <span class="math">\(x\)</span> כן שייכים להיררכייה המצטברת, כבר ראינו שמכך ינבע שגם <span class="math">\(x\)</span> שייך. אם כן, יהי <span class="math">\(y\in x\)</span> כלשהו. אם <span class="math">\(x\in A^{\left(n\right)}\)</span> אז <span class="math">\(y\in A^{\left(n+1\right)}\)</span>, ולכן <span class="math">\(y\in A^{*}\)</span> בעצמו. המינימליות של <span class="math">\(x\)</span> והעובדה ש-<span class="math">\(y\in x\)</span> אומרת לנו שלא ייתכן שגם <span class="math">\(y\)</span> לא שייך להיררכייה המצטברת, ולכן כל האיברים של <span class="math">\(x\)</span> שייכים להיררכייה המצטברת, ולכן גם <span class="math">\(x\)</span> עצמו, וסיימנו.</p>
+<p>מכאן ואילך נוכל להשתמש בחופשיות בהיררכייה המצטברת בהוכחות. פורמלית, לכל קבוצה <span class="math">\(A\)</span> נתאים סודר <span class="math">\(\text{rank}\left(A\right)\)</span> כך ש-<span class="math">\(\text{rank}\left(A\right)=\min\left\{ \alpha\ |\ A\in V_{\alpha}\right\} \)</span> ונקרא לזה <strong>הדרגה</strong> של <span class="math">\(A\)</span>, ואז האינדוקציה/רקורסיה שלנו תהיה על הדרגה. אנחנו רוצים להיות מסוגלים להניח שלכל <span class="math">\(A\)</span>, הדרגה של כל האיברים של <span class="math">\(A\)</span> קטנה מהדרגה של <span class="math">\(A\)</span> עצמה (ולכן אפשר להניח באינדוקציה שהטענה נכונה עבורם/להניח שערכם כבר הוגדר ברקורסיה). למה זה נכון? כי אם <span class="math">\(A\in V_{\alpha}\)</span>, כש-<span class="math">\(\alpha\)</span> הוא המינימלי בעל תכונה זו, אז <span class="math">\(A\in\mathcal{P}\left(\bigcup_{\beta<\alpha}V_{\beta}\right)\)</span>, מה שאומר שכל אברי <span class="math">\(A\)</span> שייכים ל-<span class="math">\(V_{\beta}\)</span> עם <span class="math">\(\beta<\alpha\)</span>.</p>
+<p>זהו, סיימנו עם ההירכייה המצטברת, ולכן עם הפוסט הזה. מה עכשיו? סיימנו את הדברים הבסיסיים שאפשר לומר על סודרים, ואפשר לעבור אל המושג הכי מלהיב שאנחנו יכולים להגדיר בעזרתם בשלב הזה: <strong>עוצמות</strong>. זה מה שיקרה בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2023/01/24/cardinals/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת הקבוצות - עוצמות</span>
+            </a>
+            
+            
+            
+            <a href="/2023/01/14/ordinal_arithmetic/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">תורת הקבוצות - אריתמטיקה של סודרים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

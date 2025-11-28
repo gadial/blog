@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>איך מוצאים את הסכום של סדרה חשבונית וסדרה הנדסית? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>איך מוצאים את הסכום של סדרה חשבונית וסדרה הנדסית?</h1>
+            <div class="post-meta">
+                <span class="date">2019-05-30</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/כללי.html">כללי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/טור הנדסי.html">טור הנדסי</a>
+                    
+                    <a href="/tags/טור חשבוני.html">טור חשבוני</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אני רוצה להקדיש פוסט ייעודי לדברים שכבר הופיעו בבלוג שלל פעמים, בתור הערות אגב בפוסטים אחרים: הסכומים של סדרות חשבוניות והנדסיות. אם אתם לא יודעים מהן הסדרות הללו, עד סוף הפוסט תדעו; אבל אם אתם כבר יודעים, אז אפשר לגשת לעניין - המטרה של הפוסט הזה היא להסביר למה הנוסחאות הבאות הן נכונות:</p>
+<ul>
+    <li><span class="math">\(S_{n}=\frac{n\left(a_{1}+a_{n}\right)}{2}\)</span> עבור טור חשבוני.</li>
+    <li><span class="math">\(S_{n}=a_{1}\frac{q^{n}-1}{q-1}\)</span> עבור טור הנדסי.</li>
+</ul>
+<p>נתחיל עם אגדה ידועה על המתמטיקאי קארל פרידריך גאוס, שתעזור לנו להבין על מה מדובר.</p>
+<p><img class="alignnone size-full wp-image-3777" src="/img/2019/05/220px-Carl_Friedrich_Gauss_1840_by_Jensen.jpg" alt="" width="220" height="280" /></p>
+<p>האגדה אומרת שכאשר גאוס היה בבית הספר היסודי, המורה שלו התעצל ונתן לתלמידים את המשימה המייגעת של חישוב הסכום <span class="math">\(1+2+3+\dots+100\)</span> - כלומר, סכום כל המספרים עד 100. הרעיון היה שהם יבלו חצי יום בעבודה טכנית מייגעת וחסרת כל טעם, והמורה ינוח. הבעיה היא שגאוס הקטן בא אל המורה תוך כמה דקות עם הפתרון. האם זה קרה בגלל שגאוס היה מחשבון אנושי? לא! בדיוק ההפך! גאוס המחיש בצורה הטובה ביותר את גישת <strong>מתמטיקאים הם עצלנים</strong>. במקום לבצע את החישוב, הוא מצא "דרך קיצור" שנותנת לו את הסכום בלי שיצטרך לחשב את כולו במפורש.</p>
+<p>הטריק של גאוס היה פשוט: הוא שם לב לכך שאם לוקחים את האיבר <strong>הראשון</strong> בסכום (שהוא 1) ומחברים אותו לאיבר <strong>האחרון</strong> בסכום (שהוא 100), מקבלים 101. זה בפני עצמו לא מרגש במיוחד, אבל העניין הוא שאותו מספר בדיוק מתקבל אם מחברים את האיבר <strong>השני</strong> בסכום (שהוא 2) עם האיבר <strong>הלפני אחרון</strong> בסכום (שהוא 99), וכן הלאה. בעצם, אומר גאוס, אפשר לחלק את כל המספרים בין 1 ל-100 לחמישים זוגות בדיוק, כך שהסכום של כל זוג הוא בדיוק 101:</p>
+<p><span class="math">\(\left(1,100\right),\left(2,99\right),\left(3,98\right),\dots\)</span></p>
+<p>אם יש לנו בדיוק 50 זוגות, והסכום של כל אחד מהם הוא בדיוק 101, אז עברנו מביצוע 99 תרגילי חיבור לביצוע תרגיל כפל יחיד: <span class="math">\(50\times101=5050\)</span>. זה תרגיל שאפילו אני מסוגל לבצע בראש; לא צריך להיות "מחשבון אנושי".</p>
+<p>אז הנה השיטה של גאוס בצורה יותר כללית: נניח שאני רוצה לחבר את כל המספרים מ-1 ועד <span class="math">\(n\)</span>, כאשר <span class="math">\(n\)</span> הוא מספר טבעי כלשהו (במקרה של גאוס <span class="math">\(n=100\)</span>). אני יכול לחלק את המספרים ל-<span class="math">\(\frac{n}{2}\)</span> זוגות כך שבכל זוג הסכום של שני האיברים הוא <span class="math">\(n+1\)</span>, ולכן אני מקבל את הנוסחה</p>
+<p><span class="math">\(1+2+\dots+n=\frac{n\left(n+1\right)}{2}\)</span></p>
+<p>אבל רגע אחד, יש כאן משהו מוזר: מה קורה אם <span class="math">\(n\)</span> הוא אי זוגי? נאמר, <span class="math">\(n=9\)</span>, כדי לעבוד עם דוגמא קונקרטית פשוטה. במקרה הזה אני אמור לכאורה לחלק את המספרים ל-<span class="math">\(4.5\)</span> זוגות, וזה... חסר משמעות. אז בואו נראה מה קורה אם מחלקים את המספרים מ-1 עד 9 ל"זוגות":</p>
+<p><span class="math">\(\left(1,9\right),\left(2,8\right),\left(3,7\right),\left(4,6\right),\left(5\right)\)</span></p>
+<p>מה קרה פה? ראשית, קיבלנו ארבעה זוגות שסכום כל אחד מהם הוא 10. שנית, קיבלנו את האיבר 5 <strong>לבדו</strong>. אפשר לחשוב על זה בתור "חצי זוג"; כאילו לקחתי את הזוג <span class="math">\(\left(5,5\right)\)</span> אבל במקום לספור את הסכום שלו, 10, ספרתי רק <strong>חצי </strong>מהסכום שלו, כלומר 5. זה אומר שהנוסחה שלנו עובדת יפה גם במקרה הזה.</p>
+<p>עכשיו אפשר לקחת את הנוסחה הזו ולהכליל אותה טיפה. הסכום <span class="math">\(1+2+3+\dots+n\)</span> הוא דוגמא פשוטה למשהו שנקרא <strong>טור חשבוני</strong>: זה סכום של סדרת מספרים, שבה <strong>ההפרש </strong>בין כל שני איברים סמוכים הוא <strong>קבוע</strong>. סדרות של מספרים לרוב נכתבות בעזרת אות שמסמנת את הסדרה, ועוד מספר קטן למטה - <strong>האינדקס</strong> - שבא לומר על איזה מקום בסדרה מדברים כרגע. למשל <span class="math">\(a_{1},a_{2},a_{3},\dots,a_{n}\)</span>. את הסכום של סדרה כזו נהוג לסמן ב-<span class="math">\(S_{n}=a_{1}+\dots+a_{n}\)</span>.</p>
+<p>שימו לב לעניין טרמינולוגי קטן: המילה <strong>סדרה</strong> (באנגלית Sequence) מתארת את סדרת האיברים - מה שסימנתי בתור <span class="math">\(a_{1},a_{2},a_{3},\dots,a_{n}\)</span>. המילה <strong>טור</strong> (באנגלית Series) מתארת את הסכום שלהם, מה שסימנתי בתור <span class="math">\(a_{1}+\dots+a_{n}\)</span>.</p>
+<p>בסדרה חשבונית, התכונה שמגדירה את הסדרה היא ש-<span class="math">\(a_{k+1}-a_{k}=d\)</span> לכל <span class="math">\(1\le k&lt;n\)</span>. המספר <span class="math">\(d\)</span> נקרא <strong>ההפרש</strong> של הסדרה. מה שנחמד הוא שמספיק להכיר את האיבר הראשון בסדרה ואת <span class="math">\(d\)</span> כדי לדעת מה יהיה ערכו של כל איבר אחר: <span class="math">\(a_{2}=a_{1}+d\)</span> ו-<span class="math">\(a_{3}=a_{2}+d=a_{1}+2d\)</span> וכן הלאה - קל לראות שבאופן כללי אפשר לכתוב <span class="math">\(a_{n}=a_{1}+\left(n-1\right)d\)</span>.</p>
+<p>גם בסדרה חשבונית כללית משתמר הכלל שגאוס ראה - שסכום האיבר הראשון והאחרון זהה לסכום האיבר השני והלפני-אחרון וכן הלאה. למה? ובכן, בכל זוג כזה אנחנו הולכים "צעד אחד קדימה" עבור אחד מהאיברים (מהאיבר הראשון אל השני, למשל). בצעד הזה מתווסף <span class="math">\(d\)</span> לסכום; אבל באיבר השני אנחנו הולכים "צעד אחורה" (מהאיבר האחרון אל הלפני אחרון, למשל) ובצעד הזה מורידים <span class="math">\(d\)</span> מהסכום הכללי. לכן, אומר גאוס, בסדרה חשבונית של <span class="math">\(n\)</span> איברים שהאיבר הראשון שלה הוא <span class="math">\(a_{1}\)</span> והאחרון הוא <span class="math">\(a_{n}\)</span>, אפשר לחלק את הסדרה ל-<span class="math">\(\frac{n}{2}\)</span> זוגות שסכום כל אחד מהם הוא <span class="math">\(a_{1}+a_{n}\)</span>, מה שנותן לנו את הנוסחה:</p>
+<p><span class="math">\(S_{n}=\frac{n\left(a_{1}+a_{n}\right)}{2}\)</span></p>
+<p>מכיוון שאנחנו יודעים לבטא את <span class="math">\(a_{n}\)</span> בעזרת <span class="math">\(a_{1}\)</span> ו-<span class="math">\(d\)</span> אפשר גם לכתוב</p>
+<p><span class="math">\(S_{n}=\frac{n\left(2a_{1}+\left(n-1\right)d\right)}{2}=na_{1}+\frac{n\left(n-1\right)d}{2}\)</span></p>
+<p>זה מסיים את הסיפור עבור טור חשבוני. בואו נעבור לסוג הנפוץ השני של טור, שעבורו אין לי אנקדוטה גאוסית: <strong>טור הנדסי</strong>. בסדרה הנדסית, <strong>המנה</strong> של כל שני איברים סמוכים קבועה: <span class="math">\(\frac{a_{k+1}}{a_{k}}=q\)</span> כאשר <span class="math">\(q\ne0\)</span> הוא מספר שונה מאפס כלשהו ו-<span class="math">\(a_{1}\)</span> גם הוא צריך להיות שונה מאפס. למשל, אם ניקח את <span class="math">\(a_{1}=2\)</span> ואת <span class="math">\(q=3\)</span> נקבל את הסדרה <span class="math">\(2,6,18,54,\dots\)</span>. בסדרה הנדסית כזו, האיבר במקום ה-<span class="math">\(n\)</span> נתון על ידי <span class="math">\(a_{n}=a_{1}q^{n-1}\)</span>, באופן די דומה למה שקרה בסדרה חשבונית.</p>
+<p>אם <span class="math">\(q=1\)</span> הסדרה שלנו היא "משעממת": הסדרה הקבועה <span class="math">\(a_{1},a_{1},a_{1},\dots\)</span>. הסכום של סדרה כזו הוא <span class="math">\(na_{1}\)</span> ולכן אפשר לראות את המקרה הזה כסגור ולעבור למקרים המעניינים האחרים, שבהם <span class="math">\(q\ne1\)</span>.</p>
+<p>בואו נתחיל עם המקרה הפשוט שבו <span class="math">\(a_{1}=1\)</span> ולכן הסדרה שלנו היא <span class="math">\(1,q,q^{2},q^{3},\dots,q^{n}\)</span> שימו לב ש-<span class="math">\(q^{n}\)</span> הוא האיבר ה-<span class="math">\(n+1\)</span>-י בסדרה. עכשיו, מהו הסכום <span class="math">\(1+q+q^{2}+\dots+q^{n}\)</span>? על פניו זה תרגיל לא קל, אבל שוב בא לעזרתנו תעלול מז'אנר "מתמטיקאים הם עצלנים". אני לא זוכר בעל פה את הנוסחה לטור הנדסי; אני כן זוכר בעל פה את התעלול הזה, שהוא פשוט "להכפיל הכל ב-<span class="math">\(q-1\)</span>".</p>
+<p>כי מה קורה כשכופלים ב-<span class="math">\(q-1\)</span>? לכאורה מקבלים משהו הרבה יותר מסובך, אבל למעשה רוב האיברים בסכום שנקבל <strong>יבטלו זה את זה</strong>. נקבל מה שנקרא "טור טלסקופי" (כי הרעיון בו הוא שהוא נראה ארוך אבל אפשר "לכווץ" אותו לממדים זעירים, כמו שטלסקופ יכול להיות ארוך ואפשר לכווץ אותו). כדי לראות את זה, אני אכתוב את כל אברי המכפלה <span class="math">\(\left(q-1\right)\left(1+q+\dots+q^{n}\right)\)</span> בשתי שורות: בשורה הראשונה התוצאה של הכפלת <span class="math">\(q\)</span> בסוגריים הימניים, ובשורה השניה התוצאה של הכפלת <span class="math">\(-1\)</span> בסוגריים הללו:</p>
+<p><span class="math">\(\begin{array}{cccccc} & q & +q^{2} & +\dots & +q^{n} & +q^{n+1}\\ -1 & -q & -q^{2} & -\dots & -q^{n} \end{array}\)</span></p>
+<p>האיברים היחידים שלא מבטלים אלו את אלו הם <span class="math">\(q^{n+1}\)</span> (שהתקבל מהכפלה של <span class="math">\(q\)</span> עם האיבר הגדול בסוגריים, <span class="math">\(q^{n}\)</span>) ו-<span class="math">\(-1\)</span> (שהתקבל מהכפלה של <span class="math">\(-1\)</span> עם האיבר הקטן בסוגריים, <span class="math">\(1\)</span>). לכן התוצאה שנקבל היא <span class="math">\(q^{n+1}-1\)</span>, כלומר</p>
+<p><span class="math">\(\left(q-1\right)\left(1+q+\dots+q^{n}\right)=q^{n+1}-1\)</span></p>
+<p>נחלק ב-<span class="math">\(q-1\)</span> את שני האגפים, תוך הסתמכות על ההנחה שלנו ש-<span class="math">\(q\ne1\)</span>, ונקבל את נוסחת הסכום:</p>
+<p><span class="math">\(1+q+\dots+q^{n}=\frac{q^{n+1}-1}{q-1}\)</span></p>
+<p>עכשיו בואו נדבר על טור הנדסי כללי. שני דברים משתנים: ראשית, האיבר הראשון אינו בהכרח 1 אלא הוא <span class="math">\(a_{1}\)</span>; ושנית, אני שואל את עצמי מה קורה כשיש בדיוק <span class="math">\(n\)</span> איברים בטור. כלומר, אני רוצה לדעת מהו הסכום</p>
+<p><span class="math">\(a_{1}+a_{1}q+\dots+a_{1}q^{n-1}\)</span></p>
+<p>קל לטפל בעניין ה-<span class="math">\(a_{1}\)</span> הזה: בואו נוציא אותו כגורם משותף, ונקבל</p>
+<p><span class="math">\(a_{1}\left(1+q+\dots+q^{n-1}\right)\)</span></p>
+<p>עכשיו, הביטוי שבסוגריים מאוד קרוב למה שכבר קיבלנו:</p>
+<p><span class="math">\(1+q+\dots+q^{n}=\frac{q^{n+1}-1}{q-1}\)</span></p>
+<p>אם נחליף בנוסחה שלעיל את <span class="math">\(n\)</span> ב-<span class="math">\(n-1\)</span> בשני האגפים, נקבל</p>
+<p><span class="math">\(1+q+\dots+q^{n-1}=\frac{q^{n}-1}{q-1}\)</span></p>
+<p>ומכאן הנוסחה הכללית לסכום סדרה הנדסית:</p>
+<p><span class="math">\(S_{n}=a_{1}\frac{q^{n}-1}{q-1}\)</span></p>
+<p>מה באשר לסכומים של סדרות כלליות ומתוחכמות יותר? למשל, ידעתם שהסכום של <span class="math">\(n\)</span> האיברים הראשונים בסדרת פיבונאצ'י שווה למספר פיבונאצ'י ה-<span class="math">\(n+2\)</span>, כל זה פחות 1? כלומר, אם <span class="math">\(F_{1}=F_{2}=1\)</span> ו-<span class="math">\(F_{n}=F_{n-1}+F_{n-2}\)</span> אז <span class="math">\(F_{1}+F_{2}+\dots+F_{n}=F_{n+2}-1\)</span>. האם יש לי דרך פשוטה להסביר את זה? ובכן... לא. אפשר להוכיח את זה בקלות באינדוקציה ואפשר לגלות את זה בקלות בעזרת כלי בקומבינטוריקה שנקרא <strong>פונקציות יוצרות</strong>, אבל אני לא מכיר הסבר טריוויאלי פשוט שנותן את האינטואיציה לכך (אולי אקבל כזה בתגובות). באופן כללי, זו הבעיה עם סדרות מתוחכמות יותר - יש לנו כלים לטפל גם בהן, אבל הסיפור כבר לא עד כדי כך פשוט. לכן אני חושב שאעצור כאן.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2019/06/17/lagrange_mean_value_theorem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט הערך הממוצע של לגראנז&#39;</span>
+            </a>
+            
+            
+            
+            <a href="/2019/04/30/euler_formula_proof_with_eulerian_graphs/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הוכחה לנוסחת אוילר לגרפים בעזרת גרפים אוילריים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

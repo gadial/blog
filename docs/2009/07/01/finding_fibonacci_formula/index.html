@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>איך מוצאים את נוסחת פיבונאצ&#39;י? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>איך מוצאים את נוסחת פיבונאצ&#39;י?</h1>
+            <div class="post-meta">
+                <span class="date">2009-07-01</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הוכחות יפות.html">הוכחות יפות</a>
+                    
+                    <a href="/tags/טכני.html">טכני</a>
+                    
+                    <a href="/tags/מספרי פיבונאצ&#39;י.html">מספרי פיבונאצ&#39;י</a>
+                    
+                    <a href="/tags/מתמטיקאים הם עצלנים.html">מתמטיקאים הם עצלנים</a>
+                    
+                    <a href="/tags/מתמטיקה תיכונית.html">מתמטיקה תיכונית</a>
+                    
+                    <a href="/tags/נוסחאות נסיגה.html">נוסחאות נסיגה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בדומה לפוסטים אחרים, גם המוטיבציה לפוסט הזה היא שאילתת חיפוש שראויה לתשובה רצינית ולא בת שתי שורות - במקרה הזה, "איך מוכיחים נוסחת פיבונאצ'י". איני בטוח אם הכוונה היא רק להוכחה שהנוסחה נכונה, או גם <strong>למציאת</strong> הנוסחה; לדעתי מציאת הנוסחה היא העיקר ואז ההוכחה (באינדוקציה, או באמצעות כלים כבדים מאלגברה לינארית שמטפלים במקרה כללי בהרבה) היא די אלמנטרית, ולכן אתמקד בשאלת מציאת הנוסחה. התשובה טמונה בשיטה סטנדרטית לפתרון נוסחאות נסיגה, שזכורה לי בתור אחד מהדברים היפים ביותר שבהם נתקלתי כשרק התחלתי ללמוד מתמטיקה. ההתלהבות שלי מכך שאפשר למצוא את הנוסחה בפחות או יותר שלוש שורות של חשבון ברמת בית ספר תיכון נבעה מכך שהייתה זו פחות או יותר הפעם הראשונה שבה ראיתי איך ניתוח מתמטי רציני של בעיה שגם אני תהיתי לגביה "מחסל" אותה בקלי קלות - ההמחשה הטובה ביותר לטענת "מתמטיקאים הם עצלנים" של <a href="http://www.gap-system.org/~history/Quotations/Polya.html">פוליה</a>.</p>
+<p>אבל ראשית יש להציג את הבעיה. תחילתה באחד מהמתמטיקאים האירופאים הבולטים הבודדים של ימי הביניים, שהיו תקופה חשוכה במיוחד עבור המתמטיקה, בין הפריחה האדירה לה היא זכתה ביוון העתיקה, והפריחה האדירה שלה החל מימי הרנסנס והלאה. בימי הביניים עיקר המתמטיקה השתמר ופותח בידי המוסלמים, וגם ליאונרדו מפיזה המוכר יותר בשם <a href="http://he.wikipedia.org/wiki/%D7%A4%D7%99%D7%91%D7%95%D7%A0%D7%A6%27%D7%99">פיבונאצ'י</a>, איטלקי, למד מתמטיקה אצל מורים מוסלמים כשגדל באלג'יר. בשנת 1202 פרסם פיבונאצ'י ספר - "ספר החשבוניה" - שהקיף את הידע המתמטי על אלגברה של אותה תקופה (בתקופת היוונים עסקו בעיקר בגאומטריה, וגם בעיות מספריות, דוגמת מציאת <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%97%D7%9C%D7%A7_%D7%9E%D7%A9%D7%95%D7%AA%D7%A3_%D7%9E%D7%A7%D7%A1%D7%99%D7%9E%D7%9C%D7%99">מחלק משותף מקסימלי</a> - "האלגוריתם האוקלידי" - נוסחו באופן גאומטרי; בשלהי תקופת יוון העתיקה ובתקופת המוסלמים עיקר הדגש עבר לאלגברה, והמילה "אלגברה" עצמה הגיעה משם ספר של המתמטיקאי המוסלמי המפורסם ביותר, <a href="http://he.wikipedia.org/wiki/%D7%90%D7%91%D7%95_%D7%92%27%D7%A2%D7%A4%D7%A8_%D7%9E%D7%95%D7%97%D7%9E%D7%93_%D7%90%D7%9C-%D7%97%27%D7%95%D7%90%D7%A8%D7%99%D7%96%D7%9E%D7%99">אל-ח'ואריזמי</a>). הספר הכיל כמה מהחידושים המסעירים בתחום - למשל, השיטה העשרונית ושימוש באפס. הוא גם הכיל חידה חביבה שעסקה בארנבים.</p>
+<p>אציג כאן את אחד מהניסוחים של הבעיה - איני מתחייב לניסוח המקורי של פיבונאצ'י, שכן אני מעדיף את הניסוח שנראה לי הכי פשוט להבנה. נניח שאוכלוסיית ארנבים מתרבה באופן המשונה הבא: זוג בוגר של ארנבים מביא לעולם, תוך חודש, זוג צעיר של ארנבים, וכך בכל חודש. לזוג צעיר של ארנבים לוקח חודש לגדול ולהפוך לזוג בוגר בעצמו, ואז גם הוא מתחיל להוליד. הארנבים כולם בני אלמוות. כעת, נניח שאנחנו מתחילים עם זוג של ארנבים צעירים - כמה זוגות (שימו לב - זוגות, לא ארנבים בודדים; הזוגות הם תמיד של זכר ונקבה, באופן קסום) של ארנבים <strong>בוגרים</strong> יהיו לנו בחודש ה-<span class="math">\(n\)</span>-י?</p>
+<p>ובכן, בחודש הראשון יש 0 זוגות של ארנבים בוגרים - יש זוג אחד של ארנבים צעירים ותו לא. בחודש שלאחר מכן יש זוג אחד של ארנבים בוגרים (הזוג הצעיר שלנו התבגר), ואפס זוגות של ארנבים צעירים. בחודש לאחר מכן יש את אותו הזוג של ארנבים בוגרים, וזוג חדש של ארנבים צעירים שהם הולידו; ובחודש שלאחר מכן הארנבים שהיו צעירים התבגרו, כך שיש לנו שני זוגות של ארנבים בוגרים, ובנוסף יש זוג צעיר אחד חדש. אם תמשיכו את המשחק הזה עוד ועוד, בוודאי תקבלו את סדרת הערכים הבאה, עבור מספר הארנבים הבוגרים בכל חודש: <span class="math">\(0,1,1,2,3,5,8,13,\dots\)</span>. מה שפיבונאצ'י רצה לעשות הוא למצוא חוקיות בסדרה הזו.</p>
+<p>נסמן את אברי הסדרה בתור <span class="math">\(F_{n}\)</span>, כאשר <span class="math">\(n\)</span> הוא מספר החודש המתאים. לצורך נוחות, החודש הראשון יסומן ב-0, ולכן הסדרה היא <span class="math">\(F_{0}=0,F_{1}=1,F_{2}=1,F_{3}=2\)</span> וכן הלאה. החוקיות שפיבונאצ'י הצביע עליה היא פשוטה במיוחד: <span class="math">\(F_{n}=F_{n-1}+F_{n-2}\)</span>. כלומר, כל איבר בסדרה (לאחר שני האיברים הראשונים) שווה לסכום שני האיברים שקדמו לו. מעט מחשבה מראה מדוע זה כך במקרה של הארנבונים. מהו <span class="math">\(F_{n}\)</span>, בעצם? הוא מספר זוגות הארנבונים שהיו בוגרים בחודש שלפני כן, ועוד מספר זוגות הארנבונים שהיו <strong>צעירים</strong> בחודש שלפני כן, והתבגרו. מספר זוגות הארנבונים שהיו בוגרים בחודש שלפני כן הוא בדיוק <span class="math">\(F_{n-1}\)</span> - זה מה שמספר זה סופר. אבל כמה זוגות ארנבונים צעירים היו? ובכן, הכלל הוא שארנבון צעיר בחודש מסויים הוא ה"תוצר" הישיר של זוג ארנבונים שהיו <strong>מבוגרים</strong> בחודש שלפני כן. כלומר, אם אנחנו רוצים לספור כמה ארנבונים צעירים היו בחודש <span class="math">\(n-1\)</span>, התשובה היא שמספר זה שווה למספר הארנבונים המבוגרים בחודש <span class="math">\(n-2\)</span>. כלומר, <span class="math">\(F_{n-2}\)</span> הוא בדיוק מספר הארנבונים שהיו צעירים בחודש <span class="math">\(n-1\)</span>, ומכאן נובעת הנוסחה. הנוסחה הזו, שבה איבר בסדרה מתואר באמצעות איברים מוקדמים יותר בסדרה, נקראת <strong>נוסחה רקורסיבית</strong> (רקורסיה היא הגדרה של דבר מה באמצעות הסתמכות על מופעים יותר פשוטים שלו - במקרה שלנו, איבר בסדרה מוגדר באמצעות איברים קטנים יותר בסדרה, עד לאיברים <span class="math">\(F_{0},F_{1}\)</span> שמוגדרים בצורה ישירה) או בעברית, <strong>נוסחת נסיגה</strong>.</p>
+<p><a href="http://he.wikipedia.org/wiki/%D7%A1%D7%93%D7%A8%D7%AA_%D7%A4%D7%99%D7%91%D7%95%D7%A0%D7%90%D7%A6%27%D7%99">סדרת פיבונאצ'י</a>הייתה מוכרת זמן רב לפני פיבונאצ'י וחידת הארנבים שלו, אך פיבונאצ'י זכה בכבוד שבקריאת הסדרה על שמו. קשה להתחיל ולתאר בכמה מקומות במתמטיקה מופיעה הסדרה - החל בניתוח הסיבוכיות של האלגוריתם האוקלידי, וכלה בהוכחה ש<a href="http://he.wikipedia.org/wiki/%D7%94%D7%91%D7%A2%D7%99%D7%94_%D7%94%D7%A2%D7%A9%D7%99%D7%A8%D7%99%D7%AA_%D7%A9%D7%9C_%D7%94%D7%99%D7%9C%D7%91%D7%A8%D7%98">הבעיה העשירית של הילברט</a> היא בלתי כריעה. מכיוון שהפוסט הזה אינו מיועד לתיאור סדרת פיבונאצ'י ואני רחוק מלהכיר אפילו מקצת משימושיה, לא אכנס לכך כעת. תחת זאת אתמקד בבעיה שעדיין נותרה פתוחה - מציאת נוסחה סגורה לאברי הסדרה.</p>
+<p>מה הבעיה כרגע? נניח שאני רוצה מסיבה כלשהי לחשב את <span class="math">\(F_{137}\)</span>. איך אני עושה זאת? אם כל מה שיש לי הוא הנוסחה הרקורסיבית, עלי לחשב את <span class="math">\(F_{136}\)</span> ואת <span class="math">\(F_{135}\)</span>, כלומר הצטצמתי לבעיה יותר פשוטה, ועדיין גם היא דורשת עבודה - כדי לחשב את <span class="math">\(F_{136}\)</span> אני צריך את <span class="math">\(F_{135}\)</span> (שאמנם, אני ממילא צריך) אבל גם את <span class="math">\(F_{134}\)</span> וכן הלאה וכן הלאה - כלומר, כדי לחשב את <span class="math">\(F_{137}\)</span> אצטרך לחשב את כל <span class="math">\(F_{n}\)</span> עבור <span class="math">\(n&lt;137\)</span>. חייבים להודות שזה לא נשמע יעיל במיוחד. האם אין דרך לחשב את <span class="math">\(F_{n}\)</span> בלי לחשב את כל האיברים הקודמים בסדרה?</p>
+<p>התשובה חיובית, וכדי להבהיל אתכם גם אתן אותה במפורש עכשיו - מתקיים ש-<span class="math">\(F_{n}=\frac{1}{\sqrt{5}}\left[\left(\frac{1+\sqrt{5}}{2}\right)^{n}-\left(\frac{1-\sqrt{5}}{2}\right)^{n}\right]\)</span>. הנוסחה הזו נראית מבעיתה לגמרי - משום מקום צץ לו שורש 5, שהוא בכלל לא מספר רציונלי, ומעלים דברים בחזקת <span class="math">\(n\)</span> ולך תחשב את זה בכלל והצילו. ובכן, אתם מוזמנים לבדוק עבור ערכים קטנים של <span class="math">\(n\)</span> שהנוסחה עובדת, וכל השורשים של חמש מצטמצמים והכל טוב ויפה; ומחשב מסוגל להשתמש בנוסחה הזו כדי לחשב את <span class="math">\(F_{n}\)</span> בקלות רבה יחסית, הרבה יותר מאשר שימוש בנוסחה הרקורסיבית וחישוב כל הערכים הקודמים בסדרה (למעשה, לא חייבים לחשב את הנוסחה שמוצגת בנוסחה כמות שהיא ואפשר לבצע כל מני שיפורים אך לא אכנס לכך).</p>
+<p>אם כן, איך מגיעים לנוסחה הזו? מה ההגיון שבה? מאיפה צץ השורש? והאם הפתרון הוא אד-הוקי ומתאים רק לפיבונאצ'י? אענה על הכל, ואתחיל מהשאלה האחרונה - לגמרי לא. השיטה שאציג עובדת לכל נוסחה רקורסיבית שהיא לינארית במקדמים קבועים והומוגנית - ובמילים המפוצצות הללו אני מתכוון לכך שנוסחת הנסיגה היא באופן כללי מהצורה <span class="math">\(a_{n}=c_{1}a_{n-1}+c_{2}a_{n-2}+\dots+c_{k}a_{n-k}\)</span>, כלומר שהאיבר ה-<span class="math">\(n\)</span> בסדרה הוא סכום של <span class="math">\(k\)</span> האיברים הקודמים בסדרה, כשהם מוכפלים במספרים קבועים <span class="math">\(c_{1},\dots,c_{k}\)</span>. למשל, <span class="math">\(a_{n}=3a_{n-1}+5a_{n-4}\)</span> היא דוגמה נוספת לסדרה שמתאימה לנוסחה הזו. השיטה שאציג תקפה לכל המשוואות הללו, אך אציג אותה עבור הדוגמה הספציפית של פיבונאצ'י כדי לא להסתבך יותר מדי עם הסימונים.</p>
+<p>לאלו מכם שמכירים <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%95%D7%95%D7%90%D7%94_%D7%93%D7%99%D7%A4%D7%A8%D7%A0%D7%A6%D7%99%D7%90%D7%9C%D7%99%D7%AA">משוואות דיפרנציאליות</a>, המילים "משוואה לינארית במקדמים קבועים והומוגנית" עשויה להיות מוכרת מאוד - בעיות דומות יש גם במשוואות דיפרנציאליות. גם "תנאי ההתחלה" של הנוסחה הרקורסיבית (במקרה של פיבונאצ'י, <span class="math">\(F_{0}=0,F_{1}=1\)</span>; במקרה של סדרה שבה איבר תלוי ב-<span class="math">\(k\)</span> הקודמים, תנאי ההתחלה צריך להיות <span class="math">\(k\)</span> האיברים הראשונים בסדרה) מזכירים את המושג המקביל ממשוואות דיפרנציאליות, וגם שיטת הפתרון היא דומה - מתחילים מ"ניחוש מוצלח" של איך בערך הפתרון <strong>אמור להיראות</strong>, מציבים אותו במשוואה, ומקבלים מההצבה הזו את הפתרון המדוייק. זה לא מוכיח מיידית שהפתרון נכון, אלא צריך להוכיח זאת - אלא שההוכחה אינה קשה ומספיק לבצע אותה פעם אחת, עבור נוסחת הנסיגה ה"כללית" (הלינארית-מקדמים קבועים-הומוגנית), ואז מספיק יהיה להשתמש בשיטה כדי <strong>למצוא</strong> את הפתרון (שהוא הדבר שמעניין אותנו, בסופו של דבר).</p>
+<p>כבר אגלה מראש שהניחוש הבסיסי שלנו הוא שפתרון נוסחת נסיגה "כללית" הוא מהצורה <span class="math">\(a_{n}=\lambda^{n}\)</span> עבור מספר ממשי כלשהו <span class="math">\(\lambda\)</span>. כלומר, שהאיבר ה-<span class="math">\(n\)</span>-י בסדרה הוא העלאה בחזקה <span class="math">\(n\)</span>-ית של מספר קבוע כלשהו, שתלוי רק בנוסחת הנסיגה הספציפית ולא ב-<span class="math">\(n\)</span>. בוודאי תצעקו כעת שהפתרון של פיבונאצ'י אינו בדיוק כזה - אני יודע, ונגיע לכך. לפני כן צריך להבין איך בכלל הגענו לניחוש הזה - למה שזה יהיה משהו בחזקת <span class="math">\(n\)</span>? למה לא <span class="math">\(n^{t}\)</span>, למשל? (שימו לב להבדל - כעת <span class="math">\(n\)</span> הוא בסיס החזקה ולא המעריך שלה, כמקודם). התשובה לכך היא שניתן להעריך את קצב הגידול של הפונקציה לא רע. אדגים זאת על פיבונאצ'י. מכיוון ש-<span class="math">\(F_{n}=F_{n-1}+F_{n-2}\)</span> וכל האיברים (פרט ל-<span class="math">\(F_{0}\)</span>) הם חיוביים, אז <span class="math">\(F_{n}&gt;F_{n-1}\)</span> לכל <span class="math">\(n&gt;1\)</span>. מכאן בפרט שמתקיים <span class="math">\(F_{n}=F_{n-1}+F_{n-2}&lt;2F_{n-1}\)</span>, כלומר <span class="math">\(F_{n}\)</span> לא גדול יותר מאשר פי 2 האיבר שקדם לו, <span class="math">\(F_{n-1}\)</span>, ולכן קצב הגידול שלו אינו גדול <strong>מדי</strong>: מתקיים ש-<span class="math">\(F_{n}&lt;2^{n}\)</span> (כי אם האיבר <span class="math">\(F_{1}\)</span> הוא 1, השני הוא לא יותר מאשר 2, והשלישי לא יותר מאשר 4, והרביעי לא יותר מאשר 8, וכן הלאה).</p>
+<p>מצד שני, <span class="math">\(F_{n}=F_{n-1}+F_{n-2}&gt;2F_{n-2}\)</span>. כלומר, <span class="math">\(F_{n}\)</span> הוא <strong>לפחות</strong> גדול פי 2 מאשר <span class="math">\(F_{n-2}\)</span>, ולכן קצב הגידול שלו אינו יכול להיות קטן <strong>מדי</strong>: מתקיים ש-<span class="math">\(F_{n}&gt;2^{\left\lfloor \frac{n}{2}\right\rfloor }\)</span>. שוב, לדוגמה - אם <span class="math">\(F_{1}=1\)</span> אז האיבר השלישי בסדרה הוא לפחות 2, והאיבר החמישי הוא לפחות 4, והשביעי הוא לפחות 8 וכן הלאה. כלומר, קיבלנו שקצב הגידול של <span class="math">\(F_{n}\)</span> הוא אקספוננציאלי - הוא חסום הן מלמעלה והן מלמטה על ידי חזקה <span class="math">\(n\)</span>-ית של מספר כלשהו (שימו לב ש-<span class="math">\(2^{\frac{n}{2}}=\left(\sqrt{2}\right)^{n}\)</span> ומכאן שזה ש-<span class="math">\(n\)</span> מופיע במעריך כשהוא מוכפל במשהו לא באמת משנה עבורו, אלא רק עבור הבסיס של החזקה). מכאן שבדיקת מועמד לפתרון שהוא מהצורה <span class="math">\(\lambda^{n}\)</span> היא מתבקשת; הוא מסדר הגודל הנכון. מי שלא עלה בידו לעקוב אחרי כל האסימפטוטיקה הזו - לא נורא. מטרתה לתת מוטיבציה לפתרון ולהמחיש שלא מדובר בניחוש ממוזל בלבד אלא בבחירה מושכלת, אך אין זה הכרחי להמשך הפתרון.</p>
+<p>כעת אנו מגיעים לשאלה המרכזית. נניח כי <span class="math">\(F_{n}=\lambda^{n}\)</span> הוא אכן פתרון לנוסחת הנסיגה; מהו <span class="math">\(\lambda\)</span>? לצורך כך ניתן להציב את הפתרון בנוסחה <span class="math">\(F_{n}=F_{n-1}+F_{n-2}\)</span> ולקבל את המשוואה <span class="math">\(\lambda^{n}=\lambda^{n-1}+\lambda^{n-2}\)</span>. ברור כי <span class="math">\(\lambda=0\)</span> פותר את נוסחת הנסיגה (פתרון כזה פותר גם את הנוסחה ה"כללית" שלעיל) אבל זה אינו פתרון מעניין, אז נניח כי <span class="math">\(\lambda\ne0\)</span>, ולכן אפשר לחלק את המשוואה שקיבלנו ב-<span class="math">\(\lambda^{n-2}\)</span> ולקבל <span class="math">\(\lambda^{2}=\lambda+1\)</span>, או, אחרי העברת אגפים, <span class="math">\(\lambda^{2}-\lambda-1=0\)</span>. זוהי משוואה ריבועית פשוטה ואנו יודעים לפתור אותה בעזרת הנוסחה הכללית. נקבל <span class="math">\(\lambda=\frac{1\pm\sqrt{1+4}}{2}=\frac{1\pm\sqrt{5}}{2}\)</span>. כלומר, קיבלנו שני פתרונות, ובשניהם צץ לו ה-<span class="math">\(\sqrt{5}\)</span> המבהיל. מכאן זה מגיע.</p>
+<p>כדי לעשות לעצמי את החיים פשוטים יותר מעתה והלאה, אשתמש בסימון סטנדרטי: <span class="math">\(\phi_{+}=\frac{1+\sqrt{5}}{2}\)</span>, ו-<span class="math">\(\phi_{-}=\frac{1-\sqrt{5}}{2}\)</span>. המספר <span class="math">\(\phi_{+}\)</span> הוא "יחס הזהב" המפורסם. אם כן, הגענו למסקנה ש-<span class="math">\(F_{n}=\phi_{+}^{n}\)</span> ו-<span class="math">\(F_{n}=\phi_{-}^{n}\)</span> הם פתרונות של נוסחת הנסיגה <span class="math">\(F_{n}=F_{n-1}+F_{n-2}\)</span>. מדוע זה לא הפתרון שהצגתי לעיל ומה עוד לא עשינו?</p>
+<p>הבעיה בשני הפתרונות שמצאנו היא שהם אינם עונים ל"תנאי ההתחלה". צריך, למשל, שיתקיים <span class="math">\(F_{0}=0\)</span>. מיידית ברור שהייתי אידיוט גמור אם חשבתי שפתרון מהצורה <span class="math">\(\lambda^{n}\)</span> יקיים זאת - חזקה של מספר שאינו 0, אינה 0. כמו כן צריך שיתקיים <span class="math">\(F_{1}=1\)</span>, ולכן הפתרון העלוב <span class="math">\(\lambda=0\)</span> גם כן לא טוב לנו. בקיצור, האם צריך לזרוק לזבל את כל הרעיון שהפתרון הוא מהצורה <span class="math">\(\lambda^{n}\)</span>? לא, צריך רק להרחיב מעט את אוסף הפתרונות שלנו - משני פתרונות, לאינסוף.</p>
+<p>באופן כללי, אם <span class="math">\(f\left(n\right)\)</span> הוא פתרון של נוסחת הנסיגה של פיבונאצ'י (ושוב, מה שאני אומר תקף גם לנוסחה ה"כללית"), כלומר אם <span class="math">\(f\left(n\right)=f\left(n-1\right)+f\left(n-2\right)\)</span> אז גם <span class="math">\(h\left(n\right)=\alpha\cdot f\left(n\right)\)</span>, כאשר <span class="math">\(\alpha\)</span> הוא מספר ממשי, הוא פתרון, כי הרי <span class="math">\(h\left(n\right) = \alpha f\left(n\right)=\alpha\left(f\left(n-1\right)+f\left(n-2\right)\right)=\alpha f\left(n-1\right)+\alpha f\left(n-2\right) = h\left(n-1\right)+h\left(n-2\right)\)</span> באופן דומה, אם <span class="math">\(f\left(n\right),g\left(n\right)\)</span> שניהם פתרונות, אז גם <span class="math">\(h\left(n\right)=f\left(n\right)+g\left(n\right)\)</span> הוא פתרון, כי</p>
+<p><span class="math">\(h\left(n\right) = f\left(n\right)+g\left(n\right)=\left(f\left(n-1\right)+f\left(n-2\right)\right)+\left(g\left(n-1\right)+g\left(n-2\right)\right) = \left(f\left(n-1\right)+g\left(n-1\right)\right)+\left(f\left(n-2\right)+g\left(n-2\right)\right)=h\left(n-1\right)+h\left(n-2\right)\)</span></p>
+<p>אם כן, אוסף הפתרונות של המשוואה סגור לפעולות של "כפל בסקלר" (כפל במספר ממשי, במקרה שלנו) ושל חיבור שני פתרונות. אלו מכם שמכירים אלגברה לינארית ודאי רואים כעת כי אוסף הפתרונות של נוסחת הנסיגה (אם לא דורשים את קיום תנאי ההתחלה) מהווה <strong><a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A8%D7%97%D7%91_%D7%95%D7%A7%D7%98%D7%95%D7%A8%D7%99">מרחב וקטורי</a></strong>. הבסיס של המרחב הזה הם בדיוק שני הפתרונות שמצאנו בהתחלה - <span class="math">\(\phi_{+}^{n},\phi_{-}^{n}\)</span>. מי שאינו מכיר אלגברה לינארית עדיין יכול לראות, משתי התכונות שהדגמתי לעיל, שאם <span class="math">\(f\left(n\right),g\left(n\right)\)</span> הם שני פתרונות לנוסחת הנסיגה, אז גם <span class="math">\(\alpha f\left(n\right)+\beta g\left(n\right)\)</span> הוא פתרון, עבור כל <span class="math">\(\alpha,\beta\)</span> ממשיים שנבחר. לכן הגדלנו בצורה משמעותית את אוסף הפתרונות האפשריים שלנו - אולי אחד מהם כן עונה לתנאי ההתחלה?</p>
+<p>אם כן, נכתוב פתרון "כללי" לנוסחת הנסיגה בתור <span class="math">\(F_{n}=\alpha\phi_{+}^{n}+\beta\phi_{-}^{n}\)</span>. אנו רוצים לגלות מהם <span class="math">\(\alpha,\beta\)</span> שעבורם יתקיימו תנאי ההתחלה, אז נשתמש בכך שידוע ש-<span class="math">\(F_{0}=0\)</span> ונקבל את הנוסחה <span class="math">\(0=\alpha\phi_{+}^{0}+\beta\phi_{-}^{0}=\alpha+\beta\)</span>, כלומר אנחנו כבר יודעים שבהכרח מתקיים <span class="math">\(\alpha=-\beta\)</span>. לכן נכתוב את הפתרון בתור <span class="math">\(F_{n}=\alpha\left(\phi_{+}^{n}-\phi_{-}^{n}\right)\)</span>. כעת נשתמש במשוואה הנוספת שנותרה לנו - <span class="math">\(F_{1}=1\)</span>. נקבל ממנה כי <span class="math">\(1=\alpha\left(\phi_{+}-\phi_{-}\right)\)</span>, אבל את <span class="math">\(\phi_{+}-\phi_{-}\)</span> קל לנו לחשב: <span class="math">\(\phi_{+}-\phi_{-}=\frac{1+\sqrt{5}}{2}-\frac{1-\sqrt{5}}{2}=\sqrt{5}\)</span>. מכאן נקבל ש-<span class="math">\(1=\alpha\sqrt{5}\)</span>, ובמילים אחרות - <span class="math">\(\alpha=\frac{1}{\sqrt{5}}\)</span>. לכן הפתרון הנכון לנוסחת פיבונאצ'י, זה שמתאים גם לתנאי ההתחלה, הוא <span class="math">\(F_{n}=\frac{1}{\sqrt{5}}\left(\phi_{+}^{n}-\phi_{-}^{n}\right)\)</span> (וזו גם המפלצת שהצגתי לעיל, עם סימונים מעט יותר ידידותיים). ושוב, מה שעשיתי כאן, עם המרחב הלינארי והכל, זהה למה שעושים כאשר פותרים משוואות דיפרנציאליות לינאריות.</p>
+<p>מה שעשיתי נראה אולי מעט אד-הוקי בשל הצורה שבה מצאתי את <span class="math">\(\alpha,\beta\)</span>, אבל זה רק כי נמנעתי מלהשתמש בשיטת הפתרון הכללית למשוואות לינאריות, שהייתה נותנת את אותה התוצאה. באופן כללי, כשיש לנו משוואה מהצורה <span class="math">\(a_{n}=c_{1}a_{n-1}+c_{2}a_{n-2}+\dots+c_{k}a_{n-k}\)</span>, הצבה של <span class="math">\(\lambda^{n}\)</span> מניבה את המשוואה <span class="math">\(\lambda^{k}-c_{1}\lambda^{k-1}-\dots c_{k-1}\lambda-c_{k}=0\)</span>. עבור <span class="math">\(k\ge5\)</span> כבר אין נוסחה סגורה פשוטה עבור פתרונות המשוואה (ניתן להראות זאת באמצעות <a href="http://he.wikipedia.org/wiki/%D7%AA%D7%95%D7%A8%D7%AA_%D7%92%D7%9C%D7%95%D7%90%D7%94">תורת גלואה</a>, וזה עניין לסדרת פוסטים בפני עצמה), ויכולות להיות בעיות נוספות עם הפתרונות (הם יהיו מרוכבים, או שאותו פתרון יופיע מספר פעמים, בדומה לכך שהפתרון היחיד של <span class="math">\(x^{2}-2x+1\)</span> הוא <span class="math">\(x=1\)</span>) אבל למרות כל הבעיות הללו ניתן לבנות <span class="math">\(k\)</span> פתרונות שונים למשוואה שיהוו בסיס למרחב הפתרונות שלה, וניתן להראות שלכל בחירה של תנאי ההתחלה נקבל פתרון יחיד. כל זה דורש אלגברה לינארית שלא אוכל להיכנס אליה כעת, אבל בעתיד אולי ארחיב על כך (בפוסט שיהיה בהכרח טכני יותר מזה הנוכחי). ושוב - גם במשוואות דיפרנציאליות כל הסיפור הזה מתרחש באופן זהה.</p>
+<p>הפתרון שהצגתי אולי נראה ארוך למדי כי הכברתי הסברים, אך מבחינה מעשית הוא פשוט בצורה יוצאת דופן - פותרים משוואה ריבועית, ואז פותרים עוד מערכת של שתי משוואות בשני נעלמים. הכל חומר של תיכון, ודורש שלוש שורות חישוב - והנוסחה לפיבונאצ'י בהישג יד. קשה לי להסביר עד כמה מצער אותי שנמנעים מלהציג את הנוסחה הזו בתיכון - לשם מה בכלל לדעת איך פותרים משוואות, אם לא בשביל דברים כאלו?</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2009/07/14/monster/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">האם המצאנו או גילינו את המפלצת המתמטית שמתחת למיטה?</span>
+            </a>
+            
+            
+            
+            <a href="/2009/06/26/sums_of_squares_and_quadratic_reciprocity/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">על סכומי ריבועים והקשר להדדיות ריבועית</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

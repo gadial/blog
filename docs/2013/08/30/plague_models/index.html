@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מה המתמטיקה שמאחורי התפשטות מחלות מדבקות? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מה המתמטיקה שמאחורי התפשטות מחלות מדבקות?</h1>
+            <div class="post-meta">
+                <span class="date">2013-08-30</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מידול מחלות.html">מידול מחלות</a>
+                    
+                    <a href="/tags/משוואות דיפרנציאליות.html">משוואות דיפרנציאליות</a>
+                    
+                    <a href="/tags/מתמטיקה שימושית.html">מתמטיקה שימושית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>כפי שרובכם בוודאי יודעים, בימים אלו מתחוללת בארץ מהומה סביב מחלת הפוליו. סקירה טובה של המחלה וההתפרצות הנוכחית בפרט אפשר למצוא בבלוג של קרן לנדסמן <a href="http://realitybugs.me/2013/06/25/polio/">כאן</a> ו<a href="http://realitybugs.me/2013/08/05/polio2/">כאן</a> (וזו הזדמנות טובה להגיד תודה ענקית לד"ר לנדסמן שחשפה אותי לכל הנושא המרתק הזה, ענתה לאינספור שאלות מטופשות שלי עליו ובאופן כללי עושה מלאכת קודש בנוגע אליו) אך בכל זאת אסביר בקצרה במה מדובר כי זה יהיה רלוונטי להמשך הפוסט.</p>
+
+<p>פוליו היא מחלה נגיפית שעלולה לגרום לשיתוק ואפילו למוות, וגם עשתה בדיוק את זה ללא הפסקה ברחבי העולם בחצי הראשון של המאה ה-20. בשנים האחרונות היא הוכחדה ממרבית מדינות העולם כמעט לחלוטין, וממשיכה להשתולל רק בשלוש מדינות - ניגריה, פקיסטן ואפגניסטן. איך זה קרה? ובכן, כל מדינות העולם משתמשות ב<strong>חיסון</strong> נגד המחלה למעט שלוש מדינות אלו.</p>
+
+<p>מהו חיסון? ובכן, כנגד מחלות מסויימות הגוף יודע לייצר נוגדנים שמסוגלים להתמודד עם גורמי המחלה ולהשמיד אותם. פוליו היא מחלה כזו. הבעיה מתחילה כשתופסים את הגוף לא מוכן ונגיפי הפוליו פולשים לגוף מבלי שבגוף יהיו נוגדנים. הרעיון בחיסון הוא להקדים תרופה למכה - לגרום לגוף לייצר בצורה כלשהי את הנוגדנים מבלי לגרום להשפעות המזיקות של המחלה עצמה. בשנות ה-50 של המאה ה-20 פותחו שני סוגים שונים של חיסוני פוליו שעושים בדיוק את זה - "החיסון המומת", IPV (קיצור של Inactivated polio vaccine) ו"החיסון המוחלש", OPV (קיצור של Oral polio vaccine). בשניהם הגוף מקבל "דגימה" של נגיף הפוליו, בגרסה שמנטרלת את היכולות המזיקות של הנגיף, וכתוצאה מכך הגוף עשוי לפתח נוגדנים. לא מובטח ב-100 אחוז שיתפתחו נוגדנים ולכן נהוג לתת מספר מנות חיסון בהפרשי זמנים מסויימים, אבל לא ניכנס לפרטים הללו כאן.</p>
+
+<p>יש שני הבדלים עקרוניים בין IPV ובין OPV. כדי להבין את ההבדל הראשון, המהותי, צריך להבין איך נגיף הפוליו פועל: הוא חי ומתרבה במעי של האדם שנושא אותו, ומשם הוא גם מופרש ועשוי להדביק אנשים אחרים. עם זאת, כל עוד הוירוס במעי האדם לא יכול ללקות בשיתוק כתוצאה ממחלת הפוליו; לצורך כך הנגיף צריך לפלוש אל מחזור הדם. שני החיסונים גורמים ליצירת נוגדנים במחזור הדם של האדם ולכן מונעים מנגיף הפוליו לפלוש לשם ולגרום לשיתוק; עם זאת, OPV עושה משהו נוסף - הוא מייצר נוגדנים גם במעי עצמו, ובכך מונע את היכולת של הנגיף להתקיים ולהתרבות שם.</p>
+
+<p>במילים אחרות, מי שחוסן ב-IPV לא יכול <strong>ללקות בשיתוק</strong> כתוצאה מהמחלה, אבל הוא יכול <strong>להדביק אחרים</strong> בנגיף, ואם אותם אחרים אינם מחוסנים, הם עלולים להפוך למשותקים. מי לא מחוסנים? בין היתר: ילדים שהוריהם לא חיסנו אותם; אנשים בעלי מחלות קשות שמקבלים תרופות מדכאות חיסון; אנשים בעלי מחלות קשות שפגעו במערכת החיסון שלהם; ואנשים שחוסנו כהלכה נגד המחלה אבל לא התפתחו אצלם נוגדנים. כאשר יש התפרצות של פוליו, האנשים הללו הם היעד מס' 1 של הנגיף: אם הוא מגיע אליהם, הם בצרות. הדרך הטובה ביותר להתמודד עם הנגיף היא למנוע ממנו להגיע אל האנשים הללו מלכתחילה. וכדי לעשות את זה צריך למנוע מהנגיף להפיץ את עצמו. כלומר, צריך חיסון ב-OPV. אז למה בכלל לא לחסן ב-OPV? ניהול סיכונים. בעבר חיסון ה-OPV גרם לתופעות לוואי קשות, עד כדי מחלת הפוליו עצמה. הסיכוי לתופעות הלוואי הללו היה זעום - 1 ל-2.5 מיליון מקרים, בעוד שהנגיף "הרגיל" של פוליו גורם למחלה ב-1 מתוך 1,000 מקרים. עם הזמן התברר שחיסון ב-IPV לפני חיסון ב-OPV מעלים את תופעות הלוואי הללו לחלוטין, ובנוסף גם הסירו מה-OPV את החיסון נגד זן 2 (מתוך שלושה) של הפוליו כי הוא כנראה נכחד מהעולם, וזן זה בחיסון היה אחראי למרבית הבעיות - אבל עדיין, ניהול סיכונים. הגישה הרווחת כעת בעולם היא שכל עוד במדינה אין זכר לנגיף הפוליו האמיתי, לא מומלץ לחסן ב-OPV. בישראל חיסנו בשיטה של IPV-ואז-OPV במשך 15 שנים (מ-1990 עד 2005) מבלי שאיש יחלה בפוליו עקב החיסון, ועדיין הוחלט להפסיק עם זה, כך שילדים שנולדו ב-8 השנים האחרונות לא קיבלו OPV.</p>
+
+<p>מה שקורה אצלנו הוא שעכשיו גילו את הנגיף האמיתי, והמעקב אחריו מראה שהוא הולך ומתפשט, כבר חצי שנה, ולא נעצר. המטרה של מבצע החיסונים הנוכחי היא לעצור אותו.</p>
+
+<p>לכאורה, מדובר על עניין פשוט: לחסן את כל מי שטרם קיבל OPV, וחסל. בפועל, עניין מסובך: מי שלא חוסנו הם ילדים קטנים, והדילמה הלא פשוטה האם לחסן אותם נופלת על ההורים, שמשוללים ברובם השכלה רפואית ורואים (במידת מה של צדק) את הסיטואציה בתור "תסכן את הילד הקטן שלך כדי להגן על שאר האוכלוסיה". כדי להוסיף שמן למדורה ישנם טיפוסים שונים ומשונים שכותבים מניפסטים עמוסים בהבלים (או סתם שקרים) שמטרתם לבלבל את הציבור ולחשוב שעושים ניסוי על הציבור, או שחיסונים זה שקר, או שפוליו בכלל זה שקר, או שמחלות זה שקר (אבל שהומאופתיה זו אמת). מה אומר לכם, מזלי שאני עוסק במתמטיקה: הטרחנים הכפייתיים שלי לכל היותר יגרמו לאנשים להבין לא נכון את מושג האינסוף; הטרחנים הכפייתיים של החיסונים עלולים לגרום לאנשים למות.</p>
+
+<p>אני לא רוצה להיכנס כאן לדיון חיסונים-בעד-או-נגד. אם תשאלו את דעתי הלא מקצועית, אין ספק שבעד, אבל כבר יש מספיק מקומות אחרים ברחבי האינטרנט הישראל שעוסקים בשאלה מדוע בעד, ומנפצים לרסיסים את הקשקשת של מכחישי החיסונים. אני מבהיר מראש שגם אין לי כוונה לקיים בתגובות כאן דיון בעניין ובניגוד למנהגי גם אמחק הודעות בנושא - כי המטרה שלי היא עדיין לדבר על מתמטיקה. ואיך מתמטיקה קשורה לכל הפרשה העגומה הזו?</p>
+
+<p>ובכן, הדיון עד כה מעורר שאלה מטרידה אחת - אם תמיד יהיו באוכלוסיה אנשים שאינם מחוסנים נגד המחלה (למשל, מדוכאי חיסון), איך אפשר יהיה לעצור אותה? האם לא הכרחי להגיע לרמה של 100 אחוזי חיסון כדי שהמחלה תיעצר? התשובה היא שכמובן, לא. אם אחוז גדול מספיק של האוכלוסיה יהיה מחוסן כנגד המחלה, זה הסוף שלה - דינה יהיה להיכחד. השאלה מה האחוז הזה - וכמובן, זה מאוד תלוי במחלה. וכמובן, כשאני אומר "אחוז" אני בעצם מתכוון "ההסתברות שאדם אקראי שנדגם מהאוכלוסיה יהיה מחוסן"; כי אם נחסן את כל המדינה חוץ מעיר אחת אולי רוב המדינה תהיה בסדר, אבל המחלה תמשיך להשתולל בעיר האחת הזו ולא תיכחד ממנה. צריך שהחיסון יהיה אחיד יחסית.</p>
+
+<p>העניין הזה הוא לא סתם שעשוע במספרים; זה נתון שקובע מדיניות כלל עולמית בהתמודדות עם מחלות. עבור אבעבועות שחורות ההערכה הייתה שהאחוז הוא בסביבות ה-80 עד 85 אחוז, ולכן שיש תקווה להכחיד את המחלה לחלוטין מהעולם באמצעות מבצע חיסון כלל-עולמי. מבצע שכזה הוא אתגר לוגיסטי ענק, אבל באופן די מדהים הוא הצליח: מחלת האבעבועות השחורות אכן נכחדה מהעולם. מחלה שהרגה עשרות מיליוני אנשים לאורך ההיסטוריה ובשנות ה-50 של המאה ה-20 פגעה ב-50 מיליון אנשים בשנה - פשוט נכחדה. מחלת הפוליו היא יעד דומה להכחדה שכזו, אך כל עוד קיימות בעולם מדינות שנמנעות באופן גורף מחיסון, הכחדה שכזו היא בלתי אפשרית.</p>
+
+<p>בואו נעבור עכשיו לדבר על האופן שבו מבחינה מתמטית אנו מנסים להבין התפשטות של מחלות כדוגמת פוליו או אבעבועות שחורות. נתחיל באבחנה הפשוטה הבאה - רפואה זה עניין מורכב. המציאות זה עניין מורכב. נסיון לתיאור מדויק של התפשטות מחלה באמצעיים מתמטיים הוא קשה ביותר עד בלתי אפשרי, ולכן לא עושים את זה. מה שכן עושים הוא לבנות <strong>מודל</strong> שמתאר את התפשטות המחלה - מודל שהוא <strong>הפשטה</strong> מתמטית. מודלים הם אף פעם לא מדויקים; הם תמיד נותנים רק קירוב, או הערכה, של המצב האמיתי. רק שלעתים קרובות ההערכה הזו היא טובה מאוד ומאפשרת לנו לקבל מידע מועיל.</p>
+
+<p>בפוסט הזה אני הולך להציג מודל שהוא פשטני מאוד, פשוט כי זה מה שקל להציג; בפועל עובדים עם מודלים יותר מתוחכמים, שמרחיבים את הרעיונות הבסיסיים שאציג כאן. לכן אני אפילו לא מתיימר להיות מסוגל להפיק נתונים מספריים נכונים מתוך המודל; מה שאני כן רוצה לראות הוא את ה<strong>התנהגות</strong> של המודל ולראות האם היא מתארת התנהגות שאכן אופיינית למחלות.</p>
+
+<p>במודל שאציג, אפשר לחלק את האוכלוסיה לשלוש קבוצות: אנשים ש<strong>פגיעים</strong> למחלה (Susceptible), אנשים ש<strong>חולים</strong> במחלה ולכן הם <strong>מדבקים</strong> (Infectious), ואנשים שכבר אינם פגיעים למחלה או מעבירים אותה, ולכן הם <strong>הוסרו</strong> מרשימת האנשים הרלוונטית למחלה (Removed). "הסרה" כמובן כוללת את המקרה המורבידי של אנשים שמתו מהמחלה, אבל היא גם כוללת את המקרה המשמח של אנשים שהחלימו ללא פגע והנוגדנים שנוצרו בגופם עקב המחלה מגינים עליהם מהידבקות מחודשת (וישנם גם מקרים משמחים הרבה פחות של אנשים ששרדו את המחלה ופיתחו נוגדנים אבל המחלה גרמה להם לנזק לכל החיים - פוליו היא מחלה ידועה לשמצה מהבחינה הזו). התהליך שהמחלה מעבירה את האוכלוסיה הוא מהקבוצה S של הפגיעים, לקבוצה I של המדבקים, ומשם לקבוצה R של המוסרים, ולכן המודל נקרא מודל SIR. אפשר לדבר גם על מודלים שונים שמתארים מחלות שונות; למשל, מחלות הנגרמות על ידי בקטריות הן לרוב מסוג SIS, כלומר לאחר שאדם הפסיק להיות מדבק הוא חוזר להיות פגיע ולא מפתח חיסון. אני הולך לדבר רק על SIR (שהוא המודל של פוליו).</p>
+
+<p>בואו נניח בינתיים שיש לנו אוכלוסיה בעלת גודל קבוע, <span class="math">\(N\)</span>. נסמן ב-<span class="math">\(S\left(t\right),I\left(t\right),R\left(t\right)\)</span> את מספר האנשים בכל אחת משלוש הקבוצות בכל נקודת זמן <span class="math">\(t\)</span>; זה מגדיר לנו שלוש פונקציות <span class="math">\(S,I,R\)</span> שמקיימות <span class="math">\(S+I+R=N\)</span> (כלומר, סכום שלוש הפונקציות הללו הוא פונקציה קבועה שמחזירה את המספר <span class="math">\(N\)</span> לכל ערך). עכשיו, מה שמעניין אותנו הוא <strong>ההשתנות על פני זמן</strong> של שלוש הפונקציות הללו; הכלי המתמטי הסטנדרטי לחקירה של שינוי כזה הוא <strong>החשבון הדיפרנציאלי</strong>. מה שאני רוצה למצוא הוא תיאור של <strong>הנגזרות</strong> של <span class="math">\(S,I,R\)</span> (חשבו על זה כך: אם <span class="math">\(f\)</span> היא פונקציה שמתארת מיקום של כדור כפונקציה של זמן, הנגזרת שלה היא המהירות של הכדור - קצב השינוי של המיקום שלו).</p>
+
+<p>השאלה הראשונה היא - כמה אנשים מתוך <span class="math">\(S\)</span> צפוי שיידבקו על ידי אנשים מתוך <span class="math">\(I\)</span> בכל יחידת זמן?</p>
+
+<p>אנחנו מניחים פיזור אחיד של כל האוכלוסיות (הנחה פשטנית - המודל פשטני). עכשיו, בואו נתמקד בנשא יחיד של המחלה. הוא חי לו את חייו ומסתובב ברחוב ויוצר קשר עם אנשים וברוב המקרים כנראה ששום דבר לא קורה. אבל בחלק מהמקרים הוא יוצר קשר עם אנשים בצורה שתדביק אותם, בהינתן שהם שייכים ל-<span class="math">\(S\)</span>. במקרה של פוליו, הקשר הזה יכול לבוא לידי ביטוי בכך שהוא נוגע עם ידיים מלוכלכות (לא נגיד מלוכלכות במה...) בחפץ כלשהו שאחר כך נוגעים בו אנשים אחרים, לא מנקים את הידיים ואז נוגעים איתן באוכל. במקרה של מחלה כמו איידס, הקשר הזה לרוב מתבטא ביחסי מין לא מוגנים. כפי שאנחנו רואים, טיב הקשר יכול להיות שונה ומשונה, אבל זה לא הולך לעניין אותנו כאן - אנחנו נכניס לתמונה איזה פרמטר <span class="math">\(\beta\)</span> שהוא משהו שמאפיין את המחלה, ואומר שבממוצע נשא של המחלה, כשהוא באוכלוסיה בגודל <span class="math">\(N\)</span>, יוצר מגע שמסוגל להדביק עם <span class="math">\(\beta N\)</span> מהאוכלוסיה בכל יחידת זמן.</p>
+
+<p>עכשיו, עם כמה אנשים ב-<span class="math">\(S\)</span> הנשא יצור מגע-שגורם-להדבקה ביחידת זמן? תחת הנחת הפיזור האחיד החלק היחסי של <span class="math">\(S\)</span> באוכלוסיה שהנשא פוגש הוא <span class="math">\(\frac{S}{N}\)</span>, ולכן המספר הוא, <span class="math">\(\beta N\cdot\frac{S}{N}=\beta S\)</span>. עכשיו צריך להכפיל את זה ב-<span class="math">\(I\)</span> נשאים, ומקבלים שבכל יחידת זמן, <span class="math">\(\beta SI\)</span> מהאנשים יעברו מהקבוצה <span class="math">\(S\)</span> לקבוצה <span class="math">\(I\)</span>.</p>
+
+<p>מה שעוד קורה בזמן הזה הוא שאנשים יוצאים מ-<span class="math">\(I\)</span> ועוברים ל-<span class="math">\(R\)</span> - בין אם בנסיבות משמחות ובין אם לאו. גם כאן, הקצב שבו זה קורה הוא פרמטר כלשהו של המחלה; נסמן ב-<span class="math">\(\alpha\)</span> את הפרמטר שמתאר את הסיכוי של מישהו ב-<span class="math">\(I\)</span> לעבור ל-<span class="math">\(R\)</span> בכל יחידת זמן (שוב, יש כאן הנחת פיזור אחיד כלשהי - מה?). נקבל ש-<span class="math">\(I\)</span> מאבדים בכל יחידת זמן <span class="math">\(\alpha I\)</span> חברים, שעוברים ל-<span class="math">\(R\)</span>.</p>
+
+<p>עם נגזרות זה מתואר בשלוש המשוואות הבאות:</p>
+
+<p><span class="math">\(S^{\prime}=-\beta SI\)</span></p>
+
+<p><span class="math">\(I^{\prime}=\beta SI-\alpha I=\left(\beta S-\alpha\right)I\)</span></p>
+
+<p><span class="math">\(R^{\prime}=\alpha I\)</span></p>
+
+<p>זה המודל: מערכת של <strong>משוואות דיפרנציאליות</strong>. אבל מה אנחנו לומדים ממנו? בדרך כלל כשאומרים "משוואות" אנחנו חושבים על משהו שכל המטרה שלנו היא לפתור אותו, אבל כאן לא ברור אם יש דרך הצגה יפה עבור פתרונות של מערכת המשוואות הזו; מה שמעניין אותנו הוא לא לפתור את המשוואות, אלא להבין <strong>איך הפתרונות מתנהגים</strong>.</p>
+
+<p>למערכת המשוואות שלעיל יש פתרון יחיד בהינתן <strong>תנאי התחלה</strong> מסויימים: אם <span class="math">\(S_{0},I_{0},R_{0}\)</span> הם קבועים כלשהם אז קיימת בדיוק שלשה אחת של פונקציות <span class="math">\(S,I,R\)</span> שמקיימות את המשוואות הדיפרנציאליות וכמו כן <span class="math">\(S\left(0\right)=S_{0},I\left(0\right)=I_{0}\)</span> ו-<span class="math">\(R\left(0\right)=R_{0}\)</span>. מכיוון שאנחנו רוצים למדל התפרצות של מגיפה, אפשר להניח ש-<span class="math">\(S_{0},I_{0}\)</span> שניהם חיוביים בזמן ש-<span class="math">\(R_{0}=0\)</span>.</p>
+
+<p>כעת, מה אנחנו רואים? ראשית, שכל עוד <span class="math">\(I,S\)</span> הם חיוביים, אז <span class="math">\(S\)</span> היא פונקציה <strong>יורדת</strong> כי הנגזרת שלה שלילית. כמו כן <span class="math">\(R\)</span> היא פונקציה <strong>עולה</strong> כל עוד <span class="math">\(I\)</span> חיובי. ההתנהגות המעניינת היא של <span class="math">\(I\)</span> עצמו. מכיוון ש-<span class="math">\(I\)</span> ו-<span class="math">\(S\)</span> חיוביים, הערך של <span class="math">\(I^{\prime}\)</span> יהיה חיובי כל עוד <span class="math">\(\beta S-\alpha&gt;0\)</span>, כלומר כל עוד <span class="math">\(S&gt;\frac{\alpha}{\beta}\)</span>. במילים אחרות, מספר האנשים באוכלוסיה שעדיין פגיעים למחלה חייב להיות גדול מקבוע כלשהו, שמאפיין את המחלה, כדי שהמחלה תוסיף להתפשט. ברגע ש-<span class="math">\(S\)</span> נהיה קטן יותר מהסף הקריטי הזה, כמות החולים באוכלוסייה מתחילה לרדת. כל זה נשמע די מובן מאליו כשחושבים על זה בהגיון גם בלי מתמטיקה, אבל זה כבר מעודד שהמודל הפשוט שלנו מספק תוצאות הגיוניות; כך אפשר להרגיש שיש בסיס לבנות עליו את ההמשך.</p>
+
+<p>ועכשיו בואו נפנה את מבטנו לרגע אל הזמן <span class="math">\(t=0\)</span>. המגיפה בדיוק התחילה להשתולל - יש לנו כמות חיובית <span class="math">\(I\)</span> כלשהי של אנשים שנושאים את המחלה (למשל, נוסעים מחו"ל). האם המחלה תתפרץ בתור מגיפה? ובכן, אם <span class="math">\(S_{0}&gt;\frac{\alpha}{\beta}\)</span> אז מספר החולים יתחיל לעלות עד שיגיע לשיא כלשהו; אם <span class="math">\(S_{0}\le\frac{\alpha}{\beta}\)</span> מספר החולים רק יקטן ולא תהיה לנו מגיפה. זה מוביל אותנו להגדרה הבאה: <span class="math">\(\mathcal{R}_{0}=\frac{\beta S_{0}}{\alpha}\)</span> הוא מספר שנקרא ה-Basic reproduction number של המחלה. אם הוא גדול מ-1, אז המחלה תתפשט; אם הוא קטן מ-1, היא תגווע. אפשר לחשוב על המספר הזה כמייצג את התשובה לשאלה הבאה: נניח שאנחנו לוקחים אוכלוסיה שכולה מורכבת מאנשים שפגיעים למחלה, מניחים בתוכה אדם שזה עתה הפך לנגוע במחלה ומחכים לראות מה קורה - מה יהיה (בממוצע) מספר האנשים שאותו אדם ידביק לפני שיעבור מ-<span class="math">\(I\)</span> אל <span class="math">\(R\)</span>? שימו לב; לא מדובר כאן על "ביחידת זמן" אלא לאורך כל "מחזור החיים" של המחלה בתוך אותו אדם.</p>
+
+<p>המודל שלנו אמנם פשטני, אבל המספר <span class="math">\(\mathcal{R}_{0}\)</span> הזה (אני כותב אותו באופן מסולסל כדי לא לבלבל אותו עם ה-<span class="math">\(R\)</span> שכבר יש לנו כאן - אלו דברים שונים) הוא מושג קיים באפידימיולוגיה ומככב גם במודלים מורכבים יותר. כמובן שבהינתן מחלה מסויימת אין לה ערך <span class="math">\(\mathcal{R}_{0}\)</span> יחיד שמאפיין אותה - זה תלוי בסביבה שבה המחלה מתפרצת - אבל עדיין יש טווח ערכים סטנדרטי שבו <span class="math">\(\mathcal{R}_{0}\)</span> עשוי להימצא עבור המחלה הזו. כך למשל עבור פוליו או אבעבועות שחורות מדובר על ערך של 5-7 לערך; עבור איידס על 2-5; ועבור חצבת מדובר על 12-18 (וכאן המקום להזכיר שחצבת היא מחלה קטלנית ומסוכנת ומדבקת מאוד, שבזכות העובדה שקיים לה חיסון נראית לחלקנו היום בתור "מחלת ילדות קלה").</p>
+
+<p>בואו נסתכל עכשיו על <span class="math">\(S+I\)</span>, כלומר על הפונקציה שמתארת את המספר הכולל של אנשים באוכלוסיה שהמחלה עדיין רלוונטית לגביהם בכל רגע נתון. אנחנו רוצים לדעת מה יקרה איתם בטווח הארוך, כלומר כאשר <span class="math">\(t\)</span> שואף לאינסוף. שוב, להסתכל על הנגזרת יהיה אינפורמטיבי:</p>
+
+<p><span class="math">\(\left(S+I\right)^{\prime}=S^{\prime}+I^{\prime}=-\alpha I\)</span></p>
+
+<p>כלומר, המספר הזה יורד כל הזמן, אבל מצד שני הוא נשאר אי-שלילי (כי אין משמעות עבורנו לכמות שלילית של אנשים). זה אומר שאם קיים פתרון למשוואות שאכן נותר אי-שלילי, אז בפרט הנגזרת שלו צריכה לשאוף לאפס (למה? זה תרגיל בחדו"א: אם הנגזרת שלילית תמיד ולא שואפת לאפס אז הפונקציה בהכרח שואפת למינוס אינסוף - נסו להוכיח את זה, למשל, באמצעות משפט הערך הממוצע של לגראנז'). מכיוון שהנגזרת היא קבוע כפול <span class="math">\(I\)</span>, אנחנו מקבלים ש-<span class="math">\(\lim_{t\to\infty}I=0\)</span>. כמו כן, מכיוון ש-<span class="math">\(S+I\)</span> היא פונקציה מונוטונית וחסומה היא מתכנסת (שוב, למה?) ולכן אפשר לסמן <span class="math">\(\lim_{t\to\infty}S+I=S_{\infty}\)</span>. הערך של <span class="math">\(S_{\infty}\)</span> הוא כמות ה"שורדים" שלא נפגעו כלל מהמחלה.</p>
+
+<p>עד עכשיו הכל נראה די טריוויאלי, לפחות עבורי (וזה לא מפתיע, הרי המודל מאוד פשוט), אבל בואו תראו קסם: בואו ניקח את המשוואה <span class="math">\(S^{\prime}=-\beta SI\)</span> ונחלק אותה ב-<span class="math">\(S\)</span>. נקבל <span class="math">\(\frac{S^{\prime}}{S}=-\beta I\)</span>. עכשיו, למי שקצת משופשף בחדו"א, ביטוי כמו <span class="math">\(\frac{S^{\prime}}{S}\)</span> (פונקציה חלקי הנגזרת שלה) נראה קורץ מאוד - זה מה שמקבלים כשגוזרים את <strong>הלוגריתם הטבעי</strong> של פונקציה:</p>
+
+<p><span class="math">\(\left[\ln\left(f\left(x\right)\right)\right]^{\prime}=\frac{f^{\prime}\left(x\right)}{f\left(x\right)}\)</span> (זה נובע מכך ש-<span class="math">\(\left(\ln x\right)^{\prime}=\frac{1}{x}\)</span> ומכלל השרשרת שאומר ש-<span class="math">\(g\left(f\left(x\right)\right)^{\prime}=g^{\prime}\left(f\left(x\right)\right)f^{\prime}\left(x\right)\)</span>). לכן המשוואה <span class="math">\(\frac{S^{\prime}}{S}=-\beta I\)</span> נראית כמו משהו שכדאי לבצע לו <strong>אינטגרציה</strong> (הפעולה ה"הפוכה" מגזירה). אני רוצה לחשב אינטגרל מסויים, שהוא מעין סכימה משוקללת של ערכי הפונקציה על גבי תחום מסויים - במקרה שלנו, הזמן מ-0 עד אינסוף.</p>
+
+<p>בואו נזכיר איך עושים את זה בתכל'ס: אם יש לי פונקציה <span class="math">\(f\left(x\right)\)</span> שהיא גזירה עם נגזרת <span class="math">\(f^{\prime}\left(x\right)\)</span>, אז האינטגרל המסויים <span class="math">\(\int_{0}^{\infty}f^{\prime}\left(x\right)dx\)</span> (שימו לב! האינטגרל <strong>של הנגזרת</strong> של <span class="math">\(f\)</span>) שווה ל-<span class="math">\(f\left(\infty\right)-f\left(0\right)\)</span>, כאשר <span class="math">\(f\left(\infty\right)\)</span> הוא סימון מוזר ל-<span class="math">\(\lim_{x\to\infty}f\left(x\right)\)</span>. לתוצאה הזו קוראים <strong>המשפט היסודי של החשבון הדיפרנציאלי והאינטגרלי</strong> (כי היא מצביעה על הקשר שבין חשבון דיפרנציאלי - נגזרות - ובין חשבון אינטגרלי - אינטגרלים).</p>
+
+<p>אם כן, מצד אחד</p>
+
+<p><span class="math">\(\int_{0}^{\infty}\frac{S^{\prime}\left(t\right)}{S\left(t\right)}dt=\ln\left(S\left(\infty\right)\right)-\ln\left(S\left(0\right)\right)=\ln S_{\infty}-\ln S_{0}=\ln\frac{S_{\infty}}{S_{0}}\)</span></p>
+
+<p>(כאן אני משתמש בתכונה לפיה <span class="math">\(\ln a-\ln b=\ln\frac{a}{b}\)</span> - לוגריתם הוא בדיוק הפונקציה שהופכת חיבור וחיסור לכפל וחילוק).</p>
+
+<p>מצד שני, בואו נזכור שראינו ש-<span class="math">\(\left(S+I\right)^{\prime}=-\alpha I\)</span>, כלומר <span class="math">\(I=-\frac{1}{\alpha}\left(S+I\right)^{\prime}\)</span>, ולכן:</p>
+
+<p><span class="math">\(\int_{0}^{\infty}-\beta I\left(t\right)dt=-\beta\int_{0}^{\infty}I\left(t\right)dt=\frac{\beta}{\alpha}\int_{0}^{\infty}\left(S+I\right)^{\prime}dt=\frac{\beta}{\alpha}\left(S_{\infty}+I_{\infty}-S_{0}-I_{0}\right)=\frac{\beta}{\alpha}\left(S_{\infty}-N\right)\)</span></p>
+
+<p>כאן השתמשתי בכך ש-<span class="math">\(I_{\infty}=0\)</span> (זוכרים? כי ראינו ש-<span class="math">\(\lim_{t\to\infty}I=0\)</span>) וש-<span class="math">\(N=S_{0}+I_{0}\)</span> (כי בהתחלה כל האוכלוסיה היא או ב-<span class="math">\(S\)</span> או ב-<span class="math">\(I\)</span>).</p>
+
+<p>קיבלנו ש-<span class="math">\(\ln\frac{S_{\infty}}{S_{0}}=\frac{\beta}{\alpha}\left(S_{\infty}-N\right)\)</span>. שני הביטויים הללו הם בבירור שליליים, כי <span class="math">\(S_{\infty}&lt;N\)</span> (האוכלוסיה שלא נפגעה מהמחלה כמובן תהיה קטנה מהאוכלוסיה הכוללת) ו-<span class="math">\(S_{\infty}&lt;S_{0}\)</span> (האוכלוסיה שלא נפגעה מהמחלה כמובן תהיה קטנה מהאוכלוסיה שהייתה פגיעה בהתחלה) ולכן אפשר להכניס מינוס לשני האגפים ולקבל את השוויון השקול:</p>
+
+<p><span class="math">\(\ln\frac{S_{0}}{S_{\infty}}=\frac{\beta}{\alpha}\left(N-S_{\infty}\right)\)</span></p>
+
+<p>ועוד להטוט אחד לסיום: כזכור, <span class="math">\(\mathcal{R}_{0}=\frac{\beta}{\alpha}S_{0}\)</span> כאשר <span class="math">\(\mathcal{R}_{0}\)</span> היה המאפיין הבסיסי של התפשטות המחלה שקראנו לו Basic reproduction number. עכשיו, כדי לקבל משוואה נחמדה שמערבת אותו נבצע את הפשע המתמטי החמור ביותר - <strong>הזנחה</strong>. נניח שבתחילת התפשטות המחלה מספר החולים הוא נמוך מאוד, ולכן <span class="math">\(N\approx S_{0}\)</span> ולכן <span class="math">\(\mathcal{R}_{0}\approx\frac{\beta}{\alpha}N\)</span>. נציב במשוואה את זה, ונקבל אחרי פישוט אלגברי:</p>
+
+<p><span class="math">\(\ln\frac{S_{0}}{S_{\infty}}\approx\mathcal{R}_{0}\left(1-\frac{S_{\infty}}{N}\right)\)</span></p>
+
+<p>למשוואה הזו קוראים ה-final size relation של המחלה. אחד הדברים המעניינים בה הוא שאת הערכים של <span class="math">\(S_{0},S_{\infty}\)</span> אפשר לדעת, סטטיסטית, על ידי בחינת האוכלוסיה לפני ואחרי התפרצות המחלה, ואז ניתן להשתמש במשוואה כדי לקבל הערכה ל-<span class="math">\(\mathcal{R}_{0}\)</span> של המחלה. המודל הזה הוא, כאמור, פשטני מאוד ולכן גם ההערכה היא פשטנית ובפועל מתבצעת עם מודלים מורכבים יותר, אבל עדיין יפה שאפשר לקבל את המידע הזה כבר מהמודל הפשוט הנוכחי.</p>
+
+<p>אני רוצה לעבור ולהציג עכשיו בזריזות מודל מורכב קצת יותר. הבעיה העיקרית במודל ה-SIR שבגללו הוא לא יכול לתאר בצורה נכונה את מחלת הפוליו, הוא ההנחה ש-<span class="math">\(S\)</span> לא גדלה עם הזמן (או ליתר דיוק - שהמגפה מתקדמת כל כך מהר שהגידול שכן יש ב-<span class="math">\(S\)</span> הוא זניח). אם תסלחו לי על האנלוגיה, זה דומה לאש שחומר הבעירה שלה רק הולך ואוזל - ברור שהיא תיכבה בסוף. אבל במחלות "איטיות" יותר, חומר הבעירה הולך ומתחדש עם הזמן, כשילדים חדשים נולדים ומהגרים חדשים מצטרפים לאוכלוסיה. אז אנחנו רוצים לדבר על מודל יותר מורכב - כזה שבו <span class="math">\(S\)</span> גדלה עם הזמן - ולראות איך המחלה תתנהג בתוך מודל כזה. </p>
+
+<p>אני הולך להיות מאוד פשטני ולבצע רק שינוי אחד במודל - להוסיף גידול <strong>קבוע</strong> בגודל של <span class="math">\(S\)</span>, כלומר המשוואות שלי עכשיו ייראו כך:</p>
+
+<p><span class="math">\(S^{\prime}=-\beta SI+\lambda\)</span></p>
+
+<p><span class="math">\(I^{\prime}=\left(\beta S-\alpha\right)I\)</span></p>
+
+<p>בפועל הגידול לא קבוע אלא תלוי בגודל האוכלוסיה הכוללת (לידות...) וצריך גם לקחת תמותה טבעית בחשבון, ועושים את זה; אבל אני מציג כאן משהו פשטני ורוצה לראות רק מה יהיה השינוי שייגרם בגללו.</p>
+
+<p>ובכן, כמו קודם אנחנו רואים שיש גודל ספציפי של <span class="math">\(S\)</span> שהוא מה שמכריע בין התפשטות של המחלה ובין היעצרות שלה: <span class="math">\(S_{e}=\frac{\alpha}{\beta}\)</span>. כאשר <span class="math">\(S_{e}\)</span> נמצא מעל הסף הזה, <span class="math">\(I\)</span> גדל; ככל ש-<span class="math">\(I\)</span> גדל, כך <span class="math">\(S^{\prime}\)</span> הופך לקטן יותר, ולכן <span class="math">\(S\)</span> קטן; לבסוף <span class="math">\(S\)</span> יהיה קטן יותר מ-<span class="math">\(S_{e}\)</span> ואז <span class="math">\(I\)</span> יתחיל לקטון, עד שבסופו של דבר נקבל ש-<span class="math">\(\lambda&gt;\beta SI\)</span> ואז <span class="math">\(S\)</span> יתחיל לגדול שוב; ואז <span class="math">\(S\)</span> יעבור את <span class="math">\(\frac{\alpha}{\beta}\)</span>; ואז המחלה תתפרץ שוב.</p>
+
+<p>ואיך עוצרים מגפה? ובכן, אפשר להקטין את הפרמטרים שמאפיינים את התפשטות המחלה: הקפדה רצינית על היגיינה תקטין מאוד את הפצת הפוליו, והקפדה רצינית על יחסי מין בטוחים תקטין מאוד את הפצת האיידס. עם זאת, האמצעי האפקטיבי ביותר לעצירת המגפה הוא חיסון. בזמן שהקפדה על היגיינה וכדומה מצמצמים את הקבוע <span class="math">\(\mathcal{R}_{0}\)</span> של המחלה, ולכן מגדילים את <span class="math">\(S_{e}\)</span> - הרף של האוכלוסיה בסיכון שנדרש כדי שהמגפה תתפשט, הרי שחיסון מקטין את <span class="math">\(S\)</span> עצמה, וחיסון מסיבי של האוכלוסיה מקטין את <span class="math">\(S\)</span> דרסטית (אבל קריטי שהחיסון יהיה מפוזר באופן אחיד באוכלוסיה - אם יש קבוצה אחידה שמסרבת להתחסן, המחלה תשתמר בתוכה אם היא גדולה מספיק). אם נניח ש-<span class="math">\(p\)</span> הוא החלק היחסי של האוכלוסיה שמחוסנת, כאשר <span class="math">\(0\le p\le1\)</span>, וש-<span class="math">\(S_{0}\)</span> הוא גודל האוכלוסיה הפגיעה או המחוסנת בהתחלה, הרי שרק <span class="math">\(\left(1-p\right)S_{0}\)</span> מהאוכלוסיה פגיעה; ואנחנו רוצים שיתקיים <span class="math">\(\left(1-p\right)S_{0}\le S_{e}=\frac{S_{0}}{\mathcal{R}_{0}}\)</span>, כלומר אנחנו רוצים שיתקיים <span class="math">\(1-p\le\frac{1}{\mathcal{R}_{0}}\)</span>, ואחרי העברת אגפים נקבל שאנחנו רוצים שיתקיים <span class="math">\(p\ge1-\frac{1}{\mathcal{R}_{0}}\)</span>. זה מה שנקרא רף <strong>חסינות העדר</strong> של המחלה; אם ה"עדר" שחלקו היחסי באוכלוסיה הוא <span class="math">\(p\)</span> התחסן, אז המחלה לא תצליח להתפשט למרות שיש עדיין אנשים לא מחוסנים (כדוגמת מדוכאי מערכת החיסון שפשוט אינם יכולים להיות מחוסנים נגד המחלה), והיא תגווע ותיעלם. זה מה שקרה לאבעבועות השחורות - החיסון העולמי הצליח להעלות את כמות המחוסנים בעולם אל מעל לרף חסינות העדר.</p>
+
+<p>הנה גרף שמציג את איך שהתנהגות פתרונות למשוואות הדיפרנציאליות שלעיל נראית. הקו הצהוב הוא הגודל של <span class="math">\(S\)</span>, הקו הכחול הוא הגודל של <span class="math">\(I\)</span> והקו האדום הוא <span class="math">\(S_e\)</span> כדי שיהיה כיף, הגרף הוא אינטראקטיבי - אפשר לשנות את הפרמטרים השונים והמשונים של הגדלים של <span class="math">\(S,I\)</span> בהתחלה (<span class="math">\(S_{0},I_{0}\)</span>), כמו גם של הפרמטרים <span class="math">\(\alpha,\beta,\lambda\)</span>, אם כי במקרה של <span class="math">\(\alpha,\beta\)</span> הערכים שאותם מכניסים הם לא הערכים האבסולוטיים, אלא למעשה הערכים של <span class="math">\(\beta S_{0}I_{0}\)</span> (כלומר, כמה אנשים יחלו אחרי יחידת הזמן הראשונה) ושל <span class="math">\(\alpha I_{0}\)</span> (כלומר, כמה חולים יעברו לקבוצה <span class="math">\(R\)</span> שכולה טוב ולא מוצגת כאן אחרי יחידת הזמן הראשונה). השינויים בגודל האוכלוסיה הם דיסקרטיים ולא רציפים, אבל זה לא משנה יותר מדי.</p>
+
+<style type="text/css">
+.demo-container {
+    box-sizing: border-box;
+    width: 650px;
+    height: 450px;
+    padding: 20px 15px 15px 15px;
+    margin: 15px auto 30px auto;
+    border: 1px solid #ddd;
+    background: #fff;
+    background: linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+    background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+.demo-placeholder {
+    width: 100%;
+    height: 450px;
+    font-size: 14px;
+    line-height: 1.2em;
+}
+.legend div {
+    border-spacing: 5px;
+display:none;
+}
+.legend table {
+    border-spacing: 5px;
+display:none;
+}
+</style>
+
+<div id="content">
+
+        <div class="demo-container">
+<div class="demo-placeholder" id="placeholder" style="padding: 0px; position: relative; height: 450px;"></div>
+        </div>
+
+        <table border="1">
+            <tr>
+                <td>S_0:</td>
+                <td><input type="text" id="S_0" value="300" /></td>
+            </tr>
+            <tr>
+                <td>I_0:</td>
+                <td><input type="text" id="I_0" value="5" /></td>
+            </tr>
+            <tr>
+                <td>Beta:</td>
+                <td><input type="text" id="BETA" value="5" /></td>
+            </tr>
+            <tr>
+                <td>Alpha:</td>
+                <td><input type="text" id="ALPHA" value="3" /></td>
+            </tr>
+            <tr>
+                <td>Lambda:</td>
+                <td><input type="text" id="GAMMA" value="2" /></td>
+            </tr>
+            <tr>
+                <td>Steps:</td>
+                <td><input type="text" id="STEPS" value="500" /></td>
+            </tr>
+        </table>
+    </div>
+
+<p>שימו לב לצורה הטיפוסית של הגרף - <span class="math">\(S\)</span> עולה ויורדת בגלים, כשכל גל כזה מייצג התפרצות מגיפה ואז התאוששות של האוכלוסיה ממנה. בגרף של <span class="math">\(I\)</span> אפשר לראות איך בכל התפרצות מספר החולים מטפס למקסימום עד ש-<span class="math">\(S\)</span> יורד מתחת ל-<span class="math">\(S_{e}\)</span>, ואז הוא קטן שוב עד לרמה שבה הוא כמעט בלתי נראה, ו"מחכה להזדמנות הבאה" שלו להתפרץ. האוכלוסיה עצמה לא מיוצגת בצורה ריאליסטית - המספרים הם מספרים ממשיים, לא שלמים, כך שיש לנו פה ושם <span class="math">\(0.033\dots\)</span> "חולים" - אבל כמובן, אפשר להכפיל את המספרים הללו בקבוע מתאים וזה יסתדר.</p>
+
+<p>גרפים זה נחמד, אבל הכי נחמד זה לראות בעיניים איך זה קורה, אז הכנתי <a href="\stuff\plague\">משחק</a> שהולך כך: יש לנו הרבה ריבועים שנעים אקראית באיזה שטח מלבני. חלק מהריבועים "בריאים", חלק "נגועים" וחלק "מחוסנים". כשריבוע "נגוע" פוגע בריבוע "בריא" הוא עשוי להדביק אותו. ריבוע נגוע הולך ודועך לאיטו עד שהוא או "מת" ומוסר לגמרי, או הופך למחוסן. רציתי לעשות כך שאפשר יהיה לשלוט על הפרמטרים השונים - כמה בריאים, נגועים ומחוסנים יהיו, מה תהיה המהירות שלהם (מהירות גדולה יותר - יותר התנגשויות) ותוך כמה זמן נגוע דועך לגמרי, אבל בפועל לא היה לי מעולם כוח להשלים את זה (אתם כמובן מוזמנים לקחת את הקוד שנמצא שם ולעשות זאת בעצמכם)</p>
+
+<p>המשחקים הללו שאני עושה, כשמם כן הם - משחקים. בפועל מידול של מחלות הוא מורכב הרבה יותר - נכתבו על הנושא ספרים רבים - והתיאוריה תמיד נלקחת במידת מה של זהירות עם הקפדה על בדיקה של הנתונים בפועל. עם זאת, חשוב להבין ש<strong>זה עובד</strong>. עם ההצלחה של התחום קשה להתווכח. טוב, האמת שקל להתווכח, בדיוק כמו שלטרחנים מתמטיים קל לטעון שקנטור טעה. </p>
+
+<script language="javascript" type="text/javascript" src="\assets\js\plague\jquery.js"></script>
+<script language="javascript" type="text/javascript" src="\assets\js\plague\jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="\assets\js\plague\jquery.flot.time.js"></script>
+<script language="javascript" type="text/javascript" src="\assets\js\plague\jquery.flot.canvas.js"></script>
+<script language="javascript" type="text/javascript" src="\assets\js\plague\plot.js"></script>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/09/03/student_and_computer_16-20-ruby/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">פרוייקט &#34;התלמיד והמחשב&#34;, בעיות 16-20 - רובי</span>
+            </a>
+            
+            
+            
+            <a href="/2013/08/26/student_and_computer_15/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">פרוייקט &#34;התלמיד והמחשב&#34;, בעיה 15</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

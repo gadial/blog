@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תורת הקבוצות - אריתמטיקה של סודרים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תורת הקבוצות - אריתמטיקה של סודרים</h1>
+            <div class="post-meta">
+                <span class="date">2023-01-14</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/סודרים.html">סודרים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>איך הסודרים נראים?</h2>
+
+<p>סדרת הפוסטים שלי על תורת הקבוצות הגיעה <a href="https://gadial.net/2023/01/12/ordinals/">בפוסט הקודם</a> אל ההגדרה של סודרים וראינו עליהם כל מני דברים מרתקים כמו זה שאפשר להשוות אותם, אבל דבר אחד לא באמת הסברתי - <strong>איך הם נראים</strong>. מלמלתי משהו על זה שהטבעיים הם סודרים, ויש איזה סודר שנקרא <span class="math">\(\omega=\left\{ 0,1,2,\ldots\right\} \)</span> והראיתי עוד כמה סודרים באמצעותו, אבל זה לא רציני. אם אנחנו מדברים על סודרים, בואו נבין איך <strong>כולם</strong> כולל כולם נראים. אבל איך נעשה את זה?</p>
+<p>בואו נחשוב על מספרים טבעיים. יש כל מני דרכים לייצג מספרים טבעיים, אבל הדרך החביבה על האנושות בימינו היא <strong>הצגה עשרונית</strong>. בהצגה עשרונית אני כותב 572 וכולם מבינים שכתבתי מספר שמתקבל בתור מין תרגיל חשבוני: <span class="math">\(5\times10^{2}+7\times10^{1}+2\times10^{0}\)</span>. מה יש לנו פה? ביטוי שמערב שלוש פעולות חשבוניות: חיבור, כפל וחזקה; ומערב שלוש <strong>ספרות</strong>, במקרה הזה 5,7,2, שהן מספרים בין 0 ל-9; ומערב את המספר המיוחד 10 שמשמש בתור ה<strong>בסיס</strong> של הייצוג העשרוני.</p>
+<p>האם יש משהו דומה עבור סודרים באופן כללי? למרבה השמחה, כן. כל סודר <span class="math">\(\alpha>0\)</span> אפשר לכתוב באופן הבא:</p>
+<p><span class="math">\(\alpha=\omega^{\beta_{1}}\cdot k_{1}+\ldots+\omega^{\beta_{n}}\cdot k_{n}\)</span></p>
+<p>כאשר <span class="math">\(\alpha\ge\beta_{1}\ge\ldots\ge\beta_{n}\)</span> הם סודרים ו-<span class="math">\(k_{1},\ldots,k_{n}\)</span> הם מספרים טבעיים. הייצוג הזה נקרא <strong>הצורה הנורמלית של קנטור</strong>.</p>
+<p>לא תמיד הייצוג הזה עושה את החיים פשוטים יותר: למשל, יש סודרים שמקיימים <span class="math">\(\alpha=\omega^{\alpha}\)</span>, אז לא לגמרי ברור האם הייצוג הזה עוזר לנו להבין יותר טוב איך הם נראים; אבל לפחות יש לנו צורה אחידה לכולם שנראית סבירה יחסית.</p>
+<h2>איך מגדירים אריתמטיקה של סודרים?</h2>
+
+<p>כדי להבין איך הצורה הנורמלית הזו "עובדת", אנחנו צריכים להגדיר פעולות חשבון עבור סודרים - חיבור, כפל וחזקה, בדיוק כמו עבור טבעיים. ההגדרות די פשוטות; הן כמעט זהות למה שקורה עם טבעיים. אבל עם סיבוך אחד. אז בואו ניזכר קודם איך ההגדרות עובדות אצל הטבעיים.</p>
+<p>הדבר הבסיסי שאנחנו מתחילים ממנו הוא קיום הפעולה <span class="math">\(n+1\)</span> - פעולת ה<strong>עוקב</strong>. ראינו איך היא מוגדרת פורמלית: <span class="math">\(n+1\triangleq n\cup\left\{ n\right\} \)</span>. ברגע שיש אותה, אפשר להגדיר חיבור כללי <span class="math">\(n+m\)</span> באופן הבא:</p>
+<ul> <li><span class="math">\(n+0\triangleq n\)</span></li>
+
+
+<li><span class="math">\(n+\left(m+1\right)\triangleq\left(n+m\right)+1\)</span></li>
+
+</ul>
+
+<p>במילים אחרות, עבור <span class="math">\(m=0\)</span> החיבור מוגדר בצורה כזו ש-0 הוא נייטרלי לחיבור - לא משנה את מה שמחברים אותו אליו. עבור חיבור עם כל מספר גדול מאפס, אנחנו מתבססים על כך שהמספר הזה הוא <strong>עוקב מיידי</strong> של מישהו: כלומר, ניתן לכתוב אותו בתור <span class="math">\(m+1\)</span> עבור <span class="math">\(m\)</span> טבעי כלשהו. מכיוון ש-<span class="math">\(m<m+1\)</span> אנחנו מניחים שכבר הגדרנו את <span class="math">\(n+m\)</span> עבורו, ואנחנו לוקחים את ה-<span class="math">\(n+m\)</span> הזה ומפעילים עליו את פעולת העוקב. זו דוגמא להגדרה <strong>רקורסיבית</strong>: אנחנו מגדירים משהו באמצעות מקרים פשוטים יותר שלו שכבר טיפלנו בהם.</p>
+<p>באופן מאוד דומה אפשר להגדיר עכשיו כפל <span class="math">\(n\cdot m\)</span>, רק שעכשיו 0 לא יהיה נייטרלי אלא "בולעני", ואת מקום פעולת העוקב תחליף פעולת החיבור שכבר הגדרנו:</p>
+<ul> <li><span class="math">\(n\cdot0\triangleq0\)</span></li>
+
+
+<li><span class="math">\(n\cdot\left(m+1\right)\triangleq n\cdot m+n\)</span></li>
+
+</ul>
+
+<p>והגדרת חזקה <span class="math">\(n^{m}\)</span> ממשיכה באותה רוח:</p>
+<ul> <li><span class="math">\(n^{0}\triangleq1\)</span></li>
+
+
+<li><span class="math">\(n^{m+1}\triangleq n^{m}\cdot n\)</span></li>
+
+</ul>
+
+<p>את כל ההגדרות הללו אפשר להחיל גם על סודרים, אבל יש לנו סיבוך מהותי אחד: בהגדרה עבור טבעיים, ההנחה המובלעת שלנו הייתה שכל מספר שאיננו 0 הוא עוקב מיידי של מישהו. זה לא קורה עבור סודרים. למשל, <span class="math">\(\omega=\left\{ 0,1,2,\ldots\right\} \)</span> הוא לא עוקב מיידי של אף אחד. סודר כזה נקרא <strong>סודר גבולי</strong>. הסודר הגבולי הקטן ביותר הוא כאמור 0 שבו ההגדרות הקיימות כן מטפלות, אבל יש עוד אינספור נוספים, וצריך לטפל בכולם.</p>
+<p>כדי לקבל אינטואיציה לגבי מה שנעשה עכשיו, בואו ניזכר לרגע באופן שבו מגדירים במספרים ממשיים את <span class="math">\(a^{\sqrt{2}}\)</span>. הרעיון הוא להתבסס על זה שאנחנו יודעים להגדיר חזקה שבה המעריך הוא מספר רציונלי: <span class="math">\(a^{\frac{n}{m}}=\sqrt[m]{a^{n}}\)</span>; ומה שאנחנו עושים עכשיו הוא לקחת סדרה של מספרים רציונליים שמתכנסת ל-<span class="math">\(\sqrt{2}\)</span> (תמיד יש כזו; זה מה שנקרא "הרציונליים צפופים בממשיים"): סדרה <span class="math">\(\left\{ r_{n}\right\} _{n=1}^{\infty}\)</span> כך ש-<span class="math">\(\lim_{n\to\infty}r_{n}=\sqrt{2}\)</span>, ואנחנו <strong>מגדירים</strong> <span class="math">\(a^{\sqrt{2}}=\lim_{n\to\infty}a^{r_{n}}\)</span>. צריך כמובן להוכיח שזה מוגדר היטב, במובן זה שכל סדרה של רציונליים שמתכנסת אל <span class="math">\(\sqrt{2}\)</span> תניב את אותו מספר, אבל זה עובד.</p>
+<p>ההגדרה הזו הסתמכה על מושג ה<strong>גבול</strong> שקיים בחדו"א. עבור סודרים אין דבר כזה, אבל יש משהו דומה. ראשית, בואו נשים לב לכך שאם יש לנו קבוצה <span class="math">\(A\)</span> שכל האיברים שלה הם סודרים, אז <span class="math">\(\bigcup A\)</span> הוא סודר בעצמו. זה די ברור בקבוצה סופית, כי ראינו שלכל זוג סודרים, אחד מוכל בשני, כך שהאיחוד של כולם יהיה פשוט האיבר המקסימלי בקבוצה. אבל אם <span class="math">\(A\)</span> אינסופית זה מצריך הוכחה דומה לאלו של הפוסט הקודם. אני אסמן <span class="math">\(\alpha=\bigcup A\)</span> ואז כדי להראות שזו קבוצה טרנזיטיבית ניקח <span class="math">\(\gamma\in\alpha\)</span>. על פי הגדרת <span class="math">\(\alpha\)</span> זה אומר שקיים <span class="math">\(\beta\in A\)</span> כך ש-<span class="math">\(\gamma\in\beta\)</span>, ומכיוון ש-<span class="math">\(\beta\)</span> סודר אז <span class="math">\(\gamma\subseteq\beta\subseteq\bigcup A=\alpha\)</span> ולכן <span class="math">\(\gamma\subseteq\alpha\)</span> וקיבלנו ש-<span class="math">\(\alpha\)</span> טרנזיטיבי. עכשיו, האיברים של <span class="math">\(\alpha\)</span> כולם סודרים (כי האיברים של <span class="math">\(A\)</span> הם סודרים ולכן כל האיברים <strong>שלהם</strong> הם סודרים) וכבר ראינו שהם סדורים בסדר מלא על ידי <span class="math">\(\in\)</span>, כך ש-<span class="math">\(\alpha\)</span> הוא סודר.</p>
+<p>אבחנה נוספת היא ש-<span class="math">\(\alpha=\sup A\)</span>, כלומר האיבר המינימלי של אוסף הסודרים שגדולים או שווים לכל אברי <span class="math">\(A\)</span>. איבר כזה בהחלט קיים כי <span class="math">\(\alpha\)</span> הוא סודר כזה, אז מספיק להסתכל על קבוצת כל הסודרים הקטנים או שווים אליו שמקיימים את התכונה הזו והיא סדורה היטב. בנוסף, מכיוון ש-<span class="math">\(\text{sup}A\)</span> גדול או שווה לכל איבר ב-<span class="math">\(A\)</span> הוא מכיל את כולם, ולכן מכיל את האיחוד שלהם שהוא <span class="math">\(\alpha\)</span>; והמינימליות שלו פירושה שהוא מוכל ב-<span class="math">\(\alpha\)</span>, כך שקיבלנו שהם שווים.</p>
+<p>עכשיו אפשר להגדיר גבול, עבור מקרה ספציפי. ניקח סודר גבולי <span class="math">\(\alpha\)</span> וסדרה של סודרים שהאינדקסים שלה הם כל הסודרים עד ולא כולל <span class="math">\(\alpha\)</span>, כלומר <span class="math">\(\left\{ a_{\beta}\right\} _{\beta<\alpha}\)</span> (פורמלית, זו פונקציה מ-<span class="math">\(\alpha\)</span> אל קבוצה כלשהי של סודרים, כמו שסדרה רגילה היא פונקציה מ-<span class="math">\(\mathbb{N}\)</span> לקבוצה כלשהי). נניח שהסדרה עולה, כלומר אם <span class="math">\(\beta_{1}<\beta_{2}\)</span> אז <span class="math">\(a_{\beta_{1}}<a_{\beta_{2}}\)</span>, ועכשיו אפשר להגדיר את הגבול של הסדרה על ידי</p>
+<p><span class="math">\(\lim_{\beta\to\alpha}a_{\beta}=\sup\left\{ a_{\beta}\ |\ \beta<\alpha\right\} \)</span></p>
+<p>עם ההגדרה הזו אפשר להציג סוף סוף את ההגדרה הפורמלית של פעולות האריתמטיקה של סודרים.</p>
+<p>חיבור מוגדר על ידי</p>
+<ul> <li><span class="math">\(\alpha+0\triangleq\alpha\)</span></li>
+
+
+<li><span class="math">\(\alpha+\left(\beta+1\right)\triangleq\left(\alpha+\beta\right)+1\)</span> לכל סודר <span class="math">\(\beta\)</span></li>
+
+
+<li><span class="math">\(\alpha+\beta\triangleq\lim_{\gamma\to\beta}\left(\alpha+\gamma\right)\)</span> לכל סודר גבולי <span class="math">\(\beta>0\)</span></li>
+
+</ul>
+
+<p>כפל מוגדר על ידי</p>
+<ul> <li><span class="math">\(\alpha\cdot0\triangleq0\)</span></li>
+
+
+<li><span class="math">\(\alpha\cdot\left(\beta+1\right)\triangleq\left(\alpha\cdot\beta\right)+\alpha\)</span> לכל סודר <span class="math">\(\beta\)</span></li>
+
+
+<li><span class="math">\(\alpha\cdot\beta\triangleq\lim_{\gamma\to\beta}\left(\alpha\cdot\gamma\right)\)</span> לכל סודר גבולי <span class="math">\(\beta>0\)</span></li>
+
+</ul>
+
+<p>חזקה מוגדרת על ידי</p>
+<ul> <li><span class="math">\(\alpha^{0}\triangleq1\)</span></li>
+
+
+<li><span class="math">\(\alpha^{\beta+1}\triangleq\alpha^{\beta}\cdot\alpha\)</span> לכל סודר <span class="math">\(\beta\)</span></li>
+
+
+<li><span class="math">\(\alpha^{\beta}\triangleq\lim_{\gamma\to\beta}\alpha^{\gamma}\)</span> לכל סודר גבולי <span class="math">\(\beta>0\)</span></li>
+
+</ul>
+
+<p>זה מסיים את ההגדרה, אם כי אני כבר מציין שההגדרה הזו לא פורמלית מספיק; הגדרתי את הכל באופן רקורסיבי, אבל לא הסברתי למה בכלל אפשר להגדיר דברים באופן רקורסיבי. בגלל שהנושא הזה מביא איתו שלל סיבוכים משל עצמו, אני שומר אותו לפוסט הבא.</p>
+<h2>כמה דוגמאות ועוד דרך התבוננות על זה</h2>
+
+<p>עכשיו שיש לנו הגדרות פורמליות אפשר לראות כל מני דברים שאולי קצת לא אינטואיטיביים לנו, למשל ש-<span class="math">\(1+\omega\ne\omega+1\)</span>. למה? כי <span class="math">\(\omega+1=\left\{ 0,1,\ldots,\omega\right\} \)</span>, זה הסודר שבא מייד אחרי <span class="math">\(\omega\)</span>; לעומת זאת, אם ננסה למצוא מהו <span class="math">\(1+\omega\)</span> על פי הגדרה, נקבל</p>
+<p><span class="math">\(1+\omega=\lim_{n\to\omega}\left(1+n\right)=\sup\mathbb{N}=\omega\)</span></p>
+<p>זה בגלל שאם <span class="math">\(n<\omega\)</span> אז <span class="math">\(n\)</span> הוא מספר טבעי, ולכן <span class="math">\(1+n\)</span> גם הוא מספר טבעי, ואנחנו לוקחים את הסופרמום על קבוצת הטבעיים - לא קיבלנו שום דבר "חדש".</p>
+<p>הבעיה עם התיאור הזה, לפחות שלי, היא שאני מרגיש שהעניינים הסתבכו בצורה משמעותית. קיבלנו הגדרה יפה ומועילה, אבל עכשיו אנחנו רואים שיש בה מוקשים סמויים שאין לנו אינטואיציה טובה לגביהם. אז אולי אפשר לתת עוד אינטואיציה מה זה בכלל חיבור סודרים? התשובה היא שכן, ולמרבה המזל היא די פשוטה.</p>
+<p>בואו ניקח שתי קבוצות זרות <span class="math">\(A,B\)</span> שהן סדורות בסדרים מלאים, <span class="math">\(<_{A},<_{B}\)</span>, ונגדיר יחס סדר על <span class="math">\(A\cup B\)</span> שאפשר לתאר בתור "קודם <span class="math">\(A\)</span> ואז <span class="math">\(B\)</span>". כלומר:</p>
+<ul> <li>אם <span class="math">\(a\in A,b\in B\)</span> אז <span class="math">\(a<b\)</span></li>
+
+
+<li>אם <span class="math">\(a,b\in A\)</span> אז <span class="math">\(a<b\)</span> אם ורק אם <span class="math">\(a<_{A}b\)</span></li>
+
+
+<li>אם <span class="math">\(a,b\in B\)</span> אז <span class="math">\(a<b\)</span> אם ורק אם <span class="math">\(a<_{B}b\)</span></li>
+
+</ul>
+
+<p>ראינו כבר משהו כזה לא מזמן; <a href="https://gadial.net/2023/01/07/well_ordered_sets/">בפוסט שלי</a> על קבוצות סדורות היטב לקחתי את <span class="math">\(\mathbb{Z}\)</span> וחילקתי אותה לשני חלקים: <span class="math">\(\mathbb{Z}=A\cup B\)</span> כאשר <span class="math">\(A=\mathbb{N}\)</span> עם יחס הסדר הרגיל ו-<span class="math">\(B=\left\{ -1,-2,-3,\ldots\right\} \)</span> עם יחס הסדר על פי הערך המוחלט. מזה הסקתי יחס סדר חדש ולא סטנדרטי של <span class="math">\(\mathbb{Z}\)</span>, שסימנתי <span class="math">\(\mathbb{Z}=\left\{ 0,1,2,\ldots,-1,-2,\ldots\right\} \)</span>. עכשיו, כשעושים את זה על קבוצות סדורות היטב, התוצאה היא קבוצה סדורה היטב; ואם <span class="math">\(A\cong\alpha,B\cong\beta\)</span> מקבלים ש-<span class="math">\(A\cup B\cong\alpha+\beta\)</span> (בדוגמא שלנו קיבלנו ש-<span class="math">\(\mathbb{Z}\)</span> עם יחס הסדר המוזר איזומורפית ל-<span class="math">\(\omega+\omega\)</span>). זו הדרך הנוחה לחשוב על זה.</p>
+<p>עכשיו אולי קצת יותר ברור עניין ה-<span class="math">\(1+\omega\ne\omega+1\)</span>. כי <span class="math">\(\omega+1\)</span> זה "לאינסוף... ומעבר לו!" - זו קבוצת הטבעיים <span class="math">\(\omega\)</span> כשאנחנו מוסיפים עוד איבר 1 (זה ה-<span class="math">\(+1\)</span>) "בסוף" שלה, אחרי כל הטבעיים. לעומת זאת, <span class="math">\(1+\omega\)</span> זו קבוצת הטבעיים כשאנחנו מוסיפים איבר חדש <strong>בהתחלה</strong>, כלומר למשל הקבוצה <span class="math">\(\left\{ -1,0,1,2,\ldots\right\} \)</span> עם יחס הסדר הרגיל, שאיזומורפית ל-<span class="math">\(\mathbb{N}\)</span> עם האיזומורפיזם <span class="math">\(x\mapsto x+1\)</span>.</p>
+<p>מה עם כפל? אותו עניין: <span class="math">\(2\cdot\omega\ne\omega\cdot2\)</span>. כי <span class="math">\(2\cdot\omega=\lim_{n\to\omega}2\cdot n=\omega\)</span>, אבל <span class="math">\(\omega\cdot2=\left(\omega\cdot1\right)+\omega=\omega+\omega\)</span>. ושוב נשאלת השאלה האם אפשר לתת תיאור "קבוצתי" של זה, ואפשר! ניקח <span class="math">\(A,B\)</span> כמו קודם ונסתכל על <span class="math">\(A\times B\)</span>. על הקבוצה הזו נגדיר <strong>סדר לקסיקוגרפי</strong>, כלומר כזה שבו קודם כל משווים את האיברים ברכיב אחד, ורק אם הם זהים משווים ברכיב השני. כאן ספציפית משווים קודם את <span class="math">\(B\)</span> ורק אז את <span class="math">\(A\)</span>. כלומר, אם יש לנו את <span class="math">\(\left(a_{1},b_{1}\right),\left(a_{2},b_{2}\right)\in A\times B\)</span> אז <span class="math">\(\left(a_{1},b_{1}\right)<\left(a_{2},b_{2}\right)\)</span> אם ורק אם</p>
+<ul> <li><span class="math">\(b_{1}<b_{2}\)</span>, או:</li>
+
+
+<li><span class="math">\(b_{1}=b_{2}\)</span> וגם <span class="math">\(a_{1}<a_{2}\)</span></li>
+
+</ul>
+
+<p>וכמקודם, אם <span class="math">\(A\cong\alpha\)</span> ו-<span class="math">\(B\cong\beta\)</span> אז <span class="math">\(A\times B\cong\alpha\times\beta\)</span>. למשל, עבור <span class="math">\(\omega\cdot2\)</span> אפשר להסתכל על הקבוצה <span class="math">\(\mathbb{N}\times\left\{ 0,1\right\} \)</span>; אנחנו משווים איברים <span class="math">\(\left(n,b\right)\)</span> קודם כל על פי ה"ביט" הימני, ואז על פי המספר השמאלי. אנחנו מקבלים שני עותקים של <span class="math">\(\mathbb{N}\)</span>: ראשית כל האיברים מהצורה <span class="math">\(\left(n,0\right)\)</span> ולאחר מכן האיברים מהצורה <span class="math">\(\left(n,1\right)\)</span>.</p>
+<h2>אז איך מגיעים לצורה הנורמלית?</h2>
+
+<p>כזכור, התחלנו את הפוסט מלדבר על זה שכל סודר ניתן להציג בצורה הנורמלית <span class="math">\(\alpha=\omega^{\beta_{1}}\cdot k_{1}+\ldots+\omega^{\beta_{n}}\cdot k_{n}\)</span>. איך מוכיחים את זה? התשובה היא - באינדוקציה. אבל כמו שהייתי זקוק לסוג מיוחד של רקורסיה כדי להגדיר את פעולות האריתמטיקה, אני צריך סוג מיוחד של אינדוקציה בשביל ההוכחה; אני אשמור את ההסבר הפורמלי עליה לפוסט הבא ובואו פשוט נזרום איתה כרגע.</p>
+<p>הלב הטכני של ההוכחה הוא משפט ש... ניחשתן נכון... מכליל תוצאה דומה עבור מספרים טבעיים. ספציפית, בטבעיים אנחנו יודעים שאם <span class="math">\(a,b\)</span> הם טבעיים כך ש-<span class="math">\(b>0\)</span> אז קיימים <span class="math">\(q,r\)</span> יחידים כך ש-<span class="math">\(a=bq+r\)</span> ו-<span class="math">\(0\le r<a\)</span>. מה שנקרא, חילוק עם שארית. עבור סודרים קיים אותו דבר בדיוק: בהינתן <span class="math">\(\alpha,\beta\)</span> כך ש-<span class="math">\(\beta>0\)</span>, קיימים <span class="math">\(\gamma,\rho\)</span> כך ש-<span class="math">\(\alpha=\beta\cdot\gamma+\rho\)</span> ו-<span class="math">\(\rho<\alpha\)</span>. גם ההוכחה של זה דומה להוכחה עבור הטבעיים: לוקחים את <span class="math">\(\gamma\)</span> המקסימלי שעבורו <span class="math">\(\alpha\ge\beta\cdot\gamma\)</span> (קיים כזה כי <span class="math">\(\beta\cdot\left(\alpha+1\right)>\alpha\)</span>). עכשיו לוקחים את <span class="math">\(\rho\)</span> המקסימלי שעבורו <span class="math">\(\alpha\ge\beta\cdot\gamma+\rho\)</span> (קיים כזה כי <span class="math">\(\beta\cdot\gamma+\beta=\beta\cdot\left(\gamma+1\right)>\alpha\)</span>). קל לראות ש-<span class="math">\(\alpha=\beta\cdot\gamma+\rho\)</span> אחרת היינו מקבלים סתירה למקסימליות עם <span class="math">\(\beta\cdot\gamma+\rho+1\)</span>.</p>
+<p>את המשפט המרכזי של הצורה הנורמלית מוכיחים באינדוקציה על <span class="math">\(\alpha\)</span>. עבור <span class="math">\(\alpha=1\)</span> בוחרים <span class="math">\(\beta=0\)</span> ומקבלים <span class="math">\(\alpha=\omega^{\beta}\)</span> כך ש-<span class="math">\(\alpha\ge\beta\)</span>. עבור <span class="math">\(\alpha>1\)</span> כלשהו, בוחרים את <span class="math">\(\beta\)</span> להיות הסודר הגדול ביותר כך ש-<span class="math">\(\alpha\ge\omega^{\beta}\)</span>. קיים כזה כי <span class="math">\(\alpha\le\omega^{\alpha}\)</span> (ההוכחה היא באינדוקציה; נראה אותה בפוסט הבא בתור דוגמא). על פי משפט החלוקה שראינו, קיימים <span class="math">\(\delta,\rho\)</span> כך ש-<span class="math">\(\rho<\omega^{\beta}\)</span> ומתקיים <span class="math">\(\alpha=\omega^{\beta}\cdot\delta+\rho\)</span>. עכשיו שמים לב ש-<span class="math">\(\delta\)</span> חייב להיות מספר טבעי (כי אם היה לפחות <span class="math">\(\omega\)</span> היינו מקבלים <span class="math">\(\omega^{\beta}\cdot\delta\ge\omega^{\beta}\cdot\omega=\omega^{\beta+1}\)</span> בסתירה למקסימליות של <span class="math">\(\beta\)</span>) ואפשר להמשיך באינדוקציה על <span class="math">\(\rho\)</span>.</p>
+<p>זה מסיים את הפוסט הזה, אבל כמות נפנופי הידיים שהלכה פה היא לא זניחה, והיא תחמיר בהמשך אם לא נעצור כדי להבין מה הולך באינדוקציות והרקורסיות שאני משתמש בהן; בזה יעסוק הפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2023/01/18/classes_and_transfinite/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת הקבוצות - מחלקות, אקסיומת ההחלפה ואינדוקציה ורקורסיה על-סופיות</span>
+            </a>
+            
+            
+            
+            <a href="/2023/01/12/ordinals/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">תורת הקבוצות - סודרים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

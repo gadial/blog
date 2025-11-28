@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>החלפת משתנים בחשבון דיפרנציאלי ואינטגרלי (&#34;שיטת ההצבה&#34;) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>החלפת משתנים בחשבון דיפרנציאלי ואינטגרלי (&#34;שיטת ההצבה&#34;)</h1>
+            <div class="post-meta">
+                <span class="date">2015-12-31</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אינטגרציה.html">אינטגרציה</a>
+                    
+                    <a href="/tags/החלפת משתנים.html">החלפת משתנים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>היעד הנוכחי של סדרת הפוסטים שלי על אנליזה וקטורית הוא משפט כבד למדי - משפט החלפת המשתנים. אבל לפני שנצלול למעמקים הטכניים שלו, בואו נחזור לרגע לחדו"א של משתנה יחיד ונדבר על איך משפט החלפת המשתנים נראה שם, גם כי זה נותן לנו נקודת אחיזה למשפט הכללי והמסובך יותר, וגם כי מעולם לא כתבתי על המשפט הבסיסי פוסט והגיע הזמן. במשתנה יחיד הניסוח של המשפט פשוט וההוכחה פשוטה (יחסית) גם כן, כך שזהו מבוא מוצלח.</p>
+<p>אבל לפני שנדבר על חדו"א, בואו ננסה להבין מה זו בכלל "החלפת משתנים" עם דוגמה יותר פשוטה - משוואות פולינומיות. בואו נסתכל במשוואה <span class="math">\(x^{4}-5x^{2}+4=0\)</span> - מה הפתרונות שלה? איך מוצאים אותם? ובכן, יש נוסחה לפתרון משוואות ממעלה ארבע, אבל היא מסובכת מאוד. האם יש דרך יותר פשוטה? ובכן, שימו לב שבמשוואה הזו מופיעות רק חזקות <strong>זוגיות</strong> של <span class="math">\(x\)</span> - החזקות 4, 2 ו-0. זה אומר לנו שבעצם יש פה משוואה ריבועית ב"תחפושת". כדי להוריד את התחפושת, אנחנו מבצעים החלפת משתנים: מגדירים משתנה חדש, <span class="math">\(t\)</span>, כך ש-<span class="math">\(t=x^{2}\)</span>, ואז המשוואה לעיל הופכת להיות המשוואה <span class="math">\(t^{2}-5t+4=0\)</span> שקל לפתור בדרכים סטנדרטיות לפתרון משוואה ריבועית (נוסחת השורשים או טרינום). מקבלים שהפתרונות הם <span class="math">\(t=1,4\)</span>. מכאן קל לקבל פתרונות למשוואה המקורית: מכיוון ש-<span class="math">\(t=x^{2}\)</span> קיבלנו שהמשוואות <span class="math">\(x^{2}=1\)</span> ו- <span class="math">\(x^{2}=4\)</span> נותנות פתרונות למשוואה המקורית, ובסך הכל נקבל שלמשוואה המקורית יש ארבעה פתרונות: <span class="math">\(x=1,-1,2,-2\)</span>.</p>
+<p>אם כן, מהי בעצם החלפת משתנים? אנחנו מנסים <strong>לפשט</strong> ביטוי כלשהו על ידי כך שאנחנו מגדירים משתנה חדש, שהוא <strong>פונקציה</strong> של המשתנה הישן. בואו נחדד את זה על ידי כך שנעבור לטרמינולוגיה של חדו"א, שמשתמשת בפונקציות. ראשית כל הייתה לנו פונקציה <span class="math">\(h\left(x\right)=x^{4}-5x^{2}+4\)</span> וביקשו מאיתנו לפתור את המשוואה <span class="math">\(h\left(x\right)=0\)</span>. זה היה קשה, אבל אז שמנו לב לכך שאפשר לחשוב על <span class="math">\(h\)</span> בתור <strong>הרכבה</strong> של שתי פונקציות פשוטות יותר: <span class="math">\(f\left(t\right)=t^{2}-5t+4\)</span> ו-<span class="math">\(g\left(x\right)=x^{2}\)</span>. דהיינו, קיבלנו ש-<span class="math">\(h\left(x\right)=f\left(g\left(x\right)\right)\)</span>, או בסימון מקובל אחר, <span class="math">\(h=f\circ g\)</span>. כעת השתמשנו בכך שיותר קל לנו לפתור משוואות שמערבות את <span class="math">\(f,g\)</span> בנפרד כדי לפתור את המשוואה המקורית עבור <span class="math">\(h\)</span>.</p>
+<p>בואו נעבור עכשיו לדוגמה שקשורה לאינטגרלים לא מסויימים. ראשית כל נזכיר לכם אינטגרל אחד נחמד שאנחנו יודעים לפתור יפה: <span class="math">\(\int\frac{1}{x}dx\)</span>. האינטגרל הזה שווה ל-<span class="math">\(\ln x+C\)</span> (לא ניכנס עכשיו להסבר מדוע). עכשיו בואו נסתכל על אינטגרל דומה: <span class="math">\(\int\frac{1}{1-x}dx\)</span>. למה הוא שווה? האינטואיציה היא שאפשר לבצע פה החלפת משתנים: להגדיר משתנה חדש <span class="math">\(y=1-x\)</span> ואז לקבל את האינטגרל <span class="math">\(\int\frac{1}{y}dy\)</span>, לבצע את האינטגרציה ולקבל <span class="math">\(\ln y+C\)</span>, ואז להציב מחדש את המשתנה ולקבל <span class="math">\(\ln\left(1-x\right)+C\)</span>. ואיך נבדוק את עצמנו? נגזור: אחרי גזירה מקבלים <span class="math">\(\frac{1}{1-x}\cdot\left(1-x\right)^{\prime}=\frac{1}{1-x}\cdot\left(-1\right)=-\frac{1}{1-x}\)</span>. אוקיי, משהו לא עבד פה. קיבלנו מינוס של התוצאה הנכונה.</p>
+<p>עוד לא השתכנעתם שיש פה בעיה? אז שימו לב שאפשר היה לנקוט באותו תעלול גם עבור <span class="math">\(\int\frac{1}{1+x^{2}}dx\)</span> ולקבל את ה"פתרון" <span class="math">\(\ln\left(1+x^{2}\right)+C\)</span>. אבל הפתרון הזה <strong>בבירור</strong> לא נכון, כי הנגזרת יוצאת בכלל <span class="math">\(\frac{2x}{1+x^{2}}\)</span>, ואם אתם זוכרים קצת אינטגרציה אתם זוכרים ש-<span class="math">\(\int\frac{1}{1+x^{2}}dx=\arctan x+C\)</span>. וזו פונקציה שונה לגמרי. בקיצור, משהו פה משתבש (וזה לא מפתיע; הרי לא הוכחתי עד עכשיו כלום, אני סתם הולך לפי אינטואיציה עיוורת). התחושה היא שמה שמשתבש הוא שחסר לי בביטוי המקורי את ה<strong>נגזרת</strong> של הביטוי שאני מחליף - זה מסביר את המינוס 1 במקרה הראשון (הנגזרת של <span class="math">\(1-x\)</span>) ואת ה-<span class="math">\(2x\)</span> במקרה השני (הנגזרת של <span class="math">\(1+x^{2}\)</span>). משפט החלפת המשתנים בחדו"א הוא בדיוק מה שמקבלים כשמתחשבים גם בעניין הזה.</p>
+<p>הנה דוגמת צעצוע שבה הנגזרת של הביטוי הפנימי יוצאת 1 ולכן אין צורך בתיקון: <span class="math">\(\int\frac{1}{2+x}dx\)</span>. במקרה הזה נגדיר <span class="math">\(y=2+x\)</span> ואכן נקבל בסופו של דבר <span class="math">\(\ln\left(2+x\right)+C\)</span> בתור הפתרון. אבל גם במקרה הזה עדיין יש בעיה אחרת שצריך להתחשב בה וצצה כשאנחנו מנסים לחשב אינטגרל <strong>מסויים</strong> (כלומר, אינטגרל שבו יש גבולות אינטגרציה ואנחנו מחפשים את ערך האינטגרל ביניהם, ולא אינטגרל שבו אנחנו מחפשים פונקציה קדומה). נניח שאנחנו מחשבים את <span class="math">\(\int_{-1}^{1}\frac{1}{2+x}dx\)</span>. בבירור אין שום בעיה עם האינטגרל הזה, כי כאשר <span class="math">\(x\)</span> רץ ממינוס 1 אל 1, הביטוי <span class="math">\(2+x\)</span> רץ מ-1 אל 3, ולכן <span class="math">\(\frac{1}{2+x}\)</span> מוגדר בכל הקטע <span class="math">\(\left[-1,1\right]\)</span>. לעומת זאת, אם נבצע "סתם" החלפת משתנה <span class="math">\(y=2+x\)</span> נקבל את האינטגרל <span class="math">\(\int_{-1}^{1}\frac{1}{y}dy\)</span> שהוא כמובן בעייתי כי עבור <span class="math">\(y=0\)</span> שממש באמצע הקטע <span class="math">\(\left[-1,1\right]\)</span> נקבל ביטוי לא מוגדר (וזו לא בעיה נקודתית; האינגטרל "מתפוצץ" סביב הנקודה הזו). אם כן, כשמבצעים החלפת משתנים באינטגרל מסויים, גם גבולות האינטגרציה צריכים להשתנות בהתאם.</p>
+<p>עכשיו משברור לנו מה שני ה"תיקונים" שצריך לעשות (כפל בנגזרת של מה שמחליפים, ותיקון גבולות אינטגרציה בהתאם) אפשר ממש לנסות ולחפש את הניסוח המדויק של משפט החלפת המשתנים באופן עצמאי, אבל זה קצת מעייף, אז אני פשוט אביא את הניסוח הנקי:</p>
+<p>בהינתן פונקציה <span class="math">\(g:\left[a,b\right]\to\mathbb{R}\)</span> (זו הפונקציה שמבצעת את "החלפת המשתנים") שהיא ב-<span class="math">\(C^{1}\)</span> (כלומר - גזירה, והנגזרת רציפה) ו-<span class="math">\(g^{\prime}\left(x\right)\ne0\)</span> לכל <span class="math">\(x\in\left(a,b\right)\)</span>, ובהינתן פונקציה <span class="math">\(f\)</span> רציפה שמוגדרת על התמונה של <span class="math">\(g\)</span>, מתקיים:</p>
+<p><span class="math">\(\int_{g\left(a\right)}^{g\left(b\right)}f\left(y\right)dy=\int_{a}^{b}\left(f\circ g\right)\left(x\right)g^{\prime}\left(x\right)dx\)</span></p>
+<p>בכתיב טיפה יותר חסכוני:</p>
+<p><span class="math">\(\int_{g\left(a\right)}^{g\left(b\right)}fdy=\int_{a}^{b}\left(f\circ g\right)g^{\prime}dx\)</span></p>
+<p>ואם נסמן <span class="math">\(I=\left[a,b\right]\)</span> ו-<span class="math">\(J=g\left(I\right)\)</span> ונוותר על ה-<span class="math">\(dx\)</span>-ים, כפי שעשינו עם הגדרת האינטגרל הכללי באנליזה וקטורית, אפילו אפשר לכתוב</p>
+<p><span class="math">\(\int_{J}f=\int_{I}\left(f\circ g\right)\left|g^{\prime}\right|\)</span></p>
+<p>כאשר הערך המוחלט צץ לו כדי לקזז את העובדה שעכשיו אין לנו גבולות אינטגרציה עליונים ותחתונים אלא פשוט אינטגרציה על קטע; אסביר את זה עוד מעט. ראשית כל בואו נוכיח את המשפט הזה.</p>
+<p>זה שעשוע נחמד לחשוב מאיפה צצו כל ההנחות המוזרות של המשפט, עם ה-<span class="math">\(C^{1}\)</span> וכאלה (טוב, יש עוד שעשועים נחמדים כמו לנסוע ברכבת הרים וכדומה, אבל אני מניח שאם שרדתם עד פה גם מבחינתכם זה שעשוע נחמד). אין כאן משהו מסובך במיוחד - ראשית, אנחנו רוצים ש-<span class="math">\(g\)</span> תהיה מונוטונית עולה או יורדת בכל <span class="math">\(I=\left[a,b\right]\)</span>, כך שהיא בפרט תהיה חד חד ערכית על הקטע הזה. מכיוון ש-<span class="math">\(g^{\prime}\left(x\right)\ne0\)</span> בתוך הקטע, בשילוב עם העובדה ש-<span class="math">\(g^{\prime}\)</span> רציפה, נקבל שלא ייתכן ש-<span class="math">\(g^{\prime}\)</span> מחליפה סימן בתוך הקטע (אם הייתה מחליפה סימן, אז על פי משפט ערך הביניים היא הייתה מתאפסת בתוך הקטע). עכשיו, אם <span class="math">\(g\)</span> היא פונקציה יורדת, זה אומר ש-<span class="math">\(g\left(a\right)&gt;g\left(b\right)\)</span>, אז בואו ניזכר מה זה אומר מבחינת הסימון <span class="math">\(\int_{g\left(a\right)}^{g\left(b\right)}f\)</span>; המוסכמה היא שאם באינטגרל הגבול העליון קטן מהגבול התחתון, הוא שווה למינוס האינטגרל עם הגבולות "בסדר הנכון", כלומר <span class="math">\(\int_{g\left(a\right)}^{g\left(b\right)}f=-\int_{g\left(b\right)}^{g\left(a\right)}f\)</span>. זו בסך הכל מוסכמת סימון, לא יותר מכך. בלעדיה הייתי צריך להגיד יותר פעמים "נפריד למקרים". זה גם מסביר את הערך המוחלט בניסוח השני של המשפט - <span class="math">\(\int_{J}f\)</span> מניח תמיד שהגבולות ב-<span class="math">\(J\)</span> הם "בסדר הנכון" ולכן אם <span class="math">\(g\)</span> יורדת, כלומר אם <span class="math">\(g^{\prime}\)</span> שלילית, מקזזים את המינוס החסר באגף שמאל על ידי כך שמוחקים אותו גם מאגף ימין - זו המשמעות היחידה של הערך המוחלט על <span class="math">\(g^{\prime}\)</span>.</p>
+<p>טוב ויפה, אבל איך מוכיחים את המשפט? ובכן, משתמשים בתותח כבד - <a href="http://www.gadial.net/2011/01/02/fundemental_theorem_of_calculus/">במשפט היסודי של החדו"א</a>. בואו ניזכר מה המשפט אומר (בגרסה קצת פחות כללית ממה שאפשר לסחוט): אם <span class="math">\(f\)</span> היא פונקציה רציפה על הקטע <span class="math">\(\left[ c,d\right]\)</span> אז ניתן להגדיר פונקציה <span class="math">\(F\left(x\right)=\int_{c}^{x}f\left(t\right)dt\)</span>, ונקבל ש-<span class="math">\(F\)</span> גזירה ומתקיים <span class="math">\(F^{\prime}\left(x\right)=f\left(x\right)\)</span> לכל <span class="math">\(x\in\left[ c,d\right]\)</span>. אם תזכרו, נובע מכך די בקלות ש-<span class="math">\(\int_{c}^{d}f\left(x\right)dx=F\left(d\right)-F\left(c\right)\)</span>.</p>
+<p>עכשיו נשתמש בטריק שאפשר להמציא עם קצת הינדוס לאחור: נגדיר <span class="math">\(H\left(x\right)=F\left(g\left(x\right)\right)\)</span>, ונגזור באמצעות כלל השרשרת. נקבל ש-<span class="math">\(H^{\prime}\left(x\right)=F^{\prime}\left(g\left(x\right)\right)g^{\prime}\left(x\right)=f\left(g\left(x\right)\right)g^{\prime}\left(x\right)\)</span>. דהיינו, מצאנו את הפונקציה הקדומה של כל הביטוי <span class="math">\(\left(f\circ g\right)g^{\prime}\)</span>, מה שמאפשר לנו להשתמש במשפט היסודי של החדו"א פעמיים כדי לקבל את השוויון שרצינו:</p>
+<p><span class="math">\(\int_{a}^{b}\left(f\circ g\right)\left(x\right)g^{\prime}\left(x\right)dx=\int_{a}^{b}H^{\prime}\left(x\right)dx=H\left(b\right)-H\left(a\right)=F\left(g\left(b\right)\right)-F\left(g\left(a\right)\right)=\int_{g\left(a\right)}^{g\left(b\right)}f\left(y\right)dy\)</span></p>
+<p>זה מסיים את ההוכחה, אבל לפני שנסיים את הפוסט, בואו נראה כמה שימושים של העסק הזה כדי שלא נהיה לחלוטין באוויר. מה שכדאי לזכור כשבאים להשתמש בהחלפת משתנים בפועל הוא שאפשר להשתמש במשפט בשני הכיוונים שלו. באחד מהם אנחנו לוקחים ביטוי מסובך שמופיע בתוך האינטגרל ומחליפים אותו במשתנה חדש, אבל כדי שהקסם הזה יעבוד אנחנו חייבים שהביטוי הזה יכלול גם את הנגזרת של מה שהמשתנה בא לייצג לבסוף - כלומר, צריך לזהות תבניות מאוד ספציפיות. בכיוון השני אנחנו פשוט מחליפים את <span class="math">\(x\)</span> בביטוי מורכב יותר וה"עונש" שאנחנו משלמים על כך הוא שאנחנו צריכים לכפול בנגזרת של הביטוי המורכב הזה.</p>
+<p>אני אתחיל דווקא עם דוגמה עבור הכיוון השני, כי טרם ראינו אותו בפעולה. בואו נחשב את האינטגרל <span class="math">\(\int_{0}^{1}\sqrt{1-x^{2}}dx\)</span>. זה נראה כמו אינטגרל מזעזע כי יש שם שורש ועניינים. אז משתמשים בתעלול מהסוג שכולנו אוהבים במתמטיקה - מכניסים מושג מתחום לכאורה לא קשור, שמפשט לנו את הבעיה. במקרה שלנו, טריגונומטריה. הזהות הבסיסית ביותר בטריגונומטריה היא <span class="math">\(\sin^{2}\alpha+\cos^{2}\alpha=1\)</span> (זה נובע ישירות ממשפט פיתגורס), ודרך אחרת לחשוב על זה היא בתור <span class="math">\(\sin\alpha=\pm\sqrt{1-\cos^{2}\alpha}\)</span>, שכבר נראה כמו הביטוי שאצלנו. אז נשתמש בהצבה שמחליפה את <span class="math">\(x\)</span> בפונקציה טריגונומטרית; לטכניקה הזו קוראים "הצבה טריגונומטרית" והיא יעילה למדי בחישוב כל מני אינטגרלים שנראים אבודים.</p>
+<p>במקרה הזה, <span class="math">\(f\left(x\right)=\sqrt{1-x^{2}}\)</span> ואנחנו משתמשים ב-<span class="math">\(g\left(y\right)=\cos y\)</span> כדי לעבור מ-<span class="math">\(\int f\left(x\right)dx\)</span> אל <span class="math">\(\int f\left(g\left(y\right)\right)g^{\prime}\left(y\right)dy\)</span>. יש דרך ציורית לזכור את מה שמבצעים כאן - הביטו בביטוי <span class="math">\(\int\sqrt{1-x^{2}}dx\)</span>. כשאנחנו מבצעים את ההחלפה, אנחנו מחליפים את <span class="math">\(x\)</span> ב-<span class="math">\(\cos y\)</span>, ואפשר לשחק ב"נדמה לי" שאנחנו מחליפים את <span class="math">\(dx\)</span> ב<strong>נגזרת</strong> של הביטוי בהחלפה, כלומר ב-<span class="math">\(d\left(\cos y\right)\)</span>. למה "נדמה לי"? כי ה-<span class="math">\(dx\)</span> הזה, זכרו, הוא לא אובייקט פורמלי כלשהו, אלא רק צורת כתיב (יש דרך לתת לו משמעות פורמלית אבל אנחנו ממש לא שם כרגע). האינטואיציה היא ש-<span class="math">\(d\left(\cos y\right)=-\sin ydy\)</span>, כשה-<span class="math">\(dy\)</span> הנוסף הגיע מכך שאנחנו "גוזרים את ה-<span class="math">\(y\)</span> שבתוך ה-<span class="math">\(\cos\)</span>". עכשיו צריך לטפל גם בגבולות האינטגרציה; במקרה שלנו ה-<span class="math">\(\int_{0}^{1}\)</span> שהתחלנו ממנו הוא כבר במשמעות של <span class="math">\(\int_{g\left(a\right)}^{g\left(b\right)}\)</span> ולכן צריך להתאמץ קצת כדי למצוא את ה-<span class="math">\(a,b\)</span>: <span class="math">\(0=\cos a\)</span> ו-<span class="math">\(1=\cos b\)</span> מובילים אותנו לבחור <span class="math">\(a=\frac{\pi}{2}\)</span> ו-<span class="math">\(b=0\)</span>. נקבל, אם כן:</p>
+<p><span class="math">\(\int_{0}^{1}\sqrt{1-x^{2}}dx=\int_{\pi/2}^{0}-\sqrt{1-\cos^{2}y}\sin ydy=\int_{0}^{\pi/2}\sin^{2}ydy\)</span></p>
+<p>אינטגרל של סינוס בריבוע נראה כמו עניין כואב, אבל למזלנו יש לנו את הזהות הטריגונומטרית <span class="math">\(\sin^{2}y=\frac{1-\cos2y}{2}\)</span>, כך שבעצם קיבלנו פה שני אינטגרלים קלים יחסית:</p>
+<p><span class="math">\(\int_{0}^{\pi/2}\sin^{2}ydy=\int_{0}^{\pi/2}\frac{dy}{2}-\frac{1}{2}\int_{0}^{\pi/2}\cos2ydy=\)</span></p>
+<p><span class="math">\(=\left[\frac{y}{2}\right]_{0}^{\pi/2}-\frac{1}{2}\left[\frac{\sin2y}{2}\right]_{0}^{\pi/2}=\frac{\pi}{4}\)</span></p>
+<p>כשכל החלק ה"טריגונומטרי" (המחובר הימני) מתאפס.</p>
+<p>שימו לב לתוצאה המעניינת שקיבלנו - באינטגרל המקורי לא היה זכר לטריגונומטריה, אבל התוצאה המספרית שלנו יצאה <span class="math">\(\frac{\pi}{4}\)</span>. כנראה שהבחירה ללכת בדרך הטריגונומטריה אכן הייתה מוצדקת במובן כלשהו (פרט למובן של "היי, תראו, זה פתר את זה!")</p>
+<p>בואו נעבור עכשיו לדוגמה מהסוג השני. נניח שאנחנו רוצים לחשב את <span class="math">\(\int_{0}^{1}\left(x^{3}+2\right)^{2}x^{2}dx\)</span>. הביטוי נראה מזעזע, אבל אנחנו חדי עין ורואים שה-<span class="math">\(x^{2}\)</span> שמחוץ לסוגריים נראה <strong>בערך </strong>כמו הנגזרת של הביטוי בתוך הסוגריים. זה נותן לנו אינטואיציה לגבי הצבה שכדאי להשתמש כאן כדי לפשט את המפלצת הזו - הצבה שתעלים לנו את ה-<span class="math">\(x^{2}\)</span> שבחוץ ותהפוך את מה שבסוגריים לפשוט: <span class="math">\(t=x^{3}+2\)</span>.</p>
+<p>שימו לב להבדל. כאן אני מגדיר משתנה חדש <span class="math">\(t\)</span> בתור פונקציה של <span class="math">\(x\)</span>, ואילו קודם כתבתי את <span class="math">\(x\)</span> בתור פונקציה של משתנה חדש. זו הסיבה שקודם אני כפלתי ב-<span class="math">\(g^{\prime}\)</span> ואילו עכשיו אני "בולע" את ה-<span class="math">\(g^{\prime}\)</span>. אצלי כל הביטוי <span class="math">\(\left(x^{3}+2\right)^{2}x^{2}dx\)</span> הופך להיות <span class="math">\(\frac{1}{3}t^{2}dt\)</span>. שימו לב ל-<span class="math">\(\frac{1}{3}\)</span> הזה; הוא לא צץ משום מקום. אם <span class="math">\(t=x^{3}+2\)</span> אז (שוב, זה סימון נוח, אין פה משמעות פורמלית מעבר לכך) <span class="math">\(dt=3x^{2}dx\)</span> ולכן <span class="math">\(x^{2}dx=\frac{1}{3}dt\)</span>. ואיך משתנים הגבולות? הפעם אני פשוט מציב את הגבולות בנוסחה <span class="math">\(t=x^{3}+2\)</span>:</p>
+<p><span class="math">\(\int_{0}^{1}\left(x^{3}+2\right)^{2}x^{2}dx=\frac{1}{3}\int_{2}^{3}t^{2}dt=\frac{1}{3}\left[\frac{t^{3}}{3}\right]_{2}^{3}=\frac{27-8}{9}=\frac{19}{9}\)</span></p>
+<p>זהו זה עם הדוגמאות. אבל לפני שנסיים, אני בטוח שכולכם מצפים בכליון עיניים לראות את משפט החלפת המשתנים הכללי עבור אינטגרלים מעל <span class="math">\(\mathbb{R}^{n}\)</span>. אז הנה הניסוח, כדי שנוכל להתרשם כמה הוא דומה לניסוח של המשפט הבסיסי: אם <span class="math">\(g:A\to B\)</span> היא <strong>דיפאומורפיזם</strong> של קבוצות פתוחות ב-<span class="math">\(\mathbb{R}^{n}\)</span> ו-<span class="math">\(f:B\to\mathbb{R}\)</span> רציפה, אז <span class="math">\(f\)</span> אינטגרבילית מעל <span class="math">\(B\)</span> אם ורק אם <span class="math">\(\left(f\circ g\right)\left|\det Dg\right|\)</span> אינטגרבילית מעל <span class="math">\(A\)</span> ובמקרה זה מתקיים:</p>
+<p><span class="math">\(\int_{B}f=\int_{A}\left(f\circ g\right)\left|\det Dg\right|\)</span></p>
+<p>מה השתנה, בעצם? ראשית, במקום שיהיה כתוב <span class="math">\(\left|g^{\prime}\right|\)</span> כתוב <span class="math">\(\left|\det Dg\right|\)</span>, אבל היינו יכולים להשתמש באותו כתיב גם במקרה החד-ממדי; במקרה החד-ממדי המספר הנגזר בנקודה מסויימת הוא בדיוק הדטרמיננטה של הנגזרת (במובן הרב-ממדי של הנגזרת - קירוב לינארי) באותה נקודה. הדבר השני שהשתנה הוא שבמקום כל מני הנחות על <span class="math">\(g\)</span> אנחנו אומרים שהיא "דיפאומורפיזם", שזה מושג שבכלל לא הגדרתי, אבל אין בו משהו מיוחד - זו פונקציה <span class="math">\(g:A\to B\)</span> שהיא חד-חד-ערכית ועל, כך שגם <span class="math">\(g\)</span> וגם <span class="math">\(g^{-1}\)</span> שייכות ל-<span class="math">\(C^{r}\)</span> עבור <span class="math">\(r\ge1\)</span> כלשהו. כפי שניתן לנחש מכך שיש להן שם מיוחד, פונקציות שהן דיפאומורפיזמים הן בעלות חשיבות כללית באנליזה וקטורית, לא רק עבור משפט החלפת המשתנים.</p>
+<p>אם כן, זה המשפט בגרסתו הכללית, אבל איך מוכיחים אותו בגרסה הזו? או, טוב ששאלתם. זה ידרוש עוד לא מעט עבודה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2016/01/31/flat_earth_fun/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">על כדורים שטוחים וחצאי הרים</span>
+            </a>
+            
+            
+            
+            <a href="/2015/11/09/d-dimensional_integrals/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אינטגרלים כפולים, משולשים ו-d-ממדיים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

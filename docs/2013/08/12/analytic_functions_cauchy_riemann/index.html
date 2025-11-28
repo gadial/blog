@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נגזרת מרוכבת, פונקציות אנליטיות ונוסחאות קושי-רימן - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>נגזרת מרוכבת, פונקציות אנליטיות ונוסחאות קושי-רימן</h1>
+            <div class="post-meta">
+                <span class="date">2013-08-12</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אנליזה מרוכבת.html">אנליזה מרוכבת</a>
+                    
+                    <a href="/tags/נגזרת.html">נגזרת</a>
+                    
+                    <a href="/tags/נוסחאות קושי-רימן.html">נוסחאות קושי-רימן</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>המושג היסודי בחשבון דיפרנציאלי הוא מושג ה<strong>נגזרת</strong>. כבר הקדשתי לו <a href="http://www.gadial.net/2010/11/21/derivative/">פוסט</a>, אבל אחזור על הרעיון בקצרה: כאשר יש לנו פונקציה <span class="math">\(f\)</span>, אנחנו מעוניינים למדוד את <strong>קצב השינוי</strong> שלה. המושג האינטואיטיבי שלנו הוא זה של <strong>שינוי ממוצע</strong> - מסתכלים על ההפרש בין ערכי הפונקציה בשתי נקודות שונות, ומחלקים אותו בהפרש שבין הנקודות הללו. אם המרחק בין ת"א וחיפה הוא 100 ק"מ, והמרחק בין השעה שבה יצאנו מת"א - 8:00 - לשעה שבה הגענו לחיפה - 10:00 - הוא 2 שעות, אז השינוי הממוצע של פונקציית המיקום שלנו (פונקציה שמקבלת נקודת זמן ומחזירה את המיקום שלנו באותה נקודת זמן) בין שתי הנקודות הללו של 8:00 ו-10:00 הוא <span class="math">\(\frac{100}{2}=50\)</span>, כשהיחידות שבהן אנו מבצעים את המדידה הן ק"מ לשעה (במתמטיקה הפונקציות הן לרוב אבסטרקטיות - מקבלות מספרים חסרי יחידות ומחזירות מספרים חסרי יחידות - ולכן אנחנו לא מדברים על יחידות רוב הזמן). הבעיה בשינוי ממוצע שכזה היא בכך שהוא מתאר מה קרה לאורך פרק זמן ארוך כלשהו - הוא לא אומר לנו מה קרה בנקודת זמן מסויימת (כלומר, מה היינו רואים אם היינו מסתכלים במד המהירות בנקודת זמן כלשהי).</p>
+<p>הדרך הנאיבית להתמודד עם הבעיה היא לומר - אוקיי, אז בואו נשתמש באותו תעלול שהשתמשנו בו עד כה. חישבנו את השינוי הממוצע בין ערך הפונקציה ב-<span class="math">\(x\)</span> ובין ערכה ב-<span class="math">\(y\)</span> על ידי הנוסחה <span class="math">\(\frac{f\left(x\right)-f\left(y\right)}{x-y}\)</span>? יופי, בואו נציב <span class="math">\(x=y\)</span> ונראה מה נקבל. לרוע המזל, נקבל ביטוי מהצורה <span class="math">\(\frac{0}{0}\)</span> וביטוי כזה אינו מוגדר, ואין דרך טובה להגדיר אותו בצורה חד משמעית. אנחנו צריכים לנקוט בגישה קצת יותר חכמה כדי לחקור את <span class="math">\(f\)</span>.</p>
+<p>הפתרון הוא כזה: כדי לדעת מה קצב השינוי של הפונקציה <span class="math">\(f\)</span> בנקודה <span class="math">\(x\)</span>, מוסיפים ל-<span class="math">\(x\)</span> ערך <strong>קטן מאוד אך לא אפס</strong> שאפשר לסמן ב-<span class="math">\(dx\)</span>, ואז מחשבים את <span class="math">\(\frac{f\left(x+dx\right)-f\left(x\right)}{dx}\)</span>. זה מה שניוטון ולייבניץ עשו. לרוע המזל, הפתרון הזה לא מוגדר עד הסוף מבחינה מתמטית - לא ברור מה בדיוק אומר מתמטית "קטן מאוד אך לא אפס", ואיך עובדים עם יצור כזה מבחינה טכנית - ניוטון ולייבניץ פשוט התייחסו אליו כאל אפס כשהיה נוח להם, ואל משהו שאינו אפס כשהיה נוח להם. אפשר לבצע פורמליזציה מתמטית של יצור כזה, אבל הגישה הסטנדרטית באנליזה היא שונה ומשתמשת במושג ה<strong>גבול</strong>. הרעיון הבסיסי הוא לקחת ערך מספרי קונקרטי <span class="math">\(h\)</span>, לחשב את <span class="math">\(\frac{f\left(x+h\right)-f\left(x\right)}{h}\)</span>, ואז לשאול את עצמנו לאיזה ערך הביטוי הזה <strong>שואף</strong> כאשר <span class="math">\(h\)</span> שואף לאפס. פורמלית וטכנית, מחשבים את הגבול <span class="math">\(\lim_{h\to0}\frac{f\left(x+h\right)-f\left(x\right)}{h}\)</span>.</p>
+<p>מושג הגבול מצריך הגדרה קפדנית בפני עצמו, וגם לו הקדשתי <a href="http://www.gadial.net/2010/10/03/limit_of_sequence/">פוסט</a>. בכל זאת צריך להזכיר את ההגדרה המדויקת: הפונקציה <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span> מקיימת <span class="math">\(\lim_{x\to x_{0}}f\left(x\right)=L\)</span> אם לכל <span class="math">\(\varepsilon&gt;0\)</span> קיים <span class="math">\(\delta&gt;0\)</span> כך שאם <span class="math">\(\left|x-x_{0}\right|&lt;\delta\)</span> אז <span class="math">\(\left|f\left(x\right)-L\right|&lt;\varepsilon\)</span>. ועכשיו אנחנו צריכים לעצור ולשאול את עצמנו - מה בהגדרה הזו דורש את היות <span class="math">\(f\)</span> פונקציה שמוגדרת על מספרים ממשיים? מה צריך לתקן כדי להיות מסוגלים להכליל את ההגדרה לפונקציות מעל מרחבים אחרים? התשובה היא פשוטה - הערך המוחלט.</p>
+<p>הערך המוחלט משמש בהגדרת הגבול בתור מקרה פרטי של <strong>פונקצית מרחק</strong>, (או בשם אחר <strong>מטריקה</strong>). את המושג הזה אפשר להציג בצורה כללית מאוד: אם <span class="math">\(A\)</span> היא קבוצה, אז מטריקה היא כל פונקציה <span class="math">\(d:A\times A\to\mathbb{R}\)</span> כך ש-<span class="math">\(d\left(x,y\right)=0\)</span> אם ורק אם <span class="math">\(x=y\)</span>, ו-<span class="math">\(d\left(x,y\right)=d\left(y,x\right)\)</span> לכל <span class="math">\(x,y\)</span>, ו-<span class="math">\(d\left(x,y\right)\le d\left(x,z\right)+d\left(y,z\right)\)</span> לכל <span class="math">\(x,y,z\)</span>. למה שלוש התכונות הללו דווקא? כי כשמסתכלים על מה שעושים בהוכחות שמערבות את מושג הגבול, אפשר לראות שאנחנו לא נזקקים לכל התכונות האפשריות של ערך מוחלט במהלך ההוכחה, ולעתים קרובות שלוש התכונות שציינתי מספיקות בהחלט כדי להשיג את אותן התוצאות.</p>
+<p>לכן, השלב הראשון בהכללת מושג הנגזרת לפונקציות מרוכבות הוא הכללת מושג המרחק עבור מספרים מרוכבים. אבל זה קל - כבר ראינו איך מוגדר ערך מוחלט עבור מספרים מרוכבים: <span class="math">\(\left|a+bi\right|=\sqrt{a^{2}+b^{2}}\)</span>. זו אותה מטריקה בדיוק כמו המטריקה על <span class="math">\(\mathbb{R}^{2}\)</span> שבה משתמשים כשרוצים להגדיר חשבון דיפרנציאלי על פונקציות מ- ואל <span class="math">\(\mathbb{R}^{2}\)</span>. אז בעצם, מה ההבדל בין חשבון דיפרנציאלי של פונקציות <span class="math">\(f:\mathbb{R}^{2}\to\mathbb{R}^{2}\)</span> ובין פונקציות <span class="math">\(f:\mathbb{C}\to\mathbb{C}\)</span>? נדבר על זה עוד מעט.</p>
+<p>אז יש לנו מושג של גבול של פונקציה מרוכבת (ובדומה גם אפשר להגדיר גבול של סדרה מרוכבת, אבל אין לנו צורך בגבולות כאלו עדיין). מכאן ההגדרה של נגזרת מרוכבת נובעת כמעט מעצמה: אם <span class="math">\(f:\mathbb{C}\to\mathbb{C}\)</span> היא פונקציה מרוכבת ו-<span class="math">\(z\in\mathbb{C}\)</span> הוא מספר מרוכב כלשהו, אז אנו מגדירים <span class="math">\(f^{\prime}\left(z_{0}\right)=\lim_{\Delta z\to0}\frac{f\left(z_{0}+\Delta z\right)-f\left(z_{0}\right)}{\Delta z}\)</span>. אם הגבול הזה קיים (ושונה מאינסוף), אומרים שהפונקציה <strong>גזירה</strong> בנקודה <span class="math">\(z_{0}\)</span>. זה הכל. אין כאן שום דבר חדש למי שכבר מכיר חדו"א; אבל כפי שנראה בקרוב, אם <span class="math">\(f:\mathbb{C}\to\mathbb{C}\)</span> היא גזירה, ההשלכות של זה הן קיצוניות יותר מאשר עבור פונקציה ממשית.</p>
+<p>רגע, השלכות? אילו השלכות יכולות להיות לכך שפונקציה היא גזירה? ובכן, משפט בסיסי אחד בחדו"א הוא שכל פונקציה גזירה היא גם רציפה בכל נקודה שבה היא גזירה (רציפות פירושה ש-<span class="math">\(\lim_{x\to x_{0}}f\left(x\right)=f\left(x_{0}\right)\)</span>). המשפט הזה תקף גם עבור פונקציות מרוכבות, וכפי שנראה, ההוכחה "אדישה" לשאלה אם הפונקציה מרוכבת או לא, כל עוד מושג הגבול שלנו מתנהג באותו האופן.</p>
+<p>ההוכחה מתבססת על השוויון הבא: <span class="math">\(f\left(z_{0}+\Delta z\right)=f\left(z_{0}\right)+\frac{f\left(z_{0}+\Delta z\right)-f\left(z_{0}\right)}{\Delta z}\cdot\Delta z\)</span> - שהוא, כמובן, טריוויאלי. מה שמעניין הוא מה שקורה כאשר משאיפים את <span class="math">\(\Delta z\)</span> לאפס: מקבלים ש-</p>
+<p><span class="math">\(\lim_{\Delta z\to0}f\left(z_{0}+\Delta z\right)=\lim_{\Delta z\to0}\left(f\left(z_{0}\right)+\frac{f\left(z_{0}+\Delta z\right)-f\left(z_{0}\right)}{\Delta z}\cdot\Delta z\right)=f\left(z_{0}\right)+f^{\prime}\left(z_{0}\right)\cdot0=f\left(z_{0}\right)\)</span></p>
+<p>כאשר השוויון האחרון נובע מכך ש-<span class="math">\(\lim_{\Delta z\to0}\frac{f\left(z_{0}+\Delta z\right)-f\left(z_{0}\right)}{\Delta z}=f^{\prime}\left(z_{0}\right)\)</span> וזה מספר מרוכב, ואילו <span class="math">\(\lim_{\Delta z\to0}\Delta z=0\)</span>, וגבול של מכפלה של שני גבולות מתכנסים שווה למכפלה שלהם. רק כדי לשכנע אתכם סופית בכך שאין הבדל בין חדו"א רגיל ואנליזה מרוכבת בנקודה הזו, אני אחזור על איך מוכיחים את הטענה הזו. פורמלית אני רוצה להוכיח שאם <span class="math">\(\lim_{z\to z_{0}}f\left(z\right)=a\)</span> ו-<span class="math">\(\lim_{z\to z_{0}}g\left(z\right)=b\)</span> אז <span class="math">\(\lim_{z\to z_{0}}f\left(z\right)g\left(z\right)=ab\)</span>. כלומר, אני רוצה להיות מסוגל לחסום בצורה טובה את הביטוי <span class="math">\(\left|f\left(z\right)g\left(z\right)-ab\right|\)</span>. לשם כך, אני נוקט את התעלול הכי ישן בספר - מוסיף ומחסיר את אותו גורם, שאחרי טיפה משחקים אפשר לראות שכדאי שיהיה <span class="math">\(bf\left(z\right)\)</span> כדי שנוכל לקבל חסם שכולל את שני הגבולות שאנחנו יודעים עליהם:</p>
+<p><span class="math">\(\left|f\left(z\right)g\left(z\right)-ab\right|=\left|f\left(z\right)g\left(z\right)+bf\left(z\right)-bf\left(z\right)-ab\right|=\left|f\left(z\right)\left[g\left(z\right)-b\right]+b\left[f\left(z\right)-a\right]\right|\)</span></p>
+<p><span class="math">\(\le\left|f\left(z\right)\right|\left|g\left(z\right)-b\right|+\left|b\right|\left|f\left(z\right)-a\right|\)</span></p>
+<p>עכשיו, יהא <span class="math">\(\varepsilon&gt;0\)</span> כלשהו. אנחנו רוצים למצוא <span class="math">\(\delta\)</span> כך שלכל <span class="math">\(z\)</span> שמקיים <span class="math">\(\left|z-z_{0}\right|&lt;\delta\)</span>, מתקיים ש-<span class="math">\(\left|f\left(z\right)\right|\left|g\left(z\right)-b\right|+\left|b\right|\left|f\left(z\right)-a\right|&lt;\varepsilon\)</span>. ראשית, מכיוון ש-<span class="math">\(\lim_{z\to z_{0}}f\left(z\right)=a\)</span> נובע מכך שקיים <span class="math">\(\delta_{1}\)</span> כך שאם <span class="math">\(\left|z-z_{0}\right|&lt;\delta_{1}\)</span> אז <span class="math">\(\left|f\left(z\right)-a\right|&lt;\frac{\varepsilon}{2\left|b\right|}\)</span>, ולכן <span class="math">\(\left|b\right|\left|f\left(z\right)-a\right|&lt;\frac{\varepsilon}{2}\)</span>.</p>
+<p>שנית, קיים <span class="math">\(\delta_{2}\)</span> כך שאם <span class="math">\(\left|z-z_{0}\right|&lt;\delta_{2}\)</span> אז <span class="math">\(\left|f\left(z\right)-a\right|&lt;1\)</span>, ולכן <span class="math">\(\left|f\left(z\right)\right|&lt;1+a\)</span>. הויסה, רגע, רגע! איך עשיתי את זה? ובכן, תכונה כללית של ערך מוחלט: <span class="math">\(\left|x-y\right|\ge\left|x\right|-\left|y\right|\)</span>. איך מוכיחים אותה? ובכן, <span class="math">\(\left|x\right|=\left|x-y+y\right|\le\left|x-y\right|+\left|y\right|\)</span>. כל מה שאני מתבסס עליו הוא אי-שוויון המשולש (והטריק הרגיל של לחסר ולחבר את אותו הדבר).</p>
+<p>כעת, קיים גם <span class="math">\(\delta_{3}\)</span> כך שאם <span class="math">\(\left|z-z_{0}\right|&lt;\delta_{3}\)</span> אז <span class="math">\(\left|g\left(z\right)-b\right|&lt;\frac{\varepsilon}{2\left(1+a\right)}\)</span>, ולכן אם <span class="math">\(\left|z-z_{0}\right|&lt;\min\left\{ \delta_{2},\delta_{3}\right\} \)</span> מתקיים <span class="math">\(\left|f\left(z\right)\right|\left|g\left(z\right)-b\right|&lt;\left(1+a\right)\frac{\varepsilon}{2\left(1+a\right)}=\frac{\varepsilon}{2}\)</span>. המסקנה הסופית: נגדיר <span class="math">\(\delta=\min\left\{ \delta_{1},\delta_{2},\delta_{3}\right\} \)</span> ונקבל שאם <span class="math">\(\left|z-z_{0}\right|&lt;\delta\)</span> אז</p>
+<p><span class="math">\(\left|f\left(z\right)\right|\left|g\left(z\right)-b\right|+\left|b\right|\left|f\left(z\right)-a\right|&lt;\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon\)</span></p>
+<p>שימו לב בכמה מעט השתמשנו בהוכחה הזו.</p>
+<p>חזרה לענייננו. הוכחנו שפונקציה גזירה היא גם רציפה; בואו נראה עוד כמה תכונות בסיסיות של נגזרות. תכונה נחמדה אחת של נגזרת היא שמדובר על אופרטור <strong>לינארי</strong> - זה אומר שאם <span class="math">\(a,b\in\mathbb{C}\)</span> ו-<span class="math">\(f,g\)</span> הן פונקציות מרוכבות, אז <span class="math">\(\left[af+bg\right]^{\prime}=af^{\prime}+bg^{\prime}\)</span> (למי שמכיר אלגברה לינארית - זה אומר שאופרטור הגזירה הוא טרנספורמציה לינארית, עבור מרחבים וקטוריים מתאימים של פונקציות). ההוכחה לזה נובעת מייד מתכונות של גבולות ושימוש בהגדרה של נגזרת ולא אכנס אליה. תחת זאת אציג את ההוכחה למשהו טיפה יותר מסובך - נוסחת הנגזרת של מכפלה, שזהה גם היא למקרה הממשי: <span class="math">\(\left[fg\right]^{\prime}=f^{\prime}g+fg^{\prime}\)</span>. ההוכחה, כרגיל, מבוססת על לחבר ולהחסיר את אותו דבר:</p>
+<p><span class="math">\(\left[fg\right]^{\prime}\left(z_{0}\right)=\lim_{\Delta z\to0}\frac{fg\left(z_{0}+\Delta z\right)-fg\left(z_{0}\right)}{\Delta z}=\lim_{\Delta z\to0}\frac{fg\left(z_{0}+\Delta z\right)+f\left(z_{0}+\Delta z\right)g\left(z_{0}\right)-f\left(z_{0}+\Delta z\right)g\left(z_{0}\right)-fg\left(z_{0}\right)}{\Delta z}\)</span></p>
+<p><span class="math">\(=\lim_{\Delta z\to0}\frac{f\left(z_{0}+\Delta z\right)\left[g\left(z_{0}+\Delta z\right)-g\left(z_{0}\right)\right]}{\Delta z}+\lim_{\Delta z\to0}\frac{g\left(z_{0}\right)\left[f\left(z_{0}+\Delta z\right)-f\left(z_{0}\right)\right]}{\Delta z}\)</span></p>
+<p><span class="math">\(=f\left(z_{0}\right)g^{\prime}\left(z_{0}\right)+g\left(z_{0}\right)f^{\prime}\left(z_{0}\right)\)</span></p>
+<p>הבנתם את הפרינציפ. זה מה שתמיד כיף בהכללות מתמטיות - האופן שבו חלק מההוכחות פשוט ממשיכות לעבוד למרות ששינינו לגמרי את "שדה המשחק" שלהן.</p>
+<p>ומה עם גזירה של פונקציות קונקרטיות? ובכן, בינתיים מה שפשוט להציג הוא את הגזירה של פולינום. פולינום הוא ביטוי מהצורה <span class="math">\(\sum a_{n}z^{n}\)</span>, ולכן אפשר להשתמש בלינאריות של הנגזרת כדי לקבל ש-<span class="math">\(\left[\sum a_{n}z^{n}\right]^{\prime}=\sum a_{n}\left[z^{n}\right]^{\prime}\)</span>, כלומר די למצוא את הנגזרת של פונקציות מהצורה <span class="math">\(f\left(z\right)=z^{n}\)</span>. פונקציות כאלו אפשר להציג אינדוקטיבית בתור <span class="math">\(z^{n}=z^{n-1}\cdot z\)</span> ואז לגזור עם כלל הגזירה של מכפלה. בשביל הבסיס נצטרך להבין את הנגזרת של <span class="math">\(f\left(z\right)=z\)</span>, ואת זה אפשר לעשות ישירות מההגדרה:</p>
+<p><span class="math">\(f^{\prime}\left(z_{0}\right)=\lim_{\Delta z\to0}\frac{f\left(z_{0}+\Delta z\right)-f\left(z_{0}\right)}{\Delta z}=\lim_{\Delta z\to0}\frac{z_{0}+\Delta z-z_{0}}{\Delta z}=\lim_{\Delta z\to0}1=1\)</span></p>
+<p>וכעת אפשר לנחש (אחרי שמנסים כמה מקרים פרטיים, או סתם לזכור מה קורה במספרים ממשיים) ש-<span class="math">\(\left[z^{n}\right]^{\prime}=nz^{n-1}\)</span>, ולהוכיח את זה באינדוקציה:</p>
+<p><span class="math">\(\left[z^{n}\right]^{\prime}=\left[z^{n-1}\right]^{\prime}z+z^{n-1}=\left(n-1\right)z^{n-2}\cdot z+z^{n-1}=nz^{n-1}\)</span></p>
+<p>טוב, מספיק עם זה. עד עכשיו כל מה שעשיתי הוא לקחת תוצאות מחדו"א במספרים ממשיים ולהגיד "היי, תראו, איזה מגניב, זה עובד גם כאן!". עד כאן. אני רוצה להראות משהו חדש - את <strong>משוואות קושי-רימן</strong>. נתחיל דווקא בלדבר על פונקציות ממשיות מהמרחב לעצמו, דהיינו <span class="math">\(f:\mathbb{R}^{2}\to\mathbb{R}^{2}\)</span>. איך אפשר להגדיר נגזרת של פונקציה שכזו? אפשר לדבר על גבולות ב-<span class="math">\(\mathbb{R}^{2}\)</span> - כבר אמרנו שיש לנו על <span class="math">\(\mathbb{R}^{2}\)</span> את אותה מטריקה כמו ב-<span class="math">\(\mathbb{C}\)</span>, אבל משהו אחר ישתבש. אם ננסה להגדיר <span class="math">\(f^{\prime}\left(a_{0}\right)=\lim_{\Delta a\to0}\frac{f\left(a+\Delta a\right)-f\left(a\right)}{\Delta a}\)</span> נקבל משהו שהוא ביטוי חסר משמעות, כי יש בו שבר שבו במונה ובמכנה יש איברים של <span class="math">\(\mathbb{R}^{2}\)</span>, כלומר אנחנו מחלקים איבר של <span class="math">\(\mathbb{R}^{2}\)</span> באיבר אחר של <span class="math">\(\mathbb{R}^{2}\)</span>. אבל על <span class="math">\(\mathbb{R}^{2}\)</span> אין לנו מושג של חילוק - <span class="math">\(\mathbb{R}^{2}\)</span> אינו <strong>שדה</strong>. אם אתם זוכרים, <a href="http://www.gadial.net/2013/07/21/complex_analysis_intro/">בפוסט הראשון</a> על פונקציות מרוכבות התייחסתי לנקודה הזו. המספרים המרוכבים הם כן שדה בזכות פעולת כפל "מתוחכמת" (שממנה נובעת פעולת החילוק). הנה הנקודה המדוייקת שבו האנליזה של <span class="math">\(\mathbb{R}^{2}\)</span> נפרדת מהאנליזה המרוכבת.</p>
+<p>אבל מה כן עושים ב-<span class="math">\(\mathbb{R}^{2}\)</span>? דרך אחת לתאר פונקציות כאלו היא בתור זוג פונקציות <span class="math">\(u,v:\mathbb{R}^{2}\to\mathbb{R}\)</span> שמקבלות כל אחת זוג ערכים ומחזירות ערך בודד: <span class="math">\(f\left(x,y\right)=\left(u\left(x,y\right),v\left(x,y\right)\right)\)</span>. כעת אפשר לדבר על הנגזרות של כל פונקציה כזו בנפרד. אבל מה המשמעות של נגזרת של פונקציה בשני משתנים? חשבו על הפונקציה כאילו היא מתארת קווי גובה של הר - לכל נקודה במישור מותאם ה"גובה" שלה. אז נגזרת של הפונקציה היא <strong>שיפוע</strong> ההר בנקודה מסויימת; אבל הכרחי לשאול - שיפוע ביחס לאיזה כיוון? חשבו על שפת תהום, שבה בכיוון אחד יש לנו נפילה בכיוון אנכי ובכיוון אחר יש לנו משטח אופקי...</p>
+<p>שני הכיוונים ה"נאיביים" הם אלו של ציר <span class="math">\(x\)</span> וציר <span class="math">\(y\)</span>. עבורם פשוט נוהגים באופן הבא: "מקפיאים" את אחד המשתנים, וגוזרים לפי המשתנה השני. מה שמתקבל נקרא <strong>נגזרת חלקית</strong>. למשל:</p>
+<p><span class="math">\(\frac{\partial u}{\partial x}\left(x,y\right)=\lim_{\Delta x\to0}\frac{u\left(x+\Delta x,y\right)-u\left(x,y\right)}{\Delta x}\)</span></p>
+<p><span class="math">\(\frac{\partial u}{\partial y}\left(x,y\right)=\lim_{\Delta y\to0}\frac{u\left(x,y+\Delta y\right)-u\left(x,y\right)}{\Delta y}\)</span></p>
+<p>כאשר כאן <span class="math">\(a,b\in\mathbb{R}\)</span>. הסימון <span class="math">\(\frac{\partial u}{\partial x}\)</span> לתיאור נגזרת חלקית הוא וריאציה על הסימון <span class="math">\(\frac{du}{dx}\)</span> לתיאור נגזרת של פונקציה במשתנה יחיד (ה-<span class="math">\(\partial\)</span> הוא מין <span class="math">\(d\)</span> מסולסלת).</p>
+<p>מסתבר ששתי הנגזרות החלקיות הללו מספיקות לנו כדי למצוא את הנגזרת של הפונקציה בכל כיוון, אבל אני לא מדבר כאן על אנליזה ממשית אז נעזוב את זה לבינתיים. תחת זאת אני רוצה לשאול את השאלה - מה קורה כאשר מנסים לנתח פונקציה מרוכבת בגישת הנגזרות החלקיות הזו?</p>
+<p>ובכן, תהא <span class="math">\(f:\mathbb{C}\to\mathbb{C}\)</span> פונקציה מרוכבת. אפשר להציג אותה בתור זוג של פונקציות ממשיות <span class="math">\(u,v:\mathbb{R}^{2}\to\mathbb{R}\)</span>: <span class="math">\(f\left(x+yi\right)=u\left(x,y\right)+iv\left(x,y\right)\)</span>. עכשיו, נרצה לחשב את הנגזרת של <span class="math">\(f\)</span> בנקודה <span class="math">\(z=x+iy\)</span> <strong>בשתי דרכים שונות</strong>. בואו נסתכל קודם כל על הגבול הבא:</p>
+<p><span class="math">\(\lim_{\Delta x\to0}\frac{f\left(z+\Delta x\right)-f\left(z\right)}{\Delta x}\)</span></p>
+<p>כאשר <span class="math">\(\Delta x\in\mathbb{R}\)</span>. הגבול הזה הוא מעין גרסה מצומצמת של הגבול ה"כללי", שבו מה ששואף לאפס יכול להיות מספר מרוכב כלשהו ולא רק מספר ממשי. אם הגבול ה"כללי" קיים, אז בפרט הגבול ה"פרטי" קיים ושווה לו (תרגיל קל למדי להוכחה - עבור אפסילון נתון זו אותה הדלתא!). מצד שני, אם נעבור להציג את <span class="math">\(f\)</span> בעזרת הפונקציות הממשיות, נקבל:</p>
+<p><span class="math">\(f^{\prime}\left(z\right)=\lim_{\Delta x\to0}\frac{u\left(x+\Delta x,y\right)-u\left(x,y\right)}{\Delta x}+\lim_{\Delta x\to0}i\frac{v\left(x+\Delta x,y\right)-v\left(x,y\right)}{\Delta x}=\frac{\partial u}{\partial x}\left(x,y\right)+i\frac{\partial v}{\partial x}\left(x,y\right)\)</span></p>
+<p>עד כאן, מתבקש; אבל עכשיו בואו נחשב את הגבול לא לאורך ציר <span class="math">\(x\)</span> אלא לאורך ציר <span class="math">\(y\)</span>: נחשב את הגבול</p>
+<p><span class="math">\(\lim_{\Delta y\to0}\frac{f\left(z+i\Delta y\right)-f\left(z\right)}{i\Delta y}\)</span></p>
+<p>כאשר <span class="math">\(\Delta y\in\mathbb{R}\)</span>.</p>
+<p>תזכרו מה זה אומר לחלק ב-<span class="math">\(i\)</span>: מכיוון ש-<span class="math">\(i^{4}=1\)</span> אז <span class="math">\(\frac{1}{i}=i^{3}\)</span>, ומצד שני <span class="math">\(i^{3}=i^{2}i=-i\)</span>. לכן לחלק ב-<span class="math">\(i\)</span> זה בעצם לכפול ב-<span class="math">\(-i\)</span>. מכאן שנקבל:</p>
+<p>נקבל:</p>
+<p><span class="math">\(f^{\prime}\left(z\right)=\lim_{\Delta y\to0}\frac{u\left(x,y+\Delta y\right)-u\left(x,y\right)}{i\Delta y}+\lim_{\Delta x\to0}i\frac{v\left(x,y+\Delta y\right)-v\left(x,y\right)}{i\Delta y}=-i\frac{\partial u}{\partial y}\left(x,y\right)+\frac{\partial v}{\partial y}\left(x,y\right)\)</span></p>
+<p>כלומר, דווקא <span class="math">\(u\)</span> (החלק ה"ממשי") הוכפל בסופו של דבר ב-<span class="math">\(-i\)</span>, ואילו <span class="math">\(v\)</span> בסוף יצא עם מקדם 1, בלי <span class="math">\(i\)</span> ובלי מינוס ובלי שום דבר.</p>
+<p>עכשיו אפשר להשוות את שני הערכים שקיבלנו:</p>
+<p><span class="math">\(\frac{\partial u}{\partial x}\left(x,y\right)+i\frac{\partial v}{\partial x}\left(x,y\right)=\frac{\partial v}{\partial y}\left(x,y\right)-i\frac{\partial u}{\partial y}\left(x,y\right)\)</span></p>
+<p>כשמשווים שני מספרים מרוכבים, הם שווים רק אם החלקים הממשיים והמדומים שלהם שווים, ולכן נקבל בעצם <strong>זוג</strong> של משוואות:</p>
+<p><span class="math">\(\frac{\partial u}{\partial x}=\frac{\partial v}{\partial y}\)</span></p>
+<p><span class="math">\(\frac{\partial u}{\partial y}=-\frac{\partial v}{\partial x}\)</span></p>
+<p>שמתקיימות בכל נקודה שבה <span class="math">\(f\)</span> גזירה. המשוואות הללו נקראות <strong>משוואות קושי-רימן</strong>.</p>
+<p>משוואות קושי רימן מראות שאם אנחנו רוצים לבנות פונקציה מרוכבת גזירה, אי אפשר סתם לקחת שתי פונקציות <span class="math">\(u,v\)</span> ולחבר אותן ביחד, אפילו אם שתיהן גזירות בעצמן (כלומר, אם יש להן נגזרות חלקיות). הפונקציות הללו חייבות לקיים קשר כלשהו בין הנגזרות החלקיות שלהן כדי שהפונקציה המרוכבת שתתקבל מהן תהיה גזירה (ואם הייתי רוצה לקלל, הייתי קורא לקשר הזה "משוואה דיפרנציאלית חלקית"). אבל הקשר הזה בין שתי הפונקציות גם מצביע על עוד תכונה שכל פונקציה לבדה חייבת לקיים - בואו ניקח את <span class="math">\(u\)</span> ונגזור את הנגזרות החלקיות שלה שוב (צריך להסביר למה שהנגזרות החלקיות יהיו גזירות שוב - בינתיים בואו רק תניחו שזה קורה). נקבל:</p>
+<p><span class="math">\(\frac{\partial^{2}u}{\partial x^{2}}=\frac{\partial v}{\partial x\partial y}\)</span></p>
+<p><span class="math">\(\frac{\partial^{2}u}{\partial y^{2}}=-\frac{\partial v}{\partial y\partial x}\)</span></p>
+<p><span class="math">\(\frac{\partial v}{\partial x\partial y}\)</span> הוא מה שמקבלים כשגוזרים את <span class="math">\(v\)</span> קודם על פי <span class="math">\(x\)</span> ואז על פי <span class="math">\(y\)</span> ו-<span class="math">\(\frac{\partial v}{\partial y\partial x}\)</span> הוא מה שקורה כשגוזרים על פי הסדר ההפוך. יש משפט באנליזה שמראה שאם הנגזרות ה"מעורבות" הללו רציפות אז הן שוות, כלומר <span class="math">\(\frac{\partial v}{\partial y\partial x}=\frac{\partial v}{\partial x\partial y}\)</span>; המסקנה היא שבמקרה שלנו <span class="math">\(\frac{\partial^{2}u}{\partial x^{2}}+\frac{\partial^{2}u}{\partial y^{2}}=0\)</span>. בניסוח אחר, <span class="math">\(u\)</span> היא פונקציה שמתאפסת על ידי אופרטור ה<strong>לפליסאן</strong>, <span class="math">\(\Delta=\frac{\partial^{2}}{\partial x^{2}}+\frac{\partial^{2}}{\partial y^{2}}\)</span>. לפונקציות כאלו יש שם מיוחד - פונקציות <strong>הרמוניות</strong>. אני לא נכנס עכשיו לפרטים של מה זה בדיוק אומר; אני רק רוצה שנקבל תחושה של איך שמשוואות קושי רימן מצביעות על כך שלא כל פונקציה מהרחוב יכולה להשתתף בפרוייקט הכביר והנשגב של בניית פונקציה מרוכבת גזירה: יש תנאים לא טריוויאליים שצריכים להתקיים.</p>
+<p>עכשיו אני רוצה להכניס לתמונה מושג שעד כה החבאתי - <strong>פונקציה אנליטית</strong>. למשמעות המלאה של המושג הזה נגיע רק בהמשך, אז בינתיים אתן הגדרה יבשה למדי - אם <span class="math">\(D\)</span> היא קבוצה פתוחה במישור המרוכב - מה שאקרא לו גם "תחום" - אז פונקציה מרוכבת <span class="math">\(f:D\to\mathbb{C}\)</span> היא <strong>אנליטית</strong> אם היא גזירה בכל נקודה של <span class="math">\(D\)</span> (אם תחום ההגדרה של <span class="math">\(f\)</span> רחב יותר אפשר להצטמצמם רק ל-<span class="math">\(D\)</span> ולומר ש-"<span class="math">\(f\)</span> אנליטית על <span class="math">\(D\)</span>"). שימו לב שאנליטיות היא לא תכונה נקודתית - היא תכונה שמתארת את התנהגות הפונקציה בתוך קבוצה פתוחה. מה זו קבוצה פתוחה? בהקשר של המישור המרוכב, זוהי קבוצה שכל נקודה בה היא נקודה פנימית של הקבוצה: לכל <span class="math">\(z_{0}\in D\)</span> קיים <span class="math">\(r&gt;0\)</span> ממשי כך שאם <span class="math">\(\left|z-z_{0}\right|&lt;r\)</span> אז <span class="math">\(z\in D\)</span> (ציורית, כל נקודה <span class="math">\(z_{0}\)</span> בקבוצה ניתן להקיף בעיגול קטן שכולו מוכל בקבוצה). למה חשוב לנו ש-<span class="math">\(D\)</span> תהיה פתוחה? נראה זאת בהמשך; אנליטיות של פונקציה נותנת לנו "קצת יותר" מאשר גזירות בלבד.</p>
+<p>עכשיו אני רוצה לתאר בנפנוף ידיים את הכיוון השני של המשפט על נוסחאות קושי-רימן: לא רק שמדובר על תנאי <strong>הכרחי</strong> עבור פונקציות כדי שיוכלו להרכיב פונקציה אנליטית, זה גם תנאי <strong>מספיק</strong>: אם <span class="math">\(u,v\)</span> הן בעלות נגזרות חלקיות רציפות שמקיימות את משוואות קושי רימן על תחום <span class="math">\(D\)</span> כלשהו, אז <span class="math">\(u+iv\)</span> היא פונקציה אנליטית.</p>
+<p>ההוכחה לא מסובכת, אבל מתבססת על עוד משהו באנליזה "רגילה" שלא הראיתי אף פעם - פיתוח טיילור של פונקציה בשני משתנים. בקצרה, אפשר לכתוב את הערך של <span class="math">\(u\)</span> אחרי שמזיזים טיפה את הערכים שלה ביחס לנקודה <span class="math">\(\left(x,y\right)\)</span> נתונה על ידי הערך שלה ב-<span class="math">\(\left(x,y\right)\)</span>, הערכים של הנגזרות החלקיות הראשונות שלה ב-<span class="math">\(\left(x,y\right)\)</span>, ועוד שארית "קטנה". זה מתואר על ידי הנוסחה המזעזעת הבאה:</p>
+<p><span class="math">\(u\left(x+\Delta x,y+\Delta y\right)=u\left(x,y\right)+\frac{\partial u}{\partial x}\left(x,y\right)\Delta x+\frac{\partial u}{\partial y}\left(x,y\right)\Delta y+R\left(\Delta x,\Delta y\right)\)</span></p>
+<p>כאשר <span class="math">\(R\left(\Delta x,\Delta y\right)\)</span> היא "קטנה", במובן זה שאם נסמן <span class="math">\(\Delta z=\Delta x+i\Delta y\)</span> נקבל ש-<span class="math">\(\lim_{\Delta z\to0}\frac{R\left(\Delta x,\Delta y\right)}{\left|\Delta z\right|}=0\)</span>. באותו אופן אפשר לכתוב עבור <span class="math">\(v\)</span>:</p>
+<p><span class="math">\(v\left(x+\Delta x,y+\Delta y\right)=v\left(x,y\right)+\frac{\partial v}{\partial x}\left(x,y\right)\Delta x+\frac{\partial v}{\partial y}\left(x,y\right)\Delta y+S\left(\Delta x,\Delta y\right)\)</span></p>
+<p>ועכשיו, אם נכתוב את <span class="math">\(f\left(z+\Delta z\right)=u\left(x+\Delta x,y+\Delta y\right)+iv\left(x+\Delta x,y+\Delta y\right)\)</span> במפורש על פי הנוסחאות שלמעלה <strong>ונשתמש בנוסחאות קושי רימן</strong>, העסק המזוויע הזה יצטמצם למשהו שדי קל להבין:</p>
+<p><span class="math">\(f\left(z+\Delta z\right)=f\left(z\right)+\left(\frac{\partial u}{\partial x}\left(x,y\right)+i\frac{\partial v}{\partial x}\left(x,y\right)\right)\Delta z+R\left(\Delta z\right)+iS\left(\Delta z\right)\)</span></p>
+<p>עכשיו קחו את האיבר הראשון באגף ימין, חסרו אותו משני האגפים, חלקו אותם ב-<span class="math">\(\Delta z\)</span>, והופס:</p>
+<p><span class="math">\(\frac{f\left(z+\Delta z\right)-f\left(z\right)}{\Delta z}=\left(\frac{\partial u}{\partial x}\left(x,y\right)+i\frac{\partial v}{\partial x}\left(x,y\right)\right)+\frac{R\left(\Delta z\right)+iS\left(\Delta z\right)}{\Delta z}\)</span></p>
+<p>ואחרי השאפת <span class="math">\(\Delta z\)</span> לאפס נישאר עם <span class="math">\(f^{\prime}\left(z\right)=\frac{\partial u}{\partial x}\left(x,y\right)+i\frac{\partial v}{\partial x}\left(x,y\right)\)</span> . קיבלנו ש-<span class="math">\(f\)</span> גזירה וגם מצאנו נוסחה לנגזרת שלה.</p>
+<p>בואו נראה דוגמה קלילה לסיום, כי בלי זה באמת אי אפשר. כזכור, הגדרנו את פונקצית האקספוננט (על התחום <span class="math">\(\mathbb{C}\)</span>) באופן הבא: <span class="math">\(e^{x+iy}=e^{x}\cos y+ie^{x}\sin y\)</span>. כלומר, <span class="math">\(u\left(x,y\right)=e^{x}\cos y\)</span> ו-<span class="math">\(u\left(x,y\right)=e^{x}\sin y\)</span> במקרה שלנו. בואו נחשב את הנגזרות החלקיות:</p>
+<p><span class="math">\(\frac{\partial u}{\partial x}=e^{x}\cos y\)</span></p>
+<p><span class="math">\(\frac{\partial u}{\partial y}=-e^{x}\sin y\)</span></p>
+<p><span class="math">\(\frac{\partial v}{\partial x}=e^{x}\sin y\)</span></p>
+<p><span class="math">\(\frac{\partial v}{\partial y}=e^{x}\cos y\)</span></p>
+<p>ובבירור משוואות קושי רימן אכן מתקיימות. במובן מסויים פונקציית האקספוננט גם מקיימת את המשוואות הללו בצורה "טבעית" מאוד לטעמי, אבל לא אנסה לשכנע אתכם בכך.</p>
+<p>לסיכום, משוואות קושי-רימן הן הצצה ראשונה לאופן שבו תכונות כמו גזירות הן בעלות רמת סיבוכיות נוספת לעומת מה שקורה בפונקציות ממשיות, אבל זה רק החימום - תאמינו לי שבהמשך הולכים לקרות דברים מוזרים הרבה יותר.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/08/19/student_and_computer_12-13-14/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">פרוייקט &#34;התלמיד והמחשב&#34;, בעיות 12-13-14</span>
+            </a>
+            
+            
+            
+            <a href="/2013/08/02/complex_analysis_dramatis_functionae/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אנליזה מרוכבת - זה הרגע לגלות את הנפשות הפועלות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

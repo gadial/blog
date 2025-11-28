@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה הקשר בין אוטומטים ופונקציות יוצרות? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז מה הקשר בין אוטומטים ופונקציות יוצרות?</h1>
+            <div class="post-meta">
+                <span class="date">2009-09-10</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוביות.html">חישוביות</a>
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסטים הקודמים <a href="http://www.gadial.net/2009/08/30/finite_automata_and_regular_languages/">תיארתי אוטומטים סופיים </a>ו<a href="http://www.gadial.net/2009/09/08/generating_functions/">תיארתי פונקציות יוצרות</a>. עכשיו הגיע הזמן להציג את הקשר היפה (לדעתי) בין השניים. שני הפוסטים הקודמים היו מעין מבוא מרפרף, ולכן בפוסט הזה ארשה לעצמי להיות פחות "מבואי" ולדבר יותר לעניין - ולכן הפוסט יהיה גם יותר טכני מהקודמים. ראו הוזהרתם.</p>
+<p>ובכן, אם יש לנו שפה רגולרית <span class="math">\(L\)</span>, אפשר לשכוח מהמבנה הפנימי העשיר שלה ולהתמקד בשאלה כמותית - כמה מילים יש מכל אורך? נסמן ב-<span class="math">\(a_{n}\)</span> את מספר המילים ב-<span class="math">\(L\)</span> מאורך <span class="math">\(n\)</span>. אפשר כעת להתאים ל-<span class="math">\(L\)</span> פונקציה יוצרת <span class="math">\(f_{L}\left(x\right)\)</span> שמתארת את הסדרה <span class="math">\(a_{n}\)</span> (למי שתוהה, יש מילה אחת מאורך 0 - "המילה הריקה", כך ש-<span class="math">\(a_{0}\)</span> יכול להיות שווה 1). כל זה טוב ויפה - כעת השאלה היא כיצד ניתן לחשב את <span class="math">\(f_{L}\left(x\right)\)</span>. אציג שיטה כללית לעשות זאת, אם נתון אוטומט <span class="math">\(A\)</span> שמקבל את <span class="math">\(L\)</span>; זה מכתיב דרך פעולה כללית בהתמודדות עם בעיה קומבינטורית שאנחנו רוצים למצוא עבורה פונקציה יוצרת - קודם כל לבדוק האם הבעיה הזו ניתנת לניסוח בתור שפה רגולרית. אם כן, קיבלנו את הפונקציה היוצרת "בחינם".</p>
+<p>מכיוון שאנחנו מתמקדים בשאלה כמותית ולא במבנה של כל מילה, אפשר להתעלם מההבדלים שבין אותיות שונות, ולהתמקד בשאלה יותר פשוטה הנוגעת לאוטומט - בכמה מסלולים שונים מאורך <span class="math">\(n\)</span> אפשר להגיע מהמצב ההתחלתי למצב המקבל? מספר המסלולים הזה הוא בדיוק <span class="math">\(a_{n}\)</span>. עם זאת, כפי שקורה בדרך כלל בהוכחות שעוסקות באוטומטים, צריך לשאול שאלה "חזקה" יותר - נניח שאנחנו מתחילים ממצב <strong>כלשהו</strong> של האוטומט, לאו דווקא המצב ההתחלתי. כמה מסלולים מאורך <span class="math">\(n\)</span> שמגיעים למצב מקבל יהיו כעת? אם <span class="math">\(q_{i}\)</span> הוא המצב הזה, אפשר לסמן את המספר בתור <span class="math">\(a_{n}^{i}\)</span>, ואת הפונקציה היוצרת המתאימה בתור <span class="math">\(f_{i}\left(x\right)\)</span>. כדי לפשט עוד יותר את הסימונים אפשר לדבר על <strong>וקטור</strong> של פונקציות יוצרות: <span class="math">\(\overline{f}=\left(f_{0},f_{2},\dots,f_{k}\right)\)</span> (אני מסמן את מספר המצבים הכולל של האוטומט ב-<span class="math">\(k+1\)</span> כדי שהוקטור יראה "נחמד").</p>
+<p>מכיוון שויתרנו על זהות האותיות השונות ואנחנו מתמקדים רק במספר הדרכים להגיע ממצב אחד באוטומט לאחר, אפשר להפסיק לדבר על פונקצית המעברים של האוטומט ולהסתפק במעין טבלת מעברים מופשטת - מטריצה מגודל <span class="math">\(\left(k+1\right)\times\left(k+1\right)\)</span> שהן שורותיה והן עמודותיה מייצגות מצבים, ובתא ה-<span class="math">\(\left(i,j\right)\)</span> שלה כתוב מספר הדרכים לעבור מהמצב <span class="math">\(q_{i}\)</span> למצב <span class="math">\(q_{j}\)</span> (בצורה אולטרה פורמלית, זהו <span class="math">\(\left|\left\{ \sigma\in\Sigma:\delta\left(q_{i},\sigma\right)=q_{j}\right\} \right|\)</span>). דרך הייצוג הזו, של גרף באמצעות מטריצה, היא מאוד, מאוד נפוצה. אקרא למטריצה הזו <span class="math">\(T\)</span>. אלו שבקיאים באלגברה לינארית ומכירים כפל מטריצות יכולים לוודא לעצמם ש-<span class="math">\(T^{r}\)</span> היא המטריצה שבכניסה <span class="math">\(\left(i,j\right)\)</span> שלה רשום מספר הדרכים להגיע מ-<span class="math">\(i\)</span> אל <span class="math">\(j\)</span> בדיוק ב-<span class="math">\(r\)</span> צעדים.</p>
+<p>האבחנה הבסיסית בכל הסיפור הזה היא פשוטה ביותר. מספר המסלולים מאורך <span class="math">\(n\)</span> שמובילים מ-<span class="math">\(q_{i}\)</span> אל מצב מקבל כלשהו ניתן לחישוב באופן רקורסיבי. אם <span class="math">\(n=0\)</span> אז הוא 1 אם <span class="math">\(q_{i}\)</span> הוא בעצמו מצב מקבל ואחרת הוא 0. אפשר לסמן זאת בקומפקטיות באמצעות וקטור: <span class="math">\(\overline{u}\)</span>יהיה וקטור שבכניסה ה-<span class="math">\(i\)</span> שלו יש 1 אם המצב <span class="math">\(q_{i}\)</span> הוא מקבל, ואחרת 0. אם <span class="math">\(n&gt;0\)</span> אז אפשר להפעיל רקורסיה: לכל מצב <span class="math">\(q_{j}\)</span> אפשר לדבר על "מספר המסלולים מאורך <span class="math">\(n\)</span> מ-<span class="math">\(q_{i}\)</span> למצב מקבל, שבצעד הראשון נכנסים ל-<span class="math">\(q_{j}\)</span>". מספר המסלולים הללו הוא בדיוק המכפלה של מספר האפשרויות לעבור מ-<span class="math">\(q_{i}\)</span> אל <span class="math">\(q_{j}\)</span> (כלומר, <span class="math">\(T_{ij}\)</span>) במספר המסלולים מאורך <span class="math">\(n-1\)</span> מ-<span class="math">\(q_{j}\)</span> שמגיעים למצב מקבל. מכיוון ש<strong>כל</strong> מסלול מ-<span class="math">\(q_{i}\)</span> שמגיע למצב מקבל חייב לעבור דרך <span class="math">\(q_{j}\)</span> <strong>כלשהו</strong> בצעד הראשון, מספר המסלולים הכולל הוא סכום של המכפלות הללו, עבור כל ה-<span class="math">\(j\)</span>-ים האפשריים. מי שבקיא באלגברה לינארית אולי רואה כבר <a href="http://he.wikipedia.org/wiki/%D7%9B%D7%A4%D7%9C_%D7%9E%D7%98%D7%A8%D7%99%D7%A6%D7%95%D7%AA">כפל מטריצות</a> מול העיניים, אז אכתוב במפורש את הנוסחה: <span class="math">\(f_{i}\left(x\right) = u_{i}+\sum_{j}T_{ij}\cdot xf_{j}\left(x\right)=u_{i}+\left[T\right]_{i}\cdot x\overline{f}\left(x\right)\)</span></p>
+<p>ההכפלה ב-<span class="math">\(x\)</span> של <span class="math">\(f_{j}\left(x\right)\)</span> היא הדרך שלנו לבטא את העובדה שמסלול מאורך <span class="math">\(n\)</span> של <span class="math">\(f_{i}\)</span> נבנה באמצעות מסלולים מאורך <span class="math">\(n-1\)</span> של אגף ימין. ה-<span class="math">\(u_{i}\)</span> שמתווסף לסכום בא לתאר בדיוק את תנאי העצירה של הרקורסיה (הוא יהיה המקדם החופשי בטור של <span class="math">\(f_{i}\left(x\right)\)</span>).</p>
+<p>המשוואה שלמעלה היא משוואה כללית לכל <span class="math">\(i\)</span>; היא בעצם מייצגת מערכת של <span class="math">\(k+1\)</span> משוואות. את כל המערכת הזו אפשר לתאר באופן עוד יותר קומפקטי:</p>
+<p><span class="math">\(\overline{f} = u+T\cdot x\overline{f}\)</span></p>
+<p>ועל ידי העברת אגף מקבלים:</p>
+<p><span class="math">\(\overline{f}\left(I-xT\right) = u\)</span></p>
+<p>ומכאן:</p>
+<p><span class="math">\(\overline{f} = \left(I-xT\right)^{-1}u\)</span></p>
+<p>וזה נותן לנו את וקטור הפונקציות היוצרות עבור כל המצבים. אם רוצים "לבודד" את הפונקציה היוצרת רק עבור המצב <span class="math">\(q_{0}\)</span>, צריך לכפול את שני האגפים בוקטור <span class="math">\(\left(1,0,0,\dots,0\right)\)</span> (הוקטור שכולו אפסים פרט לכניסה במקום ה-0). נסמן וקטור זה כ-<span class="math">\(v\)</span>, ונקבל ש-<span class="math">\(f_{0}\left(x\right)=v\left(I-xT\right)^{-1}u\)</span>. זו הנוסחה.</p>
+<p>חישוב של כל העסק הזה הוא לא מסובך, בהינתן שאנחנו כבר יודעים לעשות חשבון עם פולינומים. יש מערכות אלגברה ממוחשבות שעושות את זה בדיוק - אני משתמש ב-<a href="http://www.sagemath.org/">Sage</a> לצורך כך, ובה החישוב שלעיל הוא מיידי. התוצאה המתקבלת היא תמיד פונקציה רציונלית (מנה של שני פולינומים), כך שמציאת נקודות הסינגולריות שלה (הנקודות שבהן "משהו מתקלקל" ולכן אפשר ללמוד מהן על קצב הגידול של <span class="math">\(a_{n}\)</span>) היא פשוטה למדי (אלו בדיוק הנקודות שמאפסות את המכנה).</p>
+<p>זה הכל. אחרי ההקדמה הארוכה שנתתי, הפשטות והמיידיות של התוצאה הן לטעמי יפות מאוד, כך שלא אכביר עליהן עוד מילים. מן הסתם נפנפתי פה בידיים ללא הרף ויש נקודות עדינות שעוד דורשות התייחסות, אך למזלי אני יכול להרשות לעצמי כאן להיות לא מדויק.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2009/09/19/pcp_theorem_intro/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט ה-PCP או: איך למדתי להפסיק לדאוג ולאהוב הוכחות הניתנות לבדיקה הסתברותית</span>
+            </a>
+            
+            
+            
+            <a href="/2009/09/08/generating_functions/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">פונקציות יוצרות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פותרים את SAT: המקרים של HORNSAT ו-2SAT - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>פותרים את SAT: המקרים של HORNSAT ו-2SAT</h1>
+            <div class="post-meta">
+                <span class="date">2013-11-24</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/לוגיקה.html">לוגיקה</a>
+                    
+                    <a href="/categories/מבני נתונים ואלגוריתמים.html">מבני נתונים ואלגוריתמים</a>
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/2SAT.html">2SAT</a>
+                    
+                    <a href="/tags/HORNSAT.html">HORNSAT</a>
+                    
+                    <a href="/tags/SAT.html">SAT</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסטים הקודמים דיברתי על בעיית SAT ועל השיטה שבה ניתן להוכיח שפסוק CNF אינו ספיק, אבל כל מה שעשיתי עד כה היה מאוד באוויר - עדיין לא הסברתי איך אפשר בפועל לקחת פסוק CNF ולקבוע אם הוא ספיק או לא.</p>
+<p>ובכן, באופן כללי הבעיה היא קשה, לפחות מבחינה תיאורטית, אבל יש <strong>מקרים פרטיים</strong> מסויימים של פסוקי CNF שהם פתירים באופן יעיל, גם מנקודת המבט התיאורטית של זמן הריצה הגרוע ביותר. בפוסט הזה אני רוצה להציג שני מקרים פרטיים שכאלו ואיך פותרים אותם; הרעיונות שנראה כאן יעזרו לנו להבין את הרעיון הכללי של האלגוריתמים לפתרון SAT (בפועל, לא במובן התיאורטי) שאציג בהמשך.</p>
+<p>נתחיל עם בעיה שנקראת HORNSAT, על שם הלוגיקאי אלפרד הורן. בבעיה הזו נתון לנו CNF מצורה מיוחדת מאוד: כל פסוקית שלו מכילה לכל היותר ליטרל חיובי אחד - כל יתר הליטרלים הם בשלילה. פסוקית כזו נקראת <strong>פסוקית הורן</strong>. למשל, <span class="math">\(\left(\neg x\vee y\vee\neg z\vee\neg w\right)\)</span> היא פסוקית הורן; גם <span class="math">\(\left(\neg x\vee\neg y\right)\)</span> שאין בה בכלל ליטרלים חיוביים היא פסוקית הורן.</p>
+<p>בואו נסתכל לרגע על הפסוקית <span class="math">\(\left(\neg x\vee y\vee\neg z\vee\neg w\right)\)</span>. אם נציב 0 ב-<span class="math">\(x\)</span>, או 0 ב-<span class="math">\(z\)</span>, או 0 ב-<span class="math">\(w\)</span>, זה יספק את הפסוקית. אבל מה יקרה אם נציב 1 בשלושתם? במקרה זה, כדי לספק את הפסוקית אנחנו חייבים להציב 1 ב-<span class="math">\(y\)</span>. כלומר, הפסוקית ממדלת טענה מהצורה "אם <span class="math">\(x,w,z\)</span> מתקיימים כולם אז גם <span class="math">\(y\)</span> מתקיים". פורמלית כותבים את זה כך: <span class="math">\(\left(x\wedge w\wedge z\to y\right)\)</span>. באופן כללי, את הקשר <span class="math">\(\to\)</span> אפשר "לקודד" עם שלילה ו-<span class="math">\(\vee\)</span>: <span class="math">\(\alpha\to\beta\)</span> שקול לוגית ל-<span class="math">\(\neg\alpha\vee\beta\)</span>, ומכאן האופן שבו פסוקית כמו <span class="math">\(\left(x\wedge w\wedge z\to y\right)\)</span> מוצגת כ-CNF. עם זאת, אני חושב שהרבה יותר קל להבין פסוקיות הורן כשחושבים עליהן כעל משהו מהצורה <span class="math">\(\left(x\wedge w\wedge z\to y\right)\)</span>.</p>
+<p>איך בודקים את הספיקות של פסוק הורן שכזה? הפתרון פשוט עד להפתיע: באופן איטרטיבי, אם יש משתנה ש<strong>חייב</strong> לקבל 1, מציבים בו 1; אחרת, מציבים 0 בכל המשתנים וסיימנו.</p>
+<p>מה זה אומר "חייב" לקבל 1? זה אומר שאם הוא לא מקבל 1, תהיה לנו פסוקית שאינה מסתפקת. אבל כדי שהדרך היחידה לספק פסוקית CNF היא על ידי הצבת 1 במשתנה <span class="math">\(x\)</span> כלשהו, הפסוקית חייבת להיות מהצורה <span class="math">\(\left(x\right)\)</span> (כי אם היה בה ליטרל נוסף, היינו מקבלים דרכים נוספות לספק את הפסוקית). פסוקית כזו נקראת <strong>פסוקית יחידה</strong> (Unit clause).</p>
+<p>אם אין בפסוק שלנו אף פסוקית יחידה עם משתנה חיובי, אז הצבה של 0 לכל המשתנים תספק בודאות את כל הפסוקיות. למה? כי בואו ניקח פסוקית כלשהי: היא לא פסוקית יחידה עם משתנה חיובי, ולכן יש בה לפחות משתנה שלילי אחד, או לפחות שני משתנים חיוביים. המקרה השני בלתי אפשרי עבור פסוקיות הורן, כי בפסוקית הורן על פי הגדרה יש לכל היותר ליטרל חיובי אחד. מסקנה: בפסוקית יש ליטרל שלילי אחד לפחות, ובהשמה שנותנת 0 לכל המשתנים הוא יקבל 1. סיימנו.</p>
+<p>אם בפסוק שלנו יש פסוקית יחידה עם משתנה חיובי <span class="math">\(x\)</span>, מבצעים את מה שנקרא Unit Propagation ובעברית פשוט אקרא לו "פעפוע": מבחינה רעיונית, אנחנו מציבים 1 ב-<span class="math">\(x\)</span> (כי אין לנו ברירה!). בפועל, אנחנו פשוט מסלקים מה-CNF שלנו את כל הפסוקיות שבהן הופיע הליטרל <span class="math">\(x\)</span> (כי הן סופקו) ומסירים את הליטרל <span class="math">\(\neg x\)</span> מכל הפסוקיות שבהן הוא הופיע (כי <span class="math">\(\neg x\)</span> קיבל את הערך 0 וכבר לא יספק את הפסוקית). אם קיבלנו פסוקית ריקה, הפסדנו; הפסוק לא ספיק. אם קיבלנו פסוק ריק, כלומר סילקנו ממנו את כל הפסוקיות, הצלחנו; מצאנו השמה מספקת (משתנים שהערך שלהם טרם נקבע יכולים להיות בעלי כל אחד משני הערכים האפשריים - זה לא ישנה).</p>
+<p>אחרי שגמרנו עם <span class="math">\(x\)</span>, צריך לבדוק אם יש לנו עוד פסוקיות יחידה חיוביות. ייתכן שקודם לא היו כאלו אבל הן נוצרו במהלך הפעפוע (למשל, אם קודם הייתה לנו הפסוקית <span class="math">\(\left(\neg x\vee y\right)\)</span>). אם כן, מפעפעים גם את המשתנה החדש, וכן הלאה וכן הלאה. אם אין עוד פסוקיות יחידה חיוביות, אז כאמור פשוט מציבים 0 בכל המשתנים שנותרו וסיימנו.</p>
+<p>האלגוריתם הזה ממש, ממש פשוט. בביצוע נאיבי זמן הריצה שלו הוא <span class="math">\(O\left(n^{2}\right)\)</span>, אבל עם קצת התחכמויות אפשר גם לבצע אותו בזמן לינארי (<span class="math">\(O\left(n\right)\)</span>) מה שאומר שהוא גם יעיל מאוד. זה מעניין, כי מצד שני זו גם בעיה שהיא במובן מסויים "הכי קשה ב-P'' (כאן P מייצג את אוסף הבעיות עם אלגוריתם פולינומי שפותר אותן), במובן זה שכל בעיה אחרת שיש אלגוריתם פולינומי המכריע אותה ניתנת לתרגום ל-HORNSAT תוך שימוש בכמות קטנה יחסית של זכרון - פולי-לוגריתמית (כלומר, כמות זכרון שהיא פולינום בלוגריתם של <span class="math">\(n\)</span>). פורמלית אומרים שזו שפה שהיא P-שלמה (כמו שיש NP-שלמה) ביחס לרדוקציות logspace (ולכן, למשל, אם קיים אלגוריתם שפותר אותה בזכרון פולי-לוגריתמי - לא סביר בכלל - אז לכל שפה ב-P קיים אלגוריתם עם דרישות זכרון מצומצמות שכאלה).</p>
+<p>בואו נעבור עכשיו לוריאנט אחר של SAT, שנקרא 2SAT. הפעם אנחנו מרשים לליטרל חיובי להופיע פעמיים בתוך פסוקית, אבל מטילים על הפסוק מגבלה די קשיחה: בכל פסוקית יש <strong>בדיוק</strong> שני ליטרלים (אנחנו מרשים גם פסוקיות כמו <span class="math">\(\left(x\vee x\right)\)</span> שהן בפועל פסוקית עם ליטרל יחיד). ייתכן שהמגבלה הזו נראית לנו קשיחה <strong>מדי</strong>, כי אנחנו מגבילים את המספר המקסימלי של ליטרלים שיכולים להופיע בתוך פסוקית, אבל האינטואיציה שלנו בעייתית בהקשר הזה: וריאנט אחר הוא 3SAT שבו כל פסוקית מכילה בדיוק שלושה ליטרלים, ומסתבר שאפשר לקודד <strong>כל</strong> פסוק CNF כפסוק 3CNF במחיר של הגדלה לא משמעותית (לינארית באורך הכולל של הפסוקיות בפסוק המקורי) של גודל הפסוק. כך שהמגבלה פחות קטלנית מאשר היא נראית במבט ראשון, ועדיין - פסוקי 2CNF הם משמעותית יותר פשוטים ולכן אני יכול להציג אלגוריתם יעיל שבודק את הספיקות שלהם.</p>
+<p>הסיבה שבגללה פסוקי 2CNF הם פשוטים ברמה שעוזרת לנו היא שאפשר לחשוב על כל פסוק כזה בתור אוסף אילוצים מהצורה "ליטרל אחד גורר ליטרל אחר". את <span class="math">\(\left(x\vee y\right)\)</span> אפשר לכתוב גם כ-<span class="math">\(\neg x\to y\)</span> וגם כ-<span class="math">\(\neg y\to x\)</span>, כלומר כל פסוקית נותנת לנו שתי גרירות שמערבות ליטרלים. היופי פה הוא שגרירה היא <strong>יחס טרנזיטיבי</strong>: אם <span class="math">\(x\to y\)</span> ו-<span class="math">\(y\to z\)</span> אז גם <span class="math">\(x\to z\)</span> גם אם הם לא מופיעים יחד באף פסוקית (אם תחשבו על זה לרגע, תראו שזה בעצם כלל הרזולוציה בתחפושת: מ-<span class="math">\(\left(\neg x\vee y\right)\)</span> ו-<span class="math">\(\left(\neg y\vee z\right)\)</span> אנו מסיקים את <span class="math">\(\left(\neg x\vee z\right)\)</span>).</p>
+<p>עכשיו, נניח שעל ידי שרשרת של הסקות כאלו קיבלנו את הגרירה <span class="math">\(x\to\neg x\)</span>. מה זה אומר? זה אומר שאם <span class="math">\(x\)</span> שווה 1 אז גם <span class="math">\(\neg x\)</span> צריך להיות שווה 1, אבל זה כמובן בלתי אפשרי, והמסקנה היא ש-<span class="math">\(x\)</span> חייב לקבל 0 על ידי כל השמה שאנחנו מקווים שתספק את הפסוק שלנו (<span class="math">\(x\to\neg x\)</span> הוא פשוט הפסוקית <span class="math">\(\left(\neg x\vee\neg x\right)\)</span> בתחפושת, כלומר פסוקית היחידה <span class="math">\(\left(\neg x\right)\)</span>).</p>
+<p>ומה קורה אם קיבלנו גם את <span class="math">\(x\to\neg x\)</span> וגם את <span class="math">\(\neg x\to x\)</span>? הגרירה הראשונה מראה ש-<span class="math">\(x\)</span> לא יכול לקבל 1, והשניה מראה ש-<span class="math">\(x\)</span> לא יכול לקבל 0, ולכן המשחק נגמר - הפסוק אינו ספיק. במונחי רזולוציה, קיבלנו את <span class="math">\(\left(x\right),\left(\neg x\right)\)</span> ואחרי רזולוציה לשניהם נקבל את הפסוקית הריקה. אם כן, יש לנו קריטריון להכרעה מתי פסוק 2CNF אינו ספיק: אם קיימת שרשרת גרירות מ-<span class="math">\(x\)</span> אל <span class="math">\(\neg x\)</span> וקיימת שרשרת גרירות מ-<span class="math">\(\neg x\)</span> אל <span class="math">\(x\)</span> עבור משתנה <span class="math">\(x\)</span> כלשהו. מה שיפה כאן הוא שהקריטריון הזה הוא קריטריון של אם ורק אם: אם לאף משתנה אין שתי שרשראות גרירה כאלו, הפסוק ספיק. בואו נוכיח את זה.</p>
+<p>בואו ניקח פסוק <span class="math">\(\varphi\)</span> עם התכונה המבוקשת, כלומר שאין משתנה שגורר את שלילתו וגם שלילתו גוררת אותו. נתחיל לבנות לו השמה. נבחר שרירותית משתנה <span class="math">\(x\)</span>. אם לא מתקיים <span class="math">\(x\to\neg x\)</span>, נציב ב-<span class="math">\(x\)</span> 1; אם כן מתקיים <span class="math">\(x\to\neg x\)</span> אז מובטח לנו שלא מתקיים ההפך, <span class="math">\(\neg x\to x\)</span>, ואז נציב 0 ב-<span class="math">\(x\)</span>.</p>
+<p>בואו נניח שהצבנו 1 ב-<span class="math">\(x\)</span>; עבור הצבה של 0 ההמשך דומה. מה שיקרה עכשיו הוא שכל פסוקית שבה <span class="math">\(x\)</span> הופיע תוסר מ-<span class="math">\(\varphi\)</span>, ואילו כל פסוקית שבה <span class="math">\(\neg x\)</span> הופיע תיוותר עם ליטרל יחיד, שנהיה חייבים להציב בו 1. ואז אולי נקבל פסוקיות יחידה נוספות שגם בליטרלים שלהן נצטרך להציב 1, וכן הלאה. בקיצור, יש לנו פעפוע כמו קודם. האבחנה היא שאם <span class="math">\(,l\)</span> הוא ליטרל כלשהו שקיבל 1 כחלק מהפעפוע, אז <span class="math">\(x\to l\)</span> ניתן להסקה מתוך אוסף הגרירות שהפסוק מגדיר.</p>
+<p>תהליך הפעפוע יכול להסתיים בשתי דרכים שונות: או שניוותר לבסוף בלי פסוקיות יחידה, ואז נוכל לבחור משתנה חדש ולהציב בו ערך (אם עוד יש כזה שטרם הצבנו בו ערך), או שנגיע לפסוקית ריקה ולסתירה. אני רוצה לשכנע אתכם שאי אפשר להגיע לפסוקית ריקה. כדי להגיע לפסוקית ריקה, צריכים להיות שני ליטרלים <span class="math">\(l_{1},l_{2}\)</span> כך ש-<span class="math">\(\left(l_{1}\vee l_{2}\right)\)</span> היא פסוקית של <span class="math">\(\varphi\)</span>, ובנוסף לכך <span class="math">\(x\to\neg l_{1}\)</span> ו-<span class="math">\(x\to\neg l_{2}\)</span>.</p>
+<p>עכשיו, שימו לב לתעלול הבא: אם <span class="math">\(\left(l_{1}\vee l_{2}\right)\)</span> היא פסוקית של <span class="math">\(\varphi\)</span>, אז למאגר הגרירות שלנו אפשר להוסיף את <span class="math">\(\neg l_{1}\to l_{2}\)</span>. כעת, מכיוון ש-<span class="math">\(x\to\neg l_{1}\)</span> נקבל <span class="math">\(x\to l_{2}\)</span>. שקול לוגי של הפסוק הזה הוא <span class="math">\(\neg l_{2}\to\neg x\)</span> (בדקו זאת!) ומכיוון ש-<span class="math">\(x\to\neg l_{2}\)</span> נסיק <span class="math">\(x\to\neg x\)</span>, אבל הנחנו שזה לא קורה - סתירה! לכן תהליך הפעפוע לא יכול להיגמר עם פסוקית ריקה, וההצלחה של האלגוריתם מובטחת.</p>
+<p>עד כאן התיאוריה, אבל איך מבצעים את האלגוריתם בפועל? ובכן, צריך למצוא משתנה <span class="math">\(x\)</span> שאינו גוזר את <span class="math">\(\neg x\)</span>, צריך להציב בו ובכל מה שנגזר ממנו 1, ולוודא שלא נגרמו בעיות בשל כך. הדרך הנוחה לחשוב על זה (וגם לממש בפועל) היא בתור אלגוריתם שפועל על <strong>גרף מכוון</strong>. הצמתים של הגרף יהיו הליטרלים של הפסוק שלנו, כלומר כל צומת הוא מהצורה <span class="math">\(x\)</span> או מהצורה <span class="math">\(\neg x\)</span> עבור משתנה <span class="math">\(x\)</span> כלשהו, והקשתות מייצגות גרירה: אם <span class="math">\(\left(l_{1}\vee l_{2}\right)\)</span> היא פסוקית ב-<span class="math">\(\varphi\)</span>, אז מוסיפים לגרף את הקשתות <span class="math">\(\neg l_{1}\to l_{2}\)</span> ו-<span class="math">\(\neg l_{2}\to l_{1}\)</span>. כעת יש לנו פירוש פשוט לכך שליטרל אחד נגרר על ידי אחר: נסתכל על צומת <span class="math">\(l\)</span> ואז נסתכל על כל צומת ש<strong>ישיג</strong> ממנו, כלומר שיש מסלול מכוון ממנו אליו. כל הצמתים הללו מייצגים ליטרלים שנובעים מ-<span class="math">\(l\)</span>.</p>
+<p>כעת האלגוריתם ברור: בוחרים משתנה <span class="math">\(x\)</span> באופן שרירותי, ומריצים עליו אלגוריתם DFS, שמוצא את כל הצמתים הישיגים ממנו. אם <span class="math">\(\neg x\)</span> הוא לא בין הצמתים שהיו ישיגים מ-<span class="math">\(x\)</span>, אז מציבים 1 ב-<span class="math">\(x\)</span> ובכל ליטרל אחר שצץ במהלך ה-DFS. לא ייתכן שנצטרך להציב 1 גם בליטרל וגם בשלילתו, כי כפי שכבר ראינו, זה היה גורם לכך שמ-<span class="math">\(x\)</span> כן אפשר יהיה להגיע אל <span class="math">\(\neg x\)</span>.</p>
+<p>אם כן ראינו שאפשר להגיע אל <span class="math">\(\neg x\)</span> מתוך <span class="math">\(x\)</span>, אז נריץ DFS חדש מ-<span class="math">\(\neg x\)</span> ונפעל באותו האופן כמו קודם. אם הגענו אל <span class="math">\(x\)</span> במהלך ה-DFS אפשר לסיים - זו הוכחה שהפסוק לא ספיק (וקל לזקק ממנה הוכחת רזולוציה אמיתית).</p>
+<p>אחרי שסיימנו לעשות כל מה שאפשר עם <span class="math">\(x\)</span>, אם יש משתנים שטרם הצבנו בהם ערכים בוחרים אחד מהם - נאמר, <span class="math">\(y\)</span> - וחוזרים על הסיפור יחד איתו. על פניו יכולה לצוץ בעיה חדשה: אולי יש איזה שהוא משתנה <span class="math">\(z\)</span> שכבר הצבנו בו ערך בשלב של הטיפול ב-<span class="math">\(x\)</span> - נניח שהצבנו בו 1, אבל גם עבור 0 זה אותו עקרון - אבל עכשיו בשלב הטיפול ב-<span class="math">\(y\)</span> נצטרך להציב בו 0? זה יקרה אם נגלה ש-<span class="math">\(\neg z\)</span> ישיג מ-<span class="math">\(y\)</span> ולכן נרצה להציב 1 ב-<span class="math">\(\neg z\)</span>, מה שמכריח אותנו להציב 0 ב-<span class="math">\(z\)</span>.</p>
+<p>ובכן, התשובה לכך פשוטה מאוד: אם <span class="math">\(\neg z\)</span> ישיג מ-<span class="math">\(y\)</span>, אז זה אומר ש-<span class="math">\(\neg y\)</span> ישיג מ-<span class="math">\(z\)</span> (למה?) ולכן אם <span class="math">\(\neg z\)</span> היה ישיג מ-<span class="math">\(x\)</span>, אז <span class="math">\(\neg y\)</span> היה ישיג מ-<span class="math">\(x\)</span>, מה שאומר שכבר בשלב הקודם של <span class="math">\(x\)</span> היינו אמורים להציב ערך ב-<span class="math">\(y\)</span> ולא ייתכן שהוא שרד עד לשלב הזה. זה מסיים עם החששות שלנו; מי שעדיין מודאג מוזמן להוכיח פורמלית לעצמו שזה עובד.</p>
+<p>אם כן, ראינו אלגוריתמים שעובדים טוב מאוד על מקרים פרטיים של SAT. מה עושים במקרה הכללי? על כך נדבר בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/12/11/dpll_algorithm/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">פותרים את SAT - אלגוריתם DPLL</span>
+            </a>
+            
+            
+            
+            <a href="/2013/11/14/resolution_proof_system/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">רזולוציה - איך אפשר להוכיח שאי אפשר?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

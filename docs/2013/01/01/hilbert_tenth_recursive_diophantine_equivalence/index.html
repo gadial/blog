@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הבעיה העשירית של הילברט - נקמתן של הפונקציות הרקורסיביות והדיופנטיות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הבעיה העשירית של הילברט - נקמתן של הפונקציות הרקורסיביות והדיופנטיות</h1>
+            <div class="post-meta">
+                <span class="date">2013-01-01</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הבעיה העשירית של הילברט.html">הבעיה העשירית של הילברט</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסטים הקודמים בסדרה <a href="http://www.gadial.net/2012/11/12/hilbert_tenth_exponential_function/">עבדנו קשה</a> כדי להוכיח שהפונקציה האקספוננציאלית היא דיופנטית. הצלחנו בזה סוף סוף ועכשיו אפשר לשכוח מהעניין לבינתיים ולנסות להיזכר מה בעצם אנחנו מנסים להוכיח, ומה האסטרטגיה הכללית שלנו.</p>
+<p>כזכור, פונקציה דיופנטית היא פונקציה <span class="math">\(f\left(x_{1},\dots,x_{n}\right)\)</span> כך שקיימת מערכת משוואות דיופנטיות עם המשתנים <span class="math">\(x_{1},\dots,x_{n},y,z_{1},\dots,z_{n}\)</span> בעלת התכונה הבאה: אם אנו מציבים ערכים <span class="math">\(a_{1},\dots,a_{n}\)</span> ב-<span class="math">\(x\)</span>-ים ו-<span class="math">\(b\)</span> ב-<span class="math">\(y\)</span>, אז למה שנשאר ממערכת המשוואות (שכעת היא רק עם המשתנים <span class="math">\(z_{1},\dots,z_{n}\)</span>) קיים פתרון אם ורק אם <span class="math">\(b=f\left(a_{1},\dots,a_{n}\right)\)</span>. כאן "משוואה דיופנטית" היא משוואה פולינומית עם מקדמים חיוביים שהפתרונות שלה גם הם חייבים להיות חיוביים.</p>
+<p>הבעיה העשירית של הילברט היא זו: בהינתן משוואה דיופנטית, לקבוע האם קיים לה פתרון או לא. איך זה קשור לפונקציות דיופנטיות? בצורה הבאה: נניח שהצלחנו לפתור את הבעיה העשירית של הילברט; אז אם <span class="math">\(f\)</span> היא פונקציה דיופנטית ואנחנו רוצים לדעת אם <span class="math">\(f\left(a_{1},\dots,a_{n}\right)=b\)</span>, כל מה שאנחנו צריכים לעשות הוא לקחת את מערכת המשוואות שמראה ש-<span class="math">\(f\)</span> היא דיופנטית, להציב במשתנים המתאימים בה את <span class="math">\(a_{1},\dots,a_{n},b\)</span>, ואז לקחת את האלגוריתם שפותר את הבעיה העשירית של הילברט ולהפעיל אותו על המשוואה שקיבלנו. אם יש פתרון, אז <span class="math">\(f\left(a_{1},\dots,a_{n}\right)=b\)</span>; ואם אין פתרון, אז <span class="math">\(f\left(a_{1},\dots,a_{n}\right)\ne b\)</span>.</p>
+<p>בואו ניקח את זה צעד אחד קדימה: נניח שכל מה שנתון לנו הם רק <span class="math">\(a_{1},\dots,a_{n}\)</span> ומבקשים מאיתנו <strong>לחשב</strong> את <span class="math">\(f\left(a_{1},\dots,a_{n}\right)\)</span> או אפילו סתם לדעת אם <span class="math">\(f\)</span> מוגדרת על הקלט הזה. באופן כללי זו יכולה להיות בעיה קשה למדי, אבל לא אם יש לנו פתרון לבעיה העשירית של הילברט: במקרה זה פשוט נציב את <span class="math">\(a_{1},\dots,a_{n}\)</span> במשוואות ונראה אם יש לנו פתרון. אם אין פתרון, אז <span class="math">\(f\left(a_{1},\dots,a_{n}\right)\)</span> אינו מוגדר, ואילו אם יש פתרון אז ניקח את הערך שהוצב במשתנה <span class="math">\(y\)</span> במשוואות: הערך הזה יהיה <span class="math">\(b\)</span> שמקיים <span class="math">\(b=f\left(a_{1},\dots,a_{n}\right)\)</span>.</p>
+<p>עכשיו, בואו נכניס לתמונה שחקן חדש שתמיד כדאי להכיר: <a href="http://www.gadial.net/2007/09/26/halting_problem/">בעיית העצירה</a>. בניסוח לא פורמלי שיספיק לנו כאן, בעיית העצירה היא זו - נותנים לכם קוד של תוכנית מחשב בשפת C, ושואלים אם תוכנית המחשב הזו מסיימת אי פעם את ריצה (אנו מניחים שאין עליה מגבלות זמן וזכרון כמו שיש על תוכניות שרצות על מחשבים אמיתיים). על פניו לא בעיה נוראית, אבל אלן טיורינג הוכיח ש<strong>אין אלגוריתם</strong> שפותר את הבעיה הזו. עם זאת, הבעיה היא כן "חצי פתירה" במובן הבא: אם התוכנית עוצרת מתישהו תמיד נוכל לגלות את זה אם נריץ אותה מספיק זמן; ולכן יש לנו בעיה לענות נכון רק אם התוכנית לא עוצרת אף פעם (כי מתי אנחנו יכולים להפסיק את הבדיקה ולהחליט בודאות גמורה שהתוכנית לא תעצור אף פעם?). בהתאם לתכונה הזו אפשר להגדיר פונקציה <span class="math">\(f\)</span> שמקבלת כקלט תוכנית מחשב בשפת C, ופולטת את מספר הצעדים שהתוכנית מבצעת עד שהיא עוצרת, ואילו אם התוכנית לא עוצרת אז <span class="math">\(f\)</span> לא מוגדרת עליה.</p>
+<p>נניח שבאורח קסום כלשהו <span class="math">\(f\)</span> הייתה דיופנטית והבעיה העשירית של הילברט הייתה פתירה, אז היינו פותרים את בעיית העצירה כך: בהינתן תוכנית מחשב שמקודדת על ידי ערכים <span class="math">\(a_{1},\dots,a_{a}\)</span> ש-<span class="math">\(f\)</span> מקבלת נציב את <span class="math">\(a_{1},\dots,a_{n}\)</span> במשוואה הדיופנטית שמתאימה ל-<span class="math">\(f\)</span>, נפעיל את האלגוריתם שפותר את הבעיה העשירית של הילברט על המשוואה שהתקבלה, ואם אין לה פתרון נכריז שהתוכנית לא עוצרת, ואחרת נכריז שהתוכנית כן עוצרת. פשוט ביותר.</p>
+<p>אם כן, כדי להוכיח שהבעיה העשירית של הילברט אינה פתירה, די לי להוכיח שהפונקציה <span class="math">\(f\)</span> שהגדרתי היא דיופנטית. מה שעשו בפועל היה הרבה יותר מכך - הוכיחו שכל פונקציה <strong>ניתנת לחישוב</strong> היא דיופנטית. מהי פונקציה ניתנת לחישוב? פונקציה <span class="math">\(f\)</span> שקיים אלגוריתם שעל כל קלט <span class="math">\(x\)</span> <strong>עבורו היא מוגדרת</strong> מחשבת את <span class="math">\(f\left(x\right)\)</span>, ואילו על קלטים שעבורם <span class="math">\(f\)</span> לא מוגדרת האלגוריתם פשוט לא עוצר. אם כן, זה היעד שלנו וזה מה שמחסל את הבעיה העשירית של הילברט: הטענה "אם פונקציה היא ניתנת לחישוב, אז היא דיופנטית".</p>
+<p>הבעיה היא ש"ניתנת לחישוב" הוא מושג די מופשט. צריך להיסגר על פורמליזם קונקרטי של חישוב ולעבוד איתו. אפשר היה ללכת לפורמליזם הסטנדרטי בתורת החישוביות: "מכונת טיורינג". רק שאנחנו לא עושים זאת, כי יש פורמליזם אחר, שקול, שהרבה יותר דומה למה שאנחנו מנסים לעשות עם פונקציות דיופנטית ואיתו העבודה שלנו תהיה קלה בהרבה: המודל של <strong>פונקציות רקורסיביות</strong>. כבר הזכרתי אותן <a href="http://www.gadial.net/2012/09/04/hilbert_tenth_diophantic_functions/">בפוסט השני</a> בסדרת הפוסטים הנוכחית ותיארתי את תחילת ההוכחה לשקילות שלהן ושל הפונקציות הדיופנטיות. מה שנשאר היה רק ליצור "שפה" דמוית לוגיקה שבעזרתה אפשר לבנות פונקציות דיופנטיות מורכבות וזאת כדי להוכיח שכללי הבניה של הפונקציות הרקורסיביות, כשמפעילים אותם על פונקציות דיופנטיות, מחזירים פונקציות דיופנטיות. בואו נתחיל, בזהירות, ליצור את ה"שפה" הזו. פורמלית, אני מגדיר קבוצה של איברים שאני קורא להם ברישול מה "ביטויים דיופנטיים".</p>
+<p>ראשית, כל משוואה דיופנטית היא כמובן ביטוי דיופנטי לגיטימי בשפה שלנו. משוואה דיופנטית היא משהו מהצורה <span class="math">\(p\left(x_{1},\dots,x_{n}\right)=0\)</span> כאשר <span class="math">\(x_{1},\dots,x_{n}\)</span> הם משתנים כלשהם ו-<span class="math">\(p\)</span> הוא פולינום. אפשר להכליל את זה קצת ולדבר על משוואות מהצורה <span class="math">\(p\left(x_{1},\dots,x_{n}\right)=q\left(x_{1},\dots,x_{n}\right)\)</span> כאשר <span class="math">\(q\)</span> גם הוא פולינום (גם 0 הוא פולינום חוקי מבחינתנו). המשוואה הדיופנטית שמייצגת את הביטוי <span class="math">\(p\left(x_{1},\dots,x_{n}\right)=q\left(x_{1},\dots,x_{n}\right)\)</span> היא פשוט <span class="math">\(p\left(x_{1},\dots,x_{n}\right)-q\left(x_{1},\dots,x_{n}\right)=0\)</span> (כלומר, הפולינום <span class="math">\(p-q\)</span> מייצג את הביטוי הזה).</p>
+<p>כעת, אם <span class="math">\(P,Q\)</span> הם שני ביטויים דיופנטיים שמיוצגים על ידי הפולינומים <span class="math">\(p,q\)</span> בהתאמה, גם <span class="math">\(P\wedge Q\)</span> הוא ביטוי דיופנטי שמיוצג על ידי הפולינום <span class="math">\(p^{2}+q^{2}\)</span> (שמתאפס אם ורק אם <span class="math">\(p,q\)</span> מתאפסים בו זמנית). עד כאן - הכל קל.</p>
+<p>עכשיו, נניח ש-<span class="math">\(f\left(x_{1},\dots,x_{n}\right)\)</span> היא פונקציה שכבר הוכחנו שהיא דיופנטית ואנחנו רוצים להשתמש בה בביטוי שלנו. מה זה אומר ש-<span class="math">\(f\)</span> דיופנטית? כפי שאמרנו בתחילת הפוסט, שיש פולינום <span class="math">\(p_{f}\left(x_{1},\dots,x_{n},y,z_{1},\dots,z_{m}\right)\)</span> כך שלערכים נתונים של <span class="math">\(x_{1},\dots,x_{n}\)</span> ו-<span class="math">\(y\)</span>, המשוואה <span class="math">\(p_{f}=0\)</span> (במשתנים שנותרו, <span class="math">\(z_{1},\dots,z_{m}\)</span> פתירה אם ורק אם <span class="math">\(f\left(x_{1},\dots,x_{n}\right)=y\)</span>. אם כן, אפשר להשתמש בביטוי הדיופנטי <span class="math">\(y=f\left(x_{n},\dots,x_{n}\right)\)</span> בתור קיצור ל-<span class="math">\(p_{f}=0\)</span>. אפשר גם לכתוב משהו כמו <span class="math">\(f\left(x_{1},\dots,x_{n}\right)=g\left(x_{1},\dots,x_{n}\right)\)</span> בתור קיצור ל-<span class="math">\(\left(y=f\left(x_{1},\dots,x_{n}\right)\right)\wedge\left(z=g\left(x_{1},\dots,x_{n}\right)\right)\wedge\left(y=z\right)\)</span>.</p>
+<p>הדבר האחרון שנזדקק לו הוא <strong>כמתים</strong>. נתחיל בקל מביניהם: אם <span class="math">\(P\)</span> היא ביטוי דיופנטי אז גם <span class="math">\(\exists x\left(P\right)\)</span> הוא ביטוי דיופנטי, כש-<span class="math">\(x\)</span> הוא משתנה כלשהו (כנראה כזה שמופיע ב-<span class="math">\(P\)</span>, אחרת מה הטעם). מבחינה פורמלית, כשאנחנו מתרגמים את הכל לפולינום, אין הבדל בין הפולינום של <span class="math">\(P\)</span> ובין הפולינום של <span class="math">\(\exists x\left(P\right)\)</span>. ההבדל הוא רעיוני: אם משתנה ב-<span class="math">\(P\)</span> נופל תחת כמת <span class="math">\(\exists\)</span> עבורו, אומרים שהוא <strong>משתנה קשור</strong>, ואם הוא לא נופל תחת כמת אומרים שהוא <strong>חופשי</strong>. הרעיון בביטוי דיופנטי הוא לקבל בסופו של דבר פולינום בעל התכונה הבאה: לכל הצבה של ערכים <strong>במשתנים החופשיים</strong>, למשוואה שמיוצגת על ידי הפולינום קיים פתרון אם ורק אם הביטוי הדיופנטי מקבל את ערך האמת "אמת". במילים אחרות, המשתנים הקשורים הם המשתנים שבהם משחקים את משחק ה"האם המשוואה פתירה, עכשיו משהצבתי בה ערכים מסויימים?"</p>
+<p>נשאר לנו עוד לתאר כמת אחד אבל קודם כל בואו נראה דוגמאות למכביר כי אחרת קשה להבין מה הלך פה. באופן כללי כשאני רוצה לייצג פונקציה דיופנטית <span class="math">\(f\)</span> כלשהי אני כותב משהו מהצורה <span class="math">\(y=f\left(x_{1},\dots,x_{n}\right)\iff P\left(y,x_{1},\dots,x_{n}\right)\)</span> כאשר <span class="math">\(P\)</span> הוא ביטוי דיופנטי שמקבל "אמת" רק כאשר מתקיים הקשר <span class="math">\(y=f\left(x_{1},\dots,x_{n}\right)\)</span> (או במילים אחרות, הוא מייצג פולינום שאחרי שמציבים בו את <span class="math">\(y,x_{1},\dots,x_{n}\)</span> המשוואה שמתקבלת היא פתירה אם ורק אם <span class="math">\(y=f\left(x_{1},\dots,x_{n}\right)\)</span>).</p>
+<p>הפונקציות הרקורסיביות הבסיסיות היו הפונקציה הקבועה <span class="math">\(c\left(x\right)=1\)</span>, פונקציית העוקב <span class="math">\(s\left(x\right)=x+1\)</span> ופונקציות ההטלה <span class="math">\(U_{i}^{n}\left(x_{1},\dots,x_{n}\right)=x_{i}\)</span>. הביטויים הדיופנטיים המתאימים הם:</p>
+<p><span class="math">\(y=c\left(x\right)\iff\left(y=1\right)\)</span></p>
+<p><span class="math">\(y=s\left(x\right)\iff\left(y=x+1\right)\)</span></p>
+<p><span class="math">\(y=U_{i}^{n}\left(x_{1},\dots,x_{n}\right)\iff\left(y=x_{i}\right)\)</span></p>
+<p>בכל המקרים הללו הביטוי הדיופנטי הוא מה שקראתי לו "ביטוי בסיסי" מהצורה <span class="math">\(p=q\)</span> כאשר <span class="math">\(p,q\)</span> הם שני פולינומים (ופולינומים פשוטים למדי במקרה שלנו). בניה קצת יותר מעניינת אפשר לתת אם זוכרים שהצלחנו להוכיח שהפונקציה <span class="math">\(h\left(n,k\right)=n^{k}\)</span> היא דיופנטית. נניח שאנחנו רוצים להוכיח עכשיו שהפונקציה <span class="math">\(f\left(n,k,t\right)=n^{\left(k^{t}\right)}\)</span> היא דיופנטית, את זה אפשר לעשות בקלי קלות:</p>
+<p><span class="math">\(y=n^{k^{t}}\iff\exists z\left(y=n^{z}\wedge z=k^{t}\right)\)</span></p>
+<p>שימו לב: כאן <span class="math">\(n,k,t,y\)</span> כולם <strong>פרמטרים</strong> שאנחנו הולכים להציב בפולינום שמתאר את הביטוי באגף ימין, ואחרי שנעשה את זה נישאר עם פולינום שהמשתנה החופשי היחיד שלו הוא <span class="math">\(z\)</span>, ו... רגע, האמנם?</p>
+<p>בפולינום הזה יהיה כמובן את <span class="math">\(z\)</span> בתור משתנה חופשי, אבל יהיו בו המון משתנים חופשיים אחרים ש"מוסתרים" כרגע מאיתנו. הביטוי <span class="math">\(y=n^{z}\)</span> והביטוי <span class="math">\(z=k^{t}\)</span> אומרים שניהם את אותו הדבר: עבדנו קשה בפוסטים הקודמים כדי לקבל פולינום מסובך מאוד שמתאר את הפונקציה הזו (אם תזכרו, בסופו של דבר קיבלנו מערכת של 11 משוואות). קחו את הפולינום שמתאים ל-<span class="math">\(z=k^{t}\)</span> ואת הפולינום שמתאים ל-<span class="math">\(y=n^{z}\)</span> (זה אותו פולינום אבל עם שמות שונים למשתנים שבתוכו) ועכשיו "תערבבו" אותם על פי הכלל של <span class="math">\(\wedge\)</span> (דהיינו תעלו בריבוע ותחברו). התוצאה תיראה איום ונורא, אבל כל עוד אנחנו מסוגלים לתאר אותה בצורה הקומפטית <span class="math">\(\exists z\left(y=n^{z}\wedge z=k^{t}\right)\)</span> ולדעת זה עובד, אנחנו מרוצים. וזה כמובן עובד, כי <span class="math">\(\exists z\left(y=n^{z}\wedge z=k^{t}\right)\)</span> מקבל ערך אמת רק אם באמת <span class="math">\(y=n^{k^{t}}\)</span>.</p>
+<p>בואו נמשיך לחסל את הפונקציות הרקורסיביות, ונעבור כעת לטפל בכללי הבניה שלהן - די לנו להראות שאם מפעילים את כללי הבניה על פונקציות דיופנטיות מקבלים פונקציה דיופנטית. הכלל הראשון היה הרכבה, ובו בנינו מתוך הפונקציות <span class="math">\(f,g_{1},\dots,g_{m}\)</span> את <span class="math">\(h\left(x_{1},\dots,x_{n}\right)=f\left(g_{1}\left(x_{1},\dots,x_{n}\right),\dots,g_{m}\left(x_{1},\dots,x_{n}\right)\right)\)</span>. הביטוי הדיופנטי המתאים (שכבר הצגתי בעבר) הוא</p>
+<p><span class="math">\(y=h\left(x_{1},\dots,x_{n}\right)\iff\exists t_{1},\dots,t_{m}\)</span></p>
+<p><span class="math">\(\left(y=f\left(t_{1},\dots,t_{m}\right)\wedge t_{1}=g_{1}\left(x_{1},\dots,x_{n}\right)\wedge\dots\wedge t_{m}=g_{m}\left(x_{1},\dots,x_{n}\right)\right)\)</span></p>
+<p>שבנוי בדיוק על פי אותם עקרונות כמו <span class="math">\(\exists z\left(y=n^{z}\wedge z=k^{t}\right)\)</span>, רק באופן כללי. למעשה, אם תחשבו על כך לרגע, <span class="math">\(f\left(n,k,t\right)=n^{k^{t}}\)</span> מתקבל מהפונקציה <span class="math">\(h\left(n,k\right)=n^{k}\)</span> בעזרת הרכבה: <span class="math">\(f\left(n,k,t\right)=h\left(n,h\left(k,t\right)\right)\)</span> (כלומר, מה שקראתי לו <span class="math">\(f\)</span> בהגדרה הכללית של הרכבה הוא כאן <span class="math">\(h\)</span>, ואילו <span class="math">\(g_{1}\left(n,k,t\right)=n\)</span> ו-<span class="math">\(g_{2}\left(n,k,t\right)=h\left(k,t\right)\)</span>) כך שזה לא ממש מפתיע.</p>
+<p>בואו נוסיף עוד כלל בניה של ביטויים דיופנטיים: הקשר "או", <span class="math">\(\vee\)</span>. נניח שיש לנו את הביטויים <span class="math">\(P,Q\)</span> עם פולינומים מתאימים <span class="math">\(p,q\)</span> ואנחנו רוצים למצוא פולינום עבור <span class="math">\(P\vee Q\)</span>, כלומר כזה שמתאפס אם לפחות אחד משני הפולינומים מתאפס, מה נעשה? פשוט נכפול אותם: <span class="math">\(pq\)</span>.</p>
+<p>ואו נשלים את הבניה של אוסף הביטויים הדיופנטיים על ידי הוספה של המרכיב האחרון: כמת "לכל". בלוגיקה מסדר ראשון, הכמת <span class="math">\(\forall x\)</span> אומר "לכל <span class="math">\(x\)</span>". אפשר להכניס דבר כזה לביטויים הדיופנטיים שלנו, אבל אז עולה השאלה - איך לתרגם את זה לפולינום? יש כאן איזו שהיא סתירה מובנית - הרי הרעיון הוא שאם הביטוי מקבל ערך אמת אז כל מה שצריך הוא שיהיה <strong>קיים</strong> ערך שאפשר להציב למשתנה <span class="math">\(x\)</span> כחלק מהצבה שמאפסת את הפולינום; ומצד שני, אנחנו רוצים לטפל איכשהו ב<strong>כל</strong> הערכים האפשריים של <span class="math">\(x\)</span>. זו אינטואיציה; אם אתם רוצים לקבל אינטואיציה חזקה יותר נסו לחשוב איך לממש פולינום עבור <span class="math">\(\forall\)</span> ותראו איפה אתם נתקעים. בקיצור, תשכחו מזה אין לנו דרך לעשות משהו כזה.</p>
+<p>מה שכן אפשר לעשות, עם זאת, הוא טוב כמעט באותה מידה: כמת <span class="math">\(\forall\)</span> <strong>חסום</strong>. אם <span class="math">\(z\)</span> הוא משתנה שקיבל ערך כלשהו, אנחנו <strong>יכולים</strong> להשתמש בכמת מהצורה <span class="math">\(\forall x&lt;z\)</span>, שפירושו "לכל ערך של <span class="math">\(x\)</span> שקטן מ-<span class="math">\(z\)</span>". איך לממש את הכמת הזה - זה עניין מסובך שידרוש מאיתנו להשתמש בפונקציה האקספוננציאלית, ואני דוחה אותו לפוסט הבא (שיהיה האחרון!). לעת עתה אני רוצה להראות איך בעזרת הכמת הזה אנחנו מסוגלים להתגבר על שני כללי הבניה שעוד נותרו לנו.</p>
+<p>כלל הבניה הבא בתור הוא מה שקראתי לו <strong>רקורסיה פרימיטיבית</strong>. בואו נזכיר אותו, כי הוא די קשה לעיכול. בניסוח לא פורמלי, אנחנו חושבים על קלט כלשהו למשתנים <span class="math">\(x_{1},\dots,x_{n}\)</span> כאילו הוא מגדיר סדרה אינסופית <span class="math">\(a_{1},a_{2},a_{3},a_{4},\dots\)</span> שמוגדרת באופן רקורסיבי. האיבר הראשון בסדרה מחושב בדרך כלשהי מתוך <span class="math">\(x_{1},\dots,x_{n}\)</span>; בואו נקרא לדרך הזו <span class="math">\(f\)</span>, כלומר <span class="math">\(a_{1}=f\left(x_{1},\dots,x_{n}\right)\)</span>. כעת, האיבר ה-<span class="math">\(k+1\)</span> בסדרה מחושב מתוך שלושה סוגי קלטים שונים: ראשית, הפרמטרים <span class="math">\(x_{1},\dots,x_{n}\)</span> שאנו לא שוכחים מהם אף פעם; שנית, האיבר הקודם בסדרה, <span class="math">\(a_{k}\)</span>; שלישית, האינדקס של האיבר הקודם בסדרה, כלומר המספר הטבעי <span class="math">\(k\)</span>. נסמן ב-<span class="math">\(g\)</span> את הפונקציה שמקבלת את שלושת הקלטים הללו: <span class="math">\(a_{k+1}=g\left(k,a_{k},x_{1},\dots,x_{n}\right)\)</span>. כעת אפשר להגדיר פונקציה <span class="math">\(h\left(x_{1},\dots,x_{n},k\right)=a_{k}\)</span>.</p>
+<p>פורמלית זה הולך כך. אנו מגדירים <span class="math">\(h\left(x_{1},\dots,x_{n},1\right)=f\left(x_{1},\dots,x_{n}\right)\)</span> ולכל <span class="math">\(k\)</span> אנו מגדירים <span class="math">\(h\left(x_{1},\dots,x_{n},k+1\right)=g\left(k,h\left(x_{1},\dots,x_{n},k\right),x_{1},\dots,x_{n}\right)\)</span>. זה בדיוק מה שכתבתי למעלה, רק כתוב יותר פורמלי ויותר מבלבל.</p>
+<p>התיאור שנתתי כאן מרמז על האופן שבו אפשר למדל את הבניה הזו עם ביטוי דיופנטי. הנה הנסיון הראשון לעשות את זה:</p>
+<p><span class="math">\(y=h\left(x_{1},\dots,x_{n},k\right)\iff\exists a_{1},a_{2},\dots,a_{k}\)</span></p>
+<p><span class="math">\(a_{1}=f\left(x_{1},\dots,x_{k}\right)\wedge\)</span></p>
+<p><span class="math">\(a_{2}=g\left(1,a_{1},x_{1},\dots,x_{n}\right)\wedge\)</span></p>
+<p><span class="math">\(a_{3}=g\left(2,a_{2},x_{1},\dots,x_{n}\right)\wedge\)</span></p>
+<p><span class="math">\(\dots\)</span></p>
+<p><span class="math">\(a_{k}=g\left(k-1,a_{k-1},x_{1},\dots,x_{n}\right)\wedge\)</span></p>
+<p><span class="math">\(y=a_{k}\)</span></p>
+<p>התיאור הזה טוב ויפה מבחינה רעיונית, אבל <strong>הוא לא ביטוי דיופנטי</strong> חוקי. נסו רגע להבין למה - זה חמקמק למדי. הבעיה כאן היא ש<strong>אורך</strong> הביטוי הזה - כמות האיברים שמופיעים בו - תלויה בפרמטר המספרי <span class="math">\(k\)</span>, אבל זה לא מתאים למה שאנחנו צריכים לעשות - אנחנו צריכים לתת ביטוי <strong>אחד</strong>, שמטפל בכל ה-<span class="math">\(k\)</span> באותו האופן. אם לא נעשה את זה, אנחנו כבר לא תוקפים את הבעיה העשירית של הילברט אלא בעיה עוד יותר כללית (ולכן עוד יותר קשה) - להגיד אם יש פתרון למערכת משוואות דיופמנטיות שבו המשוואות עצמן תלויות בערכים של חלק מהמשתנים (ערכים שונים - משוואות שונות). אם כן, הבניה שלעיל היא לא מוצלחת כל עוד לא מצאנו דרך לכתוב אותה במסגרת הכללים הנוקשים יחסית של בניית ביטויים דיופנטיים שיש לנו.</p>
+<p>לב הבעיה הוא בכך שכדי לתאר את הרקורסיה בשלב <span class="math">\(k\)</span> אנחנו צריכים <span class="math">\(k\)</span> משתנים, <span class="math">\(a_{1},\dots,a_{k}\)</span>, כלומר מספר משתנים שאינו קבוע אלא תלוי בפרמטר <span class="math">\(k\)</span>. אם הייתה איכשהו דרך לדחוף את כל המשתנים הללו לתוך משתנה יחיד...</p>
+<p>וכאן הגיע הזמן להחזיר למשחק את הפונקציה שתיארתי ב<a href="http://www.gadial.net/2012/09/15/hilbert_tenth_sequence_function/">פוסט השלישי בסדרה</a>: פונקציה דיופנטית <span class="math">\(S\left(i,u\right)\)</span> שהיא בעלת התכונה הבאה: לכל סדרה סופית <span class="math">\(a_{1},\dots,a_{k}\)</span> של מספרים טבעיים חיוביים, קיים <span class="math">\(u\)</span> כך ש-<span class="math">\(S\left(i,u\right)=a_{i}\)</span> לכל <span class="math">\(1\le i\le k\)</span>. במילים אחרות, <span class="math">\(u\)</span> מקודד את הסדרה <span class="math">\(a_{1},\dots,a_{k}\)</span> במלואה. בעזרת הפונקציה הזו אפשר לכתוב מחדש את הביטוי שלעיל באופן הבא:</p>
+<p><span class="math">\(y=h\left(x_{1},\dots,x_{n},k\right)\iff\exists u\)</span></p>
+<p><span class="math">\(S\left(1,u\right)=f\left(x_{1},\dots,x_{k}\right)\wedge\)</span></p>
+<p><span class="math">\(S\left(2,u\right)=g\left(1,S\left(1,u\right),x_{1},\dots,x_{n}\right)\wedge\)</span></p>
+<p><span class="math">\(S\left(3,u\right)=g\left(2,S\left(2,u\right),x_{1},\dots,x_{n}\right)\wedge\)</span></p>
+<p><span class="math">\(\dots\)</span></p>
+<p><span class="math">\(S\left(k,u\right)=g\left(k-1,S\left(k-1,u\right),x_{1},\dots,x_{n}\right)\wedge\)</span></p>
+<p><span class="math">\(y=S\left(k,u\right)\)</span></p>
+<p>אבל, למרות שעכשיו אנחנו צריכים להניח את קיומו של משתנה יחיד <span class="math">\(u\)</span> ולא של <span class="math">\(k\)</span> משתנים, זה עדיין לא פותר לנו את הבעיה, כי הפסוק עצמו עדיין תלוי באורכו ב-<span class="math">\(k\)</span>. לכן הטוויסט האחרון הוא להשתמש בכמת "לכל":</p>
+<p><span class="math">\(y=h\left(x_{1},\dots,x_{n},k\right)\iff\exists u\)</span></p>
+<p><span class="math">\(S\left(1,u\right)=f\left(x_{1},\dots,x_{k}\right)\wedge\)</span></p>
+<p><span class="math">\(\forall i&lt;k\left(S\left(i+1,u\right)=g\left(i,S\left(i,u\right),x_{1},\dots,x_{n}\right)\right)\wedge\)</span></p>
+<p><span class="math">\(y=S\left(k,u\right)\)</span></p>
+<p>וזהו זה! זה כבר ביטוי תקין לגמרי, בהינתן שאנחנו מאמינים שאפשר להשתמש בכמת "לכל" חסום. כדאי להעיר שהתעלול הזה, של שימוש ב-<span class="math">\(S\)</span> כדי לתפוס רקורסיה בפסוק קצר אחד, הוא המצאתו של קורט גדל (עד לרמה הטכנית של בניית <span class="math">\(S\)</span> עם משפט השאריות הסיני) והוא אחד מהכלים שבהם הוא השתמש בהוכחה המבריקה שלו של משפט אי השלמות הראשון.</p>
+<p>אם כן, סיימנו עם הרקורסיה הפרימיטיבית ומותיר לנו רק את כלל היצירה האחרון: מינימיזציה.</p>
+<p>כזכור, מינימיזציה הולכת כך:</p>
+<p><span class="math">\(h\left(x_{1},\dots,x_{n}\right)=\min_{y}\left(f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right)\right)\)</span></p>
+<p>כלומר, <span class="math">\(h\)</span> מחזירה את הערך המינימלי של <span class="math">\(y\)</span> שכאשר מזינים אותו (יחד עם שאר הפרמטרים <span class="math">\(x_{1},\dots,x_{N}\)</span>) הן ל-<span class="math">\(f\)</span> והן ל-<span class="math">\(g\)</span> מקבלים את אותה התוצאה. אם אין <span class="math">\(y\)</span> שעבורו זה קורה, <span class="math">\(h\)</span> פשוט לא מוגדרת על <span class="math">\(x_{1},\dots,x_{n}\)</span>.</p>
+<p>לתרגם את הפונקציה הזו לביטוי יהיה קל יותר מאשר רקורסיה. נתחיל מכך ש-<span class="math">\(f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right)\)</span> הוא ביטוי לגיטימי למהדרין. כל מה שנשאר לעשות הוא לקודד איכשהו את תכונת המינימליות. כלומר, אנחנו רוצים להגיד שאין איזה <span class="math">\(t&lt;y\)</span> כך ש-<span class="math">\(f\left(x_{1},\dots,x_{n},t\right)=g\left(x_{1},\dots,x_{n},t\right)\)</span>. הכמת החסום בנוי בדיוק עבור זה:</p>
+<p><span class="math">\(y=h\left(x_{1},\dots,x_{n}\right)\iff f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right)\wedge\)</span></p>
+<p><span class="math">\(\wedge\forall t&lt;y\left(f\left(x_{1},\dots,x_{n},t\right)\ne g\left(x_{1},\dots,x_{n},t\right)\right)\)</span></p>
+<p>דבר אחד שעדיין צריך להסביר הוא איך לתאר את <span class="math">\(f\ne g\)</span>. זה פשוט קיצור של <span class="math">\(\left(f&gt;g\right)\vee\left(f&lt;g\right)\)</span>, ולכן כל מה שנותר לעשות הוא להשתכנע שאפשר להשתמש ב-<span class="math">\(&lt;\)</span>, אבל זה אחד מהדברים הראשונים שהראיתי: כדי לתאר את <span class="math">\(x&lt;y\)</span> משתמשים במשוואה הדיופנטית <span class="math">\(x+z=y\)</span>. וזהו! סיימנו את ההוכחה של אי-כריעות הבעיה העשירית של הילברט!</p>
+<p>...פרט לכך שעדיין לא הוכחנו שאפשר לקודד את הכמת "לכל" החסום. זה יהיה תוכן הפוסט הבא, האחרון בסדרה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/01/15/mirror_mirror/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מראה מראה שעל הקיר, למה את מבדילה בין ציר וציר?</span>
+            </a>
+            
+            
+            
+            <a href="/2012/12/16/the_surprise_examination/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">פרדוקס בוחן הפתע</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

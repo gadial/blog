@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הבעיה של מונטי הול - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הבעיה של מונטי הול</h1>
+            <div class="post-meta">
+                <span class="date">2008-02-23</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/הסתברות.html">הסתברות</a>
+                    
+                    <a href="/categories/משחקים וחידות מתמטיות.html">משחקים וחידות מתמטיות</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אתם משתתפים בתוכנית טלוויזיה. המנחה מציג בפניכם שלוש דלתות סגורות. מאחורי שתיים מהן יש עז, ומאחורי השלישית - מכונית. המשחק - אתם בוחרים דלת, וזוכים במה שמאחוריה. מן הסתם אתם רוצים לזכות במכונית. אתם מצביעים על אחת משלוש הדלתות, ואז מגיע הטוויסט: המנחה הולך ופותח דלת <strong>אחרת</strong>, מראה שמאחוריה יש עז, ושואל אם בא לכם להחליף את הבחירה שלכם לדלת השלישית (הדלת שבה לא בחרתם והוא לא פתח). משתלם להחליף, או לא?</p>
+<p>הסיטואציה הזו אינה בדיונית לגמרי; היא הופיעה, בערך (לא ממש הציעו להחליף דלת) בשעשועון טלוויזיה אותו הנחה <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%95%D7%A0%D7%98%D7%99_%D7%94%D7%95%D7%9C">מונטי הול</a>, ומכאן שם הבעיה - "<a href="http://he.wikipedia.org/wiki/%D7%94%D7%91%D7%A2%D7%99%D7%94_%D7%A9%D7%9C_%D7%9E%D7%95%D7%A0%D7%98%D7%99_%D7%94%D7%95%D7%9C">הבעיה של מונטי הול</a>". גם בישראל הייתה תוכנית (בהנחיית <a href="http://he.wikipedia.org/wiki/%D7%90%D7%91%D7%A8%D7%99_%D7%92%D7%9C%D7%A2%D7%93">אברי גלעד</a>) שכללה סיטואציה כזו (כולל החלפת הדלת). עם זאת, הבעיה עתיקת יומין עוד יותר (עוד מהמאה ה-19) ויש לה גם ניסוח קצת שונה, שאציג בהמשך.</p>
+<p>חשוב לציין כי כפי שהצגתי את השאלה, אין שום דרך לדעת את התשובה הנכונה עלייה - זה תלוי בכללי ההתנהגות שמנחים את מונטי הול. אם, למשל, הוא פותח דלת נוספת ומציע להחליף <strong>רק</strong> אם בחרתם בדלת הנכונה, הרי שברור שעדיף תמיד לסרב להצעה. אם הוא מציע להחליף <strong>רק</strong> אם לא בחרתם בדלת הנכונה, תמיד כדאי להחליף; אבל איך אפשר לדעת מה עובר לו בראש? לכן ההנחה שבבסיס השאלה כולה היא שמונטי <strong>תמיד</strong> פותח דלת נוספת (נניח - חוקי התוכנית מכתיבים זאת).</p>
+<p>כעת, אם מקבלים את ההנחה הזו, התשובה המפתיעה למדי, לפחות ממבט ראשון, לשאלה היא שכן, כדאי להחליף - זה מכפיל את סיכויי הזכייה שלך. זאת בניגוד לאינטואיציה, שרומזת שהסיכוי הוא 50:50 - כי במה עדיפה דלת אחת על חברתה? בפרט, אם מונטי פותח דלת, ורק אז אתה נכנס לאולפן ובוחר באקראי דלת אחת מבין השתיים שנותרו, הסיכוי שלך יהיה 50:50. מה ההבדל?</p>
+<p>כשנתקלתי בחידה בזמנו חשבתי שאין הבדל, והגנתי בלהט על עמדת ה-50:50. מה ששכנע אותי היה כתיבת תוכנה ש"מדמה" את המשחק והגילוי שסטטיסטית, מי שמחליף דלת אכן זוכה ב-2/3 מהמקרים. למעוניינים, הנה תוכנית בשפת פייתון שעושה זאת:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">randint</span><span class="p">,</span> <span class="n">choice</span>
+<span class="n">NUM_OF_ROUNDS</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">PLAYER_STRATEGY</span> <span class="o">=</span> <span class="s2">&quot;switch&quot;</span><span class="p">;</span> <span class="c1">#switch/stay/random</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">play_round</span><span class="p">():</span> <span class="c1">#returns 0 for failure, 1 for success</span>
+    <span class="n">prize_door</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">player_door</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> 
+    <span class="n">monty_door</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="n">door</span> <span class="k">for</span> <span class="n">door</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">door</span> <span class="ow">in</span> <span class="p">[</span><span class="n">prize_door</span><span class="p">,</span> <span class="n">player_door</span><span class="p">]])</span> <span class="c1">#if two doors are possible, choose uniformly</span>
+    <span class="n">remaining_door</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">-</span> <span class="p">(</span><span class="n">player_door</span> <span class="o">+</span> <span class="n">monty_door</span><span class="p">)</span> <span class="c1">#1 + 2 + 3 = 6</span>
+    <span class="n">player_door</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;switch&quot;</span><span class="p">:</span> <span class="n">remaining_door</span><span class="p">,</span> <span class="s2">&quot;stay&quot;</span><span class="p">:</span> <span class="n">player_door</span><span class="p">,</span> <span class="s2">&quot;random&quot;</span><span class="p">;:</span> <span class="n">choice</span><span class="p">([</span><span class="n">remaining_door</span><span class="p">,</span> <span class="n">player_door</span><span class="p">])}[</span><span class="n">PLAYER_STRATEGY</span><span class="p">]</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">player_door</span> <span class="o">==</span> <span class="n">prize_door</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+
+<span class="n">success_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">play_round</span><span class="p">()</span> <span class="k">for</span> <span class="n">round_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_OF_ROUNDS</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Success: </span><span class="si">{}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="mf">100.0</span> <span class="o">*</span> <span class="n">success_count</span><span class="p">)</span> <span class="o">/</span> <span class="n">NUM_OF_ROUNDS</span><span class="p">))</span>
+</code></pre></div>
+
+
+</div>
+
+<p>עם זאת, לדעתי יש כמה דרכים פשוטות יותר להשתכנע. כמובן שניתן לכתוב את הסיטואציה באופן מתמטי-פורמלי באמצעות תורת ההסתברות והתוצאה נובעת מאליה; אבל סתם חבל לעשות זאת כשאפשר לפייס את האינטואיציה בדרכים אחרות.</p>
+<p>הדרך האהובה עלי ביותר היא זו: נניח שהמשחק היה שונה - במקום שמונטי יפתח דלת וישאל אם אנחנו רוצים לעבור, הוא לא יפתח דלת, וישאל אם אנחנו רוצים לקבל את מה שמאחורי <strong>שתי</strong> הדלתות שבהן לא בחרנו. די ברור שההסתברות לזכות אם מחליפים מכפילה את עצמה - שתי דלתות במחיר אחת! עם זאת, מה ההבדל בין זה ובין הסיטואציה שבה מונטי מציע את אותה הצעה בדיוק, אבל פותח את הדלת ה"מיותרת" מבין השתיים (כלומר, זו שמכילה עז)? התשובה היא שאין הבדל.</p>
+<p>עדיין, קשה להצביע על הסיבה המדוייקת שבגללה ההסתברות מוכפלת, ולכן כדאי לחדד את מה שהולך כאן. כשאנחנו בוחרים את הדלת הראשונה, הסיכוי שלנו לזכות הוא 1/3, כי רק אחת משלוש הדלתות היא הנכונה. כעת, אם בחרנו את הדלת הנכונה ונחליף אותה, <strong>מובטח</strong> לנו שנפסיד - אבל אם בחרנו את הדלת הלא נכונה ונחליף אותה, <strong>מובטח</strong> לנו שננצח. מובטח שננצח כי מונטי "נפטר" מהדלת האחרת שהייתה גורמת לנו להפסד; הוא העביר לנו מידע שלא גלוי למי שכרגע נכנס לאולם ולא יודע מה הדלת המקורית שבה בחרנו - המידע הזה הוא "<strong>אם</strong> בחרת בדלת הלא נכונה, <strong>אז</strong> כדאי לך לנסות את הדלת שבה לא בחרת ואותה לא פתחתי". על כן, אם אנחנו תמיד מחליפים, נפסיד <strong>רק אם</strong> בחרנו את הדלת הנכונה כבר בהתחלה - וההסתברות לכך היא רק 1/3, ולכן ננצח בהסתברות 2/3.</p>
+<p>יש עוד מגוון של אינטואיציות שונות לנכונות התוצאה - לא אציג אותן כאן, אבל אם מישהו יבקש פירוט בתגובות אוכל לנסות. כעת - למשהו אחר לגמרי, באותו עניין.</p>
+<p>למרות שהבעיה הומצאה עוד במאה ה-19, ופורסמה בידי <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A8%D7%98%D7%99%D7%9F_%D7%92%D7%A8%D7%93%D7%A0%D7%A8">מרטין גרדנר</a> בסוף שנות ה-50, מה שנתן לה תנופה פרסומית היה שערוריה זוטא הקשורה אליה. מקורה בבעלת הטור <a href="http://en.wikipedia.org/wiki/Marilyn_vos_Savant">מרילין ווס סוונט</a> (vos Savant - זה שם אמיתי, מסתבר). מרילין נחשבת ל"בעלת ה-IQ הגבוה בעולם" (למיטב הבנתי, כך טוען ספר השיאים של גינס, אבל לא ברור לגמרי מה הוא - לכל היותר 230) ובאופן כללי כנראה עצבנה לא מעט אנשים לאורך הדורות. השיא הגיע כאשר בטור שאלות ותשובות שהיה לה בעיתון היא התייחסה לבעיית מונטי הול וסיפקה את הפתרון הנכון (עדיף להחליף). התוצאה? לפחות לדבריה, מתקפה המונית של אלפי קוראים לעגניים שמיהרו להוקיע אותה על "טעותה", כולל מתמטיקאים רציניים. מאוחר יותר, בספר "<a href="http://he.wikipedia.org/wiki/%D7%94%D7%9E%D7%A7%D7%A8%D7%94_%D7%94%D7%9E%D7%95%D7%96%D7%A8_%D7%A9%D7%9C_%D7%94%D7%9B%D7%9C%D7%91_%D7%91%D7%A9%D7%A2%D7%AA_%D7%9C%D7%99%D7%9C%D7%94">המקרה המוזר של הכלב בשעת לילה</a>", תואר כל העניין בתוספת ציטוטים של כמה מכתבים נזעמים שכאלו (הם נשמעים מטופשים למדי), ובספר "האיש שאהב רק מספרים" העוסק ב<a href="http://he.wikipedia.org/wiki/%D7%A4%D7%90%D7%95%D7%9C_%D7%90%D7%A8%D7%93%D7%A9">פאול ארדש</a> נטען שארדש עצמו (אחד מהמתמטיקאים המבריקים ביותר של המאה ה-20) לא הבין בתחילה את הבעיה ופתרונה. מה הולך כאן?</p>
+<p>לצערי, אין לי את הטור של מרילין בהישג יד, ואשמח אם מישהו יוכל לקשר לציטוט מדוייק שלו. הניחוש שלי? מרילין לא הציגה את התנאים בצורה מדוייקת מספיק, ולא התייחסה לכך שהמנחה <strong>חייב</strong> לפתוח את הדלת. כאמור, בלי התייחסות לנקודה העדינה הזו, פחות או יותר כל פתרון הוא סביר; אך מתמטיקאי רציני לא צריך להגיד "את טועה! הפתרון הנכון הוא 50:50!" או משהו בסגנון - עליו להגיד "המממ, חסרה לך כאן הנחה, הבעיה הנוכחית לא מוגדרת היטב ויש לה כמה פתרונות שונים". בסופו של דבר, זה אחד מהדברים המרכזיים שמתמטיקאים עושים לבעיות. ציטוט ידוע אומר שמה שהמתמטיקאי באמת רוצה איננו הוכחה, כי אם הגדרה - ואכן, אחרי שכבר מגדירים במדוייק מושגים מסויימים ומנסחים היטב את התנאים למשפטים מסויימים, ההוכחה נראית קלה למדי. דוגמה נאה אחת לכך היא מושג ה<a href="http://he.wikipedia.org/wiki/%D7%A7%D7%95%D7%9E%D7%A4%D7%A7%D7%98%D7%99%D7%95%D7%AA">קומפקטיות</a> הטופולוגי - אני מקווה להרחיב על כך בפוסט עתידי.</p>
+<p>חזרה עכשיו לבעיה עצמה, או ליתר דיוק, לניסוח של מרטין גרדנר אליה. הניסוח אכזרי הרבה יותר - יש לנו שלושה אסירים, ומחר בבוקר יוציאו להורג אחד מהם וישחררו את השאר. אחד מהאסירים בא לסוהר ומתחנן בפניו שיגיד לו את שמו של אחד מהאסירים <strong>האחרים</strong> שישוחררו, אולם הסוהר מתנגד לכך, בטענה שבכך הוא יגדיל את הסיכוי (הסובייקטיבי) של האסיר שואל השאלה להיות מוצא להורג - מ-1/3 ל-1/2. הסוהר, מצויין במפורש, פועל כך: אם ישחררו את שואל השאלה, הסוהר יגיד את שמו של המשתחרר האחר; אם יוציאו להורג את שואל השאלה, הסוהר בוחר אחד משני האסירים האחרים בהסתברות שווה.</p>
+<p>"אה!" אתם אומרים. "זה בדיוק מונטי הול! רק שכאן להיות מוצא להורג זו המכונית, ולכן אנחנו רוצים להפסיד. מכיוון שראינו שגילוי המידע של מונטי לא משאיר הסתברות של 50:50 לשתי האפשרויות הנותרות, הסוהר טועה, ההסתברות תישאר 1/3... רגע, היא לא אמורה לגדול ל-2/3? רגע, הפכת את הכל! מה הולך כאן?!"</p>
+<p>טוב, זה לא אתם אומרים; זה מה שאני אמרתי כשראיתי את הבעיה. אכן, למרות שרואים שזה מונטי הול, הקשר לא ברור לי מיידית. הבה ונפתור את הבעיה הזו בצורה הכללית ביותר שלה - אם האסיר שואל השאלה (נסמנו A) מוצא להורג, הסוהר בוחר לומר "B ישוחרר" בהסתברות <span class="math">\(p\)</span>, ו-"C ישוחרר" בהסתברות <span class="math">\(1-p\)</span>. הסיכוי הסובייקטיבי של האסיר להיות מוצא להורג בהתחלה הוא 1/3; למה הוא הופך אחרי שהשומר עונה? איכשהו, האינסטינקט אומר לנו דווקא שעבור <span class="math">\(p=\frac{1}{2}\)</span> ההסתברות של A להיות מוצא להורג לא תשתנה - הסוהר לא מגלה לו שום דבר שהאסיר לא יכל לנחש בעצמו (מזכיר, במעורפל, את המושג של "הוכחה באפס ידע"). עם זאת, לכל <span class="math">\(p\)</span> אחר כן ידלוף "קצת" מידע החוצה. כדי לראות את זה בבירור נלך למקרה קיצוני - <span class="math">\(p=1\)</span>. במקרה כזה, אין שום סיכוי שהסוהר יענה "C" אם A יוצא להורג; מכאן שאם הסוהר ענה "C", אז A יודע בודאות שהוא ישוחרר (אם לעומת זאת הסוהר ענה "B", הסיכוי של A צונח פלאים).</p>
+<p>למרות שהבעיה היא בעיה הסתברותית פשוטה למדי, לעתים קרובות נותנים אותה כתרגיל וסטודנטים רבים מתקשים; הסיבה לכך היא שמרחב ההסתברות כאן מחוכם, ולא ברור ממבט ראשון (בפרט אם מציגים את גרסת ה"50:50" של השומר בלי לדבר על <span class="math">\(p\)</span> כללי). העניין הוא בכך שמתבצעות כאן <strong>שתי</strong> הגרלות, ויש להתחשב בשתיהן - הראשונה, איזה אסיר יוצא להורג (מניחים שכל אחד נבחר בהסתברות 1/3, אחרת באמת אי אפשר לנתח כאן כלום), והשנייה, מה יענה השומר <strong>בהינתן</strong> שידוע שאסיר מסויים מוצא להורג (לדבר שכזה קוראים "הסתברות מותנית"). בלי להיכנס לעובי הקורה ההסתברותי, אפשר לומר שמרחב התוצאות האפשריות מכיל את 4 התוצאות האפשריות הבאות:</p>
+<ol>
+    <li>C מוצא להורג והשומר אומר "B" - ההסתברות לכך היא 1/3, כי ההסתברות של "C מוצא להורג" היא 1/3 ובמקרה הזה, השומר חייב לומר "B".</li>
+    <li>B מוצא להורג והשומר אומר "C" - כמו קודם, הסתברות של 1/3.</li>
+    <li>A מוצא להורג והשומר אומר "B" - ההסתברות ש-A יוצא להורג היא 1/3, וההסתברות שהשומר יאמר "B" <strong>בהינתן</strong> ש-A מוצא להורג היא <span class="math">\(p\)</span>, ולכן ההסתברות הכוללת שהתוצאה הזו תתקיים היא <span class="math">\(\frac{p}{3}\)</span>.</li>
+    <li>A מוצא להורג והשומר אומר "C" - בדומה ל-3, רק עם הסתברות <span class="math">\(1-p\)</span> שהשומר יאמר "C", ולכן <span class="math">\(\frac{1-p}{3}\)</span>.</li>
+</ol>
+<p>כעת, לניתוח המדוייק - מה ההסתברות של "A מוצא להורג" (3 או 4) בהינתן שהשומר עונה "B", (כלומר, 1 או 3)? לדבר כזה קוראים חישוב של הסתברות אפוסטריורי, כלומר - למרות שקודם הוגרל המאורע של "מי יוצא להורג" ורק אחר כך המאורע של "מה יגיד השומר", אנחנו מסיקים מהמאוחר יותר משהו על המוקדם יותר. אחת מהנוסחאות הבסיסיות והנאות ביותר בהסתברות (לטעמי) היא <a href="http://he.wikipedia.org/wiki/%D7%97%D7%95%D7%A7_%D7%91%D7%99%D7%99%D7%A1">נוסחת בייס</a>, שנותנת את ההסתברות האפוסטריורית על בסיס ההסתברות האפריורית (ההסתברות שהמאורע המאוחר יותר יקרה בהינתן שמאורע מוקדם יותר קרה). ההסתברות שהשומר יאמר "B" בהינתן ש-A מוצא להורג היא, כאמור, <span class="math">\(p\)</span>. על פי בייס, יש "לתקן" אותה על ידי כפל בהסתברות של "A מוצא להורג" חלקי "השומר אומר B". ההסתברות של "A מוצא להורג" היא 1/3, ואילו ההסתברות של "השומר אומר B" (וכאן החלק ה"עדין) היא <span class="math">\(\frac{1}{3}+\frac{p}{3}=\frac{1+p}{3}\)</span> - זה סכום ההסתברויות של 1 ו-3 גם יחד. התוצאה הסופית? ההסתברות ש-A יוצא להורג בהינתן שהשומר אמר "B" היא <span class="math">\(\frac{p}{p+1}\)</span>.</p>
+<p>כעת אפשר לשחק טיפה עם הנוסחה - מציבים בה 1/2 ומגלים שההסתברות של A <strong>לא משתנה</strong> אם השומר עונה "B" - היא נותרת 1/3. אם מציבים 1, מקבלים שההסתברות של A להיות מוצא להורג קפצה ל-1/2, ואם מציבים בה 0 - שההסתברות שלו ירדה ל-0; אבל לכל הצבה של ערך שונה מ-1/2 בנוסחה נקבל הסתברות שונה מ-1/3, כלומר כל ערך שונה מ-1/2 אכן נותן אינפורמציה <strong>כלשהי</strong>.</p>
+<p>אבל איפה מונטי הול כאן? איפה ה"כדאי להחליף"? קודם הרי דרשנו בכוח שהמנחה יהיה אובייקטיבי ויפתח דלת בהסתברות 1/2, מה נשתנה? התשובה היא שלא השתנה כלום; פשוט הסתכלנו על הבעיה מזווית ראייה שונה. נסו לחשוב מדוע. אני מקווה שלא אזכה ל-10,000 תגובות נזעמות בשל כך.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2008/03/03/compactness_theorem_intro/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">כמה קומפקטי יכול להיות הסבר על משפט הקומפקטיות?</span>
+            </a>
+            
+            
+            
+            <a href="/2008/01/26/solving_quadratic_equations/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז איך פותרים משוואה ריבועית?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

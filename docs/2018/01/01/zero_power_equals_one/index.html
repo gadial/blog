@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז למה דברים בחזקת 0 שווים 1? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז למה דברים בחזקת 0 שווים 1?</h1>
+            <div class="post-meta">
+                <span class="date">2018-01-01</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/מספרים.html">מספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגברה בסיסית.html">אלגברה בסיסית</a>
+                    
+                    <a href="/tags/חזקת אפס.html">חזקת אפס</a>
+                    
+                    <a href="/tags/מבוא למתמטיקה.html">מבוא למתמטיקה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>שאלה שאני נתקל בה לא מעט ולא נראה לי שאי פעם עניתי עליה בבלוג היא למה להעלות דברים בחזקת 0 יוצא 1. זה אחד מאותם דברים שנלמדים בבית הספר ויכולים להרגיש שרירותיים מאוד אבל אפשר לתת להם הצדקה אינטואיטיבית בקלות רבה יחסית, ולומר עליהם עוד דברים מעניינים בנוסף.</p>
+<p>אז הנה הצדקה אינטואיטיבית. מה זו בכלל "העלאה בחזקה"? כשאני כותב <span class="math">\(x^{2}\)</span> זו דרך מקוצרת לתאר <strong>כפל</strong>: <span class="math">\(x^{2}=x\times x\)</span>. באופן דומה עושים את זה עם חזקות גדולות יותר:</p>
+<p><span class="math">\(x^{3}=x\times x\times x\)</span></p>
+<p><span class="math">\(x^{4}=x\times x\times x\times x\)</span></p>
+<p>וכן הלאה. נקודת ה"התחלה" שאנחנו רגילים אליה היא <span class="math">\(x^{1}=x\)</span>, וכדי להתקדם קדימה מנקודת ההתחלה הזו אנחנו פשוט כופלים שוב ושוב ב-<span class="math">\(x\)</span>: אם אני לוקח את <span class="math">\(x^{2}\)</span> וכופל אותו ב-<span class="math">\(x\)</span> אני אקבל את <span class="math">\(x^{3}\)</span> וכן הלאה.</p>
+<p><strong>באותו אופן בדיוק</strong> אפשר ללכת אחורה על ידי <strong>חלוקה</strong> ב-<span class="math">\(x\)</span>: אם אני לוקח את <span class="math">\(x^{3}\)</span> ומחלק אותו פעם אחת ב-<span class="math">\(x\)</span> אני אקבל את <span class="math">\(x^{2}\)</span> כי אחד מה-<span class="math">\(x\)</span>-ים בכפל "מתבטל". באופן דומה, אם אקח את <span class="math">\(x^{2}\)</span> ואחלק אותו ב-<span class="math">\(x\)</span> נקבל <span class="math">\(x\)</span>. עכשיו, אם אני לוקח את <span class="math">\(x^{1}\)</span> ומחלק אותו ב-<span class="math">\(x\)</span>, מה אני אקבל? כל חלוקה ב-<span class="math">\(x\)</span> מקטינה את החזקה ב-1, אז מה שאני אמור לקבל הוא <span class="math">\(x^{0}\)</span>; ומצד שני, על פי ההגדרה היבשה, לקחת את <span class="math">\(x^{1}\)</span> ששווה ל-<span class="math">\(x\)</span> ולחלק אותו ב-<span class="math">\(x\)</span> זה אומר לקבל את <span class="math">\(\frac{x}{x}=1\)</span> - כי כל מספר שמחלקים אותו בעצמו יוצא 1. חוץ מאשר <span class="math">\(x=0\)</span>. אפס הוא מקרה מיוחד ומסובך יותר. נדבר עליו בהמשך.</p>
+<h2>חוקי חשבון</h2>
+<p>הנה דרך מסודרת יותר לדבר על הרעיון הזה - <strong>חוקי החשבון של חזקות</strong>. בבית הספר לומדים את הכלל הבא: <span class="math">\(x^{a}\times x^{b}=x^{a+b}\)</span>. הכלל הזה נכון כאשר <span class="math">\(a,b\)</span> הם מספרים שלמים חיוביים, למשל <span class="math">\(2^{2}\times2^{3}=2^{5}\)</span>. למה זה עובד? כי <span class="math">\(2^{2}\)</span> זה בסך הכל לכתוב <span class="math">\(2\times2\)</span> ולכתוב <span class="math">\(2^{3}\)</span> זה בסך הכל לכתוב <span class="math">\(2\times2\times2\)</span>. אז לכתוב <span class="math">\(2^{2}\times2^{3}\)</span> זה כמו לכתוב <span class="math">\(\left(2\times2\right)\times\left(2\times2\times2\right)\)</span>. אם נספור כמה פעמים 2 מופיע במכפלה הזו נקבל את סכום הפעמים שהוא מופיע בסוגריים הימניים ובסוגריים השמאליים.</p>
+<p>ברגע שבו יש לנו פעולת חיבור, אוטומטית אפשר לדבר גם על חיסור. אם <span class="math">\(a+b=c\)</span> עבור שלמים חיוביים <span class="math">\(a,b,c\)</span>, אז <span class="math">\(a=c-b\)</span> - זו המהות של פעולת החיסור. אפשר לקחת את זה גם לפעולת החזקה כדי להגדיר את המשמעות של <strong>חיסור חזקות</strong>: אם <span class="math">\(x^{c}=x^{a+b}=x^{a}\times x^{b}\)</span> אז מצד אחד <span class="math">\(x^{a}=\frac{x^{c}}{x^{b}}\)</span> (כי נחלק את שני האגפים של <span class="math">\(x^{c}=x^{a}\times x^{b}\)</span> ב-<span class="math">\(x^{a}\)</span>) ומצד שני <span class="math">\(x^{a}=x^{c-b}\)</span> (כי כבר אמרנו ש-<span class="math">\(a=c-b\)</span>). כלומר, מכלל ה<strong>חיבור</strong> של חזקות קיבלנו את השוויון הבא: <span class="math">\(x^{c-b}=\frac{x^{c}}{x^{b}}\)</span>. חיסור של חזקות מתפרש אצלנו בתור <strong>חלוקה</strong>. אם מקבלים את הגישה הזו, אז זה ש-<span class="math">\(x^{0}\)</span> הוא 1 זה מתבקש: <span class="math">\(x^{0}=x^{a-a}=\frac{x^{a}}{x^{a}}=1\)</span> לכל <span class="math">\(a\)</span> שלם חיובי.</p>
+<p>מה שנחמד בגישה הזו של המינוס היא שהיא גם מציעה לנו מייד דרך להגדיר חזקות <strong>שליליות</strong>: למשל, <span class="math">\(x^{-1}=x^{0-1}=\frac{1}{x}\)</span>, ובאופן כללי מקבלים <span class="math">\(x^{-a}=\frac{1}{x^{a}}\)</span>. הדרך הזו עקבית עם המחשבה על חיסור בתור "חיבור עם מינוס של מספר", כי</p>
+<p><span class="math">\(x^{a-b}=x^{a+\left(-b\right)}=x^{a}\times x^{-b}=x^{a}\times\frac{1}{x^{b}}=\frac{x^{a}}{x^{b}}\)</span></p>
+<p>אגב, הגישה הזו היא גם מה שמוביל להגדרה של דברים כמו <span class="math">\(x^{\frac{1}{2}}=\sqrt{x}\)</span> וכדומה. יש כלל חזקות נוסף שמדבר על <strong>מכפלה</strong> של חזקות: <span class="math">\(x^{a\times b}=\left(x^{a}\right)^{b}\)</span>, אז אפשר להשתמש בו כדי להשתכנע שיהיה נוח להגדיר את <span class="math">\(x^{\frac{1}{2}}\)</span> בתור משהו שמקיים <span class="math">\(\left(x^{\frac{1}{2}}\right)^{2}=x^{\frac{1}{2}\times2}=x^{1}=x\)</span>, כלומר ש-<span class="math">\(x^{\frac{1}{2}}\)</span> יהיה שורש של <span class="math">\(x\)</span>. אני כן חייב להעיר שהסיפור די מסתבך כאן כי ל-<span class="math">\(x\)</span> יכול להיות <strong>יותר משורש אחד</strong>, ולכן כשמגדירים את <span class="math">\(x^{\frac{1}{2}}\)</span> בוחרים את אחד מהשורשים האפשריים בצורה קצת שרירותית.</p>
+<h2>הגדרה רקורסיבית</h2>
+<p>אני רוצה להציג עכשיו את מה שכבר הסברתי, אבל בלבוש טיפה שונה, שאני מקווה שיהיה מעניין למי שלא מכיר אותו עדיין - <strong>הגדרה רקורסיבית</strong> של פעולת החזקה. להגדיר משהו באופן רקורסיבי פירושו להגדיר אותו "בעזרת עצמו על מקרה יותר פשוט". הגדרה רקורסיבית כוללת בדרך כלל שני מרכיבים: הגדרה למקרה "הכי פשוט" שהיא ישירה, והגדרה "עקיפה" למקרים יותר מסובכים. הנה הגדרה עקיפה שכזו של חזקה:</p>
+<p><span class="math">\(x^{n+1}=x^{n}\times x\)</span></p>
+<p>מה הולך פה? ההגדרה אומרת את הדבר הבא: <strong>נניח</strong> שאנחנו כבר יודעים להגדיר את החזקה ה-<span class="math">\(n\)</span>-ית של <span class="math">\(x\)</span>. עכשיו אפשר להגדיר את החזקה <span class="math">\(x^{n+1}\)</span> בעזרתה: נגדיר אותה בתור המכפלה של <span class="math">\(x\)</span> ב-<span class="math">\(x^{n}\)</span>.</p>
+<p>על פניו, מה ההבדל הגדול בין לומר את זה ובין לומר שנגדיר את <span class="math">\(x^{n}\)</span> להיות <span class="math">\(x\times x\times\dots\times x\)</span> במשך <span class="math">\(n\)</span> פעמים? לא נראה שיש הבדל גדול, אבל שימו לב שכן יש הבדלים. בניסוח ה"ישיר" אני משתמש בכל מני סימנים שהם קצת מעורפלים מבחינה מתמטית: השלוש נקודות הללו שבאות באמצע הכפל, וה"במשך <span class="math">\(n\)</span> פעמים" שהוא ביטוי מילולי. אני לא אומר שזו לא הגדרה פורמלית לגמרי, כי היא כן; אבל הפורמליזם שלה מסתמך על כך שאתם, הקוראים, יודעים להשלים פרטים בראש. למחשב יהיה יותר קשה להתמודד עם הגדרה כזו. בשל כך, הגדרות רקורסיביות שכאלו הן משהו ידידותי יותר למחשבים, ומועילות יותר בהקשר הזה.</p>
+<p>עדיין, ההגדרה שנתתי למעלה היא בעייתית כי אין לה <strong>תנאי עצירה</strong> - אין לה מקרה פשוט כל כך שבו אפשר לעצור ולהחזיר תשובה ישירה. אפשר היה לעשות את תנאי העצירה ב-<span class="math">\(n=1\)</span>, שיהיה <span class="math">\(x^{1}=x\)</span> וחסל; אבל אפשר באותה המידה גם להגדיר תנאי עצירה ב-<span class="math">\(n=0\)</span>. נניח שאנחנו לא יודעים ש-<span class="math">\(x^{0}=1\)</span>; איך נכון לנו להגדיר באופן ישיר את <span class="math">\(x^{0}\)</span>?</p>
+<p>ובכן, אנחנו רוצים שיתקיים <span class="math">\(x^{1}=x^{0+1}=x^{0}\times x\)</span>. הדרך היחידה שבה <span class="math">\(x^{1}=x^{0}\times x\)</span> תתקיים היא אם <span class="math">\(x^{0}=1\)</span>, ולכן גם ההגדרה הרקורסיבית מזמינה את ההגדרה <span class="math">\(x^{0}=1\)</span>, הפעם בתור מקרה הבסיס שלה.</p>
+<h2>"מכפלה ריקה"</h2>
+<p>ועכשיו, הנה דרך <strong>שונה</strong> לחשוב על הסיפור הזה. לאו דווקא טובה או גרועה יותר, אבל שונה. בואו נשחק משחק - וחשוב שנשחק אותו כדי להפעיל את האינטואיציה כאן: מה סכום כל המספרים הקטנים או שווים ל-100 שמתחלקים גם ב-5 וגם ב-7?</p>
+<p>ובכן, יש בדיוק שני מספרים כאלו: 35 ו-70, ולכן הסכום שלהם הוא 105. אם אתם רוצים נימוק (וזה ממש לא חשוב כאן), זה נובע מכך ש-5 ו-7 שניהם <strong>ראשוניים</strong> ולכן מספר שמתחלק על ידי שניהם בפרט מתחלק על ידי המכפלה שלהם, שהיא 35.</p>
+<p>עכשיו בואו נשאל את אותה שאלה עם פרמטרים שונים: מה סכום כל המספרים הקטנים או שווים ל-100 שמתחלקים גם ב-11 וגם ב-13?</p>
+<p>כמקודם, שני אלו מספרים ראשוניים ולכן המספר הקטן ביותר שמתחלק בשניהם הוא המכפלה שלהם, 143. והמספר הזה גדול מ-100, כלומר בכלל <strong>לא קיימים</strong> מספרים קטנים או שווים ל-100 שמתחלקים גם ב-11 וגם ב-13. אז מה הסכום הולך לצאת?</p>
+<p>חלקכם יענו "אפס" בשלב הזה, וזה מה שאני מכוון אליו; אבל חלקכם יענו "לא מוגדר", ואתם צודקים באותה מידה. לא לגמרי ברור אם <strong>אמור</strong> להיות סכום לקבוצה ריקה של מספרים. אבל אני רוצה לתת אינטואיציה לכך ש<strong>כדאי</strong> שיהיה לה סכום. נניח שאני כותב תוכנית מחשב שמסיבות אלו ואחרות, עבור הרבה זוגות של ראשוניים מחשבת את הסכום של המספרים עד 100 שמתחלקים בזוגות הללו. אז אני אכתוב קטע קוד שמקבל שני מספרים ראשוניים ומחזיר את הסכום של כל המספרים עד 100 שמתחלקים בהם, ואז אני אפעיל את קטע הקוד הזה כמה פעמים שונות ואחבר את התוצאות של כל הפעמים הללו. פעם אחת אפעיל עם 5 ו-7 ואקבל 105, ובפעם אחרת אפעיל עם 11 ו-13 ואקבל... ובכן, לא הייתי רוצה שההפעלה על 11 ו-13 "תקלקל" לי את המשך החישוב, ואם בהפעלה הזו אני אקבל חזרה "תוצאה לא מוגדרת" ואנסה לחבר אותה עם 105 לא יצא לי שום דבר מועיל.</p>
+<p>מה שאני רוצה הוא פשוט <strong>להתעלם</strong> מההפעלה על 11 ו-13. לכן אני רוצה שהיא תחזיר מספר שחיבור בו הוא התעלמות ממנו. המספר הזה הוא רק 0: אפס שמחובר עם כל <span class="math">\(x\)</span> מחזיר את <span class="math">\(x\)</span>, כאילו 0 בכלל לא השתתף במשחק. זאת להבדיל מחיבור "משהו לא מוגדר" עם <span class="math">\(x\)</span> שיחזיר "משהו לא מוגדר" או יגרום לתוכנה שלנו לקרוס.</p>
+<p>החשיבות של אפס כאן היא בהיותו <strong>אדיש ביחס לפעולת החיבור</strong>. אבל מה קורה עם פעולת <strong>כפל</strong>? אם אני כופל את <span class="math">\(x\)</span> ב-0 אני אקבל 0; כלומר, כפל באפס לא "מתעלם" מהאפס, אלא ההפך - יש לו אפקט "הרסני", שתלטני. הוא מוחק את ה-<span class="math">\(x\)</span> לגמרי. אז למרות ש-0 הוא סביר בהחלט בתור <strong>סכום</strong> של קבוצה ריקה של איברים, הוא ממש לא סביר בתור <strong>מכפלה</strong> של קבוצה ריקה של איברים. כאן האינטואיציה היומיומית שלנו כנראה נגמרת.</p>
+<p>אז מה כדאי לנו לבחור בתור המכפלה של קבוצה ריקה של איברים? עבור סכום רצינו את האיבר האדיש ביחס לחיבור, כלומר 0; אז עבור מכפלה נרצה את האיבר האדיש ביחס לכפל, כלומר 1.</p>
+<p>ואיך זה מתקשר לחזקה? ובכן, אם <span class="math">\(x^{n}\)</span> זו מכפלה של <span class="math">\(x\)</span> בעצמו בדיוק <span class="math">\(n\)</span> פעמים, אפשר לחשוב על זה כאילו אנחנו לוקחים סדרה שמכילה בדיוק <span class="math">\(n\)</span> עותקים של <span class="math">\(x\)</span> וכופלים את כל האיברים בה. ואם <span class="math">\(n=0\)</span>, זו תהיה קבוצה ריקה של מספרים, שלא מכילה אפילו עותק בודד של <span class="math">\(x\)</span>, ולכן המכפלה הזו היא "המכפלה הריקה" במקרה הזה, ושווה ל-1.</p>
+<h2>כמה מחרוזות יש?</h2>
+<p>והנה עוד גישה שונה לגמרי לכל הסיפור הזה, שייתכן ותיראה מאוד מוזרה במבט ראשון, אבל לדעתי היא פותחת עיניים. היתרון הגדול ביותר שלה הוא בכך שהיא תיתן לנו אינטואיציה כלשהי לגבי מה אמור לקרות עם החזקה המושמצת ביקום: <span class="math">\(0^{0}\)</span>, שעדיין לא התייחסתי אליה ישירות.</p>
+<p>הנה שאלה: כמה מילים מאורך 2 אפשר להרכיב מהאותיות א', ב', ג'? התשובה שלי היא ש-9 מילים:</p>
+<p>"אא", "אב", "אג", "בא", "בב", "בג", "גא", "גב", "גג".</p>
+<p>אתם עשויים להסכים איתי, או שתציינו, ובצדק רב, שרוב מה שכתבתי פה הוא לא מילים. האם "אא" זו מילה חוקית בשפה העברית? בוודאי שלא. לכן אני אחדד את הניסוח שלי: אני לא שואל כמה <strong>מילים</strong> אפשר להרכיב, אלא כמה <strong>מחרוזות</strong> אפשר להרכיב. "מחרוזת" היא סדרה של אותיות (ב"סדרה" אני מתכוון שהסדר חשוב - "אב" ו"בא" הן שתי מחרוזות שונות) בלי שתהיה דרישה שהסדרה הזו תיתן משהו שאפשר להגות אותו בצורה נורמלית, או שישתמשו בו בפועל בשפה כלשהי, וכדומה. תחשבו על <strong>ססמאות</strong> - על פי רוב כשאנחנו כותבים ססמאות אנחנו כותבים מחרוזות שאנחנו דווקא <strong>לא רוצים</strong> שיהיו מילים חוקיות בפני עצמן (הסתייגות אחת - ססמא שהיא צירוף של כמה מילים לא קשורות יכולה להיות בסדר גמור). בקיצור, מחרוזות זה עניין שימושי ונפוץ במדעי המחשב, אז בואו נדבר עליהן בתור הדוגמא שלנו.</p>
+<p>עכשיו, בואו נבין איך הגענו לבדיוק 9 מחרוזות שהן מאורך 2 ועם אותיות מתוך א',ב',ג': יש לנו 3 אפשרויות לבחירה של האות הראשונה במחרוזת, ו-3 אפשרויות לבחירה של האות השניה במחרוזת, ושתי האפשרויות הללו בלתי תלויות זו בזו (זה לא שאם בחרתי א' בתור אות ראשונה אז אסור לי לבחור אותה בתור אות שניה, למשל). אז עבור כל אחת מ-3 הבחירות האפשריות לאות ראשונה יש לי 3 אפשרויות שונות לאות שניה, ולכן בסך הכל <span class="math">\(3\times3=9\)</span>.</p>
+<p>באופן דומה אם הייתי צריך לבנות מילים מאורך 3, אז היו לי <span class="math">\(3\times3\times3=27\)</span> אפשרויות. ועבור מילים באורך <span class="math">\(4\)</span> הייתי מקבל <span class="math">\(3\times3\times3\times3=81\)</span> וכן הלאה. באופן כללי, עבור מחרוזת מאורך <span class="math">\(n\)</span> הייתי מקבל <span class="math">\(3^{n}\)</span> אפשרויות. ועכשיו נשאלת השאלה - מה עם מחרוזת מאורך 0?</p>
+<p>כמקודם, יש לנו שתי אפשרויות. לומר "אין דבר כזה מחרוזת מאורך 0", או לזרום עם זה שכדאי שתהיה כזו מחרוזת ולנסות לענות על השאלה. אני אישית בעד גישת "יש מחרוזת מאורך 0". ראשית כי קל לי לכתוב כזו: אם כתבתי קודם "אב" בתור מחרוזת לדוגמא מאורך 2, אז מחרוזת מאורך 0 היא פשוט "" - זוג המרכאות שמציין את תחילת וסוף המחרוזת, בלי שום תוכן באמצע. נראה לכם מטופש? זה מה שעושים בפועל כשמתכנתים.</p>
+<p>פרט לכך, למה שלא תהיה מחרוזת מאורך 0? הרבה פעמים אנחנו ממלאים טפסים ממוחשבים ומשאירים שדה זה או אחר ריק (למשל, את שדה "הערות נוספות"). אפשר לחשוב על זה בתור "אין מחרוזת" אבל אפשר גם באותה מידה לחשוב על זה בתור "מחרוזת מאורך 0", ובדבר השני קל יותר לטפל עם קוד כללי.</p>
+<p>אם כן, הסכמנו ש<strong>יש</strong> מחרוזת מאורך 0. האם יש <strong>יותר ממחרוזת אחת</strong> מהאורך הזה? לא. כי מחרוזות הן שונות זו מזו אם אני יכול להגיד "במקום כך-וכך מופיעה במחרוזת הראשונה אות מסויימת ובמחרוזת השניה באותו מקום מופיעה אות אחרת". כלומר, כדי להבדיל בין שתי מחרוזות שונות אני צריך בפרט שיהיו בהן אותיות. זה לא קיים במחרוזת מאורך 0, ולכן יש בדיוק אחת כזו. על כן, אם <span class="math">\(3^{n}\)</span> מייצג את מספר המחרוזות מאורך 0 שבנויות משלוש אותיות אפשריות, אז <span class="math">\(3^{0}=1\)</span> צץ מאליו.</p>
+<p>כמובן, המספר 3 פה הוא לא מיוחד. אם הייתי מדבר על מחרוזות שבנויות על ארבע האותיות א', ב', ג', ד', אז היו לי <span class="math">\(4^{n}\)</span> מחרוזות מאורך <span class="math">\(n\)</span> - ושוב, עבור <span class="math">\(n=0\)</span> הייתי מקבל 1. באופן כללי אם יש לי <span class="math">\(k\)</span> אותיות אז יש <span class="math">\(k^{n}\)</span> מחרוזות מאורך <span class="math">\(n\)</span> שאפשר לכתוב באמצעות האותיות הללו.</p>
+<p>ומה אם <span class="math">\(k=0\)</span>? מה אם אין לי אותיות בכלל?</p>
+<p>ובכן, אם אין אותיות בכלל, אז אי אפשר לכתוב מחרוזת מאורך 1, כי "אורך 1" זו דרך להגיד "מופיעה בדיוק אות אחת". גם מאורך 2 אין מחרוזות. גם מאורך 5, וכן הלאה. באופן כללי יש <span class="math">\(0^{n}=0\)</span> מחרוזות מאורך <span class="math">\(n\)</span> לכל <span class="math">\(n\)</span> חיובי. אבל מה אם <span class="math">\(n=0\)</span>? במקרה הזה, המחרוזת "", זו שאינה כוללת אותיות כלל, <strong>היא עדיין מחרוזת חוקית</strong>! כלומר, למרות שמאורך חיובי יש לנו 0 מחרוזות, דווקא מהאורך הקטן יותר 0 יש לנו מחרוזת אחת. זה אומר שאם <strong>עבור המקרה הזה</strong> אני אבחר להגדיר <span class="math">\(0^{0}=1\)</span>, הנוסחה <span class="math">\(k^{n}\)</span> שמצאתי קודם למספר המחרוזות מאורך <span class="math">\(n\)</span> שאפשר לכתוב באמצעות <span class="math">\(k\)</span> אותיות - הנוסחה הזו תעבוד באופן מושלם גם עבור <span class="math">\(k=0\)</span>.</p>
+<h2>מה קורה עם אפס?</h2>
+<p>אחרי שאולי שכנעתי אתכם לפני רגע שכדאי להגדיר <span class="math">\(0^{0}=1\)</span>, בואו נדבר קצת יותר על מה הקשר של אפס לכל הסיפור הזה. קודם כבר הזכרתי את התכונה ה"שתלטנית" של אפס: <span class="math">\(x\times0=0\)</span> תמיד. לכל <span class="math">\(x\)</span>. למי שסקפטי, הנה הוכחה זריזה: <span class="math">\(x\times0=x\times\left(0+0\right)=x\times0+x\times0\)</span> ועכשיו תעבירו אגפים.</p>
+<p>ה"שתלטנות" הזו של אפס גורמת לכך שלא תהיה לנו דרך ברורה לחלק בו תוך שמירה על חוקי החשבון הרגילים. כי אם <span class="math">\(\frac{x}{0}=y\)</span> זה אומר ש-<span class="math">\(x=0\times y\)</span>, אז <span class="math">\(0\times y=0\)</span>. במילים אחרות, אם <span class="math">\(x\)</span> לחלק ב-0 היה יוצא מספר כלשהו והיינו רוצים לשמור את החוק הזה ש-<span class="math">\(\frac{x}{0}=y\)</span>, אז היה נובע מכך שבהכרח ש-<span class="math">\(x\)</span> עצמו הוא 0. אבל גם במקרה הזה, לא לגמרי ברור איך נכון להגדיר את <span class="math">\(\frac{0}{0}\)</span>; אם אני אגדיר <span class="math">\(\frac{0}{0}=0\)</span> אז זה יצא "הגיוני" במובן זה ש-<span class="math">\(0=0\times0\)</span>, אבל גם אם אגדיר <span class="math">\(\frac{0}{0}=1\)</span> זה יצא "הגיוני" במובן זה ש-<span class="math">\(0=0\times1\)</span>. במילים אחרות, אין לנו הגדרה טובה גם ל-<span class="math">\(\frac{0}{0}\)</span>. זה מה שנקרא "ביטוי לא מוגדר" אצלנו, ומסיבה טובה.</p>
+<p>מכיוון שאי אפשר לחלק ב-0, האינטואיציה שהשתמשנו בה קודם, של לומר <span class="math">\(0^{a-b}=\frac{0^{a}}{0^{b}}\)</span>, פשוט לא עובדת. הביטוי באגף ימין לא מוגדר. זו סיבה טובה מאוד לומר ש-<span class="math">\(0^{0}\)</span> הוא ביטוי לא מוגדר. בוודאי ובוודאי שביטוי כמו <span class="math">\(0^{-1}=\frac{1}{0}\)</span> יהיה בלתי מוגדר; אנחנו אפילו לא מנסים לדבר על חזקות שליליות של 0. אבל הדיון על <span class="math">\(0^{0}\)</span> עצמו לא נגמר פה.</p>
+<p>למה שלא ייגמר? כי ראינו שיש בעיה בשימוש בנימוק הראשון שלי, זה של חוקי החשבון של חזקות, אבל כל הנימוקים האחרים שהבאתי - רקורסיה, מכפלה ריקה ובטח זה עם מספר המחרוזות - כולם <strong>מאפשרים</strong> לי להגדיר <span class="math">\(0^{0}=1\)</span> ולהרגיש טוב עם זה.</p>
+<p>בהגדרה הרקורסיבית, <span class="math">\(0^{0}=1\)</span> הוא פשוט בחירה לגיטימית למקרה הבסיס, ואחר כך מקבלים <span class="math">\(0^{n}=0\)</span> לכל <span class="math">\(n\)</span> טבעי, כך שלא נגמרת אף סתירה. מה שנכון הוא שההגדרה הרקורסיבית הייתה עובדת גם אם הייתי בוחר <span class="math">\(0^{0}=142342\)</span> שנראה שרירותי לגמרי; זה לא כל כך שונה מלומר שאני יכול להגדיר את <span class="math">\(\frac{0}{0}\)</span> להיות מה שבא לי. ההבדל הוא שבהגדרה הרקורסיבית אני רוצה לדבר מראש על הגדרה לכל <span class="math">\(x\)</span>: אני אומר <strong>באופן כללי</strong> ש-<span class="math">\(x^{0}=1\)</span> וש-<span class="math">\(x^{n+1}=x\times x^{n}\)</span>. אני לא טורח להחריג את 0 החוצה, כי אין סיבה לעשות את זה - ההגדרה עובדת טוב גם יחד איתו.</p>
+<p>בגישת "המכפלה הריקה" מה שקורה הוא ש-<span class="math">\(0^{0}\)</span> מייצג את "המכפלה הריקה" של קבוצה שאין בה שום דבר. אין הבדל בין <span class="math">\(1^{0}\)</span> ובין <span class="math">\(0^{0}\)</span> מהבחינה הזו - כשהקבוצה ריקה, הזהות של האיבר ש<strong>פוטנציאלית</strong> יכל להיות בה לא משפיעה עלינו. זה מאוד דומה לגישת "המחרוזת מאורך 0" שבה לא משנה מי האותיות ש<strong>פוטנציאלית</strong> יכלו להיות חלק מהמחרוזת. אם כן, <span class="math">\(0^{0}=1\)</span> זו ההגדרה הטבעית ביותר שלנו.</p>
+<p>אז למה לא הכל טוב? כי יש גישות אחרות ל-<span class="math">\(0^{0}\)</span> שבהן אם הוא יהיה שווה ל-1, זה לא יסתדר עם דברים אחרים. הנה דוגמא מתחום החשבון הדיפרנציאלי והאינטגרלי (חדו"א): בואו נסתכל למשל על הפונקציה <span class="math">\(f\left(x\right)=x^{x}\)</span>. כאשר אנחנו מציבים בה ערכים קטנים יותר ויותר של <span class="math">\(x\)</span> חיובי אנחנו מתקרבים יותר ויותר למספר 1 - תנסו ותראו! פורמלית כותבים את זה, <span class="math">\(\lim_{x\to}x^{x}=1\)</span>. העניין הוא שאפשר גם לעשות משהו אחר לגמרי. למשל, בואו נגדיר <span class="math">\(g\left(x\right)=2^{-\frac{1}{x}}\)</span> ו-<span class="math">\(h\left(x\right)=-x\)</span>. לא קשה לראות שכאשר <span class="math">\(x\)</span> מתקרב ל-0, אז שתי הפונקציות הללו מתקרבות ל-0 גם כן. מצד שני, <span class="math">\(\lim_{x\to0}g\left(x\right)^{h\left(x\right)}=2\)</span> פשוט כי <span class="math">\(g\left(x\right)^{h\left(x\right)}=\left(2^{\left(-\frac{1}{x}\right)}\right)^{-x}=2^{\frac{x}{x}}=2\)</span>. את התעלול הזה אפשר לעשות לא רק עם 2 אלא עם כל מספר שנרצה, ולכן לכל <span class="math">\(a\)</span> אפשר למצוא פונקציות <span class="math">\(g,h\)</span> כך ש-<span class="math">\(\lim_{x\to0}g\left(x\right)=\lim_{x\to0}h\left(x\right)=0\)</span> אבל <span class="math">\(\lim_{x\to0}g\left(x\right)^{h\left(x\right)}=a\)</span>.</p>
+<p>זו התנהגות <strong>שונה</strong> ממה שקורה בדרך כלל בגבולות. אם <span class="math">\(\lim_{x\to0}g\left(x\right)=a\)</span> ו-<span class="math">\(\lim_{x\to0}h\left(x\right)=b\)</span> עבור <span class="math">\(a,b\)</span> חיוביים, אז <span class="math">\(\lim_{x\to0}g\left(x\right)^{h\left(x\right)}=a^{b}\)</span>. אין אפשרות להתחכם. רק במקרה שבו שתי הפונקציות הללו שואפות לאפס לא ניתן לדעת כלום על מה יהיה הגבול בסופו של דבר. לכן מי שמתעסק בחדו"א לא ישמח בכלל להגדיר <span class="math">\(0^{0}=1\)</span>; מבחינתו אין שום הגיון בהגדרה כזו.</p>
+<p>ומה עם <span class="math">\(x^{0}\)</span> כאשר <span class="math">\(x\)</span> הוא חיובי? לגבי זה גם איש החדו"א יסכים שההגדרה <span class="math">\(x^{0}=1\)</span> עובדת היטב. אני לא מכיר מקום כלשהו במתמטיקה שבו <span class="math">\(x^{0}=1\)</span> הוא <strong>לא</strong> הגיוני כאשר <span class="math">\(x\)</span> הוא חיובי והמשמעות של חזקה היא המשמעות הרגילה שלה.</p>
+<p>אז לסיכום: לומר ש-<span class="math">\(x^{0}=1\)</span> זו לא סתם הגדרה שרירותית; יש בה הגיון והיא די מתבקשת. מצד שני, זו עדיין הגדרה ולא חוק טבע. יותר מאשר מעניין אותי לשכנע אתכם שהיא נכונה, אני רוצה לשכנע אתכם שהיא <strong>מעניינת</strong>.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2018/01/07/polyonomial_rings_and_hardware_verification/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מה הקשר בין חוגי פולינומים לאימות חומרה?</span>
+            </a>
+            
+            
+            
+            <a href="/2017/12/26/ideals_of_rings/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הומומורפיזמים, חוגי מנה, ואידאלים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

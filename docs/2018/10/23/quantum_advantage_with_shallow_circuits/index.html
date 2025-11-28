@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>”הוכחה ראשונה לעליונות מחשב קוונטי“ - מה לא (וקצת מה כן) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>”הוכחה ראשונה לעליונות מחשב קוונטי“ - מה לא (וקצת מה כן)</h1>
+            <div class="post-meta">
+                <span class="date">2018-10-23</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                    <a href="/tags/סיבוכיות.html">סיבוכיות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>השבוע קרה דבר שהוא תמיד משמח - עולם המתמטיקה עלה לכותרות בזכות תוצאה שקשורה לחישוב קוונטי - תחום שהופך לפופולרי יותר ויותר לאחרונה בעיתונות. "פריצת דרך: הוכחה ראשונה לעליונות מחשוב קוונטי" נאמר בכותרת <a href="https://www.themarker.com/wallstreet/1.6574243">בדה-מרקר</a>, ובלועזית ראיתי כותרות אפילו מתלהבות יותר בסגנון "צוות מיבמ הוכיח שמחשבים קוונטיים יכולים לעשות דברים בלתי אפשריים". ובכן, אני רוצה לעשות קצת סדר. ראשית, להסביר על מה בערך מדובר ומה בערך הוכיחו (התקציר: הוכיחו תוצאה מאוד יפה שהיא אכן פורצת דרך, אבל בואו לא נגזים עם הכותרות שנותנים לה), ושנית (ואת זה אעשה בפוסט נפרד) - להיכנס יותר לפרטים המתמטיים לטובת אלו שמעוניינים בכך (טוקבק זועם אצל דה-מרקר התלונן שלא סיפרו לו "איזו בעיה? גם השם מספיק" - ובכן חבר, להגיד 2D Hidden Linear Function Problem עוזר במשהו?)</p>
+<h2>מה זה חישוב קוונטי בכלל?</h2>
+<p>נתחיל מהשאלה המתבקשת - מה זה חישוב קוונטי בכלל? יש לי על כך סדרת פוסטים שלמה ש<a href="https://gadial.net/2014/07/17/quantum_computing_intro/">מתחילה כאן</a>, אבל הנה התקציר: חישוב קוונטי הוא תחום במדעי המחשב שמתבסס על היכולת שלנו <strong>לייצג אינפורמציה</strong> בצורה יותר מורכבת מאשר מחשבים מייצגים אותה כיום. הייצוג היותר מורכב הזה מתבסס על האופן שבו מתנהל העולם ברמה התת-אטומית כפי שאנחנו מצליחים להבין את זה; התחום בפיזיקה שעוסק ב"כפי שאנחנו מצליחים להבין את זה" הזה נקרא <strong>תורת הקוונטים</strong>. בנפנוף ידיים הפרוע המתבקש, חישוב "רגיל" מתבסס על כך שיחידת מידע בסיסית היא <strong>ביט</strong>: משהו שיכול להיות או 0 או 1 (ברמת הפרקטיקה, מה שקורה במחשב בפועל הוא שיש רכיב שמיועד לייצג ביט שכזה, והוא יכול לתחזק שתי רמות שונות של מתח חשמלי שאחת מהן מייצגת 0 ואחת מהן מייצגת 1). בחישוב קוונטי לעומת זאת יחידת המידע הבסיסית היא <strong>קיוביט</strong>: משהו שיכול להיות לא רק 0 או 1 אלא גם <strong>תערובת</strong> של השניים עם משקלים שונים ומשונים לכל אחד מהערכים הללו; לתערובת הזו קוראים <strong>סופרפוזיציה</strong> בפיזיקאית.</p>
+<p>בואו נכניס <strong>טיפה</strong> סימון מתמטי לסיפור כי לדעתי זה יכול לעזור גם להדיוטות. פיזיקאים אוהבים להשתמש בסימון <span class="math">\(\left|0\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \)</span> כדי לתאר את הערכים הבסיסיים שקיוביט יכול להחזיק בהם; יש הגיון מאחורי הסימון המוזר הזה עם המשולש והכל, אבל נעזוב אותו כרגע. "תערובת" של שני המצבים הבסיסיים הללו היא משהו מהצורה <span class="math">\(a\left|0\right\rangle +b\left|1\right\rangle \)</span> כאשר <span class="math">\(a,b\)</span> הם מספרים. מה זה "מספרים" כאן? אני מרשה שברים כמו <span class="math">\(\frac{1}{2}\)</span> וגם מספרים כמו <span class="math">\(\frac{\sqrt{2}}{2}\)</span> ואפילו <strong>מספרים מרוכבים</strong> כמו <span class="math">\(i\)</span> (מה זה <span class="math">\(i\)</span>? זה מספר שמקיים <span class="math">\(i^{2}=-1\)</span>, משהו שלא קורה במספרים שאנחנו מכירים מחיי היום יום). יש רק מגבלה אחת שאני דורש במפורש: שיתקיים <span class="math">\(\left|a\right|^{2}+\left|b\right|^{2}=1\)</span>.</p>
+<p>בחישוב קלאסי, לעומת זאת, עדיין אפשר לחשוב על כל מצב בתור משהו מהצורה <span class="math">\(a\left|0\right\rangle +b\left|1\right\rangle \)</span>, אבל עם מגבלה הרסנית הרבה יותר: הדרישה היא ש-<span class="math">\(a=1\)</span> ו-<span class="math">\(b=0\)</span> או ש-<span class="math">\(a=0\)</span> ו-<span class="math">\(b=1\)</span> וזהו. כלומר, ייצוג מידע קוונטי פותח לנו פתח לייצוג מורכב בצורה דרסטית יותר מאשר בייצוג מידע קלאסי. אבל זה אפילו לא סוף הסיפור, כי לא דיברנו (עדיין) על מה קורה במערכות שכוללות יותר מקיוביט בודד.</p>
+<p>עכשיו, משהבנו מה זה בערך חישוב קוונטי, אפשר לתהות ממתי הדבר הזה קיים ולמה אנחנו שומעים עליו רק עכשיו. ובכן, תורת הקוונטים עצמה קיימת עוד מתחילת המאה ה-20, ומחשבים "קלאסיים" קיימים מאמצע המאה ה-20, אבל את ההצעה לבצע משהו כמו החישוב הקוונטי שמדברים עליו כיום הציע הפיזיקאי ריצ'ארד פיינמן רק ב-1982, מתוך כוונה להציע בניית מחשבים שיוכלו להתמודד יותר טוב עם בעיות של סימולציה של מערכות פיזיקליות "אמיתיות" (למה לעבוד קשה כדי לסמלץ מצבים קווונטיים בעזרת חישוב קלאסי כשאפשר לרתום את הטבע לעשות את העבודה בשבילנו). באופן די מרתק, עם הזמן התגלה שחישוב קוונטי יכול לסייע גם בכיוון "ההפוך" - לעזור לנו לפתור בעיות "קלאסיות" שמחשב קלאסי מתקשה להתמודד איתן. הדוגמא הידועה ביותר היא בעיית <strong>הפירוק לגורמים</strong> של מספרים; אנחנו לא מכירים כיום אלגוריתם קלאסי יעיל מספיק לפירוק לגורמים, למרות שהאלגוריתמים הקיימיים הם מתוחכמים בצורה יוצאת מן הכלל ומתבססים על מתמטיקה עמוקה למדי. התחושה הכללית היא שפירוק לגורמים היא בעיה "קשה מדי" ושכל אלגוריתם שפותר אותה ייקח כמות גדולה של זמן ("אקספוננציאלית" למי שזה אומר לו משהו).</p>
+<p>אבל ב-1994 בא פיטר שור והציע אלגוריתם יעיל לפירוק לגורמים, שמתבסס על חישוב קוונטי. במילים אחרות - בנו מחשב קוונטי שתומך במספיק קיוביטים, והופס - אתם מסוגלים לפרק לגורמים בזמן יעיל, ולעשות צרות גדולות למערכת הצפנה כמו RSA שמסתמכת על כך שפירוק לגורמים זה עניין קשה. מאז התוצאה הסנסציונית הזו העניין התיאורטי בחישוב קוונטי הלך וגדל והתחום נחקר יפה בעשורים האחרונים.</p>
+<p>רק מה, הייתה פה רק בעיה קטנה אחת - אין מחשבים קוונטיים שיכולים להריץ בפועל את האלגוריתם של שור. לבנות מחשב קוונטי - זה סיפור רציני ביותר. לא בגלל שלא יודעים איך לייצר רכיב שיתאר קיוביט - יש כבר כמה וכמה גישות שונות לעניין הזה - אלא כי בטכנולוגיות שיש לנו כרגע, המחשבים הקוונטיים רגישים מאוד ל<strong>רעשים</strong>, כש"רעש" יכול להיות גם פוטון בודד שנקלע בטעות למקום הלא נכון, פוגע ברכיב שמייצג קיוביט ומקלקל את הסופרפוזיציה שלו. רעשים קיימים גם במחשבים קלאסיים, כמובן, אבל אנחנו יודעים לבנות רכיבים שיהיו עמידים יחסית לרעש, ואנחנו גם יודעים לבנות רכיבים שמסוגלים לזהות שגיאות ולתקן אותן. במחשבים קוונטיים כל העסק פשוט יותר קשה. למשל, אתגר מרכזי בבניית מחשבים קוונטים בימינו הוא פשוט <strong>לקרר</strong> מספיק את הרכיבים שמייצגים קיוביטים (עד לרמה של כמה מיקרו-קלווין מעל האפס המוחלט) כדי לצמצם למינימום את הרעש שהם יסבלו ממנו.</p>
+<p>התוצאה? יש כיום מחשבים קוונטיים, חלקם אפילו נגישים לציבור הרחב דרך שירות ענן, אבל הם על מספר <strong>קטן ביותר</strong> של קיוביטים והזמן המקסימלי של חישוב בהם לפני שהחישוב מתחיל לסבול מרעשים והולך לאיבוד הוא לא גדול. לא צפוי מחשב קוונטי שיוכל להריץ את האלגוריתם של שור בשנים הקרובות (ואולי גם בעשורים הקרובים) אבל התחושה היא שאנחנו הולכים ומתקרבים אל היום שבו מחשב קוונטי יוכל לעשות <strong>משהו</strong> פרקטי שמחשב רגיל לא מסוגל.</p>
+<p>האם המאמר הנוכחי שעלה לכותרות עושה את זה?</p>
+<p>ובכן, לא.</p>
+<p>אבל הוא כן עושה משהו מספיק חשוב כדי להצדיק פרסום במגזין Science. אז מה הוא עושה.</p>
+<h2>מה המאמר אומר?</h2>
+<p>אפשר לראות <a href="https://arxiv.org/abs/1704.00690">כאן</a> את המאמר. התוצאה שיש במאמר היא <strong>תיאורטית</strong> לגמרי, אם כי ייתכן שבעתיד היא תתורגם גם לניסוי פרקטי. אני מדגיש את הנקודה הזו כי דה-מרקר, למשל, כותב לו בקלילות</p>
+<blockquote>בניסוי הוכיחו המדענים בפעם הראשונה, באמצעות דוגמה מוחשית, כי מחשב קוונטי יכול לעשות משימות שמחשב רגיל אינו מסוגל לבצע. עד פרסום תוצאות הניסוי, שבו הצליח המחשב לפתור בעיה מתמטית מורכבת, יתרונות המחשב הקוונטי על פני מחשב רגיל תוארו במונחים תיאורטיים בלבד.</blockquote>
+<p>וזה פשוט לא מה שקרה. לא הייתה בעיה מתמטית מורכבת קונקטית שלא הצלחנו לפתור עד כה, ואז כתבו איזו תוכנית למחשב קוונטי, הריצו את המחשב הקוונטי וקיבלו תוצאה שלא הייתה בהישג ידינו עד היום. שוב, אולי זה יקרה בעתיד הקרוב ואולי אפילו אפשר יהיה לעשות את זה בעתיד הקרוב עם הבעיה הספציפית שהמאמר דיבר עליה, אבל זה לא מה שקרה. מה שהמאמר עשה הוא לקחת <strong>מחלקה</strong> של בעיות מסוג מסויים ולהראות שאת כולן אפשר לפתור בעזרת חישוב קוונטי "רדוד" (ועוד אסביר מה זה "רדוד") אבל אי אפשר לפתור באמצעות חישוב קלאסי "רדוד". זה נותן לנו תוצאה תיאורטית חשובה - הוכחה מתמטית שחישוב קוונטי "רדוד" הוא <strong>חזק יותר מבחינה חישובית</strong> מאשר חישוב קלאסי "רדוד". זה בוודאי <strong>לא אומר</strong> שיש משהו שמחשב רגיל לא מסוגל לעשות ומחשב קוונטי יכול; גם מחשב רגיל יוכל לעשות את זה, זה פשוט ייקח לו יותר משאבי חישוב.</p>
+<p>כדי לחדד את העניין הזה אני רוצה להתייחס לשתי תוצאות דומות מהעבר: האלגוריתם של שור שכבר הזכרתי, והאלגוריתם של גרובר.</p>
+<p>נתחיל מהאלגוריתם של שור. כאמור, הוא פותר <strong>ביעילות</strong> בעיה שאנחנו <strong>לא יודעים</strong> איך לפתור <strong>ביעילות </strong>במחשב קלאסי. כלומר יש כאן שני סייגים:</p>
+<ol>
+    <li>הבעיה <strong>ניתנת לפתרון</strong> במחשב קלאסי, זה פשוט לוקח יותר זמן.</li>
+    <li><strong>ייתכן</strong> שקיים פתרון קלאסי יעיל ופשוט טרם מצאנו אותו.</li>
+</ol>
+<p>סייג 1 הוא לא ייחודי לבעיה הזו - מחשב קלאסי <strong>יכול לסמלץ מחשב קוונטי</strong>, כך שאין דבר שמחשב קוונטי יכול לעשות ומחשב קלאסי לא יוכל לעשות, בהינתן שיש לו יותר זמן חישוב. <strong>אין בעיות שהן בלתי אפשריות למחשב רגיל ואפשריות למחשב קוונטי</strong>. כל הדיון הוא על התחרות של "מי יותר מהיר" (וזה דיון חשוב ביותר; רוב מדעי המחשב עוסקים בשאלות כאלו ולא בשאלות של מה בלתי אפשרי בכלל).</p>
+<p>סייג 2 הוא יותר מהותי. בלשון של תורת הסיבוכיות, שהיא הענף המתמטי שעוסק בנושאים הללו, מה שפיטר שור הראה הוא שפירוק לגורמים היא בעיה ששייכת למחלקת הסיבוכיות BQP שבאה לתאר חישובים קוונטיים יעילים. אנחנו <strong>מאמינים</strong> שפירוק לגורמים לא שייכת למחלקה BPP שבאה לתאר חישובים קלאסיים יעילים (שיכולים להשתמש בנוסף לכך בהגרלות; גם חישוב קוונטי הוא כזה). כלומר, אנחנו <strong>מאמינים</strong> שפיטר שור הוכיח ש-BQP <strong>שונה</strong> מ-BPP, אבל אין לנו הוכחה לכך. ייתכן שמחר בבוקר נגלה ש-BPP=BQP וזו תהיה סנסציה אדירה, גדולה אפילו יותר מהאלגוריתם של שור.</p>
+<p>המאמר הנוכחי לוקח שני מחלקות סיבוכיות אחרות: אחת "קלאסית" שנקראת <span class="math">\(\text{NC}^{0}\)</span> והשניה קוונטית שנקראת <span class="math">\(\text{SQC}\)</span> (השם הזה הוא לדעתי חידוש של המאמר הנוכחי ולא תמצאו אותו בגוגל) ומראה שהן <strong>כן שונות</strong>, כלומר שיש בעיה ששייכת ל-SQC אבל <strong>לא שייכת</strong> ל-<span class="math">\(\text{NC}^{0}\)</span>. ההוכחה שהבעיה שייכת ל-SQC היא החלק הפשוט יותר של המאמר; עיקר העבודה היא בלהוכיח ש-<span class="math">\(\text{NC}^{0}\)</span> לא כוללת את הבעיה - כלומר, עיקר המאמר הוא תוצאה "קלאסית" בתורת הסיבוכיות שאפשר היה לדבר עליה גם בלי לדבר על חישוב קוונטי.</p>
+<p>התוצאה הזו, של הפרדה בין שתי מחלקות סיבוכיות מקבילות שאחת מהן קלאסית ואחת מהן קוונטית, היא באמת משהו חדש (לפחות למיטב ידיעתי). אבל לומר שזו "הוכחה ראשונה לעליונות מחשב קוונטי" זה לא באמת נכון, וכדי להסביר למה אני רוצה להכניס לתמונה את <strong>האלגוריתם של גרובר</strong>. יש לי <a href="https://gadial.net/2014/08/16/grover_algorithm/">פוסט עליו</a>, אבל הנה התקציר: האלגוריתם של גרובר מטפל בבעיה של <strong>חיפוש. </strong>תחשבו שאתם בספריה ועל המדף יש <span class="math">\(N\)</span> ספרים, ואתם מחפשים ספר אחד ספציפי. והמדף לא ממוין בשום צורה - או ליתר דיוק, גם אם הוא ממוין, אתם לא יודעים את זה ואתם לא יודעים על פי איזו שיטת מיון. איך תמצאו את הספר? תצטרכו <strong>לדגום</strong>: לקחת ספר מהמדף, לבדוק אם הוא הספר שלכם, ואם לא אז להחזיר אותו ולעבור לספר אחר. אפשר להוכיח מתמטית שבחישוב רגיל, תצטרכו במקרה הגרוע לדגום את כל <span class="math">\(N\)</span> הספרים לפני שתמצאו את הספר שלכם.</p>
+<p>והנה, בחישוב קוונטי קורה קסם מדהים ואתם יכולים למצוא את הספר שלכם ב-<span class="math">\(\sqrt{N}\)</span> דגימות. זה אפשרי בגלל שבחישוב קוונטי, גם "דגימה" היא קוונטית - במקום לדגום את <span class="math">\(\left|0\right\rangle \)</span> או את <span class="math">\(\left|1\right\rangle \)</span> אתם מסוגלים לדגום את <span class="math">\(a\left|0\right\rangle +b\left|1\right\rangle \)</span> "בבת אחת". התיאור הפשטני הזה יוצר תחושה שהרעיון בחישוב קוונטי הוא המקביליות הזו - היכולת לפעול בו זמנית על <span class="math">\(\left|0\right\rangle \)</span> ו-<span class="math">\(\left|1\right\rangle \)</span> ולקבל עליהם אינפורמציה ביחד. זה אמנם מה שקורה אבל זה לא סוף הסיפור, ויש לחישוב קוונטי גם קשיים (אין לנו דרך פשוט "לקרוא" את התשובה לדגימה שביצענו; בסוף החישוב הקוונטי כל מה שנקבל הוא את הכתובת של ספר בודד שמוגרל איכשהו מבין כל הספרים, וצריך לעבוד קשה כדי לוודא שההסתברות של הספר "שלנו" תהיה גבוהה).</p>
+<p>מה שמעניין באלגוריתם גרובר הוא שמדובר על הוכחה חד משמעית לכך שמחשב קוונטי מסוגל להשיג "קיצורי דרך" שמחשב קלאסי לא מסוגל להן - <span class="math">\(\sqrt{N}\)</span> דגימות מול <span class="math">\(N\)</span> דגימות. יש עוד דוגמאות ל"שיפור במספר הדגימות" והמאמר הנוכחי מאזכר אחת מהן ומתבסס עליה חלקית, אבל הדיבור על "מספר דגימות" הוא שונה מהדיבור על "זמן ריצה" שהזכרנו קודם. גרובר בהחלט משפר את זמן הריצה של אלגוריתמים מסויימים, אבל לא ברמה שמספיקה כדי לטעון ששתי מחלקות סיבוכיות כמו BQP ו-BPP הן שונות זו מזו. מה שהמאמר הנוכחי עושה, ועושה בצורה יפה מאוד, הוא להיפטר מכל הנושא הזה של <strong>דגימה</strong> ובמקום זה לדבר על בעיה שנתונה בצורה מפורשת לחלוטין; אני אסביר את זה בפוסט הבא.</p>
+<p>אז נו, למה לשמור אותנו במתח, מה הבעיה? אז זהו, שזו בעיה שמנוסחת בלשון מתמטית למדי והיא לא כל כך מעניינת אלא בתור אמצעי להפריד בין שתי מחלקות סיבוכיות. יש פונקציה שמיוצגת בדרך מסובכת כלשהי ואפשר להסיק מהייצוג המסובך הזה ייצוג יותר פשוט שלה, והאתגר הוא למצוא את הייצוג היותר פשוט הזה (לבקיאים - הייצוג המסובך הוא של <strong>תבנית ריבועית</strong> והייצוג הפשוט הוא של <strong>פונקציה לינארית</strong> על תת-מרחב של הקלטים של התבנית הריבועית). אני לגמרי מסכים עם דה-מרקר שלא פירטו מה בדיוק הבעיה; העובדה שהיא מרגישה מלאכותית שכזו תהיה עוד גורם שיקלקל את תחושת הסנסציה כי רובנו לא מתלהבים כל כך מהפרדות בין שתי מחלקות סיבוכיות.</p>
+<p>ולפני שאסיים, האם בכל זאת יש סיכוי שנראה את הבעיה הזו מורצת על מחשבים קוונטיים אמיתיים ונפתרת למרות שאף מחשב קלאסי לא מצליח? אולי. לדיבור על "חישוב רדוד" יש יתרון משמעותי בהקשר הנוכחי של חישוב קוונטי. כבר אמרתי שחישוב קוונטי בימינו סובל מהבעיה המהותית שאחרי זמן חישוב כלשהו הסיכוי שלא ייגרם רעש שיקלקל את כל החישוב הוא נמוך מאוד. כלומר, חישובים קוונטיים צריכים להיות "קצרים" (זה בערך המובן של "רדוד" אבל לא לגמרי). לכן, אם אנחנו רוצים בעיה ספציפית שמחשב קוונטי אמיתי מאלו שנבנים כיום יוכל להתמודד איתה בכבוד, בעיות מסוג זו שבהן המאמר עוסק הן בדיוק מה שכדאי לחפש. מצד שני, יהיה הרבה יותר נחמד אם העליונות של חישוב קוונטי תוכח לבסוף בזכות זה שאלגוריתם קוונטי לסינתזה של מולקולות יצליח לאפשר לחוקרים לייצר תרופה למחלה שעד היום לא עלה בידם לייצר כי חישוב קלאסי היה מסוגל להגיע לאותן תוצאות (גם זה כיוון שעובדים עליו...), ואז הכותרות בעיתון כבר לא יצטרכו להיות לא מדויקות כדי להבהיר את גודל הסנסציה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2018/11/07/quantum_advantage_with_shallow_circuits_math/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">”הוכחה ראשונה לעליונות מחשב קוונטי“ - מה כן (אזהרה - עלול לכלול מתמטיקה)</span>
+            </a>
+            
+            
+            
+            <a href="/2018/10/13/modules_structure_theorem_uniqueness/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">משפט המבנה למודולים נוצרים סופית מעל תחום ראשי - סיום הוכחת היחידות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

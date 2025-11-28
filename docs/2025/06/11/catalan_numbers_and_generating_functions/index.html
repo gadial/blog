@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פונקציות יוצרות ומספרי קטלן - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>פונקציות יוצרות ומספרי קטלן</h1>
+            <div class="post-meta">
+                <span class="date">2025-06-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מספרי קטלן.html">מספרי קטלן</a>
+                    
+                    <a href="/tags/פונקציות יוצרות.html">פונקציות יוצרות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p><a href="https://gadial.net/2025/05/31/catalan_numbers/">בפוסט הקודם</a> שלי כתבתי על מספרי קטלן, סדרת המספרים <span class="math">\(1,1,2,5,14,42,\ldots\)</span>. הראיתי נוסחת נסיגה עבורה, <span class="math">\(C_{n+1}=\sum_{k=0}^{n}C_{k}C_{n-k}\)</span>; הראיתי נוסחה סגורה עבורה, <span class="math">\(C_{n}=\frac{1}{n+1}{2n \choose n}\)</span>; והראיתי שלל בעיות ספירה שמספרי קטלן פותרים, משילושים של מצולעים, עבור בעצים בינאריים וכלה במגדלי קפלר. רק דבר אחד לא הראיתי, למרות שהוא מושג מרכזי וחשוב בקומבינטוריקה באופן כללי: את <strong>הפונקציה היוצרת</strong> של מספרי קטלן. לא עשיתי את זה כי זה היה מעלה פי כמה את רמת הטכניות של הפוסט ומרחיק אותי מהנושא המעניין בו, שהוא מספרי קטלן עצמם; אבל עכשיו אחרי שהתרגלנו אליהם (או דילגנו לגמרי על הפוסט הקודם כי אנחנו רוצים את האקשן שיהיה כאן) אפשר להפנות זרקור אל פונקציות יוצרות בכלל, וזו של מספרי קטלן בפרט.</p>
+<p>כמיטב מסורת הבלוג, <a href="https://gadial.net/2011/08/07/generating_functions_hardcore_1/">כבר יש לי פוסט על הנושא הזה</a>, כולל אזכור של מספרי קטלן, אבל הפעם אני רוצה <strong>לחפור</strong> ולהציג נושאים שרק נגעתי בהם בעבר ברמת פורמליות הרבה יותר גדולה. זה אומר שהפוסט יהיה טכני יחסית, ויילך ויסתבך ככל שאתקדם, אבל נגיע לפונקציה היוצרת של קטלן יחסית מהר; האתגר יהיה להבין למה הפונקציה היוצרת הזו "חוקית" וכמה אפשר להכליל את זה. אני אגלה מראש כבר עכשיו שהפונקציה היוצרת היא <span class="math">\(C\left(x\right)=\frac{1-\sqrt{1-4x}}{2x}\)</span>, אבל - מה זה בעצם אומר? ואיך מגיעים לזה? בשביל זה אני אצטרך לדבר קצת על דברים.</p>
+<h2>למה פונקציות יוצרות זה כמו פולינומים, רק פשוט יותר</h2>
+
+<p>הרעיון בפונקציות יוצרות הוא לקודד סדרות מספרים כמו מספרי קטלן בתור <strong>טורי חזקות פורמליים</strong>. זה דורש הגדרה של מה זה בכלל טור חזקות פורמלי, ואם לא מכירים אותם המושג הזה קצת מוזר בהתחלה אז אפשר להתחיל עם אובייקטים יותר ידידותיים: <strong>פולינומים</strong>. התיאור הכללי שלנו של פולינום הוא </p>
+<p><span class="math">\(a\left(x\right)=\sum_{n=0}^{d}a_{n}x^{n}\)</span></p>
+<p>כאשר <span class="math">\(d\)</span> הוא <strong>דרגת</strong> הפולינום - החזקה הגבוהה ביותר שלו שהמקדם שלה שונה מאפס. עכשיו, על פולינומים אפשר להגדיר פעולות חיבור וכפל, אז בשביל להדגים את זה בואו נציג שני פולינומים מדרגות <span class="math">\(d_{1},d_{2}\)</span>:</p>
+<p><span class="math">\(a\left(x\right)=\sum_{n=0}^{d_{1}}a_{n}x^{n}\)</span></p>
+<p><span class="math">\(b\left(x\right)=\sum_{n=0}^{d_{2}}b_{n}x^{n}\)</span></p>
+<p>עכשיו החיבור מוגדר "איבר-איבר":</p>
+<p><span class="math">\(a\left(x\right)+b\left(x\right)=\sum_{n=0}^{\max\left\{ d_{1},d_{2}\right\} }\left(a_{n}+b_{n}\right)x^{n}\)</span></p>
+<p>וזה בסך הכל יפה מאוד חוץ מהאיכסה של ה-<span class="math">\(\max\left\{ d_{1},d_{2}\right\} \)</span> למעלה שגם מצריך אותנו לענות על שאלות קשות כמו מה המקדמים של פולינום מעבר לדרגה המקסימלית שלו (אפס. הם אפס).</p>
+<p>מה עם כפל? כאן זה טיפה יותר מסובך אבל לא בצורה חריגה. בואו נתחיל עם דוגמא:</p>
+<p><span class="math">\(\left(a_{1}x+a_{0}\right)\left(b_{1}x+b_{0}\right)=a_{1}b_{1}x^{2}+\left(a_{0}b_{1}+a_{1}b_{0}\right)x^{1}+a_{0}b_{0}x^{0}\)</span></p>
+<p>כדאי לחשב את הדוגמא הזו ידנית, או אפילו משהו עם איבר אחד נוסף לאחד הפולינומים, כדי לקבל תחושה טובה של "מה הולך פה". מה שמקבלים הוא שהמקדם של כל חזקה של <span class="math">\(x^{n}\)</span> הוא <strong>סכום</strong> של איברים, כשכל איבר הוא <strong>מכפלה</strong> של מקדם של <span class="math">\(a\left(x\right)\)</span> ומקדם של <span class="math">\(b\left(x\right)\)</span>, כשהמקדמים נבחרים כך שסכום האינדקסים של שניהם יוצא <span class="math">\(n\)</span>.</p>
+<p>כדי לכתוב נוסחה כללית עבור זה, קודם כל אני אכתוב</p>
+<p><span class="math">\(a\left(x\right)\cdot b\left(x\right)=\sum_{n=0}^{d_{1}+d_{2}}c_{n}x^{n}\)</span></p>
+<p>ועכשיו אפשר להגיד מהו כל מקדם <span class="math">\(c_{n}\)</span> שכזה:</p>
+<p><span class="math">\(c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k}\)</span></p>
+<p>עד כאן - חומר לא הכי קל טכנית אבל מאוד בסיסי, הרי משתמשים בפולינומים כמעט בכל מקום במתמטיקה אוניברסיטאית. אבל אפשר להצמיד לו שתי נקודות מבט שהן טיפונת פחות נפוצות:</p>
+<p>ראשית, אפשר לחשוב על הפולינומים כאילו הם מקודדים <strong>סדרת מספרים</strong> - סדרת המקדמים שלהם. בצורה הזו, חיבור פולינומים מתורגם לחיבור נקודתי של שתי סדרות, וכפל פולינומים מתורגם לפעולת <strong>קונבולוציה</strong> של הסדרות. חיבור נקודתי אנחנו מכירים, אבל קונבולוציה היא פעולה שיכול לקחת זמן עד שפוגשים אותה בשם הזה לראשונה (אני נתקלתי בה בלימודים רק בסמסטר מתקדם יחסית - וכמובן, באותו סמסטר היא הופיעה שוב ושוב בשלל קורסים שונים ובלתי תלויים; עבורי במקום לומר "אפקט באדר-מיינהוף" אפשר לומר "אפקט הקונבולוציה") אבל הנה, אנחנו רואים שבעצם הכרנו אותה מאז ומעולם, או לפחות מאז שהכרנו כפל פולינומים.</p>
+<p>שנית, שתי הפעולות הללו של חיבור וכפל הופכות את הפולינומים <strong>לחוג</strong>. אני לא אניח שהמושג הזה מוכר כאן; לסטודנטים יכול לקחת טיפה זמן עד שהם נתקלים בו לראשונה, למרות החשיבות העצומה שלו למתמטיקה, אבל אני מניח שאנחנו כן מכירים <strong>שדות</strong>, כי כבר באלגברה לינארית מתעסקים איתם. שדות הן קבוצות עם פעולת חיבור וכפל שמתנהגות ממש נחמד - אפילו נחמד <strong>מדי</strong>. למשל, אפשר לחלק בכל איבר. כשעוברים לדבר על <strong>חוג</strong> אנחנו משאירים את הדרישות של ההתנהגות הנחמדה מפעולת החיבור, וממשיכים לדרוש את חוק הפילוג ("דיסטריביוטיביות") אבל מכפל אנחנו דורשים הרבה פחות; שיהיה אסוציאטיבי וזהו בערך. עכשיו, פולינומים דווקא מתנהגים לא רע בכלל - הכפל הוא קומוטטיבי, יש לו יחידה ואי אפשר בטעות לקבל אפס על ידי הכפלה של שני איברים שאינם אפס: זה הופך פולינומים למה שנקרא <strong>תחום שלמות</strong>, שזה משהו שהאבטיפוס שלו הוא המספרים השלמים. כשהמקדמים של הפולינומים הם מעל שדה <span class="math">\(F\)</span> אנחנו מסמנים את חוג הפולינומים המתאים ב-<span class="math">\(F\left[x\right]\)</span>, משתמשים בו לשלל מטרות יפות (למשל, בנייה של שדות שמרחיבים את <span class="math">\(F\)</span>) וכולם מרוצים.</p>
+<p>אבל אני לא רוצה לדבר על פולינומים. אני רוצה לדבר על טורי חזקות פורמליים.</p>
+<p>מה ההבדל בין פולינומים לטורי חזקות פורמליים? פשוט מאוד. הנה פולינום:</p>
+<p><span class="math">\(a\left(x\right)=\sum_{n=0}^{d}a_{n}x^{n}\)</span></p>
+<p>הנה טור חזקות פורמלי:</p>
+<p><span class="math">\(a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n}\)</span></p>
+<p>כלומר, במקום סכום של <span class="math">\(d+1\)</span> איברים, יש לנו סכום של אינסוף איברים. לראות סכום כזה מייד מעלה את השאלה הקשה - <strong>למה זה מתכנס</strong>? אבל כשמדברים על "טור חזקות פורמלי" ה"פורמלי" אומר בדיוק שהטור קיים גם בלי לעמוד בדרישות התכנסות כלשהן. זו הנקודה שנשמעת הכי חשודה בסיפור אז בואו נעשה את זה לאט.</p>
+<p>בהחלט <strong>יש</strong> משמעות לשאלות התכנסות כשאני לוקח טור כמו <span class="math">\(\sum_{n=0}^{\infty}\frac{1}{2^{n}}\)</span> ושואל מה הסכום שלו. כאן יש לנו סדרה <span class="math">\(\left\{ a_{n}\right\} _{n=0}^{\infty}\)</span>של מספרים ממשיים, <span class="math">\(a_{n}=\frac{1}{2^{n}}\)</span>. אנחנו יודעים לחבר שני מספרים ממשיים, ובאינדוקציה גם שלושה, ארבעה וכן הלאה - כל מספר <strong>סופי</strong> שלהם. אבל להתאים מספר קונקרטי לסכום של <strong>אינסוף</strong> מביניהם - זה כבר דורש טכניקות נוספות, ולא בהכרח תמיד יעבוד. אפשר לכתוב <span class="math">\(\sum_{n=0}^{\infty}\frac{1}{2^{n}}=2\)</span> בעזרת השיטה המקובלת לסכימה של טור אינסופי, אבל היא גם תאלץ אותנו לכתוב <span class="math">\(\sum_{n=0}^{\infty}2^{n}=\infty\)</span>. העניין הוא שבשני המקרים הללו, בין אם הטור מתכנס ובין אם לא, אף אחד לא חושב שיש בעיה עם קיום <strong>הסדרה</strong>: גם הסדרה <span class="math">\(\left\{ \frac{1}{2^{n}}\right\} _{n=0}^{\infty}\)</span> וגם הסדרה <span class="math">\(\left\{ 2^{n}\right\} _{n=0}^{\infty}\)</span> הן אובייקטים שאנחנו לא מערערים על הקיום שלהם, אלא רק תוהים לגבי השאלה האם לאותם אובייקטים אפשר להתאים מספר שיתאר במובן מסויים את הסכום שלהם.</p>
+<p>עם טורי חזקות פורמליים זה אותו דבר. אם הסימון <span class="math">\(\sum_{n=0}^{\infty}a_{n}x^{n}\)</span> מעורר בנו אי נוחות כי אנחנו מצפים, כשאנחנו רואים סכום, שהוא יתכנס למשהו, הרי שלראות את <span class="math">\(\left(a_{0},a_{1},a_{2},\ldots\right)\)</span> לא יעורר בנו את אותו סוג של אי נוחות, אבל שני אלו הם פשוט סימונים שונים לאותו דבר. כמו שהרברט וילף כותב ב-generatingfunctionology שלו: פונקציות יוצרות הן חבל כביסה שעליו אנחנו תולים מספרים לתצוגה.</p>
+<p>אחרי שאנחנו מוכנים לקבל את <strong>הקיום</strong> של אובייקט כמו <span class="math">\(a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n}\)</span>, אפשר לעבור לדבר על מה שעושים איתו - ומה שעושים איתו הוא <strong>אלגברה</strong>, כלומר פעולות כמו חיבור וכפל. ראינו את ההגדרה עבור פולינומים; איך היא תשתנה עבור טורי חזקות? ובכן, עבור חיבור היא תהפוך מ-</p>
+<p><span class="math">\(a\left(x\right)+b\left(x\right)=\sum_{n=0}^{\max\left\{ d_{1},d_{2}\right\} }\left(a_{n}+b_{n}\right)x^{n}\)</span></p>
+<p>אל</p>
+<p><span class="math">\(a\left(x\right)+b\left(x\right)=\sum_{n=0}^{\infty}\left(a_{n}+b_{n}\right)x^{n}\)</span></p>
+<p>עבור כפל היא תהפוך מ-</p>
+<p><span class="math">\(a\left(x\right)\cdot b\left(x\right)=\sum_{n=0}^{d_{1}+d_{2}}c_{n}x^{n}\)</span></p>
+<p>אל</p>
+<p><span class="math">\(a\left(x\right)\cdot b\left(x\right)=\sum_{n=0}^{\infty}c_{n}x^{n}\)</span></p>
+<p>כאשר בשני המקרים</p>
+<p><span class="math">\(c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k}\)</span></p>
+<p>במילים אחרות, ההגדרה הפכה להיות <strong>אלגנטית יותר</strong> כי לא צריך להסתבך עם הדרגות המעצבנות של הפולינומים. למה זה עובד, למרות שבטור חזקות יש אינסוף איברים? כי גם בהגדרת החיבור וגם בהגדרת הכפל, הערך של כל מקדם הוא סכום <strong>סופי</strong> של איברים. המקדמים הם לא איברים פורמליים בעצמם; הם מספרים ממשיים (או מרוכבים, או איברים בשדה אחר). אז ביטוי כמו <span class="math">\(a_{n}+b_{n}\)</span> הוא סכום של שני מספרים ממשיים, וסכום כזה בוודאי קיים; וביטוי כמו <span class="math">\(\sum_{k=0}^{n}a_{k}b_{n-k}\)</span> הוא סכום יותר מורכב אבל עדיין כזה שכולל רק מספר <strong>סופי</strong> של מחוברים. אם היו אינסוף מחוברים, אז היינו בצרות. אבל אנחנו לא בצרות, ובדיוק כמו שעבור הפולינומים קיבלנו חוג שמסומן ב-<span class="math">\(F\left[x\right]\)</span>, גם עבור טורי חזקות קיבלנו חוג, ואפילו תחום שלמות (ואפילו תחום שלמות עם כל מני תכונות אלגבריות נחמדות שלא אכנס אליהן) שמסומן ב-<span class="math">\(F\left[\left[x\right]\right]\)</span>.</p>
+<h2>קצת חימום טכני - הטור ההנדסי האינסופי ומספרי פיבונאצ'י</h2>
+
+<p>בואו נראה שתי דוגמאות פשוטות לעבודה עם פונקציות יוצרות. ראשית, ניקח את הסדרה הממש פשוטה <span class="math">\(a_{n}=1\)</span>, כלומר את הפונקציה היוצרת <span class="math">\(1+x+x^{2}+x^{3}+\ldots\)</span>. אם נכפול אותה ב-<span class="math">\(\left(1-x\right)\)</span>, שהוא הפונקציה היוצרת <span class="math">\(\sum_{n=0}^{\infty}b_{n}x^{n}\)</span> עם</p>
+<p><span class="math">\(b_{n}=\begin{cases} 1 & n=0\\ -1 & n=1\\ 0 & n>1 \end{cases}\)</span></p>
+<p><span class="math">\(\left(1+x+x^{2}+x^{3}+\ldots\right)\left(1-x\right)=\sum_{n=0}^{\infty}c_{n}x^{n}\)</span></p>
+<p>כאשר <span class="math">\(c_{0}=a_{0}b_{0}=1\)</span> ו-<span class="math">\(c_{1}=a_{0}b_{1}+a_{1}b_{0}=b_{1}+b_{0}=0\)</span></p>
+<p>ובאופן כללי, בגלל שכל ה-<span class="math">\(a_{n}\)</span>-ים הם 1 אז בעצם <span class="math">\(\sum_{k=0}^{n}a_{k}b_{n-k}=\sum_{k=0}^{n}b_{n-k}\)</span>, ומכיוון שסכום כל ה-<span class="math">\(b\)</span>-ים החל מ-<span class="math">\(b_{0}\)</span> ועד למקום כלשהו הוא סכום של 1, מינוס 1 ועוד אפסים, נקבל <span class="math">\(c_{n}=0\)</span> לכל <span class="math">\(n>0\)</span>. המסקנה היא ש-</p>
+<p><span class="math">\(\left(1+x+x^{2}+x^{3}+\ldots\right)\left(1-x\right)=1\)</span></p>
+<p>במילים אחרות, בחוג <span class="math">\(F\left[\left[x\right]\right]\)</span> האיבר <span class="math">\(1+x+x^{2}+\ldots\)</span> הוא <strong>הפיך</strong> וההופכי שלו הוא <span class="math">\(\left(1-x\right)\)</span>. כדי לתאר את זה בצורה שקל לנו לעכל, אוהבים לסמן את זה כך:</p>
+<p><span class="math">\(1+x+x^{2}+\ldots=\frac{1}{1-x}\)</span></p>
+<p>קרוב לודאי שאתם מכירים את השוויון הזה בתור נוסחת הסכום של סדרה הנדסית מתכנסת - אבל כאן הוכחנו את הנכונות שלו בלי שיקולי התכנסות! ה"מחיר" הוא שאי אפשר להציב ערכים ב-<span class="math">\(x\)</span> ולצפות שהשויון יתקיים עבורם; למשל אם נציב <span class="math">\(x=2\)</span> נקבל את הסכום הידוע לשמצה <span class="math">\(1+2+4+8+\ldots=-1\)</span> (שנראה מופרך אבל הוא בעצם לא מופרך בכלל, אם אנחנו לא במספרים הממשיים אלא <a href="https://gadial.net/2014/01/18/sum_of_naturals/">במקום קסום אחר</a>).</p>
+<p>בואו נעבור לדוגמא קצת יותר מחוכמת: סדרת פיבונאצ'י. הסדרה הזו מוגדרת על ידי הגדרה רקורסיבית: <span class="math">\(F_{0}=1,F_{1}=1\)</span> ו-<span class="math">\(F_{n}=F_{n-1}+F_{n-2}\)</span>. הגדרה רקורסיבית שכזו נותנת לנו דרך פשוטה לגלות מה הפונקציה היוצרת של הסדרה <span class="math">\(F_{0},F_{1},F_{2},\ldots\)</span>. ראשית כל, נכתוב</p>
+<p><span class="math">\(F\left(x\right)=\sum_{n=0}^{\infty}F_{n}x^{n}\)</span></p>
+<p>עכשיו, היינו רוצים להציב במקום <span class="math">\(F_{n}\)</span> את <span class="math">\(F_{n}=F_{n-1}+F_{n-2}\)</span>, אבל אי אפשר לעשות את זה מיידית, כי עבור <span class="math">\(n=0,1\)</span> הנוסחה הזו לא מתקיימת. אז נפריד את הסכום לשני האיברים הראשונים וכל היתר:</p>
+<p><span class="math">\(F\left(x\right)=\left(1\cdot x^{0}+1\cdot x^{1}\right)+\sum_{n=2}^{\infty}F_{n}x^{n}=\left(1+x\right)+\sum_{n=2}^{\infty}\left(F_{n-1}+F_{n-2}\right)x^{n}\)</span></p>
+<p><span class="math">\(=\left(1+x\right)+\sum_{n=2}^{\infty}F_{n-1}x^{n}+\sum_{n=2}^{\infty}F_{n-2}x^{n}\)</span></p>
+<p>המטרה שלי היא לנסות לגרום לשני הסכומים הללו להיראות כמו הסכום המקורי שהגדיר את הפונקציה היוצרת של פיבונאצ'י. בואו נסתכל על <span class="math">\(\sum_{n=2}^{\infty}F_{n-2}x^{n}\)</span> קודם - אני יכול לשנות את אינדקס הסכימה. כלל אצבע שקל לזכור הוא - אני יכול <strong>להגדיל</strong> את האינדקס באיזה ערך שאני רוצה (במקרה הנוכחי, 2) בתנאי שאני <strong>מקטין</strong> את הערך ההתחלתי באותה כמות. כלומר: </p>
+<p><span class="math">\(\sum_{n=2}^{\infty}F_{n-2}x^{n}=\sum_{n=0}^{\infty}F_{n}x^{n+2}=x^{2}\sum_{n=0}^{\infty}F_{n}x^{n}=x^{2}F\left(x\right)\)</span></p>
+<p>עבור <span class="math">\(\sum_{n=2}^{\infty}F_{n-1}x^{n}\)</span> זה יהיה טיפה טריקי יותר כי אם אני אגדיל את אינדקס הסכימה ב-1, אני עדיין לא אקבל את <span class="math">\(F\left(x\right)\)</span> בסכום, כי:</p>
+<p><span class="math">\(\sum_{n=2}^{\infty}F_{n-1}x^{n}=\sum_{n=1}^{\infty}F_{n}x^{n+1}=x\sum_{n=1}^{\infty}F_{n}x^{n}\)</span></p>
+<p>הסכום פה מתחיל מ-1, לא מ-0. כדי לטפל בזה אני יכול <strong>לחבר ולחסר</strong> את אותו איבר, שבמקרה הנוכחי הוא <span class="math">\(F_{0}x^{0}=1\)</span> (למעשה, בחרתי להתחיל את פיבונאצ'י מ-1 ולא מ-0 כדי להדגים את ההתמודדות עם הקושי הזה). כלומר, אני אכתוב</p>
+<p><span class="math">\(x\sum_{n=1}^{\infty}F_{n}x^{n}=x\left(\sum_{n=0}^{\infty}F_{n}x^{n}-1\right)=xF\left(x\right)-x\)</span></p>
+<p>ולכן מכל זה קיבלנו</p>
+<p><span class="math">\(F\left(x\right)=\left(1+x\right)+x^{2}F\left(x\right)+xF\left(x\right)-x=\left(x^{2}+x\right)F\left(x\right)+1\)</span></p>
+<p>עכשיו אפשר להעביר את <span class="math">\(F\left(x\right)\)</span> אגף ולהוציא גורם משותף - אלו פעולות תקינות בכל חוג. נקבל:</p>
+<p><span class="math">\(F\left(x\right)\left(1-x^{2}-x\right)=1\)</span></p>
+<p>מה שהייתי רוצה לעשות עכשיו הוא <strong>לחלק</strong> ב-<span class="math">\(1-x^{2}-x\)</span>. האם מותר לי? כבר ראיתי שאפשר לחלק ב-<span class="math">\(\left(1-x\right)\)</span>, אבל מה עם דברים מורכבים יותר? תכף אני אוכיח שכל עוד המקדם החופשי הפיך, תמיד אפשר לחלק, אז התוצאה היא שאני יכול לכתוב</p>
+<p><span class="math">\(F\left(x\right)=\frac{1}{1-x^{2}-x}\)</span></p>
+<p>וזו הפונקציה היוצרת של מספרי פיבונאצ'י (כשהם מתחילים מ-1 ולא מ-0). בשביל מה זה היה טוב? מה אפשר לעשות איתה שלא יכלנו לעשות בלעדיה? זה סיפור אחר - אפשר למשל לקבל ממנה את הנוסחה הסגורה למספרי פיבונאצ'י, או הערכות אסימפטוטיות על קצב הגידול שלה; כל זה מצריך לקחת את הפונקציה היוצרת ולזרוק עליה כלים סטנדרטיים שיודעים לטפל באנליזה של פונקציות רציונליות. הדגש פה הוא על <strong>סטנדרטיים</strong> - זו הסיבה שמתמטיקאים אוהבים פונקציות יוצרות, זו דרך קומפקטית לייצר סדרות, שאחר כך אפשר להשתמש עליה בכל המתמטיקה שאנחנו מכירים.</p>
+<p>כדי לסיים את החלק הזה אני צריך להוכיח את מה שטענתי קודם: ש-<span class="math">\(a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n}\)</span> הוא הפיך אם ורק אם <span class="math">\(a_{0}\)</span> הפיך. הרעיון בבסיסו הוא אותו רעיון כמו ההיפוך של <span class="math">\(1+x+x^{2}+\ldots\)</span> רק שהפעם במקום לזרוק מהשמיים את ההופכי אני אסביר איך מוצאים אותו.</p>
+<p>אם קיים הופכי, <span class="math">\(b\left(x\right)=\sum_{n=0}^{\infty}b_{n}x^{n}\)</span>, מה המקדמים שלו <strong>חייבים</strong> להיות? אנחנו יודעים ש-<span class="math">\(a\left(x\right)b\left(x\right)=1\)</span> (כי זו ההגדרה של הופכי), כלומר אם נכתוב <span class="math">\(a\left(x\right)\cdot b\left(x\right)=\sum_{n=0}^{\infty}c_{n}x^{n}\)</span> אז <span class="math">\(c_{0}=1\)</span> ו-<span class="math">\(c_{n}=0\)</span> לכל <span class="math">\(n>0\)</span>.</p>
+<p>מהשוויון הראשון אנחנו מקבלים <span class="math">\(a_{0}b_{0}=1\)</span>. כלומר, אם <span class="math">\(a\left(x\right)\)</span> היה הפיך אז השוויון הזה מראה לנו ש-<span class="math">\(a_{0}\)</span> הפיך ו-<span class="math">\(b_{0}\)</span> הוא ההופכי שלו; זה כיוון אחד של ההוכחה. הכיוון המורכב יותר הוא להניח ש-<span class="math">\(a_{0}\)</span> הפיך ולכן באמת קיים לו הופכי <span class="math">\(b_{0}\)</span>, וזה נותן לנו את <strong>ההתחלה</strong> של הבניה של <span class="math">\(b\left(x\right)\)</span>, אבל צריך להראות שאפשר לבנות גם את יתר המקדמים.</p>
+<p>למרבה המזל, יתר המקדמים מתקבלים מאליהם, בדרך אינדוקטיבית. נניח שכבר ידועים לנו המקדמים <span class="math">\(b_{0},\ldots,b_{n-1}\)</span> ונבנה את <span class="math">\(b_{n}\)</span>. מכיוון ש-<span class="math">\(n>0\)</span> אז <span class="math">\(c_{n}=0\)</span> ולכן השוויון <span class="math">\(c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k}\)</span> שמגדיר את המקדם במכפלה נותן לנו:</p>
+<p><span class="math">\(0=\sum_{k=0}^{n}a_{k}b_{n-k}\)</span></p>
+<p>כלומר</p>
+<p><span class="math">\(a_{0}b_{n}=-\sum_{k=1}^{n}a_{k}b_{n-k}\)</span></p>
+<p>עכשיו, אמרנו כבר ש-<span class="math">\(a_{0}\)</span> הפיך, אז אפשר לחלק בו - כלומר, לכפול ב-<span class="math">\(b_{0}\)</span>, ולקבל:</p>
+<p><span class="math">\(b_{n}=-b_{0}\sum_{k=1}^{n}a_{k}b_{n-k}\)</span></p>
+<p>אגף ימין מורכב כולו מפעולת <strong>חוקיות</strong> בחוג <span class="math">\(F\)</span> שמעליו אנחנו מגדירים את <span class="math">\(F\left[\left[x\right]\right]\)</span>, כך שהבניה עובדת וזה מסיים את ההוכחה! לא רק שהוכחנו ש-<span class="math">\(a\left(x\right)\)</span> הפיך, גם עשינו את זה בדרך קונסטרוקטיבית שמוצאת את ההופכי שלו. </p>
+<h2>הפונקציה היוצרת של מספרי קטלן</h2>
+
+<p>עד כאן, הכל טוב, אז בואו נתמודד עם האתגר המרכזי שלנו - מציאת הפונקציה היוצרת של מספרי קטלן.</p>
+<p>יש כמה דרכים להגיע אל הפונקציה היוצרת של מספרי קטלן, ואחת הפשוטות שבהן היא להניח שכבר מצאנו את נוסחת הנסיגה שלהם, שראינו בפוסט הקודם: <span class="math">\(C_{n+1}=\sum_{k=0}^{n}C_{k}C_{n-k}\)</span>, עם תנאי ההתחלה <span class="math">\(C_{0}=1\)</span>. הנוסחה הזו גם מזכירה קצת את זו של פיבונאצ'י ולכן הטכניקה שבה השתמשנו עבור פיבונאצ'י נראית מבטיחה כאן - אבל אפילו עוד יותר מכך, הנוסחה הזו מזכירה את איך שמכפלת פולינומים עובדת: <span class="math">\(c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k}\)</span>. רק הקטע הזה עם ה-<span class="math">\(n+1\)</span> טיפה שונה. בואו נראה איך זה יסתדר לנו.</p>
+<p>נתחיל עם להגדיר את הפונקציה היוצרת: <span class="math">\(C\left(x\right)=\sum_{n=0}^{\infty}C_{n}x^{n}\)</span>. עכשיו, בואו נכפיל את <span class="math">\(C\left(x\right)\)</span> <strong>בעצמה</strong> כדי לנסות לקבל משהו שנראה כמו הנוסחה למכפלת פולינומים. אני אסמן את ההכפלה של <span class="math">\(C\left(x\right)\)</span> בעצמה ב-<span class="math">\(C\left(x\right)^{2}\)</span> - גם זה סימון סטנדרטי לגמרי בחוגים באופן כללי, ואני מקפיד על הפדנטיות הזו רק כי עוד רגע יגיעו דברים לא לגמרי סטנדרטיים.</p>
+<p><span class="math">\(C\left(x\right)^{2}=\sum_{n=0}^{\infty}A_{n}x^{n}\)</span></p>
+<p>כאשר</p>
+<p><span class="math">\(A_{n}=\sum_{k=0}^{n}C_{k}C_{n-k}\)</span></p>
+<p>זה מה שנובע מהנוסחה למכפלת פולינומים. אבל בנוסף לכך אנחנו מכירים את נוסחת הנסיגה של קטלן, <span class="math">\(C_{n+1}=\sum_{k=0}^{n}C_{k}C_{n-k}\)</span>, ולכן משילוב של שתיהן אנחנו מקבלים ש-</p>
+<p><span class="math">\(A_{n}=C_{n+1}\)</span></p>
+<p>כלומר</p>
+<p><span class="math">\(C\left(x\right)^{2}=\sum_{n=0}^{\infty}C_{n+1}x^{n}\)</span></p>
+<p>הייתי רוצה להשתמש באותו טריק כמו פיבונאצ'י כדי להמיר את אגף ימין ל-<span class="math">\(C\left(x\right)\)</span>, אבל יש לי כאן בעיה. קודם, בפיבונאצ'י, הסכימה התחילה ממשהו גדול מ-0, והמקדם בפנים היה בעל אינדקס קטן מ-<span class="math">\(n\)</span>, ולכן היה קל לתקן את זה - הגדלנו את האינדקס, הקטנו את הערך ההתחלתי. כאן, לעומת זאת, הסכימה מתחילה מ-0, כלומר מהערך הנכון, והאינדקס הוא גדול מ-<span class="math">\(n\)</span>. אז נעשה משהו טיפה שונה: קודם כל נכפול את שני האגפים ב-<span class="math">\(x\)</span> (פעולה מותרת בחוג), ונקבל</p>
+<p><span class="math">\(xC\left(x\right)^{2}=\sum_{n=0}^{\infty}C_{n+1}x^{n+1}=\sum_{n=1}^{\infty}C_{n}x^{n}=\sum_{n=0}^{\infty}C_{n}x^{n}-C_{0}=C\left(x\right)-1\)</span></p>
+<p>אחרי העברת אגפים נקבל</p>
+<p><span class="math">\(xC\left(x\right)^{2}-C\left(x\right)+1=0\)</span></p>
+<p>וזו... משוואה ריבועית? עכשיו אפשר לנפנף ממש מהר בידיים כמו שחלק מהספרים עושים: להגיד שנוסחת השורשים מלמדת אותנו ש-<span class="math">\(C\left(x\right)=\frac{1\pm\sqrt{1-4x}}{2x}\)</span> ושהפתרון ה"נכון" מבין השניים הוא זה עם המינוס, כי אם נסתכל על <span class="math">\(\frac{1+\sqrt{1-4x}}{2x}\)</span> נראה שכש-<span class="math">\(x\)</span> שואף ל-0 המונה שואף ל-2 ולכן הביטוי שואף לאינסוף למרות שהוא אמור לשאוף ל-<span class="math">\(C_{0}=1\)</span> ולעומת זאת עבור <span class="math">\(\frac{1-\sqrt{1-4x}}{2x}\)</span> קל לראות שזה עובד עם כלל לופיטל, וסיימנו! גילינו את הנוסחה לפונקציה היוצרת של מספרי קטלן, <span class="math">\(C\left(x\right)=\frac{1-\sqrt{1-4x}}{2x}\)</span>. זהו, אפשר לסגור את הפוסט.</p>
+<h2>אפשר לסגור את הפוסט, או שלא</h2>
+
+<p>אוקיי, בואו לא נסגור עדיין את הפוסט.</p>
+<p>חשוב לי להדגיש שכל מה שראינו פה הוא <strong>נכון</strong>. זה למעשה מה שאוילר עשה במכתב הראשון שבו הוא סיפר לגולדבך על מספרי קטלן. אבל בבירור לא עשיתי את זה ברמת הפורמליות שבה התייחסתי לטורי חזקות פורמליים בכל יתר הפוסט, ומה שעוד יותר גרוע - פתאום ברגע האחרון עירבתי מושגים מאנליזה ודיברתי על להשאיף את <span class="math">\(x\)</span> לאפס ועל כלל לופיטל... זה בלאגן שלם. לכן אני רוצה להקדיש את החלק הזה של הפוסט, שיהיה יותר מורכב מתמטית ממה שעשינו עד עכשיו, כדי להסביר למה הכל בסדר.</p>
+<p>הרגע האחרון שבו הכל היה באמת בסדר פורמלית היה כשקיבלתי את המשוואה <span class="math">\(xC\left(x\right)^{2}-C\left(x\right)+1=0\)</span>. הדבר הבא שעשיתי היה להזכיר את <strong>נוסחת השורשים</strong>. נוסחת השורשים היא הכלי הסטנדרטי שלנו לפתרון משוואה ריבועית, והיא נכונה בהרבה סיטואציות, לא רק במספרים הממשיים והמרוכבים. בואו נראה את זה: אני נמצא בחוג <span class="math">\(R\)</span> כלשהו, עם איברים <span class="math">\(a,b,c\in R\)</span>, ואני מחפש ערך של <span class="math">\(x\in R\)</span> שמקיים</p>
+<p><span class="math">\(ax^{2}+bx+c=0\)</span></p>
+<p><a href="https://gadial.net/2023/12/16/quadratic_equations/">יש לי פוסט</a> שמסביר מה עושים עכשיו, אבל אני אתן פה תיאור טיפה שונה. ראשית, נכפול את שני אגפי המשוואה ב-<span class="math">\(4a\)</span> ונקבל</p>
+<p><span class="math">\(4a^{2}x^{2}+4abx+4ac=0\)</span></p>
+<p>זה עדיין מתקיים בכל חוג <span class="math">\(R\)</span>. עכשיו, נסתכל על הביטוי <span class="math">\(\Delta=b^{2}-4ac\)</span> ("הדיסקרימיננטה"). גם הביטוי הזה - קיים בכל חוג <span class="math">\(R\)</span>. נחבר אותו לשני האגפים ונקבל</p>
+<p><span class="math">\(4a^{2}x^{2}+4abx+b^{2}=\Delta\)</span></p>
+<p>עכשיו אגף שמאל נראה בדיוק כמו משהו בריבוע: <span class="math">\(4a^{2}x^{2}+4abx+b^{2}=\left(2ax+b\right)^{2}\)</span>. <strong>גם זה עדיין נכון בכל חוג</strong>. כלומר, קיבלנו</p>
+<p><span class="math">\(\left(2ax+b\right)^{2}=\Delta\)</span></p>
+<p>עכשיו מגיע המעבר ה"בעייתי":</p>
+<p><span class="math">\(2ax+b=\pm\sqrt{\Delta}\)</span></p>
+<p>המעבר הזה בעייתי לא רק בגלל שאנחנו בחוג כללי - אפילו אם היינו עובדים מעל הממשיים, <span class="math">\(\mathbb{R}\)</span>, הוא עדיין היה בעייתי אם <span class="math">\(\Delta\)</span> היה שלילי. אז במקום לראות אותו כ"בעייתי" אפשר לחשוב על זה כאילו אנחנו מוסיפים הנחה: אנחנו אומרים - <strong>נניח</strong> שקיים <span class="math">\(\alpha\in R\)</span> כך ש-<span class="math">\(\alpha^{2}=\Delta\)</span>, אז במקרה הזה אפשר לכתוב <span class="math">\(\left(2ax+b\right)^{2}=\alpha^{2}\)</span>. אבל האם עכשיו אפשר להסיק ש-<span class="math">\(2ax+b=\pm\alpha\)</span>? ובכן, לא.</p>
+<p>בואו נראה דוגמא: החוג <span class="math">\(R=\mathbb{Z}_{8}=\left\{ 0,1,\ldots,7\right\} \)</span> עם חיבור וכפל מודולו 8. בחוג הזה מתקיים ש-<span class="math">\(1^{2}=3^{2}=5^{2}=7^{2}=1\)</span>, ולכן אם <span class="math">\(x^{2}=y^{2}\)</span> זה לא אומר ש-<span class="math">\(x=\pm y\)</span> כי למשל מה אם <span class="math">\(y=1\)</span> ואילו <span class="math">\(x=3\)</span>?</p>
+<p>אז אילו תנאים צריך לדרוש מהחוג שלנו כדי ש-<span class="math">\(x^{2}=y^{2}\)</span> יגרור <span class="math">\(x=\pm y\)</span>? בואו ננסה להוכיח את זה ונראה את התנאים צצים בדרך.</p>
+<p>נתחיל עם <span class="math">\(x^{2}=y^{2}\)</span>. נעביר את <span class="math">\(y\)</span> אגף (לא דורש כלום) ונקבל <span class="math">\(x^{2}-y^{2}=0\)</span>, שאפשר לכתוב גם בתור <span class="math">\(\left(x-y\right)\left(x+y\right)=0\)</span>. הופס, הוספנו דרישה! רואים מה היא? השתמשתי בדיסטריביוטיביות, אבל זה לא העניין כאן אלא זה שאם נפתח את הסוגריים, נקבל</p>
+<p><span class="math">\(\left(x-y\right)\left(x+y\right)=x^{2}-yx+xy-y^{2}\)</span></p>
+<p>כלומר, אני הנחתי ש-<span class="math">\(xy=yx\)</span> וזה קורה באופן כללי רק אם החוג <strong>קומוטטיבי</strong>. אבל אוקיי, <span class="math">\(R\left[\left[x\right]\right]\)</span> שלנו הוא קומוטטיבי אם <span class="math">\(R\)</span> עצמו הוא קומוטטיבי (ואצלנו <span class="math">\(R\)</span> הוא הממשיים/המרוכבים). אז בינתיים זו דרישה קלילה יחסית (אבל שמראה יפה כמה חוגים לא קומוטטיביים - למשל חוגי מטריצות - הם עולמות משוגעים בפני עצמם).</p>
+<p>עכשיו, קיבלתי <span class="math">\(\left(x-y\right)\left(x+y\right)=0\)</span>, כלומר יש לי מכפלה של שני איברים ששווה אפס. האם בכלל ייתכן שמכפלה של שני איברים תיתן אפס למרות ששניהם שונים מאפס? זה לא משהו שיש באינטואיציה המתמטית היומימית שלנו כי זה לא קורה בשלמים והרחבותיהם, אבל זה <strong>כן</strong> קורה ב-<span class="math">\(\mathbb{Z}_{8}\)</span> שהבאתי כאן בתור דוגמה, למשל <span class="math">\(2\cdot4=0\)</span>. לכן בתורת החוגים יש מונחים סטנדרטיים לסיפור הזה: אנחנו אומרים ש-<span class="math">\(a,b\)</span> הם <strong>מחלקי אפס</strong> אם <span class="math">\(ab=0\)</span> למרות ש-<span class="math">\(a,b\ne0\)</span>, וקוראים לחוג (קומוטטיבי בד"כ) בלי מחלקי אפס <strong>תחום שלמות</strong>. בתחומי שלמות, ש-<span class="math">\(\mathbb{Z}\)</span> הוא מעין אבטיפוס שלהם, אפשר לבצע "צמצום": אם <span class="math">\(ax=ay\)</span> אז <span class="math">\(x=y\)</span> זו הדוגמא הפשוטה, אבל גם <span class="math">\(x^{2}=y^{2}\)</span> גורר <span class="math">\(x=\pm y\)</span> הוא דוגמא לצמצום, ואנחנו מקבלים אותו כי אם יש לנו <span class="math">\(\left(x-y\right)\left(x+y\right)=0\)</span> בתחום שלמות, או ש-<span class="math">\(x-y=0\)</span> או ש-<span class="math">\(x+y=0\)</span>, אין אפשרות אחרת.</p>
+<p>למרבה השמחה, <span class="math">\(R\left[\left[x\right]\right]\)</span> הוא תחום שלמות אם <span class="math">\(R\)</span> הוא תחום שלמות, כי אם <span class="math">\(a\left(x\right)b\left(x\right)=0\)</span> אז בפרט <span class="math">\(a_{0}b_{0}=0\)</span> ואם אנחנו מעל תחום שלמות אז בלי הגבלת הכלליות, <span class="math">\(b_{0}=0\)</span>. עכשיו, <span class="math">\(a_{0}b_{1}+a_{1}b_{0}=0\)</span>, כלומר <span class="math">\(a_{0}b_{1}=0\)</span> ונקבל שגם <span class="math">\(b_{1}=0\)</span> וכן הלאה באינדוקציה.</p>
+<p>אם כן, חזרה למשוואות ריבועיות: מה שראינו הוא שמעל תחום שלמות, <strong>אם</strong> קיים <span class="math">\(\alpha\)</span> כך ש-<span class="math">\(\alpha^{2}=\Delta\)</span> אז אפשר לומר <span class="math">\(2ax+b=\pm\alpha\)</span>. עכשיו אפשר להעביר אגף ולקבל </p>
+<p><span class="math">\(2ax=-b\pm\alpha\)</span></p>
+<p>כדי להתקדם מכאן, אנחנו צריכים שאפשר יהיה לחלק ב-<span class="math">\(2a\)</span> וזה כמובן לא נכון בכל חוג, אפילו לא בתחום שלמות, זה הרי לא נכון אפילו ב-<span class="math">\(\mathbb{Z}\)</span>. אבל אם אפשר לחלק ב-<span class="math">\(2a\)</span> - כלומר, אם <span class="math">\(2a\)</span> הוא <strong>הפיך</strong> בחוג שלנו - אז נקבל </p>
+<p><span class="math">\(x=\frac{-b\pm\alpha}{2a}\)</span></p>
+<p>וכדי לא לכתוב <span class="math">\(\alpha\)</span> מעדיפים לכתוב</p>
+<p><span class="math">\(x=\frac{-b\pm\sqrt{b^{2}-4ac}}{2a}\)</span></p>
+<p>מתוך הבנה ש-<span class="math">\(\sqrt{b^{2}-4ac}\)</span> הוא <strong>סימון</strong> שאומר "איבר בחוג שכשמעלים אותו בריבוע מקבלים <span class="math">\(b^{2}-4ac\)</span>, בהנחה שקיים כזה".</p>
+<p>זה האופן שבו צריך לקרוא את המשוואה <span class="math">\(C\left(x\right)=\frac{1\pm\sqrt{1-4x}}{2x}\)</span> שקיבלנו עבור מספרי קטלן. מה שהיא אומרת, ברמה הפורמלית ביותר, הוא "אם קיים טור חזקות פורמלי <span class="math">\(a\left(x\right)\)</span> כך ש-<span class="math">\(a\left(x\right)^{2}=1-4x\)</span>, אז <span class="math">\(C\left(x\right)\)</span> הוא או <span class="math">\(\frac{1+a\left(x\right)}{2x}\)</span> או <span class="math">\(\frac{1-a\left(x\right)}{2x}\)</span>, אנחנו לא סגורים על איזה משניהם נכון".</p>
+<p>אבל רגע, לא סיימנו! צריך להצדיק גם את החלוקה ב-<span class="math">\(2x\)</span>. להצדיק חלוקה ב-<span class="math">\(2\)</span> זה קל, הרי <span class="math">\(2\)</span> הוא הפיך. אבל לחלק ב-<span class="math">\(2x\)</span>? הרי לפני רגע אמרתי שטור חזקות הוא הפיך אם ורק אם האיבר החופשי שלו הוא הפיך, וב-<span class="math">\(2x\)</span>, כשאני חושב עליו בתור טור חזקות, האיבר החופשי הוא 0, כלומר לא הפיך. <strong>אופס</strong>.</p>
+<p>העניין הוא שכן אפשר סוג של "לחלק" ב-<span class="math">\(x\)</span>. לפעמים. הנה דוגמא לאיך זה עובד. נניח ש-<span class="math">\(a\left(x\right)=a_{1}x+a_{2}x^{2}+\ldots\)</span>, כלומר יש לנו טור חזקות שהמקדם החופשי שלו הוא 0. אז אפשר <strong>להוציא החוצה</strong> את <span class="math">\(x\)</span> ולקבל <span class="math">\(a\left(x\right)=x\left(a_{1}+a_{2}x+\ldots\right)\)</span> ואז אפשר לכתוב <span class="math">\(a_{1}+a_{2}x+\ldots=\frac{a\left(x\right)}{x}\)</span>. כלומר, את הפעולה "חלוקה ב-<span class="math">\(x\)</span>" אפשר לראות בתור "הזזה שמאלה של כל האיברים בסדרה שמתחילה ב-0" - אם היה לנו את הסדרה <span class="math">\(\left(0,a_{1},a_{2},\ldots\right)\)</span> אחרי ביצוע הפעולה הזו קיבלנו את הסדרה <span class="math">\(\left(a_{1},a_{2},\ldots\right)\)</span>.</p>
+<p>עוד יותר פורמלית, מה שאנחנו רואים במשוואה <span class="math">\(C\left(x\right)=\frac{1\pm a\left(x\right)}{2x}\)</span> הוא בעצם את <span class="math">\(2xC\left(x\right)=1\pm a\left(x\right)^{2}\)</span>. אם נגלה שיש <span class="math">\(a\left(x\right)\)</span> כך ש-<span class="math">\(1-a\left(x\right)=x\cdot b\left(x\right)\)</span> כלשהו, אז נוכל לכתוב <span class="math">\(2xC\left(x\right)=xb\left(x\right)\)</span> ואז נוכל <strong>לצמצם</strong> ב-<span class="math">\(x\)</span>, כי אנחנו בתחום שלמות, ולקבל <span class="math">\(2C\left(x\right)=b\left(x\right)\)</span>, כלומר <span class="math">\(C\left(x\right)=\frac{b\left(x\right)}{2}\)</span>. זה התוכן הפורמלי של הכתיב <span class="math">\(C\left(x\right)=\frac{1-\sqrt{1-4x}}{2x}\)</span>.</p>
+<p>העניין הזה גם מסביר לנו למה אנחנו בוחרים מינוס ולא פלוס, גם בלי שנזדקק ישירות להסברים אנליטיים: אם קיים <span class="math">\(a\left(x\right)\)</span> כך ש-<span class="math">\(a\left(x\right)^{2}=1-4x\)</span>, אז המקדם החופשי שלו מקיים <span class="math">\(a_{0}^{2}=1\)</span> (כי <span class="math">\(1\)</span> הוא המקדם החופשי של המכפלה, <span class="math">\(1-4x\)</span>) ובגלל שאנחנו בתחום שלמות, <span class="math">\(a_{0}=\pm1\)</span>. כשמשתמשים בסימן <span class="math">\(\sqrt{\cdot}\)</span> עבור מספרים ממשיים הכוונה היא תמיד ללקיחת השורש החיובי, אז גם כאן נוכל להשתמש במוסכמה שלוקחים את ה-<span class="math">\(a\left(x\right)\)</span> עם המקדם החופשי <span class="math">\(a_{0}=1\)</span>. עכשיו, אם אנחנו רוצים שהביטוי <span class="math">\(\frac{1\pm a\left(x\right)}{2x}\)</span> יהיה מוגדר היטב, צריך שהמקדם החופשי של <span class="math">\(1\pm a\left(x\right)\)</span> יהיה 0, וזה יעבוד עבור חיסור ולא יעבוד עבור חיבור.</p>
+<p>כמובן, עדיין נותרה לנו שאלה אחת: <strong>למה</strong> אנחנו יודעים ש-<span class="math">\(\sqrt{1-4x}\)</span> קיים בכלל? אני יכול לכתוב <span class="math">\(a\left(x\right)^{2}=1-4x\)</span> ולנסות לפתור את המשוואה ולחלץ את המקדמים של <span class="math">\(a\left(x\right)\)</span>, כמו שעשיתי עבור הופכי. אבל אני יכול גם לחפור יותר עמוק...</p>
+<h2>חופרים יותר עמוק</h2>
+
+<p>אני מניח שאנחנו מכירים את הבינום של ניוטון, ואם לא - <a href="https://gadial.net/2010/06/22/newton_binom/">יש לי על זה פוסט</a>. זו הנוסחה החביבה</p>
+<p><span class="math">\(\left(a+b\right)^{n}=\sum_{k=0}^{n}{n \choose k}a^{k}b^{n-k}\)</span></p>
+<p>שנכונה לכל <span class="math">\(n\)</span> טבעי ו-<span class="math">\(a,b\)</span> כלשהם, אפילו איברים בחוג <strong>קומוטטיבי</strong> כללי.</p>
+<p>זו נוסחה שימושית ונהדרת עם הוכחה קומבינטורית מקסימה וכל זה מתואר בפוסט שלי. אני רוצה לדבר הפעם על <strong>ההכללה</strong> שלה: מה קורה אם אנחנו רוצים ש-<span class="math">\(n\)</span> לא יהיה מספר טבעי דווקא, אלא מספר ממשי כללי? ובכן, ניוטון דאג גם לזה, ובאמצעות חדו"א אפשר להוכיח את הנוסחה</p>
+<p><span class="math">\(\left(a+b\right)^{r}=\sum_{k=0}^{\infty}{r \choose k}a^{k}b^{r-k}\)</span></p>
+<p>כאשר <span class="math">\(r\in\mathbb{R}\)</span> הוא מספר ממשי כללי, והסימון <span class="math">\({r \choose k}\)</span> מוגדר בתור</p>
+<p><span class="math">\({r \choose k}=\frac{r\left(r-1\right)\left(r-2\right)\cdots\left(r-k+1\right)}{k!}\)</span></p>
+<p>זו ממש הכללה ישירה של הבינום הרגיל של ניוטון, שבו <span class="math">\({n \choose k}=\frac{n!}{k!\left(n-k!\right)}=\frac{n\left(n-1\right)\left(n-2\right)\cdots\left(n-k+1\right)}{k!}\)</span>. העניין הוא שאם <span class="math">\(n\)</span> הוא מספר טבעי, ואם <span class="math">\(k>n\)</span>, אז נקבל <span class="math">\({n \choose k}=0\)</span> כי במכפלה <span class="math">\(\left(n-1\right)\ldots\left(n-k+1\right)\)</span> יופיע מתישהו <span class="math">\(\left(n-n\right)\)</span>, כלומר כל המכפלה הזו מוכפלת ב-0 ושווה ל-0 ולכן אנחנו מקבלים ש-<span class="math">\(\left(a+b\right)^{n}\)</span> הוא לא סכום אינסופי אלא סופי (ליתר דיוק - הוא סכום אינסופי שכל אבריו הם 0 החל ממקום מסויים).</p>
+<p>אם לעומת זאת <span class="math">\(r\)</span> הוא לא מספר טבעי, אז <span class="math">\(\left(r-r\right)\)</span> לא יופיע במכפלה ולכן היא אף פעם לא תתאפס. לכן צריך לעבור לסכום אינסופי ולקוות ממש חזק שהוא יתכנס.</p>
+<p>בואו נראה דוגמא. נניח ש- <span class="math">\(a=-4x\)</span> ו-<span class="math">\(b=1\)</span> ו-<span class="math">\(r=\frac{1}{2}\)</span>, אז נקבל</p>
+<p><span class="math">\(\sqrt{1-4x}=\left(-4x+1\right)^{\frac{1}{2}}=\sum_{k=0}^{\infty}{1/2 \choose k}\left(-4x\right)^{k}=\sum_{k=0}^{\infty}\left(-4\right)^{k}{1/2 \choose k}x^{k}\)</span></p>
+<p>הנוסחה הזו מאפשר חישוב פשוט של המקדמים של <span class="math">\(x^{k}\)</span> עבור הערכים הראשונים של <span class="math">\(k\)</span> (אני מציע לכם לנסות לחשב בעצמכם, גם אני "מרגיש" את הביטוי רק כשאני עושה את זה):</p>
+<ul> <li><span class="math">\(\left(-4\right)^{0}{1/2 \choose 0}=1\cdot1=1\)</span></li>
+
+
+<li><span class="math">\(\left(-4\right)^{1}{1/2 \choose 1}=-4\cdot\frac{1}{2}=-2\)</span></li>
+
+
+<li><span class="math">\(\left(-4\right)^{2}{1/2 \choose 2}=16\cdot\frac{1}{2}\cdot\frac{1}{2}\cdot\left(-\frac{1}{2}\right)=-2\)</span></li>
+
+
+<li><span class="math">\(\left(-4\right)^{3}{1/2 \choose 3}=-64\cdot\frac{1}{2\cdot3}\cdot\frac{1}{2}\cdot\left(-\frac{1}{2}\right)\cdot\left(-\frac{3}{2}\right)=-4\)</span></li>
+
+</ul>
+
+<p>מכאן כבר יש לי מספיק אומץ לנסות לכתוב את הביטוי הכללי:</p>
+<p><span class="math">\(\left(-4\right)^{n}{1/2 \choose n}=\left(-1\right)^{n}2^{n}\cdot2^{n}\cdot\frac{1}{2\cdot3\cdots n}\cdot\frac{1}{2}\cdot\left(-\frac{1}{2}\right)\cdot\left(-\frac{3}{2}\right)\cdots\left(-\frac{2n-3}{2}\right)\)</span></p>
+<p><span class="math">\(=2^{n}\cdot\frac{3\cdot5\cdots\left(2n-3\right)}{2\cdot3\cdots n}=\frac{6\cdot10\cdots\left(4n-6\right)}{2\cdot3\cdots n}\)</span></p>
+<p>מה שנותן לנו, אם נציב ערכים קונקרטיים:</p>
+<p><span class="math">\(\sqrt{1-4x}=1-2x-2x^{2}-4x^{3}-10x^{4}-28x^{5}-84x^{6}-\ldots\)</span></p>
+<p>זה כמובן מזכיר את סדרת מספרי קטלן, <span class="math">\(1,1,2,5,14,42,\ldots\)</span>, ולא במקרה: הנוסחה שקיבלנו הייתה <span class="math">\(C\left(x\right)=\frac{1-\sqrt{1-4x}}{2x}\)</span>, כך שמספרי קטלן מתקבלים מ-<span class="math">\(\sqrt{1-4x}\)</span> באופן הבא:</p>
+<ol> <li>החליפו את ה-1 שבהתחלה ב-0, והסירו את סימני המינוס (זה החלק של <span class="math">\(1-\)</span> השורש)</li>
+
+
+<li>הזיזו את הסדרה צעד אחד שמאלה כך שה-0 בהתחלה נעלם (זה החלק של החלוקה ב-<span class="math">\(x\)</span>)</li>
+
+
+<li>חלקו את אברי כל הסדרה ב-2 (זו החלוקה ב-2).</li>
+
+</ol>
+
+<p>במילים אחרות - כן! הבינום המוכלל של ניוטון עובד ונותן לנו את מספרי קטלן! ככה <strong>בדיוק</strong> אוילר גילה את הנוסחה הסגורה למספרי קטלן. לא על ידי תעלול קומבינטורי מרהיב כמו שהראיתי בפוסט הקודם, אלא על ידי "הא, מצאתי את הפונקציה היוצרת, עכשיו בוא ניקח את המתמטיקה הסטנדרטית שלנו ונפעיל אותה על הפונקציה כדי לקבל את סדרת המקדמים".</p>
+<p>זה השלב שבו כולם מרוצים... חוץ ממני. כל הקטע הזה של הבינום המוכלל של ניוטון? זו התעסקות בטורי חזקות של חדו"א, לא בטורי חזקות פורמליים. זה לא אומר שזה לא תקין - אפשר בהחלט לומר שזו תוצאה שתקפה רק בתחום ההתכנסות של הטור, אבל זה מספיק כדי לקבל את סדרת המקדמים - אבל אני רוצה לראות כמה רחוק אפשר ללכת כשדבקים <strong>רק</strong> בפורמליות, בלי חדו"א בכלל. עכשיו יש לנו מטרה הרבה יותר ברורה: אנחנו לא רוצים להבין "סתם" איך להתעסק במספרי קטלן פורמלית, אלא איך אפשר להוכיח את <strong>הבינום המוכלל של ניוטון</strong> פורמלית.</p>
+<h2>הבינום הפורמלי המוכלל של ניוטון</h2>
+
+<p>נשמור על העניין פשוט ונסתכל על הבינום של ניוטון כשאחד המחוברים הוא 1. כלומר, על הנוסחה</p>
+<p><span class="math">\(\left(1+x\right)^{r}=\sum_{n=0}^{\infty}{r \choose n}x^{n}\)</span></p>
+<p>מה שיש לנו באגף ימין כאן הוא פונקציה יוצרת - הפונקציה היוצרת של הסדרה <span class="math">\(a_{n}={r \choose n}\)</span>. באגף שמאל יש לנו ביטוי שאין לו משמעות פורמלית - לא הגדרנו בשום שלב העלאה בחזקה כללית של פולינומים, או של טורי חזקות. אז אני יכול <strong>להגדיר</strong> את המשמעות של אגף שמאל להיות מה שכתוב באגף ימין; השאלה המעניינת היא האם ההגדרה הזו תסכים עם מה שאנחנו מצפים שיהיה, כלומר אם עבור <span class="math">\(r\)</span> שהוא <strong>מספר טבעי</strong> ההגדרה תתלכד עם ההגדרה הרגילה, ואם יישמרו חוקי החשבון הרגילים של חזקות, שהם מה שעומד מאחורי הרחבת הגדרת החזקה מטבעיים למספרים ממשיים באופן כללי. כלומר, האם יתקיים</p>
+<p><span class="math">\(\left(1+x\right)^{r}\cdot\left(1+x\right)^{s}=\left(1+x\right)^{r+s}\)</span></p>
+<p>ו-<span class="math">\(\left(\left(1+x\right)^{r}\right)^{s}=\left(1+x\right)^{rs}\)</span></p>
+<p>אבל כבר כאן צצה בעיה: הביטוי <span class="math">\(\left(\left(1+x\right)^{r}\right)^{s}\)</span> הוא לא מוגדר היטב, כי הרי <span class="math">\(\left(1+x\right)^{r}\)</span> הוא כבר פונקציה יוצרת עם אינסוף מחוברים, ולא הגדרתי העלאה בחזקה <strong>שלה</strong>, רק של הביטוי הפשוט <span class="math">\(1+x\)</span>. אז אני צריך מראש ללכת על הגדרה כללית יותר. מה בדבר...</p>
+<p><span class="math">\(\left(1+F\left(x\right)\right)^{r}=\sum_{n=0}^{\infty}{r \choose n}F\left(x\right)^{n}\)</span></p>
+<p>כאשר <span class="math">\(F\left(x\right)\)</span> היא פונקציה יוצרת כלשהי? ובכן, זה <strong>כמעט</strong> עובד, אבל בואו ננצל את ההזדמנות כדי להציג גם את הדבר הזה בהקשר טיפה יותר כללי: <strong>הרכבה</strong> של פונקציות יוצרות.</p>
+<p>אז נניח שיש לנו שתי פונקציות יוצרות</p>
+<p><span class="math">\(a\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n}\)</span></p>
+<p><span class="math">\(b\left(x\right)=\sum_{n=0}^{\infty}b_{n}x^{n}\)</span></p>
+<p>ואנחנו רוצים להגדיר את ההרכבה, <span class="math">\(a\left(b\left(x\right)\right)\)</span>. אם הפונקציות היוצרות היו פונקציות אמיתיות ולא סתם חבלי כביסה, מה שהיה מתקיים (כשרדיוס ההתכנסות היה מתיר את זה) הוא</p>
+<p><span class="math">\(a\left(b\left(x\right)\right)=\sum_{n=0}^{\infty}a_{n}b\left(x\right)^{n}x^{n}\)</span></p>
+<p>הדבר הזה הוא לא ביטוי מפורש. כלומר, זה לא שבהרכבה, המקדם של <span class="math">\(x^{n}\)</span> יהיה <span class="math">\(a_{n}b\left(x\right)^{n}\)</span>. מה שקורה הוא שצריך לקחת את הטור האינסופי <span class="math">\(b\left(x\right)\)</span>, לכפול אותו בעצמו <span class="math">\(n\)</span> פעמים (את זה אנחנו יודעים לעשות), לכפול את התוצאה במקדם המספרי <span class="math">\(a_{n}\)</span> ואז להוסיף את זה לטור הכולל שאנחנו בונים. בצורה הזו לאותו <span class="math">\(x^{n}\)</span> יכולות לתרום חזקות רבות ושונות מהצורה <span class="math">\(b\left(x\right)^{k}\)</span>. למעשה, קיימת הסכנה שלאותו <span class="math">\(x^{n}\)</span> יהיו <strong>אינסוף</strong> חזקות שתורמות מחוברים. זה קורה אם ורק אם <span class="math">\(b_{n}\ne0\)</span>. כי למשל, בואו נסתכל על המקרה הפשוט שבו <span class="math">\(b\left(x\right)=1+x\)</span>, אז מהן החזקות?</p>
+<p><span class="math">\(\left(1+x\right)^{0}=1\)</span></p>
+<p><span class="math">\(\left(1+x\right)^{1}=1+x\)</span></p>
+<p><span class="math">\(\left(1+x\right)^{2}=1+2x+x^{2}\)</span></p>
+<p><span class="math">\(\left(1+x\right)^{3}=1+3x+3x^{2}+x^{3}\)</span></p>
+<p>וכן הלאה - אנחנו רואים שכל חזקה החל מ-2 תתרום ל-<span class="math">\(x^{1}\)</span>, למשל. למה? כי מה זה בעצם <span class="math">\(\left(1+x\right)^{3}\)</span>? זו המכפלה <span class="math">\(\left(1+x\right)\left(1+x\right)\left(1+x\right)\)</span>. בכל פעם אנחנו בוחרים אחד משני האיברים שבתוך זוג סוגריים ספציפי ומוסיפים אותו למכפלה שלנו. אם בכל פעם היינו חייבים לבחור איבר שהוא לפחות <span class="math">\(x\)</span>, אז כל זוג סוגריים שמשתתף במכפלה היה מגדיל ב-1 לפחות את החזקה של <span class="math">\(x\)</span> בתוצאה הסופית. אבל אם 1 נמצא בסוגריים, אז אפשר לבחור אותו ולא להגדיל את החזקה של <span class="math">\(x\)</span> בתוצאה הסופית. זה היה מבטיח שעבור חזקות מסוימות של <span class="math">\(x\)</span>, אפשר יהיה תמיד לייצר אותן החל ממקום מסוים - לכן המקדם שלהם יהיה אינסופי, וזה לא מוגדר היטב.</p>
+<p>אפשר לחזור עכשיו אל ההעלאה בחזקה. במקרה הזה, יש לנו את הפונקציה היוצרת</p>
+<p><span class="math">\(a\left(x\right)=\left(1+x\right)^{r}=\sum_{n=0}^{\infty}{r \choose n}x^{n}\)</span></p>
+<p>כלומר, <span class="math">\(a_{n}={r \choose n}\)</span>, אז אני יכול להציב בה את <span class="math">\(F\left(x\right)\)</span> לכל <span class="math">\(F\left(x\right)\)</span> שמקיים <span class="math">\(F_{0}=0\)</span>. למשל, עבור <span class="math">\(\sqrt{1-4x}\)</span> הצבתי את <span class="math">\(F\left(x\right)=-4x\)</span>, שבהחלט מקיימת את זה. ומה עם תכונות החזקה שאנחנו רוצים להוכיח?</p>
+<p><span class="math">\(\left(1+F\left(x\right)\right)^{r}\cdot\left(1+F\left(x\right)\right)^{s}=\left(1+F\left(x\right)\right)^{r+s}\)</span></p>
+<p>ו-<span class="math">\(\left(\left(1+F\left(x\right)\right)^{r}\right)^{s}=\left(1+F\left(x\right)\right)^{rs}\)</span></p>
+<p>כדי שזה יהיה מוגדר היטב, <span class="math">\(\left(1+F\left(x\right)\right)^{r}\)</span> צריך להיות מהצורה <span class="math">\(1+G\left(x\right)\)</span> כך ש-<span class="math">\(G_{0}=0\)</span>. את זה אפשר לראות ממש מההגדרה:</p>
+<p><span class="math">\(\left(1+F\left(x\right)\right)^{r}=\sum_{n=0}^{\infty}{r \choose n}F\left(x\right)^{n}=1+\sum_{n=1}^{\infty}{r \choose n}F\left(x\right)^{n}\)</span></p>
+<p>ועכשיו נגדיר <span class="math">\(G\left(x\right)=\sum_{n=1}^{\infty}{r \choose n}F\left(x\right)^{n}\)</span> ונשתמש בכך ש-<span class="math">\(F_{0}=0\)</span> בעצמו ולכן כל העלאה בחזקה של <span class="math">\(F\left(x\right)\)</span> כוללת רק חזקות של <span class="math">\(x\)</span> החל מ-<span class="math">\(x^{1}\)</span>.</p>
+<p>עכשיו אפשר לעבור לעבודה הטכנית עצמה של להוכיח ש-<span class="math">\(\left(1+x\right)^{r}\cdot\left(1+x\right)^{s}=\left(1+x\right)^{r+s}=\sum_{n=0}^{\infty}{r+s \choose n}x^{n}\)</span>. יש לנו כאן כפל של שני טורי חזקות, ואנחנו יודעים בדיוק איך זה עובד. נגדיר</p>
+<p><span class="math">\(a\left(x\right)=\sum_{n=0}^{\infty}{r \choose n}x^{n}\)</span></p>
+<p><span class="math">\(b\left(x\right)=\sum_{n=0}^{\infty}{s \choose n}x^{n}\)</span></p>
+<p>כלומר</p>
+<p><span class="math">\(a_{n}={r \choose n}\)</span></p>
+<p><span class="math">\(b_{n}={s \choose n}\)</span></p>
+<p>וכעת</p>
+<p><span class="math">\(a\left(x\right)b\left(x\right)=\sum_{n=0}^{\infty}c_{n}x^{n}\)</span></p>
+<p>כאשר</p>
+<p><span class="math">\(c_{n}=\sum_{k=0}^{n}a_{k}b_{n-k}=\sum_{k=0}^{n}{r \choose k}{s \choose n-k}\)</span></p>
+<p>מה שאנחנו <strong>מצפים</strong> לקבל הוא</p>
+<p><span class="math">\(\sum_{k=0}^{n}{r \choose k}{s \choose n-k}={r+s \choose n}\)</span></p>
+<p>אם יש לנו את זה - סיימנו את ההוכחה. למרבה המזל, זה שוויון מפורסם מאוד, שאפילו יש לו שם משלו: שוויון צ'ו-ונדרמונדה. עוד יותר למרבה המזל, זה שוויון שקל מאוד להוכיח <strong>קומבינטורית</strong>, כלומר יש לנו אחלה אינטואיציה למה הוא נכון... אבל רק אם <span class="math">\(s,r\)</span> הם מספרים טבעיים. במקרה הזה, אפשר לחשוב על כך שיש לנו קבוצה של <span class="math">\(r\)</span> חתולים ו-<span class="math">\(s\)</span> כלבים ואנחנו רוצים להרכיב צוות מרגלים שכולל בדיוק <span class="math">\(n\)</span> חברים - זו בעיה של <strong>בחירה בלי חשיבות לסדר ובלי חזרות</strong>, ומכיוון שקבוצת המרגלים הפוטנציאליים הכוללת היא מגודל <span class="math">\(r+s\)</span> יש לנו בסך הכל <span class="math">\({r+s \choose n}\)</span> אפשרויות. אבל היה אפשר גם לסרבל את זה טיפה: אם היינו מחליטים לקחת לקבוצה שלנו <strong>בדיוק</strong> <span class="math">\(k\)</span> חתולים, אז היו לנו <span class="math">\({r \choose k}\)</span> אפשרויות לבחור את החתולים, ואחר כך היינו צריכים לבחור עוד <span class="math">\(n-k\)</span> כלבים, ולזה יש <span class="math">\({s \choose n-k}\)</span> אפשרויות, ולכן מעקרון הכפל יש לנו <span class="math">\({r \choose k}{s \choose n-k}\)</span> אפשרויות להרכיב צוות שכולל בדיוק <span class="math">\(k\)</span> חתולים. את הסיפור הזה יכלנו לעשות לכל <span class="math">\(k\)</span> בין 0 ל-<span class="math">\(n\)</span>, ועקרון החיבור אומר שמספר האפשרויות הכולל, אם כך, הוא <span class="math">\(\sum_{k=0}^{n}{r \choose k}{s \choose n-k}\)</span>. זה מסיים את ההוכחה הקומבינטורית.</p>
+<p>השאלה היא מה עושים עכשיו, כשרוצים להוכיח את השוויון ל-<span class="math">\(r,s\)</span> שהם מספרים ממשיים כלליים. לא ברור איך הגיון קומבינטורי יעזור לנו כאן, אבל למרבה המזל גם לא צריך אותו - אפשר להסתמך על מה שכבר הוכחנו. בשביל זה בואו נדבר לרגע על <strong>פולינומים</strong>.</p>
+<p>נניח ש-<span class="math">\(p\left(x\right),q\left(x\right)\)</span> הם שני פולינומים. אנחנו יודעים שפולינום ממעלה <span class="math">\(d\)</span> נקבע בצורה יחידה על ידי הערכים שלו ב-<span class="math">\(d+1\)</span> נקודות, ולכן פולינום ממעלה <span class="math">\(d\)</span> שמתאפס ב-<span class="math">\(d+1\)</span> נקודות הוא זהותית פולינום האפס. עכשיו, אם אנחנו יודעים ש-<span class="math">\(p\left(n\right)=q\left(n\right)\)</span> <strong>לכל</strong> <span class="math">\(n\in\mathbb{N}\)</span>, אז אנחנו יודעים שהפולינום <span class="math">\(p-q\)</span> מתאפס על <strong>אינסוף</strong> נקודות, ובפרט על מספר נקודות שגדול מהדרגה שלו, ולכן הוא זהותית אפס: <span class="math">\(p-q=0\)</span>, כלומר <span class="math">\(p=q\)</span> - <strong>פולינומים שמזדהים על אינסוף נקודות הם זהים</strong>.</p>
+<p>עכשיו בואו נסבך את זה ונהפוך את הפולינומים לבעלי שני משתנים: <span class="math">\(p\left(x,y\right),q\left(x,y\right)\)</span>. כאן צריך להיזהר: אם למשל <span class="math">\(p\left(x,y\right)=x\)</span> ו-<span class="math">\(q\left(x,y\right)=y\)</span> אז נקבל ש-<span class="math">\(p\left(n,n\right)=q\left(n,n\right)\)</span> עבור אינסוף ערכי <span class="math">\(n\in\mathbb{N}\)</span> אבל זה כמובן לא אומר שהפולינומים הללו זהים. הטיעון צריך להיות קצת יותר עדין. באופן כללי, אם יש שתי קבוצות אינסופיות <span class="math">\(A,B\)</span> כך ש-<span class="math">\(p\left(a,b\right)=0\)</span> לכל <span class="math">\(a\in A,b\in B\)</span>, אז <span class="math">\(p\)</span> הוא פולינום האפס (כלומר, הפואנטה היא ש-<span class="math">\(p\)</span> מתאפס על כל <span class="math">\(A\times B\)</span>, לא רק על איזו תת-קבוצה נחמדה של <span class="math">\(A\times B\)</span>). בואו נוכיח את זה: באופן כללי, <span class="math">\(p\left(x,y\right)=\sum_{i,j}a_{ij}x^{i}y^{j}\)</span>. אפשר לסדר את הסכום הזה לפי חזקות של <span class="math">\(y\)</span>, כלומר לכתוב <span class="math">\(p\left(x,y\right)=\sum_{j}\left(\sum_{i}a_{ij}x^{i}\right)y^{j}\)</span>, ולסמן <span class="math">\(p_{j}\left(x\right)=\sum_{i}a_{ij}x^{i}\)</span>. עכשיו, אם כל ה-<span class="math">\(p_{j}\left(x\right)\)</span> הללו הם פולינומי האפס, סיימנו; מקבלים ש-<span class="math">\(p\left(x,y\right)=\sum_{j}p_{j}\left(x\right)y^{j}=\sum_{j}0\cdot y=0\)</span>. אז בואו נניח בשלילה שעבור <span class="math">\(j\)</span> כלשהו, <span class="math">\(p_{j}\left(x\right)\)</span> הוא <strong>לא</strong> פולינום האפס. בפרט, קיים ערך קונקרטי, <span class="math">\(a\in A\)</span>, כך ש-<span class="math">\(p_{j}\left(a\right)\ne0\)</span> - כי אם לכל <span class="math">\(a\in A\)</span> היינו מקבלים <span class="math">\(p_{j}\left(x\right)=0\)</span> אז היינו מקבלים פולינום שמתאפס על אינסוף ערכים ולכן הוא זהותית 0. אם כן, <span class="math">\(p_{j}\left(a\right)\ne0\)</span> ולכן אם נסתכל על הפולינום <span class="math">\(q\left(y\right)=p\left(a,y\right)\)</span> אנחנו רואים שמצד אחד, <span class="math">\(q\left(y\right)=\sum_{j}p_{j}\left(a\right)y^{j}\)</span> הוא לא פולינום האפס כי <strong>לכל הפחות</strong> המקדם של <span class="math">\(y^{j}\)</span> הוא לא אפס. מצד שני - אנחנו יודעים שלכל אינסוף הערכים <span class="math">\(b\in B\)</span> מתקיים <span class="math">\(q\left(b\right)=p\left(a,b\right)=0\)</span> ולכן זה כן פולינום האפס - סתירה. לב העניין הוא בדיוק בשלב האחרון: ש<strong>לכל</strong> <span class="math">\(b\in B\)</span> מקבלים <span class="math">\(p\left(a,b\right)=0\)</span>, באופן שלא תלוי בזהות של <span class="math">\(a\)</span>.</p>
+<p>המסקנה מכל זה היא שאם יש לנו זוג פולינומים בשני משתנים <span class="math">\(p\left(x,y\right),q\left(x,y\right)\)</span> כך ש<strong>לכל זוג מספרים טבעיים</strong> <span class="math">\(r,s\)</span> מתקיים <span class="math">\(p\left(r,s\right)=q\left(r,s\right)\)</span> אז הפולינום הם זהים, לכל זוג ערכים, כולל ערכים ממשיים (או אפילו מרוכבים). עכשיו נסתכל על הביטוי</p>
+<p><span class="math">\(\sum_{k=0}^{n}{r \choose k}{s \choose n-k}={r+s \choose n}\)</span></p>
+<p>לב העניין הוא שבאופן כללי, <span class="math">\({x \choose n}=\frac{x\left(x-1\right)\left(x-2\right)\ldots\left(x-n+1\right)}{n!}\)</span> הוא פולינום ב-<span class="math">\(x\)</span>: המונה הוא הרי מכפלה של <span class="math">\(n\)</span> פולינומים ב-<span class="math">\(x\)</span>, אז גם הוא פולינום. לכן גם <span class="math">\(\sum_{k=0}^{n}{x \choose k}{y \choose n-k}={x+y \choose n}\)</span> הוא שוויון של פולינומים - ושוויון שמתקיים לכל הצבה של <span class="math">\(r,s\)</span> טבעיים ב-<span class="math">\(x,y\)</span>. זה מוכיח את השוויון לכל <span class="math">\(r,s\)</span> ממשיים, ולכן מסיים את ההוכחה <strong>הפורמלית</strong> לכך ש-<span class="math">\(\left(1+x\right)^{r}\cdot\left(1+x\right)^{s}=\left(1+x\right)^{r+s}\)</span>, וכמסקנה אנחנו מקבלים ש-<span class="math">\(\left(1+F\left(x\right)\right)^{r}\cdot\left(1+F\left(x\right)\right)^{s}=\left(1+F\left(x\right)\right)^{r+s}\)</span> לכל <span class="math">\(F\left(x\right)\)</span> עם <span class="math">\(F_{0}=0\)</span>.</p>
+<p>זה מקדם אותנו בצורה משמעותית לתפיסה האינטואיטיבית של <span class="math">\(\left(1+x\right)^{r}\)</span> בתור פעולת החזקה. כדי לראות את זה, בואו נוותר לרגע על שיטת הסימון שבה אנחנו משתמשים ובמקום זה נכתוב</p>
+<p><span class="math">\(\Phi\left(1+F\left(x\right),r\right)=\sum_{n=0}^{\infty}{r \choose n}F\left(x\right)^{n}\)</span></p>
+<p>כלומר, בינתיים פשוט הגדרנו דרך לבנות פונקציה יוצרת חדשה מתוך <span class="math">\(F\left(x\right)\)</span>. מה לזה ולפעולת ההעלאה בחזקה? ובכן, ראשית נשים לב לכך שעל פי הגדרה</p>
+<p><span class="math">\(\Phi\left(1+F\left(x\right),1\right)=\sum_{n=0}^{\infty}{1 \choose n}F\left(x\right)^{n}=F\left(x\right)^{0}+F\left(x\right)^{1}=1+F\left(x\right)=\left(1+F\left(x\right)\right)^{1}\)</span></p>
+<p>כלומר, <span class="math">\(\Phi\left(1+F\left(x\right),1\right)\)</span> מתלכד עם מה שאנחנו מכירים בתור <span class="math">\(\left(1+F\left(x\right)\right)^{1}\)</span>. שימו לב שאת הביטוי <span class="math">\(\left(1+F\left(x\right)\right)^{1}\)</span> אנחנו מכירים לא בתור "פונקציה יוצרת שהוגדרה מוזר" אלא זו חזקה במשמעות הרגילה שלה בחוגים - כפל של האיבר בעצמו שוב ושוב (פעם אחת, במקרה הזה).</p>
+<p>טוב ויפה, אבל כזכור עבדנו קשה כדי להוכיח את התכונה</p>
+<p><span class="math">\(\Phi\left(1+F\left(x\right),r+s\right)=\Phi\left(1+F\left(x\right),r\right)\Phi\left(1+F\left(x\right),s\right)\)</span></p>
+<p>ולכן עכשיו אפשר להראות באינדוקציה שלכל <span class="math">\(n\)</span> טבעי, </p>
+<p><span class="math">\(\Phi\left(1+F\left(x\right),n+1\right)=\Phi\left(1+F\left(x\right),n\right)\Phi\left(1+F\left(x\right),1\right)=\)</span></p>
+<p><span class="math">\(=\left(1+F\left(x\right)\right)^{n}\left(1+F\left(x\right)\right)^{1}=\left(1+F\left(x\right)\right)^{n+1}\)</span></p>
+<p>כאשר גם כאן - החזקה היא במשמעות המקורית והרגילה שלה בחוג, אז הפונקציה <span class="math">\(\Phi\)</span> <strong>מתלכדת</strong> עם המשמעות הרגילה בחוג. כדי להשתכנע שהיא מרחיבה אותה בצורה נכונה, בואו נסתכל למשל על</p>
+<p><span class="math">\(\Phi\left(1+F\left(x\right),1\right)=\Phi\left(1+F\left(x\right),\frac{1}{2}+\frac{1}{2}\right)=\Phi\left(1+F\left(x\right),\frac{1}{2}\right)^{2}\)</span></p>
+<p>במילים אחרות, <span class="math">\(G\left(x\right)=\Phi\left(1+F\left(x\right),\frac{1}{2}\right)\)</span> הוא מצד אחד טור חזקות פורמלי מוגדר היטב, שלא נזקקנו לחשבון דיפרנציאלי כדי להגדיר; ומצד שני הוא מקיים <span class="math">\(G\left(x\right)^{2}=1+F\left(x\right)\)</span> וכמו כן קל לראות ש-<span class="math">\(G_{0}=1\)</span> ולכן, בסימון שלנו בתחילת הפוסט, <span class="math">\(G\left(x\right)=\sqrt{1+F\left(x\right)}\)</span>, וזה תואם את המשמעות האינטואיטיבית שיש לנו למה העלאה בחזקת <span class="math">\(\frac{1}{2}\)</span> אמורה להיות.</p>
+<p>זה עובד גם עבור אפס ועבור מספרים שליליים. אפשר לבדוק ישירות על פי ההגדרה ש-</p>
+<p><span class="math">\(\Phi\left(1+F\left(x\right),0\right)=\sum_{n=0}^{\infty}{0 \choose n}F\left(x\right)^{n}=1\)</span></p>
+<p>מה שמתאים להעלאה "רגילה" בחזקת 0, ועכשיו עבור שליליים:</p>
+<p><span class="math">\(1=\Phi\left(1+F\left(x\right),0\right)=\Phi\left(1+F\left(x\right),n-n\right)=\)</span></p>
+<p><span class="math">\(=\Phi\left(1+F\left(x\right),n\right)\Phi\left(1+F\left(x\right),-n\right)\)</span></p>
+<p>כלומר קיבלנו ש-<span class="math">\(\Phi\left(1+F\left(x\right),-n\right)=\frac{1}{\Phi\left(1+F\left(x\right),n\right)}\)</span>. הצעד האחרון דורש כזכור שהאיבר החופשי של <span class="math">\(\Phi\left(1+F\left(x\right),n\right)\)</span> לא יהיה 0, ואנחנו כבר יודעים שהוא 1, אז הכל בסדר.</p>
+<p>זה נחמד כי זה מחזיר אותנו לתחילת הפוסט, שבו הוכחנו בדרך די ישירה ש-<span class="math">\(1+x+x^{2}+\ldots=\frac{1}{1-x}\)</span>. עכשיו זה אמור לנבוע מההגדרה הכללית יותר שלנו. נסמן <span class="math">\(F\left(x\right)=x+x^{2}+\ldots\)</span> ונקבל</p>
+<p><span class="math">\(\Phi\left(1+F\left(x\right),-1\right)=\sum_{n=0}^{\infty}{-1 \choose n}F\left(x\right)^{n}=\frac{1}{0!}F\left(x\right)^{0}+\frac{\left(-1\right)}{1!}F\left(x\right)^{1}+\frac{\left(-1\right)\left(-2\right)}{2!}F\left(x\right)^{2}+\ldots\)</span></p>
+<p>באופן כללי, האיבר ה-<span class="math">\(n\)</span>-י בסכום יהיה <span class="math">\(\frac{\left(-1\right)\left(-2\right)\cdots\left(-n\right)}{n!}=\frac{\left(-1\right)^{n}n!}{n!}=\left(-1\right)^{n}\)</span>, כלומר אנחנו מקבלים</p>
+<p><span class="math">\(1-F\left(x\right)+F\left(x\right)^{2}-F\left(x\right)^{3}+\ldots\)</span></p>
+<p>בכמה דרכים <span class="math">\(x^{n}\)</span>, עבור <span class="math">\(n\ge2\)</span>, יכול להתקבל כאן? אם נסתכל על <span class="math">\(F\left(x\right)^{k}\)</span>, הוא כולל <span class="math">\(k\)</span> זוגות סוגריים שמכל אחד מהם בוחרים חזקה של <span class="math">\(x\)</span> כך שהחזקות מסתכמות אל <span class="math">\(n\)</span> - זה כמו לספור כמה פתרונות יש למשוואה <span class="math">\(a_{1}+\ldots+a_{k}=n\)</span>. מה שכן, שימו לב שהסוגריים לא כוללים את <span class="math">\(x^{0}\)</span> אז הפתרונות הם <strong>בטבעיים חיוביים</strong>. זו בעיה קלה, קומבינטורית: זה כמו לשאול כמה פתרונות בשלמים אי-שליליים יש ל-<span class="math">\(a_{1}+\ldots+a_{k}=n-k\)</span> וזו בדיוק בחירה בלי חשיבות לסדר ועם חזרות של <span class="math">\(n-k\)</span> פעמים מתוך <span class="math">\(k\)</span> איברים - הפתרון הוא <span class="math">\({\left(n-k\right)+k-1 \choose k-1}={n-1 \choose k-1}\)</span>. עכשיו, זה נתן לנו את המקדם של <span class="math">\(x^{n}\)</span> באיבר <span class="math">\(F\left(x\right)^{k}\)</span>, אבל כדי לקבל את המקדם הכולל של <span class="math">\(x^{n}\)</span> צריך לחבר את המקדמים שמקבלים לכל <span class="math">\(k\)</span> וגם לקחת בחשבון את סימן המינוס שיש על איברים שבהם <span class="math">\(k\)</span> אי זוגי. כלומר נקבל</p>
+<p><span class="math">\(\sum_{k=1}^{n}\left(-1\right)^{k}{n-1 \choose k-1}\)</span></p>
+<p>במקרה הזה קל לטפל בעזרת <strong>הבינום של ניוטון</strong>. נשנה את משתנה הסכימה באותה דרך שבה עשינו את זה קודם עבור פיבונאצ'י:</p>
+<p><span class="math">\(\sum_{k=1}^{n}\left(-1\right)^{k}{n-1 \choose k-1}=-\sum_{k=0}^{n-1}\left(-1\right)^{k}{n-1 \choose k}=-\left(1-1\right)^{n-1}=0\)</span></p>
+<p>המקרים החריגים היחידים הם <span class="math">\(n=0,1\)</span>. עבור <span class="math">\(n=0\)</span> בכלל אי אפשר להשתמש בנוסחה הזו, אבל אם חושבים רגע רואים שהיא אמורה לתת 0 כאן - וזה נכון, כי <span class="math">\(x^{0}\)</span> בכלל לא מופיע ב-<span class="math">\(-F\left(x\right)+F\left(x\right)^{2}-F\left(x\right)^{3}+\ldots\)</span>, הוא מופיע רק ב-1 בהתחלה. כמו כן עבור <span class="math">\(n=1\)</span> יש לנו סיטואציה חריגה של <span class="math">\(0^{0}\)</span> וזו מהסיטואציות שבהן הדבר הנכון לעשות הוא להגדיר <span class="math">\(0^{0}=1\)</span> (<a href="https://gadial.net/2018/01/01/zero_power_equals_one/">יש לי פוסט על זה</a>), ובואו לא נשכח את המינוס הזה שהשתרבב החוצה, כלומר מקבלים <span class="math">\(-1\)</span> במקרה הזה, ולכן <span class="math">\(1-F\left(x\right)+F\left(x\right)^{2}-F\left(x\right)^{3}+\ldots=1-x\)</span> וזה - הפלא ופלא, זה בדיוק מה שציפינו לקבל, כי אנחנו כבר יודעים ש-<span class="math">\(1+x+x^{2}+\ldots=\frac{1}{1-x}\)</span> אז כמובן ש-<span class="math">\(\left(1+x+x^{2}+\ldots\right)^{-1}=1-x\)</span>.</p>
+<p>אוקיי, אז אני מקווה שהשתכנענו שהצלחנו להגדיר את <span class="math">\(\left(1+F\left(x\right)\right)^{r}\)</span> לכל <span class="math">\(r\)</span> <strong>רציונלי</strong>. איך נגדיר אותו לכל ממשי? ובכן, כאן אנחנו בבעיה וחייבים לדבר על מושגים מחדו"א פשוט כי <strong>מספר ממשי</strong> הוא מושג מחדו"א. הייתה לי <a href="https://gadial.net/2024/08/11/real_numbers_decimal_notation/">סדרת פוסטים</a> על זה לא מזמן. בגדול, דרך נוחה לחשוב על מספרים ממשיים הם בתור אובייקטים שלכל אחד מהם, אנחנו יכולים לקחת סדרת רציונליים ששואפת אליו. זה מוביל להגדרה "הרגילה" של חזקה שהיא מספר ממשי כללי: בהינתן <span class="math">\(r\)</span>, לוקחים סדרה <span class="math">\(q_{n}\)</span> של רציונליים כך ש-<span class="math">\(q_{n}\to r\)</span>, ואז מגדירים <span class="math">\(x^{r}=\lim_{n\to\infty}x^{q_{n}}\)</span> וצריך לשבור את הראש כדי להוכיח שזה מוגדר היטב. אבל איך אפשר לעשות משהו דומה עם טורי חזקות פורמליים? אין לנו מושג של התכנסות על טורי חזקות, נכון? נכון...?</p>
+<h2>החפירה העמוקה ביותר (שנגיע אליה כאן)</h2>
+
+<p>אז כן, יש לנו מושג של התכנסות על טורי חזקות, הוא לא מסובך במיוחד, והוא כנראה יאפשר את הראייה הצלולה ביותר של מה שעשינו כאן ולאן אפשר להתקדם מפה.</p>
+<p>בגדול, הרעיון הוא שאם יש לנו סדרה <span class="math">\(F^{1}\left(x\right),F^{2}\left(x\right),F^{3}\left(x\right),\ldots\)</span> ואנחנו רוצים לדעת אם היא מתכנסת לאנשהו, נסתכל על המקדם של <span class="math">\(x^{n}\)</span> עבור כל הסדרות הללו. אם <strong>החל ממקום מסוים</strong> המקדם הזה קבוע, ואם זה קורה <strong>לכל</strong> <span class="math">\(n\)</span>, אז לסדרה יש גבול שהוא הפונקציה היוצרת שבנויה מהמקדמים הללו. קצת יותר פורמלית: אם לכל <span class="math">\(n\)</span> קיימים <span class="math">\(a_{n}\in\mathbb{R}\)</span> ו-<span class="math">\(k_{n}\)</span> כך שלכל <span class="math">\(i\ge k_{N}\)</span> מתקיים ש-<span class="math">\(F_{n}^{i}=a_{n}\)</span> (כאן <span class="math">\(F_{n}^{i}\)</span> פירושו המקדם של <span class="math">\(x^{n}\)</span> בטור החזקות <span class="math">\(F^{i}\left(x\right)\)</span>) אז <span class="math">\(\lim_{i\to\infty}F^{i}\left(x\right)=F\left(x\right)\)</span> כך ש-<span class="math">\(F\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n}\)</span>.</p>
+<p>אבל אפשר לעשות את זה עוד יותר מסודר. מי שמכירות את הבניה האנליטית של המספרים ה-<span class="math">\(p\)</span>-אדיים (<a href="https://gadial.net/2010/01/12/padic_numbers_analytic_constructions/">הצגתי אותה כאן</a>) כנראה ירגישו בבית.</p>
+<p>ראשית, לכל טור חזקות פורמלי <span class="math">\(F\left(x\right)\)</span> ששונה מאפס, נגדיר <span class="math">\(\nu\left(F\left(x\right)\right)=\min_{F_{n}\ne0}n\)</span>, כלומר האינדקס של המקדם הראשון בטור ששונה מאפס. בנוסף נגדיר <span class="math">\(\nu\left(0\right)=\infty\)</span> כדי שהכל יסתדר יפה. עכשיו אפשר להגדיר <strong>מטריקה</strong> על חוג טורי החזקות הפורמליים: </p>
+<p><span class="math">\(d\left(F,G\right)=2^{-\nu\left(F-G\right)}\)</span></p>
+<p>במילים אחרות, ככל שהאינדקס הראשון שבו <span class="math">\(F,G\)</span> נבדלים זה מזה הוא גבוה יותר, כך ה"מרחק" שלהם יהיה קטן יותר. אם הם נבדלים כבר באינדקס ה-0 המרחק שלהם יהיה 1, ואם הם נבדלים לראשונה באינדקס ה-3 אז המרחק שלהם יהיה <span class="math">\(\frac{1}{8}\)</span> וכן הלאה.</p>
+<p>מה שקורה כאן הוא שראשית כל, אם <span class="math">\(F=G\)</span> אז <span class="math">\(F-G=0\)</span> ולכן <span class="math">\(d\left(F,G\right)=2^{-\nu\left(F-G\right)}=2^{-\nu\left(0\right)}=2^{-\infty}=0\)</span> (מי שמפריע לו השימוש הזה באינסוף - אוקיי, בסדר, פשוט נגדיר <span class="math">\(d\left(F,G\right)=0\)</span> כאשר <span class="math">\(F=G\)</span> וחסל, מרוצים?).</p>
+<p>שנית, <span class="math">\(d\left(F,G\right)=2^{-\nu\left(F-G\right)}=2^{-\nu\left(G-F\right)}=d\left(G,F\right)\)</span>; זה עובד כי המקדם הראשון ששונה מאפס ב-<span class="math">\(F-G\)</span> הוא אותו מקדם כמו ב-<span class="math">\(G-F\)</span>, פשוט עם סימן הפוך.</p>
+<p>לבסוף, אם <span class="math">\(F,G,H\)</span> הם שלושה טורים, אז ראשית בואו נסמן ב-<span class="math">\(n\)</span> את האינדקס הראשון שבו <span class="math">\(F,H\)</span> נבדלים (אם הם זהים התוצאה שאגיע אליה עוד מעט נובעת עוד יותר בקלות), כלומר <span class="math">\(d\left(F,H\right)=2^{-n}\)</span>. בואו נסמן ב-<span class="math">\(m_{1}\)</span> את האינדקס הראשון שבו <span class="math">\(F,G\)</span> נבדלים וב-<span class="math">\(m_{2}\)</span> את האינדקס הראשון שבו <span class="math">\(G,H\)</span> נבדלים (ייתכן ש-<span class="math">\(m_{1},m_{2}=\infty\)</span>). אני טוען ש-<span class="math">\(n\ge\min\left\{ m_{1},m_{2}\right\} \)</span>. למה? ובכן, אם <span class="math">\(G\)</span> נבדל מ-<span class="math">\(F,H\)</span> בשלב שבו הם עדיין זהים, זה אומר ש-<span class="math">\(m_{1}=m_{2}\)</span> (כי הוא ייבדל משניהם בו זמנית שהרי הם זהים עדיין בשלב הזה) ומכיוון שזה לפני שהם נבדלים, האינדקס הזה בא לפני <span class="math">\(n\)</span>, כלומר במקרה הזה <span class="math">\(m_{1},m_{2}<n\)</span>.</p>
+<p>עכשיו, באינדקס ה-<span class="math">\(n\)</span> מתקיים <span class="math">\(F_{n}\ne H_{n}\)</span> ולכן <strong>פשוט לא ייתכן</strong> ש-<span class="math">\(G_{n}=F_{n}\)</span> וגם <span class="math">\(G_{n}=H_{n}\)</span>, כי שוויון כזה היה מכריח את <span class="math">\(F_{n}=H_{n}\)</span>. לכן זה השלב שבו <strong>בודאות</strong> <span class="math">\(G\)</span> הולך להיבדל מ-<span class="math">\(F\)</span> או מ-<span class="math">\(H\)</span>. אנחנו לא יודעים מי מהם, לכן אנחנו לוקחים את המינימום על <span class="math">\(\left\{ m_{1},m_{2}\right\} \)</span>.</p>
+<p>מה המסקנה? <span class="math">\(n\ge\min\left\{ m_{1},m_{2}\right\} \)</span> גורר ש-</p>
+<p><span class="math">\(d\left(F,H\right)=2^{-n}\le2^{-\min\left\{ m_{1},m_{2}\right\} }=\max\left\{ 2^{-m_{1}},2^{-m_{2}}\right\} =\max\left(d\left(F,G\right),d\left(G,H\right)\right)\)</span></p>
+<p>זה נותן לנו את <strong>אי שוויון המשולש</strong>, בגרסה יותר חזקה מהרגיל אפילו: אם אני קטן מהמקסימום של שני מספרים אי שליליים, אני בוודאי קטן יותר מהסכום שלהם (שכולל את המקסימום ועוד איזה מספר)</p>
+<p>אז קיבלנו פונקציה <span class="math">\(d\)</span> כך ש-</p>
+<ul> <li><span class="math">\(d\left(F,G\right)\ge0\)</span> ויש שוויון אם ורק אם <span class="math">\(F=G\)</span></li>
+
+
+<li><span class="math">\(d\left(F,G\right)=d\left(G,F\right)\)</span></li>
+
+
+<li><span class="math">\(d\left(F,H\right)\le d\left(F,G\right)+d\left(G,H\right)\)</span></li>
+
+</ul>
+
+<p>שלוש התכונות הללו הופכות את <span class="math">\(d\)</span> למה שנקרא <strong>מטריקה</strong>, שהיא פונקציה שמאפשרת לדבר באופן כללי על גבולות והתכנסות (למעשה, התכונה החזקה יותר של אי-שוויון המשולש נותנת משהו שנקרא <strong>אולטרמטריקה</strong> אבל נעזוב את זה). עכשיו אפשר לומר משהו כזה: <span class="math">\(\lim_{n\to\infty}F^{n}\left(x\right)=F\left(x\right)\)</span> אם לכל <span class="math">\(\varepsilon>0\)</span> קיים <span class="math">\(N\)</span> כך שאם <span class="math">\(n>N\)</span> אז <span class="math">\(d\left(F^{n}\left(x\right),F\left(x\right)\right)<\varepsilon\)</span>. זו ההגדרה הסטנדרטית לגבול, ואם חושבים עליה קצת בהקשר של ה-<span class="math">\(d\)</span> הספציפית שלנו רואים שהמשמעות של <span class="math">\(\lim_{n\to\infty}F^{n}\left(x\right)=F\left(x\right)\)</span> היא בדיוק מה שהזכרתי קודם: כדי שהסדרה <span class="math">\(F^{n}\left(x\right)\)</span> תתכנס לגבול, צריך שהמקדם של <span class="math">\(x^{k}\)</span> יתקבע החל ממקום מסוים בסדרה, ואז הוא יהיה המקדם של אותו איבר ב-<span class="math">\(F\left(x\right)\)</span>.</p>
+<p>עכשיו אפשר להסתכל על ביטוי כמו <span class="math">\(\sum_{n=0}^{\infty}F\left(x\right)^{n}\)</span>. כבר היינו בסיטואציה דומה קודם, וראינו שכדי שחזקה של <span class="math">\(F\left(x\right)\)</span> תתנהג יפה, היה צריך שיתקיים <span class="math">\(F_{0}=0\)</span>, אז נניח שזה קורה. עכשיו אפשר לחשוב על <span class="math">\(\sum_{n=0}^{\infty}F\left(x\right)^{n}\)</span> פשוט כמו טור במובן הרגיל, כזה שמוגדר עם סכומים חלקיים <span class="math">\(\sum_{n=0}^{\infty}F\left(x\right)^{n}=\lim_{n\to\infty}S_{n}\)</span> כאשר <span class="math">\(S_{n}=\sum_{k=0}^{n}F\left(x\right)^{k}\)</span>. בכל פעם שבה מוסיפים חזקה חדשה <span class="math">\(F\left(x\right)^{n}\)</span> לסכום שיש לנו, היא משנה רק את המקדמים של <span class="math">\(x^{n}\)</span> וחזקות גבוהות יותר - כלומר, החזקות הנמוכות יותר <strong>התקבעו</strong> ולכן הטור מתכנס.\textbackslash אפשר לעשות משהו אפילו עוד יותר משעשע כדי לחשב את הסכום שלו: הרי כדי לחשב את הסכום של <span class="math">\(\sum_{n=0}^{\infty}q^{n}\)</span> במספרים ממשיים אנחנו מסתכלים על הסכום החלקי ה-<span class="math">\(n\)</span>-י שיוצא <span class="math">\(\frac{q^{n+1}-1}{q-1}\)</span>, נוכל להסתכל על סכום דומה גם עבור <span class="math">\(F\left(x\right)\)</span>. הרי איך מוכיחים את הנוסחה לסכום החלקי? מסתכלים על המכפלה</p>
+<p><span class="math">\(\left(1+F\left(x\right)+\ldots+F\left(x\right)^{n}\right)\left(F\left(x\right)-1\right)=F\left(x\right)^{n+1}-1\)</span></p>
+<p>זו זהות שאפשר להוכיח בכל חוג קומוטטיבי. עכשיו, אם <span class="math">\(F_{0}=0\)</span> אז המקדם החופשי של <span class="math">\(F\left(x\right)-1\)</span> שונה מאפס ולכן הוא הפיך, ולכן אפשר לכפול בהופכי ולקבל</p>
+<p><span class="math">\(1+F\left(x\right)+\ldots+F\left(x\right)^{n}=\frac{F\left(x\right)^{n+1}-1}{F\left(x\right)-1}\)</span></p>
+<p>ועכשיו, מהו <span class="math">\(\lim_{n\to\infty}\frac{F\left(x\right)^{n+1}-1}{F\left(x\right)-1}\)</span>? המכנה נשאר קבוע, ובמונה יש לנו חזקה הולכת וגדלה <span class="math">\(F\left(x\right)^{n+1}\)</span>. בחזקה הזו, המקדם של <span class="math">\(x^{n}\)</span> וכל הקודמים לו הוא 0, ולכן... <span class="math">\(\lim_{n\to\infty}F\left(x\right)^{n+1}=0\)</span> ומכאן נקבל <span class="math">\(\lim_{n\to\infty}\frac{F\left(x\right)^{n+1}-1}{F\left(x\right)-1}=\frac{0-1}{F\left(x\right)-1}=\frac{1}{1-F\left(x\right)}\)</span> והנה קיבלנו את התוצאה שממנה התחיל הפוסט - רק שעכשיו הוכחנו אותה <strong>באותה צורה בדיוק</strong> שבה מוכיחים את הסכום ה"קלאסי". אותה טרמינולוגיה, אותו עולם מושגים של התכנסות, אותה טכניקה - <strong>ובלי לערב רדיוסי התכנסות בכלל</strong>. אין זכר למגבלה <span class="math">\(\left|q\right|<1\)</span>, פשוט כי בחוג שלנו, עם המטריקה שלנו, העניינים הם למעשה <strong>פשוטים יותר</strong>.</p>
+<p>עכשיו גם קצת יותר ברורה העניין הזה של להציב את <span class="math">\(F\left(x\right)\)</span> בתוך <span class="math">\(G\left(x\right)\)</span>. אנחנו מקבלים בסוף טור מהצורה <span class="math">\(\sum_{n=0}^{\infty}a_{n}F^{n}\left(x\right)\)</span>, וזה מתכנס אם <span class="math">\(F_{0}=0\)</span>. עכשיו אפשר לקחת את זה ולהשתמש בזה עבור טורים מוכרים. למשל, אם ניזכר איך נראה הפיתוח של פונקציית האקספוננט לטור חזקות: <span class="math">\(e^{x}=\sum_{n=0}^{\infty}\frac{1}{n!}x^{n}\)</span>, אז אפשר להגדיר <span class="math">\(e^{F\left(x\right)}=\sum_{n=0}^{\infty}\frac{1}{n!}F^{n}\left(x\right)\)</span>, ואפשר להגדיר <span class="math">\(\ln\left(1+F\left(x\right)\right)=\sum_{n=0}^{\infty}\frac{\left(-1\right)^{n+1}}{n}F^{n}\left(x\right)\)</span> ועוד ועוד. אז ביטוי כמו <span class="math">\(\sqrt{1-4x}\)</span> שמופיע בתוך פונקציה יוצרת? נראה לי שאנחנו כבר יודעים איך להסתדר איתו.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2025/06/18/quintic_and_catalan/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">האם נמצאה נוסחה לפתרון משוואה ממעלה חמישית?! (לא)</span>
+            </a>
+            
+            
+            
+            <a href="/2025/05/31/catalan_numbers/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מספרי קטלן</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

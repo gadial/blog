@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי בגישה מתמטית, חלק ג&#39; - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי בגישה מתמטית, חלק ג&#39;</h1>
+            <div class="post-meta">
+                <span class="date">2022-08-01</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>איך לייצג מצב קוונטי של מספר קיוביטים עם וקטור?</h2>
+
+<p><a href="https://gadial.net/2022/07/31/quantum_computing_math_2/">בפוסט הקודם</a> שלי על חישוב קוונטי הצגתי את הפורמליזם המתמטי שבו אנחנו משתמשים כדי לתאר מצב קוונטי של שני קיובטים או יותר - <strong>מכפלה טנזורית</strong>. הצגתי את זה למכפלה של שני מרחבים, אבל אפשר להמשיך באינדוקציה לכל מספר של מרחבים. מה שאני רוצה לדבר עליו הפעם הוא איך עושים דברים תכל'ס, ברמה הטכנית. יש לי מצב קוונטי - איך אני מייצג אותו, למשל, במחשב? זה הולך להיות פוסט טכני יחסית, והחלק האחרון שלו יוכיח שהכל עובד ולא באמת יוסיף אינפורמציה חדשה כך שאפשר לדלג עליו, ואני אדחה לפוסט הבא את הדברים המגניבים שרציתי לתאר אחריו (איזה אופרטור משמש אותנו כדי לייצר מצבים שזורים וכאלה). עדיין, שני החלקים הראשונים של הפוסט יוסיפו לנו מושגים שאני כנראה אשתמש בהם בחופשיות מכאן והלאה.</p>
+<p>אנחנו בעולם האלגברה הלינארית, וכבר בקורס הראשון באלגברה לינארית רואים את הפתרונות הפשוטים לכל הבעיות הללו. ספציפית, לכל מרחב וקטורי סוף-ממדי <span class="math">\(V\)</span>, לא משנה כמה האיברים שלו משונים או מתוסבכים, יש דרך ייצוג פשוטה: ראשית לוקחים בסיס שלו, <span class="math">\(B=\left\{ b_{1},\ldots,b_{n}\right\} \)</span>. כעת, לכל איבר <span class="math">\(v\in V\)</span> קיים ייצוג <strong>יחיד</strong> בתור צירוף לינארי <span class="math">\(v=\sum_{i=1}^{n}\lambda_{i}b_{i}\)</span>, אז מגדירים את <strong>וקטור הקואורדינטות</strong> של <span class="math">\(v\)</span> על פי הבסיס <span class="math">\(B\)</span> בתור הוקטור</p>
+<p><span class="math">\(\left[v\right]_{B}\triangleq\left(\begin{array}{c} \lambda_{1}\\ \vdots\\ \lambda_{n} \end{array}\right)\)</span></p>
+<p>של כל המקדמים של <span class="math">\(v\)</span> בצירוף הלינארי הזה. מרגע זה ואילך אפשר להתעסק עם <span class="math">\(V\)</span> כאילו הוא <span class="math">\(\mathbb{F}^{n}\)</span> (<span class="math">\(\mathbb{F}\)</span> הוא השדה מעליו המרחב מוגדר; אצלנו זה <span class="math">\(\mathbb{C}\)</span>), מה שמפשט את העניינים.</p>
+<p>דבר אחד שצריך לשים לב אליו הוא שההתאמה הזו של וקטורי קואורדינטות לאיברים <strong>תלויה בבסיס</strong> - תיקחו בסיס שונה, תקבלו וקטורי קואורדינטות שונים. יותר מזה, זה תלוי <strong>בסדר שבו האיברים מופיעים בבסיס</strong>, מה שאצלי היה קיים באופן מובלע על ידי המספור <span class="math">\(b_{1},\ldots,b_{n}\)</span> של איברי הבסיס. אם אנחנו רוצים להשתמש בוקטורי קואורדינטות בהקשר של חישוב קוונטי, נצטרך למצוא דרך מוסכמת למספר את אברי הבסיס שבו נשתמש.</p>
+<p>בפוסט הקודם שלי ראינו בסיס סטנדרטי למרחב של שני קיוביטים: <span class="math">\(\left|00\right\rangle ,\left|01\right\rangle ,\left|10\right\rangle ,\left|11\right\rangle \)</span>. למה כתבתי את האיברים בסדר הזה? פשוט: כי אם אני חושב על מחרוזות הביטים הללו כאילו הן מייצגות מספר בייצוג בינארי, הן מתארות את המספרים <span class="math">\(0,1,2,3\)</span> בהתאמה. הסדר בא מעצמו. אבל עבור מי שלא מכירים ייצוג בינארי בואו נסביר קצת יותר בפירוט.</p>
+<p>בייצוג "רגיל" של מספר, למשל <span class="math">\(142\)</span>, יש ספרת אחדות, וספרות עשרות, וספרת מאות. אחד, עשר ומאה כולם חזקות של <span class="math">\(10\)</span>, והספרות אומרות לנו במה לכפול את החזקות הללו לפני שמחברים את הכל: <span class="math">\(1\cdot10^{2}+4\cdot10^{1}+2\cdot10^{0}\)</span>. בייצוג בינארי קורה אותו דבר רק עם חזקות של 2. ספרה בינארית היא או 0, או 1, כלומר ייצוג בינארי אומר או "תוסיף את החזקה הזו של 2 לסכום" או "אל תוסיף אותה". למשל <span class="math">\(1101\)</span> מייצג את הסכום <span class="math">\(2^{3}+2^{2}+2^{0}=8+4+1=13\)</span>.</p>
+<p>בשביל להבין איך אני מגדיר את הסדר לא חייבים לדעת אפילו את זה, רק את השיטה שבה אני עובר ממחרוזת אחת לבאה אחריה בתור: המחרוזת הראשונה היא זו שכולה 0 והאחרונה היא זו שכולה 1. כדי לעבור ממחרוזת אחת לבאה אחריה, עוברים על המספר מימין לשמאל. כל עוד הספרה שרואים היא 1, הופכים אותה ל-0; כשמגיעים לספרה 0, משנים אותה ל-1 ועוצרים. בואו נראה את זה קורה עבור שלושה קיוביטים:</p>
+<p><span class="math">\(000\to001\to010\to011\to100\to101\to110\to111\)</span></p>
+<p>עכשיו שיש לנו לכל <span class="math">\(n\)</span> בסיס למרחב הקיוביטים על <span class="math">\(n\)</span> איברים, וסדר על אברי הבסיס הזה, ברור איך אפשר לייצג כל מצב של המערכת בעזרת וקטור - וקטור שמכונה <strong>וקטור המצב</strong> (state vector) של המערכת. לדוגמא, עבור שני קיוביטים, המצב <span class="math">\(\alpha\left|00\right\rangle +\beta\left|01\right\rangle +\gamma\left|10\right\rangle +\delta\left|11\right\rangle \)</span> מיוצג בידי הוקטור</p>
+<p><span class="math">\(\left(\begin{array}{c} \alpha\\ \beta\\ \gamma\\ \delta \end{array}\right)\)</span></p>
+<p>מעכשיו אני מרשה לעצמי לחשוב על מרחב של <span class="math">\(n\)</span> קיוביטים, כלומר על המכפלה הטנזורית <span class="math">\(\underset{n}{\underbrace{\mathbb{C}^{2}\otimes\ldots\otimes\mathbb{C}^{2}}}\)</span>, בתור <span class="math">\(\mathbb{C}^{2^{n}}\)</span>.</p>
+<h2>איך לייצג אופרטור אוניטרי שפועל על מספר קיוביטים?</h2>
+
+<p>עד עכשיו הכל היה נחמד וכיפי ועכשיו העניינים עומדים להסתבך נורא. לב העניין הוא בכך שבחישוב קוונטי, אנחנו בדרך כלל מפעילים פעולות על קיוביט בודד בכל פעם, או שני קיוביטים. על שלושה ויותר זה כבר די נדיר בפועל (למשל, כי מימוש של פעולה כזו במחשב קוונטי הוא מאתגר). זה לכשעצמו לא היה כזה נורא אם לא היינו רואים בפוסט הקודם שמצב קוונטי יכול להיות <strong>שזור</strong>, כלומר בנוי כך שלא ניתן לחשוב עליו בתור קיוביטים בודדים, ועדיין אני צריך להסביר איך משפיעה פעולה על קיוביט בודד על המצב השזור כולו. כמו שקורה כל פעם מחדש בחישוב קוונטי, נפנופי הידיים המילוליים שאני יכול להשתמש בהם פשוט עושים עבודה הרבה פחות טובה מהפרטים המתמטיים הטכניים.</p>
+<p>אם יש לי מצב של <span class="math">\(n\)</span> קיוביטים, כל פעולה שאני מבצע עליו הולכת להיות אופרטור אוניטרי שמבחינה פורמלית פועל על כל הקיוביטים בבת אחת: <span class="math">\(U:\mathbb{C}^{2^{n}}\to\mathbb{C}^{2^{n}}\)</span>. אחד היתרונות הגדולים של חשיבה על איברים של מרחב וקטורי בתור וקטורי עמודה הוא בכך שעל אופרטורים אפשר לחשוב בתור <strong>מטריצות</strong> ואז הפעולה של האופרטור על וקטור מתורגמת לכפל של מטריצה בוקטור. אז אצלנו <span class="math">\(U\)</span> יהיה מטריצה; מטריצה אוניטרית מסדר <span class="math">\(2^{n}\times2^{n}\)</span>. השאלה היא איך לקבל את המטריצה הזו אם אני מתחיל מ"כן אני מפעיל פעולת <span class="math">\(X\)</span> על קיוביט מספר 3 מתוך 7". התשובה היא, איך לא, <strong>מכפלה טנזורית</strong>. ליתר דיוק, פעולה על מטריצות שמסומנת ב-<span class="math">\(\otimes\)</span> אבל נקראת <strong>מכפלת קרונקר</strong> (שאפשר גם לראות בתור מכפלה טנזורית במובן הרגיל אבל לא אכנס לזה בפוסט הזה כי זה לא באמת חשוב). וכדי להבין מה זו הפעולה הזו ואיך היא מתקשרת לענייננו, בואו נפשיל שרוולים ונעשה חישובים.</p>
+<p>ראשית, בואו ניזכר מה זו הפעולה <span class="math">\(X\)</span>. תיארתי אותה כבר בעזרת מטריצה:</p>
+<p><span class="math">\(X=\left(\begin{array}{cc} 0 & 1\\ 1 & 0 \end{array}\right)\)</span></p>
+<p>הפעולה שלה על אברי הבסיס היא זו:</p>
+<p><span class="math">\(X\left|0\right\rangle =\left|1\right\rangle \)</span></p>
+<p><span class="math">\(X\left|1\right\rangle =\left|0\right\rangle \)</span></p>
+<p>עכשיו, כשיש לי מצב של שני קיוביטים ואני רוצה להפעיל פעולת <span class="math">\(X\)</span> על אחד מהם, אני צריך לציין על מי אני מפעיל אותה. דרך אפשרית אחת לסמן את זה שבה אשתמש היא להוסיף מספר למטה: <span class="math">\(X_{1}\)</span> הוא "הפעלה של <span class="math">\(X\)</span> על הקיוביט הראשון" ו-<span class="math">\(X_{2}\)</span> הוא "הפעלה של <span class="math">\(X\)</span> על הקיוביט השני". אינטואיטיבית, מה ש-<span class="math">\(X_{1}\)</span> אמור לעשות על מצב בסיס של שני קיוביטים הוא די ברור - מצב כזה הוא לא שזור, ולכן אפשר לחשוב ש-<span class="math">\(X\)</span> משנה את הקיוביט הראשון ולא נוגע בשני. כלומר:</p>
+<p><span class="math">\(X_{1}\left|00\right\rangle =\left|10\right\rangle \)</span></p>
+<p><span class="math">\(X_{1}\left|01\right\rangle =\left|11\right\rangle \)</span></p>
+<p><span class="math">\(X_{1}\left|10\right\rangle =\left|00\right\rangle \)</span></p>
+<p><span class="math">\(X_{1}\left|11\right\rangle =\left|01\right\rangle \)</span></p>
+<p>האופן שבו אני מוצא את המטריצה מסדר <span class="math">\(4\times4\)</span> שמייצגת את האופרטור <span class="math">\(X_{1}\)</span> היא בדיוק בעזרת הרשימה למעלה: אם <span class="math">\(b_{1},\ldots,b_{n}\)</span> הוא הבסיס שבו אני משתמש עבור וקטורי קואורדינטות, ו-<span class="math">\(U\)</span> הוא אופרטור לינארי כלשהו, אז המטריצה שמייצגת את <span class="math">\(U\)</span> לפי הבסיס הזה היא כזו שבה העמודה ה-<span class="math">\(i\)</span> היא וקטור הקואורדינטות של <span class="math">\(U\left(b_{i}\right)\)</span>. אז במטריצה של <span class="math">\(X_{1}\)</span> העמודה הראשונה תהיה וקטור הקואורדינטות של <span class="math">\(\left|10\right\rangle \)</span>, השניה תהיה וקטור הקואורדינטות של <span class="math">\(\left|11\right\rangle \)</span> וכן הלאה. נקבל:</p>
+<p><span class="math">\(X_{1}=\left(\begin{array}{cccc} 0 & 0 & 1 & 0\\ 0 & 0 & 0 & 1\\ 1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0 \end{array}\right)\)</span></p>
+<p>זו מטריצה טיפה מבלבלת, אבל הכל מתבהר אם מחלקים אותה לארבעה בלוקים של <span class="math">\(2\times2\)</span>:</p>
+<p><span class="math">\(X_{1}=\left(\begin{array}{ccccc} 0 & 0 &  & 1 & 0\\ 0 & 0 &  & 0 & 1\\ \\ 1 & 0 &  & 0 & 0\\ 0 & 1 &  & 0 & 0 \end{array}\right)\)</span></p>
+<p>אנחנו רואים ש-<span class="math">\(X_{1}\)</span> מורכבת משני בלוקים שכולם 0, ושני בלוקים שנראים כמו <span class="math">\(I\)</span>. או בסימון מקובל עבור מטריצת בלוקים:</p>
+<p><span class="math">\(X_{1}=\left(\begin{array}{cc} 0 & I\\ I & 0 \end{array}\right)\)</span></p>
+<p>וזה נראה באופן חשוד כמו המטריצה של האופרטור <span class="math">\(X\)</span> בגרסה שלו שפועלת על קיוביט בודד:</p>
+<p><span class="math">\(X=\left(\begin{array}{cc} 0 & 1\\ 1 & 0 \end{array}\right)\)</span></p>
+<p>רק עם מטריצת היחידה במקום 1. הדמיון הזה הוא כמובן לא מקרי <strong>בכלל</strong>.</p>
+<p>בואו נראה מה קורה עם <span class="math">\(X_{2}\)</span>, בצורה זהירה ועם אותו חישוב פדנטי על אברי הבסיס:</p>
+<p><span class="math">\(X_{2}\left|00\right\rangle =\left|01\right\rangle \)</span></p>
+<p><span class="math">\(X_{2}\left|01\right\rangle =\left|00\right\rangle \)</span></p>
+<p><span class="math">\(X_{2}\left|10\right\rangle =\left|11\right\rangle \)</span></p>
+<p><span class="math">\(X_{2}\left|11\right\rangle =\left|10\right\rangle \)</span></p>
+<p>שמוביל למטריצת הבלוקים</p>
+<p><span class="math">\(X_{2}=\left(\begin{array}{ccccc} 0 & 1 &  & 0 & 0\\ 1 & 0 &  & 0 & 0\\ \\ 0 & 0 &  & 0 & 1\\ 0 & 0 &  & 1 & 0 \end{array}\right)\)</span></p>
+<p>או במילים אחרות, מטריצת הבלוקים</p>
+<p><span class="math">\(X_{2}=\left(\begin{array}{cc} X & 0\\ 0 & X \end{array}\right)\)</span></p>
+<p>תראו מה קיבלנו עכשיו: משהו שנראה כמו מטריצת היחידה, <span class="math">\(I=\left(\begin{array}{cc} 1 & 0\\ 0 & 1 \end{array}\right)\)</span>, רק עם <span class="math">\(X\)</span> במקום <span class="math">\(1\)</span>. מה הולך פה?</p>
+<p>ובכן, הנה ה"סוד" הגדול: במקרה הראשון קיבלנו את המטריצה <span class="math">\(X\otimes I\)</span>, שמייצגת את הפעולה "הפעילו <span class="math">\(X\)</span> על האיבר השמאלי במכפלה הטנזורית ו-<span class="math">\(I\)</span> על האיבר הימני", ובמקרה השני קיבלנו את <span class="math">\(I\otimes X\)</span>, ונשאלת השאלה מה החוקיות מאחורי מכפלת קרונקר <span class="math">\(\otimes\)</span> שמניבה את המטריצות שקיבלנו.</p>
+<p>במקרה הראשון, <span class="math">\(X\otimes I\)</span>, קיבלנו כזכור את <span class="math">\(\left(\begin{array}{cc} 0 & I\\ I & 0 \end{array}\right)\)</span> שהיא "המטריצה <span class="math">\(X\)</span> כאשר מציבים <span class="math">\(I\)</span> במקום 1" ובמקרה השני, <span class="math">\(I\otimes X\)</span>, קיבלנו את <span class="math">\(\left(\begin{array}{cc} X & 0\\ 0 & X \end{array}\right)\)</span> שהיא "המטריצה <span class="math">\(I\)</span> כאשר מציבים <span class="math">\(X\)</span> במקום 1". אם כן, ההשערה היא שבאופן כללי <span class="math">\(A\otimes B\)</span> הולכת להיות "המטריצה <span class="math">\(A\)</span> כאשר מציבים <span class="math">\(B\)</span> במקום 1". אבל במטריצות כלליות יש יותר דברים מאשר 1 ו-0; הרעיון הכללי הוא להחליף את הסקלר <span class="math">\(\lambda\)</span> במטריצה <span class="math">\(\lambda B\)</span>. במילים אחרות, אם </p>
+<p><span class="math">\(A=\left(\begin{array}{cc} a_{11} & a_{12}\\ a_{21} & a_{22} \end{array}\right)\)</span></p>
+<p>אז </p>
+<p><span class="math">\(A\otimes B=\left(\begin{array}{cc} a_{11}B & a_{12}B\\ a_{21}B & a_{22}B \end{array}\right)\)</span></p>
+<p>ובאופן כללי יותר, אם <span class="math">\(A\)</span> היא מטריצה כלשהי מסדר <span class="math">\(n\times m\)</span></p>
+<p><span class="math">\(A=\left(\begin{array}{ccc} a_{11} & \cdots & a_{1m}\\ \vdots & \ddots & \vdots\\ a_{n1} & \cdots & a_{nm} \end{array}\right)\)</span></p>
+<p>אז </p>
+<p><span class="math">\(A\otimes B=\left(\begin{array}{ccc} a_{11}B & \cdots & a_{1m}B\\ \vdots & \ddots & \vdots\\ a_{n1}B & \cdots & a_{nm}B \end{array}\right)\)</span></p>
+<p>אפשר גם לכתוב ביטוי מפורש ל-<span class="math">\(A\otimes B\)</span> שלא כמטריצת בלוקים אבל עזבו אותי מכאב הראש הזה, לכו להסתכל עליו בויקיפדיה (האנגלית, בעברית אין את זה כרגע).</p>
+<h2>למה כל זה עובד, בעצם?</h2>
+
+<p>אם כן, ראינו דוגמא קונקרטית אחת ואז את ההגדרה הכללית שתופסת אותה, אבל למה ההגדרה הכללית הזו עובדת? אני רוצה לחדד את מה שאני רוצה להוכיח: שאם <span class="math">\(u\otimes w\)</span> הוא איבר במכפלה טנזורית <span class="math">\(U\otimes W\)</span>, ו-<span class="math">\(A:U\to U,B:W\to W\)</span> הם שני אופרטורים, אז האופרטור <span class="math">\(A\otimes B\)</span> מקיים <span class="math">\(\left(A\otimes B\right)\left(u\otimes w\right)=Au\otimes Bw\)</span>.</p>
+<p>בשביל להוכיח את זה, ראשית בואו נראה מה <span class="math">\(\otimes\)</span> עושה לזוג איברים <span class="math">\(u,w\)</span> כאשר מתייחסים לוקטורי הקואורדינטות. ניקח בסיסים <span class="math">\(\mathcal{B}_{U}=\left\{ e_{1},\ldots,e_{n}\right\} \)</span> ו-<span class="math">\(\mathcal{B}_{W}=\left\{ f_{1},\ldots,f_{m}\right\} \)</span> ונסמן ב-<span class="math">\(\mathcal{B}_{U\otimes W}\)</span> את הבסיס שהם משרים על המכפלה הטנזורית:</p>
+<p><span class="math">\(\mathcal{B}_{U\otimes W}=\left\{ e_{1}\otimes f_{1},e_{1}\otimes f_{2},\ldots,e_{1}\otimes f_{m},\ldots,e_{n}\otimes f_{m}\right\} \)</span></p>
+<p>כלומר, אני מסדר את האיברים של הבסיס כך שקודם יש את כל המכפלות שמערבות את <span class="math">\(e_{1}\)</span>, אחר כך כל המכפלות שמערבות את <span class="math">\(e_{2}\)</span> וכן הלאה.</p>
+<p>עכשיו הטענה הפורמלית שאני רוצה לטעון היא:</p>
+<p><span class="math">\(\left[u\otimes w\right]_{\mathcal{B}_{U\otimes W}}=\left[u\right]_{\mathcal{\mathcal{B}_{U}}}\otimes\left[w\right]_{\mathcal{B}_{W}}\)</span></p>
+<p>מה הולך בשוויון הזה? אגף שמאל הוא וקטור הקואורדינטות של הטנזור <span class="math">\(u\otimes w\)</span> על פי הבסיס <span class="math">\(\mathcal{B}_{U\otimes W}\)</span>. אגף ימין הוא מכפלת <strong>קרונקר</strong> של שני <strong>וקטורים</strong>, הוקטור <span class="math">\(\left[u\right]_{\mathcal{\mathcal{B}_{U}}}\)</span> והוקטור <span class="math">\(\left[w\right]_{\mathcal{B}_{W}}\)</span>. מכיוון שוקטור הוא בעצם מטריצה עם עמודה אחת, מכפלת קרונקר מוגדרת היטב כאן: אם הכניסות של הוקטורים הן <span class="math">\(a_{1},\ldots,a_{n}\)</span> ו-<span class="math">\(b_{1},\ldots,b_{m}\)</span>, בהתאמה, אז הכניסות במכפלת הקרונקר הן <span class="math">\(a_{1}b_{1},a_{1}b_{2},a_{1}b_{3},\ldots,a_{2}b_{1},\ldots,a_{n}b_{m}\)</span> (כלומר - חוזרים שוב ושוב על הוקטור <strong>השני</strong> כשהוא מוכפל כל פעם בכניסה אחרת של הוקטור <strong>הראשון</strong>).</p>
+<p>ולמה זה עובד? ובכן, די הינדסתי הכל כדי שזה יעבוד. אם <span class="math">\(\left[u\right]_{\mathcal{\mathcal{B}_{U}}}=\left(a_{1},a_{2},\ldots,a_{n}\right)\)</span> ו-<span class="math">\(\left[w\right]_{\mathcal{B}_{W}}=\left(b_{1},b_{2},\ldots,b_{m}\right)\)</span> (אני מרשה לעצמי לכתוב בשורה ולא בעמודה כי, נו, כמה אפשר) אז אני אכן מקבל</p>
+<p><span class="math">\(\left[u\right]_{\mathcal{\mathcal{B}_{U}}}\otimes\left[w\right]_{\mathcal{B}_{W}}=\left(a_{1}b_{1},a_{1}b_{2},a_{1}b_{3},\ldots,a_{2}b_{1},\ldots,a_{n}b_{m}\right)\)</span></p>
+<p>וזה אגף ימין. באגף שמאל יש לנו וקטור שמייצג את <span class="math">\(u\otimes w\)</span> בבסיס המשולב <span class="math">\(\mathcal{B}_{U\otimes W}\)</span>. בשביל לדעת איך <span class="math">\(u\otimes w\)</span> נראה בבסיס הזה אנחנו כותבים כל וקטור באמצעות הבסיס המתאים, ואז "פותחים" את המכפלה הטנזורית עם כללי הוצאת הסקלר החוצה וחוק הפילוג שראינו בפוסט הקודם. כלומר:</p>
+<p><span class="math">\(u\otimes w=\left(\sum_{i=1}^{n}a_{i}e_{i}\right)\otimes\left(\sum_{j=1}^{m}b_{j}f_{j}\right)=\sum_{i,j}a_{i}b_{j}\left(e_{i}\otimes f_{j}\right)\)</span></p>
+<p>כלומר, המקדם של <span class="math">\(e_{i}\otimes f_{j}\)</span> הוא <span class="math">\(a_{i}b_{j}\)</span>, ולכן אם אנחנו מסדרים את הבסיס לפי הסדר</p>
+<p><span class="math">\(e_{1}\otimes f_{1},e_{1}\otimes f_{2},\ldots,e_{1}\otimes f_{m},\ldots,e_{n}\otimes f_{m}\)</span></p>
+<p>אנחנו מקבלים בוקטור הקואורדינטות את סדרת הערכים</p>
+<p><span class="math">\(\left(a_{1}b_{1},a_{1}b_{2},a_{1}b_{3},\ldots,a_{2}b_{1},\ldots,a_{n}b_{m}\right)\)</span></p>
+<p>וזה בדיוק מה שרצינו. יופי, כמו תמיד באלגברה לינארית, אנחנו עושים הרבה עבודה טכנית כדי לראות שמתקיים מה שנראה לנו אינטואיטיבית מובן מאליו.</p>
+<p>עכשיו אפשר לחזור אל <span class="math">\(\left(A\otimes B\right)\left(u\otimes w\right)=Au\otimes Bw\)</span>, הנוסחה שמקשרת בין מכפלת קרונקר של אופרטורים (משמאל) למכפלה טנזורית של וקטורים, ולכן למכפלת קרונקר של וקטורים (מימין). אפשר להיכנס לנוסחה הזו ברמת האינדקס הבודד והכל יעבוד אבל זה יהיה ממש מבלבל, ואני רוצה שכן תהיה לנו אינטואיציה כלשהי לגבי מה שקורה כאן. אז בואו נבין למה הכניסה הראשונה בוקטור <span class="math">\(\left(A\otimes B\right)\left(u\otimes w\right)\)</span> שווה לכניסה הראשונה בוקטור <span class="math">\(Au\otimes Bw\)</span> ומכאן זה יהיה די ברור.</p>
+<p>הכניסה הראשונה היא המכפלה של <strong>השורה הראשונה</strong> של <span class="math">\(A\otimes B\)</span> בכל הוקטור <span class="math">\(u\otimes w\)</span>. מהי השורה הראשונה הזו? ובכן, אם <span class="math">\(A\)</span> הוא אופרטור <span class="math">\(n\times n\)</span> אז זה כזכור, </p>
+<p><span class="math">\(A\otimes B=\left(\begin{array}{ccc} a_{11}B & \cdots & a_{1n}B\\ \vdots & \ddots & \vdots\\ a_{n1}B & \cdots & a_{nn}B \end{array}\right)\)</span></p>
+<p>ולכן השורה הראשונה היא וקטור של אברי השורה הראשונה של <span class="math">\(A\)</span>, כאשר כל ערך כזה מוכפל ב<strong>כל</strong> ערכי השורה הראשונה של <span class="math">\(B\)</span> לפי הסדר. אם אברי <span class="math">\(B\)</span> הם מהצורה <span class="math">\(b_{i,j}\)</span> והסדר של <span class="math">\(B\)</span> הוא <span class="math">\(m\times m\)</span> אז נקבל שהשורה הראשונה הזו היא</p>
+<p><span class="math">\(a_{11}b_{11},a_{11}b_{12},\ldots,a_{11}b_{1m},a_{12}b_{11},\ldots,a_{1n}b_{1m}\)</span></p>
+<p>כלומר אפשר לחלק את הוקטור לקבוצות. כל קבוצה כוללת איבר אחד מהשורה של <span class="math">\(A\)</span>, כפול כל השורה של <span class="math">\(B\)</span>, וחוזר חלילה.</p>
+<p>עכשיו, מה האיברים של <span class="math">\(u\otimes w\)</span> כבר ראינו לפני זה: זה וקטור שבו הכניסות גם כן מחולקות לקבוצות: האיבר הראשון של <span class="math">\(u\)</span> כפול כל האיברים של <span class="math">\(w\)</span>, וחוזר חלילה. בואו נסמן אותן באותיות שונות מאלו שבהן השתמשנו קודם: אם <span class="math">\(u=\left(\alpha_{1},\ldots,\alpha_{n}\right)\)</span> ו-<span class="math">\(w=\left(\beta_{1},\ldots,\beta_{m}\right)\)</span> (אלו ה-<span class="math">\(n,m\)</span> של <span class="math">\(A,B\)</span> כי <span class="math">\(A\)</span> הוא הרי אופרטור שפועל על <span class="math">\(u\)</span> ו-<span class="math">\(B\)</span> אופרטור שפועל על <span class="math">\(w\)</span>), אז אברי <span class="math">\(u\otimes w\)</span> הם</p>
+<p><span class="math">\(\alpha_{1}\beta_{1},\alpha_{1}\beta_{2},\ldots,\alpha_{1}\beta_{m},\alpha_{2}\beta_{1},\ldots,\alpha_{n}\beta_{m}\)</span></p>
+<p>לכן כשאני כופל את השורה הראשונה של <span class="math">\(A\otimes B\)</span> בוקטור <span class="math">\(u\otimes w\)</span> אני מקבל סכום שאני יכול לחלק באופן הבא:</p>
+<p><span class="math">\(\left(a_{11}b_{11}\alpha_{1}\beta_{1}+\ldots+a_{11}b_{1m}\alpha_{1}\beta_{m}\right)+\ldots+a_{1n}b_{1m}\alpha_{n}\alpha_{m}\)</span></p>
+<p>מהקבוצה הראשונה אפשר להוציא את <span class="math">\(a_{11}\alpha_{1}\)</span> ולקבל את הסכום</p>
+<p><span class="math">\(a_{11}\alpha_{1}\left(b_{11}\beta_{1}+\ldots+b_{1m}\beta_{m}\right)\)</span></p>
+<p>כאן האיבר שבסוגריים הוא פשוט הכניסה הראשונה במכפלה <span class="math">\(Bw\)</span>. והאיבר הזה הולך לחזור על עצמו שוב ושוב לאורך הסכום של השורה הראשונה של <span class="math">\(A\otimes B\)</span> שמוכפלת ב-<span class="math">\(u\otimes w\)</span>. לכן אם נקבץ איברים נקבל שהסכום כולו הוא</p>
+<p><span class="math">\(\left(a_{11}\alpha_{1}+\ldots+a_{1n}\alpha_{n}\right)\left(b_{11}\beta_{1}+\ldots+b_{1m}\beta_{m}\right)\)</span></p>
+<p>כלומר קיבלנו בדיוק את המכפלה של הכניסה הראשונה של <span class="math">\(Au\)</span> בכניסה הראשונה של <span class="math">\(Bw\)</span>.</p>
+<p>מה יקרה עבור השורה השניה? שווה להסתכל <strong>שוב</strong> על <span class="math">\(A\otimes B\)</span>:</p>
+<p><span class="math">\(A\otimes B=\left(\begin{array}{ccc} a_{11}B & \cdots & a_{1n}B\\ \vdots & \ddots & \vdots\\ a_{n1}B & \cdots & a_{nn}B \end{array}\right)\)</span></p>
+<p>השורה השניה של המטריצה הזו כוללת את אותו <span class="math">\(a_{11}\)</span> מקודם, כשהוא מוכפל בשורה <strong>השניה</strong> של <span class="math">\(B\)</span>. לכן מה שנקבל הוא את הכניסה <strong>הראשונה</strong> של <span class="math">\(Au\)</span> מוכפלת בכניסה <strong>השניה</strong> של <span class="math">\(Bw\)</span>. אם שרדתם את כל ענייני הטנזורים הללו זה אמור להיראות מוכר - ככה נבנית המכפלה הטנזורית של שני הוקטורים <span class="math">\(Au\)</span> ו-<span class="math">\(Bw\)</span>: קודם כל הכניסה <strong>הראשונה</strong> של <span class="math">\(Au\)</span> כשהיא מוכפלת בכל הכניסות של <span class="math">\(Bw\)</span> לפי הסדרה, אחר כך הכניסה השניה של <span class="math">\(Au\)</span> וחוזר חלילה. זה בדיוק מה שנשיג כשנעבור על השורות של <span class="math">\(A\otimes B\)</span> ונכפיל ב-<span class="math">\(u\otimes w\)</span>.</p>
+<p>האם אפשר לעשות את זה יותר פורמלי ועם אינדקסים וכל זה? כמובן. זה בדיוק מסוג הדברים שאוהבים להשאיר כתרגיל כי הם וידוא טכני משעמם שבפני עצמו לא מוסיף לאינטואיציה. אני מעדיף להסתפק בהסבר הלא מדויק.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2022/08/03/quantum_computing_math_4/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חישוב קוונטי בגישה מתמטית, חלק ד&#39;: שערים קוונטיים</span>
+            </a>
+            
+            
+            
+            <a href="/2022/07/31/quantum_computing_math_2/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי בגישה מתמטית, חלק ב&#39;</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

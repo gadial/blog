@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>למה (בגדול, מאוד בגדול) לא ניתן לפתור משוואות ממעלה חמישית ומעלה, ומה זה בכלל אומר? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>למה (בגדול, מאוד בגדול) לא ניתן לפתור משוואות ממעלה חמישית ומעלה, ומה זה בכלל אומר?</h1>
+            <div class="post-meta">
+                <span class="date">2009-10-09</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה מופשטת.html">אלגברה מופשטת</a>
+                    
+                    <a href="/categories/בעיות מתמטיות מפורסמות.html">בעיות מתמטיות מפורסמות</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אחת מהצורות הפופולריות שבהן נתפסת המתמטיקה בציבור הרחב היא בתור העיסוק ב"פתרון משוואות". כמובן שזה תיאור מקומם של המתמטיקה, ואני מקווה שכבר סיפקתי בעבר דוגמאות אין ספור לכך שהמתמטיקה היא הרבה יותר מסתם עיסוק ב"פתרון משוואות", אך הפעם אני רוצה לדבר בדיוק על זה - משוואות. מהסוג שנלמד בבית הספר. אז בואו נתחיל מההתחלה.</p>
+<p>משוואות יכולות לדבר על הרבה אובייקטים מתמטים (למשל, בתחום של <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%95%D7%95%D7%90%D7%94_%D7%93%D7%99%D7%A4%D7%A8%D7%A0%D7%A6%D7%99%D7%90%D7%9C%D7%99%D7%AA">משווואות דיפרנציאליות</a>, האובייקט הוא פונקציות) אבל אנחנו נצטמצם לדיבור על משוואות במספרים. <span class="math">\(1+1=2\)</span> היא דוגמה למשוואה - מימין ומשמאל לסימן השווה (במה שנקרא "אגף ימין" ו"אגף שמאל") נמצא אותו ערך, כשהוא מתואר בשתי דרכים שונות. משוואה כמו <span class="math">\(1+1=2\)</span> היא פשוטה יחסית (כן, אני מודע לכך שאפשר לכתוב עליה פוסט בפני עצמו), אבל לפעמים המשוואות מספקות יותר אינפורמציה, למשל <span class="math">\(0.999\dots=1\)</span> ש<a href="http://www.gadial.net/2008/06/07/almost_1_is_one/">כבר עסקתי בה</a>. אלא שבדרך כלל כשעוסקים במשוואות, מכניסים לתמונה נעלמים, וכאן העסק מתחיל להסתבך.</p>
+<p>בואו נדבר לרגע על בעיה מה"עולם האמיתי". יש לנו דף נייר שרוחבו הוא 1. אנחנו רוצים לדעת מה צריך להיות אורכו של הנייר כדי שיקיים את התכונה החביבה הבאה: אם מחלקים את הנייר לריבוע ומלבן, המלבן החדש הוא בעל אותן פרופורציות בין אורך לרוחב כמו אלו של דף הנייר המקורי.</p>
+<p>איך פותרים את הבעיה הזו? ראשית, מסמנים את אורכו של הנייר ב-<span class="math">\(x\)</span>. זה מציין שאורך הנייר הוא "נעלם" - ערך מספרי כלשהו שכרגע אין לנו מושג מה הוא (או אפילו אם באמת קיים כזה, או אם הוא יחיד או שיש כמה אורכים שמקיימים את אותה תכונה). כעת אנחנו רוצים לכתוב משוואה כלשהי ש-<span class="math">\(x\)</span> מופיע בתוכה, בתקווה שאפשר יהיה להמיר אותה במשוואה אחרת שנותנת לנו את ערכו של <span class="math">\(x\)</span>. מה יש בניסוח הבעיה המקורית שיש בו שווין? השוויון של הפרופורציות של המלבן החדש עם המלבן הישן. הפרופורציה במלבן הישן היא <span class="math">\(\frac{x}{1}\)</span>; הפרופורציה במלבן החדש היא <span class="math">\(\frac{1}{x-1}\)</span>, ולכן ניתן לכתוב <span class="math">\(\frac{x}{1}=\frac{1}{x-1}\)</span>. כעת מתחילים לבצע על המשוואה מניפולציות; הרי אם <span class="math">\(1+1=2\)</span> אז גם <span class="math">\(1+1+3=2+3\)</span>, כלומר אפשר לחבר את אותו ערך לשני האגפים גם יחד ולקבל משוואה חדשה שגם היא נכונה; ובאופן דומה ניתן גם לחסר, לכפול ולחלק. בכל הנוגע לכפל וחלוקה צריך להיזהר קצת - אסור לחלק באפס, ואם "מרמים" ומרשים חלוקה באפס יכולים לקבל משוואות שגויות (דרך מאוד פופולרית להוכיח ש-<span class="math">\(1=2\)</span> מתבססת על חלוקה מובלעת באפס). במקרה שלנו אין צורך לחלק באפס, אם כי הייתה יכולה להיות סכנה בביטוי <span class="math">\(\frac{1}{x-1}\)</span> אם <span class="math">\(x\)</span> היה שווה אחד; אבל בגלל ש-<span class="math">\(x\)</span> הוא אורך מלבן (שאינו ריבוע) שרוחבו <span class="math">\(1\)</span> והאורך תמיד גדול מהרוחב (זו ההגדרה...) אז <span class="math">\(x&gt;1\)</span> ואין כאן בעיה.</p>
+<p><a href="/img/2009/10/golden.png"><img src="/img/2009/10/golden.png" alt="golden" width="420" height="318" class="aligncenter size-full wp-image-3251" /></a></p>
+<p>אז מה שעושים הוא לכפול את שני אגפי המשוואה ב-<span class="math">\(x-1\)</span> ולקבל <span class="math">\(x\left(x-1\right)=1\)</span>. פותחים את הסוגריים באגף שמאל ומקבלים <span class="math">\(x^{2}-x=1\)</span>. מחסירים 1 משני האגפים ומקבלים <span class="math">\(x^{2}-x-1=0\)</span>. הגענו ל"צורה קנונית" של משוואה ממעלה שניה. איך פותרים דבר כזה? התשובה הייתה ידועה כבר לבבלים והצגתי את הרעיון בפוסט קודם - את הפתרונות של המשוואה <span class="math">\(ax^{2}+bx+c=0\)</span> ניתן למצוא בעזרת המשוואה <span class="math">\(x=\frac{-b\pm\sqrt{b^{2}-4ac}}{2a}\)</span>. המשוואה הזו היא קצת "רמאות" - יש בה את ה-<span class="math">\(\pm\)</span>, שמשמעותו שבעצם יש כאן שתי משוואות שזהות זו לזו פרט לכך שבאחת כתוב שם פלוס ובשניה מינוס; ופרט לכך יש שאלה של מה קורה אם <span class="math">\(b^{2}-4ac\)</span> אינו חיובי, אך לא ניכנס לכך כעת. במקרה שלנו, הצבת הערכים נותנת את הפתרונות <span class="math">\(\frac{1\pm\sqrt{5}}{2}\)</span>, ומכיוון שאנחנו יודעים שמתקיים <span class="math">\(x&gt;1\)</span> אז נובע שהפתרון לבעיה המקורית הוא הקבוע שנקרא "<a href="http://he.wikipedia.org/wiki/%D7%99%D7%97%D7%A1_%D7%94%D7%96%D7%94%D7%91">יחס הזהב</a>": <span class="math">\(\phi=\frac{1+\sqrt{5}}{2}\)</span>.</p>
+<p>טוב, אז עכשיו אפשר לדבר באופן כללי על "משוואות ממעלה <span class="math">\(n\)</span>". אלו משוואות שבהן מופיע <span class="math">\(x\)</span> וחזקות שלו, כשכל מופע של <span class="math">\(x\)</span> מוכפל במספר כלשהו - "מקדם". מכיוון שנוח לדבר על החזקה ה-0 של מספר בתור 1 (<span class="math">\(x^{0}=1\)</span>), ההגדרה הזו תופסת גם מספרים שאינם צמודים למופע של <span class="math">\(x\)</span>, כמו ה-<span class="math">\(c\)</span> במשוואה שלעיל (שאפשר לחשוב עליו כעל <span class="math">\(c\cdot x^{0}\)</span>). ההגדרה אינה פורמלית עד הסוף - למשל, ראינו שהמשוואה <span class="math">\(\frac{x}{1}=\frac{1}{x-1}\)</span> היא בעצם משוואה ממעלה שניה בתחפושת, אך באופן ההצגה הזה שלה היא אינה עונה על ההגדרה - אבל די בכך עבורנו. השאלה שאנחנו מצטמצמים אליה ב"פתרון משוואות", אם כן, היא זו: בהינתן משוואה מהצורה <span class="math">\(a_{n}x^{n}+a_{n-1}x^{n-1}+\dots+a_{1}x+a_{0}=0\)</span>, מהם הערכים של <span class="math">\(x\)</span> שפותרים אותה?</p>
+<p>משוואה ממעלה ראשונה היא קלה: פתרון <span class="math">\(ax+b=0\)</span> הוא פשוט <span class="math">\(x=-\frac{b}{a}\)</span> (צריך ש-<span class="math">\(a\)</span> יהיה שונה מאפס, אבל אם הוא אפס זו לא באמת משוואה ממעלה ראשונה; ובאופן כללי מניחים תמיד שהמקדם של החזקה הגבוהה ביותר אינו אפס). במקרה הזה יש פתרון יחיד. על משוואה ממעלה שניה כבר דיברנו. ומה הלאה? גם עבור משוואות ממעלה שלישית ורביעית יש נוסחה לשורשים, אלא שאין לי שום כוונה להציג אותה כאן לכו והביטו בה בויקיפדיה ותבינו מדוע. מדובר בנוסחאות ענקיות ומזוויעות. אם מנסים לכתוב את הכל "בבת אחת" על הדף, חושכות העיניים. מה כן אפשר לעשות? לפרק את חישוב הפתרונות לכמה שלבי ביניים - סדרה של משוואות שמגדירות ערכי ביניים, ואז המשוואה הסופית אינה נוראית כל כך. אפשר להדגים זאת גם על משוואות ממעלה שניה: לפעמים נהוג להשתמש בסימון <span class="math">\(\Delta=b^{2}-4ac\)</span> (שנקרא "הדיסקרימיננטה של המשוואה"), ואז הפתרון הכללי של המשוואה הוא <span class="math">\(\frac{-b\pm\sqrt{\Delta}}{2a}\)</span> - קצת יותר פשוט.</p>
+<p>זה מצביע על כך שנוסחה היא בעצם גרסה פשוטה של <a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%92%D7%95%D7%A8%D7%99%D7%AA%D7%9D">אלגוריתם</a>. אוסף של פעולות חישוביות שנותנות בסופו של דבר את התשובה הנכונה. במקרה הזה האלגוריתם מקבל כקלט את <strong>מקדמי המשוואה</strong>, והפלט שלו הוא אחד מהערכים האפשריים של פתרון המשוואה. למשל, עבור משוואה ממעלה ראשונה האלגוריתם הוא "קח את המקדם <span class="math">\(b\)</span>, חלק אותו ב-<span class="math">\(a\)</span>, הכפל את הכל במינוס 1 וסיימת". האלגוריתם הזה מתבסס על כך שאנחנו יודעים לבצע פעולות מסויימות - בפרט, לבצע חלוקה (שהיא לא דבר מובן מאליו כלל). האלגוריתם של פתרון משוואה ממעלה שניה מעלה קצת את רמת התחכום - צריך לבצע חיבור או חיסור, צריך לכפול ב-2 (את המקדם <span class="math">\(a\)</span>), והכי חשוב - צריך להוציא שורש ריבועי, כשמחשבים את <span class="math">\(\sqrt{\Delta}\)</span>. חישוב שורש ריבועי אינו עסק טריוויאלי (אם כי גם לא נורא במיוחד - <a href="http://www.gadial.net/2007/10/31/finding_square_roots/">הרחבתי על כך בעבר</a>). קל לראות שהפעולה של "הוצאת שורש" היא הכרחית - למשוואה <span class="math">\(x^{2}-2=0\)</span> לא ניתן למצוא פתרון שמתקבל רק מפעולות של חיבור, חיסור כפל וחילוק על מקדמי המשוואה (שהם <span class="math">\(1\)</span> ו-<span class="math">\(-2\)</span>) שכן פעולות אלו יחזירו רק מספרים רציונליים, ופתרונות המשוואה (<span class="math">\(\sqrt{2}\)</span> ו-<span class="math">\(-\sqrt{2}\)</span>) אינם מספרים רציונליים.</p>
+<p>הנוסחאות לפתרון משוואות ממעלה שלישית ורביעית הן מסובכות נורא, אבל הן מתוות אלגוריתם שמשתמש פחות או יותר באותן פעולות - חיבור, חיסור, כפל, חילוק והוצאת שורש. ההבדל היחיד הוא שהוצאת השורש יכולה להיות מסדר כלשהו, לא רק שורש ריבועי. עבור משוואה ממעלה שלישית צריך הוצאת שורש מסדר 3 (כלומר, בהינתן <span class="math">\(a\)</span> למצוא מספר <span class="math">\(b\)</span> שמקיים <span class="math">\(b^{3}=a\)</span>), ועבור משוואה ממעלה רביעית צריך הוצאת שורש מסדר 4.</p>
+<p>כעת הגענו לנקודה המרכזית, החשובה ביותר בכל הפוסט - כשאומרים ש"אין נוסחה לפתרון משוואה מעלה חמישית ומעלה", למה מתכוונים? לכך שלא קיימת <strong>נוסחה</strong> שהמרכיבים שלה הם רק פעולות חיבור, חיסור, כפל, חילוק והוצאת שורש מסדר כלשהו. על משוואה שכן ניתן לכתוב לה פתרון באופן הזה אומרים שניתן לפתור אותה "באמצעות רדיקלים". יש משוואות, גם ממעלה חמישית, שניתנות לפתרון באמצעות רדיקלים (דומה קיצונית היא משפחת המשוואות <span class="math">\(x^{5}-a=0\)</span> שפתרונן הוא פשוט <span class="math">\(a^{\frac{1}{5}}\)</span>, כלומר הוצאת שורש חמישי של <span class="math">\(a\)</span>); פשוט לא ניתן לעשות זאת לכל המשוואות. זה לא אומר שלא קיים למשוואות הללו פתרון - קיים. זה לא אומר שלא ניתן לחשב אותו - ניתן. זה פשוט אומר שהאלגוריתם שבאמצעותו נחשב את הפתרון הוא יותר מורכב מהאלגוריתמים שבעזרתם פתרנו משוואות ממעלה נמוכה יותר. לא שאני מזלזל בתוצאה הזו או ביופי שלה - על פניו, אין שום סיבה מדוע יהיה שינוי דרסטי כזה בין משוואה ממעלה רביעית לחמישית; הגיוני היה להניח שמה שעבד עד כה ימשיך לעבוד ושנוסחה לפתרון משוואה ממעלה חמישית (שתהיה ארוכה ומפלצתית) תתגלה. היסטורית, המתמטיקאים אכן שברו את הראש על הבעיה הזו במשך מאות שנים; לבסוף, במאה ה-19, הגיע אבל והוכיח שאין פתרון כללי למשוואה ממעלה חמישית; ולאחר מכן הגיע גלואה וניסח תורה כללית יותר שבאמצעותה ניתן גם להבין בדיוק מתי למשוואה יהיה פתרון באמצעות רדיקלים ומתי לא. זו התורה הזו - <a href="http://he.wikipedia.org/wiki/%D7%AA%D7%95%D7%A8%D7%AA_%D7%92%D7%9C%D7%95%D7%90%D7%94">תורת גלואה</a> - שעליה ארצה לדבר בהמשך. חשוב להבהיר שתורת גלואה היא מרחיקת לכת הרבה יותר מאשר פתרון בעיית המשוואות הנ"ל - <a href="http://www.gadial.net/2009/02/15/constructing_regular_polygons/">כבר תיארתי בעבר</a> את בעית בניית המצולעים המשוכללים באמצעות סרגל ומחוגה, וזו בעיה נוספת שתורת גלואה חיסלה לגמרי. בימינו לא ניתן למצוא כמעט טקסט העוסק באלגברה מודרנית שלא משתמש כל הזמן ברעיונות מתורת גלואה - היא הפכה להיות חלק מהלחם והחמאה של המתמטיקה, בדומה לחשבון האינפיניטסימלי.</p>
+<p>על קצה המזלג, אנסה להסביר עכשיו איך בכלל מוכיחים את הדבר הזה. פירוט יבוא (אני מקווה) בפוסטים עתידיים.</p>
+<p>איני בטוח לגבי הניסוח המקורי של גלואה, ולכן אסתפק בלדבר על הניסוח המודרני, שמשתמש במושגים שלא היו קיימים בצורה מפורשת בזמנו של גלואה (ואין ספק שהרעיונות שלו תרמו תרומה אדירה לעבר יצירתם - בדרך כלל מושג כללי נוצר לאחר שהצטברו מספיק מקרים פרטיים חשובים שמתאימים לו). הרעיון הבסיסי שבתורת גלואה הוא לקשור בין המושג של הרחבת שדות (שעליו <a href="http://www.gadial.net/2009/01/06/field_extensions/">דיברתי בפוסטים קודמים</a>), למושג של חבורה. לא אגדיר כרגע את המושגים הללו - רק אעיר ש"שדה" הוא הכללה של אובייקטים כמו המספרים הרציונליים והמספרים הממשיים - קבוצה שסגורה לארבע פעולות החשבון והן מתנהגות בה בצורה ה"רגילה" (למשל, מתקיים <span class="math">\(a+b=b+a\)</span>).</p>
+<p>יותר במדוייק - לכל הרחבת שדות מותאמת חבורה - חבורת גלואה של הרחבת השדות - באופן כזה שיש התאמה של אחד לאחד בין המבנה של תתי החבורות של חבורת הגלואה, ותתי השדות של שדה ההרחבה. זה מתקשר לפתרון של משוואות מכיוון שניתן לתאר הרחבת שדות (סופית) בתור "מה שקורה לשדה כשמוסיפים אליו פתרונות של משוואה שמקדמיה נלקחו מתוך השדה הזה".</p>
+<p>כעת, אם משוואה ניתנת לפתרון על ידי רדיקלים, אז אפשר "להגיע אל הפתרון" באמצעות סדרת פעולות חשבון והצאות שורש. הסדרה הזו ניתנת לתרגום לסדרה של הרחבת שדות, החל משדה בסיס שנוצר באמצעות מקדמי המשוואה וכלה בשדה שמכיל את הפתרון. כל הרחבה בסדרה הזו היא פשוטה - נוצרת על ידי הוצאת שורש. לכן קיבלנו בין השדה שהתחלנו ממנו והשדה שסיימנו בו סדרה של תת-שדות שכל אחד מהם מתקבל בצורה פשוטה מקודמו. בחבורת הגלואה המתאימה זה מתורגם לסדרה של תת חבורות בעלות תכונה מסויימת. זה מוביל אותנו להגדרה העיקרית - חבורה היא <strong><a href="http://he.wikipedia.org/wiki/%D7%97%D7%91%D7%95%D7%A8%D7%94_%D7%A4%D7%AA%D7%99%D7%A8%D7%94">פתירה</a></strong> אם קיימת בה סדרה של תת חבורות שמקיימת כך וכך (כל אחת מהחבורות בסדרה היא תת חבורה נורמלית של קודמתה, והמנה של כל זוג חבורות עוקבות אבלית). זו הגדרה יחסית קלה שניתן לעבוד איתה, ובפרט להוכיח שחבורות מסויימות לא מקיימות אותה.</p>
+<p>השלב הבא הוא לדבר באופן מדוייק על משוואה "כללית" ממעלה <span class="math">\(n\)</span>. שוב, לא אכנס כרגע לניתוח, אבל ניתן להגדיר יצור כזה במדוייק ולהוכיח שחבורת הגלואה המתאימה להרחבת השדות על ידי משוואה כזו היא <span class="math">\(S_{n}\)</span> - חבורת הפרמוטציות על <span class="math">\(n\)</span> איברים. ואז מגיע ניתוח מתמטי לא מסובך של החבורות הללו שמראה כי כל עוד <span class="math">\(n\le4\)</span>, אז <span class="math">\(S_{n}\)</span> פתירה; ואילו <span class="math">\(S_{5}\)</span> ומעלה כבר אינן פתירות, מה שמסיים את הסיפור.</p>
+<p>ובכן, זה היה מבט מרפרף מאוד על ההוכחה, אך כמובן שהיופי האמיתי טמון בפרטים, שעליהם אני מקווה להרחיב בעתיד.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2009/10/14/galois_theory_basics/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת גלואה - מה הרעיון הבסיסי בה?</span>
+            </a>
+            
+            
+            
+            <a href="/2009/10/04/sub_loglog_space_is_constant/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">למה זכרון שהוא פחות מלגלג הוא קבוע?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אוטומטים ושפות רגולריות - מבוא - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אוטומטים ושפות רגולריות - מבוא</h1>
+            <div class="post-meta">
+                <span class="date">2014-11-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אוטומט סופי דטרמיניסטי.html">אוטומט סופי דטרמיניסטי</a>
+                    
+                    <a href="/tags/שפה רגולרית.html">שפה רגולרית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אני רוצה לפתוח כאן בסדרת פוסטים על נושא שיש לי היכרות אישית טובה איתו אבל בבלוג נגעתי בו רק בחטף - תורת השפות הפורמליות, וספציפית אוטומטים. אני אשכח מפוסטים קודמים שאולי נגעו בנושאים הללו (<a href="http://www.gadial.net/2009/08/30/finite_automata_and_regular_languages/">כמו זה</a>) וקרוב לודאי שאחזור על עצמי קצת בהתחלה, אבל אחר כך אציג דברים חדשים ובתקווה מגניבים.</p>
+<p>אז על מה אנחנו הולכים לדבר? תורת האוטומטים היא תחום ב<strong>מדעי המחשב התיאורטיים</strong>, וזה אומר (בצורה פשטנית מאוד, כמובן) שמה שאנחנו מתעניינים בו פה הוא סוג של <strong>מודל חישובי</strong>: מודל שהוא מתמטי-פורמלי ומנסה לתפוס סוג מסויים של הדבר החמקמק הזה שאנחנו קוראים לו "חישוב". השאלות הנפוצות כשעוסקים במודל חישובי כלשהו הן: מה מאפיין את הבעיות שהמודל יודע לפתור? איך ניתן לבנות בעיות חדשות שהמודל יודע לפתור מתוך בעיות קיימות? האם יש בעיות שהמודל אינו יודע לפתור, ואיך מוכיחים את זה עבורן? איך המודל הזה ביחס למודלים אחרים - חזק יותר או חלש יותר או שונה מהותית מבחינת הבעיות שהוא יודע להתמודד איתן?</p>
+<p>יש כמה דרכים שונות לתאר את מה שמנסים להשיג עם המודל של אוטומט, אבל הדרך החביבה עלי היא זו: <strong>אוטומט הוא מודל שמנסה לתאר חישובים בזכרון חסום</strong>. וכאן צריך להסביר מה הכוונה ב"זכרון חסום". כל מי שכתב קוד בחיים יודע שחלק עיקרי מרוב שפות התכנות הוא <strong>משתנים</strong>, שיכולים להחזיק מידע כלשהו. המשתנים הללו מאוחסנים ב"זכרון" של המחשב, וכל אלגוריתם דורש, אם כך, כמות כלשהי של זכרון במהלך הריצה שלו. המילה "חסום" כאן אומרת שכמות הזכרון הכוללת שהאלגוריתם יזדקק לה <strong>אינה תלויה בגודל הקלט</strong> שהוא מקבל. פורמלית, נהוג לדבר על "כמה זכרון אתה צריך כפונקציה של גודל הקלט שקיבלת" ו"זכרון חסום" הוא בעצם דרך לומר "הפונקציה שמתארת את כמות הזכרון כפונקציה של גודל הקלט היא חסומה".</p>
+<p>בואו נראה דוגמה פשוטה במיוחד. נתונה הבעיה הבאה: הקלט שלנו הוא מחרוזת של ביטים, כלומר משהו שנראה ככה: 01001010. סדרה של אפסים ואחדים. השאלה שעלינו לענות עליה: האם מספר ה-1-ים בקלט הוא זוגי או אי זוגי?</p>
+<p>הנה קוד נאיבי שפותר את הבעיה (עונה True עבור מספר זוגי של 1-ים ו-False עבור מספר אי זוגי):</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">c</span> <span class="o">=</span> <span class="n">read_next_char</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">if</span> <span class="n">count</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">true</span>
+<span class="k">return</span> <span class="n">false</span>
+</code></pre></div>
+
+
+</div>
+
+<p>בקוד הזה אנחנו סופרים את מספר ה-1-ים במחרוזת, ובסוף בודקים אם הוא זוגי או לא ועונים בהתאם. נשאלת השאלה - בכמה זכרון אנחנו משתמשים כאן?</p>
+<p>וכאן יש הבדל אדיר בין מה שקורה בעולם האמיתי ומה שקורה בעולם התיאורטי של מדעי המחשב. בעולם האמיתי המשתנה count שהגדרתי בקוד דורש כמות זכרון <strong>קבועה</strong> שתלויה בהגדרות שרלוונטיות לשפת התכנות שלי ולמחשב שעליו מקמפלים אותה, אבל היא תהיה, נאמר, בת 32 ביטים. לא יותר. לכן לכאורה האלגוריתם שלי פועל בזכרון חסום; אלא שלמשתנה הזה יש <strong>ערך מקסימלי</strong> שאם עוברים אותו המשתנה יתאפס (או שערכו יהפוך לשלילי, תלוי בפרטים נוספים שלא אכנס אליהם כאן) והאלגוריתם עלול להיכשל (למעשה, בגלל שבחרתי דוגמה כל כך נאיבית, האלגוריתם עדיין יעבוד, אבל כבר עבור בדיקה של חלוקה ב-3 זה לא היה נכון).</p>
+<p>הפתרון? לא להשתמש במשתנה חסום שכזה... יש שפות תכנות, כדוגמת Ruby ו-Python, שבהן משתנים כאלו אכן לא יכולים להגיע לחריגה (ייצוג פנימי חכם מטפל בכך) אבל הם אכן צורכים יותר ויותר זכרון ככל שמאחסנים בהם ערכים גדולים יותר. אבל בעולם התיאורטי הפרטים הללו לא מעניינים אותנו בכלל. אנחנו מניחים מראש ש-count יכול להחזיק כל מספר טבעי, אבל ה"מחיר" לכך הוא שגודל הייצוג שלו תלוי בערך של המספר שהוא מחזיק: אם הוא מחזיק את המספר <span class="math">\(n\)</span>, אז כמות הזכרון שהוא צורך היא <span class="math">\(O\left(\lg n\right)\)</span>. מכאן שהאלגוריתם שהצגתי לא פועל בזכרון חסום.</p>
+<p>האם אפשר לתקן את האלגוריתם כך שישתמש בזכרון חסום? כמובן. אנחנו רק רוצים לדעת את הזוגיות של count, לא את ערכו האמיתי. מספיק לשם כך ביט בודד:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">c</span> <span class="o">=</span> <span class="n">read_next_char</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="p">(</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+<span class="k">if</span> <span class="n">count</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">true</span>
+<span class="k">return</span> <span class="n">false</span>
+</code></pre></div>
+
+
+</div>
+
+<p>קיבלנו קוד שהוא תיאור חוקי לגמרי של אלגוריתם שפועל בזכרון חסום. אבל הקוד הזה הוא ייצוג מסורבל למדי מבחינה מתמטית - הוא כולל כל מני פעולות אריתמטיות, ולולאות, ופיצולים (if) והשוואות וכדומה. האמת היא שאנחנו <strong>לא בהכרח צריכים</strong> את כל המידע הזה. אנחנו מחפשים דרך לבצע לו אבסטרקציה - להיפטר מהחלקים הלא רלוונטיים ולהישאר עם המהות של האלגוריתם.</p>
+<p>אם חושבים על זה קצת, רואים שהאלגוריתם יכול להיות באחד משני "מצבים" אפשריים - או ש-count שווה 0, או שהוא שווה 1. מה שקורה בכל צעד של האלגוריתם תלוי בתו הבא מהקלט שקראנו: אם קראנו 0 המצב שלנו לא משתנה; ואם קראנו 1 אנחנו עוברים מהמצב שלנו למצב השני. אנחנו מתחילים במצב של 0, והפלט שלנו אמור להיות "כן" רק אם גם סיימנו במצב של 0. את כל המידע הזה אפשר לקודד באיור באופן הבא:</p>
+<p><a href="/img/2014/11/diagram001.png"><img src="/img/2014/11/diagram001.png" alt="תיאור האוטומט" width="307" height="119" class="aligncenter size-full wp-image-3189" /></a></p>
+<p>מה שנכלל באיור הזה הוא <strong>מצבים</strong>, שהם עיגולים, ונתתי להם את השמות <span class="math">\(q_{0},q_{1}\)</span>. יש <strong>מעברים</strong> בין מצבים שמתוארים על ידי חצים ("אי שינוי מצב" מתואר על ידי מעבר ממצב לעצמו) כשעל החצים יש את סימון התו מהקלט שקראנו וגרם למעבר הזה. את <span class="math">\(q_{0}\)</span> סימנו בשני עיגולים כדי לומר שזה מצב <strong>מקבל</strong>, כזה שאם האלגוריתם מסיים את ריצתו בו אז התשובה של האלגוריתם היא "כן", וכמו כן יש חץ משום מקום שנכנס לתוך <span class="math">\(q_{0}\)</span> כדי לתאר שזה המצב <strong>ההתחלתי</strong> שבו האלגוריתם מתחיל את ריצתו.</p>
+<p>האיור הזה הוא בדיוק דוגמה לאוטומט, וכולל את כל מרכיביו של האוטומט: מצבים, מעברים, מצבים מקבלים ומצב התחלתי. אתן הגדרה מדויקת יותר בהמשך, אחרי שנפתח עוד קצת את האינטואיציה.</p>
+<p>לבינתיים, בואו נדבר על סוג הבעיות שאנחנו הולכים לנסות ולפתור בכלל. הרבה מאוד ממה שאלגוריתמים עושים אפשר לתאר בתור חישוב פונקציה מסויימת - יש קלט סופי, האלגוריתם עושה איתו מהומות, ובסוף מוציא פלט סופי. זה לא נכון לכל האלגוריתמים; יש אלגוריתמים שמעצם טבעם מיועדים לרוץ לנצח (למשל, מערכת ההפעלה שלכם היא תוכנה שלא אמורה לסיים את ריצתה אף פעם) ואפשר לשאול שאלות בסגנון "האם בכלל ייתכן שבמהלך הריצה הנצחית הזו יקרה כך-וכך?". אלו אחלה שאלות ויש אוטומט שמתאר אלגוריתמים נצחיים שכאלו ואגיע אליו בעתיד, אבל לעת עתה אני רוצה לדבר רק על אלגוריתמים שהופכים קלט סופי לפלט סופי.</p>
+<p>מהו הקלט? קלט לאלגוריתמים יכול להיות מידע מכל הסוגים והמינים: גרף שאנחנו רוצים למצוא לו עץ פורש; נוסחה לוגית שאנחנו מחפשים לה השמה מספקת; סרטון וידאו שאנחנו רוצים להמיר לפורמט אחר, וכן הלאה וכן הלאה. אלא שאנחנו רוצים לבצע אבסטרקציה, ולכן נלך אל הגורם המשותף המינימלי לכל האובייקטים הללו - במחשב, כולם מיוצגים על ידי סדרה סופית ("מחרוזת") של ביטים. אז בואו נדבר רק על סדרות סופיות של ביטים!</p>
+<p>למעשה, סדרות סופיות של ביטים זה לא כל כך נוח לנו. הרבה פעמים נרצה לתאר מחרוזות עם יותר משני סימבולים כי ככה יותר קל להבין מה קורה פה. אמנם, כל מחרוזת עם יותר משני סימבולים אפשר לקודד בעזרת מחרוזת עם שני סימבולים בלי להגדיל אותה יותר מדי, אבל יהיה לנו יותר נוח פשוט להרשות למחרוזות להיות מעל אוסף סופי כלשהו של סימנים. לכל אוסף כזה קוראים <strong>אלפבית</strong> ונסמן אלפבתים באות <span class="math">\(\Sigma\)</span> לרוב. למשל, <span class="math">\(\Sigma=\left\{ 0,1\right\} \)</span> הוא דוגמה לאלפבית שדיברנו עליו עד כה, אבל גם <span class="math">\(\Sigma=\left\{ 0\right\} \)</span> הוא אלפבית לגיטימי, וגם <span class="math">\(\Sigma=\left\{ a,b,c\right\} \)</span> וכדומה. כמובן שגם אפשר לקחת כאלפבית את כל האלפבית הלטיני או העברי, או את כל הסימבולים שבהם משתמשים בסינית, אבל זה כבר יהיה לרוב יותר מדי עבורנו.</p>
+<p>אם כן, הקלטים שלנו הן סדרות סופיות של מחרוזות מתוך א"ב סופי <span class="math">\(\Sigma\)</span> - אומרים על זה שהקלט הוא <strong>מילה</strong> מעל <span class="math">\(\Sigma\)</span>. ומה עושים עם הקלט הזה? בדרך כלל מוציאים פלט, שגם הוא מילה מעל אלפבית כלשהו (לאו דווקא <span class="math">\(\Sigma\)</span>). לעתה עתה, כדי לשמור על פשטות, נתעסק במקרה הפשוט ביותר של הוצאת פלט - פלט של ביט בודד. כן או לא. כמו בדוגמה שכבר נתתי. בגישה הזו, כל בעיה שאנחנו רוצים לפתור ניתנת לתיאור בצורה הבאה: נתונה קבוצה <span class="math">\(L\)</span> כלשהי של מילים, ונתונה מילה <span class="math">\(w\)</span>; צריך לקבוע אם <span class="math">\(w\in L\)</span>. לקבוצה <span class="math">\(L\)</span> כזו קוראים <strong>שפה</strong>. למשל, בדוגמה שכבר נתתי השפה הייתה <span class="math">\(L=\left\{ w\in\left\{ 0,1\right\} ^{*}|\#_{1}\left(w\right)\equiv_{2}0\right\} \)</span>. כאן אני מכניס כמה סימונים חדשים לתמונה. למשל, אם <span class="math">\(\Sigma\)</span> היא אלפבית כלשהו אז <span class="math">\(\Sigma^{*}\)</span> היא קבוצת כל המילים מעל <span class="math">\(\Sigma\)</span> (בהמשך נבין למה הסימון הזה) ויש לי גם סימון עבור "מספר ה-1-ים במילה <span class="math">\(w\)</span>".</p>
+<p>אם כן, <strong>המטרה</strong> שלנו ברורה: בהינתן שפה <span class="math">\(L\)</span> מעל אלפבית <span class="math">\(\Sigma\)</span> למצוא אלגוריתם שמכריע לכל <span class="math">\(w\in\Sigma^{*}\)</span> האם <span class="math">\(w\in L\)</span> ועושה את זה בזכרון <span class="math">\(O\left(1\right)\)</span>. יש רק עוד נקודה עדינה אחת שצריך לדבר עליה - אופן הגישה של האלגוריתם הזה לקלט. הקלט הרי נמצא במקום כלשהו בזכרון; האם אפשר לכתוב למקום הזה? לא, כי אז האלגוריתם יוכל "לרמות" ולהשתמש ב-<span class="math">\(O\left(n\right)\)</span> זכרון (גם לזה יש מודל מעניין אבל נעזוב את זה כרגע). אז הקלט נמצא באיזור בזכרון שהוא "לקריאה בלבד". אבל איך האלגוריתם יכול לגשת לאיזור הזה? בדרך כלל זכרונות של מחשב מספקים לנו <strong>גישה אקראית</strong> - בלי להיכנס לעומק הקורה, זה אומר שאם אנחנו רוצים לגשת לביט ה-17 בקלט, אנחנו פשוט עושים את זה מבלי שנצטרך לעבור קודם בכל הביטים עד לביט ה-17. אבל די ברור שאם אנחנו רוצים לשמור על <span class="math">\(O\left(1\right)\)</span> זכרון אפשר לשכוח מהגישה האקראית הזו לזכרון. כדי לכתוב מספר תא כללי בקלט שאורכו <span class="math">\(n\)</span> נצטרך באופן כללי <span class="math">\(O\left(\lg n\right)\)</span> ביטים - זכרון לא קבוע. לכן אנחנו נוקטים בגישה של קריאה <strong>סדרתית</strong> של הקלט, כפי שעשינו בדוגמה - בכל צעד חישוב האלגוריתם קורא את האות הבאה מהקלט ופועל על פיה (עוד נקודה טריקית - אלגוריתם שרץ במחשב אמיתי כנראה יקבל אוטומטית גישה אקראית לקלט, כך שההגבלה שלנו נראית קצת מלאכותית, לכן חשוב לזכור שאנחנו מנסים לבצע אבסטרקציה לפרטי המימוש הללו).</p>
+<p>ייתכן מאוד שאתם צועקים עכשיו "אבל חכה רגע! הסכמנו לגישה סדרתית, אבל למה שזה יגיד שבכל צעד חישוב קוראים את האות הבאה מהקלט? מה אם רוצים לבצע חישוב בלי לקרוא כלום? ומה עם לחזור אחורה בקלט במקום ללכת קדימה?". שתי ההשגות הללו לגיטימיות, אבל מה שנחמד פה הוא ששתיהן <strong>לא משנות כלום</strong>. אני אשכנע אתכם בעתיד שהוספת שתי היכולות הללו לא מוסיפה למודל שלנו כוח חישובי ולכן מספיק לדבר על המודל הפשוט יותר שבכל צעד קורא את האות הבאה (ובגלל שהוא פשוט יותר, יהיה קל יותר לנתח אותו).</p>
+<p>אם כן, בואו נסכם את המרכיבים שלנו - אלגוריתם שפועל בזכרון קבוע, וקורא את הקלט אות אות בכל צעד. ממה אלגוריתם כזה מורכב? בעקרון, משני חלקים: יש לו <strong>קוד</strong> ויש לו <strong>משתנים</strong>. בין המשתנים הללו בפרט יש אחד שאומר "באיזה מקום בקוד אנחנו נמצאים כרגע" (במחשב משתנה כזה נקרא לרוב PC, מלשון Program Counter. קפיצה כלשהי בתוכנית (למשל, אחרי פקודת if) היא בעצם השמה של ערך כלשהו למשתנה הזה. מה שהאלגוריתם עושה בכל רגע נתון תלוי בדיוק בשני פרטי מידע, אם כן: ראשית, אות הקלט שהוא קיבל כרגע; ושנית, תוכן כל המשתנים שלו. התוכן של PC בוודאי, כי הוא אומר מה הפקודה הבאה שנבצע; אבל לעתים קרובות תוכן של עוד תא גם משפיע, כי משתמשים בו בתוך חישוב או השוואה או משהו. ה<strong>פעולה</strong> שהאלגוריתם מבצע בצעד הזה כוללת רק דבר אחד: שינוי של חלק מהמשתנים (כמעט תמיד לפחות PC משתנה וגדל ב-1).</p>
+<p>התוכן של כל המשתנים של האלגוריתם ברגע נתון הוא מעיין "תמונת מצב" של ריצת האלגוריתם, או בקיצור - <strong>מצב.</strong> האלגוריתם ניתן לתיאור בתור סדרה של מצבים, שכל אחד נובע מקודמו ומאות הקלט שנקראה באותו רגע. המצב שבו האלגוריתם מתחיל (התוכן ההתחלתי של המשתנים) הוא המצב ההתחלתי, ומצב שבו האלגוריתם אומר במפורש "כן" הוא מצב מקבל. כדי לעשות לנו את החיים קצת יותר פשוטים, כשאנו עוברים לאבסטרקציה שלנו אנחנו מרשים לכל מצב להיות מצב מקבל.</p>
+<p>ועכשיו לנקודה החשובה מכל. יש לנו מספר סופי של משתנים באלגוריתם, וכמות הזכרון שכל משתנה כזה יכול להשתמש בה היא סופית ואינה תלויה בקלט. גם PC הוא כזה, כי גודל הקוד של האלגוריתם לא תלוי בקלט (סדר העניינים הוא זה: קודם נתונה <span class="math">\(L\)</span>; אחר כך בונים את האלגוריתם על פי <span class="math">\(L\)</span> ולבסוף מריצים אותו על מילה <span class="math">\(w\)</span> כלשהי). מכאן עולה שיש רק מספר <strong>סופי</strong> של מצבים שבהם האלגוריתם יכול להיות. האבסטרקציה המרכזית שנעשה תהיה <strong>לשכוח מכך שיש משתנים וקוד</strong> ופשוט לדבר על קבוצה סופית כלשהי של "מצבים", שיהיו בסך הכל סימבולים. לרוב נסמן אותה באות <span class="math">\(Q\)</span> ואת האיברים שלה ב-<span class="math">\(q_{0},q_{1},q_{2},\dots\)</span> וכדומה.</p>
+<p>בהינתן <span class="math">\(Q\)</span> כזו, המצב ההתחלתי של האלגוריתם הוא בסך הכל איבר כלשהו של <span class="math">\(Q\)</span> - לרוב בוחרים את <span class="math">\(q_{0}\)</span> לתפקיד. המצבים המקבלים הם תת-קבוצה <span class="math">\(F\subseteq Q\)</span>. נשאר רק לתאר את ה"לוגיקה" של האלגוריתם - האופן שבו אנחנו עוברים בין מצבים. אמרנו כבר שבכל צעד חישוב המצב הבא נקבע על בסיס המצב הקיים ואות הקלט הנוכחית שנקראה, אז אפשר לדבר פשוט על <strong>פונקציה</strong> <span class="math">\(\delta:Q\times\Sigma\to Q\)</span> שלכל זוג של מצב ואות קלט אומרת מה המצב שאליו נעבור.</p>
+<p>אלו כל המרכיבים של המודל התיאורטי שלנו. <strong>אוטומט</strong> הוא חמישייה שכוללת את כולם: <span class="math">\(A=\left(\Sigma,Q,q_{0},\delta,F\right)\)</span>. זה המודל שאני ארצה להתעסק בו. כבר בשלב הזה מעניין להשוות אותו למודל הסטנדרטי עבור חישוב כללי - <strong>מכונת טיורינג</strong>. המודלים דומים מאוד, ולא במקרה; טיורינג הציע את המודל שלו הרבה לפני שהתחילו לדבר על אוטומטים, וקרוב לודאי שכאשר התחילו לדבר על המקרה המצומצם יותר של אוטומט אימצו את דרך החשיבה והסימונים של טיורינג, אבל נפטרו ממה שמיותר.</p>
+<p>מה שמבדיל מכונת טיורינג מאוטומט הוא הזכרון - לאלגוריתם כללי יש זכרון לא חסום, דהיינו בכל רגע נתון הוא משתמש רק בכמות סופית של זכרון, אבל אם יש צורך הוא תמיד יכול לבקש עוד. לצורך כך, טיורינג חושב על הקלט כנתון על <strong>סרט</strong> שמחולק לתאים, ותחת שנקרא את הקלט תו-תו, יש למכונת טיורינג <strong>ראש קורא וכותב</strong> שיכול לנוע על הסרט צעד אחד בכל פעם. כדי להבטיח שהזכרון לא יהיה חסום, הסרט הוא <strong>אינסופי בכיוון אחד</strong>. פרט לכך ההגדרות זהות - יש קבוצת מצבים סופית (במקרה של טיורינג אפשר לחשוב עליה "רק" כמייצגת את ה-PC ותו לא), פונקציית מעברים (שבנוסף למצב החדש אליו עוברים מתארת גם מה הראש כותב על הסרט ואיזה צעד הוא מבצע - על הפונקציה הזו צריך לחשוב בתור תיאור התוכנית שהמכונה מבצעת), מצב התחלתי ומצבים מקבלים (וגם אלפבית אחד לקלט ואלפבית שמכיל אותו עבור הסימבולים שיכולים להיות על הסרט, כולל סימבול מיוחד לתא ריק). די יפה שתוספות לא מורכבות כל כך מקפיצות את האוטומט למעמד של מודל חישוב כללי; אבל הן גם גורמות לניתוח של מה שהוא עושה להיות מורכב פי כמה וכמה.</p>
+<p>כדי שהתיאור הפורמלי שלנו של אוטומט יהיה שלם, צריך לתאר לא רק את האוטומט עצמו אלא גם מה זה אומר, פורמלית, שהאוטומט "רץ" על מילה. ריצה היא בסך הכל סדרת מצבים שהראשון שבהם הוא המצב ההתחלתי של האוטומט וכל מצב מתקבל מקודמו על ידי קריאת אות מהקלט ועל פי פונקציית המעברים. אם <span class="math">\(w=\sigma_{1}\sigma_{2}\dots\sigma_{n}\)</span> היא מילה בת <span class="math">\(n\)</span> אותיות, אז <strong>ריצה</strong> על המילה הזו תהיה סדרה <span class="math">\(p^{0},p^{1},\dots,p^{n}\)</span> של מצבים שמקיימת <span class="math">\(p^{0}=q_{0}\)</span> ולכל <span class="math">\(0&lt;i\le n\)</span> מתקיים <span class="math">\(p^{i}=\delta\left(p^{i-1},\sigma_{i}\right)\)</span>. לבסוף, <span class="math">\(w\)</span> מתקבלת על ידי האוטומט אם ורק אם <span class="math">\(p^{n}\in F\)</span>.</p>
+<p>כדי לפשט בסימונים ובכתיבה, מה שנוח לעשות הוא לקחת את פונקציית המעברים של האוטומט ו<strong>להרחיב אותה למילים</strong>. דהיינו, במקום לדבר על <span class="math">\(\delta:Q\times\Sigma\to Q\)</span> מדברים על פונקציה <span class="math">\(\delta:Q\times\Sigma^{*}\to Q\)</span> שאומרת לאן האוטומט מגיע בריצה שלו על כל מילה אפשרית. מה שקריטי להבין כאן הוא שהפונקציה מוגדרת על כל זוג של מצב ומילה, אבל רק ההגדרה שלה על מצב ואות היא חלק מההגדרה של האוטומט; כל השאר <strong>נובע</strong> מההגדרה הזו באופן חד-ערכי (לפעמים מסמנים את הפונקציה המורחבת ב-<span class="math">\(\hat{\delta}\)</span> או משהו דומה כדי שההבדל בין שתי הפונקציות יהיה ברור).</p>
+<p>קל לתאר את <span class="math">\(\delta\)</span> המורחבת הזו באופן אינדוקטיבי. ראשית, נסמן ב-<span class="math">\(\varepsilon\)</span> את המחרוזת הריקה - מחרוזת ללא תווים (אני מקווה שאין לאף אחד כאן בעיה עם המושג הזה - הרי הוא קיים גם בשפות תכנות סטנדרטיות). אז ברור ש-<span class="math">\(\delta\left(q,\varepsilon\right)=q\)</span> כי אם עוד לא קראנו כלום אנחנו נשארים במצב שהתחלנו בו. כמו כן, אם <span class="math">\(w\)</span> היא מילה כלשהי ו-<span class="math">\(\sigma\)</span> היא אות כלשהי, אז מתקיים <span class="math">\(\delta\left(q,w\sigma\right)=\delta\left(\delta\left(q,w\right),\sigma\right)\)</span>, כלומר המצב שאליו מגיעים מ-<span class="math">\(q\)</span> על ידי קריאת <span class="math">\(w\sigma\)</span>. הוא המצב שאליו מגיעים על ידי כך שקודם כל קוראים את <span class="math">\(w\)</span>, מגיעים למצב כלשהו, ואז בו קוראים את <span class="math">\(\sigma\)</span> ומבצעים מעבר אחד נוסף. למעשה, אם רוצים להיות ממש פורמליים אז <strong>מגדירים</strong> את פונקציית המעברים המורחבת על ידי שתי המשוואות הללו (עבור <span class="math">\(\varepsilon\)</span> ועבור <span class="math">\(w\sigma\)</span>) - זו המחשה להגדרה אינדוקטיבית של פונקציה.</p>
+<p>כדי לוודא שהבנו, הנה הוכחה טכנית של טענה קצת יותר כללית על פונקציית המעברים: <span class="math">\(\delta\left(q,w_{1}w_{2}\right)=\delta\left(\delta\left(q,w_{1}\right),w_{2}\right)\)</span> כאשר <span class="math">\(w_{1},w_{2}\)</span> מילים כלשהן (מה שראינו - או הגדרנו - קודם הוא שזה נכון עבור <span class="math">\(w_{2}\)</span> שהיא אות). הוכחה של טענה כמו זו היא באינדוקציה על האורך של <span class="math">\(w_{2}\)</span>, כשמקרה הבסיס (<span class="math">\(\left|w_{2}\right|=0\)</span> ולכן <span class="math">\(w_{2}=\varepsilon\)</span>) טריוויאלי. עבור הצעד, מפרקים <span class="math">\(w_{2}=w\sigma\)</span> ומניחים שהטענה כבר נכונה עבור <span class="math">\(w_{1}w\)</span>, ואז מקבלים את שרשרת המעברים הבאה:</p>
+<p><span class="math">\(\delta\left(q,w_{1}w\sigma\right)=\delta\left(\delta\left(q,w_{1}w\right),\sigma\right)=\)</span></p>
+<p><span class="math">\(\delta\left(\delta\left(\delta\left(q,w_{1}\right),w\right),\sigma\right)=\delta\left(\delta\left(q,w_{1}\right),w\sigma\right)=\delta\left(\delta\left(q,w_{1}\right),w_{2}\right)\)</span></p>
+<p>עכשיו אפשר סוף סוף לתת את ההגדרה האחרונה שלנו - מה השפה שהאוטומט מזהה, או כפי שיותר נהוג לומר - <strong>מקבל</strong>. אם <span class="math">\(A=\left(\Sigma,Q,q_{0},\delta,F\right)\)</span> הוא אוטומט, אז נגדיר <span class="math">\(L\left(A\right)=\left\{ w\in\Sigma^{*}|\delta\left(q_{0},w\right)\in F\right\} \)</span>. שפה שמתקבלת על ידי אוטומט סופי דטרמיניסטי כלשהו נקראת <strong>שפה רגולרית</strong>.</p>
+<p>לסיום הפוסט הזה, וכדי לראות שהפשטות של המודל מקילה עלינו להוכיח דברים, בואו ניתן דוגמה קונקרטית לשפה שאפשר להוכיח שאינה רגולרית (למי שמכיר קצת תורת הקבוצות ברור שיהיו כאלו - יש מספר בן מניה של אוטומטים אבל מספר לא בן מניה של שפות). השפה היא <span class="math">\(L=\left\{ a^{n}b^{n}|n\ge0\right\} \)</span> עבור הא"ב <span class="math">\(\left\{ a,b\right\} \)</span>. למי שלא מבין מה כתוב פה - חזקה של אות היא בסך הכל חזרה שוב ושוב על אותה אות, כלומר השפה הזו היא שפת כל המחרוזות שכוללות רצף של a-ים ואחריו רצף של b-ים כשאורך שני הרצפים זהה. מה האינטואיציה שמאחורי הקושי של השפה? ובכן, אלגוריתם נאיבי עבורה עובר אות-אות בקלט. כל עוד הוא קורא <span class="math">\(a\)</span>-ים הוא סופר את הכמות שלהם על ידי הגדלת מונה, וכשה-<span class="math">\(b\)</span>-ים מתחילים הוא מתחיל לחסר מהמונה. הוא מקבל רק אם המונה שווה 0 בסיום, ואם לא התחילו לצוץ <span class="math">\(a\)</span>-ים שוב באמצע.</p>
+<p>האלגוריתם הזה בבירור לא פועל בזכרון קבוע בגלל המונה שלנו. אבל כאן התחושה האינטואיטיבית היא שאנחנו <strong>חייבים</strong> את המונה, לא כמו בדוגמה שבה התחלנו עם הזוגיות. אלא ש"תחושות" כאלו הן חסרות משמעות מבחינה מתמטית; אנחנו חייבים לשלול את הקיום של אלגוריתם <strong>כלשהו</strong>, מתוחכם וגאוני ככל שיהיה, שמזהה את השפה הזו בסיבוכיות זכרון קבועה. איך עושים את זה?</p>
+<p>שוב, מעניין להשוות למה שטיורינג עשה בהוכחה שלו שיש שפות שמכונת טיורינג לא יכולה לקבל. בהוכחה של טיורינג יש רעיון מקסים ומבריק לפיו מה שהמכונה תעשה הוא לקבל קלט שמתפרש בתור קידוד של מכונה, ואז כשמזינים לה את עצמה כקלט הכל מתחרבש - תעלול מקסים של הפניה עצמית שגורם לכך שהמכונה נקלעת לסיטואציה שבה כל תשובה שהיא תענה תוביל לסתירה.</p>
+<p>זה ממש לא מה שאנחנו הולכים לעשות.</p>
+<p>המודל של אוטומט כל כך פשוט שיהיה הרבה יותר קל להראות שאף אוטומט לא יעבוד. נניח ש-<span class="math">\(A\)</span> הוא אוטומט כלשהו שמקבל כל מילה ב-<span class="math">\(L\)</span> ונוכיח שהוא בהכרח מקבל גם מילה שאינה ב-<span class="math">\(L\)</span>, ולכן הוא אינו מקבל בדיוק את <span class="math">\(L\)</span>. מכיוון שזה יהיה נכון לכל אוטומט שמקבל את כל המילים ב-<span class="math">\(L\)</span>, זה יסיים את ההוכחה.</p>
+<p>נסתכל על קבוצת המצבים של <span class="math">\(A\)</span>. היא סופית, אז בואו ניתן שם לגודל שלה: <span class="math">\(\left|Q\right|=n\)</span>. עכשיו, בואו נזכור שבכל צעד חישוב האוטומט קופץ למצב כלשהו. זה אומר שאחרי <span class="math">\(n\)</span> צעדים, אוסף המצבים שבהם האוטומט היה הוא מגודל <span class="math">\(n+1\)</span> ולכן (עקרון שובך היונים...) היה מצב כלשהו שבו האוטומט עבר פעמיים. זה אומר שאפשר היה בפרט "לוותר" על כל הצעדים שבין לבין, מה שאומר שהאוטומט יקבל מילה שאינה בשפה. בואו ונראה את זה פורמלית.</p>
+<p>ראשית, לכל <span class="math">\(0\le k\le n\)</span> נגדיר <span class="math">\(p^{k}=\delta\left(q_{0},a^{k}\right)\)</span>. מכיוון שהגדרנו <span class="math">\(n+1\)</span> מצבים, לפחות אחד ממצבי האוטומט מתקבל פעמיים באופן הזה, כלומר יש <span class="math">\(i&lt;j\)</span> כך ש-<span class="math">\(\delta\left(q_{0},a^{i}\right)=\delta\left(q_{0},a^{j}\right)\)</span>. כמו כן האוטומט מקבל, על פי ההנחה שלנו, כל מילה ב-<span class="math">\(L\)</span>, ולכן <span class="math">\(\delta\left(q_{0},a^{n}b^{n}\right)\in F\)</span>. עכשיו בואו תראו קסם:</p>
+<p><span class="math">\(\delta\left(q_{0},a^{n}b^{n}\right)=\delta\left(\delta\left(q_{0},a^{j}\right)a^{n-j}b^{n}\right)=\delta\left(\delta\left(q_{0},a^{i}\right)a^{n-j}b^{n}\right)=\delta\left(q_{0},a^{n-j+i}b^{n}\right)\)</span></p>
+<p>עכשיו, מכיוון ש-<span class="math">\(i&lt;j\)</span> הרי ש-<span class="math">\(n-j+i&lt;n\)</span> ולכן האוטומט קיבל מילה שאינה בשפה. סוף הסיפור. אם עדיין לא ברור למה זה עבד, הנה איור שממחיש את זה:</p>
+<p><a href="/img/2014/11/pumping_lemma.png"><img src="/img/2014/11/pumping_lemma.png" alt="pumping_lemma" width="584" height="168" class="aligncenter size-large wp-image-3192" /></a></p>
+<p>האיור איננו של אוטומט, אלא תיאור סכמטי של מסלול החישוב שהאוטומט מבצע על המילה הספציפית <span class="math">\(a^nb^n\)</span>. חץ "מזגזג" במקום חץ ישר באיור פירושו שמוסתר כאן מסלול שלם, שעובר במצבים שאני לא טורח לצייר. הכיתוב של החץ אומר מה המילה שנקראת במהלך הריצה במסלול הזה. הצומת שבמרכז הוא הצומת שבו מבקרים פעמיים. האיור הזה מסייע לטעמי מאוד להבין מה קורה כאן - בסך הכל ויתרנו על הלולאה האמצעית; החישוב עדיין אמור להסתיים באותו מצב מקבל למרות שהוא קרא פחות <span class="math">\(a\)</span>-ים ממה שהוא היה "אמור" לקרוא.</p>
+<p>זה היה החימום. בהמשך נדבר על מודל חישוב או שניים ששקולים לאוטומט סופי דטרמיניסטי ויקלו עלינו להוכיח טענות על שפות רגולריות. יהיה אקשן.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2014/11/19/nondeterministic_automata/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אוטומטים אי דטרמיניסטיים ושאר מריעין בישין</span>
+            </a>
+            
+            
+            
+            <a href="/2014/10/14/change_making_problem/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">בעיית המטבעות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

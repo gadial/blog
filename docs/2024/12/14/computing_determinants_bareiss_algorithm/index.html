@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>איך מחשבים דטרמיננטה עם אלגוריתם בריס? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>איך מחשבים דטרמיננטה עם אלגוריתם בריס?</h1>
+            <div class="post-meta">
+                <span class="date">2024-12-14</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/דטרמיננטה.html">דטרמיננטה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>חלק ראשון, שבו אנחנו לומדים שמינוס 32 הוא כמעט 256</h2>
+
+<p><a href="https://gadial.net/2024/12/03/computing_determinants/">בפוסט הקודם שלי</a> על דטרמיננטות הסברתי איך מחשבים אותן. הצגתי שתי דרכים: אחת שהולכת דרך ההגדרה הרקורסיבית והיא מאוד לא יעילה לחישוב, ואחת שמבצעת פישוט למטריצה שרוצים לחשב את הדטרמיננטה שלה והיא משמעותית יותר יעילה. יש שיטות שהן אפילו יעילות יותר, אבל בפוסט הזה אני רוצה לקחת צעד אחד אחורה דווקא ולהציג שיטה יעילה פחות, אבל עם יתרון נחמד אחד: אם האיברים של המטריצה הם כולם מספרים שלמים, אנחנו לא נזדקק לשברים במהלך כל החישוב. למה זה טוב? תכף אתן דוגמא פשוטה.</p>
+<p>ראשית, בואו נבין מה באלגוריתם ה"יעיל" מכריח את השברים להיכנס למשחק. בואו נסתכל במטריצה הבאה:</p>
+<p><span class="math">\(\left[\begin{array}{ccc} 2 & 1 & 3\\ 3 & 1 & 6\\ 4 & 1 & 8 \end{array}\right]\)</span></p>
+<p>האלגוריתם מבוסס על כך שאנחנו עוברים עמודה-עמודה, ובכל פעם אנחנו משתמשים באיבר כלשהו מהעמודה כדי לאפס את כל האיברים שאחריו בעמודה - זה הופך את חישוב הדטרמיננטה לפשוט כי כאשר מפתחים את הדטרמיננטה לפי עמודות, יוצא שבכל פעם יש רק איבר אחד בכל עמודה שצריך לפתח לפיו, ולכן מה שהוא בדרך כלל חישוב רקורסיבי מסובך שמתפצל להרבה מקרים לא מתפצל בכלל. כדי לאפס איברים בעמודה משתמשים בתוצאה המרהיבה לפיה אם לוקחים שורה במטריצה, ומחברים אותה עם שורה אחרת כשהיא מוכפלת בסקלר כלשהו, התוצאה היא בעלת אותה דטרמיננטה כמו המטריצה המקורית. למשל, אם במטריצה לעיל אני אקח את השורה הראשונה, אכפול אותה ב-<span class="math">\(-2\)</span> ואחבר לשורה האחרונה, אני אקבל את המטריצה</p>
+<p><span class="math">\(\left[\begin{array}{ccc} 2 & 1 & 3\\ 3 & 1 & 6\\ 0 & -1 & 2 \end{array}\right]\)</span></p>
+<p>והמטריצה הזו היא בעלת אותה דטרמיננטה בדיוק כמו המטריצה שהתחלתי ממנה, והנה - קיבלתי אפס בעמודה הראשונה. הבעיה היא שכדי להיפטר מה-3 שבשורה האמצעית אני צריך לכפול את השורה הראשונה במשהו שאינו מספר שלם - ב-<span class="math">\(-\frac{3}{2}\)</span>, מה שמוביל אותי למטריצה הבאה:</p>
+<p><span class="math">\(\left[\begin{array}{ccc} 2 & 1 & 3\\ 0 & -\frac{1}{2} & \frac{3}{2}\\ 0 & -1 & 2 \end{array}\right]\)</span></p>
+<p>וזהו, עכשיו יש לי שברים בתוך המטריצה, למרות שהתחלתי עם מטריצה שכולה מספרים שלמים ולמרות <strong>שגם התוצאה תהיה מספר שלם</strong>. כדי לראות שהתוצאה תהיה מספר שלם מספיק להיזכר באופן שבו דטרמיננטה מוגדרת רקורסיבית: אנחנו מקבלים סכום של איברים שכל אחד מהם שייך למטריצה (כלומר הוא מספר שלם) שמוכפל ב-<span class="math">\(\pm1\)</span> (מספר שלם) וזה מוכפל בדטרמיננטה של תת-מטריצות שמתקבלות מהמטריצה המקורית על ידי מחיקת שורות ועמודות (ולכן גם בהן יש מספרים שלמים). לי הסיטואציה הזו טיפה מזכירה את המקרה של ה-Casus irreducibilis בפתרון משוואות ממעלה שלישית (<a href="https://gadial.net/2018/07/26/casus_irreducibilis/">יש לי פוסט על זה</a>): שם העניין הוא שיש לנו משוואה פולינומית עם מקדמים שהם מספרים ממשיים, והפתרונות שלה כולם מספרים ממשיים, אבל בלי לעבור "דרך" המספרים המרוכבים (כלומר, להוציא שורש ריבועי למספר שלילי) לא נוכל לכתוב את הפתרונות הללו באמצעות נוסחה. אלא שיש הבדל מהותי - במקרה ההוא <strong>חייבים</strong> לעבור דרך המרוכבים (יש לזה הוכחה די מרהיבה באמצעות תורת גלואה שאני מראה בפוסט ההוא) אבל במקרה שלנו זה לא הכרחי. יש דרכים אחרות לחשב את הדטרמיננטה גם בלי להכניס שברים למשחק. כבר ראינו אחת: לחשב את הדטרמיננטה באמצעות האלגוריתם הרקורסיבי, אלא שזה כאמור פשוט לא יעיל ולכן בפוסט הזה אני אציג את מה שנקרא "האלגוריתם של ברייס" (Bareiss) ששומר על הכל שלם והנזק שהוא גורם לזמן הריצה הוא לא כזה משמעותי (אבל יש נזק; זה בהחלט אלגוריתם שבעייתי בשלל סיטואציות ולכן טוב שמכירים אותו <strong>וגם</strong> שיטות אחרות).</p>
+<p>בואו נדבר שניה על המוטיבציה האישית שלי לכתוב את הפוסט כדי להבין למה לא כדאי לסמוך בעיניים עצומות על השיטות הקיימות ולמה לפעמים חשוב לדבוק במספרים שלמים במקום בשברים. נסיבות אלו ואחרות הובילו אותי לחשב דטרמיננטה של מטריצה <span class="math">\(5\times5\)</span>, שנותנת לנו את הנפח של טטרהדרון (פירמידה עם בסיס משולש) שאורכי הצלעות שלו נתונים על ידי <span class="math">\(d_{ij}\)</span> עבור <span class="math">\(1\le i,j\le4\)</span>. הנפח <span class="math">\(V\)</span> נתון באמצעות</p>
+<p><span class="math">\(288V^{2}=\left|\begin{array}{ccccc} 0 & 1 & 1 & 1 & 1\\ 1 & 0 & d_{12}^{2} & d_{13}^{2} & d_{14}^{2}\\ 1 & d_{21}^{2} & 0 & d_{23}^{2} & d_{24}^{2}\\ 1 & d_{31}^{2} & d_{32}^{2} & 0 & d_{34}^{2}\\ 1 & d_{41}^{2} & d_{42}^{2} & d_{43}^{2} & 0 \end{array}\right|\)</span></p>
+<p>הדטרמיננטה הזו נקראת <strong>דטרמיננטת קיילי-מנגר</strong> והיא ראויה לפוסט בפני עצמה (היא עושה יותר מאשר לחשב נפח של טטרהדרון) והאמת העצובה היא שהדרך הכי פשוטה לחשב אותה היא פשוט להשתמש בנוסחה הרקורסיבית - זו בסך הכל מטריצת <span class="math">\(5\times5\)</span>, הרקורסיה תסתיים כמעט מייד, ואין צורך באלגוריתם שאני הולך להציג - אבל את זה נזכרתי לנסות רק אחרי שכבר מימשתי את האלגוריתם (כי על מי אני עובד, כל כך התלהבתי מהאלגוריתם שהייתי חייב לממש אותו בכל מקרה). אבל למה היא גרמה לי להגיע אל אלגוריתם בריס מלכתחילה? ובכן, כי עשיתי את הטעות של לחשב אותה באמצעות numpy. מבלי להיכנס לפרטים, המטרה שלי הייתה למצוא אורכי צלעות שעבורם הדטרמיננטה תהיה שווה בדיוק ל-256. עכשיו, בואו נניח שיש לנו מספר שלם <span class="math">\(n\)</span> כלשהו ואנחנו מסתכלים על הדטרמיננטה</p>
+<p><span class="math">\(\left|\begin{array}{ccccc} 0 & 1 & 1 & 1 & 1\\ 1 & 0 & 1 & n^{2} & n^{2}\\ 1 & 1 & 0 & \left(n-1\right)^{2} & \left(n-1\right)^{2}\\ 1 & n^{2} & \left(n-1\right)^{2} & 0 & 4\\ 1 & n^{2} & \left(n-1\right)^{2} & 4 & 0 \end{array}\right|\)</span></p>
+<p>שהיא מקרה פרטי של הדטרמיננטה לעיל עבור סדרת האורכים <span class="math">\(1,n,n,n-1,n-1,2\)</span>. אם מחשבים את הדטרמיננטה בצורה סימבולית (כלומר, פשוט פותחים את הביטוי, מקבלים פולינום ב-<span class="math">\(n\)</span> ומפשטים אותו) מקבלים <span class="math">\(-32\)</span>, כלומר הערך של הדטרמיננטה הזו לא תלוי ב-<span class="math">\(n\)</span>. למי שתוהים איך עושים את זה במחשב בלי לעבור את התהליך המהנה של לחשב ידנית דטרמיננטה <span class="math">\(5\times5\)</span>, אפשר לעשות את זה עם ספריית הפייתון sympy:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">determinant</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">det</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">determinant</span><span class="p">))</span>
+</code></pre></div>
+
+<p>טוב ויפה, אלא שאני לא השתמשתי ב-sympy כי בדקתי שלל דטרמיננטות משלל סוגים ולא רק מהמבנה הספציפי הזה שאותו מצאתי אחר כך. ספציפית, אני בדקתי את הדטרמיננטה שמתקבלת עבור הערך <span class="math">\(n=524,283\)</span> וחישבתי אותו בעזרת הספריה הסטנדרטית לחישובים נומריים בפייתון - numpy. ומה ש-numpy נתנה הוא את התוצאה <span class="math">\(255.99999991524982\)</span>.</p>
+<p>במבט ראשון, התוצאה הזו היא "זה 256, פשוט numpy משתמשת בייצוג שברים עם נקודה צפה ולכן יש אי דיוקים קטנים". אבל לא! זו דרך טובה לעבוד על עצמנו! כי אם אני מכניס <span class="math">\(n=524,283\)</span> ואז עוד מעלה דברים בריבוע, אני עובד עם מספרי ענק ולכן יש לי שגיאות דיוק גדולות, וחישובים שקשורים במטריצות יכולים להיות מאוד רגישים לשגיאות דיוק, וזה מתנפח ומתנפח. התוצאה, כאמור, הייתה אמורה להיות <span class="math">\(-32\)</span>; זה שהגענו אל כמעט 256 זה סתם מקרה (על ידי ערכים שונים של <span class="math">\(n\)</span> אפשר להגיע קרוב לשלל מספרים שלמים לא קשורים, פשוט 256 היה מה שחיפשנו). הנה קוד פייתון שמשתמש ב-numpy ומאפשר לראות מה הולך פה. עבור <span class="math">\(n=1\)</span> החישוב מדויק כמעט לחלוטין, וכך גם עבור <span class="math">\(n=10,000\)</span>; אבל כשהוא נשבר, הוא נשבר <strong>חזק</strong>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">524283</span><span class="p">]:</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>    <span class="mi">1</span><span class="p">,</span>        <span class="mi">1</span><span class="p">,</span>        <span class="mi">1</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>    <span class="mi">1</span><span class="p">,</span>        <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>     <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>        <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>         <span class="mi">4</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>         <span class="mi">0</span><span class="p">]]</span>
+                  <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+</code></pre></div>
+
+<p>הבעיה פה היא כאמור ש-numpy מייצג שברים בשיטת הנקודה הצפה, ולכן יש לו רמת דיוק מוגבלת, בעוד שבפייתון יש רמת דיוק בלתי מוגבלת לעבודה עם מספרים שלמים. אז מכיוון שחשדתי ש-numpy מרמה אותי החלטתי שאני לא צריך להתעצל ולהסתמך עליו או אפילו לחפש ספריה אחרת שמבצעת את החישוב (כי אולי גם היא תרמה אותי?) אלא פשוט לממש את זה בעצמי. עכשיו, <strong>הייתי יכול</strong> להשתמש באלגוריתם הרקורסיבי הנאיבי; וגם <strong>הייתי יכול</strong> להשתמש בשיטה מבוססת השברים שראינו, ופשוט להשתמש בספריה frac בפייתון שמאפשרת ייצוג של שברים עם דיוק לא מוגבל. אבל באותו הרגע הדבר הראשון שעלה לי לראש היה לחפש "אלגוריתם לחישוב דטרמיננטה שלא משתמש בשברים" ואני שמח שזה קרה כי אלגוריתם בריס הוא די מגניב גם אם הייתי יכול להסתדר בלעדיו.</p>
+<p>אז בואו נדבר עליו סוף סוף.</p>
+<h2>חלק שני שבו אנו רואים את מה שלשמו התכנסנו פה</h2>
+
+<p>קודם כל, מה אלגוריתם בריס <strong>לא</strong> עושה: הוא לא מעביר את המטריצה <span class="math">\(A\)</span> שלנו למטריצה אחרת <span class="math">\(B\)</span> כך ש-<span class="math">\(\left|A\right|=\left|B\right|\)</span>, כמו האלגוריתם היעיל שהצגתי. זה לא הולך לקרות. אני כן הולך להפוך את <span class="math">\(A\)</span> למטריצה אחרת <span class="math">\(B\)</span>, אבל יהיו להן דטרמיננטות שונות לגמרי והרעיון הוא שבסיום האלגוריתם, <span class="math">\(\left[B\right]_{nn}\)</span> (הכניסה הימנית-תחתונה של <span class="math">\(B\)</span>) תהיה שווה ל-<span class="math">\(\left|A\right|\)</span>. יותר מכך - אין בעצם סיבה להציג את האלגוריתם בתור אוסף של שינויים של המטריצה <span class="math">\(A\)</span> (ובמאמר שלו עליו אני מתבסס כאן, Sylvester's Identity and Multistep Integer Preserving Gaussian Elimination, בריס באמת לא מציג אותו ככה). אפשר לחשוב על האלגוריתם גם ככה: אם בהתחלה האיבר הכללי של <span class="math">\(A\)</span> הוא <span class="math">\(a_{ij}\)</span> (עבור <span class="math">\(1\le i,j\le n\)</span>) אז האלגוריתם מייצר סדרה של איברים <span class="math">\(a_{ij}^{\left(0\right)},a_{ij}^{\left(1\right)},\ldots a_{ij}^{\left(n-1\right)}\)</span> כך שבסופו של דבר יוצא ש-<span class="math">\(a_{nn}^{\left(n-1\right)}=\left|A\right|\)</span>. ה"חזקה" של האיברים היא לא חזקה אלא אינדקס של השלב באלגוריתם שבו אנחנו נמצאים כרגע, והאתחול הוא <span class="math">\(a_{ij}^{\left(0\right)}=a_{ij}\)</span>. בפועל, כשמממשים את האלגוריתם, הכי נוח באמת לבצע שינויים מקומיים ב-<span class="math">\(A\)</span> כדי לשמור את המספרים של השלב הבא - זה חוסך זיכרון.</p>
+<p>אז איך עובד האלגוריתם? אין שום טעם להציג אותו כרגע כי לא נבין כלום ממה שהולך שם. זה לא הולך למנוע ממני להציג אותו בכל מקרה כי זה לפחות יוצר עניין - אני קודם כל מימשתי את האלגוריתם ורק אז תהיתי למה בעצם זה עובד. הרעיון, כאמור, הוא לעבוד בשלבים, כשבשלב מספר <span class="math">\(k\)</span> אנחנו מעדכנים את המספרים <span class="math">\(a_{ij}^{\left(k\right)}\)</span> שעדיין רלוונטיים לנו (כמו בחישוב דטרמיננטה רגיל, ככל שמתקדמים בשלבים כך פחות ופחות איברים הופכים לרלוונטיים לנו. </p>
+<p>הנה האלגוריתם:</p>
+<ul> <li>אתחל את המשתנים <span class="math">\(a_{ij}^{\left(0\right)}=a_{ij}\)</span> לכל <span class="math">\(1\le i,j\le n\)</span> ואת המשתנה המיוחד <span class="math">\(a_{00}^{\left(-1\right)}=1\)</span>.</li>
+
+
+<li>לכל <span class="math">\(k=1,2,\ldots,n-1\)</span>: </li>
+<ul>
+<li>לכל <span class="math">\(k+1\le i,j\le n\)</span>, קבעו <span class="math">\(a_{ij}^{\left(k\right)}\leftarrow\frac{a_{ij}^{\left(k-1\right)}a_{kk}^{\left(k-1\right)}-a_{ik}^{\left(k-1\right)}a_{kj}^{\left(k-1\right)}}{a_{k-1,k-1}^{\left(k-2\right)}}\)</span></li>
+
+</ul>
+
+</ul>
+
+<li>החזירו את <span class="math">\(a_{nn}^{\left(n-1\right)}\)</span></li>
+
+<p>בקיצור, האלגוריתם די דומה למה שקורה באלגוריתם הרגיל - גם פה פשוט מעדכנים באופן סדרתי כניסות עם כל מני מכפלות וחיסורים ו... רגע... האם זה רק אני או שיש סימן <strong>חילוק</strong> ענקי באמצע האלגוריתם? איך בדיוק פתרנו את הבעיה? ובכן, הרעיון הוא שבסימן החילוק שמופיע שם, המכנה מחלק את המונה <strong>בלי שארית</strong>. במילים אחרות - אנחנו צריכים לבצע פעולת חילוק, אבל פעולת <strong>חילוק שלמים</strong> שיכולה להיות מדויקת, ובשום שלב אנחנו לא צריכים לעבוד עם מספר שהוא שבר (אם תקראו את הפוסט עד כה תראו שנמנעתי בזהירות מלטעון דברים מופרכים כמו "האלגוריתם לא מבצע חילוק").</p>
+<p>אוקיי, אבל למה זה עובד? במאמר שלו שעליו אני מתבסס כאן, בריס מביא טיעון לא טריוויאלי, שאולי היה אפשר להחליף בטיעונים אלמנטריים יותר (יש לבריס מאמר מוקדם יותר שבו יש טיעונים כאלו) אבל אני דווקא מאוד אוהב את הטכניקה שלו, אז בואו נראה אותה במלואה.</p>
+<h2>חלק שלישי שבו קורים קסמים עם מטריצות בלוקים</h2>
+
+<p>באלגוריתם שהצגתי, <span class="math">\(a_{ij}^{\left(k\right)}\)</span> חושב באמצעות תרגיל מפוקפק כלשהו (שבמסגרתו הבטחתי שתתבצע חלוקה ללא שארית). זה לא ממש עוזר לנו להבין מה הולך פה, אז מה שנרצה לעשות הוא למצוא דרך טובה יותר <strong>להגדיר</strong> את הערכים של אותם <span class="math">\(a_{ij}^{\left(k\right)}\)</span> מלכתחילה. ההגדרה תיראה די משונה אם פשוט אציג אותה, אז בואו נוכיח תוצאה כללית כלשהי קודם.</p>
+<p>משהו שלא דיברתי עליו בכלל עד כה בפוסטים הללו הוא שדרך נוחה להתמודד עם מטריצות היא לפעמים לחלק אותן ל<strong>בלוקים</strong>. כל מטריצה ריבועית <span class="math">\(A\)</span> מסדר <span class="math">\(n\times n\)</span> אפשר להציג בתור <span class="math">\(A=\left(\begin{array}{cc} A_{11} & A_{12}\\ A_{21} & A_{22} \end{array}\right)\)</span> כך ש-<span class="math">\(A_{11}\)</span> היא מטריצה מסדר <span class="math">\(k\times k\)</span> שכוללת את מה שמקבלים אם מעתיקים מ-<span class="math">\(A\)</span> את כל הכניסות מהצורה <span class="math">\(a_{ij}\)</span> עבור <span class="math">\(1\le i,j\le k\)</span>. גם שאר המטריצות נקבעות בצורה דומה: <span class="math">\(A_{12}\)</span> תהיה מסדר <span class="math">\(k\times\left(n-k\right)\)</span>, <span class="math">\(A_{21}\)</span> תהיה מסדר <span class="math">\(\left(n-k\right)\times k\)</span> ו-<span class="math">\(A_{22}\)</span> תהיה מסדר <span class="math">\(\left(n-k\right)\times\left(n-k\right)\)</span>, אבל בואו נתמקד לרגע ב-<span class="math">\(A_{11}\)</span>. זו המטריצה</p>
+<p><span class="math">\(A_{11}=\left(\begin{array}{cccc} a_{11} & a_{12} & \cdots & a_{1k}\\ a_{21} & a_{22} &  & a_{2k}\\ \vdots &  & \ddots & \vdots\\ a_{k1} & a_{k2} & \cdots & a_{kk} \end{array}\right)\)</span></p>
+<p>מטריצה כזו, שמתקבלת מ-<span class="math">\(A\)</span> על ידי לקיחת <span class="math">\(k\)</span> השורות והעמודות הראשונות ומחיקת כל היתר, נקראת לפעמים <strong>המינור העיקרי</strong> (principle) מסדר <span class="math">\(k\)</span> של המטריצה. אני הולך להניח שהוא הפיך, כלומר <span class="math">\(\left|A_{11}\right|\ne0\)</span>; בהמשך נראה מה קורה כשזה לא המצב (רמז: האלגוריתם שהצגתי קודם עדיין לא שלם). אם הוא לא הפיך, זה נותן לנו פירוק פשוט יחסית של <span class="math">\(A\)</span> למכפלה של שתי מטריצות בלוקים אלכסוניות:</p>
+<p><span class="math">\(A=\left(\begin{array}{cc} A_{11} & A_{12}\\ A_{21} & A_{22} \end{array}\right)=\left(\begin{array}{cc} A_{11} & 0\\ A_{21} & I \end{array}\right)\left(\begin{array}{cc} I & A_{11}^{-1}A_{12}\\ 0 & A_{22}-A_{21}A_{11}^{-1}A_{12} \end{array}\right)\)</span></p>
+<p>מה הולך כאן? במבט ראשון זה נראה מבעית, אבל בעצם יש כאן שתי שאלות פשוטות יחסית:</p>
+<ul> <li>כשכופלים מטריצות בלוקים, האם חוקי כפל המטריצות הרגילים עדיין תקפים כמו קודם?</li>
+
+
+<li>אם מניחים שכן, האם החישוב של המכפלה למעלה באמת מחזיר את <span class="math">\(A\)</span>?</li>
+
+</ul>
+
+<p>בואו נענה קודם לשאלה השניה - כמובן. כדי לוודא שאין בעיה עם זה, אני אחשב את כל ארבע הכניסות</p>
+<ul> <li>הכניסה של <span class="math">\(A_{11}\)</span>: מתקבלת מכפל השורה הראשונה בעמודה הראשונה, כלומר <span class="math">\(A_{11}\cdot I+0\cdot0=A_{11}\)</span>.</li>
+
+
+<li>הכניסה של <span class="math">\(A_{12}\)</span>: מתקבלת מכפל השורה הראשונה בעמודה השניה, כלומר <span class="math">\(A_{11}\cdot\left(A_{11}^{-1}A_{12}\right)+0\cdot\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)=A_{12}\)</span></li>
+
+
+<li>הכניסה של <span class="math">\(A_{21}\)</span>: מתקבלת מכפל השורה השניה בעמודה הראשונה, כלומר <span class="math">\(A_{21}\cdot I+I\cdot0=A_{21}\)</span>.</li>
+
+
+<li>הכניסה של <span class="math">\(A_{22}\)</span>: מתקבלת מכפלה השורה השניה בעמודה השניה, כלומר <span class="math">\(A_{21}\cdot A_{11}^{-1}A_{12}+I\cdot A_{22}-A_{21}A_{11}^{-1}A_{12}=A_{22}\)</span></li>
+
+</ul>
+
+<p>כל זה אולי נראה קצת מהונדס מדי כדי שהכל יעבוד, אבל זה כמובן עובד. השאלה היותר מהותית היא למה בכלל מותר לכפול מטריצות בלוקים - וכמו הרבה דברים באלגברה לינארית בסיסית זו תוצאה שאני גם מניח שכולנו מכירים והיא גם די טכנית להוכחה, אז אני לא אוכיח אותה כאן אבל אין כאן חוכמה מיוחדת - אם אתם סקפטיים, נסו להוכיח אותה על שתי מטריצות קטנות קונקרטיות ותראו מה קורה.</p>
+<p>עכשיו, מה שנחמד בפירוק המוזר הזה של <span class="math">\(A\)</span> למכפלה של שתי מטריצות בלוקים הוא שזה ממשיך לעבוד כשלוקחים <strong>דטרמיננטה</strong>. כזכור, דטרמיננטה של מכפלה היא מכפלת הדטרמיננטות; וכשיש לנו מטריצת בלוקים <span class="math">\(\left(\begin{array}{cc} A & 0\\ C & D \end{array}\right)\)</span> הדטרמיננטה שלה היא <span class="math">\(\left|A\right|\left|D\right|\)</span> (ובאופן דומה כשה-0 הוא במקום <span class="math">\(C\)</span>), כך שנקבל:</p>
+<p><span class="math">\(\left|A\right|=\left|\left(\begin{array}{cc} A_{11} & 0\\ A_{21} & I \end{array}\right)\right|\left|\left(\begin{array}{cc} I & A_{11}^{-1}A_{12}\\ 0 & A_{22}-A_{21}A_{11}^{-1}A_{12} \end{array}\right)\right|=\)</span></p>
+<p><span class="math">\(\left|A_{11}\right|\left|A_{22}-A_{21}A_{11}^{-1}A_{12}\right|\)</span></p>
+<p>עכשיו משתמשים בטריק: כופלים את שני האגפים בסקלר <span class="math">\(\left|A_{11}\right|^{n-k-1}\)</span> ומקבלים</p>
+<p><span class="math">\(\left|A_{11}\right|^{n-k-1}\left|A\right|=\left|\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)\right|\)</span></p>
+<p>זה יכול להיות די מבלבל, הנה מה שקרה פה: באופן כללי, אם יש לי מטריצה <span class="math">\(B\)</span> ואני כופל שורה כלשהי שלה בסקלר, זה מכפיל את כל הדטרמיננטה באותו סקלר. כדי להוכיח את זה אפשר להשתמש באותה טכניקה שראינו בפוסט הקודם: כפל שורה בסקלר זה כמו כפל במטריצת יחידה <span class="math">\(I\)</span> שאחד מה-1-ים על האלכסון שלה הוחלף בסקלר הבודד <span class="math">\(\lambda\)</span>, והדטרמיננטה של מטריצה כזו היא <span class="math">\(\lambda\)</span> כי היא הרי מכפלת הערכים על האלכסון.</p>
+<p>עכשיו, מה קורה אם כופלים את <strong>כל</strong> השורות של <span class="math">\(B\)</span> באותו סקלר, כלומר אם פשוט כפלנו את כל המטריצה <span class="math">\(B\)</span> בסקלר הזה? אם <span class="math">\(B\)</span> היא מטריצה מסדר <span class="math">\(n\times n\)</span> זה אומר שכפלנו את הדטרמיננטה <span class="math">\(n\)</span> פעמים בסקלר <span class="math">\(\lambda\)</span>, אז יש לנו את המשוואה <span class="math">\(\left|\lambda B\right|=\lambda^{n}\left|B\right|\)</span>.</p>
+<p>אם נחזור עכשיו למה שעשינו למעלה - יש לנו את המטריצה <span class="math">\(B=A_{22}-A_{21}A_{11}^{-1}A_{12}\)</span>. הסדר של המטריצה הזו הוא <span class="math">\(\left(n-k\right)\times\left(n-k\right)\)</span> ולכן <span class="math">\(\lambda^{n-k}\left|B\right|=\left|\lambda B\right|\)</span>. אצלנו <span class="math">\(\lambda=\left|A_{11}\right|\)</span>, ואנחנו מקבלים אותו בחזקת <span class="math">\(n-k\)</span> כי בהתחלה הוא הופיע פעם אחת באגף ימין ואז כפלנו ב-<span class="math">\(\lambda^{n-k-1}\)</span>. זה מסביר את המעבר הזה.</p>
+<h2>חלק רביעי, שבו אנו חוזים בשובם של המספרים מהאלגוריתם</h2>
+
+<p>עכשיו הגענו לקאץ': אני אראה שהאיברים של המטריצה <span class="math">\(\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)\)</span> שאליה הגענו הם בעצם ה-<span class="math">\(a_{ij}^{\left(k\right)}\)</span> שמופיעים בשלבי הביניים של האלגוריתם. ראשית, בואו נגדיר את ה-<span class="math">\(a_{ij}^{\left(k\right)}\)</span> הללו במפורש, מה שעד כה נמנעתי מלעשות:</p>
+<p><span class="math">\(a_{ij}^{\left(k\right)}=\left|\begin{array}{ccccc} a_{11} & a_{12} & \cdots & a_{1k} & a_{1j}\\ a_{21} & a_{22} & \cdots & a_{2k} & a_{2j}\\ \cdots & \cdots & \cdots & \cdots & \cdots\\ a_{k1} & a_{k2} & \cdots & a_{kk} & a_{kj}\\ a_{i1} & a_{i1} & \cdots & a_{ik} & a_{ij} \end{array}\right|\)</span> עבור <span class="math">\(k<i,j\le n\)</span></p>
+<p>מה קורה פה? ראשית לוקחים את המטריצה <span class="math">\(A_{11}\)</span> שמתקבלת מ-<span class="math">\(A\)</span> המקורית על ידי לקיחת <span class="math">\(k\)</span> השורות והעמודות הראשונות. עכשיו, מוסיפים שורה חדשה - את שורה מס' <span class="math">\(i\)</span>, כאשר <span class="math">\(k<i\)</span> כלומר זו אחת מהשורות שלא הופיעו במטריצה קודם. אנחנו לא מוסיפים את כל השורה אלא רק את <span class="math">\(k\)</span> העמודות הראשונות שלה. אחר כך אנחנו מוסיפים עמודה <span class="math">\(j\)</span> כך ש-<span class="math">\(k<j\)</span> וגם כאן - לא את כל העמודה, רק את <span class="math">\(k\)</span> השורות הראשונות שלה. לסיום, אחרי שהוספנו את השורה והעמודה עוד נותר מקום ריק אחד בקצה הימני-תחתון של המטריצה, ושם אנחנו שמים את <span class="math">\(ij\)</span>.</p>
+<p><strong>למה</strong> שנגדיר ככה? במאמר המקורי שלו בריס מגיע אל המטריצה הזו בדרך שונה וטכנית יותר - אני דווקא מעדיף את הדרך שבה נוקטים כאן, למרות שהיא נראית כמו קסם (במתמטיקה אין קסמים; כל הגדרה קסומה מגיעה אחרי שמישהו שבר את הראש על הבעיה הרבה זמן וניסה הרבה דברים).</p>
+<p>עכשיו, הדטרמיננטה הזו נראית קצת מפחידה אבל כבר ראינו דרך להתמודד איתה - אם שמים לב שיש לנו כאן דטרמיננטה של <strong>מטריצת בלוקים</strong>. הבלוקים הם בדיוק ארבעת הדברים שתיארתי: המטריצה <span class="math">\(A_{11}\)</span> שממנה מתחילים, השורה שהוספתי למטה, העמודה שהוספתי משמאל, וה-<span class="math">\(a_{ij}\)</span> שהוספתי למטה. כלומר יש לנו כאן את מטריצת הבלוקים</p>
+<p><span class="math">\(B=\left(\begin{array}{cc} B_{11} & B_{12}\\ B_{21} & B_{22} \end{array}\right)\)</span></p>
+<p>כך ש-<span class="math">\(B_{11}=A_{11}\)</span>, <span class="math">\(B_{12}=\left(a_{1j},\ldots,a_{kj}\right)^{t},B_{21}=\left(a_{i1},\ldots,a_{ik}\right)\)</span> ו-<span class="math">\(B_{22}=\left(a_{ij}\right)\)</span>.</p>
+<p>ראינו את הנוסחה</p>
+<p><span class="math">\(\left|B\right|=\left|B_{11}\right|\left|B_{22}-B_{21}B_{11}^{-1}B_{12}\right|\)</span></p>
+<p>כאן <span class="math">\(\left|B\right|=a_{ij}^{\left(k\right)}\)</span> כי <span class="math">\(a_{ij}^{\left(k\right)}\)</span> הוגדר בתור הדטרמיננטה של המטריצה הזו. קצת יותר מעניין מה זה <span class="math">\(B_{21}B_{11}^{-1}B_{12}\)</span> - זה כפל של מטריצה (<span class="math">\(A_{11}^{-1}\)</span>) במטריצת עמודה מימין ומטריצת שורה משמאל - התוצאה היא סקלר, וחישוב ישיר על פי ההגדרה של כפל מטריצות נותן ש-</p>
+<p><span class="math">\(B_{21}B_{11}^{-1}B_{12}=\sum_{r=1}^{k}\sum_{s=1}^{k}a_{ir}\left[A_{11}^{-1}\right]_{rs}a_{sj}\)</span></p>
+<p>ולכן משילוב כל הדברים הללו אנחנו מקבלים</p>
+<p><span class="math">\(a_{ij}^{\left(k\right)}=\left|A_{11}\right|\left(a_{ij}-\sum_{r=1}^{k}\sum_{s=1}^{k}a_{ir}\left[A_{11}^{-1}\right]_{rs}a_{sj}\right)\)</span></p>
+<p>מה שיש לנו באגף שמאל הוא בדיוק את האיבר ה-<span class="math">\(ij\)</span> של המטריצה <span class="math">\(\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)\)</span>, אם כי צריך קצת להיזהר עם האינדקסים כדי לראות את זה כי המטריצה הזו <strong>מתחילה</strong> לא מהאינדקס <span class="math">\(1,1\)</span> אלא מהאינדקס <span class="math">\(k+1,k+1\)</span>.</p>
+<p>איך זה עוזר לנו? ובכן, קודם כל שימו לב שכמו שאמרתי קודם - המינורים העיקריים של <span class="math">\(A\)</span> מתקבלים ככה. ממש על פי ההגדרה, מתקיים <span class="math">\(\left|A_{11}\right|=a_{kk}^{\left(k-1\right)}\)</span>, כי <span class="math">\(A_{11}\)</span> מתקבלת מלקיחת <span class="math">\(k\)</span> השורות והעמודות הראשונות ואילו המטריצה שבה משתמשים לחישוב <span class="math">\(a_{kk}^{\left(k-1\right)}\)</span> מתקבלת מלקיחת <span class="math">\(k-1\)</span> השורות והעמודות הראשונות ואז הוספה אליהן של השורה והעמודה הבאות בתור.</p>
+<p>לכן אני יכול ללכת אל הנוסחה שהוכחתי קודם:</p>
+<p><span class="math">\(\left|A_{11}\right|^{n-k-1}\left|A\right|=\left|\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)\right|\)</span></p>
+<p>ולהציב בתוכה את <span class="math">\(\left|A_{11}\right|=a_{kk}^{\left(k-1\right)}\)</span> מצד אחד, ואילו בצד השני יש לנו כאמור את המטריצה <span class="math">\(\left|A_{11}\right|\left(A_{22}-A_{21}A_{11}^{-1}A_{12}\right)\)</span> שהאיברים שלה הם בדיוק ה-<span class="math">\(a_{ij}^{\left(k\right)}\)</span> עבור <span class="math">\(k<i,j\le n\)</span>, ולכן קיבלנו את הנוסחה</p>
+<p><span class="math">\(\left|A\right|\left[a_{kk}^{\left(k-1\right)}\right]^{n-k-1}=\left|\begin{array}{ccc} a_{k+1,k+1}^{\left(k\right)} & \cdots & a_{k+1,n}^{\left(k\right)}\\ \cdots & \cdots & \cdots\\ a_{n,k+1}^{\left(k\right)} & \cdots & a_{n,n}^{\left(k\right)} \end{array}\right|\)</span></p>
+<p>את הנוסחה הזו הוכחנו לכל מטריצה <span class="math">\(A\)</span> (עם ההנחה שהמינור העיקרי שלה, מה שסימנתי ב-<span class="math">\(A_{11}\)</span>, הוא מדטרמיננטה שונה מאפס), אז אפשר להשתמש בה גם עבור המטריצה שאיתה הגדרנו את <span class="math">\(a_{ij}^{\left(k\right)}\)</span>, כלומר המטריצה שמורכבת מהמינור העיקרי <span class="math">\(A_{11}\)</span> ואז עוד שורה ועמודה. צריך קצת להיזהר עם האינדקסים: עד עכשיו השתמשתי ב-<span class="math">\(k\)</span> כדי לציין אינדקס כלשהו, <span class="math">\(1\le k\le n\)</span> שמתאים למינור העיקרי שבו מטפלים באותו הרגע, אבל עכשיו כשאני רוצה להשתמש בנוסחה הזו כדי לטפל ב-<span class="math">\(a_{ij}^{\left(k\right)}\)</span> ולכן יש לי חופש בחירה של המינור העיקרי <strong>שלו</strong> שאנחנו בוחרים, צריך להשתמש באינדקס אחר - במאמר שלו ברייס משתמש ב-<span class="math">\(l\)</span>, ואז מקבלים</p>
+<p><span class="math">\(a_{ij}^{\left(k\right)}\left[a_{ll}^{\left(l-1\right)}\right]^{\left(k+1\right)-l-1}=\left|\begin{array}{cccc} a_{l+1,l+1}^{\left(l\right)} & \cdots & a_{l+1,k}^{\left(l\right)} & a_{l+1,j}^{\left(l\right)}\\ \cdots & \cdots & \cdots & \cdots\\ a_{k,l+1}^{\left(l\right)} & \cdots & a_{k,k}^{\left(l\right)} & a_{k,j}^{\left(l\right)}\\ a_{i,l+1}^{\left(l\right)} & \cdots & a_{i,k}^{\left(l\right)} & a_{i,j}^{\left(l\right)} \end{array}\right|\)</span></p>
+<p>הסיבה לכך שיש <span class="math">\(k+1\)</span> בחזקה באגף שמאל הוא שזה הסדר של המטריצה שמגדירה את <span class="math">\(a_{ij}^{\left(k\right)}\)</span> (כי לקחנו מטריצה <span class="math">\(k\times k\)</span> והוספנו לה שורה ועמודה). השינוי באיך שאני מציג את האיברים בתוך הדטרמיננטה באגף ימין (עוד שורה ועמודה) הוא רק כדי שיהיה יותר קל להבין מה קורה, בגלל שהמבנה של השורה והעמודה האחרונות במטריצה הוא שונה מאשר עבור יתר הכניסות.</p>
+<p>עכשיו, תחת ההנחה שלנו על כך שהדטרמיננטה של המינורים העיקריים היא לא אפס אנחנו מקבלים ש-<span class="math">\(a_{ll}^{\left(l-1\right)}\)</span> הוא לא אפס (כי הוא שווה למינור עיקרי שכזה) ולכן אפשר לחלק בו ולקבל</p>
+<p><span class="math">\(a_{ij}^{\left(k\right)}=\frac{1}{\left[a_{ll}^{\left(l-1\right)}\right]^{k-l}}\left|\begin{array}{cccc} a_{l+1,l+1}^{\left(l\right)} & \cdots & a_{l+1,k}^{\left(l\right)} & a_{l+1,j}^{\left(l\right)}\\ \cdots & \cdots & \cdots & \cdots\\ a_{k,l+1}^{\left(l\right)} & \cdots & a_{k,k}^{\left(l\right)} & a_{k,j}^{\left(l\right)}\\ a_{i,l+1}^{\left(l\right)} & \cdots & a_{i,k}^{\left(l\right)} & a_{i,j}^{\left(l\right)} \end{array}\right|\)</span></p>
+<p>וזה נותן לנו דרך לחשב רקורסיבית את ה-<span class="math">\(a_{ij}^{\left(k\right)}\)</span>-ים! נזכיר את תנאי ההתחלה שלנו:</p>
+<p><span class="math">\(a_{00}^{\left(-1\right)}=1,a_{ij}^{\left(0\right)}=a_{ij}\)</span></p>
+<p>ובנוסחה למעלה, כדי לצמצם כמה שרק ניתן את הגודל של הדטרמיננטה אפשר לבחור <span class="math">\(l=k-1\)</span> ולקבל</p>
+<p><span class="math">\(a_{ij}^{\left(k\right)}=\frac{1}{a_{k-1,k-1}^{\left(k-2\right)}}\left|\begin{array}{cc} a_{kk}^{\left(k-1\right)} & a_{kj}^{\left(k-1\right)}\\ a_{ik}^{\left(k-1\right)} & a_{ij}^{\left(k-1\right)} \end{array}\right|=\frac{a_{ij}^{\left(k-1\right)}a_{kk}^{\left(k-1\right)}-a_{ik}^{\left(k-1\right)}a_{kj}^{\left(k-1\right)}}{a_{k-1,k-1}^{\left(k-2\right)}}\)</span></p>
+<p>כשהשוויון האחרון נובע פשוט מחישוב ישיר של הדטרמיננטה. זה משלים את ההוכחה, כי קיבלנו בדיוק את הנוסחה שהופיעה באלגוריתם, ועכשיו אנחנו גם מבינים למה החלוקה ב-<span class="math">\(a_{k-1,k-1}^{\left(k-2\right)}\)</span> "מצליחה" ואנחנו מקבלים מספר שלם - כי <span class="math">\(a_{ij}^{\left(k\right)}\)</span> מלכתחילה הוגדר בתור דטרמיננטה של מטריצה שמכילה רק מספרים שלמים (זאת בהנחה שהמטריצה המקורית הכילה רק שלמים) ולכן אם יש שבר ששווה לו, המכנה חייב לחלק את המונה.</p>
+<h2>חלק חמישי ואחרון, שבו אנו מגיעים לגרסה המלאה של האלגוריתם</h2>
+
+<p>יפה, אז ראינו את ההוכחה לכך שהאלגוריתם הבא עובד:</p>
+<ul> <li>אתחל את המשתנים <span class="math">\(a_{ij}^{\left(0\right)}=a_{ij}\)</span> לכל <span class="math">\(1\le i,j\le n\)</span> ואת המשתנה המיוחד <span class="math">\(a_{00}^{\left(-1\right)}=1\)</span>.</li>
+
+
+<li>לכל <span class="math">\(k=1,2,\ldots,n-1\)</span>:</li>
+<ul>
+<li>לכל <span class="math">\(k+1\le i,j\le n\)</span>, קבעו <span class="math">\(a_{ij}^{\left(k\right)}\leftarrow\frac{a_{ij}^{\left(k-1\right)}a_{kk}^{\left(k-1\right)}-a_{ik}^{\left(k-1\right)}a_{kj}^{\left(k-1\right)}}{a_{k-1,k-1}^{\left(k-2\right)}}\)</span></li>
+</ul>
+</ul>
+
+<li>החזירו את <span class="math">\(a_{nn}^{\left(n-1\right)}\)</span></li>
+
+<p>עכשיו, מהנוסחה הזו ברור שאם אנחנו בשלב <span class="math">\(k\)</span>, אז כל הערכים במטריצה שהשורה או העמודה שלהם היא לכל היותר <span class="math">\(k\)</span> כבר לא מעניינים אותנו, למעט האיבר במקום <span class="math">\(k-1,k-1\)</span> - אבל גם עבורו, אנחנו נצטרך רק <strong>לקרוא</strong> את הערך שלו ולא נשנה אותו יותר. זה אומר שאם אנחנו מקבלים את המטריצה כקלט, אז בשביל לחסוך מקום אפשר לשמור את ערכי הביניים <strong>בתוכה</strong> (אם לא מפריע לנו שהיא תשתנה; אם לא נרצה שהפונקציה תשפיע על המטריצה המקורית יהיה צורך ליצור עותק שלה, אבל גם אז עדיף עותק אחד על סביבות <span class="math">\(n\)</span> עותקים כאלו).</p>
+<p>אם נוקטים בגישה הזו, זה מה שהאלגוריתם הופך להיות:</p>
+<ul> <li>אתחלו את המשתנה <span class="math">\(A_{00}=1\)</span></li>
+
+
+<li>לכל <span class="math">\(k=1,2,\ldots,n-1\)</span>:</li>
+<ul>
+
+<li>לכל <span class="math">\(k+1\le i,j\le n\)</span>, קבעו <span class="math">\(A_{ij}\leftarrow\frac{A_{ij}A_{kk}-A_{ik}A_{kj}}{A_{k-1,k-1}}\)</span></li>
+</ul>
+</ul>
+
+<li>החזירו את <span class="math">\(A_{n-1,n-1}\)</span></li>
+
+<p>בפועל כשכותבים קוד לא כזה כיף להוסיף משתנה <span class="math">\(A_{00}\)</span> כי צריך קוד מיוחד לטפל בו ולא במטריצה <span class="math">\(A\)</span>, ולכן הרבה יותר פשוט לבדוק אם <span class="math">\(k=1\)</span> ואם כן - פשוט לוותר על פעולת החילוק באיטרציה הזו של האלגוריתם. בקוד שאצרף עוד רגע אפשר יהיה לראות את זה.</p>
+<p>יש רק דבר אחד שטרם התייחסתי אליו - מה קורה אם אחד מהמינורים העיקריים הוא עם דטרמיננטה 0? במקרה הזה, החישוב יניב בשלב כלשהו <span class="math">\(A_{kk}=0\)</span> ואי אפשר יהיה לחלק בו. בסיטואציה הזו עושים דבר דומה למה שהיה באלגוריתם ה"רגיל" לדטרמיננטה - מחפשים בעמודה ה-<span class="math">\(k\)</span>-ית החל מהשורה ה-<span class="math">\(k+1\)</span> כניסה ששונה מאפס, ואם נמצאה כזו - מחליפים את השורות ומכפילים את הסימן של הדטרמיננטה ב-<span class="math">\(-1\)</span>. זה האלגוריתם המלא (שימו לב שבפייתון // מייצג חילוק בשלמים - כלומר, חילוק שמתעלם מהשארית, אם יש כזו, ומחזיר רק את המנה השלמה):</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">bareiss_det</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="n">sign</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+                <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                     <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">//</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">return</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2024/12/18/bernoulli_numbers/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מספרי ברנולי</span>
+            </a>
+            
+            
+            
+            <a href="/2024/12/10/are_most_prime_numbers_small/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">האם רוב המספרים הראשוניים הם קטנים?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

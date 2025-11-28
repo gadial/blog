@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ההוכחה הארוכה ביותר בהיסטוריה! (או: איך פותרי SAT מתגברים על בעיות קומבינטוריות, אבל היי זה שם פחות מפוצץ) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>ההוכחה הארוכה ביותר בהיסטוריה! (או: איך פותרי SAT מתגברים על בעיות קומבינטוריות, אבל היי זה שם פחות מפוצץ)</h1>
+            <div class="post-meta">
+                <span class="date">2016-07-12</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיית SAT.html">בעיית SAT</a>
+                    
+                    <a href="/tags/שלשות פיתגוריות.html">שלשות פיתגוריות</a>
+                    
+                    <a href="/tags/תורת רמזי.html">תורת רמזי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>לפני חודש וקצת הצליחה תוצאה מתמטית נחמדה להיכנס אל החדשות לא בשל הסיבות שבגללן היא טובה, אלא בעיקר אלו שבגללן היא בעייתית: ההוכחה שלה היא (לכאורה) בגודל מפלצתי של 200 טרה-בייט. כמה זה הרבה? נאמר, זה פי 40 יותר מידע מאשר היה בשרתי ויקיפדיה ב-2010, ויש עוד שלל המחשות. בקיצור, זה הרבה מאוד. הנתון הזה מאוד הלהיב את העיתונים, וחלקם גם הגדילו לעשות וטענו ש"יקח 10 מיליארד שנים לקרוא את ההוכחה". <a href="http://www.ynet.co.il/articles/0,7340,L-4826817,00.html">הנה</a> <a href="http://www.nrg.co.il/online/13/ART2/797/148.html">כמה</a> <a href="http://davidson.weizmann.ac.il/online/%D7%97%D7%93%D7%A9%D7%95%D7%AA-%D7%9E%D7%93%D7%A2/%D7%94%D7%94%D7%95%D7%9B%D7%97%D7%94-%D7%94%D7%9E%D7%AA%D7%9E%D7%98%D7%99%D7%AA-%D7%94%D7%90%D7%A8%D7%95%D7%9B%D7%94-%D7%91%D7%99%D7%95%D7%AA%D7%A8">כתבות</a> בעניין. בפוסט הזה אני אנסה להסביר מה בעצם נפתר, למה זה דרש הוכחה כזו ארוכה, ומה זה אומר על החיים, היקום ובכלל.</p>
+<p>נתחיל מהתקציר. הבעיה מתעסקת במספרים טבעיים, <span class="math">\(1,2,3,4,\dots\)</span>. שלושה מספרים כאלו <span class="math">\(a,b,c\)</span> נקראים <strong>שלשה פיתגורית</strong> אם <span class="math">\(a^{2}+b^{2}=c^{2}\)</span> (השם מגיע מכך שמשפט פיתגורס מוכיח שזה הקשר בין אורכי הצלעות של משולש ישר זווית). אנחנו יודעים הרבה דברים נחמדים על שלשות פיתגוריות, <a href="http://www.gadial.net/2008/11/04/pythagorean_triplets/">למשל</a> שיטה יעילה לייצר את כולן, אז זה לא העניין. העניין הוא השאלה הבאה: נניח שיש לנו את קבוצת המספרים מ-1 עד <span class="math">\(n\)</span> ואנחנו מחלקים אותה לשתי קבוצות שונות; האם בהכרח באחת מהקבוצות הללו תהיה לנו שלשה פיתגורית? בלשון ציורית מדברים לפעמים על <strong>צביעה</strong> - נניח שאנחנו צובעים כל מספר בקבוצה בכחול או באדום; האם תהיה לנו שלשה פיתגורית שכל שלושת המספרים שלה צבועים באותו הצבע?</p>
+<p>הנה דוגמה. השלשה הפיתגורית הפשוטה ביותר היא <span class="math">\(3,4,5\)</span>. אם כן, נסתכל על הקבוצה <span class="math">\(\left\{ 1,2,3,4,5\right\} \)</span>. אם נחלק אותה לשתי קבוצות כך: <span class="math">\(\left\{ 1,2\right\} ,\left\{ 3,4,5\right\} \)</span> הרי שבאחת מהקבוצות הללו באמת יש שלשה פיתגורית. לעומת זאת, אם נחלק אותה <span class="math">\(\left\{ 1,2,3\right\} ,\left\{ 4,5\right\} \)</span> הרי שבחלוקה הזו אין לנו שלשה פיתגורית באף אחת מהקבוצות. כלומר, כאן היה <strong>קל</strong> למצוא חלוקה שבה אין שלשה פיתגורית באף קבוצה. ככל שנגדיל את <span class="math">\(n\)</span> כך נגלה שנהיה לנו קשה יותר ויותר למצוא חלוקה שבה באף קבוצה אין שלשה פיתגורית (אינטואיטיבית, בגלל שככל שהקבוצה יותר גדולה כך יש יותר שלשות פיתגוריות שצריך יהיה להפריד). אם מתישהו נגיע אל <span class="math">\(n\)</span> שבו <strong>אין</strong> שום דרך לחלק את המספרים מ1- עד <span class="math">\(n\)</span> לשתי קבוצות כך שבאף אחת מהן אין שלשה פיתגורית, מובטח לנו שזה מה שיקרה מעתה והלאה ותמיד, לכל <span class="math">\(m\ge n\)</span> (כי תמיד אפשר פשוט להתעלם מכל מספר שגדול מ-<span class="math">\(n\)</span> ועדיין לקבל שלשה פיתגורית בכל חלוקה). לכן יש כאן שתי שאלות:</p>
+<ol>
+    <li>האם קיים <span class="math">\(n\)</span> שעבורו לכל חלוקה לשתי קבוצות, באחת מהקבוצות יש שלשה פיתגורית?</li>
+    <li>אם קיים כזה, מה ה-<span class="math">\(n\)</span> המינימלי?</li>
+</ol>
+<p>המאמר עונה לשתי השאלות הללו: קיים <span class="math">\(n\)</span> כזה, וה-<span class="math">\(n\)</span> המינימלי הוא <span class="math">\(n=7825\)</span>.</p>
+<p>כמובן, אפשר לשאול למה השאלה הזו בכלל מעניינת ואת מי. כאן צריך טיפה רקע; ההקשר הכללי לבעיה כמו זו היא תחום בקומבינטוריקה שנקרא <strong>תורת רמזי</strong>. בתורת רמזי עוסקים בשאלות מהצורה "כמה גדולה צריכה להיות קבוצה כך שבהכרח יופיעו בה תבניות מסויימות". <a href="http://www.gadial.net/2011/08/03/ramsey_theorem/">יש לי פוסט</a> על אחד מהמשפטים הבסיסיים בנושא. התחום הזה הוא כר נרחב לשאלות והוא מעניין את הקומבינטוריקאים למדי; מעניין אותם מספיק כדי שרונלד גרהאם, מתמטיקאי מפורסם מהתחום, יציע בשנות השמונים פרס של לא פחות מ-100 דולר שלמים למי שיפתור את הבעיה הספציפית הזו. למרבה השמחה, גרהאם עדיין איתנו וראה את הבעיה נפתרת.</p>
+<p>עכשיו, משהבנו מה הבעיה, בואו נדבר על הפתרון. את המאמר עצמו <a href="https://arxiv.org/abs/1605.00723">אפשר לקרוא כאן</a>, והוא יחסית קריא. בואו נתחיל מהרעיון הכללי: את הבעיה הספציפית הזו של השלשות הפיתגוריות קל לתאר בתור מקרה פרטי של בעיה כללית במדעי המחשב שנקראת בעיית SAT. באופן תיאורטי בעיות SAT נחשבות לקשות מאוד, אבל בפועל בעשור ומשהו האחרונים חלו התפתחויות משמעותיות בתחום של פתרון מעשי של בעיות כאלו במקרים מסויימים, וקיימים כלים חזקים שעושים את זה. כותבי המאמר לקחו כלי כזה, שיפרו אותו עוד קצת על ידי התאמות לבעיה הנוכחית שעליהם לפתור, ואז זרקו את זה על מחשבים חזקים שעבדו קשה ובסוף מצאו את הפתרון. כמובן שבאים הטוקבקיסטים ותוהים "מוזר לי ועצוב שבזה מתעסקים אנשים בחיים שלהם" אבל דווקא כאן התהיה הזו (שבדרך כלל מתאימה לענייני מתמטיקה) לא רלוונטית בעליל, מהטעם הפשוט שפתרון פרקטי לבעיות SAT הוא דווקא משהו שימושי למדי במציאות ומשתמשים בו בשלל תחומים, מבניית מערכת שעות ועד לאימות פורמלי של חומרה ותוכנה. מה שהיה לנו כאן הוא סוג של "תצוגת תכלית" - אנשים שביום יום מתעסקים באלגוריתמים לפתרון SAT באו אל בעיה קשה במיוחד שלה עצמה אין שימושים, והראו איך הם מצליחים לפתור אותה באמצעות שימוש חכם באלגוריתמים הקיימים; דברים כאלו בהחלט עשויים להוביל לשיפור האלגוריתמים הקיימים ולפתרון בעיות פרקטיות חדשות.</p>
+<p>טוקבקים אחרים מתייחסים לפתרון בתור משעמם כי הוא מבוסס אך ורק על כוח גס. ובכן, להגיד שהם פתרו את הבעיה בעזרת כוח גס קצת חוטא למה שהם עשו, כי האלגוריתם שבו הם השתמשו כדי לפתור את בעיית ה-SAT הוא מחוכם ולא טריוויאלי בכלל; אבל מצד שני, כמעט כל ההוכחה בוצעה כאן על ידי המחשב.</p>
+<p>זה מעביר אותנו לדיון על שאלה שאוהבים להעלות פה ושם - האם הוכחות על ידי מחשב ראויות בכלל להיקרא הוכחות? השאלה הזו עלתה לראשונה אחרי הוכחת משפט ארבעת הצבעים, שהוכח גם הוא באמצעות מחשב, אבל הסיפור כאן הוא קצת שונה.</p>
+<p>אתחיל בלהגיד את דעתי: בוודאי שזו הוכחה. אין ספק בכלל. השאלה היא רק אם זו הוכחה <strong>מעניינת</strong>. <a href="http://www.gadial.net/2016/06/29/infinite_primes_proofs/">בפוסט הקודם</a> שלי הוכחתי שוב ושוב ושוב שיש אינסוף ראשוניים. עשיתי את זה יותר מפעם אחת כי להוכחות השונות היה ערך אסתטי שונה, והן הציעו רעיונות שונים ומשונים וזוויות הסתכלות מעניינות על הבעיה. בהוכחה באמצעות מחשב שיש לנו כאן <strong>אין שום דבר כזה</strong>. אנחנו לא משיגים שום תובנה לגבי "למה הבעיה מתנהגת כפי שהיא מתנהגת". אין לנו שום מושג למה דווקא 7825 הוא המספר שממנו קורה הקסם. אם תרצו, כל המידע שההוכחה נותנת לנו הוא מה הערך של <span class="math">\(n\)</span> וזה שהוא בכלל קיים, ותו לא. במובן הזה, זו הוכחה מאוד מאכזבת. כמובן, אני חייב להזהיר שהציפייה שלנו שתהיה הוכחה "יפה" או כזו שתיתן לנו "תובנות" על הבעיה היא ציפייה נאיבית מאוד; אף אחד לא מבטיח שהוכחה יפה כזו בכלל קיימת. קומבינטוריקה היא תחום אכזרי למדי מהבחינה הזו. הרבה דברים בו הם שרירותיים יחסית.</p>
+<p>מעבר לשאלת העניין/אסתטיקה יש גם את השאלה הפשוטה יותר - מנין לנו שההוכחה נכונה בכלל? אם כל מה שנעשה הוא לקודד את הבעיה בשיטה מסויימת ואז להריץ על זה תוכנת מחשב ולראות שהתוכנה לא מצאה פתרון, מה זה אומר לנו? אולי יש באגים בתוכנה? אולי קרן קוסמית פגעה בחומרה שעליה התוכנה רצה, הפכה שם ביט וגרמה לכל התוצאה להשתבש? למה שנאמין שהם בכלל הריצו את התוכנה הזו מלכתחילה ולא סתם טוענים שהם הריצו? התשובה לשאלות הללו היא שכמובן, הם לא הסתפקו בהרצת התוכנית - הם יצרו הוכחה שניתנת לבדיקה בקלות רבה יותר מאשר כתיבה של תוכנית דומה והרצה שלה. יותר מכך - ההוכחה <strong>לא תלויה בתוכנית</strong> שלהם אלא רק בשיטת הקידוד שבה הם קודדו את הבעיה, ושיטת הקידוד הזו היא פשוטה בצורה קיצונית - אין ספק שהקידוד עצמו תקין. זה אומר שבתיאוריה, כל אחד יכול לקחת את ההוכחה שהם יצרו ולכתוב בעצמו תוכנית מחשב שבודקת את ההוכחה הזו. הבעיה היחידה היא שההוכחה יצאה גדולה מאוד (אלו ה-200 טרהבייט המדוברים) ולכן חלק מהמאמץ של כותבי המאמר היה לכווץ אותה ככל הניתן. עדיין, אני בספק אם הרבה אנשים יטרחו כרגע לנסות ולבדוק את ההוכחה; אולי בעתיד, כשהמחשבים יהיו חזקים יותר ויהיה יותר קל להריץ בדיקה שכזו. אני מקווה שעניתי בזאת לטוקבקיסט שאמר "שקרנים, בונים על זה שאי אפשר לחיות מספיק כדי לבדוק את התשובה".</p>
+<p>כל זה אולי נשמע לכם קצת חשוד, אבל צריך להבין שככה זה עם הוכחות במתמטיקה באופן כללי. מפורסם במיוחד המקרה של ה<a href="http://www.gadial.net/2011/08/14/fermat_last_theorem_overview/">הוכחה של אנדרו ווילס למשפט האחרון של פרמה</a>: הנה לנו הוכחה שנכתבה על ידי מתמטיקאי בשר ודם, על מנת שמתמטיקאים אחרים יוכלו לקרוא אותה ומחשבים לא היו מעורבים בעניין הזה בכלל; ובהוכחה הזו הייתה טעות מאוד לא טריוויאלית שהתגלתה במהלך תהליך הבדיקה ונדרש לא מעט זמן כדי לתקן. אפילו אנדרו ווילס הגדול, שפתר את אחת מהבעיות הפתוחות החשובות ביותר במתמטיקה אי פעם, לא הצליח למנוע מטעות מהותית להשתרבב להוכחה שלו. יש הוכחות בטעויות מתמטיות. זה קורה. לכן מה שחשוב הוא באמת לאפשר ביקורת עמיתים - לאפשר לאחרים לבדוק את ההוכחה בעצמם. המרכיב הזה קיים גם כאן. נכון, מי שירצה לבדוק את ההוכחה פה יצטרך לכתוב תוכנית מחשב מתאימה, אבל גם מי שרוצה לבדוק את ההוכחה של ווילס צריך לעבוד קשה ולהכיר את החומר המתמטי הרלוונטי (המאוד לא טריוויאלי). ונכון, גם בתוכנית הבדיקה עשויה להיות טעות, אבל גם מי שקורא את ההוכחה של ווילס יכול לטעות. הבנתם את הרעיון. אני לא רואה הבדל מהותי בין ההוכחה הזו וההוכחה של ווילס, באספקט של "איך אנחנו יודעים שזה נכון".</p>
+<p>בואו נעבור עכשיו לדיון טיפה יותר טכני על הפרטים. כאמור, את כל המאמר אפשר לתמצת ל"המרנו את הבעיה לבעיית SAT ופתרנו את הבעיה הזו בצורה חכמה". אז צריך להתחיל מהסבר מהי בעיית SAT. <a href="http://www.gadial.net/2013/11/11/sat_intro/">יש לי פוסט בנושא</a> כאן עם ההגדרות המדויקות, אז לא אחזור עליהן כאן. השורה התחתונה היא זו: אם יש לנו את קבוצת המספרים <span class="math">\(\left\{ 1,2,\dots,n\right\} \)</span> אנחנו מגדירים לכל מספר <span class="math">\(k\)</span> בקבוצה משתנה <span class="math">\(x_{k}\)</span> שיכול לקבל 0 או 1, כאשר הערך שהמשתנה מקבל אומר האם המספר <span class="math">\(k\)</span> נמצא בקבוצה מס' 0 או בקבוצה מס' 1 בחלוקה שלנו את התחום לשתי קבוצות (כלומר, כל השמה של ערכים לכל המשתנים מגדירה לנו חלוקה של הקבוצה לשתי קבוצות). כעת לכל שלשה פיתגורית <span class="math">\(a^{2}+b^{2}=c^{2}\)</span> של מספרים בין 1 ל-<span class="math">\(n\)</span> אנחנו מגדירים נוסחה מהצורה <span class="math">\(\left(x_{a}\vee x_{b}\vee x_{c}\right)\wedge\left(\overline{x_{a}}\vee\overline{x_{b}}\vee\overline{x_{c}}\right)\)</span>. מה שהנוסחה הזו אומרת, מילולית, היא שעבור ההשמה שלנו למשתנים <span class="math">\(x_{a},x_{b},x_{c}\)</span>, לפחות אחד מהמשתנים קיבל 0 ולפחות אחד מהמשתנים קיבל 1. כלומר, לא כל המשתנים קיבלו אותו מספר; כלומר, לא כל שלושת המספרים <span class="math">\(a,b,c\)</span> נמצאים באותה קבוצה; כלומר, השלשה <span class="math">\(a,b,c\)</span> לא התקבלה. אם נמצא השמה למשתנים שנותנת ערך "אמת" לכל הנוסחאות הללו, עבור כל השלשות הפיתגוריות הרלוונטיות, אז מצאנו חלוקה של הקבוצה <span class="math">\(\left\{ 1,\dots,n\right\} \)</span> שבה לא נוצרות שלשות פיתגוריות. כותבי המאמר עשו את זה והצליחו למצוא השמה כזו עבור <span class="math">\(n=7824\)</span>, מה שאומר שהערך של <span class="math">\(n\)</span> שעבורו לכל חלוקה יש שלשה פיתגורית הוא <strong>לפחות</strong> 7825.</p>
+<p>החלק הקשה הוא להראות שעבור 7825 <strong>לא קיימת</strong> השמה שנותנת ערך "אמת" לכל הנוסחאות בו זמנית. איך מוכיחים דבר כזה? על פניו אין משהו חכם יותר לעשותו מאשר לבדוק את כל ההשמות האפשריות; אבל בפועל יש ויש. גם על זה <a href="http://www.gadial.net/2013/11/14/resolution_proof_system/">כתבתי פוסט בעבר</a>, שמציג דוגמה לשיטת הוכחה שכזו. הרעיון הוא להתחיל עם הנוסחה שלנו ולהתחיל <strong>לפשט</strong> אותה - לבצע כל מני שינויים שמעבירים אותנו לנוסחה אחרת, שהיא בעלת התכונה שכל השמה שנותנת ערך "אמת" לנוסחה המקורית, תיתן ערך "אמת" גם לה. אם אפשר על ידי סדרת פישוטים כזו להגיע לנוסחה שבבירור אין השמה שנותנת לה ערך "אמת", סיימנו. במקרה הזה, ה"הוכחה" שלנו תהיה תיאור של סדרת הפישוטים שיש לבצע. במאמר משתמשים בשיטת הוכחה מסוג זה, שדומה לשיטת ההוכחה שהצגתי בפוסט שלי ("רזולוציה") אבל היא מתוחכמת יותר מבחינת הפעולות שניתן לבצע. כמובן, אלו הוכחות שמיועדות לביצוע על ידי מחשב - אין לבני אדם מה לעשות איתן, ואין בהן שום תובנה מעניינת; פרקטית הן בסך הכל סדרות של מספרים.</p>
+<p>נותרה רק השאלה איך מייצרים הוכחה שכזו מלכתחילה. גם כאן, השמות שהמאמר זורק לחלל האוויר הם מוכרים למדי למי שמתעסקים בתחום. הם מתבססים על אלגוריתם שנקרא Cube and Conquer, שהוא אלגוריתם הפרד-ומשול לפתרון בעיות SAT - הרעיון הוא לפצל את הבעיה להרבה תת-בעיות, לפתור את כולן בנפרד ואיכשהו לקבל פתרון גדול מתוך הפתרונות הקטנים. כל בעיה קטנה נפתרת באמצעות אלגוריתם שנקרא CDCL שגם את הרעיון הכללי שמאחוריו <a href="http://www.gadial.net/2014/02/03/cdcl_sat_solving/">הצגתי פעם בבלוג</a>. אני לא רוצה שתקבלו אשליות כלשהו - מדובר פה על בעיה <strong>קשה</strong>. לפתור בעיות SAT זה עסק קשה באופן כללי, והבעיה הזו היא לא חריגה. הפותרים השתמשו במחשבים חזקים מאוד שעבדו לא מעט זמן כדי לפתור, וגם זה לא הספיק והם נזקקו לעוד כל מני היוריסטיקות שלא אכנס אליהן כאן אבל הן מפורטות במאמר.</p>
+<p>כל מי שקצת מתעסק בתחום של פותרי SAT מבין מהר מאוד שיש לו כאן ביד כלי חזק ושימושי מאוד, וכל מי שאוהב קצת מתמטיקה כנראה מתחיל לחשוב על בעיות קומבינטוריות שאפשר לפתור. העניין הוא, כרגיל, שאם היה קל לפתור משהו, הוא כבר היה נפתר. כדי לפתור בעיה קומבינטורית פתוחה באמצעות פותרי SAT צריך לשלוט בצ'ופצ'יקים של קצה התחום, להיות עם מחשבים חזקים ואופטימיזציות חזקות. זו הסיבה למה אני, למשל, ממש לא קרוב לפתרון בעיות כאלו למרות שאני מכיר פותרי SAT. במובן הזה, המאמר מאוד מעניין - הוא סוג של Tour De Force של פתרון SAT. אבל זה שההוכחה יצאה מאוד ארוכה - זה הרבה פחות מעניין לטעמי (אורך ההוכחה הוא בסך הכל פונקציה של גודל הבעיה; היופי כאן הוא בכך שהצליחו בכלל למצוא הוכחה על בעיה גדולה כל כך). והתוצאה עצמה, וזה שזה יצא דווקא 7825 - גם זה לא נראה לי ממש מעניין. אולי בעתיד נסיק איזו תובנה מהותית מהמספר הזה, 7825; אבל בינתיים פרט למספר הזה ההוכחה לא מלמדת אותנו שום דבר חדש, וזו הסיבה שבגלל לא חשבתי שיש ממש טעם לכתוב פוסט בנושא מלכתחילה. אני מקווה שיצא פוסט מספיק מעניין בכל זאת.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2016/07/27/eratosthenes_circumference/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">איך חישב ארטוסתנס את היקף כדור הארץ</span>
+            </a>
+            
+            
+            
+            <a href="/2016/06/29/infinite_primes_proofs/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">בואו נוכיח שיש אינסוף ראשוניים!</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

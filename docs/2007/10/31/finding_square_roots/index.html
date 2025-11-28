@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז איך באמת מוצאים שורש ריבועי? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז איך באמת מוצאים שורש ריבועי?</h1>
+            <div class="post-meta">
+                <span class="date">2007-10-31</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="//gadial.blogli.co.il/archives/91">בפוסט הקודם</a> דיברתי על טענתו של יהודה בלו שלא קיימת "שיטה" למציאת <a href="//he.wikipedia.org/wiki/%D7%A9%D7%95%D7%A8%D7%A9_%D7%A8%D7%99%D7%91%D7%95%D7%A2%D7%99">שורש ריבועי</a>. מכיוון ששיטה בסיסית למציאת שורש ריבועי היא "תשתמש ב<a href="//he.wikipedia.org/wiki/%D7%9E%D7%97%D7%A9%D7%91%D7%95%D7%9F_%D7%9B%D7%99%D7%A1">מחשבון</a>", מלכתחילה לא ברור מה הוא רוצה, אבל אפשר לנסות להבין:</p>
+<p>כשעוסקים בשורשים ריבועיים של <a href="//he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%98%D7%91%D7%A2%D7%99">מספרים טבעיים</a>, יש אחת משתי אפשרויות - או שהשורש יהיה מספר שלם, או שיהיה <a href="//he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%90%D7%99_%D7%A8%D7%A6%D7%99%D7%95%D7%A0%D7%9C%D7%99">מספר אי רציונלי</a> (הדגמתי <a href="//gadial.blogli.co.il/archives/16">כאן</a> את ההוכחה לאי הרציונליות של שורש 2; אפשר להכליל אותה לכל מספר שאין לו שורש שלם, אבל זה לא מיידי. אתגר: חשבו מדוע השיטה לא עובדת עבור 4, למשל). מספרים אי רציונליים ניחנים בתכונה המרגיזה שאי אפשר לכתוב אותם כמספר עשרוני סופי או מחזורי (וגם שינוי בסיס הספירה לא יעזור כאן), ולכן מראש אנו מוותרים על הרעיון להציג אותם בצורה הזו במדוייק. אנו כותבים <span class="math">\(\sqrt{2}=1.41421356\dots\)</span> ואומרים ששלוש הנקודות מסמנות ש"זה לא סוף הסיפור". בשביל מחשבונים, סוף הסיפור מגיע אחרי מספר לא גדול במיוחד של ספרות - הם פשוט לא מסוגלים להציג על המסך יותר ספרות. לכן, מחשבון מסתפק בהצגת <strong>קירוב</strong> של השורש האי רציונלי, ולנו זה לא כל כך מפריע, כי מי שם לב להבדל כשהוא כל כך זניח.</p>
+<p>לכן עיקר הדגש הוא על שיטות קירוב לשורש - מציאה של מספר כלשהו של הספרות הראשונות מתוך השורש והסתפקות בכך. אלו השיטות שבהן מחשבונים משתמשים, ואציג בהמשך.</p>
+<p>שיטות קירוב, מטבען, לא נותנות תוצאות סופיות מדוייקות. הן פשוט אומרות "תפסיק כשהשגת קירוב גדול מספיק" - כלומר, דיוק ברמת ספרות כלשהי. ייתכן שבלו רוצה שיטה שתעצור מתישהו ותגיד "הנה, קיבלתי בדיוק את המספר המבוקש" - גם אם עבור אי רציונלי זה לא נשמע סביר, בגלל הקשיים שתיארתי קודם והעובדה שאם הפעולות שנבצע על המספר שמוציאים לו שורש יהיו רק ארבע פעולות החשבון הבסיסיות, כל המספרים שנקבל יהיו רציונליים (למה?), הרי שעבור מספרים טבעיים זה כבר נשמע יותר סביר. לי לא נראה שיש הבדל מעשי בין לקבל 10 כשורש של 100 ובין לקבל 10.000000000000000434, כאשר הספרות השונות מאפס כבר לא מוצגות על המסך וברור לנו שהן זניחות ואנחנו מתעלמים מהן ומשתמשים בקירוב - 10, אבל ייתכן שלבלו זה כן מפריע.</p>
+<p>אם כן, איך אפשר למצוא <strong>במדוייק</strong> שורש של מספר טבעי? בלו דיבר על "חידת הראשוניים", וייתכן שכאן התשובה. אפשר לקחת כל מספר טבעי ולפרק אותו לגורמים - להציג אותו בתור מכפלת <a href="//he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99">מספרים ראשוניים</a>. הרעיון אינו מסובך: ניקח למשל את 100. לא קשה לנחש מספר שמחלק אותו - נניח, 50, ולכן <span class="math">\(100=50\cdot 2\)</span>. כאן לא נגמר הסיפור - את 2 אי אפשר לפרק למכפלה בצורה שתוסיף לנו משהו - הפירוק היחיד הוא <span class="math">\(2=2\cdot 1\)</span> שלא מגלה לנו משהו לא ידענו עדיין. למספרים כאלו, שמתחלקים רק בעצמם וב-1, קוראים <strong>ראשוניים</strong>. לעומת 2, 50 אינו ראשוני: אפשר לפרק אותו למכפלה של 2 ושל 25. גם את 25 אפשר לפרק למכפלה - של 5 בעצמו. 5 הוא ראשוני, כך שקיבלנו:</p>
+<p><span class="math">\(100=2^2\cdot 5^2\)</span></p>
+<p>וזה מכונה <strong>"ה</strong>פירוק לגורמים של מאה". ה' הידיעה כאן אינה מקרית - אין עוד פירוק אחר, וההוכחה לכך אינה מסובכת (התוצאה הזו נקראת "<a href="//he.wikipedia.org/wiki/%D7%94%D7%9E%D7%A9%D7%A4%D7%98_%D7%94%D7%99%D7%A1%D7%95%D7%93%D7%99_%D7%A9%D7%9C_%D7%94%D7%90%D7%A8%D7%99%D7%AA%D7%9E%D7%98%D7%99%D7%A7%D7%94">המשפט היסודי של האריתמטיקה</a>"). כמובן שאפשר להתחכם ולהגיד שאפשר גם לכתוב <span class="math">\(100=5^2\cdot 2\cdot 2\)</span> וכדומה - אולם אין הבדל <strong>מהותי</strong> בין שתי צורות הכתיבה; שתיהן מכילות בדיוק אותם גורמים ראשוניים, שהם הדבר החשוב.</p>
+<p>העובדה הזו, שהמספרים הראשוניים מהווים "אבני בניין" שכאלו, היא אחת הסיבות שבגללן הראשוניים הם כל כך חשובים. הוצאת שורש היא דוגמה נאה למקרה שבו הכרת הפירוק לגורמים עוזרת לנו - כדי לדעת אם יש שורש שלם למספר די לפרק אותו לגורמים ולהביט בחזקה של כל גורם. אם כל חזקה היא זוגית, אז יש למספר שורש שמתקבל על ידי חלוקת כל חזקה ב-2. אחרת, אין לו שורש. נכונות הטענה הזו נובעת מחוקי החזקות הבסיסיים - נסו להוכיח אותה (או, אם זה עדיין לא ברור, שאלו שאלות בתגובות). במקרה שלנו, מה שנקבל הוא <span class="math">\(\sqrt{100}=2^{2\cdot \frac{1}{2}}\cdot 5^{2\cdot \frac{1}{2}}=2\cdot 5=10\)</span></p>
+<p>לכאורה נפתרה תעלומת השורש. הבעיה היא שמציאת פירוק לגורמים היא בעיה <strong>קשה</strong>. מי שרוצה לחוש על בשרו את הקושי שלה מוזמן לנסות ולפרק את 51,491,333 ללא שימוש במחשב (רמז: קיבלתי את המספר הזה על ידי הכפלת שני ראשוניים בעלי ארבע ספרות). מי שיכעס על כך שאיני מרשה להשתמש במחשב, מוזמן לקבל אתגר גדול קצת יותר - פירוק של מכפלת שני ראשוניים בני 500 ספרות כל אחד (לא אכתוב מספר שכזה כאן - חבל על המקום). זו משימה שתהיה קשה גם למחשב, בכל השיטות הידועות כיום, ותגזול זמן רב ביותר (בסדר גודל של מאות שנים לכל הפחות, אם נבחר את הראשוניים גדולים מספיק, והתוכנה לא תהיה ברת מזל במיוחד). שיטות הצפנה רבות בימינו מתבססות על כך שהבעיה הזו קשה - אם הבעיה הייתה ניתנת לפתרון מהיר במחשב, היינו נאלצים להחליף חלק מהן. מה שחשוב להבין כאן הוא שלא קשה (למחשב) לבצע פעולות חשבון עם מספרים בני 500 ספרות, כך שקל להשתמש במספרים הללו לצורכי הצפנה, ועם זאת לא לחשוש שיפורקו.</p>
+<p>אם כן, גם הוצאת שורש על ידי פירוק לגורמים אינה רעיון טוב במיוחד. ישנן שיטות חישוב טובות בהרבה.</p>
+<p>איני יודע מה השיטה שבה משתמשים מחשבונים בימינו, ואני מניח שזה משתנה ממחשבון למחשבון. ויקיפדיה האנגלית מספרת ששיטה קיימת נפוצה היא מעין "רמאות" - משתמשים בכך שלמחשבון כבר יש קירוב לשתי פונקציות "מסובכות" אחרות, ומשתמשים בקירוב הזה כדי לחשב שורשים. הפונקציות הן <a href="//he.wikipedia.org/wiki/%D7%94%D7%9C%D7%95%D7%92%D7%A8%D7%99%D7%AA%D7%9D_%D7%94%D7%98%D7%91%D7%A2%D7%99">הלוגריתם הטבעי</a> (ln באנגלית) ופונקצית ה<a href="//he.wikipedia.org/wiki/%D7%90%D7%A7%D7%A1%D7%A4%D7%95%D7%A0%D7%A0%D7%98">אקספוננט</a> <span class="math">\(e^x\)</span>. השאלה מי הן ומה הן ראויה לדיון נפרד שלא אכנס אליו כאן - רק אציין שמתכונותיהן נובע שמתקיים <span class="math">\(\sqrt{x}=e^{\frac{1}{2}\ln x}\)</span>.</p>
+<p>הדרך השניה לקירוב שורש היא באמצעות שיטה שהייתה ידועה כבר ל<a href="//he.wikipedia.org/wiki/%D7%91%D7%91%D7%9C">בבלים</a> הקדמונים ("כבר" היא אולי מילה חצופה מעט כאן; לבבלים הייתה מתמטיקה מתקדמת מאוד ביחס למרבית העמים האחרים בני התקופה). בימינו ניתן לגזור את השיטה הזו באמצעות שיטת קירוב כללית יותר שנקראת "<a href="//he.wikipedia.org/wiki/%D7%A9%D7%99%D7%98%D7%AA_%D7%A0%D7%99%D7%95%D7%98%D7%95%D7%9F_%D7%A8%D7%A4%D7%A1%D7%95%D7%9F">שיטת ניוטון-רפסון</a>". מכיוון שאני אישית מחבב למדי את השיטה הזו, אציג אותה כאן (בלי הוכחות, כמובן, ובלי לנסות להיות מדויק מדי). רק אעיר לפני שאתחיל שבעזרת אותה השיטה ממש (בהינתן שקל לחשב את <span class="math">\(e^x\)</span>, ואכן קל באמצעות שיטת קירוב אחרת שמכונה "<a href="//he.wikipedia.org/wiki/%D7%98%D7%95%D7%A8_%D7%98%D7%99%D7%99%D7%9C%D7%95%D7%A8">טור טיילור</a>") אפשר לחשב את הלוגריתם הטבעי של מספרים (ואולי כך עושים זאת במחשבונים, אם כי שמעתי על שיטות טובות יותר).</p>
+<p>השיטה דורשת הבנה בסיסית ב<a href="//he.wikipedia.org/wiki/%D7%97%D7%A9%D7%91%D7%95%D7%9F_%D7%93%D7%99%D7%A4%D7%A8%D7%A0%D7%A6%D7%99%D7%90%D7%9C%D7%99">חשבון דיפרנציאלי ואינטגרלי</a> - יש לדעת מהי <a href="//he.wikipedia.org/wiki/%D7%A0%D7%92%D7%96%D7%A8%D7%AA">נגזרת</a> (אנסה לתאר אותה כך שגם מי שלא מכיר נגזרות יבין, וכנראה שלא אצליח). אחד מהדברים הרבים שמפליאים אותי במערכת החינוך שלנו הוא שהשיטה אינה נלמדת במסגרת לימודי החדו"א בבית הספר - מדובר בשימוש אלמנטרי בחומר הלימוד, שמניב תוצאה יפה ומעניינת - הסבר מספק למדי לגבי אחת מהדרכים שבהן מחשבון מחשב דברים כמו שורשים.</p>
+<p>הרעיון בשיטה הוא פשוט: נתונה <a href="//he.wikipedia.org/wiki/%D7%A4%D7%95%D7%A0%D7%A7%D7%A6%D7%99%D7%94">פונקציה</a> ממשית כלשהי <span class="math">\(f(x)\)</span> ("ממשית" פירושה - מקבלת כקלט מספר ממשי ומוציאה כפלט מספר ממשי), שאנו רוצים למצוא ערך שמאפס אותה, כלומר שמתקיים בו <span class="math">\((f(x)=0\)</span>. בצורה גרפית, זוהי נקודה שבה גרף הפונקציה חותך את ציר ה-x. מה שעושים הוא לנחש נקודה שנמצאת בסביבות נקודת החיתוך - "קירוב ראשוני". את הקירוב הזה משפרים בצורה הדרגתית והולכים ומתקרבים אל נקודת החיתוך, באופן הבא: מעבירים אנך מנקודת החיתוך הנוכחית אל גרף הפונקציה. בנקודה שבה פוגשים את גרף הפונקציה (שקוארדינטת ה-x שלה היא בדיוק הקירוב הנוכחי - נניח שהוא מסומן ב-<span class="math">\(x_n\)</span> - ולכן גובהה הוא <span class="math">\(f(x_n)\)</span> מעבירים משיק לגרף הפונקציה (קו ישר שהכיוון שלו הוא "כמו הכיוון של הפונקציה בנקודה") עד שהוא חותך את ציר x. נקודת החיתוך היא הקירוב החדש שלנו. ממשיכים עד שהקירוב טוב דיו.</p>
+<p>ויקיפדיה האנגלית מסכמת זאת בתמונה נאה:</p>
+<p><img src="//upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Newton_iteration.png/729px-Newton_iteration.png" alt="" width="375" height="300" /></p>
+<p>העקום הכחול הוא הפונקציה, והקו האדום הוא המשיק. בציור רואים שנקודת החיתוך החדשה קרובה יותר לנקודת החיתוך האמיתית של הפונקציה עם הציר, ואם תנסו להמשיך ידנית את סדרת הקירובים תראו שהיא הולכת ומשתפרת.</p>
+<p>כמובן שנשארנו עם כמה דברים פתוחים - ראשית, איך זה קשור לשורש? (תכף אסביר). שנית, מה זאת אומרת "לנחש קירוב ראשוני"? שלישית, האם זה מתקיים לכל פונקציה?</p>
+<p>אתחיל מהסוף - צריך שהפונקציה תקיים כמה תנאים בסיסיים - תהיה מה שמכונה "פונקציה חלקה" - כלומר, גזירה בכל נקודה ("גזירה" פירושו של דבר שבאמת ניתן להעביר משיק בכל נקודה - אין "שפיצים" שבהם לא ברור מה צריך להיות המשיק). זה לא מבטיח שבהכרח נתכנס לפתרון - עבור עוד כמה מגבלות מצמצמות יותר כן יש ביטחון שכזה, אך לא אפרט במדוייק מהן.</p>
+<p>בכל הנוגע לניחוש הראשוני, הוא חשוב בעיקר כדי להבטיח שהחיפוש אחרי נקודת החיתוך יתנהל כולו בתוך קטע שבו הפונקציה מקיימת את התנאים הנדרשים ממנה. לרוב הניחוש יכול להיות גס למדי. כמו כן, לפעמים יש לפונקציה כמה נקודות חיתוך - כדי למצוא את זו שמעניינת אותנו כדאי להתחיל קרוב אליה, ולא לאחרות.</p>
+<p>בכל הנוגע לשורש, התשובה טריוויאלית: אם אנו רוצים לחשב את השורש הריבועי של <span class="math">\(m\)</span>, נשתמש בניוטון-רפסון עבור הפונקציה <span class="math">\(f(x)=x^2-m\)</span>. די ברור שהפונקציה מתאפסת בדיוק בנקודות <span class="math">\(\pm\sqrt{m}\)</span>. כדי להבטיח התכנסות לשורש החיובי, מספיק "לנחש" בתור ערך התחלתי את <span class="math">\(m\)</span> עצמו. בפועל, אם <span class="math">\(m\)</span> בעל מספר ספרות רב, כבר פשוט יותר לקצוץ אותן בחצי ולבחור מספר שרירותי מסדר הגודל הזה.</p>
+<p>ואיך מבצע מחשב את השיטה? משחק קצר ב<a href="//he.wikipedia.org/wiki/%D7%92%D7%90%D7%95%D7%9E%D7%98%D7%A8%D7%99%D7%94_%D7%90%D7%A0%D7%9C%D7%99%D7%98%D7%99%D7%AA">גאומטריה אנליטית</a>, תוך כדי כך שזוכרים שהשיפוע של משיק לפונקציה בנקודה <span class="math">\(x_n\)</span> הוא <span class="math">\(f\prime(x_n)\)</span>, מביא אותנו לנוסחה הבאה: <span class="math">\(x_{n+1}=x_n-\frac{f(n)}{f\prime(n)}\)</span>. זה תרגיל נחמד להגיע לתוצאה הזו, ואשאיר אותו למי שמעוניין בכך.</p>
+<p>עבור שורש, הנגזרת פשוטה במיוחד: הנגזרת של <span class="math">\(x^2-n\)</span> היא פשוט <span class="math">\(2x\)</span>, ולכן הצבה בנוסחה הכללית מניבה לבסוף את הנוסחה הבאה:</p>
+<p><span class="math">\(x_{n+1}=\frac{1}{2}\cdot(x+\frac{n}{x})\)</span>. זו השיטה הפרטית שגם הבבלים הכירו.</p>
+<p>כדי לראות כמה מהר זה מתכנס, הנה דוגמה, עבור n=314,721, מספר שבחרתי שרירותית בתור מכפלה של שני ריבועים של ראשוניים (17 ו-33). זה מספר בן שש ספרות, כך שמימוש נבון ינחש בתור ערך התחלתי מספר בן 3 ספרות - נניח 500, שנמצא במקום טוב באמצע. הנה סדרת הקירובים:</p>
+<p>500<br />
+564.5<br />
+561.010850310009<br />
+561.000000104926<br />
+561.0</p>
+<p>ואכן, 561 הוא השורש.</p>
+<p>אם כן, זה סוגר את העניין מבחינתי. יש עוד שיטות קירוב לשורשים שניתנות למימוש במחשב, ואני בטוח שחלקן יותר מהירות מניוטון-רפסון, אבל את זה אני משאיר ליצרני מחשבונים. אגב, למקרה שזה לא ברור - ניוטון-רפסון מטפל באופן דומה גם בשורש שלישי, רביעי וכו'.</p>
+<p>מה עוד אפשר לרצות? שיטה ידנית לחישוב, ככל הנראה. הקירוב שהצגתי כאן ניתן לחישוב ידני בלי קשיים גדולים מדי, ובכל זאת העניינים הופכים למסובכים למדי, מכיוון שצריך לחלק ב-x הנוכחי, מה שאינו כיף גדול לשברים עשרוניים. האם קיימת שיטה ידנית לחישוב שהיא נוחה יותר?</p>
+<p>התשובה, אולי במפתיע, היא שכן. קיימת שיטה ידנית שמזכירה במשהו חילוק ארוך - אך למרבה הצער, היא מסובכת יותר ודורשת מספר חישובי עזר שצריך לעשות בצד. השיטה הזו איטית יותר מניוטון-רפסון (כלומר, מחשב יגיע בה לתוצאות יותר לאט) אך אדם עם מספיק סבלנות יוכל להשתמש בה ללא קשיים גדולים. היתרון הגדול שבה הוא שמרגע שהתגלתה ספרה כלשהי של השורש (והן מתגלות באופן סדרתי) אפשר להיות בטוחים שהיא נכונה. לכן, אם מחפשים שורש של מספר טבעי שהוא עצמו מספר טבעי - השיטה הזו אכן תסתיים עם המספר הנכון, במדוייק, ולא בתור קירוב.</p>
+<p>הרעיון הבסיסי בשיטה פשוט עד כדי כך שיראה כמו רמאות. איך אני יודע מהו שורש 2? ברור לי שהוא גדול מ-1 (כי 1 בריבוע זה 1) וקטן מ-2 (כי 2 בריבוע הוא 4). אם כן, הוא חייב להתחיל בספרה 1. מה הספרה הבאה? פשוט מתחילים לעבור על הספרות - 1.0 בריבוע זה 1.0 - קטן מ-2. 1.1 בריבוע זה 1.21 - קטן מ-2, וכן הלאה, עד שנגלה כי 1.4 בריבוע הוא 1.960 שעדיין קטן מ-2, אבל 1.5 בריבוע הוא 2.2500, שגדול מ-2, ולכן הספרה הבאה היא 4, כלומר בינתיים הקירוב שלנו הוא 1.4, וכן הלאה. את כל חישובי ההעלאה בריבוע הללו לא קשה לעשות - כפל מספרים עשרוניים הוא קל למדי.</p>
+<p>שכלול של הגישה הזו הוא שנותן את שיטת הכמו-חילוק-ארוך שהזכרתי. לא אכנס לפרטיה (הטכניים והמשעממים, לטעמי) כאן - אפשר לראותם ב<a href="//en.wikipedia.org/wiki/Methods_of_computing_square_roots">ויקיפדיה,</a> למשל.</p>
+<p>אם כן, האם הצלחתי לשכנע אתכם שמכל נקודת מבט אפשרית, קיימת שיטה למציאת שורש ריבועי, ואין זה משנה אם נפתרה "חידת המספרים הראשוניים" או לא? נראה לי שטענת הנגד היחידה שעוד ניתן לטעון הוא שלא ניתנה שום נוסחה סגורה שכוללת רק את ארבע פעולות החשבון ונותנת בצורה מפורשת את השורש. שיטה כזו, כאמור לעיל, לא יכולה להתקיים באופן כללי (אי אפשר לקבל באמצעותה מספרים אי רציונליים שהם שורש של מספר טבעי). עבור שורשים שהם טבעיים איני פוסל את קיומה של נוסחה שכזו; יהיה מעניין לראות אותה, או הוכחה שהיא אינה קיימת, אך בינתיים אני סבור שאפשר לשים תגית "פתור" על בעיית השורש, ולעבור לדברים מסובכים יותר.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2007/11/05/modular_square_roots/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">ועכשיו למשהו מסובך יותר - הוצאת שורש ריבועי!</span>
+            </a>
+            
+            
+            
+            <a href="/2007/10/27/math_crank_square_roots/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">האם יש שיטה למציאת שורש ריבועי? (כן!)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תורת הקבוצות - פונקציות חד-חד-ערכיות, על והפיכות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תורת הקבוצות - פונקציות חד-חד-ערכיות, על והפיכות</h1>
+            <div class="post-meta">
+                <span class="date">2020-05-15</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                    <a href="/tags/פונקציות.html">פונקציות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בסדרת הפוסטים שלי על תורת הקבוצות סיימתי להגדיר מהן פונקציות, ועכשיו אני רוצה להראות את שתי התכונות החשובות ביותר שמדברים עליהן בהקשר של פונקציות: פונקציות <strong>חד-חד-ערכיות</strong> ופונקציות <strong>על</strong>. שתי התכונות הללו הן לא משהו אקראי שנבחר להיות מעניין בצורה שרירותית - חיש קל נראה שהן מגיעות הישר מלב ההגדרה של מהי פונקציה בכלל.</p>
+<p>ראשית, בואו נגדיר את שתי התכונות הללו. ניקח פונקציה <span class="math">\(f:A\to B\)</span>. אינטואיטיבית - זה משהו שלוקח קלט מתוך <span class="math">\(A\)</span> ומחזיר פלט מתוך <span class="math">\(B\)</span>. כעת, התכונה "<span class="math">\(f\)</span> חד-חד-ערכית" פירושה ש<strong>קלטים שונים מחזירים פלטים שונים</strong> או במילים אחרות, <strong>אין שני קלטים שונים שנותנים את אותו פלט</strong>. פורמלית: אם <span class="math">\(a_{1}\ne a_{2}\in A\)</span> אז <span class="math">\(f\left(a_{1}\right)\ne f\left(a_{2}\right)\)</span>, או בניסוח אחר, שימושי אולי אפילו יותר: אם <span class="math">\(f\left(a_{1}\right)=f\left(a_{2}\right)\)</span> אז <span class="math">\(a_{1}=a_{2}\)</span>.</p>
+<p>הנה דוגמא פשוטה: אם נגדיר פונקציה מכל המכוניות שכרגע על הכביש אל מספר הרישוי שלהן, הפונקציה הזו תהיה חד-חד-ערכית כי אין שני רכבים עם אותו מספר רישוי (אני מאוד מקווה!). אם נגדיר פונקציה מכל המכוניות הללו אל <strong>הצבע</strong> שלהן, היא תהיה מאוד לא חד-חד-ערכית; זה ניחוש סביר שיהיו על הכביש שתי מכוניות שונות בצבע לבן.</p>
+<p>בואו נראה דוגמאות מקרב הפונקציות הממשיות, <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span>. הפונקציה <span class="math">\(f\left(x\right)=x\)</span> היא חד-חד-ערכית, באופן די מובן מאליו כי אם <span class="math">\(f\left(a_{1}\right)=f\left(a_{2}\right)\)</span> אז מההגדרה של <span class="math">\(f\)</span> נקבל <span class="math">\(a_{1}=f\left(a_{1}\right)=f\left(a_{2}\right)=a_{2}\)</span>. הנה משהו קצת יותר מחוכם: הפונקציה הלינארית <span class="math">\(f\left(x\right)=3x-7\)</span> היא חד-חד-ערכית כי אם <span class="math">\(f\left(a_{1}\right)=f\left(a_{2}\right)\)</span> אז <span class="math">\(3a_{1}-7=3a_{2}-7\)</span> ואם נחבר 7 לשני האגפים ונחלק ב-3 נקבל <span class="math">\(a_{1}=a_{2}\)</span>.</p>
+<p>לעומת זאת הפונקציה <span class="math">\(f\left(x\right)=x^{2}\)</span> <strong>איננה </strong>חד-חד-ערכית כי <span class="math">\(f\left(1\right)=f\left(-1\right)=1\)</span>. מה השתבש? למה אי אפשר להגיד <span class="math">\(a_{1}^{2}=a_{2}^{2}\)</span> ואז להוציא שורש משני האגפים? בדיוק בגלל שפעולת הוצאת השורש דורשת מאיתנו <strong>לאבד מידע</strong>. אם תזכרו, בפוסט הקודם אמרתי משהו על כך שהוצאת שורש היא משהו מוזר שנקרא <strong>פונקציה רב ערכית</strong> ומה שאנחנו עובדים איתו בדרך כלל הוא רק <strong>ענף</strong> של הפונקציה. לא חייבים להיכנס לדקות הזו; רק להיות מודעים לכך שלא כל פעולה שאנחנו מפעילים על שני אגפי משוואה מבטיחה שפתרונות אפשריים לא ילכו לאיבוד.</p>
+<p>באופן שאולי קצת מפתיע, <span class="math">\(f\left(x\right)=x^{3}\)</span> היא דווקא <strong>כן</strong> פונקציה חד-חד-ערכית כשמדובר על פונקציה במספרים ממשיים; זאת מכיוון של-<span class="math">\(a^{3}\)</span> יש <strong>שלושה</strong> שורשים אפשריים ש-<span class="math">\(a\)</span> הוא רק אחד מהם, אבל שני השורשים האחרים הם מספרים מרוכבים <strong>שאינם ממשיים</strong>. אם כן, השאלה מתי פונקציה היא חד-חד-ערכית או לא עשויה להיות טריקית למדי; צריך להיזהר עם זה.</p>
+<p>בשביל האינטואיציה שלנו, הנה קריטריון פשוט שמאפשר "לראות" מתי פונקציה ממשית היא חד-חד-ערכית. נסתכל על הגרף שלה ונשאל את עצמנו את השאלה הבאה: האם קיים קו <strong>אופקי</strong> שחותך את גרף הפונקציה בשתי נקודות או יותר? שתי נקודות חיתוך כאלו שהן באותו גובה הן זוגות <span class="math">\(\left(x_{1},y\right),\left(x_{2},y\right)\)</span> - כלומר שני קלטים של הפונקציה שנותנים את אותו פלט. אם מסתכלים על הגרף של <span class="math">\(f\left(x\right)=x^{2}\)</span> ("פרבולה מחייכת") רואים בקלות שהיא לא חד-חד-ערכית כי כל קו שגבוה מ-<span class="math">\(y=0\)</span> חותך אותה בשני מקומות; לעומת זאת הגרף של <span class="math">\(f\left(x\right)=x^{3}\)</span> ("אין לי מושג איך לקרוא לזה אבל זה פיתול מוזר שכזה") מקיים את תכונת החיתוך הזו יפה.</p>
+<p><img src="/img/2020/04/graphs.PNG" alt=""/></p>
+<p>נעבור לתכונה השניה. פונקציה <span class="math">\(f:A\to B\)</span> היא <strong>על</strong> <span class="math">\(B\)</span> אם לכל פלט אפשרי אכן קיים קלט שמחזיר אותו: כלומר, לכל <span class="math">\(b\in B\)</span> קיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(f\left(a\right)=b\)</span>. למשל, אם לכל מילה בשפה העברית <span class="math">\(f\)</span> מתאימה את האות הראשונה שלה, אז זו פונקציה על כי לכל אות בעברית קיימת מילה אחת לפחות שמתחילה באות הזו. לעומת זאת, הפונקציה שמחזירה לכל אדם בישראל את מספר תעודת הזהות שלו איננה על כי קיימים מספרים שאינם מספרי תעודת זהות. אבל רגע, הניסוח שלי קצת בעייתי - לא אמרתי <strong>על</strong> מה הפונקציה הזו אמורה להיות. האם על קבוצת <strong>כל</strong> המספרים הטבעיים? או אולי רק המספרים הטבעיים בני 9 ספרות בדיוק? או אולי הקבוצה "כל המספרים הטבעיים שהם מספר זהות של מישהו", מה שיגרום לפונקציה כן להיות על?</p>
+<p>בואו נחזור אל שתי הפונקציות החביבות <span class="math">\(f\left(x\right)=x^{2}\)</span> ו-<span class="math">\(f\left(x\right)=x^{3}\)</span> ונשאל את עצמנו - האם הן על? אם חושבים עליהן בתור פונקציות <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span>, אז <span class="math">\(f\left(x\right)=x^{2}\)</span> בוודאי איננה על, כי <span class="math">\(-1\)</span> אינו הפלט של אף קלט. לעומת זאת <span class="math">\(f\left(x\right)=x^{3}\)</span> היא כן על. אפשר לראות את זה בתמונה: פונקציה היא על אם כל קו אופקי חותך אותה <strong>לפחות פעם אחת</strong>.</p>
+<p>על פניו, נראה שאם פונקציה אינה על קל "לתקן" את זה - פשוט נצמצם את הטווח שלה. למשל, עבור <span class="math">\(f\left(x\right)=x^{2}\)</span> אם נסתכל עליה בתור פונקציה <span class="math">\(f:\mathbb{R}\to[0,\infty(\)</span> אז היא בהחלט פונקציה על. אבל מה זה אומר, לצמצם את הטווח? זה אומר להחליף את הפונקציה שלנו בפונקציה אחרת, שה"כלל" שמגדיר אותה זהה. זה אומר שעברנו לסיטואציה אחרת, שהיא אולי מועילה יותר בהקשר הנוכחי שלנו אבל לפעמים היא לא מועילה בכלל, ואני מקווה שזה יתברר בקרוב מעצמו. עדיין, כדאי לדבר במפורש על ה"תיקון" הזה: אם <span class="math">\(f:A\to B\)</span> היא פונקציה כלשהי, <strong>התמונה</strong> של <span class="math">\(f\)</span> על <span class="math">\(A\)</span> היא הקבוצה <span class="math">\(f\left(A\right)\triangleq\left\{ f\left(a\right)\ |\ a\in A\right\} \)</span> - זה אוסף האיברים ב-<span class="math">\(B\)</span> שמתקבלים בעזרת <span class="math">\(f\)</span>. עכשיו, אפשר תמיד לומר ש-<span class="math">\(f:A\to f\left(A\right)\)</span> היא על; ואפשר גם לומר שהתכונה "להיות על" היא פשוט הטענה <span class="math">\(B=f\left(A\right)\)</span>.</p>
+<p>אפשר באופן דומה גם "לתקן" פונקציה שאיננה חח"ע על ידי צמצום של <strong>התחום</strong> שלה (כלומר, של <span class="math">\(A\)</span>): בכל פעם שיש לנו זוג של איברים של <span class="math">\(A\)</span> שמתמפים לאותו פלט, פשוט להעיף אחד מהם מתוך <span class="math">\(A\)</span>. לא הכי אלגנטי בעולם, אבל שימושי בהקשרים מסויימים.</p>
+<p>עכשיו, אחרי שראינו קצת את התכונות הללו, בואו ונראה מאיפה הן מגיעות. ראשית, בואו נזכיר את שתי התכונות ש<strong>מגדירות</strong> מה זו פונקציה. יחס <span class="math">\(f\subseteq A\times B\)</span> הוא <strong>פונקציה</strong> אם מתקיים:</p>
+<ol> <li>"קיום": לכל <span class="math">\(a\in A\)</span> קיים <span class="math">\(b\in B\)</span> כך ש-<span class="math">\(\left(a,b\right)\in f\)</span>.</li>
+
+
+<li>"יחידות": אם <span class="math">\(\left(a,b_{1}\right)\in f\)</span> וגם <span class="math">\(\left(a,b_{2}\right)\in f\)</span> עבור <span class="math">\(a\in A\)</span> ו-<span class="math">\(b_{1},b_{2}\in B\)</span> אז <span class="math">\(b_{1}=b_{2}\)</span>.</li>
+
+</ol>
+
+<p>עכשיו אני אנסח את תכונות ה"על" וה"חד-חד-ערכית" באמצעות יחסים:</p>
+<ol> <li>"על": לכל <span class="math">\(b\in B\)</span> קיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(\left(a,b\right)\in f\)</span></li>
+
+
+<li>"חד-חד-ערכית": אם <span class="math">\(\left(a_{1},b\right)\in f\)</span> וגם <span class="math">\(\left(a_{2},b\right)\in f\)</span> עבור <span class="math">\(a_{1},a_{2}\in A\)</span> ו-<span class="math">\(b\in B\)</span> אז <span class="math">\(a_{1}=a_{2}\)</span>.</li>
+
+</ol>
+
+<p>הדמיון בין תכונות הקיום/יחידות ותכונות העל/חח"ע בולט מאוד, כמובן. נראה שההגדרות כמעט זהות עד כדי החלפת תפקידים בין <span class="math">\(A\)</span> ו-<span class="math">\(B\)</span>. ויש דרך לחדד את הדמיון עוד יותר אם <strong>נהפוך</strong> את <span class="math">\(f\)</span>. בואו נדבר על זה שניה.</p>
+<p><span class="math">\(f\)</span> היא פונקציה, ומעבר למשמעות האינטואיטיבית של "משהו שהופך קלט לפלט" פונקציה היא קודם כל <strong>יחס</strong> - אוסף של זוגות סדורים. אפשר פשוט לקחת כל זוג כזה ולהפוך את הסדר בין האיברים שלו, והתוצאה נקראת <strong>היחס ההפוך</strong>. פורמלית, אם <span class="math">\(R\subseteq A\times B\)</span> הוא יחס כלשהו, מגדירים <span class="math">\(R^{-1}\triangleq\left\{ \left(b,a\right)\ |\ \left(a,b\right)\in R\right\} \)</span>. עכשיו עבור המקרה הפרטי של פונקציה <span class="math">\(f\)</span> אפשר לעשות את אותו הדבר בדיוק: להגדיר <span class="math">\(f^{-1}\triangleq\left\{ \left(b,a\right)\ |\ \left(a,b\right)\in f\right\} \)</span>, ובסימון קצת יותר "פונקצייתי": <span class="math">\(f^{-1}\triangleq\left\{ \left(b,a\right)\ |\ f\left(a\right)=b\right\} \)</span>.</p>
+<p>מתי <span class="math">\(f^{-1}\)</span> היא פונקציה? שימו לב לכך שהיחס <span class="math">\(f^{-1}\)</span> <strong>תמיד קיים</strong> אבל בהחלט <strong>לא</strong> מובטח שהוא יהיה פונקציה; פונקציה היא יחס שמקיים שני תנאים ספציפיים, "קיום" ו"יחידות", שפירושם עבור היחס <span class="math">\(f^{-1}\subseteq B\times A\)</span> הוא</p>
+<ol> <li>"קיום": לכל <span class="math">\(b\in B\)</span> קיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(\left(b,a\right)\in f^{-1}\)</span>.</li>
+
+
+<li>"יחידות": אם <span class="math">\(\left(b,a_{1}\right)\in f^{-1}\)</span> וגם <span class="math">\(\left(b,a_{2}\right)\in f^{-1}\)</span> עבור <span class="math">\(a_{1},a_{2}\in A\)</span> ו-<span class="math">\(b\in B\)</span> אז <span class="math">\(a_{1}=a_{2}\)</span>.</li>
+
+</ol>
+
+<p>עכשיו, במקום לכתוב <span class="math">\(\left(b,a\right)\in f^{-1}\)</span> אני יכול לכתוב <span class="math">\(\left(a,b\right)\in f\)</span>: זו בדיוק ההגדרה של <span class="math">\(f^{-1}\)</span>. וכעת שתי השורות למעלה הופכות להיות:</p>
+<ol> <li>"קיום": לכל <span class="math">\(b\in B\)</span> קיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(\left(a,b\right)\in f\)</span>.</li>
+
+
+<li>"יחידות": אם <span class="math">\(\left(a_{1},b\right)\in f\)</span> וגם <span class="math">\(\left(a_{2},b\right)\in f\)</span> עבור <span class="math">\(a_{1},a_{2}\in A\)</span> ו-<span class="math">\(b\in B\)</span> אז <span class="math">\(a_{1}=a_{2}\)</span>.</li>
+
+</ol>
+
+<p>ואלו בדיוק, אבל בדיוק, התכונות של "על" ו"חד-חד-ערכיות" של <span class="math">\(f\)</span>. אז אפשר לסכם את מה שראינו במשפט אחד קצר וקולע: <span class="math">\(f\)</span> היא חח"ע ועל אם ורק אם <span class="math">\(f^{-1}\)</span> היא פונקציה. במקרה הזה נהוג להגיד ש-<span class="math">\(f\)</span> היא <strong>הפיכה</strong>. למה? כי אפשר לחשוב על <span class="math">\(f^{-1}\)</span> בתור "אותה הפונקציה כמו <span class="math">\(f\)</span> רק בכיוון ההפוך". אם יש לנו <span class="math">\(a\in A\)</span> ואנחנו מפעילים את <span class="math">\(f\)</span> על <span class="math">\(a\)</span> ומקבלים <span class="math">\(f\left(a\right)=b\)</span> ואז מפעילים את <span class="math">\(f^{-1}\)</span> על <span class="math">\(b\)</span> אנחנו מקבלים <span class="math">\(f^{-1}\left(b\right)=a\)</span>, כלומר <span class="math">\(f^{-1}\left(f\left(a\right)\right)=a\)</span> - הפונקציה <span class="math">\(f^{-1}\)</span> "ביטלה" את הפעולה של <span class="math">\(f\)</span>.</p>
+<p>פונקציות הפיכות הן כלי מרכזי בתורת הקבוצות - עליהן מתבססת ההגדרה שלנו ל<strong>שוויון עוצמות</strong> של קבוצות, שבאה לתת גישה אפשרית אחת לשאלה מתי שתי קבוצות (גם אינסופיות) הן מאותו גודל (ההגדרה פשוטה: <span class="math">\(A\)</span> שוות עוצמה ל-<span class="math">\(B\)</span> אם קיימת <span class="math">\(f:A\to B\)</span> הפיכה). נדבר על זה עוד בהמשך, אבל לפני כן אני ארצה לתת גישה מסודרת יותר לעניין ה"מפעילים את <span class="math">\(f\)</span> על קלט ואז מפעילים משהו אחר על הפלט" - זה יוביל אותנו למושג ה<strong>הרכבה</strong> שעליו אדבר בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2020/05/31/function_and_relation_composition/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת הקבוצות - הרכבת פונקציות ויחסים</span>
+            </a>
+            
+            
+            
+            <a href="/2020/03/30/mermin_peres_magic_square_solution/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">ריבוע הקסם של פרס-מרמין - איך זה עובד?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

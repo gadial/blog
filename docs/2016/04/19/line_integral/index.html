@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אינטגרל קווי - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אינטגרל קווי</h1>
+            <div class="post-meta">
+                <span class="date">2016-04-19</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אינטגרל קווי.html">אינטגרל קווי</a>
+                    
+                    <a href="/tags/משפט גרין.html">משפט גרין</a>
+                    
+                    <a href="/tags/משפט סטוקס.html">משפט סטוקס</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בראשית בראו ניוטון ולייבניץ את <a href="http://www.gadial.net/2010/11/27/integral/">אינטגרל רימן</a> (רימן בא אחרי ניוטון ולייבניץ, אז מה זה השם הזה? לא נורא, בכל סיפור בריאה טובה צריך סתירות פנימיות). ויהא אינטגרל רימן אינטגרל של פונקציה <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span> שמוגדר על קטע <span class="math">\(\left[a,b\right]\subseteq\mathbb{R}\)</span>. ויהי ערב ויהי בוקר אינפי 1.</p>
+<p>ההתחלה הזו כל כך יפה ונקייה, ומייד אחריה מגיע תוהו ובוהו וחושך על פני תהום. מסתבר שיש אינספור דרכים שונות ומשונות להכליל את האינטגרל הזה. <a href="http://www.gadial.net/2015/11/09/d-dimensional_integrals/">בפוסטים קודמים שלי ראינו </a>דרך אחרת - להכליל אותו לאינטגרל של פונקציות <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}\)</span> כאשר האינטגרל נלקח על קבוצה פתוחה <span class="math">\(A\subseteq\mathbb{R}^{n}\)</span>. ההגדרה הזו הייתה ישירה למדי - אותם רעיונות של אינטגרל רימן, כשהם מורחבים ל-<span class="math">\(\mathbb{R}^{n}\)</span> בצורה טבעית.</p>
+<p>בפוסט הזה אני רוצה לדבר על הכללה קצת שונה, אבל לא מנותקת לגמרי ממה שראינו עד כה - <strong>אינטגרל קווי</strong>. הייתי יכול, תיאורטית, לוותר על הפוסט הזה לגמרי; המטרה הסופית שלי בסדרת הפוסטים הזו היא להציג את ההכללה המאוד חזקה של כל סוגי האינטגרלים שאציג כאן ומתבססת על קסם שנקרא <strong>תבנית דיפרנציאלית</strong>. אבל אני רוצה לדבר על אינטגרלים קווים משתי סיבות: ראשית, פרקטית: אלו אינטגרלים שימושיים מאוד שצצים בשלל תחומים והקשרים ואין שום סיבה להציג אותם רק בתור מקרה פרטי של מושג מורכב הרבה יותר שלא כולם יטרחו להכיר; ושנית, מן הסתם יותר קל להבין הכללות (בפרט כאלו, כמו תבניות דיפרנצאליות, שדורשות הרבה הכנה ומושגים מקדימים לפני שאפשר להציג) אם מבינים טוב חלק מהמקרים הפרטיים שאותם מכלילים. אם כן, בפוסט הזה אני הולך לעבוד ברמה מאוד בסיסית של הגדרות, ואני מקווה שהפוסט יהיה נגיש לכל מי שמכיר כבר את אינטגרל רימן ולא הרבה מעבר לכך.</p>
+<p>אינטגרל קווי הוא משהו שבין אינטגרל במימד יחיד ובין אינטגרל ב-<span class="math">\(\mathbb{R}^{n}\)</span>: הוא מוגדר על פונקציות שתחומן הוא <span class="math">\(\mathbb{R}^{n}\)</span>, אבל הקבוצה שמעליה הוא מוגדר היא <strong>עקומה</strong> - אובייקט ב-<span class="math">\(\mathbb{R}^{n}\)</span> שהוא חד ממדי. תחשבו על מעגל היחידה במישור - אוסף כל הנקודות <span class="math">\(\left(x,y\right)\)</span> כך ש-<span class="math">\(x^{2}+y^{2}=1\)</span> - זו דוגמה לעקום. הוא נראה כמו קו ישר שלקחנו את הקצוות שלו והדבקנו אותם. זאת להבדיל מ<strong>עיגול </strong>היחידה, שכולל גם את כל ה"בפנים" של המעגל, והוא דוגמא לקבוצה דו ממדית שעליה מבצעים את האינטגרציה המוכללת שכבר ראינו בעבר.</p>
+<p>עוד נקודה מהותית היא שישנם <strong>שני</strong> סוגים של אינטגרלים קוויים, שמתאימים ל<strong>טווח</strong> של הפונקציה שמבצעים עליה אינטגרציה. אם זו פונקציה <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}\)</span> אומרים שהפונקציה הזו היא <strong>שדה סקלרי</strong> והאינטגרל הקווי שלה נקרא "אינטגרל קווי מסוג ראשון" ועד כאן זה הכל נראה מוכר; אבל בניגוד למה שראינו עד כה על אינטגרלים במספר ממדים, אנחנו מאפשרים גם אינטגרציה של פונקציות <span class="math">\(F:\mathbb{R}^{n}\to\mathbb{R}^{n}\)</span>, שמחזירות לא ערך סקלרי אלא <strong>וקטור</strong> ב-<span class="math">\(\mathbb{R}^{n}\)</span>; לפונקציה כזו קוראים <strong>שדה וקטורי</strong> ולאינטגרל הקווי שלה קוראים "אינטגרל קווי מסוג שני". שני הסוגים כמובן קשורים זה לזה ואדבר פה על שניהם. מבין שניהם, זהו דווקא הסוג השני שנפוץ וחשוב יותר. אני אתן דוגמה זריזה אחת ומרכזית לשימוש בפיזיקה - <strong>עבודה</strong>: בנפנוף ידיים לא לגמרי מדויק, <strong>עבודה</strong> של כוח על גוף היא מדד לשינוי באנרגיה הקינטית (האנרגיה של המהירות של הגוף) שכוח מסויים גורם לו. מה שמעניין כאן הוא שתיאור של השינוי הזה לא תלוי בכלל ב<strong>זמן</strong>; מספיק לדעת רק מה המסלול שהגוף נע בו (זו העקומה שלנו) ומה הכוח שפועל עליו בכל נקודה של המסלול (זה השדה הוקטורי שלנו) כדי לדעת את השינוי באנרגיה של הגוף בין שני קצוות המסלול. נתעמק קצת יותר בדוגמה הזו בהמשך, כשיהיו לנו עוד הגדרות.</p>
+<p>בפוסט הזה, כאמור, אני רוצה ללכת על הפשוט והבסיסי ביותר, ולכן אדבר על האינטגרלים הללו בדו-מימד - ב-<span class="math">\(\mathbb{R}^{2}\)</span>, ואזכיר טיפה מתישהו גם את <span class="math">\(\mathbb{R}^{3}\)</span>. ההכללות ל-<span class="math">\(\mathbb{R}^{n}\)</span> הן די מיידיות לרוב הדברים שאתאר פה ואין צורך לדבר מראש בצורה כללית שכזו.</p>
+<p>לפני שמתחילים לדבר על אינטגרלים, צריך לדבר על האובייקט שמעליו מתבצעת האינטגרציה - <strong>עקומה</strong>. עקומה היא מה שקורה כשלוקחים קטע ישר חד ממדי - נאמר <span class="math">\(\left[a,b\right]\)</span>, זורקים אותו לתוך המרחב הדו ממדי ומתחילים למשוך ולהזיז חלקים שלו ימינה ושמאלה ולהתפרע איתו - אבל בלי לקרוע. התיאור המוזר שלעיל ניתן לפורמלזיציה באמצעות פונקציות: עקומה היא פשוט פונקציה <span class="math">\(\gamma:\left[a,b\right]\to\mathbb{R}^{2}\)</span> שהיא <strong>רציפה</strong> (זה הקטע של "בלי לקרוע") ובשביל השימושים שלנו גם נרצה לדרוש שהיא תהיה <strong>גזירה</strong> בקטע ושהנגזרת שלה תהיה רציפה ב-<span class="math">\(\left(a,b\right)\)</span>(אפשר להרשות נקודות אי-גזירות מבודדות, אבל גם לזה לא אכנס). על עקומה עם תכונת הגזירות הזו אומרים שהיא <strong>חלקה</strong> (Smooth). הנה דוגמאות פשוטות לעקומות: <span class="math">\(\gamma_{1}\left(x\right)=\left(x^{2},\sqrt{1-x^{2}}\right)\)</span> היא עקומה שנותנת לנו את מעגל היחידה כשמפעילים אותה על הקטע <span class="math">\(\left[-1,1\right]\)</span>. <span class="math">\(\gamma_{2}\left(x\right)=\left(x,x^{2}\right)\)</span> נותנת לנו <strong>פרבולה</strong>, בעוד ש-<span class="math">\(\gamma_{3}\left(x\right)=\left(x,\frac{1}{x}\right)\)</span> נותנת לנו חלק מ<strong>היפרבולה</strong> (למשל, על הקטע <span class="math">\(\left[1,2\right]\)</span>). ומה עם <span class="math">\(\gamma_{4}\left(x\right)=\left(-\sqrt{1-x^{2}},x^{2}\right)\)</span>? גם היא נותנת את מעגל היחידה, אבל בצורה שונה מאשר <span class="math">\(\gamma_{1}\)</span>. ו-<span class="math">\(\gamma_{5}\left(x\right)=\left(\frac{x}{2},\frac{x^{2}}{4}\right)\)</span> תיתן לנו פרבולה כמו <span class="math">\(\gamma_{2}\)</span>, אבל שוב משהו פה מרגיש לנו שונה. אלו נקודות שכדאי להתעכב עליהן.</p>
+<p>כשאני מדבר על מעגל היחידה, מה שאני מדבר עליו בתכל'ס הוא <strong>קבוצה של נקודות במישור</strong>. לרוב אני מתאר אותן בתור "אוסף כל הנקודות שהן פתרון של מערכת משוואות מסויימת", במקרה שלנו <span class="math">\(x^{2}+y^{2}=1\)</span>. כאן, לעומת זאת, אני מדבר על משהו שונה - אני מדבר על <strong>פונקציה</strong>, שמעגל היחידה יוצא <strong>התמונה</strong> שלה על קטע מסויים. ייתכנו פונקציות רבות ושונות שיתנו את אותה התמונה. כדי לפשט את העניינים בואו נדבר על אוסף הנקודות במישור שמקיימות <span class="math">\(x=y\)</span> בין הנקודות <span class="math">\(\left(0,0\right)\)</span> ו-<span class="math">\(\left(1,1\right)\)</span> - זה פשוט קו ישר ב-45 מעלות עם ציר <span class="math">\(x\)</span>. הנה ארבע עקומות שונות שהתמונה שלהן יוצאת האוסף הזה:</p>
+<p><span class="math">\(\gamma_{1}\left(x\right)=\left(x,x\right)\)</span> על הקטע <span class="math">\(\left[0,1\right]\)</span></p>
+<p><span class="math">\(\gamma_{2}\left(x\right)=\left(2x,2x\right)\)</span> על הקטע <span class="math">\(\left[0,\frac{1}{2}\right]\)</span></p>
+<p><span class="math">\(\gamma_{3}\left(x\right)=\left(1-x,1-x\right)\)</span> על הקטע <span class="math">\(\left[0,1\right]\)</span></p>
+<p><span class="math">\(\gamma_{4}\left(x\right)=\begin{cases}\left(2x,2x\right) & 0\le x\le\frac{1}{2}\\\left(2\left(1-x\right),2\left(1-x\right)\right) & \frac{1}{2}\le x\le1\end{cases}\)</span></p>
+<p>מה קורה כאן? <span class="math">\(\gamma_{1}\)</span> מתאימה כנראה לאינטואיציה הבסיסית שלנו. לעומת זאת, <span class="math">\(\gamma_{2}\)</span> עושה את הכל "מהר יותר" - אינטואיטיבית, היא מהירה פי 2 יותר מאשר <span class="math">\(\gamma_{1}\)</span>. לעומת זאת, <span class="math">\(\gamma_{3}\)</span> נעה "באותה מהירות" כמו <span class="math">\(\gamma_{1}\)</span> אבל <strong>לכיוון ההפוך</strong>, ו-<span class="math">\(\gamma_{4}\)</span> לוקחת את הטוב שבשני העולמות: אצה רצה לה בכיוון ה"נכון" אל <span class="math">\(\left(1,1\right)\)</span>, מגיעה לשם באמצע ה"זמן" שלה, ואז פונה וחוזרת על עקבותיה, תוך שהיא עוברת במקומות שהיא כבר הייתה בהם קודם. לכל ארבע העקומות הללו יש, כאמור, את אותה תמונה, אבל הן מתארות דברים שונים.</p>
+<p>לפעמים מנסים להשתמש בטרמינולוגיה כדי להבדיל בין הדברים הללו. אני מכיר את השימוש ב<strong>עקום</strong> בעיקר כדי לתאר את קבוצת הנקודות, בזמן ש<strong>עקומה</strong> מתארת את הפונקציה (ולפעמים אומרים גם "מסלול", ו"אינטגרל מסלולי"). גם באנגלית נהוג לדבר לפעמים על Curve במשמעות של עקום ועל Path במשמעות של עקומה (אבל זה לא אומר שלא תצליחו למצוא גם Curve במשמעות של עקומה אם תחפשו מספיק - טרמינולוגיה זה לא חוק). אני אשתמש לרוב ב-<span class="math">\(C\)</span> (מלשון curve) כדי לתאר את העקום עצמו, ולזוג של פונקציה <span class="math">\(\gamma\)</span> ותחום שלה <span class="math">\(\left[a,b\right]\)</span> אני אתייחס בתור <strong>פרמטריזציה</strong> של העקום הזה. נראה בהמשך שכמעט ואין חשיבות לבחירת הפרמטריזציה כשמחשבים את הערך של האינטגרל (מה שמתאים למה שסיפרתי קודם על עבודה, שהיא אינה תלויה בזמן או במהירות של הגוף, אלא רק במסלול שהוא עובר).</p>
+<p>בדו-מימד נוח לי לתאר עקומה באופן הבא: <span class="math">\(\gamma\left(t\right)=\left(x\left(t\right),y\left(t\right)\right)\)</span>, כלומר העקומה היא זוג של פונקציות <span class="math">\(x\left(t\right),y\left(t\right)\)</span> שהן בעצמן רציפות וגזירות וכל מה שתרצו. הסימון <span class="math">\(t\)</span> לקלט של <span class="math">\(\gamma\)</span> מן הסתם עדיף על <span class="math">\(x\)</span> כי כך אנחנו יכולים להשתמש ב-<span class="math">\(x\)</span> כדי לתאר את קואורדינטת ה-<span class="math">\(x\)</span> במישור של התמונה של העקומה על <span class="math">\(t\)</span>. מבחינת אינטואיציה, נוח לחשוב על <span class="math">\(t\)</span> בתור "זמן" ועל <span class="math">\(\gamma\)</span> מעל <span class="math">\(\left[a,b\right]\)</span> כאילו היא מתארת "טיול" במישור שמתחיל ב-<span class="math">\(\gamma\left(a\right)\)</span> בזמן <span class="math">\(a\)</span> ומסתיים ב-<span class="math">\(\gamma\left(b\right)\)</span> בזמן <span class="math">\(b\)</span>. אבל "זמן" כאן הוא רק אינטואיציה ותו לא.</p>
+<p>כעת, אם <span class="math">\(f\left(x,y\right)\)</span> היא פונקציה ממשית, מה שקראתי לו "שדה סקלרי" קודם, מה סביר להגדיר בתור האינטגרל שלה על העקום <span class="math">\(C\)</span>, עם הפרמטריזציה <span class="math">\(\gamma\)</span>, שאסמן <span class="math">\(\int_{C}f\left(x,y\right)d\gamma\)</span>? באינטגרל רימן הרגיל, של פונקציה ב-<span class="math">\(\mathbb{R}\)</span> שמוגדרת מעל קטע, גישה אחת (גישת סכומי רימן) היא לפרק את הקטע לקטעים קטנים, לבחור נקודה אקראית בכל תת-קטע שכזה, לחשב את הערך של הפונקציה עליו, לכפול באורך הקטע ולחבר את הכל. אם רואים שככל שהקטעים קטנים יותר, כך הסכום שמקבלים שואף לערך ספציפי (בלי תלות בנקודות האקראיות שבוחרים בתוך תתי-הקטעים, ואופן הפירוק שלנו לתתי-קטעים) אז אומרים שהפונקציה אינטגרבילית והסכום הוא האינטגרל שלה. על פניו, זה גם בדיוק מה שאנחנו יכולים לעשות כאן: נפרק את הקטע <span class="math">\(\left[a,b\right]\)</span> לתת-קטעים קטנים, נבחר נקודה אקראית <span class="math">\(t^{*}\)</span> בכל תת-קטע, נחשב את <span class="math">\(f\left(x\left(t^{*}\right),y\left(t^{*}\right)\right)\)</span>, ואז נכפול באורך תת-הקטע... רגע, רגע, רגע. לא להתבלבל. הפונקציה <span class="math">\(f\)</span> שלנו חיה <strong>על העקומה</strong>. זה אומר שאנחנו רוצים לכפול את הערך שלה לא באורך תת-הקטע, אלא באורך <strong>התמונה</strong> של תת-הקטע של <span class="math">\(\left[a,b\right]\)</span>, דהיינו באורך של תת-העקומה שחיה בין שתי נקודות הקצה של תת-הקטע.</p>
+<p>מה שמוביל אותנו לשאלה - איך מחשבים אורך של עקומה? ליתר דיוק, איך בכלל <strong>מגדירים</strong> אורך של עקומה? ובכן, בואו ניקח דוגמא מאינטגרלים: באינטגרל אנחנו מקרבים <strong>שטח</strong> באמצעות <strong>מלבנים</strong>, אז בואו נקרב אורך (האנלוג החד-ממדי של שטח) באמצעות קווים ישרים (האנלוג החד-ממדי של מלבן). פורמלית, אם אנחנו רוצים לחשב את האורך של <span class="math">\(\gamma\)</span> שמוגדרת על הקטע <span class="math">\(\left[a,b\right]\)</span>, ניקח חלוקה <span class="math">\(P\)</span> של <span class="math">\(\left[a,b\right]\)</span> (כלומר, אוסף של נקודות <span class="math">\(t_{1},t_{2},\dots,t_{N}\)</span> כך ש-<span class="math">\(a=t_{1}&lt;t_{2}&lt;\dots&lt;t_{n}=b\)</span>), נעביר קטע ישר בין כל שתי נקודות סמוכות ונחבר את סכום כל הקטעים הללו. נקבל:</p>
+<p><span class="math">\(\sum_{i=1}^{N-1}\left|\gamma\left(t_{i+1}\right)-\gamma\left(t_{i}\right)\right|\)</span></p>
+<p>כאשר ערך מוחלט כאן מייצג את הערך המוחלט הרגיל בדו-ממד: <span class="math">\(\left|\left(x,y\right)\right|=\sqrt{x^{2}+y^{2}}\)</span>.</p>
+<p>האינטואיציה היא שהקו הישר בין שתי נקודות הוא בעל האורך הקטן ביותר מבין כל העקומות שמחברות אותם, ולכן הסכום הזה תמיד קטן מאורך העקומה האמיתי, והוא שואף אליו ככל שהחלוקה קטנה יותר. לכן אפשר לקחת את החסם העליון של כל הסכום מהצורה שלעיל ולהגדיר את אורך העקומה להיות שווה לו.</p>
+<p>זו האינטואיציה; הפורמליזם מסובך יותר ובפוסט הזה תיארתי אותו במקור בצורה כמעט שגויה - רק שנים אחר כך תיקנתי את העניין <a href="https://gadial.net/2024/06/15/curves_and_line_integrals/">בפוסט ייעודי</a>. השורה התחתונה היא שמקבלים בדיוק את האינטגרל <span class="math">\(\int_{a}^{b}\left|\gamma^{\prime}\left(t\right)\right|dt\)</span>. אם כן, מצאנו דרך נוחה <strong>לחשב</strong> את האורך של עקומה חלוקה באמצעות אינטגרל רימן רגיל, ואני מקווה שנחה דעתנו שהדרך הזו מסתדרת עם ההגדרה המתבקשת ביותר לאורך של עקומה.</p>
+<p>כעת נחזור לאינטגרל קווי. שם הניתוח המדויק מסובך קצת יותר, כי הסכום הטיפוסי שלנו נראה כך:</p>
+<p><span class="math">\(\sum_{i=1}^{N-1}f\left(\gamma\left(c_{i}\right)\right)\Delta\gamma_{i}\)</span></p>
+<p>כאשר כאן <span class="math">\(\Delta\gamma_{i}\)</span> מייצג את אורך העקומה בין <span class="math">\(\gamma\left(t_{i}\right)\)</span> ו-<span class="math">\(\gamma\left(t_{i+1}\right)\)</span>. גם פה נדרש ניתוח לא טריוויאלי שהבאתי במלואו בפוסט החדש יותר, שהשורה התחתונה שלו היא שמקבלים את האינטגרל המתבקש:</p>
+<p><span class="math">\(\int_{C}fds=\int_{a}^{b}f\left(\gamma\left(t\right)\right)\left|\gamma^{\prime}\left(t\right)\right|dt\)</span></p>
+<p>וברוב הספרים מעדיפים להביא את האינטגרל הזה בתור <strong>ההגדרה</strong> של אינטגרל קווי מסוג ראשון.</p>
+<p>ה-ds שבאינטגרל השמאלי הוא מבחינתנו כרגע סימון בלבד, שנותן אינדיקציה לכך שהאינטגרל הוא אינטגרל קווי, כלומר שהוא מהצורה "ערך הפונקציה כפול יחידת אורך קטנה מאוד על העקומה".</p>
+<p>זה מסיים לעת עתה עם אינטגרל קווי מהסוג הראשון. בואו נעבור אל השני, זה שבו אנחנו מבצעים אינטגרציה על שדה וקטורי שאסמן <span class="math">\(F\left(x,y\right)=\left(P\left(x,y\right),Q\left(x,y\right)\right)\)</span> (כלומר, אני מייצג את <span class="math">\(F\)</span> באמצעות שתי פונקציות סקלריות עם שני משתנים כל אחת, <span class="math">\(P\)</span> ו-<span class="math">\(Q\)</span>). כדי להבין את האינטואיציה שמאחורי אינטגרל קווי מסוג שני כדאי לחזור לדיבורים על <strong>עבודה </strong>בפיזיקה. בואו נחשוב על שתי סיטואציות: רץ אולימפי שרץ כשהרוח היא <strong>עם</strong> כיוון הריצה, ורץ עם רוח <strong>נגד</strong> כיוון הריצה. במקרה הראשון די ברור לנו שהרוח "עוזרת" לרץ ובמקרה השני היא מפריעה לו. במקרה הראשון הרוח <strong>מוסיפה לו אנרגייה קינטית</strong> ובשני היא גוזלת אותה ממנו. מכאן אנו רואים שהעבודה של כוח תלויה בכיוון שלו.</p>
+<p>אבל זה יותר מחוכם ממה שזה נראה במבט ראשון. הנה הדוגמה השלישית: לווין שמקיף את כדור הארץ. בואו נזניח השפעה של כל דבר מלבד כדור הארץ ונניח שהמסלול של הלווין מעגלי לחלוטין - איך הקסם הזה קורה? משהו גורם ללווין להסתובב כל הזמן סביב כדור הארץ בלי להשקיע בו אנרגיה נוספת. המשהו הזה הוא כדור הארץ עצמו; כוח המשיכה של כדור הארץ פועל על הלווין בכל עת בכיוון שהוא <strong>מאונך</strong> לכיוון התנועה של הלווין. זה גורם לשינוי ב<strong>מסלול</strong> של הלווין - במקום שהוא ימשיך בקו ישר, כפי שקורה לגופים בתנועה שלא פועלים עליהם כוחות, המסלול שלו הוא מעגלי. עם זאת, הכוח שכדור הארץ משנה לא מגדיל את <strong>גודל</strong> המהירות של הלווין, רק את הכיוון שלה; המהירות היא וקטור שמשתנה כל הזמן אבל הערך המוחלט שלו נותר קבוע. אם גודל המהירות לא השתנה, האנרגיה הקינטית של הגוף לא השתנתה. במילים אחרות, כדור הארץ מפעיל כוח שפועל על הלווין ללא הרף וגורם לו להישאר במסלול מעגלי, אבל הוא לא מבצע על הלווין שום <strong>עבודה</strong>. זה נכון באופן כללי: כוח שפועל על גוף <strong>במאונך למסלול תנועתו</strong> לא מבצע עליו עבודה.</p>
+<p>אם כן, מה שעושים באופן כללי עם כוח שפועל על גוף הוא לפרק את הכוח לשני רכיבים. הרכיב שמאונך למסלול הגוף ולא מבצע שום עבודה ואפשר לכוח ממנו; והרכיב שתואם למסלול הגוף והוא זה שמשתתף בעבודה. בניסוח מתמטי, אנחנו <strong>מטילים</strong> את הכוח על <strong>וקטור הכיוון</strong> של מסלול התנועה בכל רגע נתון. הטלה כזו מתבצעת במתמטיקה על ידי <strong>מכפלה סקלרית</strong>. כזכור, אם <span class="math">\(v_{1}\left(x_{1},y_{1}\right)\)</span> ו-<span class="math">\(v_{2}\left(x_{2},y_{2}\right)\)</span> הם שני וקטורים ב-<span class="math">\(\mathbb{R}^{n}\)</span> אז המכפלה הסקלרית שלהם מוגדרת להיות <span class="math">\(v_{1}\cdot v_{2}=x_{1}x_{2}+y_{1}y_{2}\)</span> - כופלים "רכיב רכיב" ומחברים את כל המכפלות.</p>
+<p>כלומר, הפעם אנחנו לא כופלים את ערך הפונקציה ב<strong>אורך</strong> הקטע מ-<span class="math">\(\gamma\left(t_{i}\right)\)</span> אל <span class="math">\(\gamma\left(t_{i+1}\right)\)</span>; אנחנו כופלים <strong>סקלרית </strong>את ערך הפונקציה (שהוא, כזכור, וקטור ב-<span class="math">\(\mathbb{R}^{2}\)</span>) ב<strong>וקטור</strong> ההעתק מ-<span class="math">\(\gamma\left(t_{i}\right)\)</span> אל <span class="math">\(\gamma\left(t_{i+1}\right)\)</span>. באופן דומה לניתוח של האינטגרל מהסוג הראשון, זה יביא אותנו בסופו של דבר אל הנוסחה:</p>
+<p><span class="math">\(\int_{C}F\cdot d\gamma=\int_{a}^{b}F\left(\gamma\left(t\right)\right)\cdot\gamma^{\prime}\left(t\right)dt\)</span></p>
+<p>ושוב - רוב הספרים מעדיפים <strong>להגדיר</strong> אינטגרל קווי מסוג שני באמצעות הנוסחה הזו. עוד סימון אפשרי לאינטגרל קווי, שבו לא כותבים את <span class="math">\(F\)</span> אלא את ה-<span class="math">\(P,Q\)</span> שמרכיבות אותו, הוא <span class="math">\(\int_{C}Pdx+Qdy\)</span>. זה סימון קצת מבלבל ואני לא אוהב אותו במיוחד, אבל צריך להכיר אותו ולפעמים הוא שימושי מאוד (כשרוצים להציג בו זמנית את <span class="math">\(P,Q\)</span> בצורה נוחה). שימו לב ש-<span class="math">\(\gamma\)</span> נעלמה לחלוטין מהסימון הזה; כשמשתמשים בו מניחים שאפשר להסיק מתוך <span class="math">\(C\)</span> מהי ה-<span class="math">\(\gamma\)</span> הרלוונטית (עוד מעט נראה שיש לנו חופש בחירה די גדול של <span class="math">\(\gamma\)</span> כזו בהינתן <span class="math">\(C\)</span> מבלי שמשמעות האינטגרל תשתנה). עוד סימון שכדאי להכיר הוא <span class="math">\(\oint_{C}\)</span> שמשתמשים בו כדי לתאר אינטגרל קווי כאשר <span class="math">\(C\)</span> הוא עקום <strong>סגור</strong>, כלומר נקודת הסוף של העקומה שמתארת אותו שווה לנקודת ההתחלה. זה סימון קוסמטי למדי - אפשר היה לוותר על העיגול במרכז ושום דבר לא היה משתנה, אבל אני אוהב להשתמש בו.</p>
+<p>בואו נראה איך ההגדרה הזו מסתדרת עם מושג העבודה בפיזיקה. נניח שיש לנו גוף שמבצע תנועה במישור שמתחילה ב-<span class="math">\(t_{1}\)</span> ומסתיימת ב-<span class="math">\(t_{2}\)</span>. נתאר את המיקום שלו במישור בזמן <span class="math">\(t\)</span> באמצעות הפונקציה <span class="math">\(r\left(t\right)\)</span>, את המהירות שלו עם <span class="math">\(v\left(t\right)\)</span> ואת התאוצה שלו עם <span class="math">\(a\left(t\right)\)</span>. הכוח שפועל עליו במהלך התנועה יהיה פונקציה של המיקום שלו במישור, כלומר פונקציה <span class="math">\(F\left(r\left(t\right)\right)\)</span>. אנחנו כבר רואים איך זה מתאים יפה למבנה של האינטגרל הקווי שהגדרנו.</p>
+<p>עכשיו, בואו ניזכר בכמה דברים מפיזיקה. ראשית, <strong>האנרגיה הקינטית</strong> של גוף שמהירותו <span class="math">\(v\)</span> ומסתו <span class="math">\(m\)</span> מוגדרת להיות <span class="math">\(\frac{mv^{2}}{2}\)</span>. שנית, על פי הגדרתם ממש, <span class="math">\(v\left(t\right)=r^{\prime}\left(t\right)\)</span> ו-<span class="math">\(a\left(t\right)=v^{\prime}\left(t\right)=r^{\prime\prime}\left(t\right)\)</span>. לבסוף,<strong> החוק השני של ניוטון</strong> קובע ש-<span class="math">\(F=ma\)</span> (יש גם ניסוח כללי יותר שלא רלוונטי לנו כאן).</p>
+<p>כעת, העבודה שמתבצעת על הגוף על ידי הכוח במהלך תנועתו היא, על פי ההגדרה כאינטגרל קווי מסוג שני:</p>
+<p><span class="math">\(\int_{t_{1}}^{t_{2}}F\left(r\left(t\right)\right)\cdot r^{\prime}\left(t\right)dt=\int_{t_{1}}^{t_{2}}ma\left(t\right)\cdot v\left(t\right)dt=m\int_{t_{1}}^{t_{2}}v\left(t\right)\cdot v^{\prime}\left(t\right)dt\)</span></p>
+<p>עכשיו, איזו פונקציה, כשנגזור אותה, תיתן לנו את הנגזרת <span class="math">\(v\left(t\right)v^{\prime}\left(t\right)\)</span>? המבנה הזה קצת מזכיר את כלל השרשרת, ועם קצת משחק/נסיון באינטגרציה לא קשה לראות ש-<span class="math">\(\left[\frac{1}{2}v^{2}\left(t\right)\right]^{\prime}=v\left(t\right)v^{\prime}\left(t\right)\)</span>. מכאן נקבל:</p>
+<p><span class="math">\(m\int_{t_{1}}^{t_{2}}v\left(t\right)\cdot v^{\prime}\left(t\right)dt=\frac{m}{2}\left(v^{2}\left(t_{2}\right)-v^{2}\left(t_{2}\right)\right)=\frac{mv^{2}\left(t_{2}\right)}{2}-\frac{mv^{2}\left(t_{1}\right)}{2}\)</span></p>
+<p>כלומר, קיבלנו שהעבודה אכן שווה לשינוי באנרגיה הקינטית, כפי שקיווינו.</p>
+<p>עכשיו בואו נדבר על מה שהציק לנו מתחילת הפוסט: האם האינטגרל שלנו מוגדר היטב על <strong>עקום</strong> נתון, או שיש כאן תלות בבחירת <strong>העקומה</strong> שמגדירה את העקום? התשובה המיידית היא שפרט לכמה דברים כמעט מובנים מאליהם, אין חשיבות לבחירת העקומה. מה ברור, לפחות אינטואיטיבית, שכן ישפיע? למשל, שתי עקומות שמגדירות את אותו עקום אבל נעות לכיוונים ההפוכים. בואו ניתן את הניסוחים הפורמליים וההוכחות ואז הכל יהיה ברור יותר.</p>
+<p>בואו נתבונן על שני עקומות<span class="math">\(\gamma\left(t\right)\)</span> ו-<span class="math">\(\delta\left(t\right)\)</span>. נניח ש-<span class="math">\(\gamma\)</span> מוגדרת על הקטע <span class="math">\(\left[a,b\right]\)</span> ו-<span class="math">\(\delta\)</span> מוגדרת על הקטע <span class="math">\(\left[c,d\right]\)</span>. אם <span class="math">\(\delta\)</span> מתארת את אותו דבר כמו <span class="math">\(\gamma\)</span> היינו מצפים שלכל <span class="math">\(t\in\left[c,d\right]\)</span> יהיה איזה <span class="math">\(s_{t}\in\left[a,b\right]\)</span> כך ש-<span class="math">\(\delta\left(t\right)=\gamma\left(s_{t}\right)\)</span>. זה מגדיר לנו <strong>פונקציה</strong> <span class="math">\(u:\left[c,d\right]\to\left[a,b\right]\)</span> שמקיימת <span class="math">\(\delta\left(t\right)=\gamma\left(u\left(t\right)\right)\)</span>. בואו נתבונן לצורך הדוגמה בעקומות שהראיתי בתחילת הפוסט:</p>
+<p><span class="math">\(\gamma_{1}\left(x\right)=\left(x,x\right)\)</span> על הקטע <span class="math">\(\left[0,1\right]\)</span></p>
+<p><span class="math">\(\gamma_{2}\left(x\right)=\left(2x,2x\right)\)</span> על הקטע <span class="math">\(\left[0,\frac{1}{2}\right]\)</span></p>
+<p><span class="math">\(\gamma_{3}\left(x\right)=\left(1-x,1-x\right)\)</span> על הקטע <span class="math">\(\left[0,1\right]\)</span></p>
+<p><span class="math">\(\gamma_{4}\left(x\right)=\begin{cases}\left(2x,2x\right) & 0\le x\le\frac{1}{2}\\\left(2\left(1-x\right),2\left(1-x\right)\right) & \frac{1}{2}\le x\le1\end{cases}\)</span></p>
+<p>אז כאן למשל מתקיים <span class="math">\(\gamma_{2}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right)\)</span> כאשר <span class="math">\(u\left(t\right)=2t\)</span>. וכמו כן מתקיים <span class="math">\(\gamma_{3}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right)\)</span> כאשר <span class="math">\(u\left(t\right)=1-t\)</span>, ו-<span class="math">\(\gamma_{4}\left(t\right)=\gamma_{1}\left(u\left(t\right)\right)\)</span> עם <span class="math">\(u\left(t\right)=\begin{cases}2t & 0\le t\le\frac{1}{2}\\2\left(1-t\right) & \frac{1}{2}\le t\le1\end{cases}\)</span>.</p>
+<p>עכשיו, אם נחשב את האינטגרל הקווי של השדה הוקטורי <span class="math">\(f\left(x,y\right)=\left(x,y\right)\)</span> עבור ארבעת העקומות הללו, מה נקבל?</p>
+<p>במקרה הראשון, <span class="math">\(\int_{0}^{1}\left(t,t\right)\cdot\left(1,1\right)dt=\int_{0}^{1}2t=\left[t^{2}\right]_{0}^{1}=1\)</span>.</p>
+<p>במקרה השני, <span class="math">\(\int_{0}^{\frac{1}{2}}\left(2t,2t\right)\cdot\left(2,2\right)dt=\int_{0}^{\frac{1}{2}}8t=\left[4t^{2}\right]_{0}^{\frac{1}{2}}=1\)</span>.</p>
+<p>במקרה השלישי, <span class="math">\(\int_{0}^{1}\left(1-t,1-t\right)\cdot\left(-1,-1\right)dt=\int_{0}^{1}\left(2t-2\right)dt=\left[t^{2}-2t\right]_{0}^{1}=-1\)</span></p>
+<p>במקרה הרביעי, <span class="math">\(\int_{0}^{\frac{1}{2}}\left(2t,2t\right)\cdot\left(2,2\right)dt+\int_{\frac{1}{2}}^{1}\left(2\left(1-t\right),2\left(1-t\right)\right)\cdot\left(-2,-2\right)dt=\)</span></p>
+<p><span class="math">\(=\int_{0}^{\frac{1}{2}}8tdt+\int_{\frac{1}{2}}^{1}8\left(t-1\right)dt=\left[4t^{2}\right]_{0}^{\frac{1}{2}}+\left[4t^{2}-8t\right]_{\frac{1}{2}}^{1}=1+\left(-4+3\right)=0\)</span></p>
+<p>די ברור מה "משתבש" במקרים השלישי והרביעי - במקרה השני אנחנו הולכים "בכיוון ההפוך" על העקום, ולכן מקבלים תוצאה הפוכה; ובמקרה הרביעי אנחנו הולכים "לשם ובחזרה" ולכן סוכמים את תוצאות ההליכה בשני הכיוונים ומסיימים עם אפס. כל זה מצביע על כך שאנחנו רוצים לדרוש מ-<span class="math">\(u\)</span> להיות <strong>חד-חד-ערכית</strong> ולהבדיל בין המקרה שבו היא הולכת בכיוון הנכון לבין זה שבו היא הולכת בכיוון ההפוך. דרך נוחה לעשות זאת היא לדרוש ש-<span class="math">\(u\)</span> תהיה <strong>גזירה</strong> ושהנגזרת שלה תהיה שונה מ-0 בכל הקטע; זה מבטיח ש-<span class="math">\(u\)</span> היא עולה בכל הקטע, או יורדת בכל הקטע. אם היא עולה (הנגזרת חיובית), הכל בסדר; אם היא יורדת (הנגזרת שלילית) אז נצפה לקבל היפוך של האינטגרל. פורמלית: אם <span class="math">\(\gamma\)</span> ו-<span class="math">\(\delta\)</span> הן עקומות המתאימות לעקום <span class="math">\(C\)</span> כך שקיימת <span class="math">\(u:\left[c,d\right]\to\left[a,b\right]\)</span> רציפה וגזירה עם <span class="math">\(u^{\prime}&gt;0\)</span> בכל התחום עבורה מתקיים <span class="math">\(\delta\left(t\right)=\gamma\left(u\left(t\right)\right)\)</span>, אז <span class="math">\(\int_{C}F\cdot d\gamma=\int_{C}F\cdot d\delta\)</span>. אם קיימת <span class="math">\(u\)</span> כזו כך ש-<span class="math">\(u^{\prime}&lt;0\)</span> בכל התחום אז <span class="math">\(\int_{C}F\cdot d\gamma=-\int_{C}F\cdot d\delta\)</span>. זוהי <strong>אי התלות בפרמטר</strong> שחיפשנו. היא מצביעה על כך שבהינתן <span class="math">\(C\)</span>, לא באמת חשוב איך אנחנו בוחרים לבנות את הפרמטריזציה של <span class="math">\(C\)</span>, כלומר לא חשוב באיזו <span class="math">\(\gamma\)</span> אנחנו משתמשים, כל עוד אנחנו מקפידים לזכור ש<strong>הכיוון חשוב</strong> וש<strong>מספר הפעמים</strong> שבהן העקומה שלנו מכסה את <span class="math">\(C\)</span> חשוב. למשל, אם <span class="math">\(C\)</span> הוא מעגל, חשוב לדעת אם הפרמטריזציה שלנו נעה עם כיוון השעון או נגדו, וכמה פעמים היא "משלימה הקפה".</p>
+<p>לסיום, בואו נעבור לדבר על הכללות של <strong>המשפט היסודי של החדו"א</strong> עבור האינטגרלים שראינו. כאן אנחנו שולחים יד מגששת ונוגעים לראשונה במה שהוא היעד הסופי של סדרת הפוסטים הזו ולטעמי אחת מגולות הכותרת של כל הנושאים הללו - <strong>משפט סטוקס</strong>. אבל יש עוד זמן עד שאפשר יהיה להבין מה בכלל משפט סטוקס אומר, ולכן מה שנעשה כעת יהיה לדבר על דוגמאות (שכמובן, היו ידועות הרבה לפני משפט סטוקס המדובר).</p>
+<p>בשביל להבין מאיפה זה מגיע בכלל, בואו ניזכר איך הולך המשפט היסודי של החדו"א. אם <span class="math">\(f\)</span> רציפה ו-<span class="math">\(F\)</span> היא פונקציה קדומה שלה (דהיינו, <span class="math">\(f=F^{\prime}\)</span>) אז מתקיים <span class="math">\(\int_{a}^{b}f\left(x\right)dx=F\left(b\right)-F\left(a\right)\)</span>. המשפט הזה נראה לי כמו קסם - איכשהו אנחנו מצליחים לדעת מה הערך של האינטגרל המסויים על <span class="math">\(f\)</span> בכל הקטע <span class="math">\(\left[a,b\right]\)</span> רק על ידי הסתכלות על <strong>מה שקורה בקצוות</strong> הקטע. באיזה שהוא אופן קסום, הפונקציה <span class="math">\(F\)</span> מקודדת את המידע על <span class="math">\(f\)</span> בצורה כזו שמספיק לדגום אותה בשתי נקודות הקצה של הקטע כדי לדעת את ערכו של האינטגרל.</p>
+<p>ועכשיו בואו נחשוב על אינגטרל כפול, כלומר אינטגרל ב-<span class="math">\(\mathbb{R}^{2}\)</span> שמוגדר בצורה שתיארתי בפוסטים קודמים. כאן האינטגרציה היא לא על קטע אלא על תחום דו-ממדי כלשהו (התחלנו עם מלבן אבל בסופו של דבר הגענו לקבוצה פתוחה כלשהי). בואו נניח שיש לנו פונקציה <span class="math">\(f:\mathbb{R}^{2}\to\mathbb{R}\)</span> שמוגדרת על תחום <span class="math">\(R\)</span> ב-<span class="math">\(\mathbb{R}^{2}\)</span> שהוא נחמד - הוא חסום והשפה שלו <span class="math">\(C\)</span> היא פשוטה יחסית (לא אכנס כרגע להגדרות - אתם מוזמנים בינתיים להניח שהתחום הוא מלבן אם זה עוזר לכם). אין ל-<span class="math">\(R\)</span> "נקודות קצה" כמו במימד אחד, אבל יש לו את <strong>השפה</strong> שלו; אז האם קיימת פונקציה <span class="math">\(F\)</span> כלשהי כך שאפשר להמיר את האינטגרל הכפול של <span class="math">\(f\)</span> על <span class="math">\(R\)</span> ב<strong>אינטגרל קווי</strong> על איזו שהיא פונקציה <span class="math">\(F\)</span>? באופן די נפלא, התשובה היא כן, ולתוצאה הזו קוראים <strong>משפט גרין</strong>. בואו ננסח אותו באופן מסודר. נתחיל דווקא מהפונקציה ה"קדומה": ניקח <span class="math">\(F\left(x,y\right)=\left(P\left(x,y\right),Q\left(x,y\right)\right)\)</span> כלשהי ועקומה סגורה <span class="math">\(C\)</span>, ויהא <span class="math">\(R\)</span> התחום ש-<span class="math">\(C\)</span> חוסמת, ונניח שהפרמטריזציה של <span class="math">\(C\)</span> היא "נגד כיוון השעון" ועוד כל מני הנחות שבטח פספסתי (אל תשתמשו במשפט הזה בלי לוודא את כל ההנחות שלו!) אז מתקיים הדבר הבא:</p>
+<p><span class="math">\(\iint_{R}\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)dxdy=\oint_{C}Pdx+Qdy\)</span></p>
+<p>אם כן, מה שצץ באגף שמאל הוא <strong>לא</strong> הנגזרת של <span class="math">\(F\)</span> כמו במשפט היסודי של החדו"א, אלא משהו קצת יותר מוזר - פונקציה שמתקבלת מלקיחת הרכיבים של <span class="math">\(F\)</span>, גזירה שלהם לפי המשתנה "הלא נכון" לכאורה (כלומר, רכיב ה-<span class="math">\(x\)</span> של <span class="math">\(F\)</span> נגזר לפי <span class="math">\(y\)</span> ולהפך) ועוד יש לנו סכום וסימן מינוס שצצים מאי שם. לא יודע מה איתכם, אבל בי זה מעורר אוטומטית סקרנות להבין מה החוקיות הכללית שיש כאן. אני לא מאמין גדול בלהסתיר דברים, אז הנה החוקיות הכללית, שכרגע כנראה אין לנו דרך להבין: משפט הסטוקס הכללי. הוא אומר שאם <span class="math">\(M\)</span> היא יריעה שמקיימת כך-וכך ו-<span class="math">\(\omega\)</span> היא תבנית דיפרנציאלית שמקיימת כך וכך, אז <span class="math">\(\int_{M}d\omega=\int_{\partial M}\omega\)</span>, ובמילים - האינטגרל על <span class="math">\(M\)</span> של <strong>הנגזרת החיצונית</strong> של התבנית <span class="math">\(\omega\)</span> שווה לאינטגרל של <span class="math">\(\omega\)</span> על השפה של <span class="math">\(M\)</span>. יש כאן שלל מושגים שאין לנו הגדרה עבורם כרגע (ובצדק; ההגדרות, שנראה בהמשך, הן לא קלות לעיכול), אבל אפשר להתאים את הנוסחה הכללית למשפט שראינו. ה"יריעה" <span class="math">\(M\)</span> אצלנו היא בסך הכל הקבוצה <span class="math">\(R\)</span> במישור. ה"תבנית הדיפרנציאלית" <span class="math">\(\omega\)</span> היא ה-<span class="math">\(Pdx+Qdy\)</span> הזה (בהמשך ניתן משמעות פורמלית ל-<span class="math">\(dx,dy\)</span> הללו סוף כל סוף!). אני יכול גם לגלות ש-<span class="math">\(Pdx+Qdy\)</span> זה משהו שנקרא 1-תבנית (יש גם 0-תבנית, 2-תבנית וכן הלאה) ושמשפט סטוקס תובע שהמימד של <span class="math">\(M\)</span> יהיה גדול ב-1 מהמספר של התבנית (אצלנו <span class="math">\(M\)</span> היא ממימד 2, כמובן). לבסוף, באיזו שהיא דרך, ה-<span class="math">\(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\)</span> היא התבנית שמתקבלת בתור נגזרת חיצונית של <span class="math">\(Pdx+Qdy\)</span>. אני לא אתעמק במשפט סטוקס יותר מכך כרגע; בהמשך נראה את ההכללה של אינטגרל קווי - <strong>אינטגרל משטחי</strong> - וזה יאפשר לנו להציג עוד שני משפטים הדומים למשפט גרין - <strong>משפט גאוס ומשפט סטוקס הקלאסי</strong>, שגם הם מקרים פרטיים של משפט סטוקס, ואז הרעיון הכללי יהיה טיפה יותר ברור (ולכן גם תהיה יותר מוטיבציה להילחם עם ההגדרות של יריעות ושל תבניות דיפרנציאליות).</p>
+<p>אז ראינו את משפט גרין שהיה מעין הכללה של המשפט היסודי של החדו"א, אבל עבור אינטגרלים כפולים בכלל; האינטגרל הקווי מילא כאן את התפקיד של "נקודות הקצה" במשפט היסודי הרגיל של החדו"א. השאלה היא אם קיים גם משהו הפוך - משפט יסודי שבו אפשר לצמצם את חישוב האינטגרל הקווי להסתכלות על נקודות הקצה. כלומר, בהינתן עקומה <span class="math">\(\gamma\)</span> על <span class="math">\(\left[a,b\right]\)</span> ושדה וקטורי <span class="math">\(F\)</span>, האם קיימת איזו שהיא פונקציה "קדומה" <span class="math">\(\Phi\)</span> כך ש-</p>
+<p><span class="math">\(\int_{a}^{b}F\cdot d\gamma=\Phi\left(b\right)-\Phi\left(a\right)\)</span>?</p>
+<p>התשובה היא שזה אפשרי <strong>לפעמים</strong>. צריך ש-<span class="math">\(F\)</span> יקיים תכונה נחמדה כלשהי; שהוא יהיה <strong>שדה משמר</strong>. צריך להבין מה זה אומר שהמשוואה לעיל מתקיימת - זה אומר שהאינטגרל הקווי בין הנקודות <span class="math">\(\gamma\left(a\right)\)</span> ו-<span class="math">\(\gamma\left(b\right)\)</span> <strong>לא תלוי בעקום</strong> אלא רק בנקודות הקצה שלו. שימו לב - זה לא כמו קודם, כאשר לקחנו פרמטריזציות שונות <strong>לאותו עקום</strong>; כאן אנחנו מדברים על <strong>אותן נקודות קצה</strong> אבל על עקומים שיכולים להיות שונים לגמרי. אפשר קו ישר בין הנקודות; ואפשר קו מתפתל ומזגזג והולך אחורה וקדימה ושוב אחורה וחותך את עצמו ומשתגע ועושה ספירלות וסלטות באוויר וכל מה שתרצו - ועדיין, צריך לצאת שערך האינגטרל הקווי יהיה זהה כמו במקרה של קו ישר (והנה אפיון אלטרנטיבי: האינטגרל של <span class="math">\(F\)</span> על כל מסלול סגור צריך להיות 0; הסיבה לכך היא שאפשר לבחור שתי נקודות על המסלול הסגור ולפרק אותו לאיחוד של שתי עקומות שהולכות "לשם ובחזרה"). לכן זו שאלה טובה ואפילו מצויינת באילו תנאים על <span class="math">\(F\)</span> הקסם הזה יתרחש. והתשובה היא פשוטה להפתיע: צריך ש-<span class="math">\(F\)</span> יהיה <strong>גרדיאנט</strong> של שדה סקלרי. כלומר, שתהיה פונקציה סקלרית <span class="math">\(f:\mathbb{R}^{2}\to\mathbb{R}\)</span> כך ש-<span class="math">\(F=\nabla f\)</span>, דהיינו ש-<span class="math">\(F=\left(\frac{\partial f}{\partial x},\frac{\partial f}{\partial y}\right)\)</span>. עם הסימונים הללו נקבל את הנוסחה</p>
+<p><span class="math">\(\int_{a}^{b}\nabla f\cdot d\gamma=f\left(b\right)-f\left(a\right)\)</span></p>
+<p>והנוסחה הזו <strong>ממש</strong> אנלוגית למשפט היסודי הרגיל של החדו"א - הרי <span class="math">\(\nabla f\)</span> במקרה החד ממדי זו בדיוק <span class="math">\(f^{\prime}\)</span>. היא גם נותנת לנו עוד הצצה אל משפט סטוקס הכללי - כאן <span class="math">\(f\)</span> היא התבנית הדיפרנציאלית ו-<span class="math">\(\nabla f\)</span> היא הנגזרת החיצונית שלה (אז כבר קיבלנו שתי דוגמאות לנגזרות חיצוניות של תבניות דיפרנציאליות, בלי שנדע מה זה בכלל). הטרמינולוגיה שבה משתמשים בהקשר של תבניות היא לומר שתבנית היא <strong>מדויקת</strong> אם היא הנגזרת החיצונית של תבנית אחרת, ולכן אפשר לנסח את המשפט הקודם בכך שאם השדה הוקטורי הוא תבנית מדויקת, אז הוריאנט של המשפט היסודי מתקיים עבורו.</p>
+<p>בכך הגענו לסוף הדיון הנוכחי על אינטגרלים קוויים, אבל כפי שאנחנו כבר רואים - אינטגרלים קווים הם רק ההתחלה; כרטיס הכניסה שלנו לעולם חדש, מופלא, של חדו"א. ויהי ערב ויהיה בוקר וירא אלי קרטן כי טוב ויברא את התבנית הדיפרנציאלית.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2016/04/28/fibonacci_in_alphabet/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">האם סדרת פיבונאצ&#39;י מסתתרת באלפבית העברי?</span>
+            </a>
+            
+            
+            
+            <a href="/2016/04/12/general_change_of_variables/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">החלפת משתנים בחשבון דיפרנציאלי ואינטגרלי - המשפט הכללי</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

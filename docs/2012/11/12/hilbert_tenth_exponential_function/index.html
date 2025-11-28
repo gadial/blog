@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הבעיה העשירית של הילברט - הפונקציה האקספוננציאלית היא דיופנטית - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הבעיה העשירית של הילברט - הפונקציה האקספוננציאלית היא דיופנטית</h1>
+            <div class="post-meta">
+                <span class="date">2012-11-12</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הבעיה העשירית של הילברט.html">הבעיה העשירית של הילברט</a>
+                    
+                    <a href="/tags/טכני.html">טכני</a>
+                    
+                    <a href="/tags/פונקציות דיופנטיות.html">פונקציות דיופנטיות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>סוף סוף הגענו אל האקשן האמיתי. כזכור, עבור <span class="math">\(a&gt;1\)</span> הגדרנו את משוואת פל <span class="math">\(x^{2}-dy^{2}=1\)</span> כאשר <span class="math">\(d=a^{2}-1\)</span>, וסימנו בתור <span class="math">\(x_{n}\left(a\right)\)</span> את סדרת ערכי ה-<span class="math">\(x\)</span>-ים של פתרונות של המשוואה (כשכולם מוצגים בתור "חזקות" של הפתרון היסודי). המטרה שלנו כרגע היא להראות שהפונקציה <span class="math">\(f\left(a,k\right)=x_{k}\left(a\right)\)</span> היא דיופנטית; לשם כך נציג מערכת משוואות שבה מככבים <span class="math">\(x,k,a\)</span> ועוד כל מני משתנים אחרים, כך שאחרי שמציבים ערכים קונקרטיים ב-<span class="math">\(x,k,a\)</span>, למערכת המשוואות שנותרה יש פתרון אם ורק אם <span class="math">\(x=x_{k}\left(a\right)\)</span>. במערכת הזו יש שמונה משוואות. מוכנים? הנה הן:</p>
+<ol>
+    <li><span class="math">\(x^{2}-\left(a^{2}-1\right)y^{2}=1\)</span></li>
+    <li><span class="math">\(u^{2}-\left(a^{2}-1\right)v^{2}=1\)</span></li>
+    <li><span class="math">\(s^{2}-\left(b^{2}-1\right)t^{2}=1\)</span></li>
+    <li><span class="math">\(v=ry^{2}\)</span></li>
+    <li><span class="math">\(b=1+4py=a+qu\)</span></li>
+    <li><span class="math">\(s=x+cu\)</span></li>
+    <li><span class="math">\(t=k+4\left(d-1\right)y\)</span></li>
+    <li><span class="math">\(y=k+e-1\)</span></li>
+</ol>
+<p>יפה. בואו נתחיל להבין מה המשמעות של כל זה ואיך כל משוואה עוזרת לנו.</p>
+<p>נתחיל מהראשונה. כל פתרון של המשוואה הזו בעצם נותן לנו פתרון של משוואת פל עבור <span class="math">\(a\)</span> כלשהו. כלומר, כבר מהמשוואה הראשונה אנחנו יכולים להסיק שקיים <span class="math">\(i\)</span> כלשהו כך ש-<span class="math">\(x=x_{i}\left(a\right)\)</span> וגם <span class="math">\(y=y_{i}\left(a\right)\)</span>. בעצם כל האתגר שנותר לנו כעת הוא להוכיח ש-<span class="math">\(k=i\)</span> (זכרו! יש לחשוב על <span class="math">\(k\)</span> בתור קבוע - "פרמטר" שהצבנו במשוואות).</p>
+<p>שתי המשוואות הבאות נותנות לנו עוד פתרונות למשוואות פל. משוואה 2 מראה לנו ש-<span class="math">\(u=x_{n}\left(a\right),v=x_{n}\left(a\right)\)</span> עבור <span class="math">\(n\)</span> כלשהו; שימו לב שאלו הם איברים שונים באותה סדרה (של פתרונות משוואת פל עבור <span class="math">\(a\)</span>). לעומת זאת <span class="math">\(s=x_{j}\left(b\right),t=y_{j}\left(b\right)\)</span> הם כבר פתרונות של משוואת פל שעשויה להיות שונה, תלוי אם <span class="math">\(b\)</span> שווה ל-<span class="math">\(a\)</span> או לא. לשם מה אנו נזקקים לעוד שני פתרונות? סבלנות.</p>
+<p>מידע שאנחנו מקבלים מייד הוא ש-<span class="math">\(b\)</span> אכן שונה מ-<span class="math">\(a\)</span> ולמעשה הוא בהכרח גדול ממנו - זה נובע ממשוואה 5, <span class="math">\(b=a+qu\)</span>. זכרו שכל המשוואות הללו הן בשלמים <strong>חיוביים</strong> (זה פישוט שעשינו אי-אז בתחילת סדרת הפוסטים הזו).</p>
+<p>כעת, האם אנחנו יכולים לומר משהו על הקשר שבין <span class="math">\(\left(x,y\right)\)</span> ובין <span class="math">\(\left(u,v\right)\)</span>? שניהם פתרונות של משוואת פל עם המקדם <span class="math">\(d=a^{2}-1\)</span>, אבל חוץ מזה הם כרוכים האחד בשני עם משוואה 4: <span class="math">\(v=ry^{2}\)</span>, או במפורש: <span class="math">\(y_{n}\left(a\right)=r\left(y_{i}\left(a\right)\right)^{2}\)</span>. במילים אחרות, <span class="math">\(\left(y_{i}\left(a\right)\right)^{2}\)</span> מחלק את <span class="math">\(y_{n}\left(a\right)\)</span>. בפוסט הקודם הראינו שמכך נובע ש-<span class="math">\(y_{i}\left(a\right)\)</span> מחלק את <span class="math">\(n\)</span> (וכמובן ש-<span class="math">\(i\le n\)</span>).</p>
+<p>יפה, למדנו משהו על הקשר בין <span class="math">\(i\)</span> ו-<span class="math">\(n\)</span>. עכשיו בואו נכניס את <span class="math">\(x_{j}\left(b\right)\)</span> לתמונה. משוואה 6, כשהיא מנוסחת בסימונים החדשים שלנו, אומרת ש-<span class="math">\(x_{j}\left(b\right)=x_{i}\left(a\right)+cx_{n}\left(a\right)\)</span>. אפשר לסמן זאת גם כך: <span class="math">\(x_{j}\left(b\right)\equiv_{x_{n}\left(a\right)}x_{i}\left(a\right)\)</span>. זה לא סוף מה שאפשר לעשות עם שקילות מודולו <span class="math">\(x_{n}\left(a\right)\)</span>; משוואה 5 אומרת ש-<span class="math">\(b=a+qx_{n}\left(a\right)\)</span>, כלומר <span class="math">\(b\equiv_{x_{n}\left(a\right)}a\)</span>.</p>
+<p>עכשיו בואו נשלוף תוצאה מהפוסט הקודם: אם <span class="math">\(a\equiv_{c}b\)</span> אז לכל <span class="math">\(n\)</span> מתקיים ש-<span class="math">\(x_{n}\left(a\right)\equiv_{c}x_{n}\left(b\right)\)</span> (זה נבע מההגדרה האינדוקטיבית של סדרות ה-<span class="math">\(x_{n}\)</span>-ים). אצלנו אפשר להסיק מזה ש-<span class="math">\(x_{j}\left(b\right)\equiv_{x_{n}\left(a\right)}x_{j}\left(a\right)\)</span>, ולכן נקבל ש-<span class="math">\(x_{i}\left(a\right)\equiv_{x_{n}\left(a\right)}x_{j}\left(a\right)\)</span>. לפי התוצאה מסוף הפוסט הקודם, המסקנה היא ש-<span class="math">\(j\equiv_{4n}\pm i\)</span>. כעת, מכיוון ש-<span class="math">\(y_{i}\left(a\right)\)</span> מחלק את <span class="math">\(n\)</span>, הרי ש-<span class="math">\(4y_{i}\left(a\right)\)</span> מחלק את <span class="math">\(4n\)</span> וכל דבר שמתחלק על ידו, ועל כן <span class="math">\(j\equiv_{4y_{i}\left(a\right)}\pm i\)</span>.</p>
+<p>כעת בואו נשתמש שוב במשוואה 5, בחלק שלה שבו טרם השתמשנו שקובע ש-<span class="math">\(b=1+4py_{i}\left(a\right)\)</span>, כלומר ש-<span class="math">\(b\equiv_{4y_{i}\left(a\right)}1\)</span>, כלומר ש-<span class="math">\(4y_{i}\left(a\right)\)</span> מחלק את <span class="math">\(b-1\)</span>.</p>
+<p>עכשיו בואו נשתמש בעוד תוצאה מהפוסט הקודם, לפיה <span class="math">\(y_{n}\left(a\right)\equiv_{a-1}n\)</span> (גם זה נבע די מייד מנוסחאות הנסיגה). אצלנו נשתמש בזה עם <span class="math">\(j\)</span> ונקבל ש-<span class="math">\(y_{j}\left(b\right)\equiv_{b-1}j\)</span>, כלומר <span class="math">\(y_{j}\left(b\right)\equiv_{4y_{i}\left(a\right)}j\)</span>. מבלבל? טיפה, כן. עכשיו כדי לבלבל עוד יותר נוסיף לתמונה את משוואה 7: <span class="math">\(y_{j}\left(b\right)=k+4\left(d-1\right)y_{i}\left(a\right)\)</span> (<strong>שימו לב</strong> ש-<span class="math">\(d\)</span> כאן הוא משתנה בלי אילוצים עליו פרט לכך שיהיה חיובי; אנחנו <strong>לא</strong>יכולים להניח ש-<span class="math">\(d=a^{2}-1\)</span> וגם לא ניסינו לדרוש משהו כזה). מהמשוואה הזו נקבל מייד ש-<span class="math">\(y_{j}\left(b\right)\equiv_{4y_{i}\left(a\right)}k\)</span>, והנה הכנסנו את <span class="math">\(k\)</span> לתמונה סוף סוף. זכרו - מטרת העל שלנו היא להראות ש-<span class="math">\(k=i\)</span>, והתקדמנו יפה לקראת זה; בואו נערוך סיכום ביניים קצר של תוצאות שמצאנו:</p>
+<ol>
+    <li><span class="math">\(j\equiv_{4y_{i}\left(a\right)}\pm i\)</span></li>
+    <li><span class="math">\(y_{j}\left(b\right)\equiv_{4y_{i}\left(a\right)}j\)</span></li>
+    <li><span class="math">\(y_{j}\left(b\right)\equiv_{4y_{i}\left(a\right)}k\)</span></li>
+</ol>
+<p>משלושת אלו קיבלנו את השרשרת הבאה שבה כל השקילויות הן מודולו <span class="math">\(4y_{i}\left(a\right)\)</span>: <span class="math">\(k\equiv y_{j}\left(b\right)\equiv j\equiv\pm i\)</span>. אם כן, עוד לא הוכחנו ש-<span class="math">\(k=i\)</span> אבל ראינו ש-<span class="math">\(k\equiv_{4y_{i}\left(a\right)}\pm i\)</span> וגם זו התחלה (וכמעט סיימנו!).</p>
+<p>בואו נכניס לתמונה עכשיו את משוואה 8: <span class="math">\(y=k+e-1\)</span>. מה היא בעצם אומרת? זו בסך הכל הדרך הדיופנטית לכתוב <span class="math">\(k\le y_{i}\left(a\right)\)</span> (כי <span class="math">\(e\)</span> הוא מספר חיובי כלשהו). כעת, בפוסט הקודם ראינו ש-<span class="math">\(i\le y_{i}\left(a\right)\)</span>. אם תחשבו על זה קצת, זה אומר ש-<span class="math">\(k=i\)</span>! למה? כי <span class="math">\(k,i\)</span> שניהם נמצאים בתוך טווח שבו אין שני מספרים שונים ששקולים מודולו <span class="math">\(4y_{i}\left(a\right)\)</span> - הטווח <span class="math">\(-2y_{i}\left(a\right)+1,\dots-1,0,1,\dots,2y_{i}\left(a\right)\)</span> (זוכרים? דיברנו על זה קצת בפוסט הקודם). זהו, סיימנו את הכיוון הראשון! הראינו שאם נתון פתרון למשוואות הדיופנטיות עבור ערכים נתונים של <span class="math">\(x,k,a\)</span> אז הוא מקיים <span class="math">\(x=x_{k}\left(a\right)\)</span>.</p>
+<p>הכיוון השני הוא להראות שאם יש לנו ערכים נתונים של <span class="math">\(x,k,a\)</span> שמקיימים <span class="math">\(x=x_{k}\left(a\right)\)</span> ואנחנו מציבים אותם במשוואות שלעיל, אז התוצאה היא מערכת משוואות פתירה. כלומר, אנחנו צריכים לקבוע מה יהיו הערכים ששאר המשתנים מקבלים ולהוכיח שכל המשוואות מתקיימות (עכשיו המשוואות הופכות להיות האויבים שלנו - אם קודם הן סיפקו לנו מידע, עכשיו הן מספקות לנו אילוצים שאנחנו חייבים לקיים).</p>
+<p>בואו נתחיל ממשוואה 1 - היא קלה. אם <span class="math">\(x=x_{k}\left(a\right)\)</span> אז אנחנו יודעים שיש <span class="math">\(y=y_{k}\left(a\right)\)</span> כך ש-<span class="math">\(x^{2}+\left(a-1\right)y^{2}=1\)</span> מהגדרת משוואת פל. אז סיפקנו כבר את משוואה 1. בואו נעבור ל-2; כל פתרון אחר של משוואת פל עבור <span class="math">\(a\)</span> יספק אותה, אבל כדאי לבחור את הפתרון הזה בחוכמה כדי שגם שאר המשוואות יסופקו - נבחר <span class="math">\(m=2ky_{k}\left(a\right)\)</span> (למה? כי זה עובד, כפי שנראה בהמשך) ונגדיר <span class="math">\(u=x_{m}\left(a\right)\)</span> ו-<span class="math">\(v=y_{m}\left(a\right)\)</span>, וזה כמובן שיספק את משוואה 2.</p>
+<p>עכשיו, בפוסט הקודם ראינו ש-<span class="math">\(y_{n}\)</span> מחלק את <span class="math">\(y_{t}\)</span> אם ורק אם <span class="math">\(n\)</span> מחלק את <span class="math">\(t\)</span>, וכמו כן גם ראינו ש-<span class="math">\(y_{n}^{2}\)</span> תמיד מחלק את <span class="math">\(y_{ny_{n}}\)</span>. מהתוצאה השניה נובע ש-<span class="math">\(y_{k}^{2}\)</span> מחלק את <span class="math">\(y_{m/2}\)</span>, ומהראשונה נובע ש-<span class="math">\(y_{m/2}\)</span> מחלק את <span class="math">\(y_{m}\)</span> ולכן נקבל ש-<span class="math">\(y_{k}^{2}\)</span> מחלק את <span class="math">\(y_{m}\)</span>, כלומר <span class="math">\(y^{2}\)</span> מחלק את <span class="math">\(v\)</span>, כלומר יש <span class="math">\(r\)</span> כך ש-<span class="math">\(v=ry^{2}\)</span>, והנה סיפקנו את משוואה 4. זה עדיין לא מסביר עד הסוף את האופן שבו בחרנו את <span class="math">\(m\)</span> (אם כל מה שהיינו רוצים לעשות הוא להראות ש-<span class="math">\(y^{2}\)</span> מחלק את <span class="math">\(v\)</span> היה אפשר לבחור <span class="math">\(m=ky_{k}\)</span>) אבל זה הרווח הראשון שקצרנו מההגדרה הזו.</p>
+<p>האתגר הבא, והגדול ביותר שלנו, הוא לספק את משוואה 5 שאיכשהו קושרת את הפרמטרים של כל שלוש משוואות פל שלנו יחד. נצטרך לבחור את <span class="math">\(b\)</span> בצורה חכמה מאוד, ועל פיו לבחור את מה שיפתור את משוואה 3. נתחיל דווקא מתכונה של <span class="math">\(u,v\)</span>: בפוסט הקודם ראינו שאם <span class="math">\(n\)</span> הוא זוגי אז <span class="math">\(y_{n}\)</span> הוא זוגי וכשהוא אי זוגי אז <span class="math">\(y_{n}\)</span> אי זוגי. במקרה שלנו בחרנו את <span class="math">\(m\)</span> בכוונה באופן שיבטיח שהוא זוגי ולכן <span class="math">\(v\)</span> זוגי, אבל זה אומר שבהכרח <span class="math">\(u\)</span> אי זוגי (כי <span class="math">\(u^{2}+\left(a^{2}-1\right)v^{2}=1\)</span>; מה תהיה הזוגיות של אגף שמאל אם גם <span class="math">\(u\)</span> וגם <span class="math">\(v\)</span> זוגיים?). אנחנו גם יודעים שהמחלק המשותף הגדול ביותר של <span class="math">\(u,v\)</span> הוא 1 (שוב, מהפוסט הקודם), ולכן גם המחלק המשותף הגדול ביותר של <span class="math">\(u\)</span> ושל <span class="math">\(4y\)</span> הוא 1. רגע, למה? ובכן, בואו נניח ש-<span class="math">\(p\)</span> הוא מספר גדול מ-1 שמחלק גם את <span class="math">\(u\)</span> וגם את <span class="math">\(4y\)</span>. אפשר תמיד להניח ש-<span class="math">\(p\)</span> ראשוני כי אם ניקח מחלק משותף כלשהו של <span class="math">\(u,4y\)</span> יהיה ראשוני שמחלק אותו; כמו כן, <span class="math">\(p\)</span> חייב להיות אי זוגי כי <span class="math">\(u\)</span> אי זוגי, ולכן <span class="math">\(p\)</span> לא מחלק את <span class="math">\(4\)</span>, ולכן כדי לחלק את <span class="math">\(4y\)</span> הוא חייב לחלק את <span class="math">\(y\)</span>. אבל ראינו ש-<span class="math">\(y\)</span> מחלק את <span class="math">\(v\)</span> ולכן קיבלנו ש-<span class="math">\(p\)</span> הוא מחלק משותף של <span class="math">\(u,v\)</span> וזו סתירה לכך שהם זרים.</p>
+<p>איך זה עוזר לנו ש-<span class="math">\(u,4y\)</span> זרים? ובכן, זה מאפשר לנו לשלוף מהשרוול כלי נשק קטלני במיוחד. זכרו מהי משוואה 5 - בואו נכתוב אותה הפעם בתור זוג המשוואות שהיא:</p>
+<p><span class="math">\(b=1+4yp\)</span></p>
+<p><span class="math">\(b=a+uq\)</span></p>
+<p>דרך אחרת, כמעט שקולה, לכתוב את מערכת המשוואות הזו היא:</p>
+<p><span class="math">\(b\equiv_{4y}1\)</span></p>
+<p><span class="math">\(b\equiv_{u}a\)</span></p>
+<p>וזו מערכת משוואות מודולרית שבה המודולוסים הם זרים, מה שאומר ש<strong>משפט השאריות הסיני</strong> מבטיח שתמיד קיים לה פתרון. נבחר את הערך של המשתנה <span class="math">\(b\)</span> להיות הפתרון הזה. האם סיימנו? עוד לא, כי דרך הכתיבה המודולרית לא שקולה לחלוטין; היא הייתה שקולה רק אם <span class="math">\(p,q\)</span> היו יכולים להיות גם שליליים. למרבה המזל, אם <span class="math">\(b\)</span> הוא פתרון של מערכת המשוואות אז גם <span class="math">\(b+n\left(4yu\right)\)</span> הוא כזה, לכל <span class="math">\(n\)</span> טבעי, ולכן תמיד אפשר לבחור <span class="math">\(b\)</span> גדול מספיק כדי ששתי המשוואות המקוריות יתקיימו. טראח! הנה סיפקנו גם את משוואה 5.</p>
+<p>עכשיו, כשיש לנו את <span class="math">\(b\)</span> ביד, אפשר להגדיר את <span class="math">\(s,t\)</span> - הפתרונות למשוואה 3 - בתור <span class="math">\(s=x_{k}\left(b\right),t=y_{k}\left(b\right)\)</span> (אותו <span class="math">\(k\)</span> כמו זה שהיה נתון לנו מלכתחילה). בפוסט הקודם ראינו שאם <span class="math">\(a\equiv_{c}b\)</span> אז <span class="math">\(x_{n}\left(a\right)\equiv_{c}x_{n}\left(b\right)\)</span>. במקרה שלנו, <span class="math">\(b\equiv_{u}a\)</span> ולכן נקבל <span class="math">\(s\equiv_{u}x\)</span>, כלומר <span class="math">\(s=x+cu\)</span> בדיוק כמו משוואה 6. רגע, בדיוק? לא! מי מכם האמין לי? יש פה שוב את אותה בעיה כמו קודם - אף אחד לא ערב לנו ש-<span class="math">\(c\)</span> הזה הוא חיובי. כדי להיווכח בכך שהוא חיובי שימו לב לכך ש-<span class="math">\(b&gt;a\)</span> (זה נובע מהמשוואה <span class="math">\(b=a+uq\)</span>). ולכן <span class="math">\(s=x_{k}\left(b\right)&gt;x_{k}\left(a\right)=x\)</span> (לא בטוחים בזה? הוכיחו לעצמכם, זה נובע מהגדרת <span class="math">\(x_{k}\)</span> כסדרת נסיגה).</p>
+<p>נותרו רק משוואות 7 ו-8. משוואה 7 מתעסקת בקשר שבין <span class="math">\(t=y_{k}\left(b\right)\)</span> ו-<span class="math">\(y=y_{k}\left(a\right)\)</span> ו-<span class="math">\(k\)</span>. ראשית כל, שימו לב לכך ש-<span class="math">\(t\ge k\)</span> (בגלל שראינו בפוסט הקודם ש-<span class="math">\(y_{n}\ge n\)</span> תמיד). כמו כן, בפוסט הקודם ראינו גם ש-<span class="math">\(y_{n}\equiv_{a-1}n\)</span>, ובמקרה שלנו זה אומר ש-<span class="math">\(t\equiv_{b-1}k\)</span>. ממשוואה 5 ראינו ש-<span class="math">\(b=1+4yp\)</span> ולכן <span class="math">\(t\equiv_{4yp}k\)</span> ומכאן שבפרט <span class="math">\(t\equiv_{4y}k\)</span>. כעת, מה אומרת משוואה 7? ש-<span class="math">\(t=k+4\left(d-1\right)y\)</span>, ולכן העובדה ש-<span class="math">\(t\equiv_{4y}k\)</span> מראה את זה, כי כבר ראינו ש-<span class="math">\(t\ge k\)</span>.</p>
+<p>נותרה רק משוואה 8: <span class="math">\(y=k+e-1\)</span>. להראות שהיא פתירה זה מיידי: <span class="math">\(y=y_{k}\left(a\right)\ge k\)</span> (מאוד שימושית, הטענה ש-<span class="math">\(y_{n}\left(a\right)\ge n\)</span>) ולכן קיים <span class="math">\(e\)</span> כנדרש (<span class="math">\(e=y-k+1\)</span>).</p>
+<p>סיימנו! הוכחנו ש-<span class="math">\(f\left(k,a\right)=x_{k}\left(a\right)\)</span> היא פונקציה דיופנטית! זה הישג לא מבוטל, עברנו דרך לא קצרה בדרך לחיסול הבעיה העשירית של הילברט.</p>
+<p>לפני שאמשיך, אני רוצה לכתוב את משוואות 1-8 בצורה קצת יותר ידידותית למשתמש, עכשיו כשהבנו פחות או יותר מה הולך בהן:</p>
+<ol>
+    <li><span class="math">\(x,y\)</span> הם פתרונות של משוואת פל עם הפרמטר <span class="math">\(a\)</span>.</li>
+    <li><span class="math">\(u,v\)</span> הם פתרונות של משוואת פל עם הפרמטר <span class="math">\(a\)</span>.</li>
+    <li><span class="math">\(s,t\)</span> הם פתרונות של משוואת פל עם הפרמטר <span class="math">\(b\)</span>.</li>
+    <li><span class="math">\(y^{2}\)</span> מחלק את <span class="math">\(v\)</span>.</li>
+    <li><span class="math">\(b\equiv_{4y}1\)</span> וגם <span class="math">\(b\equiv_{u}a\)</span> וגם <span class="math">\(b&gt;a\)</span>.</li>
+    <li><span class="math">\(s\equiv_{u}x\)</span> וגם <span class="math">\(s&gt;x\)</span>.</li>
+    <li><span class="math">\(t\equiv_{4y}k\)</span> וגם <span class="math">\(t&gt;k\)</span>.</li>
+    <li><span class="math">\(y\ge k\)</span>.</li>
+</ol>
+<p>זה כבר נראה הרבה יותר אנושי. בעצם יש לנו כאן שלושה פתרונות למשוואות פל עם שני פרמטרים וכמה קשרים בסיסיים בין הפרמטרים. כל שאר המשתנים שהיו מעורבים במשוואות היו רק משתני עזר שסייעו לנו לכתוב באופן דיופנטי תכונות כמו <span class="math">\(\ge\)</span> וכמו שקילות מודולו. אני מציג את המשוואות כך כדי שיהיה קצת יותר קל להבין מאיפה הן הגיעו ומה עבר בראש של מי שהמציא אותן, למרות שאין לי מושג איך הגיעו להוכחה הזו.</p>
+<p>עכשיו, קדימה לגביע הקדוש שלנו! נגדיר את הפונקציה <span class="math">\(h\left(n,k\right)=n^{k}\)</span> ונוכיח שהיא דיופנטית. לשם כך נבנה מערכת משוואות שכוללת את 8 המשוואות שהצגתי קודם, ועוד 4 משוואות חדשות:</p>
+<ol>
+    <li><span class="math">\(\left(x-y\left(a-n\right)-m\right)^{2}=\left(f-1\right)^{2}\left(2an-n^{2}-1\right)^{2}\)</span></li>
+    <li><span class="math">\(m+g=2an-n^{2}-1\)</span></li>
+    <li><span class="math">\(w=n+h=k+l\)</span></li>
+    <li><span class="math">\(a^{2}-\left(w^{2}-1\right)\left(w-1\right)^{2}z^{2}=1\)</span></li>
+</ol>
+<p>זה הכל. למה זה עובד?</p>
+<p>ובכן, בואו נניח ראשית כל שיש לנו פתרון למערכת המשוואות ונוכיח שמתקיים <span class="math">\(m=n^{k}\)</span>.</p>
+<p>ראשית, שימו לב שמשוואה מס' 3 (החדשה; אם אתייחס למשוואות הישנות במספר שלהן אומר זאת במפורש מעתה) גוררת ש-<span class="math">\(w&gt;1\)</span> (כי הוא סכום של שני מספרים חיוביים), ולכן <span class="math">\(\left(w^{2}-1\right)\left(w-1\right)^{2}z^{2}&gt;0\)</span> ומכאן על פי משוואה 4 ש-<span class="math">\(a&gt;1\)</span>. אם <span class="math">\(a&gt;1\)</span> אז כל המשוואות הישנות (1 עד 8) מראות ש-<span class="math">\(x=x_{k}\left(a\right)\)</span> ו-<span class="math">\(y=y_{k}\left(a\right)\)</span> - זה מה שעשינו קודם.</p>
+<p>עכשיו, כולנו כבר הדחקנו את זה, אבל בפוסט הקודם ראינו ש-<span class="math">\(x_{k}\left(a\right)-y_{k}\left(a\right)\left(a-n\right)\equiv_{2an-n^{2}-1}n^{k}\)</span> (בחיי! אני לא ממציא את זה!). סוף סוף זה יועיל לנו קצת. כפי שאתם רואים, משוואה 1 מהונדסת פחות או יותר כדי להתאים לביטוי הזה; אם ניקח אותה מודולו <span class="math">\(\left(2an-n^{2}-1\right)^2\)</span>, נקבל:</p>
+<p><span class="math">\(\left(x-y\left(a-n\right)-m\right)^{2}\equiv_{\left(2an-n^{2}-1\right)^2}0\)</span></p>
+<p>ובגלל שבאופן כללי אם <span class="math">\(A^2|B^2\)</span> אז <span class="math">\(A|B\)</span> נקבל:</p>
+<p><span class="math">\(x-y\left(a-n\right)-m\equiv_{2an-n^{2}-1}0\)</span></p>
+<p>או במילים אחרות:</p>
+<p><span class="math">\(m\equiv_{2an-n^{2}-1}x-y\left(a-n\right)\equiv n^{k}\)</span> (המעבר האחרון נובע מהמשפט בפוסט הקודם).</p>
+<p>יפה, אז אנחנו קרובים באופן מפתיע ליעד שלנו. רק צריך להשתכנע ש-<span class="math">\(m\)</span> ו-<span class="math">\(n^{k}\)</span> הם קטנים יותר מ-<span class="math">\(2an-n^{2}-1\)</span> ואז נסיים כמו קודם.</p>
+<p>בואו תסתכלו רגע על משוואה 4. נראה לכם מוכר? זה לא במקרה, גם זו משוואת פל! הפעם <span class="math">\(w\)</span> הוא על תקן <span class="math">\(a\)</span>, ולכן יש <span class="math">\(j\)</span> כלשהו כך ש-<span class="math">\(a=x_{j}\left(w\right)\)</span> ו-<span class="math">\(\left(w-1\right)z=y_{j}\left(w\right)\)</span>. עכשיו, משפט מהפוסט הקודם שכבר השתמשנו בו כאן הוא ש-<span class="math">\(y_{j}\equiv_{w-1}j\)</span>, אבל מכיוון ש-<span class="math">\(y_{j}\)</span> מתחלק על ידי <span class="math">\(w-1\)</span> נובע מכך ש-<span class="math">\(j\equiv_{w-1}0\)</span>, ולכן בהכרח <span class="math">\(j\ge w-1\)</span>. עכשיו, אנחנו יודעים ש-<span class="math">\(x_{j}\left(w\right)\ge w^{j}\)</span> (שוב, פוסט קודם) ולכן <span class="math">\(a\ge w^{w-1}&gt;n^{k}\)</span>, כשהמעבר האחרון נובע מכך שמשוואה 2 מראה ש-<span class="math">\(w&gt;a,k\)</span>. זה טוב מאוד - זה מראה ש-<span class="math">\(a\)</span> ענקי, כמו שאנחנו צריכים, אבל עוד לא סיימנו.</p>
+<p>בואו נציץ במשוואה 2. מה שהיא בעצם אומרת הוא ש-<span class="math">\(m&lt;2an-n^{2}-1\)</span> - כלומר, נותן לנו את הקוטן של <span class="math">\(m\)</span> שרצינו באופן מפורש. אז אם נראה ש-<span class="math">\(n^{k}&lt;2an-n^{2}-1\)</span>, נסיים את הכיוון הזה של ההוכחה. הדרך לעשות את זה היא להכניס טיפה אנליזה לתמונה. בואו נגדיר פונקציה <span class="math">\(f\left(n\right)=2an-n^{2}-1\)</span>. אז <span class="math">\(f\left(1\right)=2a-2\ge a\)</span> (אי השוויון האחרון נובע מכך ש-<span class="math">\(a&gt;1\)</span>). כעת, נגזור את <span class="math">\(f\)</span> ונקבל <span class="math">\(f^{\prime}\left(n\right)=2a-2n\)</span> וזה גדול מ-0 לכל התחום <span class="math">\(1\le n&lt;a\)</span>, כלומר <span class="math">\(f\)</span> היא פונקציה עולה בתחום הזה ולכן <span class="math">\(f\left(n\right)\ge a\)</span> לכל <span class="math">\(1\le n&lt;a\)</span>. כעת, אם <span class="math">\(a&gt;n^{k}\)</span> אז בפרט נקבל <span class="math">\(f\left(n\right)=2an-n^{2}-1\ge a&gt;n^{k}\)</span> (אין ל-<span class="math">\(n\)</span> ברירה, הוא חייב להיות קטן מ-<span class="math">\(a\)</span> אחרת <span class="math">\(n^{k}\)</span> לא היה קטן מ-<span class="math">\(a\)</span>). זה <strong>מסיים את הכיוון הראשון של ההוכחה</strong>!</p>
+<p>נותר רק הכיוון השני - להראות שאם <span class="math">\(m=n^{k}\)</span>, אז יש למערכת המשוואות שלנו פתרון. בואו נתחיל ממשוואה 3. היא בסך הכל אומרת ש-<span class="math">\(w&gt;n,k\)</span>, אז בואו נבחר את <span class="math">\(w\)</span> להיות מספר <strong>כלשהו</strong> שמקיים את זה. עכשיו, נגדיר <span class="math">\(a=x_{w-1}\left(w\right)\)</span>. מה עם <span class="math">\(y_{w-1}\left(w\right)\)</span>? מטענה מהפוסט הקודם שכבר עשינו בה שימוש פה, <span class="math">\(y_{w-1}\left(w\right)\equiv_{w-1}w-1\equiv0\)</span>. במילים אחרות, <span class="math">\(w-1\)</span> מחלק את <span class="math">\(y_{w-1}\left(w\right)\)</span> ולכן <span class="math">\(y_{w-1}\left(w\right)=z\left(w-1\right)\)</span>, והנה פתרנו את משוואה 4.</p>
+<p>כעת, אם <span class="math">\(w&gt;n\)</span> ו-<span class="math">\(w&gt;k\)</span> אז <span class="math">\(a=x_{w-1}\left(w\right)\ge w^{w-1}&gt;n^{k}\)</span> ולכן נקבל (בדיוק כמו קודם) ש-<span class="math">\(m=n^{k}&lt;2an-n^{2}-1\)</span>, מה שנותן לנו פתרון למשוואה 2. נותרה רק משוואה 1!</p>
+<p>ובכן, הבה ונגדיר <span class="math">\(x=x_{k}\left(a\right),y=y_{k}\left(a\right)\)</span>. אנחנו יודעים ש-<span class="math">\(x_{k}\left(a\right)-y_{k}\left(a\right)\left(a-n\right)\equiv_{2an-n^{2}-1}n^{k}\)</span>, ובמילים אחרות: <span class="math">\(2an-n^{2}-1\)</span> מחלק את <span class="math">\(x-y\left(a-n\right)-m\)</span>, כלומר יש <span class="math">\(f\)</span> כך ש-<span class="math">\(x-y\left(a-n\right)-m=\left(f-1\right)\left({2an-n^{2}-1}\right)\)</span>. רק שיש לנו בעיה קטנה - לא ברור אם <span class="math">\(f\)</span> הזה חיובי או שלילי בכלל. הפתרון הוא להעלות את שני אגפי המשוואה בריבוע, ואז לקבל <span class="math">\(\left(x-y\left(a-n\right)-m\right)^{2}=\left(f-1\right)^{2}\left({2an-n^{2}-1}\right)^{2}\)</span> וכעת אם <span class="math">\(f\)</span> היה שלילי אפשר להחליף אותו ב-<span class="math">\(\left|f\right|\)</span> מבלי לשים לב להבדל. זה מסיים עם משוואה 1, ומכיוון שכל המשוואות הישנות מסופקות על ידי הפתרון למשוואת פל <span class="math">\(x_{k}\left(a\right)\)</span>, <strong>סיימנו את ההוכחה!</strong></p>
+<p>זה עדיין לא מוכיח שהבעיה העשירית של הילברט היא לא כריעה, אבל זה מוכיח שהפונקציה האקספוננציאלית היא דיופנטית - וזה המכשול שעמד בפני המתמטיקאים שעבדו על הבעיה במשך עשרות שנים. מכאן ואילך העניינים יפסיקו להיראות כמו "חשבון מכולת" ונחזור לדבר על התמונה הגדולה ולהבין איך פונקציה אקספוננציאלית עוזרת לנו.</p>
+<p>קצת קרדיט לסיום על כל ההוכחה הזו. אני עובד, כאמור, על בסיס מאמר של מרטין דיוויס שקישרתי אליו בתחילת סדרת הפוסטים הזו. הוא מייחס את ההוכחה שהצגתי כאן (שמבחינה היסטורית אינה ההוכחה הראשונה מסוגה) לג'וליה רובינסון (אחת מהחוקרות המרכזיות של הבעיה העשירית) תוך שימוש בכמה מהרעיונות של יורי מאטיסייביץ' (מי שהוכיח לראשונה שיש פונקציה דיופנטית שגדלה אקספוננציאלית, ובכך סיים את ההוכחה של אי הכריעות של הבעיה העשירית). זו ההוכחה הפשוטה ביותר שהצלחתי למצוא; יש למאטיסייביץ' עצמו ספר על הבעיה, אבל את המאמר של דיוויס תמיד חיבבתי יותר.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2012/11/28/zeckendorf_theorem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט זקנדורף</span>
+            </a>
+            
+            
+            
+            <a href="/2012/11/01/hilbert_tenth_pell_equation/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הבעיה העשירית של הילברט - איך משוואת פל קשורה לכל העניין?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

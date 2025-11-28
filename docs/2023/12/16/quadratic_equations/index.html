@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז איך באמת פותרים משוואה ריבועית? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז איך באמת פותרים משוואה ריבועית?</h1>
+            <div class="post-meta">
+                <span class="date">2023-12-16</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/כללי.html">כללי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/משוואה ריבועית.html">משוואה ריבועית</a>
+                    
+                    <a href="/tags/מתמטיקה בית ספרית.html">מתמטיקה בית ספרית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>אחד הפוסטים הפופולריים ביותר בבלוג מבחינת מספר כניסות הוא הפוסט על "איך פותרים משוואה ריבועית?" שנמצא <a href="https://gadial.net/2008/01/26/solving_quadratic_equations/">כאן</a>, מן הסתם כי זו שאלה נפוצה שהרבה אנשים מחפשים. הפוסט ההוא נכתב לפני 15 שנים ושם דגש בעיקר על הבנה של שיטת הפתרון הכללית. אני רוצה עכשיו לעשות עוד סיבוב על הנושא הזה ולנקוט בגישה טיפה יותר פרקטית, למרות שגם לשיטה הכללית נגיע. התקווה שלי היא שהפוסט הזה יוכל להיות כזה שמגיעים אליו בלי לדעת כלום על משוואות ריבועיות, ויוצאים ממנו עם הבסיס של מה שצריך כדי להתמודד עם מה שזורקים עלינו בבית הספר בלי להיכנס לחרדות (אבל רק הבסיס! את התרגול המשמעותי שצריך לעשות אני לא עושה כאן).</p>
+<p>אז נדבר על מה זה בכלל, מה הטריקים הפשוטים שעוזרים לנו לפתור את זה במקרים רבים ולמה הם עובדים, ובסוף - מה הדרך הכללית להתמודד עם זה ולמה היא נכונה. אבל נתחיל ממה זה בכלל.</p>
+<p>מה זו משוואה? הנה דוגמא: <span class="math">\(2x+3=7\)</span>. יש לנו כאן סימן שוויון <span class="math">\(=\)</span>, והרעיון הוא שמה שנמצא בצד ימין שלו אמור להיות שווה למה שנמצא בצד שמאל שלו. בצד ימין יש פשוט מספר, <span class="math">\(7\)</span>, אבל בצד שמאל כתוב משהו יותר מסובך שמערב את האות <span class="math">\(x\)</span>. ה-<span class="math">\(x\)</span> הזה נקרא <strong>משתנה</strong> והרעיון בו הוא שאנחנו יכולים להחליף אותו בכל מני ערכים (ולכן "משתנה" - הערכים ש-<span class="math">\(x\)</span> מייצג יכולים להשתנות). אם נחליף את <span class="math">\(x\)</span> ב-2 נקבל את המשוואה <span class="math">\(2\cdot2+3=7\)</span>, ובאמת צד ימין שווה לצד שמאל; אבל אם נחליף את <span class="math">\(x\)</span> ב-1 נקבל <span class="math">\(1\cdot2+3=7\)</span> וזה משהו <strong>לא נכון</strong> כי <span class="math">\(5\ne7\)</span>. לכן אנחנו אומרים ש-<span class="math">\(2\)</span> הוא <strong>פתרון</strong> של המשוואה <span class="math">\(2x+3=7\)</span> ואילו <span class="math">\(1\)</span> הוא לא פתרון. וכשאני מדבר על "לפתור משוואה" אני מתכוון - למצוא את הפתרונות שלה; למצוא את הערכים שאפשר להציב ב-<span class="math">\(x\)</span> ולקבל שני אגפים שבאמת שווים זה לזה.</p>
+<p>בואו נראה דוגמא קצת יותר מסובכת למשוואה: <span class="math">\(x^{2}+3=2x+11\)</span>. כאן יש לנו את <span class="math">\(x\)</span> בשני הצדדים (ה<strong>אגפים</strong>, כפי שאני בדרך כלל קורא להם) של המשוואה, ובאגף שמאל כתוב <span class="math">\(x^{2}\)</span>, כלומר <span class="math">\(x\)</span> בחזקת 2, כלומר <span class="math">\(x\)</span> כפול עצמו. הנוכחות הזו של <span class="math">\(x^{2}\)</span> בתוך המשוואה, אבל בלי שיהיו חזקות גבוהות יותר של <span class="math">\(x\)</span> או ביטויים מסובכים יותר שמערבים את <span class="math">\(x\)</span>, הופכת את המשוואה ל<strong>משוואה ממעלה שניה</strong>, שהיא נושא הפוסט. למה משווואת ממעלה שניה מעניינות כל כך? כי כמו רוב הדברים המעניינים במתמטיקה - מצד אחד הן מסוגלות לתאר דברים לא טריוויאליים והפתרון שלהן הוא לא לגמרי טריוויאלי, אבל מצד שני הן אחד מהדברים המועטים שאנחנו <strong>כן יודעים לפתור</strong> בצורה משביעת רצון (משוואות ממעלה שלישית ומעלה זה עולם מסובך בהרבה ולא אדבר עליו בכלל בפוסט).</p>
+<p>אם בודקים, רואים ש-<span class="math">\(x=4\)</span> הוא פתרון של המשוואה: אם נחליף את <span class="math">\(x\)</span> ב-4 (<strong>נציב</strong> 4 ב-<span class="math">\(x\)</span>, כמו שאני הולך לומר מכאן ואילך) נראה שבשני אגפי המשוואה אני מקבל 19. לכן 4 הוא פתרון של המשוואה, אבל הוא לא הפתרון <strong>היחיד</strong> שלה: <span class="math">\(x=-2\)</span> גם הוא פתרון, כי אם נציב אותו במשוואה נקבל בשני האגפים <span class="math">\(7\)</span>. באופן כללי, למשוואה ממעלה שניה יכולים להיות שני פתרונות, או פתרון אחד, או אפס פתרונות אבל בשום פנים ואופן לא שלושה פתרונות או יותר; אדבר על זה קצת יותר לעומק בהמשך (כי אני טיפה - ממש טיפה! - משקר פה).</p>
+<p>עכשיו מגיעה השאלה המתבקשת - איך בעצם מצאתי את הפתרונות? מציאת הפתרונות הללו היא מה שאנחנו קוראים לו "לפתור משוואה ריבועית" ומה שאני רוצה להציג בפוסט. כבר מראש אני אגיד שיש דרך <strong>כללית</strong> לפתור משוואות ריבועיות, שפותרת <strong>כל</strong> משוואה כזו, באמצעות משהו שנקרא <strong>נוסחת השורשים</strong>. אני אדחה את ההצגה של השיטה הזו לסוף כי היא לא תמיד הדרך הכי נוחה לפתור משוואה כזו, וכי זה החלק הכי משעמם/מאיים/מפחיד/קשה לשינון בכל הסיפור.</p>
+<h2>חלק ראשון, ובו פותרים משוואות קלות במיוחד ורואים את המבנה הכללי של משוואה ריבועית</h2>
+
+<p>יש כמה מקרים שבהם קל יחסית לפתור משוואות ריבועיות. הנה אחד מהם: <span class="math">\(x^{2}=100\)</span>. איזה מספר, כשמעלים אותו בריבוע, מחזיר 100? ובכן, 10 כפי שאולי אנחנו זוכרים מלוח הכפל. אבל לא רק 10, אלא גם <span class="math">\(-10\)</span>, כי כשמכפילים את <span class="math">\(-10\)</span> בעצמו יש לנו מקרה של "מינוס כפול מינוס שווה פלוס" (<a href="https://gadial.net/2017/07/30/minus_minus/">יש לי פוסט</a> על למה הדבר הזה קורה).</p>
+<p>זה היה קל יחסית, אבל מה עם <span class="math">\(x^{2}=121\)</span>? כאן הפתרון הוא <span class="math">\(x=\pm11\)</span> (ה-<span class="math">\(\pm\)</span> הזה הוא דרך קומפקטית עבורי לכתוב את שני הפתרונות יחד), אבל מי בעצם יודע את זה? רק מי שיודע ש-<span class="math">\(11^{2}=121\)</span>, וזה לא שיש לנו סיבה טובה לדעת את זה. אם נצטרך לפתור שאלה כזו ויהיה לנו מחשבון בהישג יד, מה שנעשה הוא להשתמש בכפתור שעליו מופיע הסימן <span class="math">\(\sqrt{}\)</span> - לבצע את הפעולה של <strong>הוצאת שורש ריבועי</strong>. האם זה משהו שאפשר לעשות גם ידנית? התשובה היא כן, ויש לזה כמה שיטות (אני טיפה מדבר על זה <a href="https://gadial.net/2007/10/31/finding_square_roots/">כאן</a>), אבל בעיקרון - זה בהחלט משהו שאפשר להגיד "מחשב יודע לפתור" או אפילו לכתוב <span class="math">\(x=\pm\sqrt{121}\)</span> וזהו. גם לא תמיד יש לנו דרך יותר טובה לכתוב את הפתרון: עבור המשוואה <span class="math">\(x^{2}=2\)</span> הפתרון הוא <span class="math">\(\pm\sqrt{2}=\pm1.41421\ldots\)</span>, כאשר שלוש הנקודות אומרות "לא סיימנו לכתוב את הספרות כי יש אינסוף כאלו אבל נגמר לנו הכוח". זה לא ייצוג טוב יותר מאשר <span class="math">\(\sqrt{2}\)</span> עצמו. גם בפתרון הכללי של משוואות ממעלה שניה באמצעות נוסחת השורשים, הוצאת שורש היא שלב מרכזי בתהליך, וגם אז לפעמים יותר נוח לנו להשאיר את התוצאה בתור משהו עם סימן שורש מעליו ותו לא. למשל, אנחנו הולכים לראות בהמשך שפתרון של המשוואה <span class="math">\(x^{2}=x+1\)</span> הוא מספר <span class="math">\(\varphi=\frac{1+\sqrt{5}}{2}\)</span>. זה מספר שמוצג באמצעות ביטוי שמערב את <span class="math">\(\sqrt{5}\)</span> ועם זאת העובדה שהוא מתואר באמצעות שורש לא מנעה מהמספר הזה לזכות בכינוי "יחס הזהב" ולקבל ספרים ומאמרים משתפכים על כמה הוא המספר המדהים בתולדות המתמטיקה. אז בעיקרון, אם יש סימן שורש בפתרון זה לא סוף העולם, למרות שאם השורש הוא מספר שלם, כמו במקרה <span class="math">\(\sqrt{121}=11\)</span>, כן יותר נחמד בלעדיו.</p>
+<p>הנה דוגמא אחרת למשוואה ריבועית שקל יחסית לפתור: <span class="math">\(x^{2}=10x\)</span>. במקרה הזה, יש שתי אפשרויות: או ש-<span class="math">\(x=0\)</span> (קל לראות שהצבת <span class="math">\(x=0\)</span> תיתן אפס בשני האגפים ולכן זה פתרון של המשוואה) או ש-<span class="math">\(x\ne0\)</span>. אם <span class="math">\(x\ne0\)</span> אפשר לחלק בו ולקבל <span class="math">\(x=10\)</span>, כלומר אלו שני הפתרונות של המשוואה.</p>
+<p>מה משותף לשני סוגי המשוואות ה"קלים" הללו? בואו נתאר משוואות ממעלה שניה בצורה גנרית, כללית, ואז נראה איך שני אלו הם מקרים פרטיים פשוטים יחסית.</p>
+<p>מבנה כללי למשוואה ממעלה שניה הוא <span class="math">\(ax^{2}+bx+c=0\)</span>, כאשר <span class="math">\(a,b,c\)</span>, שנקראים <strong>המקדמים</strong> של המשוואה, הם מספרים שכדי לתאר בצורה כללית אני כותב בצורת אותיות. אף משוואה ממעלה שניה שהצגתי בפוסט עד עכשיו לא נכתבה בצורה הזו, אבל קל מאוד <strong>להביא</strong> אותן לצורה הזו. למשל, הצגתי קודם את המשוואה <span class="math">\(x^{2}+3=2x+11\)</span>. אני יכול עכשיו לבצע מה שנקרא <strong>העברת אגפים</strong> כדי להביא אותה לצורה הכללית: אני אקבל <span class="math">\(x^{2}-2x-8=0\)</span>, כלומר במקרה הזה, <span class="math">\(a=1,b=-2,c=-8\)</span> (מה זו העברת אגפים? למשל, אני מחסר 11 משני אגפי המשוואה ואז ה-11 שבאגף ימין נעלם ובאגף שמאל צץ יש מאין <span class="math">\(-11\)</span>; אפשר לדמיין את זה כאילו לקחנו את ה-11 מאגף ימין, העברנו אותו לאגף שמאל ו"שילמנו" על כך בהיפוך הסימן שלו).</p>
+<p>עבור המשוואה <span class="math">\(x^{2}=121\)</span> העברה לצורה הכללית נותנת <span class="math">\(x^{2}-121=0\)</span>, כלומר <span class="math">\(a=1,b=0,c=121\)</span>.</p>
+<p>עבור המשוואה <span class="math">\(x^{2}=10x\)</span> העברה לצורה הכללית נותנת <span class="math">\(x^{2}-10x=0\)</span>, כלומר <span class="math">\(a=1,b=-10,c=0\)</span>.</p>
+<p>שתי הדוגמאות האחרונות מראות מה הופך את המקרים הללו לפשוטים יחסית: אחד מהמקדמים של המשוואה היה 0, או <span class="math">\(b=0\)</span> או <span class="math">\(c=0\)</span>. ומה אם <span class="math">\(a=0\)</span>? ובכן, זה המקרה הקל מכולם כי במקרה הזה התוצאה היא בכלל לא משוואה ריבועית; למשל, <span class="math">\(2x+3=7\)</span> מתחילת הפוסט, כשמעבירים אותה לצורה הכללית, היא <span class="math">\(2x-4=0\)</span> ואז <span class="math">\(a=0,b=2,c=-2\)</span> ובמקרה הזה הכי קל לפתור אותה. מכיוון שהפוסט הזה עוסק במשוואות ריבועיות, אני אניח מכאן ואילך ש-<span class="math">\(a\ne0\)</span> תמיד.</p>
+<p>ראינו שמשוואה ריבועית נהיית "מעניינת" כשכל המקדמים שלה שונים מאפס. זה מביא אותנו לעוד משהו שכדאי לשים לב אליו - אם <span class="math">\(a\ne0\)</span>, ואמרנו שזה המקרה ה"מעניין" היחיד ממילא, אז תמיד אפשר לחלק בו ולקבל את המשוואה <span class="math">\(x^{2}+\frac{b}{a}x+\frac{c}{a}=0\)</span> - משוואה חדשה שבה המקדם של <span class="math">\(x^{2}\)</span> הוא 1. לעתים קרובות קל יותר לפתור משוואה בכזו סיטואציה - הפתרונות שהראיתי לשני המקרים הפשוטים אכן הסתמכו על כך. אם אני מסתכל על המשוואה <span class="math">\(4x^{2}=400\)</span> אז אי אפשר סתם להוציא שורש ל-400 וזו תהיה התשובה: אני צריך קודם שהמקדם של <span class="math">\(x^{2}\)</span> יהיה 4, אז אני מחלק את שני האגפים ב-4, מקבל <span class="math">\(x^{2}=100\)</span> ומכאן אני כבר יודע לפתור. מה שכן, אם החלוקה במקדם של <span class="math">\(x^{2}\)</span> יוצרת לנו <strong>שברים</strong> בתוך המשוואה, לעתים קרובות עדיף לוותר עליה כי חישובים בשברים הם עניין מעצבן יותר; בהמשך אני לא אניח ש-<span class="math">\(a=1\)</span> עבור המקרים היותר כלליים שבהם אטפל.</p>
+<p>עניין אחר שכדאי להביא בחשבון הוא שלא תמיד כל כך פשוט להביא את המשוואה לצורה הכללית שלה. למשל, במשוואה <span class="math">\(\frac{2}{x}+\frac{8}{x^{2}}=1\)</span> שהפתרונות שלה הן <span class="math">\(4,-2\)</span> נדרשת עבודה כדי להגיע לצורה הכללית, וכאן זה מקרה פשוט יחסית. אז גם אם אני הולך להראות איך פותרים משוואה בצורה כללית זה לא סוף הסיפור.</p>
+<h2>חלק שני, ובו אנחנו לומדים טריק שימושי מאין כמותו לניחוש פתרונות של משוואות ריבועיות</h2>
+
+<p>לא לכל משוואה ריבועית יש פתרון "נחמד". ראינו את <span class="math">\(x^{2}-x-1=0\)</span> עם הפתרון <span class="math">\(\frac{1+\sqrt{5}}{2}\)</span> - זה מספר שגם מערב שבר וגם מערב שורש, ובסטנדרט שלי זה "לא נחמד". נחמד זה מספר שלם, כמו 42 או <span class="math">\(-12\)</span>. מה שעוד יותר נחמד הוא שאם למשוואה ריבועית יש פתרון "נחמד" אחד אז נובע מזה גם שאם יש עוד פתרון, גם הפתרון האחר הוא נחמד, וגם שיחסית קל למצוא את שניהם מתוך הצורה הכללית של המשוואה, בלי נוסחת שורשים כללית ובלי כלום.</p>
+<p>בואו נדגים את זה עם המשוואה <span class="math">\(x^{2}-2x-8=0\)</span>: ראשית אני אתאר את הקסם שבו אני משתמש, ואז אני אסביר איך הוא עובד. הקסם הוא כזה: במשוואה מהצורה <span class="math">\(ax^{2}+bx+c\)</span> קוראים ל-<span class="math">\(a\)</span> "המקדם המוביל" ול-<span class="math">\(c\)</span> "המקדם החופשי". עכשיו, אם למשוואה יש שני פתרונות, אז <strong>המכפלה</strong> של אותם שני פתרונות תמיד שווה ל-<span class="math">\(\frac{c}{a}\)</span>, התוצאה של חלוקת המקדם החופשי במקדם המוביל. במקרה של <span class="math">\(x^{2}-2x-8=0\)</span> המכפלה של שני הפתרונות חייבת לצאת <span class="math">\(-8\)</span>, מה שמאוד מקל עלי לנחש זוגות פוטנציאליים של פתרונות נחמדים: אני יודע ש-<span class="math">\(8=2\cdot4\)</span> או <span class="math">\(8=1\cdot8\)</span> ואלו שתי הדרכים היחידים להציג את 8 בתור מכפלה של שני מספרים שלמים חיוביים. כשאני מכניס את המינוסים לתמונה, אני מקבל בעצם ארבעה מקרים:</p>
+<ul> <li><span class="math">\(-8=2\cdot\left(-4\right)\)</span></li>
+
+
+<li><span class="math">\(-8=-2\cdot4\)</span></li>
+
+
+<li><span class="math">\(-8=1\cdot\left(-8\right)\)</span></li>
+
+
+<li><span class="math">\(-8=\left(-1\right)\cdot8\)</span></li>
+
+</ul>
+
+<p>אפשר לבדוק את כל המקרים הללו במפורש על ידי הצבה במשוואה ובדיקה מה יקיים אותה; זה כמובן טוב יותר מאשר מה שהיה לנו קודם, שבו לא הייתה לנו בכלל רשימה של פתרונות פוטנציאליים והיינו צריכים פשוט להציב דברים אקראית מכל הבא ליד. ועדיין, בפני עצמו זה לא קסם מספיק טוב. היופי הוא שאפשר לשלב את הקסם הזה בקסם נוסף: <strong>הסכום</strong> של שני הפתרונות חייב להיות <span class="math">\(-\frac{b}{a}\)</span>, כלומר מינוס המקדם האמצעי חלקי המקדם המוביל. עבור <span class="math">\(x^{2}-2x-8=0\)</span> הסכום חייב להיות 2, וזה כבר ממש קל: ברור שזוגות שמערבים את <span class="math">\(\pm1,\pm8\)</span> בכלל לא רלוונטיים כי הסכומים שלהם לעולם לא יתנו 2. גם עבור <span class="math">\(2,-4\)</span> הסכום לא יוצא מתאים: הוא יוצא מינוס 2 במקום 2. את כל זה אפשר לבדוק בזריזות בראש, ולהגיע למסקנה שאם יש זוג פתרונות "נחמדים" הם חייבים להיות <span class="math">\(-2,4\)</span> ואז אפשר להציב אותם במשוואה ולראות שזה עובד.</p>
+<p>בואו נחזור שוב על תיאור הקסם, בצורה מפורשת, וגם ניתן לו את שמו האמיתי - <strong>נוסחאות וייטה</strong>. הקסם אומר שעבור המשוואה <span class="math">\(ax^{2}+bx+c=0\)</span>:</p>
+<ul> <li><strong>מכפלת</strong> שני הפתרונות שווה ל-<span class="math">\(\frac{c}{a}\)</span> (ואם יש פתרון יחיד, המכפלה שלו בעצמו שווה <span class="math">\(\frac{c}{a}\)</span>).</li>
+
+
+<li><strong>סכום</strong> שני הפתרונות שווה ל-<span class="math">\(-\frac{b}{a}\)</span> (ואם יש פתרון יחיד, הסכום שלו עם עצמו שווה <span class="math">\(-\frac{b}{a}\)</span>).</li>
+
+</ul>
+
+<p>בגלל שהחלוקה ב-<span class="math">\(a\)</span> הזו קצת מעצבנת, המקרה הכי נוח לשימוש בנוסחאות הללו הוא כאשר <span class="math">\(a=1\)</span> (כמו פחות או יותר כל דוגמא שהראיתי). באופן כללי, בהינתן המשוואה <span class="math">\(ax^{2}+bx+c=0\)</span> עבור <span class="math">\(a\ne0\)</span> אפשר לחלק אותה ב-<span class="math">\(a\)</span> ולקבל <span class="math">\(x^{2}+\frac{b}{a}x+\frac{c}{a}=0\)</span> ולכן מספיק להכיר את נוסחאות וייטה למקרה שבו <span class="math">\(a=1\)</span>, אבל אני בכל זאת אמשיך לעבוד עם הצורה הכללית יותר שלהן כדי שלא נגיע למצב (שאני כמעט תמיד נמצא בו, כולל בזמן כתיבת הפוסט הזה) של מין ערפל לא ברור לגבי מה קורה אם <span class="math">\(a\ne1\)</span>.</p>
+<p>חשוב לציין, ותכף נראה זאת במפורש, שהנוסחאות הללו נכונות <strong>תמיד</strong>, לכל משוואה ריבועית בצורה הכללית שלה, בלי קשר לשאלה אם הפתרונות הם "נחמדים" או לא; העניין הוא שאם הפתרונות הם נחמדים, נוסחאות וייטה נותנות לנו דרך נוחה לנחש אותם. כדי לראות מקרה שבו הסיטואציה היא לא נחמדה בואו נחזור אל <span class="math">\(x^{2}-x-1=0\)</span> והפעם אני אכתוב במפורש את <strong>שני</strong> הפתרונות:</p>
+<p><span class="math">\(\frac{1+\sqrt{5}}{2}\)</span></p>
+<p><span class="math">\(\frac{1-\sqrt{5}}{2}\)</span></p>
+<p>קל לראות שהסכום של שני הפתרונות הוא 1, ולכן הוא יוצא <span class="math">\(-b\)</span> כמו שהוא נדרש. מה שקרה פה הוא ששני הפתרונות היו דומים מספיק זה לזה כדי שהסכום שלהם "יקזז" את החלק הלא נחמד שלהם (השורש, השבר) ונקבל תוצאה שהיא מספר נחמד. גם המכפלה יוצאת נחמדה: <span class="math">\(\frac{1+\sqrt{5}}{2}\cdot\frac{1-\sqrt{5}}{2}=\frac{1-5}{4}=-1\)</span>. זה לא מקרי שהפתרונות כל כך דומים זה לזה; אני אעיר כאן שסוג כזה של דמיון בין פתרונות נותן להם במתמטיקה קצת יותר מתקדמת את השם "פתרונות צמודים" ואפשר להראות שאם למשוואה יש מקדמים "נחמדים" אז אם הפתרונות שלה אינם "נחמדים" הם חייבים להיות צמודים, אבל אני לא אכנס לפרטים של זה. הנקודה היא ש<strong>בהחלט ייתכן</strong> שלמשוואה עם מקדמים שלמים יהיו פתרונות לא שלמים, ולכן למרות שהם עדיין מקיימים את נוסחאות וייטה קשה לומר שהן עוזרות לנו לנחש אותם (עדיין אפשר לנסות, אבל לדעתי בסיטואציה כזו כבר יותר קל להיעזר בנוסחת השורשים וחסל).</p>
+<h2>חלק שלישי, שבו אנחנו מנסים להבין למה הטריק בעצם נכון</h2>
+
+<p>הצגתי את הטריק בתור "קסם" כי זה משהו שנתתי בלי להסביר מאיפה הוא מגיע ולמה הוא נכון. זו גישה טובה כשרוצים להגיע מהר אל "איך משתמשים בזה", אבל זה לא ערפל שכדאי להשאיר לטווח ארוך. בואו נבין בדיוק למה זה עובד ונקבל מושג קצת יותר טוב על מה הולך במשוואות ריבועיות בעצם.</p>
+<p>ראשית, צריך להזכיר כלל בסיסי בחשבון: חוק הפילוג. הוא אומר ש-<span class="math">\(a\left(b+c\right)=ab+ac\)</span>, כלומר אני יכול "לפתוח סוגריים" עם חיבור שמוכפלים באיזה <span class="math">\(a\)</span> על ידי כך שאני כופל את ה-<span class="math">\(a\)</span> בנפרד באיברים שבסוגריים ואז מחבר את הכל. עכשיו, נניח שבמקום <span class="math">\(a\)</span> היה כתוב סכום, זה עדיין היה עובד באותה מידה, כלומר</p>
+<p><span class="math">\(\left(a+b\right)\left(c+d\right)=\left(a+b\right)c+\left(a+b\right)d\)</span></p>
+<p>ואני יכול להשתמש שוב בחוק הפילוג עבור הסוגריים הנוספים שמופיעים כאן, ולקבל בסופו של דבר:</p>
+<p><span class="math">\(\left(a+b\right)\left(c+d\right)=ac+ad+bc+bd\)</span></p>
+<p>כלומר, קיבלתי סכום של ארבע מכפלות, כשכל מכפלה מתקבלת על ידי "קחו איבר מהסוגריים השמאליים וכפלו אותו באיבר מהסוגריים הימניים". בשביל מה כל זה היה טוב? ובכן, בואו נסתכל עכשיו על מכפלה דומה:</p>
+<p><span class="math">\(\left(x-p\right)\left(x-q\right)=xx-xq-px+pq=x^{2}-\left(p+q\right)x+pq\)</span></p>
+<p>הביטוי שהגענו אליו מזכיר מאוד את הצורה הכללית של משוואה ממעלה שניה! אבל יותר מזה, שימו לב שאם אני מציב ב-<span class="math">\(x\)</span> את <span class="math">\(p\)</span> או את <span class="math">\(q\)</span> אני מקבל 0, כי אם אני מציב את אחד מאלו ב-<span class="math">\(\left(x-p\right)\left(x-q\right)\)</span> אני אקבל מכפלה של 0 במשהו, ומכפלה כזו תמיד יוצאת 0. כלומר, גם <span class="math">\(p\)</span> וגם <span class="math">\(q\)</span> הם פתרונות של המשוואה הריבועית</p>
+<p><span class="math">\(x^{2}-\left(p+q\right)x+pq=0\)</span></p>
+<p>עכשיו, מי המקדמים <span class="math">\(a,b,c\)</span> במקרה הזה?</p>
+<p><span class="math">\(a=1\)</span></p>
+<p><span class="math">\(b=-\left(p+q\right)\)</span></p>
+<p><span class="math">\(c=pq\)</span></p>
+<p>ואלו בדיוק נוסחאות וייטה שראינו קודם: <span class="math">\(\frac{c}{a}\)</span> הוא מכפלת שני הפתרונות, <span class="math">\(b\)</span> הוא מינוס הסכום של שני הפתרונות. האם הוכחתי את הטענה שלי? ובכן, לא בדיוק. הראיתי ש<strong>אם</strong> אני בונה משוואה ריבועית על ידי המכפלה <span class="math">\(\left(x-p\right)\left(x-q\right)\)</span>, <strong>אז</strong> נוסחאות וייטה מתקיימות עבורה. בפועל כל משוואה ריבועית שבה <span class="math">\(a=1\)</span> היא אכן מהצורה <span class="math">\(\left(x-p\right)\left(x-q\right)=0\)</span> הזו, אבל יותר מסובך להוכיח את זה. לכן אני אוכיח משהו צנוע יותר: שאם <span class="math">\(ax^{2}+bx+c=0\)</span> היא משוואה ריבועית, <strong>ואם</strong> מצאתי <span class="math">\(p,q\)</span> כך ש-<span class="math">\(pq=\frac{c}{a}\)</span> וגם <span class="math">\(p+q=-\frac{b}{a}\)</span>, אז <span class="math">\(p,q\)</span> הם פתרונות של המשוואה. את זה אני אעשה על ידי סוג של הליכה "בכיוון ההפוך" ממה שכבר ראינו. ראשית כל אני אציב במקום <span class="math">\(b,c\)</span> במשוואה את הערכים שמתבססים על <span class="math">\(p,q\)</span>, כלומר על בסיס</p>
+<p><span class="math">\(b=-a\left(p+q\right)\)</span></p>
+<p><span class="math">\(c=apq\)</span></p>
+<p>ואני אקבל את המשוואה</p>
+<p><span class="math">\(ax^{2}-a\left(p+q\right)x+apq=0\)</span></p>
+<p>עכשיו אחלק ב-<span class="math">\(a\)</span> ואפתח סוגריים:</p>
+<p><span class="math">\(x^{2}-px-qx+pq=0\)</span></p>
+<p>בשלב הזה אולי כבר אפשר לראות שקיבלתי את הביטוי <span class="math">\(\left(x-p\right)\left(x-q\right)=0\)</span>, אבל למקרה שקשה לראות את זה, הנה דרך מסודרת להגיע לשם. אני קודם כל מסתכל על שני האיברים הראשונים, <span class="math">\(x^{2}-px\)</span> ואני מוציא <strong>גורם משותף</strong> לשניהם - במקרה הזה <span class="math">\(x\)</span>. אני מקבל</p>
+<p><span class="math">\(x^{2}-px=x\left(x-p\right)\)</span></p>
+<p>(הוצאת גורם משותף כזו היא בעצם הצעד ההפוך לזה שעושים בחוק הפילוג).</p>
+<p>עכשיו, עם הביטוי <span class="math">\(-qx+pq\)</span> שהוא מה שנשאר בסכום הגורם המשותף הוא <span class="math">\(q\)</span>, אז אני מוציא אותו ומקבל</p>
+<p><span class="math">\(-qx+pq=-q\left(x-p\right)\)</span></p>
+<p>שימו לב שיחד עם <span class="math">\(q\)</span> גם הוצאתי החוצה <span class="math">\(-1\)</span> כדי שהמקדם של <span class="math">\(x\)</span> בסוגריים יהיה חיובי ודווקא של <span class="math">\(p\)</span> יהיה שלילי. למה זה טוב? כי ה-<span class="math">\(x-p\)</span> הופיע גם קודם! בואו נראה מה קיבלנו:</p>
+<p><span class="math">\(x^{2}-px-qx+pq=x\left(x-p\right)-q\left(x-p\right)\)</span></p>
+<p>קיבלנו עוד סכום שאפשר להוציא ממנו גורם משותף (<span class="math">\(x-p\)</span>) עם חוג הפילוג ההפוך, ונקבל</p>
+<p><span class="math">\(x\left(x-p\right)-q\left(x-p\right)=\left(x-p\right)\left(x-q\right)\)</span></p>
+<p>וזה מה שבאמת הבטחתי. עכשיו, כשרואים את הביטוי בצורה הזו, ברור ש-<span class="math">\(p,q\)</span> הם פתרונות של המשוואה <span class="math">\(ax^{2}+bx+c=0\)</span> המקורית שממנה התחלנו.</p>
+<p>למרבה הזוועה, את כל התהליך הכללי והגנרי הזה מכריחים לפעמים תלמידים בבית הספר לעשות שוב ושוב עבור מקרים קונקרטיים. בשביל מה בעצם? ובכן, בואו נדגים את זה על המשוואה <span class="math">\(x^{2}-2x-8=0\)</span> האהובה עלי שכזכור, כבר ראינו שהפתרונות שלה הם <span class="math">\(4,-2\)</span>. הרעיון בשיטה הכללית שלי היה לפצל את האיבר האמצעי לסכום של שני איברים, וזה מה שאעשה גם כאן:</p>
+<p><span class="math">\(x^{2}-2x-8=0=x^{2}-\left(4-2\right)x-8=x^{2}-4x+2x-8\)</span></p>
+<p>עכשיו מסתכלים על הביטוי שקיבלתי בתור סכום של שני זוגות: <span class="math">\(x^{2}-4x\)</span> ו-<span class="math">\(2x-8\)</span>. בכל אחד מהם אנחנו מוציאים גורם משותף כמיטב יכולתנו, ומקבלים</p>
+<p><span class="math">\(x^{2}-4x+2x-8=x\left(x-4\right)+2\left(x-4\right)\)</span></p>
+<p>וקסם! קיבלנו בשני הזוגות גורם משותף <span class="math">\(x-4\)</span> שאפשר להוציא ולקבל</p>
+<p><span class="math">\(x\left(x-4\right)+2\left(x-4\right)=\left(x-4\right)\left(x+2\right)\)</span></p>
+<p>ובעצם סיימנו כאן: הצגנו את <span class="math">\(x^{2}-2x-8\)</span> בתור מכפלה <span class="math">\(\left(x-4\right)\left(x+2\right)\)</span>. מהמכפלה הזו אפשר "לקרוא" ישירות את פתרונות המשוואה, רק צריך לזכור שהם מופיעים בתוך הסוגריים עם סימן <strong>מינוס</strong>, כלומר ה-<span class="math">\(x-4\)</span> מלמד אותנו על הפתרון <span class="math">\(4\)</span> (לא על הפתרון <span class="math">\(-4\)</span>) וה-<span class="math">\(x+2\)</span>, שהוא בעצם <span class="math">\(x-\left(-2\right)\)</span> בתחפושת, מלמד אותנו על הפתרון <span class="math">\(-2\)</span>.</p>
+<h2>חלק רביעי, שבו אנו מגיעים אל נוסחת השורשים</h2>
+
+<p>אם כן, ראינו איך מתמודדים עם משוואות קלות במיוחד (כאלו שבהן <span class="math">\(b=0\)</span> או <span class="math">\(c=0\)</span>) וראינו טריק שמאפשר לפתור בקלות יחסית משוואות עם פתרונות נחמדים על ידי ניחוש מושכל של הפתרונות הללו; אבל כשרוצים לפתור משוואה ריבועית באופן כללי, לפעמים צריך להשתמש בשיטה הכללית ביותר המוכרת: <strong>נוסחת השורשים</strong>. בואו נציג את הנוסחה הזו כבר עכשיו ואז נדבר על מה הולך בה. הנוסחה אומרת שהפתרונות של המשוואה <span class="math">\(ax^{2}+bx+c=0\)</span> נתונים על ידי</p>
+<p><span class="math">\(x_{1,2}=\frac{-b\pm\sqrt{b^{2}-4ac}}{2a}\)</span></p>
+<p>כתבתי כרגע את הנוסחה הזו הישר מהראש שלי, בלי להיעזר בספרים ובלי כלום. האם זה בגלל שיש לי זיכרון פנומנלי? ממש לא, יש לי זיכרון די גרוע. האם זה בגלל שיש לי טריק פשוט שמאפשר לי לפתח את הנוסחה יש מאין בעזרת כוח שכלי? לא, אין לי שום טריק ושום כוח שכל. כתבתי את הנוסחה מהראש כי היא צרובה שם, עוד מימי בית הספר שלי, הרבה לפני שידעתי כמה מתמטיקה היא כיף. זה אחד מאותם דברים בודדים במתמטיקה שאני פשוט זוכר בעל פה וזהו, כי אין דרך אחרת. כמובן, <strong>יש דרך</strong> מסודרת להגיע אל הנוסחה הזו, זו לא סתם המצאה שנשלפה יש מאין, ואני הולך להראות את הדרך הזו כאן; אבל זה לא בדיוק עוזר לזכור אותה בעל פה.</p>
+<p>בואו נשתמש בנוסחה כדי להתמודד עם משוואות שכבר ראינו כדי להיווכח שהיא עובדת, ואיך שהיא עובדת. נתחיל עם <span class="math">\(x^{2}-2x-8=0\)</span> האהובה, שבה <span class="math">\(a=1,b=-2\)</span> ו-<span class="math">\(c=-8\)</span>. במקרה הזה, הביטוי שהולך להופיע מתחת לסימן השורש הוא <span class="math">\(b^{2}-4ac=4+32=36\)</span>. זה מספר נחמד, במובן זה שיש לו שורש שלם: <span class="math">\(\sqrt{36}=6\)</span>. זה מה שמבטיח שנקבל פתרונות שלמים: <span class="math">\(x_{1,2}=\frac{2\pm6}{2}=1\pm3\)</span>, ואלו אכן שני הפתרונות שלנו: <span class="math">\(1+3=4\)</span> ו-<span class="math">\(1-3=-2\)</span>. יפה, הנוסחה עובדת!</p>
+<p>אותו ביטוי שמתחת לשורש, <span class="math">\(b^{2}-4ac\)</span>, נקרא <strong>הדיסקרימיננטה</strong> של המשוואה. נעזוב את השאלה מאיפה השם הזה הגיע ומה השימוש הכללי יותר שלו במתמטיקה ונתמקד בו בהקשר של המשוואה הזו: בגלל שהוצאת שורש היא פעולה מסוכנת משהו, הזהות של מה שנמצא בדיסקרימיננטה בעצם קובעת את גורל פתרונות המשוואה. אם הדיסקרימיננטה תהיה מספר טבעי נחמד עם שורש שלם, הפתרונות יהיו פשוטים; אם אין לו שורש שלם הפתרונות יהיו קצת פחות נחמדים; אם הדסיקרימיננטה היא 0 אז יהיה פתרון <strong>יחיד</strong> למשוואה; ואם הדיסקרימיננטה תהיה מספר <strong>שלילי</strong> אז לא יהיו פתרונות שהם מספרים ממשיים <strong>בכלל</strong>. תכף אתן דוגמאות לזה (ובסוף הפוסט יהיה בונוס שמראה את הסיפור המלא סביב זה שהוא, אה, מורכב יותר).</p>
+<p>בתור דוגמא, בואו נסתכל על <span class="math">\(x^{2}-x-1=0\)</span> שכבר דיברתי עליה קודם בתור דוגמא למשוואה עם פתרון "לא נחמד". מכיוון ש-<span class="math">\(a=1,b=-1,c=-1\)</span> אז הדיסקרימיננטה תהיה <span class="math">\(b^{2}-4ac=1+4=5\)</span> ולכן הפתרונות יהיו <span class="math">\(x_{1,2}=\frac{1\pm\sqrt{5}}{2}\)</span> שכבר ראינו קודם.</p>
+<p>בתור עוד דוגמא, בואו נסתכל על המקרה הפשוט של <span class="math">\(x^{2}=100\)</span>. אם רוצים להשתמש בנוסחת השורשים צריך להעביר את ה-100 הזה אגף, לקבל <span class="math">\(x^{2}-100=0\)</span>, ואז <span class="math">\(a=1,b=0,c=-100\)</span> ונוסחת השורשים נותנת <span class="math">\(x_{1,2}=\frac{0\pm\sqrt{0^{2}+400}}{2}=\pm\frac{20}{2}=\pm10\)</span>, שזה מצד אחד נכון לגמרי ומצד שני רק סיבכנו את עצמנו ובמקום פשוט להוציא שורש ל-100, הוצאנו שורש ל-400 וביצענו כל מני פעולות אלגבריות מיותרות. כלומר, <strong>לא תמיד צריך את נוסחת השורשים</strong>, אל תמהרו להשתמש בה סתם כי אפשר.</p>
+<p>והנה עוד דוגמא: <span class="math">\(x^{2}-10x+25=0\)</span>. גם פה כנראה יותר קל לפתור עם וייטה (תנסו!) אבל בואו נראה מה קורה עם נוסחת השורשים. כאן הדיסקרימיננטה היא <span class="math">\(b^{2}-4ac=100-4\cdot25=100-100=0\)</span>, ולכן נקבל פתרון יחיד: <span class="math">\(x_{1,2}=\frac{10\pm\sqrt{0}}{2}=5\)</span>. הנוסחה עובדת! אם נכתוב את <span class="math">\(x^{2}-10x+25\)</span> בתור מכפלה של <span class="math">\(x\)</span> פחות הפתרון, שימו לב שאנחנו צריכים לכתוב את אותו הפתרון <strong>פעמיים</strong>: <span class="math">\(x^{2}-10x+25=\left(x-5\right)\left(x-5\right)=\left(x-5\right)^{2}\)</span>. על סיטואציה כזו אומרים ש-5 הוא פתרון <strong>מריבוי </strong><strong>2</strong> של המשוואה.</p>
+<p>אם כן, אני מקווה שהכל טוב ויפה ואנחנו מבינים בערך איך הנוסחה עובדת ואפשר לעבור אל השאלה מאיפה היא צצה בכלל ולמה היא נכונה. בשביל זה שווה לחזור שוב אל המשוואה <span class="math">\(x^{2}=100\)</span>. זו הייתה משוואה קלה, כי כל מה שהיה צריך לעשות בה הוא להוציא שורש משני האגפים. היינו רוצים לעשות משהו דומה גם עבור <span class="math">\(ax^{2}+bx+c=0\)</span> - איכשהו להגיע למצב שבו באגף שמאל יש רק משהו בריבוע, ובאגף ימין יש משהו נטול איקס. כדי לעשות את זה נשתמש בטריק שנקרא <strong>השלמה לריבוע</strong>, וכדי להבין איך הטריק הזה עובד נסתכל לרגע על מה שמצאנו לפני רגע - <span class="math">\(\left(x-5\right)^{2}=x^{2}-10x+25\)</span>. הביטוי הזה הוא מקרה פרטי של נוסחה כללית: <span class="math">\(\left(x+A\right)^{2}=x^{2}+2Ax+A^{2}\)</span> (אפשר לראות את זה פשוט על ידי פתיחת סוגריים על פי חוק הפילוג).</p>
+<p>בואו נסתכל לרגע על הביטוי הפשוט יחסית <span class="math">\(x^{2}+bx+c\)</span>. הייתי רוצה לכתוב אותו בתור <span class="math">\(\left(x+A\right)^{2}\)</span>; במקרה כזה צריך להתקיים <span class="math">\(bx=2Ax\)</span>, כלומר <span class="math">\(A=\frac{b}{2}\)</span>, ומכיוון שצריך להתקיים <span class="math">\(c=A^{2}\)</span> ינבע מכך ש-<span class="math">\(c=\frac{b^{2}}{4}\)</span>. לרוע המזל, <span class="math">\(b,c\)</span> יכולים להיות מספרים כלליים ואין שום התחייבות שיתקיים <span class="math">\(c=\frac{b^{2}}{4}\)</span>, אבל אפשר להשתמש בטריק ידוע - <strong>לחבר ולחסר את אותו מספר</strong> לביטוי - זה לא משנה את הערך של הביטוי, אבל זה מאפשר לנו לפשט חלק ממנו במחיר של "זנב קטן" שיישאר אחרי הפישוט.</p>
+<p>ובכן, הייתי רוצה לחבר ולחסר אל <span class="math">\(c\)</span> מספר <span class="math">\(B\)</span> כלשהו כך שיתקיים <span class="math">\(c+B=\frac{b^{2}}{4}\)</span>, או במילים אחרות - אני רוצה לחבר ולחסר לביטוי המקורי את <span class="math">\(\frac{b^{2}}{4}-c\)</span>. אז זה מה שאני אעשה:</p>
+<p><span class="math">\(x^{2}+bx+c=x^{2}+bx+c+\left(\frac{b^{2}}{4}-c\right)-\left(\frac{b^{2}}{4}-c\right)=\)</span></p>
+<p><span class="math">\(=x^{2}+bx+\frac{b^{2}}{4}-\left(\frac{b^{2}}{4}-c\right)=\left(x+\frac{b}{2}\right)^{2}-\left(\frac{b^{2}}{4}-c\right)\)</span></p>
+<p>עכשיו, המשוואה המקורית שלי הייתה <span class="math">\(x^{2}+bx+c=0\)</span> והגעתי למצב שבו משוואה שקולה, עם אותם פתרונות, היא</p>
+<p><span class="math">\(\left(x+\frac{b}{2}\right)^{2}-\left(\frac{b^{2}}{4}-c\right)=0\)</span></p>
+<p>נעביר אגף ונקבל</p>
+<p><span class="math">\(\left(x+\frac{b}{2}\right)^{2}=\left(\frac{b^{2}}{4}-c\right)\)</span></p>
+<p>זה כבר מתחיל להיראות דומה! אני אוציא שורש משני האגפים ואקבל</p>
+<p><span class="math">\(x+\frac{b}{2}=\sqrt{\frac{b^{2}}{4}-c}\)</span></p>
+<p>עכשיו, בואו נפשט את הביטוי מימין. אפשר להעלות את <span class="math">\(c\)</span> למכנה, ולקבל</p>
+<p><span class="math">\(\sqrt{\frac{b^{2}}{4}-c}=\sqrt{\frac{b^{2}-4c}{4}}\)</span></p>
+<p>ואפשר לפצל את השורש לפעולה על המונה ועל המכנה ולקבל</p>
+<p><span class="math">\(\sqrt{\frac{b^{2}-4c}{4}}=\frac{\sqrt{b^{2}-4c}}{\sqrt{4}}=\frac{\sqrt{b^{2}-4c}}{2}\)</span></p>
+<p>ועכשיו נותרנו עם</p>
+<p><span class="math">\(x+\frac{b}{2}=\frac{\sqrt{b^{2}-4c}}{2}\)</span></p>
+<p>ואחרי העברת אגפים נקבל את</p>
+<p><span class="math">\(x=\frac{-b+\sqrt{b^{2}-4c}}{2}\)</span></p>
+<p>זה דומה לנוסחת השורשים, אבל לא שכחנו משהו? ראשית, איפה ה-<span class="math">\(\pm\)</span>? ובכן, השמטתי אותו בזדון כי צריך להסביר אותו קצת יותר בפירוט. כזכור, הגענו אל <span class="math">\(\left(x+\frac{b}{2}\right)^{2}=\left(\frac{b^{2}}{4}-c\right)\)</span> ואז אמרתי שאני מוציא שורש משני האגפים ומקבל <span class="math">\(x+\frac{b}{2}=\sqrt{\frac{b^{2}}{4}-c}\)</span>. אבל כשמוציאים שורש, צריך להיזהר. כשאני כותב <span class="math">\(\sqrt{A}\)</span>, אני תמיד מתכוון לשורש <strong>החיובי</strong> של <span class="math">\(A\)</span>. למשל, <span class="math">\(\sqrt{25}=5\)</span>, תמיד. זו המוסכמה. אבל אם אני יודע ש-<span class="math">\(x^{2}=25\)</span>, אז בהחלט ייתכן ש-<span class="math">\(x=-5\)</span>, ואני צריך לכסות את שני המקרים ולכן אני כותב <span class="math">\(x=\pm\sqrt{25}\)</span> כשאני מוציא את השורש. לכן, הדבר הנכון עבורי לעשות היה לכתוב <span class="math">\(x+\frac{b}{2}=\pm\sqrt{\frac{b^{2}}{4}-c}\)</span>, מה שהיה מוביל אותנו לבסוף אל הנוסחה</p>
+<p><span class="math">\(x=\frac{-b\pm\sqrt{b^{2}-4c}}{2}\)</span></p>
+<p>טיפלנו בפלוס/מינוס, אבל איפה ה-<span class="math">\(a\)</span>? כזכור, כדי לשמור את העניינים פשוטים אני פתרתי את המשוואה <span class="math">\(x^{2}+bx+c=0\)</span>, כלומר הנחתי ש-<span class="math">\(a=1\)</span>. כבר ראינו שאפשר להביא כל משוואה ריבועית למבנה הזה: אני לוקח את <span class="math">\(ax^{2}+bx+c=0\)</span> ומחלק את הכל ב-<span class="math">\(a\)</span> ומקבל את המשוואה <span class="math">\(x^{2}+\frac{b}{a}x+\frac{c}{a}=0\)</span>. בואו ניקח את הערכים הללו ונציב בתוך הנוסחה שקיבלנו. כלומר, בכל מקום שבו כתוב <span class="math">\(b\)</span> אני אכתוב במקומו <span class="math">\(\frac{b}{a}\)</span>, ובכל מקום שכתוב <span class="math">\(c\)</span> אני אכתוב במקומו <span class="math">\(\frac{c}{a}\)</span>.</p>
+<p>מה זה יעשה לדיסקרימיננטה? במקום <span class="math">\(b^{2}-4c\)</span> אני הולך לקבל</p>
+<p><span class="math">\(\left(\frac{b}{a}\right)^{2}-4\frac{c}{a}=\frac{b^{2}}{a^{2}}-\frac{4c}{a}=\frac{b^{2}-4ac}{a^{2}}\)</span></p>
+<p>וכשאני מוציא לדבר הזה שורש, אני יכול כמו קודם לפצל את השורש למונה ומכנה, ולקבל</p>
+<p><span class="math">\(\pm\sqrt{\frac{b^{2}-4ac}{a^{2}}}=\pm\frac{\sqrt{b^{2}-4ac}}{\sqrt{a^{2}}}=\pm\frac{\sqrt{b^{2}-4ac}}{a}\)</span></p>
+<p>ולכן הנוסחה כולה, אחרי ההחלפה של <span class="math">\(b,c\)</span> ב-<span class="math">\(\frac{b}{a},\frac{c}{a}\)</span>, תהיה:</p>
+<p><span class="math">\(x=\frac{-\frac{b}{a}\pm\frac{\sqrt{b^{2}-4ac}}{a}}{2}=\frac{-b\pm\sqrt{b^{2}-4ac}}{2a}\)</span></p>
+<p>וזה בדיוק מה שרצינו! להגיע אל הנוסחה דרש קצת אלגברה, אבל לא היה לי קשה לשחזר את כל התהליך בלי להציץ בספר, פשוט כי זכרתי את הטריק - <strong>השלמה לריבוע</strong>. אני מקווה שאחרי שרואים את התהליך, הנוסחה נראית קצת פחות מאיימת וקצת יותר קל לזכור אותה, אבל כפי שאמרתי - חוץ מלשנן אותה אני לא מכיר פתרונות קסם להיכרות איתה.</p>
+<h2>בונוס: מה קורה כשהדיסקרימיננטה שלילית?</h2>
+
+<p>הסיפור של משוואה ריבועית לא יהיה שלם בלי שאספר את מה שבבית הספר לרוב מעדיפים להחביא עד שלב מאוחר, כדי לא לסבך עוד יותר את מה שהוא ממילא לא נושא קל. אז כאן אני מספר את זה בתור בונוס, אבל לספר את זה צריך. קודם הצגתי את העניין כאילו למשוואה ריבועית יכולים להיות או שני פתרונות, או פתרון אחד או אפס פתרונות, ושזה תלוי בדיסקרימיננטה: אם היא חיובית אז יש שני פתרונות; אם היא 0 אז יש פתרון אחד; ואם היא שלילית אז אין פתרונות בכלל. אלא שבפועל זה לא באמת המצב: כשאני אומר "אין פתרונות בכלל" אני מתכוון "אין פתרונות שהם מספרים <strong>ממשיים</strong>". העניין הוא שיש עוד מספרים בעולם.</p>
+<p>בואו נסתכל על משוואה פשוטה במיוחד: <span class="math">\(x^{2}+1=0\)</span>. זו משוואה שבה <span class="math">\(b=0\)</span> אז אנחנו יודעים איך פותרים אותה - מעבירים אגף ומוציאים שורש. <span class="math">\(x^{2}=-1\)</span>, ולכן <span class="math">\(x=\pm\sqrt{-1}\)</span>. אבל מה זה <span class="math">\(\sqrt{-1}\)</span>? זה מספר שכשכופלים אותו בעצמו מקבלים <span class="math">\(-1\)</span>. מצד שני, מה אנחנו יודעים על מספרים? אם כופלים מספר חיובי במספר חיובי, מקבלים תוצאה חיובית; אם כופלים מספר שלילי במספר שלילי, מקבלים גם כן תוצאה חיובית. אז איך אפשר לקבל את <span class="math">\(-1\)</span> על ידי כפל של מספר בעצמו? אי אפשר. לא במסגרת המספרים הממשיים.</p>
+<p>מה זה בכלל "מספר ממשי"? השתמשתי בשם הזה כמה פעמים אבל לא הגדרתי אותו. אם ראיתם פעם את "ציר המספרים", תחשבו על מספרים ממשיים בתור כל המספרים שנמצאים עליו. מנקודת מבט אחרת, אלו כל המספרים שאפשר לכתוב בייצוג עשרוני, למשל <span class="math">\(3.1415\ldots\)</span> - מספרים שנכתבים על ידי רצף סופי של ספרות ואז אולי נקודה עשרונית ואז אולי עוד רצף של ספרות שגם יכול להיות אינסופי. ואז נשאלת השאלה - רגע, אלו לא <strong>כל</strong> המספרים? על מה אתה מדבר בעצם?</p>
+<p>החל מהמאה ה-16 מתמטיקאים נתקלו יותר ויותר בסיטואציות שבהן עוזר לעבוד עם מספרים שכשמעלים אותם בריבוע מקבלים משהו שלילי; האינדיקציה הראשונה והחזקה לכך הייתה משוואות ממעלה <strong>שלישית</strong> שבהן יש נוסחה דומה לנוסחת השורשים עבור הפתרונות, פשוט מסובכת הרבה יותר - ושימוש בנוסחה הזו במקרים מסויימים <strong>מחייב</strong> להוציא שורש למספר שלילי, גם אם כל הפתרונות של המשוואה הם בסופו של דבר מספרים ממשיים נחמדים. זו דוגמא אחת, אבל יש רבות אחרות - למרות רתיעה ראשונית מהרעיון של הוצאת שורש למספר שלילי, המתמטיקאים נאלצו להכיר בכך שיש ליצורים הללו שימוש, והשימוש הזה נרחב, ושהשימוש הזה מאפשר לחשוף תבניות שמסתתרות "מתחת לפני השטח" ועוסקות במספרים ממשיים רגילים לכל דבר ועניין. במילים אחרות - שלא מדובר באיזו המצאה שרירותית ומלאכותית אלא בחלק מהמתמטיקה שאי אפשר סתם להתעלם ממנו. ואחרי ההכרה בכך, הגיע גם הפורמליזם; שיטות שבאו להראות איך אפשר "לבנות" בצורה מדויקת את המספרים המוזרים הללו מתוך המספרים הממשיים. היום המספרים המוזרים הללו הם חלק אינטגרלי מהמתמטיקה לכל דבר ועניין, אבל הם עדיין סוחבים איתם את השם הישן שרנה דקארט הפיל עליהם כשהם עוד נחשבו יצורים מפוקפקים משהו: <strong>מספרים דמיוניים</strong> (או <strong>מדומים</strong> כפי שאני בדרך כלל כותב).</p>
+<p>המספר המדומה הבסיסי ביותר מסומן ב-<span class="math">\(i\)</span>; זה מספר בעל התכונה <span class="math">\(i^{2}=-1\)</span>. כל מספר מדומה אחר ניתן לתיאור בתור "מספר ממשי כפול <span class="math">\(i\)</span>". למשל, <span class="math">\(\sqrt{-4}=2i\)</span> או <span class="math">\(\sqrt{-5}=i\sqrt{5}\)</span>. מאיפה בדיוק <span class="math">\(i\)</span> הזה מגיע ואיך אפשר "לבנות" אותו - אני אחכה עם זה לסוף חלק הבונוס, קודם בואו נראה איך זה עוזר לנו עם פתרון משוואות.</p>
+<p>ובכן, הפתרון של המשוואה <span class="math">\(x^{2}+1=0\)</span> הוא <span class="math">\(i\)</span>. ליתר דיוק, <span class="math">\(\pm i\)</span> (כי <span class="math">\(\left(-i\right)^{2}=\left(-1\right)^{2}i^{2}=1\cdot\left(-1\right)=-1\)</span>). מה עם משוואות יותר מתוחכמות? בואו נסתכל לדוגמא על <span class="math">\(x^{2}-4x+13=0\)</span>. במקרה הזה <span class="math">\(a=1,b=-4,c=13\)</span> ונוסחת השורשים תיתן לנו את הפתרונות</p>
+<p><span class="math">\(x_{1,2}=\frac{4\pm\sqrt{16-52}}{2}=\frac{4\pm\sqrt{-36}}{2}=\frac{4\pm6i}{2}=2\pm3i\)</span></p>
+<p>וזהו, ככה פותרים כל משוואה ריבועית דומה. השלב היחיד שבאמת בעייתי הוא הוצאת השורש, וראינו שאם יש לנו מספרים מדומים אז הוצאת שורש של מספר שלילי מתנהגת בדיוק כמו הוצאת שורש של מספר חיובי, רק שמוסיפים <span class="math">\(i\)</span> שם.</p>
+<p>בואו נסתכל לרגע על המספר <span class="math">\(2+3i\)</span>. הוא מורכב מסכום של המספר הממשי <span class="math">\(2\)</span> והמספר המדומה <span class="math">\(3i\)</span>; הוא לא ממשי, אבל הוא גם לא בדיוק מדומה ("מדומה" התייחס רק למספרים שכשמעלים אותם בריבוע מקבלים מינוס של מספר ממשי). השם שאנחנו נותנים למספרים כאלו הוא <strong>מרוכבים</strong> (ובאנגלית Complex Numbers). המרוכבים הם אוסף מעניין ביותר של מספרים, שמהרבה בחינות מתנהג "כמו הממשיים" (למשל, פעולות החיבור, החיסור הכפל והחילוק כולן מוגדרות ומתנהגות יפה על המרוכבים) אבל יש גם בחינות שבהן הם מתנהגים אחרת, לפעמים <strong>יפה יותר</strong> (התחום של חשבון דיפרנציאלי ואינטגרלי במספרים מרוכבים הוא דוגמא טובה מאוד לזה, אבל לא אכנס לכך כאן). התכונה היפה של המרוכבים שאני יכול עכשיו לנסח במדויק היא זו: <strong>לכל</strong> משוואה ממעלה שניה במספרים מרוכבים, יש <strong>בדיוק</strong> שני פתרונות מרוכבים, עד כדי ריבוי. ה"עד כדי ריבוי" פירושו שייתכן שיש רק פתרון אחד אבל כזה שבפירוק של המשוואה מופיע פעמיים, כמו שראינו בדוגמא של <span class="math">\(x^{2}-10x+25=\left(x-5\right)\left(x-5\right)\)</span>, שבה הפתרון <span class="math">\(x=5\)</span> "הופיע פעמיים". למעשה, זה אפילו יותר מכך - לכל משוואה ממעלה <span class="math">\(n\)</span>, עבור כל <span class="math">\(n\ge1\)</span> טבעי, יש בדיוק <span class="math">\(n\)</span> פתרונות, עד כדי ריבוי.</p>
+<p>התכונה הזו של המרוכבים נקראת <strong>המשפט היסודי של האלגברה</strong>. זה שם קצת מפוצץ (וגם זוכה ללעג, כי ההוכחה של המשפט הזה לא יכולה להסתמך על אלגברה בלבד אלא דורשת עזרה מתחומים אחרים, למשל חשבון דיפרנציאלי ברמה כלשהי) ובהתחלה אולי לא ברור למה היא כל כך מלהיבה. הרעיון פה הוא שהטענה תקפה לכל משוואה <span class="math">\(ax^{2}+bx+c=0\)</span> <strong>גם אם המקדמים הם בעצמם מספרים מרוכבים</strong>. זה מגניב, כי היה אפשר לחשוש שהכנסנו מספרים מרוכבים לתמונה כדי לפתור משוואות <strong>עם מקדמים ממשיים</strong> אבל בכך רק יצרנו עוד המון משוואות חדשות שאין להן פתרון ונצטרך מספרים סופר-דופר-היפר מרוכבים בשבילן, אבל לא - המרוכבים הם סוף הסיפור מהבחינה הזו, ובדיוק בגלל זה אמרתי שהסיפור של משוואה ריבועית לא יהיה שלם בלעדיהם, כי הם בדיוק סוף הסיפור.</p>
+<p>אבל הסיפור לא יהיה שלם בלי שאציג לפחות צל-צלו של הסבר מאיפה ה-<span class="math">\(i\)</span> הזה בכלל מגיע ולמה אפשר להניח שהוא קיים. החלק העצוב הוא שאת הבניה הבאמת טובה לטעמי של המרוכבים אי אפשר להראות פה (כי זה שדה מנה של חוג הפולינומים <span class="math">\(\mathbb{R}\left[x\right]\)</span> שמחולק באידאל המקסימלי <span class="math">\(\left\langle x^{2}+1\right\rangle \)</span> וכפי שאפשר להבין יש כאן שלל מושגים מתמטיים שלא הצגתי וקשה להעריך כשהם מגיעים בשולי פוסט ארוך גם ככה) אבל אפשר די בקלות להראות בניה שכל מה שהיא דורשת הוא להאמין שהמספרים הממשיים קיימים.</p>
+<p>הבניה פשוטה: אנחנו מסתכלים על אוסף <strong>הזוגות</strong> של מספרים ממשיים, <span class="math">\(\left(a,b\right)\)</span>. על האוסף הזה אנחנו מגדירים פעולות חיבור וכפל: ראשית, חיבור מוגדר על ידי</p>
+<p><span class="math">\(\left(a,b\right)+\left(c,d\right)=\left(a+c,b+d\right)\)</span></p>
+<p>כלומר, חיבור הוא "רכיב-רכיב". מחברים את האיברים ברכיב הראשון, השמאלי, של הזוג; וכנ"ל עבור הרכיב הימני.</p>
+<p>כפל, לעומת זאת, לא מוגדר כך בכלל. הוא מוגדר שונה לגמרי:</p>
+<p><span class="math">\(\left(a,b\right)\cdot\left(c,d\right)=\left(ac-bd,ad+bc\right)\)</span></p>
+<p>זו נראית הגדרה שרירותית משהו (שמגיעה, כמובן, ממה שאנחנו יודעים על המספרים המרוכבים שאנחנו רוצים לבנות) אבל הנקודה היא ש<strong>אפשר</strong> להגדיר כפל בצורה כזו; כשאנחנו בונים אובייקט מתמטי חדש מותר לנו להגדיר עליו פעולות באיזו צורה שנרצה, השאלה היא אם אלו יהיו פעולות נחמדות ומועילות.</p>
+<p>למרבה הפלא, מתברר שעם פעולות החיבור והכפל הללו מתקיימות התכונות שאנחנו רגילים אליהן מחיבור וכפל "רגילים". אם אסמן זוגות כאלו של ממשיים ב-<span class="math">\(z_{1},z_{2},z_{3}\)</span>, אז מתקיים</p>
+<ul> <li>חוק החילוף: <span class="math">\(z_{1}\cdot z_{2}=z_{2}\cdot z_{1}\)</span></li>
+
+
+<li>חוק הקיבוץ: <span class="math">\(z_{1}\cdot\left(z_{2}\cdot z_{3}\right)=\left(z_{1}\cdot z_{2}\right)\cdot z_{3}\)</span></li>
+
+
+<li>חוק הפילוג: <span class="math">\(z_{1}\left(z_{2}+z_{3}\right)=z_{1}\cdot z_{2}+z_{1}\cdot z_{3}\)</span></li>
+
+</ul>
+
+<p>אפשר גם לראות שאם <span class="math">\(a,b\)</span> הם מספרים ממשיים, אז <span class="math">\(\left(a,0\right)\)</span> ו-<span class="math">\(\left(b,0\right)\)</span> מתנהגים ביחס לפעולות הכפל והחיבור כמו מספרים ממשיים רגילים: <span class="math">\(\left(a,0\right)+\left(b,0\right)=\left(a+b,0\right)\)</span> ו-<span class="math">\(\left(a,0\right)\cdot\left(b,0\right)=\left(ab,0\right)\)</span>. כלומר, אפשר לחשוב על הזוגות מהצורה <span class="math">\(\left(a,0\right)\)</span> כאילו הם המספרים הממשיים - הבניה שלנו <strong>הכלילה</strong> את הממשיים.</p>
+<p>ועכשיו, בואו נסתכל על המכפלה של <span class="math">\(\left(0,1\right)\)</span> בעצמו. על פי חוק הכפל שראינו, מתקיים <span class="math">\(\left(0,1\right)\cdot\left(0,1\right)=\left(-1,0\right)\)</span>, כלומר <span class="math">\(z=\left(0,1\right)\)</span> מקיים <span class="math">\(z^{2}=-1\)</span> על פי הגישה שלנו שמזהה את <span class="math">\(\left(-1,0\right)\)</span> עם <span class="math">\(-1\)</span> עצמו. אנחנו מסמנים <span class="math">\(i=\left(0,1\right)\)</span>, ועכשיו נוקטים בקיצור נוסף, אחרון: במקום לכתוב <span class="math">\(\left(a,b\right)\)</span> אנחנו כותבים <span class="math">\(a+bi\)</span>, וקיבלנו את הייצוג הכללי למספרים מרוכבים שבו נהוג להשתמש.</p>
+<p>אין לי ספק שהבניה הזו עשויה להשאיר טעם של "אתם המתמטיקאים עדיין מרמים, סתם בניתם משהו מלאכותי, זה לא חוקי בכלל" וכאמור - זו רק ההתחלה; אבל הבניה הזו מראה שלא סתם המצאנו מהראש את המספרים הללו בלי דרך להראות שאפשר לבנות אותם בפועל, ומכיוון שהם נותנים לנו את המשפט היסודי של האלגברה , זו דרך הולמת לסגור בה את הפוסט.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2024/02/24/sequences_and_series_of_functions/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">סדרות וטורים של פונקציות</span>
+            </a>
+            
+            
+            
+            <a href="/2023/11/18/power_laws/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חוקי החזקות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

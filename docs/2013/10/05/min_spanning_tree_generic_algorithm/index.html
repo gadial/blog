@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אלגוריתמים לעץ פורש מינימלי בגרף - מה הרעיון הכללי? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אלגוריתמים לעץ פורש מינימלי בגרף - מה הרעיון הכללי?</h1>
+            <div class="post-meta">
+                <span class="date">2013-10-05</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/מבני נתונים ואלגוריתמים.html">מבני נתונים ואלגוריתמים</a>
+                    
+                    <a href="/categories/תורת הגרפים.html">תורת הגרפים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגוריתמים בתורת הגרפים.html">אלגוריתמים בתורת הגרפים</a>
+                    
+                    <a href="/tags/עץ פורש מינימלי.html">עץ פורש מינימלי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסט הקודם תיארתי את הבעיה המתמטית שאנחנו רוצים לפתור: מציאת עץ פורש מינימלי של גרף ממושקל. בפוסט הזה ניגש ישר לעסק ונתאר איך עושים את זה. בפוסטים הבאים אני הולך לתאר שני אלגוריתמים שעושים את זה - של קרוסקל ושל פרים, אבל לפני כן אני רוצה לתאר איזה שהוא בסיס שמשותף לשני האלגוריתמים הללו, ומספיק יהיה להבין אותו כדי להבין מדוע שני האלגוריתמים עובדים; אפשר יהיה לחשוב על שני האלגוריתמים בתור מקרים פרטיים של האלגוריתם הזה, שכל אחד מהם מממש בצורה אחרת את הצעד המסובך ביותר שבו.</p>
+<p>בשביל להסביר את האלגוריתם הכללי אני צריך עוד מושג אחד בגרפים, שהוא מאוד שימושי וחוזר בכל מקום - <strong>חתך</strong>. חתך בגרף הוא חלוקה של צמתי הגרף <span class="math">\(V\)</span> לשתי קבוצות זרות <span class="math">\(A,B\)</span> ולא ריקות. כלומר, כל צומת בגרף נמצא באחת מהקבוצות, ורק באחת מהן, ולא מתקיים שכל הצמתים נמצאים רק באחת מהן. בצורה גרפית אפשר לצייר את הצמתים ואז "לחתוך" את הנייר שעליו הן מצויירים באמצע כדי לחלק את הצמתים לשתי קבוצות, וזו אינטואיציה לפשר השם (אבל חתך הוא כל חלוקה של הצמתים לשתי קבוצות, גם אם אין דרך לממש אותה בפועל על ידי חיתוך של איזה דף נייר).</p>
+<p>עכשיו, נאמר על קשת כלשהי שהיא עוברת <strong>דרך</strong> החתך אם היא מחוברת לצמתים משני צדי החתך. פורמלית, קשת <span class="math">\(e=(u,v)\)</span> עוברת דרך החתך אם <span class="math">\(u\in A, v\in B\)</span> (או הפוך - זה לא באמת משנה מי נמצא באיזו קבוצה, כל עוד הם בקבוצות שונות). בעזרת המושגים החדשים שלנו אפשר לתת הגדרה חדשה למושג של "גרף קשיר" - גרף הוא קשיר (כלומר, יש בו מסלול בין כל זוג צמתים) אם ורק אם לכל חתך בגרף, יש קשת שעוברת דרך החתך הזה. איך מוכיחים את הקריטריון הזה?</p>
+<p>הרעיון הוא כזה: לכל צומת בגרף, אפשר לדבר על <strong>רכיב הקשירות</strong> שלו - אלו כל הצמתים בגרף שיש מסלול בינם ובין הצומת. גרף הוא קשיר אם ורק אם קיים בו רכיב קשירות יחיד. כעת, אם גרף אינו קשיר אז ניקח בו רכיב קשירות אחד באופן שרירותי ונסמן את צמתיו ב-<span class="math">\(A\)</span> - הרכיב הזה אינו כל הגרף, ולכן אפשר לסמן את שאר צמתי הגרף ב-<span class="math">\(B\)</span> ולקבל חתך של הגרף. בבירור לא יכולה להיות קשת שעוברת דרך החתך הזה, כי אז היינו מקבלים שיש ב-<span class="math">\(B\)</span> צומת שמחוברת בקשת לצמתי <span class="math">\(A\)</span> אבל אינה באותו רכיב קשירות כמו הצמתים הללו, וזו כמובן סתירה.</p>
+<p>זה מוכיח לנו שאם הקריטריון מתקיים, אז הגרף קשיר, אבל צריך גם להוכיח שאם הגרף קשיר אז הקריטריון מתקיים, וגם זה קל: ניקח חתך כלשהו בגרף ונראה שיש קשת שעוברת דרכו. מכיוון שזה חתך, הוא מורכב משתי קבוצות לא ריקות; ניקח צומת בכל אחד מהן. הגרף קשיר, אז יש מסלול שמחבר את הצמתים - נתחיל לטייל עליו מתוך הצומת ששייך ל-<span class="math">\(A\)</span>. אנחנו יודעים שהטיול לאורך המסלול הולך להסתיים בצומת ששייך ל-<span class="math">\(B\)</span>, אז חייב להיות צעד אחד לפחות שבו אנחנו עוברים מצומת ב-<span class="math">\(A\)</span> אל צומת ב-<span class="math">\(B\)</span>, והצעד הזה יהיה על קשת שעוברת דרך החתך - סיימנו!</p>
+<p>עכשיו אפשר לתת את הרעיון שמאחורי האלגוריתם הגנרי למציאת עץ פורש מינימלי. האלגוריתם בונה את העץ הפורש קשת-קשת; הוא מתחיל עם קבוצה ריקה של קשתות ובכל צעד מוסיף לה קשת אחת. אחרי בדיוק <span class="math">\(n-1\)</span> צעדים (כאשר <span class="math">\(n\)</span> הוא מספר הצמתים בגרף) האלגוריתם יסיים עם עץ. איך האלגוריתם בוחר איזו קשת להוסיף? הוא מוצא חתך כלשהו של הגרף שאף קשת מתוך הקבוצה שבנינו עד כה לא עוברת דרכו, ובוחר קשת שעוברת דרך החתך הזה ומוסיף אותה לקבוצה. איזו קשת הוא בוחר? ובכן, הוא נוקט במה שנקרא <strong>גישה חמדנית</strong>, שפירושה שבכל צעד בוחרים את האפשרות שנראית הכי טובה <strong>נקודתית</strong>: האלגוריתם יוסיף לקבוצה שהוא בונה את הקשת <strong>בעלת המשקל הקטן ביותר</strong> מבין כל הקשתות שעוברות דרך החתך (אם יש כמה קשתות עם משקל שהוא מינימלי בוחרים אחת מהן באופן שרירותי).</p>
+<p>ההגיון מאחורי האלגוריתם הזה ברור - אנחנו <strong>חייבים</strong> לבחור קשת כלשהי שעוברת דרך החתך או שהגרף שאנחנו בונים לא יהיה קשיר (כי הנה, יהיה חתך שאין לנו אף קשת שעוברת דרכו), אז למה שלא נבחר את הזולה ביותר האפשרית? כמובן, זו אמנם אינטואיציה נחמדה, אבל זה ממש לא מוכיח שהאלגוריתם עובד; בבעיות מורכבות יותר הגישה החמדנית כושלת בצורה מחפירה. תחשבו למשל על האפשרות ההיפותטית שאם ניקח עכשיו קשת יקרה קצת יותר, היא "תחסל" את כל החתכים בגרף, בעוד שאם ניקח את הקשת הזולה יותר היא תחסל רק חצי מהחתכים בגרף, ואז נצטרך לטפל בעוד חתך, ניקח עבורו עוד קשת, וסכום המחירים שלהן יהיה גדול יותר. זה עשוי, היפותטית, לקרות; אני רוצה להוכיח עכשיו שבפועל זה לא יכול לקרות, ומכאן שהגישה החמדנית אכן פותרת את הבעיה של מציאת עץ פורש מינימלי.</p>
+<p>אז איך תעבוד ההוכחה? באמצעות שימוש בתעלול סטנדרטי שהמתמטיקאים מאוד אוהבים, עד כדי כך שהוא כיכב בפוסט הראשון אי פעם בבלוג - שמורות. נציג תכונה כלשהי שקיימת בתחילת האלגוריתם ונשמרת על ידי צעדי האלגוריתם, ומספיקה לנו כדי לראות שבסוף האלגוריתם השגנו את מה שרצינו. במקרה שלנו השמורה היא כזו: בכל שלב, האלגוריתם מחזיק קבוצה <span class="math">\(A\)</span> של קשתות של הגרף שבו מחפשים עץ פורש מינימלי; הקבוצה הזו היא תמיד תת-קבוצה של קבוצת הקשתות של עץ פורש מינימלי כלשהו של הגרף. בניסוח טיפה שונה - תמיד ניתן <strong>להשלים</strong> אותה לעץ פורש מינימלי על ידי הוספת קשתות (או שהיא עצמה כבר עץ פורש מינימלי שכזה).</p>
+<p>ברור שהתכונה הזו מתקיימת בתחילת ריצת האלגוריתם, כי אז הקבוצה ריקה (ובכל גרף אכן קיים עץ פורש מינימלי אחד לפחות). ברור גם שבסוף ריצת האלגוריתם, כאשר בקבוצה יש <span class="math">\(n-1\)</span> קשתות, קיום השמורה מעיד על כך שהקבוצה עצמה היא עץ פורש מינימלי (למה?), ולכן רק צריך להראות שהשמורה אכן נשמרת. נניח אם כן שהשמורה <strong>לא</strong> נשמרת; זה אומר שהיה רגע אחד שבו היא התקיימה, ואחריו כבר לא. נסמן את קבוצת הקשתות לפני שהשמורה התקלקלה ב-<span class="math">\(A\)</span>; מה שקרה הוא שמצאנו חתך כלשהו <span class="math">\(C\)</span> כך ש-<span class="math">\(A\)</span> לא עוברת דרכו, מצאנו קשת בעלת משקל מינימלי <span class="math">\(e=(u,v)\)</span> שכן עוברת דרך החתך והוספנו אותה ל-<span class="math">\(A\)</span> ובכך קלקלנו את השמורה. זה אומר שאת <span class="math">\(A\)</span> אפשר היה להרחיב לעץ פורש מינימלי, אבל את <span class="math">\(A\cup\left\{e\right\}\)</span> כבר אי אפשר.</p>
+<p>אם כן, הבה ונסתכל על עץ פורש מינימלי שמרחיב את <span class="math">\(A\)</span>. הסיבה היחידה שבגללה העץ הזה לא מרחיב את <span class="math">\(A\cup\left\{e\right\}\)</span> היא בגלל ש-<span class="math">\(e\)</span> לא נמצאת בו (כי שאר הצמתים כן), אז התעלול שנרצה לבצע הוא להעיף מהעץ קשת כלשהי שאינה שייכת ל-<span class="math">\(A\)</span> ולדחוף את <span class="math">\(e\)</span> במקומה, כך שהתוצאה שתתקבל עדיין תהיה עץ פורש מינימלי. נסו להבהיר לעצמכם מדוע אם עשינו את זה, סיימנו.</p>
+<p>האינטואיציה הראשונית שלי היא להגיד "אוקיי, בואו נסתכל על החתך <span class="math">\(C\)</span>. בגלל שהעץ קשיר, יש קשת שעוברת דרך החתך; נעיף אותה ונכניס את <span class="math">\(e\)</span> במקומה". רק שזה לא עובד, ואני ממליץ לכם בחום לנסות לבנות דוגמה נגדית שעבורה זה לא עובד. אמנם, זה באמת יהיה מה שאעשה בסופו של דבר, אבל אני לא יכול לבחור סתם קשת שנמצאת על החתך - ייתכן מאוד שיהיו כמה קשתות כאלו, ואני צריך לבחור אחת מהן בחוכמה. מה שאני רוצה לנסות לשמר הוא את תכונת ה<strong>קשירות</strong> של העץ; המינימליות שלו ממילא מובטחת מכך ש-<span class="math">\(e\)</span> היא הקשת בעלת המשקל המינימלי מבין כל הקשתות שעל החתך (למעשה, די ברור שהקשתות היחידות ש"מתחרות" איתה הן קשתות בעלות אותו משקל ורק אותן יש סיכוי להסיר בכלל אם העץ שממנו אנחנו מתחילים הוא מינימלי).</p>
+<p>את התעלול שנעשה עכשיו אפשר לתאר מילולית כך: נוסיף את <span class="math">\(e\)</span> לעץ. זה יגרום בודאות להיווצרות מעגל. נחפש קשת על המעגל שעוברת דרך החתך ואינה <span class="math">\(e\)</span>, נסיר אותה מהגרף ונקבל שוב עץ. פורמלית, מה שעושים הוא זה: מכיוון שכרגע יש לנו ביד עץ, הרי שיש כבר מסלול שמחבר את <span class="math">\(u,v\)</span> (הקצוות של הקשת <span class="math">\(e\)</span>). נסתכל על המסלול הזה. הוא בהכרח עובר מצד אחד של החתך לצד השני שלו (כי <span class="math">\(u,v\)</span> נמצאים בצדדים שונים של החתך) ולכן יש על המסלול הזה קשת, <span class="math">\((x,y)\)</span> שעוברת דרך החתך כחלק מהמסלול. נסיר את הקשת הזו מהעץ, ונכניס את <span class="math">\(e\)</span> לגרף שהתקבל. די להוכיח שהוא עדיין קשיר, ולשם כך די להראות שאפשר להגיע מ-<span class="math">\(x\)</span> אל <span class="math">\(y\)</span> (כלומר "לסמלץ" את מה שהקשת <span class="math">\((x,y)\)</span> נתנה לנו). איך נעשה את זה? פשוט מאוד: קודם ראינו שיש מסלול מהצורה <span class="math">\(u\rightarrow x\rightarrow y\rightarrow v\)</span>; כעת פשוט נשתמש במסלול הזה בצורה קצת שונה, תוך הסתמכות חזקה על כך שהגרף אינו מכוון: קודם כל נלך מ-<span class="math">\(x\)</span> אל <span class="math">\(u\)</span>, אחר כך נחצה את הקשת <span class="math">\(e\)</span> ונגיע אל <span class="math">\(v\)</span>, ולסיום נלך מ-<span class="math">\(v\)</span> אל <span class="math">\(y\)</span>. פשוט מאוד, ומסיים את ההוכחה.</p>
+<p>עכשיו אפשר להסביר איך קרוסקל ופרים הם מקרים פרטיים של האלגוריתם הזה. נתחיל עם קרוסקל. מה שקרוסקל עושה הוא להתחיל ב<strong>מיון</strong> של כל הקשתות לפי משקלן, מהקלה ביותר לכבדה ביותר. עכשיו הוא עובר עליהן אחת אחת, ולכל קשת כזו הוא בודק האם היא מחברת צמתים אשר שייכים ל<strong>רכיבי קשירות שונים</strong> בגרף. אם זה לא המצב, עוברים לקשת הבאה; אם זה אכן המצב, הרי שרכיבי הקשירות הללו יוצרים לנו חתך בגרף (או, אם להיות מדוייקים פורמלית, רכיב הקשירות של אחד מצמתי הקשת הוא קבוצה אחת בחתך, וכל יתר הגרף הוא הקבוצה השניה), ואז מוסיפים את הקשת לגרף. מובטח לנו בודאות מוחלטת שהקשת שלנו היא הקלה ביותר על החתך הזה, שכן בקשתות יותר קלות שעל החתך כבר היינו מטפלים קודם ומוסיפים אחת מהן לעץ שאנחנו בונים.</p>
+<p>עיקר הקושי בקרוסקל הוא הבדיקה האם שני צמתים שייכים לאותו רכיב שקילות או לא, והדגש הוא על שימוש במבנה נתונים שיאפשר לבצע את הבדיקה הזו עם מחיר מינימלי לזמן הריצה. לשם כך צריך מבנה נתונים שיודע לנהל <strong>מחלקות שקילות</strong> של אובייקטים, ותומך בצורה יעילה בשתי פעולות: מציאת נציג למחלקת שקילות של איבר (ואז בדיקה אם שני איברים שייכים לאותה מחלקת שקילות כוללת את מציאת הנציגים שלהם והשוואתם), ואיחוד של שתי מחלקות שקילות קיימות (שהרי מה שקורה כשמוסיפים קשת לגרף הוא ששני רכיבי קשירות מתאחדים לרכיב קשירות אחד). מבנה נתונים שמנהל ביעילות את שתי הפעולות הללו מכונה Union/Find ואציג אותו בפוסט הבא - זה מבנה נתונים חביב מאוד, שמספר התחכמויות פשוטות הופכות אותו ליעיל למדי.</p>
+<p>האלגוריתם של פרים נוקט גישה שונה למדי. הוא מתחיל מצומת "שורש" נתון כלשהו, ובכל שלב של הריצה שלו, החתך שהוא בוחר מורכב ממחלקת השקילות של אותו "שורש" ויתר הגרף, והאלגוריתם בוחר בכל שלב בקשת הקלה ביותר שנמצאת על החתך הזה. לשם כך האלגוריתם מתחזק <strong>תור עדיפויות</strong> שכולל את כל הצמתים בגרף שאינם ברכיב הקשירות של השורש, כאשר העדיפות של צומת נקבעת על פי משקל הקשת הקלה ביותר שמחברת אותו לרכיב הקשירות של השורש (אם אין כזו, אז העדיפות של הצומת היא "מינוס אינסוף" - הגרועה ביותר האפשרית). בכל צעד האלגוריתם שולף את הצומת שבראש התור, מוסיף את הקשת הקלה ביותר שמחברת אותו לרכיב הקשירות אל העץ שאותו האלגוריתם בונה, ואז מעדכן את תור העדיפויות בהתאם לשינויים (כל שכן של הצומת החדש עשוי להתעדכן מבחינת מחיר החיבור שלו לרכיב הקשירות של השורש).</p>
+<p>כמו בקרוסקל, כך גם בפרים לב האלגוריתם הוא לא ברעיון שלו, אלא במבנה הנתונים שעליו האלגוריתם מסתמך, במקרה הזה תור עדיפויות. קיים לתור עדיפויות מהסוג שפרים זקוק לו מימוש יעיל בצורה מפתיעה שמתבסס על מבנה נתונים מורכב שנקרא <strong>ערימת פיבונאצ'י</strong>; גם את המבנה הזה אני מתכוון לתאר בהמשך.</p>
+<p>בפעם הבאה: קרוסקל, ו-Union/Find. יהיה אקשן!</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/10/18/kruskal_algorithm/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">האלגוריתם של קרוסקל ומבנה הנתונים Union/Find</span>
+            </a>
+            
+            
+            
+            <a href="/2013/09/30/graphs_spanning_trees_and_code/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">על גרפים, עצים פורשים ואיך זה נראה בקוד</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

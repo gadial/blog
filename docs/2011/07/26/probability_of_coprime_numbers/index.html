@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ההסתברות של מספרים זרים ואיך פאי נכנס לתמונה - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>ההסתברות של מספרים זרים ואיך פאי נכנס לתמונה</h1>
+            <div class="post-meta">
+                <span class="date">2011-07-26</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/פאי.html">פאי</a>
+                    
+                    <a href="/tags/פונקצית הזטא של רימן.html">פונקצית הזטא של רימן</a>
+                    
+                    <a href="/tags/תורת המספרים האנליטית.html">תורת המספרים האנליטית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>באחת מהתגובות בבלוג שאלו אותי שאלה פשוטה - נניח שאנחנו מגרילים באקראי שני מספרים טבעיים, מה ההסתברות שהם יהיו זרים, כלומר שלא יהיה מספר טבעי גדול מ-1 שמחלק את שניהם גם יחד? התשובה היא <span class="math">\(\frac{6}{\pi^{2}}\)</span>, מה שנראה מוזר מאוד במבט ראשון - מה פאי עושה כאן, הרחק מכל מעגל אפשרי?</p>
+<p>ותיקי הבלוג אולי מזהים את ה-<span class="math">\(\frac{6}{\pi^{2}}\)</span> הזה. ב<a href="http://www.gadial.net/2010/03/14/happy_pi_day/">אחד הפוסטים הקודמים</a> הראיתי שמתקיים <span class="math">\(\sum_{n=1}^{\infty}\frac{1}{n^{2}}=\frac{\pi^{2}}{6}\)</span>, וגם שלטור הזה יש סימון קצת יותר קומפקטי - <span class="math">\(\zeta\left(2\right)\)</span>, פונקצית הזטא של רימן ב-2. הקשר אינו מקרי, כמובן, ובהוכחה נתבסס על הטענה הישנה ההיא ועל רעיונות שהצגתי כבר אז. קודם כל אציג את ההוכחה, ולאחר מכן, עבור אלו שעדיין יש להם כוח, נעבור לדבר על <strong>השאלה</strong>; מסתבר ש"מגרילים באקראי שני מספרים טבעיים" זו טענה שהיא די חסרת משמעות - לפחות המשמעות האינטואיטיבית שלה שגויה - וצריך לחדד קצת את השאלה כדי שתהיה משמעות לתשובת ה-<span class="math">\(\frac{6}{\pi^{2}}\)</span>. אבל תשכחו מזה לעת עתה - ההוכחה שאציג כעת היא הרעיון המרכזי כאן. זו תהיה "הוכחה בסגנון אוילר" עם כמה הנחות לא מבוססות ואי דיוקים, אבל מרגע שהרעיון יהיה ברור באמצעותה, מי שירצה יוכל להבין גם איך מפרמלים אותה כמו שצריך.</p>
+<p>ראשית, מתי שני מספרים הם זרים? כשאין להם גורם משותף; אבל למעשה, מספיק לומר שאין להם גורם <strong>ראשוני</strong> משותף, מכיוון שכל גורם שהוא של אותם שני מספרים מתחלק לפחות בראשוני אחד. אז השאלה שלנו היא למעשה - אם אנחנו בוחרים שני מספרים באקראי, מה ההסתברות שיהיה ראשוני <span class="math">\(p\)</span> שמחלק את שניהם?</p>
+<p>מכיוון שהבחירה של שני המספרים נעשית באופן בלתי תלוי (הבחירה במספר אחד לא משפיעה על הבחירה במספר השני), ההסתברות ששניהם יתחלקו ב-<span class="math">\(p\)</span> היא מכפלת ההסתברויות עבור כל אחד מהם להתחלק ב-<span class="math">\(p\)</span>. כעת, <span class="math">\(p\)</span> מחלק אחד מכל <span class="math">\(p\)</span> מספרים (2 מחלק כל מספר זוגי; 3 מחלק, ובכן, כל מספר שמתחלק ב-3, וכן הלאה) ולכן ההסתברות לכך שמספר אקראי יתחלק ב-<span class="math">\(p\)</span> היא <span class="math">\(\frac{1}{p}\)</span>, ולכן ההסתברות ששני מספרים אקראיים יתחלקו שניהם ב-<span class="math">\(p\)</span> היא <span class="math">\(\frac{1}{p^{2}}\)</span>.</p>
+<p>כעת, אנחנו רוצים שלמספרים שלנו לא יהיה אף גורם משותף, כלומר ש<strong>לכל</strong> ראשוני <span class="math">\(p\)</span>, <strong>לא</strong> יתקיים ש-<span class="math">\(p\)</span> מחלק את שניהם. אם <span class="math">\(\frac{1}{p^{2}}\)</span> היא ההסתברות ש-<span class="math">\(p\)</span> <strong>כן</strong> יחלק את שני המספרים האקראיים, אז ההסתברות ה"משלימה", לכך שהוא לא יחלק את שניהם (כלומר, יחלק רק אחד מהם או לא יחלק אף אחד מהם) היא <span class="math">\(1-\frac{1}{p^{2}}\)</span>. ההסתברות שזה יקרה לכל הראשוניים הקיימים (בהנחה שאיני מוכיח כאן - כפי שתגובות רבות מעירות - שההסתברויות לראשוניים שונים הן בלתי תלויות) היא מכפלת ההסתברויות לכל הראשוניים; מה שמסומן במתמטית בתור <span class="math">\(\prod_{p}\left(1-\frac{1}{p^{2}}\right)\)</span> (<span class="math">\(\Pi\)</span> הוא סימן קיצור מוסכם לכפל, כמו ש-<span class="math">\(\Sigma\)</span> הוא סימן קיצור מוסכם לחיבור; ויש הסכמה על כך שה-<span class="math">\(p\)</span> למטה עובר רק על הראשוניים). המכפלה הזו נראית מוזרה במבט ראשון כי משתתפים בה אינסוף איברים, וצריך להגדיר לה מושג של התכנסות כפי שמוגדר כזה עבור סכום אינסופי, אבל כאמור - אנחנו עכשיו עושים הוכחה בסגנון אוילר.</p>
+<p>בשלב הזה אני שולף מהבוידם את התעלול של אוילר ש<a href="http://www.gadial.net/2009/05/17/euler_proof_infinity_of_primes/">הצגתי כבר בבלוג בעבר</a>: אוילר מראה כי <span class="math">\(\zeta\left(s\right)\)</span>, הערך של פונקצית הזטא של רימן בנקודה <span class="math">\(s\)</span> עבור <span class="math">\(s&gt;1\)</span> ממשי, שמוגדר כ-<span class="math">\(\sum_{n=1}^{\infty}\frac{1}{n^{s}}\)</span>, מקיים <span class="math">\(\zeta\left(s\right)=\prod_{p}\left(\frac{1}{1-p^{-s}}\right)\)</span>. הרעיון הכללי כאן הוא ש-<span class="math">\(\frac{1}{1-p^{-s}}\)</span> זו בעצם דרך אחרת לכתוב <span class="math">\(1+p^{-s}+p^{-2s}+p^{-3s}+\dots\)</span>, ומכיוון שהכפל רץ על כל הראשוניים ובשל הפירוק היחיד לראשוניים של המספרים הטבעיים, כשמבצעים פתיחת סוגריים מקבלים את כל האיברים מהצורה <span class="math">\(n^{-s}\)</span>, לכל <span class="math">\(n\)</span> אפשרי. זהו מעין אפיון אנליטי של המשפט היסודי של האריתמטיקה, ותוצאה יפהפה בכל קנה מידה אפשרי לטעמי.</p>
+<p>הביטוי שלנו די דומה: השוו את <span class="math">\(\prod_{p}\left(1-\frac{1}{p^{2}}\right)\)</span> עם <span class="math">\(\prod_{p}\left(\frac{1}{1-p^{-2}}\right)\)</span>. איך עוברים מאחד לשני? ובכן:</p>
+<p><span class="math">\(\prod_{p}\left(1-\frac{1}{p^{2}}\right)=\prod_{p}\left(1-p^{-2}\right)=\prod_{p}\left(\frac{1}{1-p^{-2}}\right)^{-1}=\left[\prod_{p}\left(\frac{1}{1-p^{-2}}\right)\right]^{-1}=\zeta\left(2\right)^{-1}=\frac{6}{\pi^{2}}\)</span></p>
+<p>וזה סוף הסיפור.</p>
+<p>למה הסיפור בכל זאת לא נגמר כאן? כי כאמור, קצת רימיתי בהתחלה. כשאני אומר ש"מספר טבעי נבחר באקראי", מה זה אומר? אם רוצים לדבר פורמלית צריך להסביר מהי ההסתברות שיש לכל מספר טבעי להיבחר, וההנחה הסמויה כאן היא שההסתברות של כל מספר טבעי היא שווה. נאמר, <span class="math">\(a\)</span>, כש-<span class="math">\(a\)</span> הוא מספר גדול מ-0 וקטן מ-1. מייד אנחנו רואים שיש כאן בעיה כי אחרי <span class="math">\(\frac{1}{a}\)</span> מספרים, ההסתברות שאחד מהם יצא תהיה גדולה כבר מ-1...</p>
+<p>לדוגמה, אם אני אומר שכל מספר טבעי נבחר באותה הסתברות - <span class="math">\(\frac{1}{5}\)</span> - אז אני אומר שגם 1, וגם 2, וכדומה עד 6 - כולם נבחרים בהסתברות <span class="math">\(\frac{1}{5}\)</span>. אז ההסתברות שאחד מהם ייבחר היא <span class="math">\(\frac{1}{5}+\dots+\frac{1}{5}=\frac{6}{5}\)</span>, ומספר זה כבר גדול מ-1. זה פשוט לא עובד. <strong>אין התפלגות אחידה על כל הטבעיים</strong>.</p>
+<p>אפשר כמובן להגדיר התפלגויות לא אחידות (למשל, המספר <span class="math">\(n\)</span> נבחר בהסתברות <span class="math">\(\frac{1}{2^{n}}\)</span>) אבל אז כל הניתוח ההסתברותי שעשינו למעלה והניח שלכל מספר טבעי אותה הסתברות להיבחר יורד לטמיון. אז מה עושים?</p>
+<p>הפתרון הוא כזה: קובעים <span class="math">\(N\)</span> גדול כלשהו, ומגרילים רק מספרים בין 1 ל-<span class="math">\(N\)</span>, כשכל אחד מהם נבחר בהסתברות <span class="math">\(\frac{1}{N}\)</span>. כעת חוזרים על ההוכחה שלמעלה; לצורך נוחות טכנית אפשר לבחור את <span class="math">\(N\)</span> תמיד להיות כפולה של כל הראשוניים עד לראשוני מסויים, ואז רק הם משתתפים במשחק ואף ראשוני אחר לא. מה שנקבל בסוף הוא את המכפלה <span class="math">\(\prod_{p}\left(1-\frac{1}{p^{2}}\right)\)</span> כשהיא אינה נלקחת על כל הראשוניים אלא רק עד גבול מסויים; אבל ככל שנגדיל את <span class="math">\(N\)</span> כך המכפלה הזו תשאף לערך של המכפלה האינסופית, שהוא <span class="math">\(\frac{6}{\pi^{2}}\)</span> המבוקש. לכן הניסוח המדויק של השאלה מתחילת הפוסט הוא זה "כאשר בוחרים מספרים טבעיים באקראי מתחום גדול מאוד, מה בערך ההסתברות שהם יהיו זרים?" ולמי שזה לא מספיק פורמלי עבורו, "לאן שואפת ההסתברות ששני מספרים טבעיים שנבחרו בהתפלגות אחידה מתוך <span class="math">\(\left[1,\dots,N\right]\)</span> יהיו זרים כאשר <span class="math">\(N\)</span> שואף לאינסוף"?</p>
+<p>באופן כללי שאלות מתמטיות נוטות להיות מנוסחות בצורה הזו, וכך לפעמים מפספסים את הפואנטה הבסיסית שלהן - שאנחנו רוצים להבין מה קורה עבור המושג-הלא-קיים-אך-ברור-אינטואטיבית של "מגרילים שני מספרים טבעיים". איזו משתי הגישות עדיפה? אתם תחליטו. אני אישית מעדיף את השניה, אבל אני מקווה שזה לא בלט יותר מדי בפוסט הזה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/08/03/ramsey_theorem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט רמזי</span>
+            </a>
+            
+            
+            
+            <a href="/2011/07/23/private_information_retreival_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">ושאינו יודע מה שאלו</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

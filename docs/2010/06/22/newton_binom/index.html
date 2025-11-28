@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הבינום של ניוטון - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הבינום של ניוטון</h1>
+            <div class="post-meta">
+                <span class="date">2010-06-22</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הבינום של ניוטון.html">הבינום של ניוטון</a>
+                    
+                    <a href="/tags/מתמטיקה תיכונית.html">מתמטיקה תיכונית</a>
+                    
+                    <a href="/tags/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2010/06/20/combinatorics_intro/">הפוסט הקודם</a> שלי עסק במבוא לקומבינטוריקה, ברמה שבתקווה גם תלמידי תיכון יוכלו להבין. אני רוצה להמשיך כעת באותה הרוח ולהציג תוצאה קומבינטורית פשוטה אך יפה, שכבר בשלב זה ניתן להבין, באמצעות הכלים שהצגתי בפוסט הקודם - הבינום של ניוטון.</p>
+<p>בשלב כלשהו בתיכון נלמדת הנוסחה הפשוטה הבאה: <span class="math">\(\left(a+b\right)^{2}=a^{2}+2ab+b^{2}\)</span>. למה? ככה. לפעמים גם נלמדת נוסחה יותר מסובכת: <span class="math">\(\left(a+b\right)^{3}=a^{3}+3a^{2}b+3ab^{2}+b^{3}\)</span>. כשהייתי בתיכון תיעבתי את הנוסחה הזו, עם החזקה השלישית - אף פעם לא זכרתי בדיוק איך היא הולכת ונאלצתי לבדוק בדף הנוסחאות. כעת, כשאני כותב את הפוסט, לא נזקקתי כלל לדף נוסחאות כלשהו - וזה לא שהזכרון שלי השתפר במיוחד או שאני משתמש בנוסחה הזו על בסיס יומיומי. אני מקווה שעד סיום הפוסט גם כל הקוראים יוכלו לכתוב את הנוסחה הזו "מהראש" וללא צורך בשום דף נוסחאות או אפילו חישובים ידניים.</p>
+<p>הבינום של ניוטון הוא נוסחה כללית עבור ביטויים כאלו - ביטויים שנראים כמו <span class="math">\(\left(a+b\right)^{n}\)</span>, כאשר <span class="math">\(n\)</span> הוא מספר טבעי כלשהו. כמובן שעולה מאליה השאלה בשביל מה זה טוב; קשה לתת לה תשובה, פשוט כי הבינום אינו מטרה בפני עצמה אלא כלי שצץ לעתים קרובות כחלק מחישובים מסובכים יותר - זה אחד מהדברים שפשוט "טוב לדעת". רק אציין שלרוב השימושים הם דווקא לא טכניים-חישוביים, אלא כחלק מהוכחה תיאורטית כללית (למשל, מציאת הנגזרת של פונקציה מהצורה <span class="math">\(f\left(x\right)=x^{n}\)</span> כוללת שימוש בבינום). לא אציג את הנוסחה עדיין פשוט כי היא מפחידה במבט ראשון; קודם כל נבין מה הולך כאן ונגיע אליה באופן טבעי.</p>
+<p>במתמטיקה באופן כללי הדרך הטובה להבין מקרה כללי היא לעתים קרובות דרך בחינת מקרים פרטיים פשוטים, אפילו פשוטים ברמה מגוחכת. <span class="math">\(\left(a+b\right)^{1}\)</span> הוא פשוט <span class="math">\(a+b\)</span>, וזה לא מלמד אותנו הרבה; אבל <span class="math">\(\left(a+b\right)^{2}\)</span> זה כבר סיפור שונה. איך באמת מגיעים לאותה נוסחה מפורסמת של <span class="math">\(a^{2}+2ab+b^{2}\)</span>?</p>
+<p>לצורך כך בואו ונחזור רגע ליסודות. תשכחו מהבינום - איך מבצעים את פעולת הכפל הבאה - <span class="math">\(\left(a+b\right)\cdot c\)</span>? כאן בא לעזרתנו אחד מחוקי החשבון הבסיסיים ביותר - חוק הפילוג, שקובע פשוט ש-<span class="math">\(\left(a+b\right)c=ac+bc\)</span>.</p>
+<p>השלב הבא הוא המכפלה <span class="math">\(\left(a+b\right)\left(c+d\right)\)</span>. גם כאן אפשר להשתמש בחוק הפילוג בדיוק באותו האופן כמו קודם, ולקבל <span class="math">\(\left(a+b\right)\left(c+d\right)=a\left(c+d\right)+b\left(c+d\right)\)</span>. כעת אפשר להשתמש בחוק הפילוג שוב (הפעם בגרסה שלו שאומרת ש-<span class="math">\(c\left(a+b\right)=ca+cb\)</span>) ולקבל <span class="math">\(a\left(c+d\right)+b\left(c+d\right)=ac+ad+bc+bd\)</span>. עד כאן חשבון פשוט - מה הקשר לקומבינטוריקה?</p>
+<p>ובכן, אני רוצה שנחשוב על המכפלה <span class="math">\(\left(a+b\right)\left(c+d\right)\)</span> באופן שונה - בתור תהליך של בחירה. בפתיחת הסוגריים, כל מחובר שנקבל בסכום הסופי מתקבל מבחירה של איבר אחד בסוגר השמאלי, בחירה של איבר אחד בסוגר הימני, והכפלתם. כך <span class="math">\(ac\)</span> מתקבל כשנבחר האיבר הראשון בכל זוג סוגריים, <span class="math">\(bd\)</span> מתקבל כשנבחר האיבר השני, וכן הלאה. שימו לב לסדר שבו כתבתי את האיברים: כתבתי <span class="math">\(ac\)</span> ולא <span class="math">\(ca\)</span> (למרות ששני ערכים אלו שווים אלו לאלו) כדי להבליט את העובדה ש-<span class="math">\(a\)</span> נבחר מהסוגריים השמאליים ואילו <span class="math">\(c\)</span> מהסוגריים הימניים.</p>
+<p>עכשיו בואו נעבור לטפל ב-<span class="math">\(\left(a+b\right)^{2}\)</span>, שהוא מקרה פשוט יותר מהמקרה הכללי: <span class="math">\(\left(a+b\right)^{2}=\left(a+b\right)\left(a+b\right)\)</span> ואחרי פתיחת הסוגריים נקבל את הסכום <span class="math">\(aa+ab+ba+bb\)</span>. כעת אפשר לשפר את מראה הסכום הזה: את <span class="math">\(aa\)</span> אפשר להחליף ב-<span class="math">\(a^{2}\)</span>, ובמקום להסתבך עם <span class="math">\(ab\)</span> ו-<span class="math">\(ba\)</span> אפשר להשתמש בחוק החילוף ולקבל <span class="math">\(ab+ba=ab+ab=2ab\)</span>. הנה כי כן הגענו ל-<span class="math">\(a^{2}+2ab+b^{2}\)</span>, אבל לדעתי יותר חשוב לזכור דווקא את התוצאה ה"גולמית": <span class="math">\(aa+ab+ba+bb\)</span>.</p>
+<p>בואו נעבור לטפל במקרה קשה הרבה יותר: <span class="math">\(\left(a+b\right)^{3}=\left(a+b\right)\left(a+b\right)\left(a+b\right)\)</span>. כאן אפשר לחשוב על תהליך פתיחת הסוגריים כעל תהליך של בחירת <strong>שלושה</strong> איברים והכפלתם - איבר אחד מכל סוגר. התוצאה הסופית תהיה סכום שבו כל מחובר מתקבל מבחירת איבר מכל אחד מזוגות הסוגריים. אם נכתוב במפורש את כל התוצאות (קצת טרחני, אני יודע) נקבל: <span class="math">\(aaa+aab+aba+abb+baa+bab+bba+bbb\)</span>. האם תוכלו להגיד לי, בלי לספור, כמה מחוברים יש? זו כבר שאלה קומבינטורית לגמרי: יש שלושה זוגות סוגריים, ומכל זוג אנו בוחרים אחד משני איברים - על כן, לפי עיקרון הכפל, יש לנו <span class="math">\(2\cdot2\cdot2=8\)</span> אפשרויות בחירה (כי הבחירה שלנו מורכבת משלושה שלבים שבכל אחד מהם יש שתי אפשרויות בחירה) ולכן יש שמונה מחוברים בסכום - עכשיו אפשר לבדוק זאת ידנית.</p>
+<p>כעת, כיצד ניתן לפשט את הזוועה של שמונת המחוברים? את <span class="math">\(aaa\)</span> אפשר להחליף ב-<span class="math">\(a^{3}\)</span>. את <span class="math">\(aab\)</span> אפשר להחליף ב-<span class="math">\(a^{2}b\)</span>. גם את <span class="math">\(aba\)</span> אפשר להחליף ב-<span class="math">\(a^{2}b\)</span> וגם את <span class="math">\(baa\)</span> אפשר להחליף ב-<span class="math">\(a^{2}b\)</span>. אם כן, כמה פעמים יופיע <span class="math">\(a^{2}b\)</span> בסכום הסופי? כמספר הפעמים שבהן אפשר לבחור מבין שלושת הסוגריים פעמיים את <span class="math">\(a\)</span>, ופעם אחת את <span class="math">\(b\)</span>. אלו בדיוק שלוש פעמים - אפשר לחשוב על כך בשתי דרכים שונות: או שאנו בוחרים את שני זוגות הסוגריים שמהם ניקח <span class="math">\(a\)</span> ואז ממה שנשאר לוקחים <span class="math">\(b\)</span>, או שבוחרים את הסוגר שממנו ניקח את <span class="math">\(b\)</span> ואומרים שמשני הנותרים ניקח <span class="math">\(a\)</span>. בדרך השנייה ברור לגמרי שיש רק שלוש אפשרויות (יש שלושה זוגות סוגריים). בדרך הראשונה זה קצת פחות ברור ולכן הגיע הזמן לקרוא לעזרת הכלי שלמדנו בפעם הקודמת: מספר האפשרויות לבחור <span class="math">\(k\)</span> איברים מתוך <span class="math">\(n\)</span> הוא <span class="math">\(\frac{n!}{k!\left(n-k\right)!}\)</span> - ביטוי שלצורך פשטות סימנו בסימון <span class="math">\({n \choose k}\)</span>, ואצלנו <span class="math">\(n=3\)</span> ו-<span class="math">\(k=2\)</span> כך שנקבל <span class="math">\(\frac{3!}{2!1!}=\frac{6}{2}=3\)</span>.</p>
+<p>בואו נחזור לרגע אל <span class="math">\(a^{3}\)</span> ידידנו - כמה פעמים הוא יופיע בסכום? כמספר הפעמים שבהן ניתן לבחור <span class="math">\(a\)</span> בכל שלושת זוגות הסוגריים - אבל יש בדיוק רק בחירה אחת שכזו. פורמלית זה שווה למספר האפשרויות לבחור שלושה איברים מתוך שלושה: <span class="math">\({3 \choose 3}=1\)</span>.</p>
+<p>כעת הגיע הזמן לבצע קפיצת מדרגה כלשהי ולהתחיל להכליל את כל מה שעשינו פה ולתאר אותו באופן אחיד יותר. כשאנו פותחים את <span class="math">\(\left(a+b\right)^{3}\)</span>, מה אנחנו מקבלים? איברים שצורתם הכללית היא <span class="math">\(a^{i}b^{j}\)</span>, כך ש-<span class="math">\(i+j=3\)</span> (כי כל איבר מתקבל מבחירת שלושה איברים בדיוק - השאלה היא רק כמה מתוכם הם <span class="math">\(a\)</span> וכמה מתוכם הם <span class="math">\(b\)</span>). אם כן, אפשר לכתוב זאת בצורה יותר פשוטה: <span class="math">\(a^{i}b^{3-i}\)</span>. כעת נשאלת השאלה - כמה פעמים האיבר <span class="math">\(a^{i}b^{3-i}\)</span> מופיע? זהו בדיוק מספר האפשרויות לבחור את <span class="math">\(a\)</span> בדיוק <span class="math">\(i\)</span> פעמים מתוך 3 זוגות הסוגריים האפשריות, כלומר <span class="math">\({3 \choose i}\)</span>. זה מוביל אותנו לניסוח האחיד הבא: <span class="math">\(\left(a+b\right)^{3}={3 \choose 0}a^{0}b^{3}+{3 \choose 1}a^{1}b^{2}+{3 \choose 2}a^{2}b+{3 \choose 3}a^{3}\)</span>.</p>
+<p>אוקיי, עכשיו אתם ככל הנראה שואלים את עצמכם מה לעזאזל עשיתי כאן. במקום לקבל, כמו שהבטחתי, משהו פשוט ויפה קיבלתי ביטוי שנראה כמו זוועת עולם. אלא שאני טוען שהביטוי כלל אינו מזוויע, אחרי שעובר ההלם הראשוני, ויש בו יתרון גדול - קל לזכור אותו. שימו לב לכך שהוא מאוד תבניתי: סכום של איברים מהצורה <span class="math">\({3 \choose i}a^{i}b^{3-i}\)</span> כשהדבר היחיד שמשתנה הוא ערכו של ה-<span class="math">\(i\)</span>. זה דבר ש<strong>קל לזכור</strong>. לא באמת צריך לזכור מה ערכו המדוייק של כל מקדם, אלא רק שכל מקדם הוא מהצורה <span class="math">\({3 \choose i}\)</span> עבור ה-<span class="math">\(i\)</span> המתאים. כשכתבתי את הנוסחה שבתחילת הפוסט "מהראש", זה מה שהשתמשתי בו.</p>
+<p>כעת אני רוצה לקפוץ קצת קדימה ולהציג סימון שבתיכון לא נהוג להשתמש בו (וחבל). כבר אמרתי שהנוסחה שלי ל-<span class="math">\(\left(a+b\right)^{3}\)</span> היא סכום של איברים שכולם נראים כמעט אותו דבר: <span class="math">\({3 \choose i}a^{i}b^{3-i}\)</span>, כשהדבר היחיד שמשתנה הוא ה-<span class="math">\(i\)</span>. הדרך המתמטית לכתוב זאת היא באמצעות האות היוונית <span class="math">\(\Sigma\)</span> (סיגמה גדולה) שבאה לציין את המילה "סכום" (בשפה המתאימה, כמובן...). הנה הסימון: <span class="math">\(\left(a+b\right)^{3}=\sum_{i=0}^{3}{3 \choose i}a^{i}b^{3-i}\)</span>.</p>
+<p>מה יש לנו פה? ובכן, אחרי הסיגמה יש לנו את <span class="math">\({3 \choose i}a^{i}b^{3-i}\)</span> שכבר הזכרתי מספיק - זהו <strong>האיבר הכללי</strong> של הסכום. איבר כללי במובן זה שכל מחובר בסכום נראה כמוהו, לאחר הצבה של ערך מתאים ב-<span class="math">\(i\)</span>. האות <span class="math">\(i\)</span> נקראת <strong>האינדקס</strong> של הסכימה, והמספרים שכתובים מתחת ומעל לסיגמה באים לציין את הערכים שאותם <span class="math">\(i\)</span> מקבל; <span class="math">\(i=0\)</span> אומר שהערך הראשון ש-<span class="math">\(i\)</span> מקבל הוא 0, וה-3 למעלה אומר שזהו הערך האחרון שהוא מקבל. המוסכמה היא שאלא אם נאמר במפורש אחרת, <span class="math">\(i\)</span> מקבל רק ערכים שלמים, ולכן הסכום מתאר את מה שמקבלים כאשר מציבים באיבר הכללי את הערכים <span class="math">\(i=0,1,2,3\)</span>.</p>
+<p>אני מקווה שסימן הסכימה ברור כעת ולא מפחיד; שאלה אחת שאולי התעוררה בכם היא למה לא לכתוב <span class="math">\(\sum_{0}^{3}{3 \choose i}a^{i}b^{3-i}\)</span> וחסל - למה צריך את ה-<span class="math">\(i=\)</span> למטה? התשובה היא שלא תמיד ברור מהו האינדקס - לפעמים (ונראה דוגמה ממש בקרוב) יש יותר ממשתנה אחד שמופיע באיבר הכללי, וצריך להבהיר מי משמש כאינדקס הסכימה. עם זאת אעיר שכשההקשר ברור, לעתים קרובות נהוג להשמיט פרטים מסימן הסכימה, עד כדי כך שלפעמים אפשר למצוא נוסחאות כמו <span class="math">\(\sum a_{i}\)</span> וחסל - כאן השאלה אילו ערכים האינדקס מקבל תלויה לחלוטין בהקשר, וכותבי הטקסט מצפים שהקורא יוכל להסיק את המידע הזה בעצמו. באופן לא מפתיע, בטקסטי מבוא לרוב אין זוועות שכאלה.</p>
+<p>אוקיי, אז טיפלנו בבינום עבור החזקות <span class="math">\(1,2,3\)</span>; המתמטיקאים נוהגים בשלב הזה לעבור לטפל ב-<span class="math">\(n\)</span> כללי וזה גם בדיוק מה שאני אעשה, ובלי הרבה שהיות אכתוב את הנוסחה, שזהה לגמרי למה שקיבלנו עבור המקרה של חזקה שלישית: <span class="math">\(\left(a+b\right)^{n}=\sum_{i=0}^{n}{n \choose i}a^{i}b^{n-i}\)</span>. עצרו רגע ונסו להבהיר לעצמכם למה היא נכונה.</p>
+<p>ובכן, למה הנוסחה נכונה? בדיוק אותם שיקולים כמו קודם. <span class="math">\(\left(a+b\right)^{n}\)</span> ניתן לכתיבה כמכפלה של <span class="math">\(n\)</span> זוגות סוגריים, ולכן התוצאה הסופית תהיה סכום של איברים שהתקבלו מבחירת <span class="math">\(a\)</span>-ים ו-<span class="math">\(b\)</span>-ים - סה"כ <span class="math">\(n\)</span> פעמים עבור שניהם. אם <span class="math">\(i\)</span> הוא מספר ה-<span class="math">\(a\)</span>-ים שנבחרו, אז נקבל איבר מהצורה <span class="math">\(a^{i}b^{n-i}\)</span>, ויש לנו בדיוק <span class="math">\({n \choose i}\)</span> דרכים שונות לבחור <span class="math">\(i\)</span> <span class="math">\(a\)</span>-ים, וזהו. מה שכתבתי כאן הוא כמעט הוכחה מתמטית, והוא בוודאי מבהיר היטב <strong>למה</strong> הנוסחה נראית כמו שהיא נראית ואיך זה קשור לקומבינטוריקה (ואם זה עדיין לא ברור - זו אשמתי, לא אשמת ההוכחה). לטעמי הוכחה זו (הגם שאינה פורמלית במאה אחוזים) טובה בהרבה מההוכחה ה"יבשה" לנכונות הבינום, שמשתמשת באינדוקציה מתמטית מזוויעה.</p>
+<p>אם כן, זהו זה. נפתרה הבעיה הכללית של <span class="math">\(\left(a+b\right)^{2}\)</span> ו-<span class="math">\(\left(a+b\right)^{3}\)</span> וכל חזקה טבעית אחרת, והנוסחה הסופית היא קצרה ויפה להצגה (אבל חשבו כמה מזוויע יהיה לכתוב באופן מפורש את <span class="math">\(\left(a+b\right)^{13}\)</span>!). כעת אני מקווה כי גם ברור מדוע <span class="math">\({n \choose i}\)</span> נקראים "מקדמי הבינום" - מכיוון שהם המקדמים של הגורמים מהצורה <span class="math">\(a^{i}b^{n-i}\)</span> בפיתוח נוסחת הבינום. אני גם מקווה שכעת ברור קצת יותר איך הקומבינטוריקה מתקשרת לתחומים אחרים במתמטיקה (כאן - אלגברה בסיסית) ומסייעת לנו להבין גם אותם.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/06/30/pascal_triangle/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משולש פסקל</span>
+            </a>
+            
+            
+            
+            <a href="/2010/06/20/combinatorics_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מהי קומבינטוריקה?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

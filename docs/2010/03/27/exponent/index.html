@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נעים להכיר - אקספוננט - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>נעים להכיר - אקספוננט</h1>
+            <div class="post-meta">
+                <span class="date">2010-03-27</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                    <a href="/categories/מספרים.html">מספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/e.html">e</a>
+                    
+                    <a href="/tags/אקספוננט.html">אקספוננט</a>
+                    
+                    <a href="/tags/טור טיילור.html">טור טיילור</a>
+                    
+                    <a href="/tags/משוואות דיפרנציאליות.html">משוואות דיפרנציאליות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסט הזה אני רוצה לדבר על אחת הפונקציות החשובות והמרכזיות במתמטיקה - פונקצית ה<a href="http://he.wikipedia.org/wiki/%D7%90%D7%A7%D7%A1%D7%A4%D7%95%D7%A0%D7%A0%D7%98">אקספוננט</a>, או כפי שבדרך כלל מכירים אותה בימינו, <span class="math">\(e^{x}\)</span>. בראש ובראשונה זו תהיה גם היכרות עם הקבוע <span class="math">\(e\)</span> שב"בסיס" הפונקציה, וגם הסבר מדוע היא מצורה זו בכלל. כמו שקורה רבות במתמטיקה, הפונקציה צצה בהקשרים רבים ושונים, ובהתאם לכך יש לה הגדרות שקולות רבות ושונות; אני רוצה לדבר על זו שלטעמי היא היפה וה"נקיה" ביותר - ההקשר של משוואות דיפרנציאליות, שכבר הוזכר <a href="http://www.gadial.net/2010/03/26/radiocarbon_dating_and_math/">בפוסט הקודם</a>, וממנה להתפתח הלאה ולראות איך ההגדרות השקולות צצות מאליהן.</p>
+<p>במשוואה דיפרנציאלית ה"נעלם" הוא פונקציה <span class="math">\(f\left(x\right)\)</span> כלשהי, והמשוואה מתארת קשר בין <span class="math">\(f\left(x\right)\)</span> ובין הנגזרות שלה. אם יש הרבה נגזרות, או אם נותנים ל-<span class="math">\(x\)</span> להתפרע חופשי במשוואה, מקבלים משהו מורכב למדי - למשל, <span class="math">\(f^{\prime}\left(x\right)=\left(f^{\prime\prime}\left(x\right)\right)^{2}-13x\cdot f\left(x\right)+11x^{2}\)</span> היא משוואה די מסובכת וקשה (או אף בלתי אפשרי?) לתת לה פתרון מפורש. לכן אך טבעי הדבר להתחיל ממשוואות פשוטות ככל הניתן (שעם זאת, עדיין צצות באופן טבעי ומעניין בטבע - את זה הדגים הפוסט הקודם). קשה לי לחשוב על משוואה דיפרנציאלית שמערבת גם את <span class="math">\(f\)</span> וגם את <span class="math">\(f^{\prime}\)</span> והיא פשוטה יותר מאשר <span class="math">\(f=f^{\prime}\)</span>; על כן, עיסוק במשוואות דיפרנציאליות צריך <strong>להתחיל</strong> מגילוי הפתרון של המשוואה הזו; זה נותן לנו קרש קפיצה לפתרון של משוואות נוספות רבות.</p>
+<p>השאלה הראשונה שעולה כשמתבוננים במשוואה היא - מי מבטיח לנו שיש פתרון בכלל? ואם יש פתרון, כמה פתרונות יש? כאן נכנס לתמונה משפט תיאורטי מרכזי בענף המשוואות הדיפרנציאליות - <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%A4%D7%98_%D7%94%D7%A7%D7%99%D7%95%D7%9D_%D7%95%D7%94%D7%99%D7%97%D7%99%D7%93%D7%95%D7%AA_%28%D7%9E%D7%A9%D7%95%D7%95%D7%90%D7%95%D7%AA_%D7%93%D7%99%D7%A4%D7%A8%D7%A0%D7%A6%D7%99%D7%90%D7%9C%D7%99%D7%95%D7%AA%29">משפט הקיום והיחידות</a>. ניסוח מדוייק של המשפט הוא מיותר כאן - הוא דורש מספר לא מבוטל של הנחות ותנאים על המשוואה עצמה, ולכן אגיד רק מה מסקנותיו עבור המשוואה <span class="math">\(f=f^{\prime}\)</span> שלנו: המשפט מבטיח שיש פתרון למשוואה, אך הוא אינו יחיד, וכדי שיהיה יחיד צריך גם לקבוע "תנאי התחלה". למשל, לומר מה יהיה ערכה של <span class="math">\(f\)</span> בנקודה <span class="math">\(x=0\)</span>. משנקבע תנאי ההתחלה הזה, קיים למשוואה פתרון יחיד שהוא פונקציה רציפה וגזירה ברציפות (אם המושגים הללו לא אומרים לכם הרבה, לא נורא). זה ש<strong>קיים</strong> פתרון לא אומר לנו עדיין שום דבר על איך הוא נראה; אך זה כן אומר שאפשר מרגע זה ואילך לסמן אותו בסימון כלשהו ולהתחיל לדבר עליו כאילו הוא מציאותי וכל מה שנותר לעשות הוא לחקור את תכונותיו.</p>
+<p>ובכן, איזה תנאי התחלה נבחר? התנאי הטבעי ביותר הוא <span class="math">\(f\left(0\right)=0\)</span>, אבל אז נקבל פתרון "משעמם" במיוחד: הפונקציה <span class="math">\(f\left(x\right)=0\)</span>. קל לראות שנגזרתה שווה לעצמה ושהיא מקיימת את תנאי ההתחלה, אבל זו לא פונקציה שאפשר לעשות איתה משהו מיוחד. תנאי ההתחלה ה"טבעי"הבא הוא <span class="math">\(f\left(0\right)=1\)</span>, בזכות המעמד המיוחד שיש לקבוע 1, בהיותו האיבר האדיש לכפל. כאן כבר בבירור לא נקבל את הפונקציה <span class="math">\(f\left(x\right)=0\)</span>, כי הפונקציה הזו שווה ל-0 בנקודה 0, לא ל-1. לכן נתכבד ונעניק לפתרון החדש סימון מיוחד: <span class="math">\(\exp\left(x\right)\)</span>. כעת נותר לנו להבין איך <span class="math">\(\exp\left(x\right)\)</span> "נראית".</p>
+<p>כרגע כל המידע שיש לנו על <span class="math">\(\exp\left(x\right)\)</span> מסתכם בכך ש-<span class="math">\(\left(\exp\left(x\right)\right)^{\prime}=\exp\left(x\right)\)</span> ובכך ש-<span class="math">\(\exp\left(0\right)=1\)</span>, אך קל להסיק מזה מידע נוסף: <span class="math">\(\exp^{\left(k\right)}\left(0\right)=1\)</span> לכל <span class="math">\(k\)</span> טבעי, כאשר <span class="math">\(\exp^{\left(k\right)}\)</span> מציין את הנגזרת ה-<span class="math">\(k\)</span>-ית של <span class="math">\(\exp\)</span>. הסיבה פשוטה: הנגזרת של <span class="math">\(\exp\)</span> שווה ל-<span class="math">\(\exp\)</span> עצמה, ולכן גם הנגזרת מקבלת את הערך 1 בנקודה 0; ואם גוזרים את הנגזרת, מקבלים שוב את אותו הדבר, וכן הלאה וכן הלאה. אם כן, אנחנו יודעים את הנגזרות של <span class="math">\(\exp\)</span> <strong>מכל סדר שהוא</strong> בנקודה 0, וזה מזמין שיטת קירוב כללית - <a href="http://he.wikipedia.org/wiki/%D7%A4%D7%95%D7%9C%D7%99%D7%A0%D7%95%D7%9D_%D7%98%D7%99%D7%99%D7%9C%D7%95%D7%A8">פולינומי טיילור</a>.</p>
+<p>פולינומים הם פונקציות מהצורה <span class="math">\(p\left(x\right)=a_{0}+a_{1}x+a_{2}x^{2}+\dots+a_{n}x^{n}\)</span>, כש-<span class="math">\(x\)</span> הוא המשתנה, <span class="math">\(a_{0},\dots,a_{n}\)</span> הם מספרים ממשיים כלשהם המכונים "מקדמי הפולינום", <span class="math">\(a_{n}\ne0\)</span>, ו-<span class="math">\(n\)</span> נקראת <strong>דרגת</strong> הפולינום. במובן מסויים אלו הן הפונקציות הפשוטות ביותר והקלות ביותר לחישוב, ולכן גם הפונקציות שנהוג להשתמש בהן כדי לקרב פונקציות מורכבות יותר. קל לגזור פולינום: <span class="math">\(\left(x^{n}\right)^{\prime}=nx^{n-1}\)</span>, ובאופן כללי לכל פונקציות גזירות <span class="math">\(f,g\)</span> וקבוע ממשי <span class="math">\(c\)</span> מתקיים <span class="math">\(\left(cf\right)^{\prime}=cf^{\prime}\)</span>ו-<span class="math">\(\left(f+g\right)^{\prime}=f^{\prime}+g^{\prime}\)</span> (תכונות אלו מכונות "הלינאריות של הנגזרת"), ומכאן קל להסיק את הנוסחה הכללית לנגזרת של פולינום: <span class="math">\(p'\left(x\right)=a_{1}+2a_{2}x+3a_{3}x^{2}\dots+na_{n}x^{n-1}\)</span> (כלומר, הנגזרת של פולינום היא פולינום אחר, מדרגה קטנה ב-1).</p>
+<p>באופן כללי, אם עבור פונקציה <span class="math">\(f\)</span> ידוע לנו הערך של <span class="math">\(f^{\left(k\right)}\left(0\right)\)</span> לכל <span class="math">\(k\)</span>, ואנו רוצים להשתמש בידע הזה כדי למצוא לה קירוב באמצעות פולינום; מתבקש להשתמש בפולינום שהערך שלו ושל נגזרותיו בנקודה 0 מתאים לערך של <span class="math">\(f\)</span> ונגזרותיה בנקודה 0 (מאחר וזה המידע שיש לנו על <span class="math">\(f\)</span>). שימו לב כי אם <span class="math">\(p\left(x\right)=a_{0}+a_{1}x+a_{2}x^{2}+\dots+a_{n}x^{n}\)</span> אז <span class="math">\(p\left(0\right)=a_{0}\)</span>, כי כל מקדם שעדיין צמוד לחזקה חיובית של <span class="math">\(x\)</span> נעלם. על פי אותו עקרון, <span class="math">\(p^{\prime}\left(0\right)=a_{1}\)</span>; ואילו <span class="math">\(p^{\left(2\right)}\left(0\right)=2a_{2}\)</span> (כי אחרי שגזרנו את <span class="math">\(p\)</span> פעם אחת, האיבר <span class="math">\(a_{2}x^{2}\)</span> הפך ל-<span class="math">\(2a_{2}x\)</span>; ואחרי גזירה שניה הוא הפך ל-<span class="math">\(2a_{2}\)</span> ואז איפוס <span class="math">\(x\)</span> לא משפיע עליו). ומה יהיה <span class="math">\(p^{\left(k\right)}\left(0\right)\)</span> באופן כללי? אפשר כבר לנחש שזה יהיה <span class="math">\(a_{k}\)</span> כפול קבוע כלשהו - איזה? אחרי שגוזרים את <span class="math">\(p\)</span> פעם אחת, <span class="math">\(a_{k}x^{k}\)</span> הופך ל-<span class="math">\(ka_{k}x^{k-1}\)</span>; אחרי גזירה שנייה הוא הופך ל-<span class="math">\(\left(k-1\right)ka_{k}x^{k-2}\)</span>; אחרי שלישית, <span class="math">\(\left(k-2\right)\left(k-1\right)ka_{k}x^{k-3}\)</span>; ובסופו של דבר כש-<span class="math">\(x\)</span> "ייעלם" ניוותר עם <span class="math">\(1\cdot2\cdot3\cdots k\cdot a_{k}\)</span>, כלומר <span class="math">\(k!\cdot a_{k}\)</span>.</p>
+<p>אם כן, הדרישה שהנגזרות של <span class="math">\(p\)</span> בנקודה 0 יהיו זהות לנגזרות של <span class="math">\(f\)</span> בנקודה 0 מאפשרת לנו למצוא באופן יחיד את מקדמי הפולינום: <span class="math">\(k!a_{k}=f^{\left(k\right)}\left(0\right)\)</span>, כלומר <span class="math">\(a_{k}=\frac{f^{\left(k\right)}\left(0\right)}{k!}\)</span>, ומכאן ש-<span class="math">\(p_{n}\left(x\right)=f\left(0\right)+f^{\prime}\left(0\right)x+\frac{f^{\left(2\right)}\left(0\right)}{2}x^{2}+\dots+\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}\)</span>. כדי להפסיק לכתוב נוסחאות ארוכות ומפחידות, אעבור לסימון מקוצר ומפחיד: <span class="math">\(p_{n}\left(x\right)=\sum_{k=0}^{n}\frac{f^{\left(k\right)}\left(0\right)}{k!}x^{k}\)</span>. זהו פולינום טיילור מדרגה <span class="math">\(n\)</span> (ולכן הוא מסומן כ-<span class="math">\(p_{n}\)</span> ולא סתם כ-<span class="math">\(p\)</span>) עבור הפונקציה <span class="math">\(f\)</span>. השאלה עד כמה זהו קירוב טוב (כלומר, עד כמה הערך של הפולינום בנקודות שאינן 0 קרוב לערך הפונקציה בנקודות אלו) תלויה מאוד בפונקציה, אולם ניתן לקבל הערכה כלשהי לגבי גודל הטעות. ניתן להראות כי לכל <span class="math">\(x\)</span> מתקיים כי <span class="math">\(f\left(x\right)-p_{n}\left(x\right)=\frac{f^{\left(n+1\right)}\left(c\right)}{\left(n+1\right)!}x^{n+1}\)</span>, כלומר משהו שנראה כמו המחובר "הבא" בטור הטיילור, אבל כשהנגזרת ה-<span class="math">\(n+1\)</span>-ית לא מוערכת בנקודה 0, אלא בנקודה <span class="math">\(c\)</span> כלשהי. מהי <span class="math">\(c\)</span>? אם היינו יודעים אותה במפורש, היינו יודעים את השארית במפורש; כל מה שאפשר לומר עליה היא שהיא נמצאת אי שם בין 0 ו-<span class="math">\(x\)</span> (ובפרט היא תלויה ב-<span class="math">\(x\)</span> וב-<span class="math">\(n\)</span>; עבור <span class="math">\(x\)</span>-ים ו-<span class="math">\(n\)</span>-ים שונים יכולות להיות נקודות ביניים שונות). הנוסחה הזו מאפשרת לנו <strong>לחסום</strong> את גודל הטעות, אם אנחנו יודעים לחסום את גודל הנגזרת ה-<span class="math">\(n+1\)</span>-ית של <span class="math">\(f\)</span> בקטע שבין 0 ו-<span class="math">\(x\)</span>.</p>
+<p>נחזור כעת אל פונקציית האקספוננט. אמרנו שהיא מקיימת <span class="math">\(\exp^{\left(k\right)}\left(0\right)=1\)</span> לכל <span class="math">\(k\)</span>, כך שהפולינום במקרה זה הוא פשוט במיוחד: <span class="math">\(p_{n}\left(x\right)=\sum_{k=0}^{n}\frac{1}{k!}x^{k}\)</span>. אלא שפולינום פשוט זה לא מספיק - צריך גם להראות שהוא קירוב טוב, כלומר צריך לומר משהו על השארית. בואו נקבע לרגע את <span class="math">\(x\)</span>, וכדי לסמן שהוא קבוע נסמנו ב-<span class="math">\(x_{0}\)</span>; מה שאנחנו באמת רוצים להראות הוא שככל שאנחנו מגדילים את <span class="math">\(n\)</span>, ושומרים את <span class="math">\(x_{0}\)</span> קבוע, אנחנו מקטינים את הטעות שלנו ככל שנרצה - כלומר, שהטעות שואפת לאפס כש-<span class="math">\(n\)</span> שואף לאינסוף. בדרך כלל לא פשוט להראות את זה (ולא תמיד זה בכלל נכון), בגלל שההתנהגות של <span class="math">\(f^{\left(n\right)}\)</span> בקטע שלנו עשויה "להתפרע"ככל שנגדיל את <span class="math">\(n\)</span> (חשבו על נהג "משוגע" שכל הזמן נותן גז ובולם בפראות - פונקצית המקום שלו משתנה בצורה יחסית "נחמדה"כי ההתפרעויות מקזזות זו את זו, אבל אם נסתכל על הנגזרת של פונקצית המקום - המהירות - נראה שהיא "משוגעת"). אלא שבמקרה שלנו אין בעיה כי <span class="math">\(f^{\left(n\right)}=f\)</span> לכל <span class="math">\(n\)</span>. אנחנו גם יודעים ש-<span class="math">\(f\)</span> במקרה שלנו היא רציפה (זה מובטח ממשפט הקיום והיחידות) ולכן בפרט היא חסומה בקטע <span class="math">\(\left[0,x_{0}\right]\)</span> (אינטואיטיבית תכונה זו ברורה יחסית, אך כמובן שיש להוכיח אותה פורמלית).</p>
+<p>אם נסמן ב-<span class="math">\(M\)</span> את החסם על גודל הפונקציה, אז <span class="math">\(\frac{f^{\left(n+1\right)}\left(c\right)}{\left(n+1\right)!}x_{0}^{n+1}\le\frac{x_{0}^{n+1}}{\left(n+1\right)!}\cdot M\)</span>. מכיוון שלכל מספר קבוע <span class="math">\(a\)</span> מתקיים כי <span class="math">\(\frac{a^{n}}{n!}\to0\)</span> (האינטואיציה היא שבעוד <span class="math">\(a^{n}\)</span> הוא מכפלה של <span class="math">\(a\)</span> הקבוע בעצמו <span class="math">\(n\)</span> פעמים, בעוד ש-<span class="math">\(n!\)</span> היא מכפלה של מספרים שהולכים וגדלים, והחל משלב מסויים כולם יהיו גדולים מ-<span class="math">\(a\)</span>) נובע שהשגיאה שואפת תמיד לאפס. מסקנה: הפולינומים מהווים קירוב טוב של <span class="math">\(\exp\)</span>, במובן זה שלכל <span class="math">\(x_{0}\)</span> מתקיים <span class="math">\(p_{n}\left(x_{0}\right)\to\exp\left(x_{0}\right)\)</span>. בשל כך אפשר לשכוח מפולינומים ולעבור לדבר על <span class="math">\(\exp\left(x\right)\)</span> כמיוצגת באמצעות טור חזקות אינסופי: <span class="math">\(\exp\left(x\right)=\sum_{n=0}^{\infty}\frac{x^{n}}{n!}\)</span>. בחלק מהמקרים בוחרים <strong>להגדיר</strong> את פונקצית האקספוננט באמצעות טור חזקות זה (צריך להראות שהוא מתכנס, אך זה פשוט למדי באמצעות תוצאות סטנדרטיות על טורי חזקות).</p>
+<p>אם מתחילים עם הגדרה זו קל למדי להראות ש-<span class="math">\(\exp^{\prime}\left(x\right)=\exp\left(x\right)\)</span>, שכן התורה של טורי חזקות מצביעה על כך שניתן לגזור את הטור "איבר איבר" כדי לקבל את הטור המתאים לנגזרת - אך לא קשה לראות שאם גוזרים את הטור <span class="math">\(\sum_{n=0}^{\infty}\frac{x^{n}}{n!}\)</span> איבר איבר, מקבלים את אותו הטור בדיוק! שהרי כשגוזרים את <span class="math">\(\frac{x^{n}}{n!}\)</span> מקבלים <span class="math">\(\frac{x^{n-1}}{\left(n-1\right)!}\)</span>. אם כן, בגישה זו קל מאוד "לראות בעיניים" מדוע הנגזרת של אקספוננט היא האקספוננט עצמו; ה"חסרון" של שיטה זו היא שיש שרירותיות רבה כלשהי בלהתחיל מההגדרה <span class="math">\(\sum_{n=0}^{\infty}\frac{x^{n}}{n!}\)</span> במקום להגיע אליה כתוצר "טבעי" של איזו שהיא דרישה בסיסית יותר (וזה גם פחות הרפתקני; במקום לטייל בג'ונגל עד שמגיעים לעיר העתיקה שקבורה בו, אנחנו מקבלים הקפצה במסוק).</p>
+<p>יפה - אם כן, כעת יש לנו ייצוג מאוד קונקרטי לפונקצית האקספוננט, ואפילו שיטה לחשב אותה נומרית בכל דיוק שנרצה. מה עוד צריך, אם כן? אפיונים נוספים שישפכו עוד אור על הפונקציה הזו. אילו תכונות מעניינות הפונקציה מקיימת? כבר ראינו תכונה מעניינת מאוד: נגזרתה שווה לעצמה. כעת אציג תכונה מעניינת וחשובה לא פחות: <span class="math">\(\exp\left(x\right)\cdot\exp\left(y\right)=\exp\left(x+y\right)\)</span>. קל לראות את זה עכשיו, כשיש לנו את הייצוג של <span class="math">\(\exp\)</span> כטור חזקות - אפשר ממש לכפול את שני הטורים. אתם יכולים להאמין לי שזה עובד, אבל גם בחישוב ה"טכני" יש יופי לא קטן וכדאי לדעתי לנסות ולעקוב אחריו. ראשית הבה וננסה להבין מהו <span class="math">\(\exp\left(x\right)\cdot\exp\left(y\right)\)</span>. כדי להקל על ההבנה כדאי לכתוב זאת כסכום בלי סיגמות: <span class="math">\(\exp\left(x\right)\cdot\exp\left(y\right)=\left(1+x+\frac{x^{2}}{2}+\dots\right)\left(1+y+\frac{y^{2}}{2}+\dots\right)\)</span>. אם נפתח את המכפלה הזו נקבל סכום של איברים שכל אחד מהם התקבל על ידי בחירת איבר אחד מהסכום השמאלי, ואיבר אחד מהסכום הימני, כלומר סכום של איברים מהצורה <span class="math">\(\frac{x^{k}}{k!}\cdot\frac{y^{t}}{t!}\)</span>. כרגע זה לא נראה מועיל במיוחד, אז נבצע שינוי משתנים מתוחכם (מי שתוהה איך הגעתי אליו - פשוט פותחים את <span class="math">\(\exp\left(x+y\right)\)</span> ורואים מה היעד שלנו...): את החזקה של <span class="math">\(x\)</span> נמשיך לסמן ב-<span class="math">\(k\)</span>, אבל את החזקה של <span class="math">\(y\)</span> נסמן בתור <span class="math">\(n-k\)</span> דווקא (כאשר <span class="math">\(n\)</span> יכול להיות כל מספר טבעי גדול או שווה ל-<span class="math">\(k\)</span>; לכל <span class="math">\(n\)</span> כזה, קיים איבר מתאים בסכום שבו <span class="math">\(x\)</span> הוא בחזקת <span class="math">\(k\)</span> ו-<span class="math">\(y\)</span> הוא בחזקת <span class="math">\(n-k\)</span>). עם הסימון הזה, האיבר שלנו הוא <span class="math">\(\frac{x^{k}y^{n-k}}{k!\left(n-k\right)!}\)</span>. אולי לחלקכם זה מתחיל להיראות מוכר. נכפול ונחלק ב-<span class="math">\(n!\)</span> ונקבל <span class="math">\(\frac{n!}{k!\left(n-k\right)!}\frac{x^{k}y^{n-k}}{n!}\)</span>, כלומר <span class="math">\(\frac{\ {n \choose k}x^{k}y^{n-1}}{n!}\)</span>.</p>
+<p>מכאן כבר העניינים מתגלגלים מהר: הסכום שלנו כעת ניתן לתיאור בתור <span class="math">\(\sum_{n=0}^{\infty}\frac{\sum_{k=0}^{n}{n \choose k}x^{k}y^{n-k}}{n!}\)</span>, ועל ידי <a href="http://he.wikipedia.org/wiki/%D7%94%D7%91%D7%99%D7%A0%D7%95%D7%9D_%D7%A9%D7%9C_%D7%A0%D7%99%D7%95%D7%98%D7%95%D7%9F">הבינום של ניוטון</a> נקבל כי סכום זה הוא <span class="math">\(\sum_{n=0}^{\infty}\frac{\left(x+y\right)^{n}}{n!}\)</span>, כלומר <span class="math">\(\exp\left(x+y\right)\)</span>, ובכך מסתיים העניין. גילינו, אם כן, כי <span class="math">\(\exp\)</span> היא פונקציה שמתרגמת פעולת חיבור לפעולת כפל. כל תלמיד תיכון כבר נתקל בתופעה כזו, בחוקי חזקות. הרי <span class="math">\(x^{a}\cdot x^{b}=x^{a+b}\)</span>. מכאן צצה אינטואיציה חדשה לגבי מהותה של <span class="math">\(\exp\)</span> - האם ייתכן שהיא פונקציה של העלאה בחזקה? ואם כן, על פי איזה בסיס? הדרך לגלות את הבסיס היא להציב 1 ב-<span class="math">\(\exp\)</span> (כלומר, לקבל את הבסיס בחזקת 1). התוצאה היא המספר <span class="math">\(\exp\left(1\right)=1+1+\frac{1}{2}+\frac{1}{3!}+\frac{1}{4!}+\dots=2.71828\dots\)</span> (שלוש הנקודות מסמלות, כרגיל, שהמספר לא נגמר בספרות אלו אלא ממשיך עד אין קץ). נהוג לסמן את המספר הזה ב-<span class="math">\(e\)</span>. לטעמי זהו הקבוע המתמטי המעניין ביותר; מעניין יותר מ-<span class="math">\(\pi\)</span>, אחיו המפורסם הרבה יותר. הטור מאפשר חישוב מאוד מהיר ויעיל של <span class="math">\(e\)</span>, להבדיל מ-<span class="math">\(\pi\)</span> שחישוב יעיל שלו דורש התחכמויות נוספות. אם כן, המטרה שלנו כעת היא להראות ש-<span class="math">\(\exp\)</span> היא בעצם פונקציה של העלאת <span class="math">\(e\)</span> בחזקה.</p>
+<p>כמובן, כדי לדבר על העלאה בחזקה צריך להגדיר במדוייק למה הכוונה. <span class="math">\(a^{2}\)</span> הוא פשוט <span class="math">\(a\cdot a\)</span>, ובאותו אופן <span class="math">\(a^{n}\)</span> עבור <span class="math">\(n\)</span> טבעי הוא <span class="math">\(a\cdot a\cdots a\)</span> במשך <span class="math">\(n\)</span> פעמים, אך מהו <span class="math">\(a^{\pi}\)</span>? חייבים לתת משמעות פורמלית לסימון הזה. האופן שבו עושים זאת הוא ראשית כל להגדיר את החזקה לכל מספר שלם, על ידי ההגדרה <span class="math">\(a^{-n}=\left(\frac{1}{a}\right)^{n}\)</span> עבור <span class="math">\(n\)</span> טבעי; ולהרחיב את ההגדרה לרציונליים על ידי כך שמגדירים <span class="math">\(a^{\frac{1}{n}}=\sqrt[n]{a}\)</span> לכל <span class="math">\(n\)</span> טבעי, ועל כן <span class="math">\(a^{\frac{m}{n}}=\sqrt[n]{a^{m}}\)</span>. עד כאן - חומר של תיכון. כדי להרחיב את ההגדרה לממשיים כבר צריך להשתמש בחשבון אינפיניטסימלי. באופן כללי בחשבון אינפיניטסימלי, כאשר יש לנו פונקציה <span class="math">\(f\left(x\right)\)</span> שערכיה נקבעו כבר על כל המספרים הרציונליים, נובעת מכך דרך <strong>אחת ויחידה</strong> להרחיב את הפונקציה לכל הממשיים כך שהפונקציה המתקבלת תהיה <strong>רציפה</strong>. זוהי הרי מהות הרציפות - שאם יש לנו סדרת נקודות <span class="math">\(x_{n}\)</span> כך ש-<span class="math">\(x_{n}\to a\)</span> עבור <span class="math">\(a\)</span> ממשי כלשהו, אז <span class="math">\(f\left(x_{n}\right)\to f\left(a\right)\)</span>. מכיוון שלכל מספר ממשי אפשר לקחת סדרת קירובים רציונליים שכזו, הערך של <span class="math">\(f\)</span> ב-<span class="math">\(a\)</span> מוכתב על ידי הערכים של <span class="math">\(f\)</span> על המספרים הרציונליים.</p>
+<p>כעת, אם <span class="math">\(f\)</span> היא פונקציה רציפה שמקיימת את המשוואה <span class="math">\(f\left(x+y\right)=f\left(x\right)\cdot f\left(y\right)\)</span> (משוואה זו מכונה לפעמים "משוואת קושי האקספוננציאלית"), ראשית כל נסמן <span class="math">\(a=f\left(1\right)\)</span>, וכעת לכל <span class="math">\(n\)</span> טבעי מתקיים <span class="math">\(f\left(n\right)=f\left(1+\dots+1\right)=f\left(1\right)\cdots f\left(1\right)=a^{n}\)</span>, כלומר על הטבעיים <span class="math">\(f\)</span> אכן מתנהגת כמו חזקה. קל לראות ש-<span class="math">\(a\)</span> חייב להיות אי שלילי, שכן <span class="math">\(a=f\left(1\right)=f\left(\frac{1}{2}+\frac{1}{2}\right)=\left[f\left(\frac{1}{2}\right)\right]^{2}\)</span>, כלומר <span class="math">\(a\)</span> הוא ריבוע של מספר ממשי כלשהו, ולכן חייב להיות אי שלילי.</p>
+<p>השלב הבא הוא 0: מכיוון ש-<span class="math">\(0=0+0\)</span> הרי ש-<span class="math">\(f\left(0\right)=f\left(0+0\right)=f\left(0\right)\cdot f\left(0\right)=\left[f\left(0\right)\right]^{2}\)</span>. איזה מספר ממשי שווה לריבוע שלו? רק 0 או 1; אבל אם <span class="math">\(f\left(0\right)=0\)</span> אז גם <span class="math">\(f\left(n\right)=f\left(n+0\right)=f\left(n\right)\cdot f\left(0\right)=0\)</span>, וקיבלנו פונקציה לא מעניינת (שאפשר לחשוב עליה בתור <span class="math">\(f\left(x\right)=0^{x}\)</span> - כלומר, אפילו במקרה הזה היא פונקציית העלאה בחזקה, אם מקבלים את הקונבנציה הלא שגרתית <span class="math">\(0^{0}=0\)</span> במקרה זה). לכן <span class="math">\(f\left(0\right)=1\)</span>. מכאן מגיעים מיידית להגדרה עבור שליליים: <span class="math">\(1=f\left(0\right)=f\left(n+\left(-n\right)\right)=f\left(n\right)f\left(-n\right)\)</span> ומכאן ש-<span class="math">\(f\left(-n\right)=\frac{1}{a^{n}}=\left(\frac{1}{a}\right)^{n}\)</span>, ולכן אפשר לומר ש-<span class="math">\(f\left(-n\right)=a^{-n}\)</span>.</p>
+<p>השלב הבא הוא הרציונליים: <span class="math">\(a=f\left(1\right)=f\left(\frac{1}{n}+\dots+\frac{1}{n}\right)=\left[f\left(\frac{1}{n}\right)\right]^{n}\)</span>, כך ש-<span class="math">\(f\left(\frac{1}{n}\right)=\sqrt[n]{a}\)</span> (עבור מספרים ממשיים אי שליליים תמיד קיים שורש שכזה; הסיבה לכך היא שהפונקציה <span class="math">\(g\left(x\right)=x^{n}-a\)</span> היא רציפה, מקבלת ערך שלילי ב-<span class="math">\(x=0\)</span> אבל ערך אי שלילי ב-<span class="math">\(x=a\)</span> ולכן על פי משפט ערך הביניים היא חייבת להתאפס היכן שהוא). דרישת הרציפות על <span class="math">\(a\)</span> מסיימת כעת את המשחק: <span class="math">\(f\left(x\right)=a^{x}\)</span> לכל <span class="math">\(x\)</span> ממשי - כאשר, כזכור, <span class="math">\(a=f\left(1\right)\)</span>. במקרה של <span class="math">\(\exp\)</span>, <span class="math">\(\exp\left(1\right)=e\)</span>, ולכן <span class="math">\(\exp\left(x\right)=e^{x}\)</span>, לכל <span class="math">\(x\)</span> ממשי. סיימנו את המעבר מההגדרה התמימה באמצעות משוואה דיפרנציאלית אל <span class="math">\(e^{x}\)</span> שאנחנו מכירים ואוהבים.</p>
+<p>בכל ההרפתקאה הזו נמנעתי במכוון - אפילו בכוח - מלהזכיר את פונקצית הלוגריתם הטבעי. למעשה, ברוב ספרי הלימוד שבהם מגדירים אקספוננט, הדרך לעשות זאת היא ראשית כל על ידי הגדרת הלוגריתם, ואז הגדרת האקספוננט כפונקציה ההופכית שלו, אבל על הלוגריתם הטבעי, המוטיבציה לו והדרך להגדיר אותו כבר אפשר וכדאי לכתוב פוסט נפרד, בעתיד. לעת עתה אני רק רוצה להפנות את תשומת הלב לעובדה אחת שעבורה אני זקוק ללוגריתם הטבעי: בעצם הוכחתי קודם כי כל פונקציה רציפה שמקיימת את משוואת קושי האקספוננציאלית היא מעריכית, כלומר מהצורה <span class="math">\(a^{x}\)</span>, אבל למעשה יש דרך אחרת לתאר פונקציה שכזו: מכיוון ש-<span class="math">\(a&gt;0\)</span> הרי ש-<span class="math">\(a=e^{\ln a}\)</span>, ולכן את הפונקציה <span class="math">\(a^{x}\)</span> אפשר גם לתאר בתור הפונקציה <span class="math">\(e^{\ln a\cdot x}\)</span>. זה גם מראה לנו מיידית מדוע הנגזרת של <span class="math">\(a^{x}\)</span> היא <span class="math">\(a^{x}\cdot\ln a\)</span> (הדבר נובע מכך ש-<span class="math">\(\left(e^{\ln a\cdot x}\right)^{\prime}=\left(\ln a\right)e^{\ln a\cdot x}\)</span>), וגם אומר לנו שאפשר לתת ל<strong>כל</strong> הפונקציות המעריכיות תיאור אחיד על ידי <span class="math">\(e^{kx}\)</span>, עבור <span class="math">\(k\)</span> ממשי כלשהו; כך למשל הפתרון של המשוואה הדיפרנציאלית שהצגתי בפוסט הקודם היה פונקציה מעריכית שכזו.</p>
+<p>גם עם הקבוע <span class="math">\(e\)</span> לא גמרנו; יש עוד דרכים להגדיר אותו, ובראש ובראשונה בתור הגבול <span class="math">\(\lim_{n\to\infty}\left(1+\frac{1}{n}\right)^{n}\)</span> (למעשה, אפשר גם להגדיר את פונקצית האקספוננט באמצעות וריאציה על גבול זה); וגם על כך אני מקווה לדבר בעתיד.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/03/29/from_exponent_to_trigo_via_ode/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">הדרך מהאקספוננט לטריגונומטריה רצופה משוואות דיפרנציאליות מסדר שני</span>
+            </a>
+            
+            
+            
+            <a href="/2010/03/26/radiocarbon_dating_and_math/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">תיארוך פחמן-14 ואיך זה קשור למתמטיקה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

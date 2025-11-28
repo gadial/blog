@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>על גרפים, עצים פורשים ואיך זה נראה בקוד - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>על גרפים, עצים פורשים ואיך זה נראה בקוד</h1>
+            <div class="post-meta">
+                <span class="date">2013-09-30</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/מבני נתונים ואלגוריתמים.html">מבני נתונים ואלגוריתמים</a>
+                    
+                    <a href="/categories/תורת הגרפים.html">תורת הגרפים</a>
+                    
+                    <a href="/categories/תכנות.html">תכנות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/גרפים.html">גרפים</a>
+                    
+                    <a href="/tags/מתיאוריה לפרקטיקה.html">מתיאוריה לפרקטיקה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2013/09/22/kruskal_and_prim_maze_builders/">בפוסט הקודם</a> הצגתי באופן מאוד לא פורמלי ולא מחוייב שני אלגוריתמים לייצור מבוכים - של קרוסקל ושל פרים. המבוכים היו רק תירוץ כדי להציג את האלגוריתמים הללו, שמיועדים לטפל בסיטואציות הרבה יותר כלליות - אלו אלגוריתמים ל<strong>מציאת עץ פורש מינימלי</strong> בגרף.  בפוסט הזה נבין מה זה גרף, מה זה עץ פורש מינימלי ואיך זה רלוונטי לבניית מבוכים. וכדי שלא נהיה באוויר לגמרי, גם נדבר קצת על איך מתכנתים את זה.</p>
+<p><strong>גרף</strong> הוא אחד מהמושגים הבסיסיים במתמטיקה ובמדעי המחשב, ומכיוון שהוא מושג בסיסי הוא גם מאוד פשוט בהגדרתו. גרף כולל שתי קבוצות של אובייקטים: צמתים (שלפעמים נקראים קודקודים) וקשתות. אין ממש מגבלה על מה שצומת יכול להיות - העיקר שכשנדבר על גרף נוכל לדעת בדיוק מי הצמתים שלו; הקשתות לעומת זאת הן תמיד זוגות של צמתים. מבחינה גרפית נוח לחשוב על הצמתים בתור עיגולים, ועל הקשתות בתור קווים שמחברים עיגולים. זה טוב ויפה, אבל בשביל מה לדבר על גרפים? מה הם מייצגים במציאות?</p>
+<p>הנה כמה דוגמאות מהשרוול:</p>
+<ul>
+    <li>הצמתים הם ערים, והקשתות מחברות ערים שיש כביש ישיר ביניהן. בין ערים שאין ביניהן כביש ישיר עדיין יכול להיות <strong>מסלול</strong> שכולל מעבר בכמה ערי ביניים; בעיה מעניינת בתורת הגרפים שנתייחס אליה בהמשך היא מציאה של מסלולים שכאלו.</li>
+    <li>הצמתים הם שורות קוד בתוכנית מחשב ויש קשת בין שתי שורות קוד שריצת התוכנית יכולה לעבור מהראשונה שבהן אל השניה. בעיה מעניינת היא לזהות מקומות בתוכנית שפשוט לא ניתן להגיע אליהם ולכן הם מיותרים. היי, זו כמעט אותה בעיה כמו קודם!</li>
+<li>הצמתים הם הרצאות שיש להעביר באוניברסיטה, כולל השעות שבהן ההרצאות ניתנות, ויש קשת בין שתי הרצאות שהזמן שלהן חופף ולכן לא יכולות להינתן שתיהן באותו אולם הרצאה. המטרה כאן היא <strong>לצבוע</strong> את הגרף בצבעים כך שכל שני צמתים שמחוברים בקשת צבועים בצבעים שונים; כל צביעה כזו אפשר לתרגם לשיבוץ הרצאות לכיתות על ידי כך שכל צבע ייצג כיתת הרצאה כלשהי (והמטרה היא למצוא צביעה עם מספר נמוך ככל האפשר של צבעים).</li>
+</ul>
+
+<p>טוב ויפה, אני מקווה שהבנתם את רוח הדברים. נקודה אחת שכדאי לשים לב אליה היא שהגרף יכול להיות מכוון - ואז לקשתות יש כיוון (מצומת א' לצומת ב') או לא מכוון, ואז כל קשת היא "בין" צמתים א' וב'. אני הולך לדבר אך ורק על גרפים לא מכוונים; בהמשך אפשר יהיה לדבר גם על גרפים מכוונים ולראות מה משתנה (לא הרבה יותר מדי, לרוב, אבל לפעמים יש הבדלים די קריטיים). עוד הנחה חשובה היא שהגרף יהיה <strong>סופי</strong>, דהיינו מספר הצמתים בו הוא סופי. אמנם, עדיין אפשר לעשות דברים גם עבור גרפים אינסופיים אבל הסיפור יותר מסובך עבורם ולא ממש רלוונטי לכל מה שאני הולך לדבר עליו.</p>
+<p>עכשיו, איך מייצגים מבוך בעזרת גרף? כפי שנראה יש כמה דרכים שלכל אחת מהן היתרונות שלה. הנה הדרך שנוחה לי עבור <strong>יצירת</strong> מבוך: התאים של המבוך יהיו הצמתים של הגרף, ותהיה קשת בין שני תאים אם ורק אם שני התאים הללו חולקים קיר משותף. כאשר אני מתחיל את אלגוריתם יצירת המבוך, המבוך שלי יהיה "מלא", במובן זה שהוא כולל את כל הקירות האפשריים - כל תא יחובר בקשת לארבעת שכניו (פרט לתאים שנמצאים בקצה המבוך ולכן יש להם פחות שכנים). כעת, מה שאני רוצה לעשות הוא להחליט אילו קירות להסיר על מנת שבמבוך יהיה מסלול יחיד בין כל שני תאים; לשם כך אני צריך לבחור תת-קבוצה של הקשתות, כך שאם מסתכלים רק עליה ומתעלמים מיתר הקשתות (כלומר, מסתכלים על <strong>תת-גרף</strong> של הגרף המקורי) מקבלים גרף שיש בו בדיוק מסלול אחד בין כל שני צמתים. לגרף כזה, שבו יש בדיוק מסלול אחד בין כל שני צמתים, קוראים <strong>עץ</strong>.</p>
+<p>הנה הגדרה שקולה של עץ, שבתקווה תהיה ברורה למי שניסו להוכיח את הטענות שזרקתי לאוויר בפוסט הקודם: עץ הוא גרף קשיר וחסר מעגלים. גרף קשיר הוא פשוט גרף שבו יש מסלול בין כל שני צמתים (אבל לא מובטח שהמסלול יחיד) ו"מעגל" בגרף הוא סדרה של צמתים כך שיש קשת בין כל זוג צמתים סמוכים בסדרה ולא חוזרים על אותה הקשת פעמיים (כדי למנוע מצב שבו אנחנו הולכים "קדימה ואז אחורה") והצומת האחרון בסדרה מחובר לצומת הראשון בה. לא קשה להשתכנע שאם גרף קשיר אינו עץ אז הוא כולל מעגל - זה אומר שיש שני צמתים שיש שני מסלולים ביניהם, ולכן אפשר "לחבר" את המסלולים הללו כדי לקבל מעגל; ובדומה, אם יש לנו מעגל בגרף, אז על כל זוג צמתים שעל המעגל יש לנו לפחות שני מסלולים ביניהם ומכאן השקילות.</p>
+<p>עכשיו, בהינתן גרף קשיר, תמיד קיים לו לפחות תת-גרף אחד שהוא עץ, ולרוב יש הרבה כאלו. לכל עץ כזה קוראים <strong>עץ פורש</strong> של הגרף. מה שאני בעצם רוצה לעשות הוא למצוא עץ פורש של "גרף המבוך" שיגיד לי אילו קירות להסיר. האינטואיציה לגבי האופן שבו מוכיחים שקיים עץ פורש בגרף קשיר זהה לאינטואיציה שמאחורי בניית המבוך: פשוט מסירים עוד ועוד קשתות ככל שניתן מבלי לפגום בתכונת הקשירות של הגרף, ובסופו של דבר נקבל בהכרח עץ. מדוע? כי לא קשה להוכיח שאפשר להסיר קשת מגרף מבלי לפגום בקשירות שלו אם ורק אם הקשת הזו נמצאת על מעגל כלשהו בגרף. לכן, אם אנחנו מגיעים למצב שבו אין לנו יותר קשתות להסיר, זה סימן שהגרף שלנו הוא חסר מעגלים. הנה אפיון נוסף של עץ: עץ הוא גרף קשיר <strong>מינימלי</strong> ביחס לתכונת הקשירות, דהיינו אם נסיר ממנו קשת כלשהי הוא כבר לא יהיה קשיר (באופן דואלי, עץ הוא גם גרף חסר מעגלים שהוא <strong>מקסימלי</strong> ביחס לתכונה הזו, במובן זה שכל קשת שנוסיף אליו תהפוך אותו לבעל מעגלים - מדוע?). כדאי גם להעיר שאנחנו יודעים בדיוק כמה קשתות הולכות להיות בעץ: כמספר הצמתים פחות 1. אני אשאיר את ההוכחה של הטענה הזו בתור אתגר לקוראים.</p>
+<p>אם כן, האלגוריתמים של קרוסקל ופרים הם אלגוריתמים למציאת עצים פורשים של גרפים, אבל הם עושים יותר מזה - הם מוצאים עצים פורשים <strong>מינימליים</strong>. אבל מינימליים ביחס למה? הרי אמרתי לפני שניה שבכל עץ פורש יש אותו מספר קשתות. התשובה היא שקרוסקל ופרים מיועדים לעבוד על גרפים <strong>ממושקלים</strong> - גרפים שבהם לקשתות יש משקל ("מחיר") ואנחנו רוצים למצוא עץ פורש שסכום משקל הקשתות שלו הוא מינימלי, ביחס לכל העצים הפורשים האפשריים של הגרף. בשביל מה זה טוב? ובכן, הנה דוגמה אחת מני רבות: נניח שהצמתים שלנו הם מחשבים, ואנחנו רוצים לחבר את כל המחשבים ברשת. לכל זוג מחשבים שאפשר לחבר יש גם "מחיר" שדורשת התקנת החיבור הזה. ענייני מהירות לא חשובים לנו - כלומר, לא אכפת לנו אם המסלול שמחבר שני מחשבים יהיה ארוך מאוד - כל מה שחשוב לנו הוא שמכל מחשב יהיה מסלול לכל מחשב אחר, ושמחיר ההתקנה של החיבורים יהיה הזול ביותר האפשרי. די בבירור אנחנו זקוקים לעץ, כי הגרף חייב להיות קשיר, וכי מעגל בגרף פירושו שיש לנו קשתות מיותרות ששילמנו עליהן "סתם"; קרוסקל ופרים ימצאו לנו את העץ הזול ביותר מכל העצים האפשריים.</p>
+<p>איך זה קשור להגרלה של מבוך? פשוט מאוד: אני אבנה את הגרף של המבוך תוך שאני נותן לכל קשת משקל שהוא מספר אקראי בין 0 ל-1. זה יוביל לכך שהעץ הפורש המינימלי שקרוסקל ופרים ימצאו יהיה מבוך אקראי. אני משתמש כאן במילה "אקראי" בנדיבות - פירושה הוא רק שבהרצות שונות אוכל לקבל שלל מבוכים שונים, שלכל מבוך יש סיכוי להופיע ושהמבוך הממוצע שיופיע "ייראה אקראי", מה שזה לא אומר; אני בפירוש לא מנסה לטעון שהשיטה שלי מגדירה התפלגות אחידה על כל המבוכים האפשריים או כל דבר אחר (אולי היא כן? לא יודע, לא בדקתי, ועם איך שקרוסקל ופרים עובדים, כנראה שממש לא).</p>
+<p>לקרוסקל ופרים בגרסתם המלאה נגיע בפוסט הבא. עכשיו אני רוצה שנעבור לדבר על ענייני מימוש, שהם מה שמבדיל את תורת הגרפים של מתמטיקה מתורת הגרפים של מדעי המחשב. ראשית כל, אני לא הולך לכתוב פסאודו-קוד אלא קוד שעובד בפועל, אם כי לא בהכרח בצורה היעילה ביותר שאפשר. בחרתי לעבוד עם Javascript, משלוש סיבות: הראשונה, והעיקרית, היא שבצורה הזו מתאפשר לנו סיפוק מיידי - אני יכול להציג את התוצרים של הקוד (למשל, ייצור מבוך) ישר בתוך הפוסטים עצמם, וכל מי שיש לו דפדפן יכול (בתקווה) להריץ אותם. שנית, זו שפה עם תחביר בסיסי די פשוט שמזכיר את זה של C ו-Java, ולכן יש תקווה שרוב הקוראים שמכירים שפות תכנות יבינו פחות או יותר את הקוד; ולבסוף, זו שפה מספיק מתוחכמת כדי שאוכל לעשות שם דברים רבים בצורה כמעט פסאודו-קודית, להבדיל משפה כמו C שבה חלק מהתעלולים היו דורשים לא מעט "בניית פיגומים" שאני מעדיף לוותר עליה. אני מזהיר מראש שאני לא מתכנן ללמד Javascript, וזו שפה מתעתעת עם כל מני תכונות מוזרות שלא ארחיב יותר מדי עליהן - המטרה היא בסופו של דבר להציג רעיונות באלגוריתמים ומבני נתונים, לא שפת תכנות.</p>
+<p>הדבר הראשון שאנחנו רוצים לעשות הוא לייצג גרף כאובייקט בשפת התכנות שלנו. יש אינספור דרכים שונות לעשות את זה. הדרך המתבקשת ביותר היא לייצג גרף בתור זוג של מערכים ("רשימות") - מערך של צמתים, ומערך של קשתות. זו גישה סבירה אבל טיפה בזבזנית מבחינת מקום - למה בעצם צריך לשמור את הצמתים בנפרד? זה הגיוני, אולי, אם יש לצמתים עוד מידע נוסף שמקודד בהם, אבל אני דווקא אעדיף להימנע מכך ככל האפשר. לכן אצלי גרף לא יכיל רשימת צמתים אלא רק מספר, שאסמן ב-<span class="math">\(n\)</span>, שהוא מספר הצמתים שיש בגרף. על הצמתים עצמם אני אחשוב בתור המספרים מ-0 ועד <span class="math">\(n-1\)</span>, כי זה מה שנהוג לעשות במדעי המחשב: אינדקסים של מקומות במערכים מתחילים ברוב שפות התכנות ב-0, ולכן אנחנו רגילים לספור החל מ-0.</p>
+<p>קשתות, לעומת זאת, אכן יהיו מיוצגות על ידי מערך של אובייקטים, כאשר כל אובייקט יורכב מזוג מספרים - הצמתים שאליו הם מחוברים - ואולי עוד פרטי מידע, למשל המשקל של הקשת (הרי אמרתי שאנחנו רוצים לעבוד עם גרפים ממושקלים). הנה אם כן הקוד שמגדיר את הפונקציה שמייצרת גרף חדש:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">Graph</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n</span><span class="p">;</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>למי שנראה לו מוזר שאני מגדיר כאן משתנה בזמן שאני בעצם מגדיר פונקציה או משהו - כן, ברוכים הבאים ל-Javascript, זה הדבר הכי מוזר שכנראה תראו פה, אז פשוט תתעלמו. העיקר שאמור לעניין אותנו פה הוא שאני קולט <strong>מראש</strong> את מספר הצמתים בגרף - <span class="math">\(n\)</span> - ואני לא הולך לאפשר לשנות אותו בהמשך כי אין בכך צורך עבור הגרפים שלי. הקשתות, לעומת זאת, מתחילות בתור רשימה ריקה.</p>
+<p>עכשיו, האם רשימת קשתות היא באמת רעיון טוב? מצד אחד, זה מקל לעבור סדרתית על כל הקשתות בגרף, ומצד שני, אם אני רוצה לדעת אם יש קשת שמחברת שני צמתים ספציפיים, זה אומר שאני צריך לעבור על כל רשימת הקשתות, וזה ממש בלתי נסלח לפעמים (תחשבו על גרפים עם מיליארד קשתות). כפי שנראה, המימוש שלי הוא לא רע עבור האלגוריתם של קרוסקל אבל לא משהו עבור האלגוריתם של פרים. מימוש חכם יותר מתבסס על רשימה של צמתים, כאשר לכל צומת יש בתוכו רשימה של הקשתות שמחוברות אליו - זה מה שנקרא מימוש ה-Adjacency list של גרף והוא המימוש הסטנדרטי ביותר שלו כשרוצים קצת יעילות. לי זה לא כזה חשוב ואני מעדיף להשאיר את רוב הקוד פשוט, אז ויתרתי על זה.</p>
+<p>עכשיו אני הולך להוסיף כמה פונקציות לגרף שאפשר להפעיל אותן, בהינתן גרף, על ידי כתיבת השם שלו, נקודה, ואז את שם הפונקציה, והפונקציה מקבלת את הגרף אוטומטית כפרמטר בשם this. לפונקציות כאלו קוראים <strong>מתודות</strong> של הגרף. בגלל הגישה המוזרה של Javascript לעניינים הללו, כל הפונקציות שאגדיר בהמשך נמצאות בין הסוגרים המסולסלים בקטע הקוד הבא:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">Graph</span><span class="p">.</span><span class="nx">prototype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>(שלוש הנקודות הן לא קוד - הן "כל הפונקציות").</p>
+<p>בואו נתחיל עם פונקציה שמוסיפה קשת לגרף. כאן כבר יש לנו "בעיה", כי קשת מוגדרת על ידי זוג הקודקודים שהיא מחוברת אליהם, אבל הגרף לא מכוון, אז הקשת <span class="math">\((3,5)\)</span> היא אותו דבר כמו <span class="math">\((5,3)\)</span>. אז יש בדיקות מפורשות עבור זה ועבור עוד דברים:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">add_edge</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">w</span><span class="p">){</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">n</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">n</span><span class="p">){</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">b</span><span class="p">){</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">add_edge</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">w</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">has_edge</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)){</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">];</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;undefined&#39;</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nx">w</span><span class="p">){</span>
+<span class="w">            </span><span class="nx">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">Infinity</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nx">e</span><span class="p">.</span><span class="nx">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">w</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>הפרמטר w הוא המשקל של הקשת - אם הוא לא ניתן כקלט, נותנים לקשת אוטומטית את המשקל אינסוף (היי, מגניב! ב-Javascript אינסוף הוא כבר חלק מתוך השפה! אפילו ברובי זה לא ככה! רגע, בעצם בגרסה 1.9.2 של רובי כבר יש, נו טוב, רובי מנצחת שוב!)</p>
+<p>אתם בטח תוהים מה זה has_edge - ובכן, זו עוד מתודה מתבקשת:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">has_edge</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+<span class="w">        </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">each_edge</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">))</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;})</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>המימוש פה הוא הכי נאיבי שאפשר - עוברים כל כל הקשתות ובודקים האם מצאנו את זו שאנחנו מחפשים. בשביל לעבור על כל הקשתות אני משתמש ב-each_edge שגם היא מתודה שכתבתי שפשוט עוברת קשת-קשת ומפעילה על כל קשת פונקציה שהועברה כפרמטר:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">each_edge</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">){</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="nx">f</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>ואם אני לא רוצה סתם לבדוק אם קשת קיימת אלא ממש למצוא ולהחזיר אותה?</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">find_edge</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">))</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nx">e</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>בהמשך אצטרך גם להסיר קשתות. האופן שבו מסירים איברים ממערך היא באמצעות הפונקציה splice שיש לה שם קצת מבלבל, אבל עושה כאן את מה שאנחנו מצפים שתעשה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">remove_edge</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">a</span><span class="p">)){</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="mf">1</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>וזהו זה לעת עתה. הקוד הזה בוודאי לא כתוב בצורה אופטימלית ויש כמה שכפולי קוד מעצבנים, אבל זה חלק מהמשחק - נסו לחשוב איך הייתם משפרים אותו.</p>
+<p>עכשיו, איך נחבר את זה עם מבוכים? ובכן, בואו ניצור אובייקט חדש של מבוך:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">Maze</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>שימו לב שאני יוצר את אובייקט המבוך הזה בצורה שונה מזו שבה יצרתי את האובייקט עבור גרף - הסיבה לכך היא שבקוד הנוכחי שלי אני לא הולך להניח שקיים יותר ממבוך אחד בו זמנית, ולכן מספיק שיהיה לי משתנה אחד שקוראים לו "מבוך", לעומת גרף שרציתי את האפשרות ליצור כמה עותקים שונים ממנו. שוב - אלו לא פרטים טכניים שחשוב להתעמק בהם כאן.</p>
+<p>עכשיו לפונקציה שיוצרת מבוך חדש, עם כל הקירות בפנים, ובונה גם את הגרף המתאים:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">generate_raw</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">height</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="p">){</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Graph</span><span class="p">(</span><span class="nx">height</span><span class="o">*</span><span class="nx">width</span><span class="p">);</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">height</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">width</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">cells</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">();</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">height</span><span class="p">;</span><span class="w"> </span><span class="nx">y</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">width</span><span class="p">;</span><span class="w"> </span><span class="nx">x</span><span class="o">++</span><span class="p">){</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="nx">cells</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">]);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">height</span><span class="p">;</span><span class="w"> </span><span class="nx">y</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">width</span><span class="p">;</span><span class="w"> </span><span class="nx">x</span><span class="o">++</span><span class="p">){</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">){</span>
+<span class="w">                    </span><span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">add_edge</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">]),</span><span class="k">this</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">([</span><span class="nx">x</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="nx">y</span><span class="p">]),</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">());</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">y</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">){</span>
+<span class="w">                    </span><span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">add_edge</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">]),</span><span class="k">this</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="o">-</span><span class="mf">1</span><span class="p">]),</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">());</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>אז מה אני עושה כאן? יוצר גרף חדש שמספר הצמתים בו הוא כמספר התאים במבוך. כמו כן אני יוצר בתוך האובייקט של המבוך מערך שמטרתו להכיל את התאים עצמם, ודוחף אליו את כל התאים (תא הוא זוג קואורדינטות - גובה ואורך). כעת יש לי התאמה בין התאים במבוך ובין הצמתים של הגרף - המספר של הצומת בתוך הגרף הוא האינדקס שלו בתוך מערך התאים.</p>
+<p>החל משורה 11 אני מוסיף קשתות לגרף: לכל תא במבוך, אם יש תא מעליו אני מוסיף קשת שמתארת את הקיר ביניהם, ואם יש תא משמאלו אני מוסיף קשת שמתארת את הקיר ביניהם. לכל הקשתות אני נותן משקל אקראי בין 0 ל-1 (זה מה ש-Math.random מחזירה).</p>
+<p>הורדה של קיר היא דבר קל - פשוט מסירים את הקשת המתאימה. בדומה, אני גם רוצה לאפשר צביעה של קירות בצבעים שונים (זה יהיה מועיל בהמשך) וגם זה מתבצע על ידי שינוי של הקשת המתאימה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">remove_wall</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">remove_edge</span><span class="p">(</span><span class="nx">Maze</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span><span class="nx">Maze</span><span class="p">.</span><span class="nx">cell_index</span><span class="p">(</span><span class="nx">b</span><span class="p">));</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="nx">set_wall_color</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">color</span><span class="p">){</span>
+<span class="w">        </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Maze</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">find_edge</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">e</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">color</span><span class="p">;</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>ועכשיו בואו נעבור לציור של המבוך. כדי לצייר דברים ב-Javascript נהוג בימינו להשתמש במשהו שנקרא Canvas, שהוא אלמנט שיכול להופיע בתוך ה-HTML של העמוד - זה אחד מהשכלולים של HTML5. אני אניח שכבר יש אובייקט בשם Game שמטרתו לנהל את העניינים ובין היתר כבר העתיק לעצמו את אובייקט ה-Canvas שעליו צריך לצייר את המבוך. הציור ל-Canvas הזה נעשה דרך אובייקט של ה-Canvas שנקרא Context, ואני מניח שגם אותו כבר יש. זה מוביל אותנו למתודה הבאה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">draw</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span>
+<span class="w">        </span><span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="nx">Game</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span><span class="w"> </span><span class="nx">Game</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">E</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">G</span><span class="p">.</span><span class="nx">E</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">cells</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]];</span>
+<span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">cells</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]];</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span><span class="w"> </span><span class="nx">x</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="nx">x</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">]);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">([</span><span class="nx">x</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="mf">1</span><span class="p">],[</span><span class="nx">x</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span><span class="w"> </span><span class="nx">y</span><span class="o">++</span><span class="p">){</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="nx">y</span><span class="p">],[</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="nx">y</span><span class="p">]);</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">draw_wall</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="nx">y</span><span class="p">],[</span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span><span class="nx">y</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>כרגע כל מה שאני עושה הוא למחוק את התוכן הנוכחי של ה-Canvas ולהריץ שלוש לולאות. שתי האחרונות מציירות את הקירות שסביב המבוך, למעט הפינה הימנית-תחתונה שנותרת פרוצה ("כניסה" למבוך); הלולאה הראשונה היא מה שמצייר את הקירות הפנימיים, על פי הקשתות שיש כרגע בגרף. אבל כל עוד לא הראיתי את המימוש של draw_wall בעצם לא עשיתי כלום, אז הנה המימוש שהוא טיפה טכני ולא חייבים להבין את פרטיו:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="nx">draw_wall</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">color</span><span class="p">){</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">undefined</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">undefined</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="o">-</span><span class="nx">b</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span><span class="o">+</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="o">-</span><span class="nx">b</span><span class="p">[</span><span class="mf">1</span><span class="p">]))</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mf">1</span><span class="p">){</span>
+<span class="w">         </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">color</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;#000000&#39;</span><span class="p">;</span>
+<span class="w">        </span><span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">strokeStyle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">color</span><span class="p">;</span>
+<span class="w">        </span><span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">color</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">WALL_WIDTH</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="nx">b</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="nx">SQUARE_SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">WALL_WIDTH</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">WALL_WIDTH</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mf">1</span><span class="p">],</span><span class="nx">b</span><span class="p">[</span><span class="mf">1</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="nx">SQUARE_SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">WALL_WIDTH</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">b</span><span class="p">[</span><span class="mf">0</span><span class="p">]){</span><span class="w"> </span><span class="c1">//vertical wall</span>
+<span class="w">            </span><span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">x</span><span class="o">-</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">y</span><span class="o">-</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">SQUARE_SIZE</span><span class="o">+</span><span class="mf">2</span><span class="o">*</span><span class="nx">WALL_WIDTH</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">b</span><span class="p">[</span><span class="mf">1</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">//horizontal wall</span>
+<span class="w">            </span><span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">x</span><span class="o">-</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">y</span><span class="o">-</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="nx">SQUARE_SIZE</span><span class="o">+</span><span class="mf">2</span><span class="o">*</span><span class="nx">WALL_WIDTH</span><span class="p">,</span><span class="w"> </span><span class="nx">WALL_WIDTH</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+</code></pre></div>
+
+
+</div>
+
+<p>כאן WALL_WIDTH ו-SQUARE_SIZE הם קבועים שנתתי להם ערכים קודם:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">SQUARE_SIZE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">20</span><span class="p">;</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">WALL_WIDTH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3</span><span class="p">;</span>
+</code></pre></div>
+
+
+</div>
+
+<p>לסיום, הנה האובייקט של המשחק שהוא קטן ופשוט יחסית כרגע:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">Game</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span>
+<span class="w">        </span><span class="nx">Game</span><span class="p">.</span><span class="nx">canvas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;canvas&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">Game</span><span class="p">.</span><span class="nx">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">parseInt</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;maze_size&quot;</span><span class="p">).</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">Maze</span><span class="p">.</span><span class="nx">generate_raw</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">Maze</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+<p>והנה ה-HTML שבו הולכים להשתמש בכל זה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;range&quot;</span> <span class="na">min</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">max</span><span class="o">=</span><span class="s">&quot;20&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;maze_size&quot;</span> <span class="na">onChange</span><span class="o">=</span><span class="s">&quot;Game.start()&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;</span>
+<span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;canvas&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;480&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;480&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+</code></pre></div>
+
+
+</div>
+
+<p>וזהו זה. עכשיו בואו נראה איך זה עובד בפועל אצלנו:</p>
+<script type="text/javascript" src="/stuff/maze/maze.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script type="text/javascript">
+  $(function() {
+      Game.start();
+  }); 
+</script>
+<p><input type="range" min="2" max="20" id="maze_size" onChange="Game.start()"><br />
+<br /></p>
+<canvas id="canvas" width="480" height="480"></canvas>
+
+<p>לא הכי מרשים, חייבים להודות - כרגע ה"מבוך" הזה כולל את כל הקירות וכל מה שאפשר לשלוט עליו הוא הגודל שלו. בפוסט הבא נסביר מה הרעיון התיאורטי הכללי מאחורי קרוסקל ופרים.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/10/05/min_spanning_tree_generic_algorithm/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אלגוריתמים לעץ פורש מינימלי בגרף - מה הרעיון הכללי?</span>
+            </a>
+            
+            
+            
+            <a href="/2013/09/22/kruskal_and_prim_maze_builders/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">קרוסקל את פרים - בוני מבוכים בע&#34;מ</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

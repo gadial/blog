@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי: פורמליזם מטריצות הצפיפות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי: פורמליזם מטריצות הצפיפות</h1>
+            <div class="post-meta">
+                <span class="date">2022-10-09</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מטריצת צפיפות.html">מטריצת צפיפות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מה זה מטריצות צפיפות ואיך מגיעים אליהן מוקטורי מצב?</h2>
+
+<p>בואו נדבר על סיטואציה פשוטה מאוד בחישוב קוונטי שכבר ראינו כמה פעמים בסדרת הפוסטים הזו: יש לנו את המצב הקוונטי על קיוביט בודד <span class="math">\(\left|+\right\rangle =\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span> ואנחנו מודדים אותו. מה קורה? קורים שני דברים: אנחנו, המודדים, מקבלים "החוצה" ביט של מידע - או 0 או 1 - והמצב הקוונטי עובר שינוי: אם ביט המידע שקיבלנו היה <span class="math">\(0\)</span> אז המצב הקוונטי הופך להיות <span class="math">\(\left|0\right\rangle \)</span>, ואם ביט המידע שקיבלנו היה 1 אז המצב הקוונטי הופך להיות <span class="math">\(\left|1\right\rangle \)</span>. כל אחת מהתוצאות הללו מתקבלת באותה הסתברות, כלומר <span class="math">\(\frac{1}{2}\)</span>.</p>
+<p>טוב ויפה, אבל עכשיו נניח שאנחנו <strong>לא</strong> אלו שמודדים את המצב; אנחנו רואים מישהי אחרת באה ומודדת את המצב, ולא מגלה לנו מה התוצאה! מה אנחנו כן יכולים להגיד על המצב הנוכחי של הקיוביט? ובכן, בדיוק את מה שראינו לפני רגע: אנחנו יכולים לומר "בהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|0\right\rangle \)</span> ובהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|1\right\rangle \)</span>".</p>
+<p>אחד הדברים המבלבלים והקשים ביותר להבנה כשמתחילים לדבר על חישוב קוונטי (ואולי על תורת הקוונטים בפרט?) הוא להבין שלומר "הקיוביט במצב <span class="math">\(\left|+\right\rangle \)</span>" זה <strong>ממש לא אותו דבר</strong> כמו לומר "בהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|0\right\rangle \)</span> ובהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|1\right\rangle \)</span>". הראשון הוא כמו לומר "החתול של שרדינגר בסופרפוזיציה של רגוע ועצבני" והשני הוא כמו לומר "החתול של שרדינגר רגוע או עצבני, אנחנו פשוט לא יודעים מי מהם כי עדיין לא פתחנו את הקופסה". עד סוף הפוסט, אולי אפילו עד האמצע שלו, כבר נראה את ה"ממש לא אותו דבר" הזה במלוא הפורמליזם המתמטי שלו - פורמליזם שעד כה טרם הצגתי, כי לא נזקקתי לו אבל אני רוצה להתחיל לדבר על דברים שמערבים אותו: פורמליזם <strong>מטריצת הצפיפות</strong>.</p>
+<p>הרעיון במטריצת צפיפות הוא <strong>להכליל</strong> את האופן שבו אנחנו מתארים מצב של מערכת קוונטית. עד כה השתמשנו בוקטור כדי לתאר אותה: כך למשל <span class="math">\(\left|+\right\rangle \)</span> הוא הוקטור <span class="math">\(\frac{1}{\sqrt{2}}\left(\begin{array}{c} 1\\ 1 \end{array}\right)\)</span>. בפורמליזם של מטריצות צפיפות, מה שמתאר את המצב של המערכת הקוונטית יהיה <strong>מטריצה</strong>: אם כדי לתאר מצב קוונטי על <span class="math">\(n\)</span> קיוביטים נזקקנו לוקטור מאורך <span class="math">\(2^{n}\)</span>, הרי שבשביל מטריצת צפיפות נזדקק למטריצה מסדר <span class="math">\(2^{n}\times2^{n}\)</span>. הגודל הנוסף הזה מאפשר לנו לכלול יותר מידע מאשר קודם; הוא מאפשר לנו בדיוק לתאר בצורה קומפקטית סיטואציה של "בהסתברות כך וכך המערכת נמצאת במצב כך וכך", עבור קבוצה של מצבים ולא רק עבור מצב בודד שאנחנו יודעים בודאות באיזה מצב הוא.</p>
+<p>לפני שנגיע לפורמליזם, אני רוצה לחדד את הנקודה שאיתה פתחתי המצב <span class="math">\(\left|+\right\rangle \)</span> הוא מצב קוונטי ספציפי, קונקרטי. אין שום הסתברות שנלווית לתיאור הזה של המערכת. ההסתברות מתחילה לשחק תפקיד רק כאשר אנחנו מודדים את המצב, לא לפני כן. קל לראות את זה אם נזכרים שיש בעולם כמה דרכים שונות למדוד מצב קוונטי; מדידה "רגילה" היא מה שקראתי לו מדידה בבסיס <span class="math">\(Z\)</span>, מדידה שמתוארת על ידי האיברים <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> שהם התוצאות האפשריות של המדידה. אבל יש עוד מדידות, למשל מדידה בבסיס <span class="math">\(X\)</span> שמתוארת על ידי האיברים <span class="math">\(\left|+\right\rangle ,\left|-\right\rangle \)</span>. אם אני מבצע מדידה בבסיס <span class="math">\(X\)</span> של המצב <span class="math">\(\left|+\right\rangle \)</span>, אני אקבל את התוצאה שמתאימה ל-<span class="math">\(\left|+\right\rangle \)</span> בהסתברות של 100 אחוז.</p>
+<p>לעומת זאת, אם המצב הקוונטי שלי הוא "בהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|0\right\rangle \)</span> ובהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|1\right\rangle \)</span>", מה יקרה אם אמדוד אותו בבסיס <span class="math">\(X\)</span>? אם הקיוביט במצב <span class="math">\(\left|0\right\rangle \)</span> אז בהסתברות <span class="math">\(\frac{1}{2}\)</span> נקבל <span class="math">\(\left|+\right\rangle \)</span> ובהסתברות <span class="math">\(\frac{1}{2}\)</span> נקבל <span class="math">\(\left|-\right\rangle \)</span>; ואם הקיוביט במצב <span class="math">\(\left|1\right\rangle \)</span> אז... במקרה הספציפי הזה של בסיס <span class="math">\(X\)</span>, יקרה בדיוק אותו דבר - כל תוצאה בהסתברות חצי (יכולים גם לקרות דברים מסובכים יותר באופן כללי).</p>
+<p>אז כדי לחדד, אם המצב הקוונטי שלנו הוא <span class="math">\(\left|+\right\rangle \)</span> אז מדידה בבסיס <span class="math">\(X\)</span> תיתן בודאות מוחלטת <span class="math">\(\left|+\right\rangle \)</span>, אבל אם הוא "בהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|0\right\rangle \)</span> ובהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|1\right\rangle \)</span>" אז מדידה בסיס <span class="math">\(X\)</span> תיתן <span class="math">\(\left|+\right\rangle \)</span> רק בהסתברות <span class="math">\(\frac{1}{2}\)</span> ואחרת היא תיתן <span class="math">\(\left|-\right\rangle \)</span>. זה מראה לנו ששני המצבים הללו שונים, בודאות מוחלטת. וכאמור, להבין שהם שונים זה לטעמי אחד המכשולים הגדולים בדרך להבנה של חישוב קוונטי.</p>
+<p>לפני שנעבור לדבר על מצבים קוונטיים מסובכים שמערבים הסתברויות, בואו ניקח צעד אחורה: ניזכר בפורמליזם המתמטי הרגיל של חישוב קוונטי באמצעות וקטורים, ונראה איך אפשר לבטא את כולו גם בשפה של מטריצות. אני חושב שזה ייראה די פשוט ולא קשה להבנה; יהיה קצת קשה להבין <strong>למה</strong> אנחנו עושים את זה אבל כבר הצהרתי מה המטרה שלנו פה.</p>
+<p>אז הנה הפורמליזם: </p>
+<ol> <li>מערכת קוונטית מתוארת על ידי מרחב הילברט <span class="math">\(\mathcal{H}\)</span> מעל <span class="math">\(\mathbb{C}\)</span>, ומצב ספציפי של המערכת הוא וקטור <span class="math">\(\left|\psi\right\rangle \in\mathcal{H}\)</span> מנורמה 1.</li>
+
+
+<li>בהינתן אופרטור <span class="math">\(U:\mathcal{H}\to\mathcal{H}\)</span> שהוא <strong>אוניטרי</strong>, ניתן להפעיל אותו על המערכת על ידי כפל המטריצה שמייצגת את <span class="math">\(U\)</span> בוקטור שמייצג את מצב המערכת ולהעביר אותה למצב חדש: <span class="math">\(\left|\psi^{\prime}\right\rangle =U\left|\psi\right\rangle \)</span>.</li>
+
+
+<li>בהינתן קבוצת אופרטורים <span class="math">\(\left\{ M_{0},M_{1},\ldots,M_{t}\right\} \)</span> שמכונים בהקשר הזה "אופרטורי מדידה", אפשר למדוד את המערכת ביחס לאופרטורים הללו ולקבל תוצאה <span class="math">\(i\in\left\{ 0,1,\ldots,t\right\} \)</span> בהסתברות <span class="math">\(p\left(i\right)\)</span>, ואם התקבלה התוצאה הזו המערכת עוברת למצב <span class="math">\(\left|\psi^{i}\right\rangle \)</span>, כך ש: 
+
+<ol>
+<li><span class="math">\(p\left(i\right)=\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle \)</span>.</li>
+
+
+<li><span class="math">\(\left|\psi^{i}\right\rangle =\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle }}\)</span>.</li>
+</ol>
+</li>
+</ol>
+
+<p>זה לא משהו קל לעיכול במיוחד אבל אני מניח שכבר ראינו את זה קודם - ואם לא, <a href="https://gadial.net/2022/07/28/quantum_computing_math/">הנה ההתחלה</a> של ה"קודם". בואו נראה עכשיו איך אותו דבר בדיוק מתואר עם מטריצה במקום וקטור.</p>
+<p>ראשית, בואו ניזכר מה הסימונים שלנו אומרים. על <span class="math">\(\left|\psi\right\rangle \)</span> אני חושב בתור וקטור עמודה; במקרה הפשוט שבו <span class="math">\(\left|\psi\right\rangle \)</span> מייצג מערכת של קיוביט בודד, זה יהיה וקטור עמודה מסדר 2, <span class="math">\(\left|\psi\right\rangle =\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)\)</span>. בנוסף לכך, הצגתי סימון נוסף: <span class="math">\(\left\langle \psi\right|\)</span>. אפשר לחשוב על <span class="math">\(\left\langle \psi\right|\)</span> בתור <span class="math">\(\left\langle \psi\right|\triangleq\left(\left|\psi\right\rangle \right)^{\dagger}\)</span>, כלומר זה וקטור <strong>שורה </strong><span class="math">\(\left\langle \psi\right|=\left(\begin{array}{cc} \overline{\alpha} & \overline{\beta}\end{array}\right)\)</span>. יש עוד דרך לחשוב על <span class="math">\(\left\langle \psi\right|\)</span> בתור פונקציונל לינארי, אבל נעזוב את זה.</p>
+<p>עכשיו, בסימון הזה, מה בעצם <span class="math">\(\left|\psi\right\rangle \left\langle \psi\right|\)</span> אומר? זו <strong>מטריצה</strong> מסדר <span class="math">\(2\times2\)</span> (ובאופן כללי, כש-<span class="math">\(\left|\psi\right\rangle \)</span> הוא וקטור מסדר <span class="math">\(n\)</span>, זו מטריצה <span class="math">\(n\times n\)</span>). כדי לראות את זה אני פשוט אכפול את הוקטורים במפורש:</p>
+<p><span class="math">\(\left|\psi\right\rangle \left\langle \psi\right|=\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)\left(\begin{array}{cc} \overline{\alpha} & \overline{\beta}\end{array}\right)=\left(\begin{array}{cc} \left|\alpha\right|^{2} & \alpha\overline{\beta}\\ \overline{\alpha}\beta & \left|\beta\right|^{2} \end{array}\right)\)</span></p>
+<p>זה פשוט על פי ההגדרה הרגילה של כפל מטריצות. שימו לב שאם אני כופל את שני הוקטורים הללו בסדר <strong>הפוך </strong>אני מקבל מטריצה מסדר <span class="math">\(1\times1\)</span> שאני חושב עליה בתור סקלר: </p>
+<p><span class="math">\(\left\langle \psi\right|\left|\psi\right\rangle =\left(\begin{array}{cc} \overline{\alpha} & \overline{\beta}\end{array}\right)\left(\begin{array}{c} \alpha\\ \beta \end{array}\right)=\left|\alpha\right|^{2}+\left|\beta\right|^{2}\)</span></p>
+<p>בעצם, לכפול שני וקטורים בצורה הזו, <span class="math">\(\left\langle \psi\right|\left|\varphi\right\rangle \)</span>, נותן לנו את <strong>המכפלה הפנימית</strong> שלהם. על אותו משקל, לפעמים קוראים ל-<span class="math">\(\left|\psi\right\rangle \left\langle \varphi\right|\)</span> "מכפלה חיצונית" אבל נעזוב גם את זה. מה שמעניין, מבחינתי, זה רק איך שתרגממו את הוקטור <span class="math">\(\left|\psi\right\rangle \)</span> למטריצה <span class="math">\(\left|\psi\right\rangle \left\langle \psi\right|\)</span>. בשביל לקצר עניינים, אני אשתמש ב-<span class="math">\(\rho\)</span> בדרך כלל כדי לתאר מטריצות כאלו (כמו גם את המטריצות היותר מורכבות שנקבל בהמשך).</p>
+<p>לפני שנסביר איך זה מסתדר עם המתמטיקה של התפתחות המערכת בזמן ושל מדידות, בואו נראה דוגמאות! קודם כל דוגמא פשוטה:</p>
+<p><span class="math">\(\left|0\right\rangle \left\langle 0\right|=\left(\begin{array}{c} 1\\ 0 \end{array}\right)\left(\begin{array}{cc} 1 & 0\end{array}\right)=\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right)\)</span></p>
+<p>ובאופן דומה:</p>
+<p><span class="math">\(\left|1\right\rangle \left\langle 1\right|=\left(\begin{array}{c} 0\\ 1 \end{array}\right)\left(\begin{array}{cc} 0 & 1\end{array}\right)=\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)\)</span></p>
+<p>והנה ידידנו מתחילת הפוסט:</p>
+<p><span class="math">\(\left|+\right\rangle \left\langle +\right|=\frac{1}{\sqrt{2}}\left(\begin{array}{c} 1\\ 1 \end{array}\right)\frac{1}{\sqrt{2}}\left(\begin{array}{cc} 1 & 1\end{array}\right)=\left(\begin{array}{cc} \frac{1}{2} & \frac{1}{2}\\ \frac{1}{2} & \frac{1}{2} \end{array}\right)\)</span></p>
+<p>והנה דוגמא דומה עם שני קיוביטים, עם מי שנקרא "מצב בל" (אחד מהם, ליתר דיוק): <span class="math">\(\left|\Phi^{+}\right\rangle =\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span>:</p>
+<p><span class="math">\(\left|\Phi^{+}\right\rangle \left\langle \Phi^{+}\right|=\frac{1}{\sqrt{2}}\left(\begin{array}{c} 1\\ 0\\ 0\\ 1 \end{array}\right)\frac{1}{\sqrt{2}}\left(\begin{array}{cccc} 1 & 0 & 0 & 1\end{array}\right)=\left(\begin{array}{cccc} \frac{1}{2} & 0 & 0 & \frac{1}{2}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ \frac{1}{2} & 0 & 0 & \frac{1}{2} \end{array}\right)\)</span></p>
+<p>הנה איור של מטריצת הצפיפות הזו; זה האופן שבו בדרך כלל מאיירים דברים כאלו (לפעמים עם איור נוסף, למקרה שהאיברים במטריצה הם מרוכבים):</p>
+<p><img src="/img/2022/density_matrix.png" alt=""/></p>
+<p>אני מקווה שאלו מספיק דוגמאות כדי לקבל תחושה ראשונית ואפשר לעבור לתיאוריה המתמטית.</p>
+<p>אם כדי לתאר את ההתפתחות של המערכת בהתאם לאופרטור <span class="math">\(U\)</span> היינו צריכים קודם לחשב מכפלה של מטריצה בוקטור, <span class="math">\(\left|\psi^{\prime}\right\rangle =U\left|\psi\right\rangle \)</span>, מה הנוסחה המתאימה כדי לחשב את <span class="math">\(\rho^{\prime}\)</span> מתוך <span class="math">\(\rho\)</span>? ובכן, אם נזכור ש-<span class="math">\(\left\langle \psi\right|=\left(\left|\psi\right\rangle \right)^{\dagger}\)</span>, אז נקבל ש-</p>
+<p><span class="math">\(\left\langle \psi^{\prime}\right|=\left(\left|\psi^{\prime}\right\rangle \right)^{\dagger}=\left(U\left|\psi\right\rangle \right)^{\dagger}=\left\langle \psi\right|U^{\dagger}\)</span></p>
+<p>(כי ככה אלו חוקי המטריצות: <span class="math">\(\left(AB\right)^{\dagger}=B^{\dagger}A^{\dagger}\)</span>)</p>
+<p>ומכאן:</p>
+<p><span class="math">\(\rho^{\prime}=\left|\psi^{\prime}\right\rangle \left\langle \psi^{\prime}\right|=U\left|\psi\right\rangle \left\langle \psi\right|U^{\dagger}=U\rho U^{\dagger}\)</span></p>
+<p>הפעולה, הזו של לקחת משהו ולכפול אותו מצד אחד ב-<span class="math">\(U\)</span> ומצד שני ב-<span class="math">\(U^{\dagger}\)</span> נקראת <strong>הצמדה</strong> והיא מאוד נפוצה במתמטיקה (בדרך כלל אמנם בגרסה שלה שבה ה-<span class="math">\(U^{\dagger}\)</span> הוא משמאל ולא מימין, אבל אין הבדל מהותי). אז בינתיים הכל נחמד - לקחנו פעולה טבעית בלשון וקטורים והחלפנו אותה בפעולה טבעית בלשון מטריצות.</p>
+<p>עכשיו, נניח שאנחנו מודדים מצב <span class="math">\(\rho=\left|\psi\right\rangle \left\langle \psi\right|\)</span>, מה ההסתברות <span class="math">\(p\left(i\right)\)</span> שאופרטור המדידה <span class="math">\(M_{i}\)</span> יעלה בגורל? אם נלך על פי הנוסחה <span class="math">\(p\left(i\right)=\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle \)</span>, לא ברור מה יש לנו לעשות - איכשהו ה-<span class="math">\(\left\langle \psi\right|\)</span> וה-<span class="math">\(\left|\psi\right\rangle \)</span> מרוחקים מאוד זה מזה ולא ברור מה אפשר לעשות איתם... אלא אם כן אני אשלוף מהשרוול פיסת קסם של אלגברה לינארית.</p>
+<p>זוכרים איך קיבלנו <span class="math">\(\left|\psi\right\rangle \left\langle \psi\right|=\left(\begin{array}{cc} \left|\alpha\right|^{2} & \alpha\overline{\beta}\\ \overline{\alpha}\beta & \left|\beta\right|^{2} \end{array}\right)\)</span> ו-<span class="math">\(\left\langle \psi\right|\left|\psi\right\rangle =\left|\alpha\right|^{2}+\left|\beta\right|^{2}\)</span> וקראתי לראשון "מכפלה חיצונית" ולשני "מכפלה פנימית"? אם מסתכלים טיפה רואים שהמכפלה הפנימית מתחבאת בתוך <span class="math">\(\left|\psi\right\rangle \left\langle \psi\right|\)</span>: היא סכום אברי האלכסון הראשי של <span class="math">\(\left|\psi\right\rangle \left\langle \psi\right|\)</span>. "סכום אברי האלכסון הראשי" של מטריצה ריבועית <span class="math">\(A\)</span> הוא כזה דבר שימושי במתמטיקה שיש לו שם וסימן בפני עצמו; הוא נקרא <strong>העקבה</strong> של <span class="math">\(A\)</span> ומסומן <span class="math">\(\text{tr}\left(A\right)=\sum_{i=1}^{n}a_{ii}\)</span>, ומה שראינו עם המכפלה הפנימית והחיצונית הוא מקרה פרטי של הטענה הכללית הבאה באלגברה לינארית: אם <span class="math">\(A\)</span> היא מטריצה מסדר <span class="math">\(1\times n\)</span> ("וקטור שורה") ו-<span class="math">\(B\)</span> היא מטריצה מסדר <span class="math">\(n\times1\)</span> ("וקטור עמודה") אז </p>
+<p><span class="math">\(AB=\text{tr}\left(BA\right)\)</span></p>
+<p>ההוכחה של זה היא פשוט משחק באינדקסים:</p>
+<p><span class="math">\(\text{tr}\left(BA\right)=\sum_{i=1}^{n}\left[BA\right]_{ii}=\sum_{i=1}^{n}B_{i,1}A_{1,i}=AB\)</span></p>
+<p>איך זה עוזר לנו? ובכן, <span class="math">\(\left\langle \psi\right|\)</span> הוא וקטור שורה ואילו <span class="math">\(M_{i}^{\dagger}M_{i}\left|\psi\right\rangle \)</span> הוא וקטור עמודה, ולכן אפשר לבצע את החלפת המקומות הזו:</p>
+<p><span class="math">\(p\left(i\right)=\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle =\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi\right\rangle \left\langle \psi\right|\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)\)</span></p>
+<p>וקיבלנו גם כאן ניסוח נחמד של חישוב <span class="math">\(p\left(i\right)\)</span> מתוך <span class="math">\(\rho\)</span> שמתבסס על מושגים מוכרים באלגברה לינארית.</p>
+<p>אם אנחנו יודעים שהאופרטור <span class="math">\(M_{i}\)</span> עלה בגורל, אנחנו יודעים שהמצב הקוונטי עבר אל <span class="math">\(\left|\psi^{i}\right\rangle =\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle }}\)</span>. עם מה שכבר ראינו, אפשר לנסח את זה מחדש גם בלשון מטריצות:</p>
+<p><span class="math">\(\rho^{i}=\left|\psi^{i}\right\rangle \left\langle \psi^{i}\right|=\frac{M_{i}\left|\psi\right\rangle \left\langle \psi\right|M^{\dagger}}{\left(\sqrt{\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle }\right)^{2}}=\frac{M_{i}\rho M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}\)</span></p>
+<p>וזה משלים את הניסוח מחדש של הסיטואציות שאנחנו כבר רגילים אליהן בלשון מטריצות במקום וקטורים, שזה נחמד אבל מן הסתם זו לא הפואנטה כי עם וקטורים זה נוח יותר. עכשיו אנחנו מגיעים אל הפואנטה - האופן שבו אפשר להשתמש בלשון מטריצות כדי לתאר סיטואציה הסתברותית "קלאסית" שמערבת מצבים קוונטיים. בזה אני מתכוון לכך שיש לנו מערכת קוונטית שיכולה להיות באחד מבין המצבים הקוונטיים <span class="math">\(\left|\psi_{1}\right\rangle ,\left|\psi_{2}\right\rangle ,\ldots,\left|\psi_{m}\right\rangle \)</span> אבל <strong>אנחנו לא יודעים איזה</strong>, אנחנו רק יודעים שהיא נמצאת במצב <span class="math">\(\left|\psi_{k}\right\rangle \)</span> בהסתברות <span class="math">\(p_{k}\)</span> שהיא מספר בין 0 ל-1: <span class="math">\(0\le p_{k}\le1\)</span>, כך ש-<span class="math">\(\sum_{k=1}^{m}p_{k}=1\)</span>. והאופן הפורמלי שבו אני הולך לתאר סיטואציה כזו הוא באמצעות המטריצה</p>
+<p><span class="math">\(\rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\)</span></p>
+<p>ובמילים אחרות, אני לוקח את מטריצות הצפיפות של כל המצבים ולוקח את הממוצע המשוקלל שלהן, כשהמשקולות הן ההסתברויות של המצבים. כדאי כבר עכשיו להעיר שממטריצת הצפיפות שאני מקבל אני לא אוכל "לשחזר" את המצבים וההסתברויות שלהם; בהחלט אפשר יהיה לקבל את אותה מטריצת צפיפות מכמה סיטואציות שונות, אבל כל הסיטואציות הללו יהיו זהות מבחינת המשך ההתפתחות שלהן בזמן והתוצאות של מדידות אפשריות שלהן - כלומר, מטריצת הצפיפות היא דרך קומפקטית לשמור את המידע מבלי לאבד משהו מהותי.</p>
+<p>בואו נבין למה שיטת הייצוג הזו באמת עובדת. נתחיל ממה קורה כשמפעילים אופרטור <span class="math">\(U\)</span> על המערכת. אם, בהסתברות <span class="math">\(p_{k}\)</span>, המערכת שלנו הייתה במצב <span class="math">\(\left|\psi_{k}\right\rangle \)</span>, אז אחרי הפעלת <span class="math">\(U\)</span> על המערכת אני מצפה להיות בהסתברות <span class="math">\(p_{k}\)</span> במצב <span class="math">\(U\left|\psi_{k}\right\rangle \)</span>, כלומר אני מצפה להיות ב-</p>
+<p><span class="math">\(\rho^{\prime}=\sum_{k=1}^{m}p_{k}U\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|U^{\dagger}=U\left(\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)U^{\dagger}=U\rho U^{\dagger}\)</span></p>
+<p>אז <span class="math">\(\rho\)</span>, גם כשהוא מייצג אוסף של מצבים קוונטיים, עדיין מתפתח כפי שציפינו על ידי הפעלת <span class="math">\(U\)</span>. </p>
+<p>כעת, מה אם מנסים למדוד את <span class="math">\(\rho\)</span> כשהוא מייצג אוסף? מה ההסתברות <span class="math">\(p\left(i\right)\)</span> לקבל את התוצאה שמתאימה ל-<span class="math">\(M_{i}\)</span>? כמובן, זה תלוי באיזה מצב המערכת נמצאת. כבר ראינו שאם היא במצב <span class="math">\(\left|\psi_{k}\right\rangle \)</span>, ההסתברות לקבל את <span class="math">\(M_{i}\)</span> היא <span class="math">\(\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)\)</span>. לכן:</p>
+<p><span class="math">\(p\left(i|k\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)\)</span></p>
+<p>כאן אני משתמש בנוסחה להסתברות <strong>מותנית</strong>. בואו ניזכר שניה איך זה עובד באופן כללי: אם במרחב ההסתברות שלנו יש שני מאורעות, <span class="math">\(A,B\)</span>, אז</p>
+<p><span class="math">\(p\left(A|B\right)=\frac{p\left(A\cap B\right)}{p\left(B\right)}\)</span></p>
+<p>כאן אפשר לחשוב על מרחב ההסתברות שלנו כאילו הוא מתאר סדרה של שתי הגרלות: בהגרלה הראשונה נבחר מצב <span class="math">\(\left|\psi_{k}\right\rangle \)</span> באקראי, ובהגרלה השניה, שתלויה בראשונה, נבחר אופרטור מדידה <span class="math">\(M_{i}\)</span>. כלומר, מרחב ההסתברות שלנו כולל זוגות <span class="math">\(\left(k,i\right)\)</span> של תוצאות אפשריות, והמאורע "<span class="math">\(\left|\psi_{k}\right\rangle \)</span> נבחר" הוא בעצם הקבוצה <span class="math">\(\left\{ \left(k,i\right)\ |\ 1\le i\le t\right\} \)</span> (כאן <span class="math">\(t\)</span> הוא מספר תוצאות המדידה האפשריות).</p>
+<p>הסתברות מותנית מאפשרת לנו, כשאנחנו מנסים לחשב את ההסתברות של מאורע מסובך <span class="math">\(A\)</span>, לחלק את המרחב לפיסות נוחות לעיכול, <span class="math">\(B_{1},\ldots,B_{m}\)</span> שקל לחשב את <span class="math">\(p\left(A|B_{k}\right)\)</span> לכל אחת מהן, ואז לחבר את כל הפיסות הללו כדי לקבל את <span class="math">\(p\left(A\right)\)</span> המקורית. זה עובד כאשר מרחב ההסתברות שלנו הוא <strong>איחוד זר</strong> של כל ה-<span class="math">\(B_{k}\)</span>-ים הללו (כולם קבוצות זרות, והאיחוד שלהם נותן את כל מרחב ההסתברות). במקרה הזה מתקבל</p>
+<p><span class="math">\(p\left(A\right)=\sum_{k=1}^{m}p\left(A|B_{k}\right)p\left(B_{k}\right)\)</span></p>
+<p>זה נקרא <strong>נוסחת ההסתברות השלמה</strong> וההוכחה פשוט מתבססת על כך ש-</p>
+<p><span class="math">\(\sum_{k=1}^{m}p\left(A|B_{k}\right)p\left(B_{k}\right)=\sum_{k=1}^{m}p\left(A\cap B_{k}\right)=p\left(A\cap\bigcup_{k=1}^{m}B_{k}\right)=p\left(A\right)\)</span></p>
+<p>תוך שאנחנו משתמשים כאן באופן שבו הסתברות של איחוד מאורעות זרים הופכת לסכום ההסתברויות שלהם.</p>
+<p>אם נחזור לענייננו, קיבלתי</p>
+<p><span class="math">\(p\left(i|k\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)\)</span></p>
+<p>והמאורעות "<span class="math">\(\left|\psi_{k}\right\rangle \)</span> נבחר" הם בוודאי זרים, ולכן</p>
+<p><span class="math">\(p\left(i\right)=\sum_{k=1}^{m}p\left(i|k\right)p\left(k\right)=\sum_{k=1}^{m}p_{k}\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)=\)</span></p>
+<p><span class="math">\(=\text{tr}\left(M_{i}^{\dagger}M_{i}\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)\)</span></p>
+<p>כשהמעבר הלפני אחרון מתבסס על קסם אלגברה לינארית - שפונקציית העקבה <span class="math">\(\text{tr}\)</span> היא לינארית בעצמה (אפשר לראות את זה מחישוב ישיר).</p>
+<p>גם פה -הגענו אל אותה נוסחה כמו קודם, רק שעכשיו היא תקפה גם למקרה של אוסף מצבים קוונטיים.</p>
+<p>הדבר הבא שהראיתי היה לאן עוברים אחרי מדידה אם <strong>ידוע</strong> ש-<span class="math">\(M_{i}\)</span> עלה בגורל: המצב <span class="math">\(\left|\psi^{i}\right\rangle =\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}^{\dagger}M_{i}\left|\psi\right\rangle }}\)</span>. אם יש לנו אוסף של מצבים קוונטיים, אני מסמן ב-<span class="math">\(\left|\psi_{k}^{i}\right\rangle \)</span> את "המצב שאליו המערכת עוברת אם הייתה במצב <span class="math">\(\left|\psi_{k}\right\rangle \)</span> ואז עלתה בגורל תוצאת המדידה <span class="math">\(M_{i}\)</span>" (שימו לב שהמצבים הללו לא בהכרח שונים זה מזה, אבל זו לא בעיה, לא הייתה לי דרישה כזו). במילים אחרות, ההסתברות להיות ב-<span class="math">\(\left|\psi_{k}^{i}\right\rangle \)</span> היא <span class="math">\(p\left(i,k\right)\)</span>. אבל השאלה שאני שואל כרגע היא מה ההסתברות להיות ב-<span class="math">\(\left|\psi_{k}^{i}\right\rangle \)</span> <strong>אם ידוע</strong> ש-<span class="math">\(M_{i}\)</span> עלה בגורל, כלומר "אם ידוע ש-<span class="math">\(M_{i}\)</span> עלה בגורל, מה ההסתברות שמלכתחילה היינו במצב <span class="math">\(\left|\psi_{k}\right\rangle \)</span>", כלומר <span class="math">\(p\left(k|i\right)\)</span>, שהוא ההפך מ-<span class="math">\(p\left(i|k\right)\)</span> שכבר חישבתי.</p>
+<p>עכשיו, הנה טריק יעיל שנקרא "כלל בייס": מכיוון ש-<span class="math">\(p\left(A|B\right)=\frac{p\left(A\cap B\right)}{p\left(B\right)}\)</span> אפשר לכתוב <span class="math">\(p\left(A|B\right)p\left(B\right)=p\left(A\cap B\right)\)</span>. אבל באותה צורה ממש מקבלים</p>
+<p><span class="math">\(p\left(B|A\right)p\left(A\right)=p\left(A\cap B\right)=p\left(A|B\right)p\left(B\right)\)</span></p>
+<p>ולכן:</p>
+<p><span class="math">\(p\left(A|B\right)=\frac{p\left(B|A\right)p\left(A\right)}{p\left(B\right)}\)</span></p>
+<p>כלומר, זו שיטה להפוך את ההסתברות של א' שמותנה בקיום ב', להסתברות של ב' שמותנה בקיום א'. בפרט, בסיטואציות כמו הנוכחית שבה אנחנו חושבים על המאורעות בתור "מה שבא קודם" ו"מה שבא אחר כך", היא מאפשרת לעבור מהשאלה היותר אינטואיטיבית "בהינתן שקרה משהו, מה ההסתברות שינבע מכך משהו אחר בעתיד" אל השאלה הטריקית יותר "בהינתן שקרה משהו, מה ההסתברות שבעבר התרחש משהו שממנו זה נבע" (הסתברות א-פריורית אל מול הסתברות א-פוסטריורית).</p>
+<p>עבורנו מה שמתקבל מכל זה כשאנחנו מתעסקים עם <span class="math">\(\rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\)</span> הוא</p>
+<p><span class="math">\(p\left(k|i\right)=\frac{p\left(i|k\right)p\left(k\right)}{p\left(i\right)}=p_{k}\frac{\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}\)</span></p>
+<p>עכשיו, המטרה שלי היא להבין לאן <span class="math">\(\rho\)</span> עברה אחרי המדידה בהינתן ש-<span class="math">\(M_{i}\)</span> עלה בגורל; מה התפלגות המצבים החדשה, כלומר מהו </p>
+<p><span class="math">\(\rho^{i}=\sum_{k=1}^{m}p\left(k|i\right)\left|\psi_{k}^{i}\right\rangle \left\langle \psi_{k}^{i}\right|\)</span></p>
+<p>בואו נפשט את הנוסחה הזו. כזכור, <span class="math">\(\left|\psi_{k}^{i}\right\rangle =\frac{M_{i}\left|\psi_{k}\right\rangle }{\sqrt{\left\langle \psi_{k}\right|M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle }}\)</span> ולכן, כפי שכבר ראינו קודם,</p>
+<p><span class="math">\(\left|\psi_{k}^{i}\right\rangle \left\langle \psi_{k}^{i}\right|=\frac{M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)}\)</span></p>
+<p>שימו לב שהמונה של <span class="math">\(p\left(k|i\right)\)</span> והמכנה של <span class="math">\(\left|\psi_{k}^{i}\right\rangle \left\langle \psi_{k}^{i}\right|\)</span> מבטלים זה את זה! בזכות זה, אם נציב את שניהם בנוסחה <span class="math">\(\rho^{i}=\sum_{k=1}^{m}p\left(k|i\right)\left|\psi_{k}^{i}\right\rangle \left\langle \psi_{k}^{i}\right|\)</span>, נקבל</p>
+<p>ואם נציב את מה שכבר מצאנו בנוסחה הזו, נקבל</p>
+<p><span class="math">\(\rho^{i}=\sum_{k=1}^{m}p_{k}\frac{M_{i}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}=\frac{M_{i}\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}=\frac{M_{i}\rho M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}\)</span></p>
+<p>ושוב - קיבלנו את אותה נוסחה גם עבור מקבץ מצבים קוונטיים ולא מצב בודד. זה משלים את הכללת הפורמליזם של חישוב קוונטי מוקטורים שמייצגים מצב בודד, אל מטריצות צפיפות שמייצגות מקבץ של מצבים.</p>
+<p>אבל לא סיימנו, עכשיו מגיע הקטע הכי נחמד! עד עכשיו תיארתי מה קורה עם מדידה שבה אנחנו מגרילים תוצאה ואז שואלים את עצמנו - בהינתן שקיבלנו את התוצאה <span class="math">\(M_{i}\)</span>, לאן עברנו? אבל עכשיו אפשר לדבר על השאלה - מה קורה אם אנחנו מבצעים מדידה ו<strong>לא יודעים</strong> מה התוצאה? זה מה שאיתו פתחנו.</p>
+<p>אינטואיטיבית, מה שקורה במקרה הזה הוא שאנחנו עוברים לסיטואציה הסתברותית קלאסית: אם בהסתברות <span class="math">\(p\left(i\right)\)</span> עברנו מהמקבץ <span class="math">\(\rho\)</span> אל המקבץ <span class="math">\(\rho^{i}\)</span>, אז עברנו אל מקבץ <span class="math">\(\rho^{\prime}\)</span> שמורכב מכל המקבצים <span class="math">\(\rho^{i}\)</span> הללו יחד, כשההסתברות של כל איבר במקבץ <span class="math">\(\rho^{i}\)</span> מוכפלת ב-<span class="math">\(p\left(i\right)\)</span> (כי עכשיו יש לנו תהליך דו-שלבי לקבלת איבר במקבץ <span class="math">\(\rho^{\prime}\)</span>: ראשית מגרילים <span class="math">\(\rho^{i}\)</span> ואז מגרילים איבר מתוכו). כלומר</p>
+<p><span class="math">\(\rho^{\prime}=\sum_{i=1}^{t}p\left(i\right)\rho^{i}\)</span></p>
+<p>אבל כבר חישבנו את <span class="math">\(p\left(i\right),\rho^{i}\)</span>! נציב אותם בנוסחה ונקבל שוב ביטול הדדי נחמד:</p>
+<p><span class="math">\(\rho^{\prime}=\sum_{i=1}^{t}p\left(i\right)\rho^{i}=\sum_{i=1}^{t}\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)\frac{M_{i}\rho M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}=\sum_{i=1}^{t}M_{i}\rho M_{i}^{\dagger}\)</span></p>
+<p>זו כנראה הנוסחה הפשוטה והיפה ביותר כאן, והיא הראשונה שבאמת מהווה משהו חדש - האופן שבו מערכת קוונטית מתפתחת בזמן תחת פעולת מדידה עם תוצאות לא ידועות. בואו נראה איך זה נותן לנו את הדוגמא מתחילת הפוסט.</p>
+<p>את הפוסט התחלנו עם המצב <span class="math">\(\left|+\right\rangle \)</span>, שמתורגם למטריצת הצפיפות</p>
+<p><span class="math">\(\rho=\left|+\right\rangle \left\langle +\right|\frac{1}{\sqrt{2}}\left(\begin{array}{c} 1\\ 1 \end{array}\right)\frac{1}{\sqrt{2}}\left(\begin{array}{cc} 1 & 1\end{array}\right)=\left(\begin{array}{cc} \frac{1}{2} & \frac{1}{2}\\ \frac{1}{2} & \frac{1}{2} \end{array}\right)\)</span></p>
+<p>אנחנו מודדים את <span class="math">\(\rho\)</span> בבסיס <span class="math">\(Z\)</span>, כלומר עם אופרטורי המדידה</p>
+<p><span class="math">\(M_{0}=\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right),M_{1}=\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)\)</span></p>
+<p>לאן <span class="math">\(\rho\)</span> יעבור אם אנחנו לא יודעים את תוצאת המדידה?</p>
+<p><span class="math">\(\rho^{\prime}=M_{0}\rho M_{0}^{\dagger}+M_{1}\rho M_{1}^{\dagger}=\)</span></p>
+<p><span class="math">\(=\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right)\left(\begin{array}{cc} \frac{1}{2} & \frac{1}{2}\\ \frac{1}{2} & \frac{1}{2} \end{array}\right)\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right)+\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)\left(\begin{array}{cc} \frac{1}{2} & \frac{1}{2}\\ \frac{1}{2} & \frac{1}{2} \end{array}\right)\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)=\)</span></p>
+<p><span class="math">\(=\left(\begin{array}{cc} \frac{1}{2} & 0\\ 0 & \frac{1}{2} \end{array}\right)=\frac{1}{2}\left(\begin{array}{cc} 1 & 0\\ 0 & 0 \end{array}\right)+\frac{1}{2}\left(\begin{array}{cc} 0 & 0\\ 0 & 1 \end{array}\right)=\frac{1}{2}\left|0\right\rangle \left\langle 0\right|+\frac{1}{2}\left|1\right\rangle \left\langle 1\right|\)</span></p>
+<p>והנה, קיבלנו באופן פורמלי את "בהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|0\right\rangle \)</span> ובהסתברות <span class="math">\(\frac{1}{2}\)</span> הקיוביט במצב <span class="math">\(\left|1\right\rangle \)</span>" וסגרנו מעגל עם תחילת הפוסט.</p>
+<h2>מה זה מטריצות צפיפות ואיך מגיעים אליהן בלי וקטורי מצב?</h2>
+
+<p>עד עכשיו הצגתי מטריצות צפיפות בתור הכללה של וקטורי מצב, אבל האם היה אפשר גם אחרת? האם בתיאוריה הייתי יכול להתחיל את התיאור של הפורמליזם המתמטי של חישוב קוונטי בלי לדבר על וקטורים בכלל, רק על מטריצות? התשובה היא "כן", אבל צריך להיות זהירים; כשם שלא כל וקטור הוא וקטור מצב, גם לא כל מטריצה היא מטריצת צפיפות.</p>
+<p>ראשית, זוכרים איך וקטור <span class="math">\(\left|\psi\right\rangle \)</span> שהוא וקטור מצב חייב להיות מנורמה 1, כלומר לקיים <span class="math">\(\left\langle \psi\right|\left|\psi\right\rangle =1\)</span>? וזוכרים איך אפשר להחליף את הסדר בין המוכפלים אם משתמשים ב-tr? אז</p>
+<p><span class="math">\(\text{tr}\left(\left|\psi\right\rangle \left\langle \psi\right|\right)=\left\langle \psi\right|\left|\psi\right\rangle =1\)</span></p>
+<p>ועכשיו, עבור <span class="math">\(\rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\)</span> כללי:</p>
+<p><span class="math">\(\text{tr}\left(\rho\right)=\text{tr}\left(\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)=\sum_{k=1}^{m}p_{k}\text{tr}\left(\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\right)=\sum_{k=1}^{m}p_{k}=1\)</span></p>
+<p>כלומר, אם מטריצה <span class="math">\(\rho\)</span> רוצה להיות מטריצת צפיפות, ברור שהיא <strong>חייבת</strong> לקיים <span class="math">\(\text{tr}\left(\rho\right)=1\)</span>. אבל זה לא מספיק. יש עוד תכונה מהותית ש-<span class="math">\(\rho\)</span> מקיימת, ונובעת מהסימטריה של <span class="math">\(\left|\psi\right\rangle \left\langle \psi\right|\)</span>. אבל בשביל להבין מאיפה התכונה הזו מגיעה אולי שווה לתת טיפה רקע.</p>
+<p>באלגברה לינארית הפעולה הבסיסית שמעניינת אותנו היא <strong>טרנספורמציה לינארית</strong>, פונקציה <span class="math">\(T:V\to W\)</span> שהיא לינארית, כלומר מקיימת <span class="math">\(T\left(u+v\right)=T\left(u\right)+T\left(v\right)\)</span>, ו-<span class="math">\(T\left(\lambda v\right)=\lambda T\left(v\right)\)</span>. זו תכונה כל כך יפה, שממנה נגזר שאפשר לתאר כל טרנספורמציה לינארית באמצעות הפעולה הפשוטה יחסית של כפל מטריצה בוקטור: קיימת מטריצה <span class="math">\(A_{T}\)</span> כך ש-<span class="math">\(T\left(v\right)=A_{T}\cdot v\)</span>.</p>
+<p>אפשר לקחת את זה לשלב הבא ולדבר על העתקה <strong>בילינארית</strong>, שהיא פונקציה <span class="math">\(B:V\times U\to W\)</span> בשני משתנים שהיא לינארית בכל משתנה לחוד, כלומר</p>
+<ol> <li><span class="math">\(B\left(v_{1}+v_{2},u\right)=B\left(v_{1},u\right)+B\left(v_{2},u\right)\)</span></li>
+
+
+<li><span class="math">\(B\left(v,u_{1}+u_{2}\right)=B\left(v,u_{1}\right)+B\left(v,u_{2}\right)\)</span></li>
+
+
+<li><span class="math">\(B\left(\lambda v,u\right)=\lambda B\left(v,u\right)\)</span></li>
+
+
+<li><span class="math">\(B\left(v,\lambda u\right)=\lambda B\left(v,u\right)\)</span></li>
+
+</ol>
+
+<p>במקרה שבו <span class="math">\(V=U\)</span> ו-<span class="math">\(W=\mathbb{F}\)</span>, כלומר <span class="math">\(B\)</span> מעתיקה זוגות של איברים מ-<span class="math">\(V\)</span> אל איבר כלשהו בשדה ש-<span class="math">\(V\)</span> חי מעליו, קוראים ל-<span class="math">\(B\)</span> <strong>תבנית בילינארית</strong>, וכמו שאפשר לייצג פונקציה לינארית עם מטריצה, אפשר לייצג תבנית בילינארית עם מטריצה. ספציפית, קיימת מטריצה <span class="math">\(A\)</span> כך ש-</p>
+<p><span class="math">\(B\left(v,u\right)=v^{T}Au\)</span></p>
+<p>(אני מחפף פה ומניח שהוקטורים של <span class="math">\(V\)</span> הם מראש וקטורי עמודה; בפועל צריך לקחת בסיס ל-<span class="math">\(V\)</span> ואת וקטורי הקואורדינטות של <span class="math">\(v,u\)</span> אבל נעזוב את זה).</p>
+<p>כשאנחנו מעל <span class="math">\(\mathbb{F}=\mathbb{R}\)</span>, אפשר לחשוב על <strong>מכפלה פנימית</strong> בתור מקרה פרטי מעניין של תבנית בילינארית. מעל המרוכבים זה טיפה יותר מסובך - אנחנו צריכים לדבר על משהו שנקרא <strong>תבנית הרמיטית</strong>, שמקיימת את תכונות 1-3 שהראיתי קודם, אבל 4 מוחלפת ב-<span class="math">\(B\left(v,\lambda u\right)=\overline{\lambda}B\left(v,u\right)\)</span>, ובנוסף יש דרישה של מעין אנטי-סימטריות: <span class="math">\(B\left(u,v\right)=\overline{B\left(v,u\right)}\)</span>. מטריצה <span class="math">\(A\)</span> מייצגת את <span class="math">\(B\)</span> על ידי המשוואה הטיפה שונה</p>
+<p><span class="math">\(B\left(v,u\right)=v^{\dagger}A\overline{u}\)</span></p>
+<p>אבל כדי שתבנית הרמיטית תהיה מכפלה פנימית, על כל הדברים הנחמדים שנובעים מכך, יש עוד תכונה אחת שהיא חייבת לקיים: <strong>חיוביות</strong>. לכל <span class="math">\(v\ne0\)</span> צריך להתקיים</p>
+<p><span class="math">\(B\left(v,v\right)>0\)</span></p>
+<p>עכשיו, כשאנחנו חושבים על <span class="math">\(B\)</span> בתור משהו שמיוצג עם המטריצה <span class="math">\(A\)</span>, לאיזו דרישה על <span class="math">\(A\)</span> החיוביות מתורגמת? לכך שאם <span class="math">\(v\ne0\)</span> אז יתקיים</p>
+<p><span class="math">\(v^{T}A\overline{v}>0\)</span></p>
+<p>את הדרישה הזו אני יכול לנסח בצורה יותר נחמדה עבורנו אם אחליף את <span class="math">\(v\)</span> ב-<span class="math">\(\overline{v}\)</span> (זה לא משנה, כי אני עובר על כל ה-<span class="math">\(v\ne0\)</span>) ואקבל</p>
+<p><span class="math">\(v^{\dagger}Av>0\)</span></p>
+<p>מטריצה <span class="math">\(A\)</span> שמקיימת את התכונה הזו נקראת <strong>מטריצה חיובית</strong> (positive definite), וזו גם בדיוק התכונה שאני הולך לדרוש מ-<span class="math">\(\rho\)</span> שלנו שמתיימרת לייצג מצב קוונטי, בנוסף לדרישה שכבר ראינו ש-<span class="math">\(\text{tr}\left(\rho\right)=1\)</span>. בואו נבין למה זה מתקיים אם <span class="math">\(\rho\)</span> הגיעה מוקטורים, כלומר היא מהצורה</p>
+<p><span class="math">\(\rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\)</span></p>
+<p>אנחנו לוקחים וקטור שונה מאפס כלשהו, <span class="math">\(v=\left|\varphi\right\rangle \)</span>, ומחשבים את <span class="math">\(v^{\dagger}\rho v\)</span>, כלומר את</p>
+<p><span class="math">\(\left\langle \varphi\right|\rho\left|\varphi\right\rangle \)</span></p>
+<p>עכשיו, עבור המקרה הפשוט שבו <span class="math">\(\rho=\left|\psi\right\rangle \left\langle \psi\right|\)</span> נקבל</p>
+<p><span class="math">\(\left\langle \varphi\right|\rho\left|\varphi\right\rangle =\left\langle \varphi\right|\left|\psi\right\rangle \left\langle \psi\right|\left|\varphi\right\rangle =\left|\left\langle \varphi,\psi\right\rangle \right|^{2}>0\)</span></p>
+<p>(כאשר כאן התוצאה התקבלה כי המכפלה הפנימית הרגילה מעל <span class="math">\(\mathbb{C}\)</span> היא חיובית)</p>
+<p>ומכאן להכללה עבור סכום מהצורה <span class="math">\(\rho=\sum_{k=1}^{m}p_{k}\left|\psi_{k}\right\rangle \left\langle \psi_{k}\right|\)</span> הדרך טריוויאלית:</p>
+<p><span class="math">\(\left\langle \varphi\right|\rho\left|\varphi\right\rangle =\sum_{k=1}^{m}p_{k}\left|\left\langle \varphi,\psi_{k}\right\rangle \right|^{2}>0\)</span></p>
+<p>עכשיו אפשר לשכוח לחלוטין מוקטורי מצב ולנסח מחדש את עקרונות הבסיס של חישוב קוונטי בעזרת מטריצות צפיפות; אבל אני אעבור לדבר על <strong>אופרטור צפיפות</strong>, כי לדבר על מטריצה מניח במובלע בסיס (אין כזו הבדלה בשפה כשמדברים על וקטורים - המילה "וקטור" מתארת גם אובייקט כללי של מרחב וקטורי וגם את וקטור השורה שאיבריו הם אברי השדה, ולכן לא צצה הבחנה כזו קודם). מי שרגילות לאלגברה לינארית כבר יודעות שאת רוב מה שאפשר לומר על מטריצות, אפשר לומר על אופרטורים - פשוט לוקחים בסיס כלשהו ומוודאים שהמטריצה המייצגת של האופרטור בבסיס הזה מקיימת את התכונה הזו (מן הסתם זה דורש שהתכונה לא תהיה תלויה בבחירת הבסיס, ולמרבה המזל זה מה שקורה עם התכונות המעניינות באלגברה לינארית).</p>
+<p>אם כן, בחישוב קוונטי אנחנו מתארים מערכת קוונטית מסויימת בעזרת מרחב הילברט <span class="math">\(\mathcal{H}\)</span>, כך שמצב המערכת בכל רגע נתון הוא אופרטור <span class="math">\(\rho:\mathcal{H}\to\mathcal{H}\)</span> שמקיים</p>
+<ul> <li><span class="math">\(\text{tr}\left(\rho\right)=1\)</span>.</li>
+
+
+<li><span class="math">\(\rho\)</span> הוא אופרטור חיובי.</li>
+
+</ul>
+
+<p>ואם המערכת נמצאת בהסתברות <span class="math">\(p_{k}\)</span> במצב <span class="math">\(\rho_{k}\)</span> אז המצב שלה הוא <span class="math">\(\rho=\sum_{k}p_{k}\rho_{k}\)</span>.</p>
+<p>בהינתן אופרטור אוניטרי <span class="math">\(U:\mathcal{H}\to\mathcal{H}\)</span>, ניתן להפעיל אותו על המערכת כדי לשנות את מצבה:</p>
+<p><span class="math">\(\rho\mapsto U\rho U^{\dagger}\)</span></p>
+<p>ובהינתן אוסף של אופרטורי מדידה <span class="math">\(\left\{ M_{0},\ldots,M_{t}\right\} \)</span> מעל <span class="math">\(\mathcal{H}\)</span> שהדרישה היחידה עליהם היא שיתקיים <span class="math">\(\sum_{i=0}^{t}M_{i}^{\dagger}M_{i}=I\)</span>, ניתן למדוד את המערכת במצב <span class="math">\(\rho\)</span> ולקבל את התוצאה <span class="math">\(M_{i}\)</span> בהסתברות</p>
+<p><span class="math">\(p\left(i\right)=\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)\)</span></p>
+<p>ואם התקבלה תוצאה זו, המערכת עוברת למצב</p>
+<p><span class="math">\(\rho\mapsto\frac{M_{i}\rho M_{i}^{\dagger}}{\text{tr}\left(M_{i}^{\dagger}M_{i}\rho\right)}\)</span></p>
+<p>זה מסיים את ההגדרה, וכפי שראינו, תוצאה מיידית ממנה היא שאם מודדים את המערכת בעזרת <span class="math">\(\left\{ M_{0},\ldots,M_{t}\right\} \)</span> אבל תוצאת המדידה אינה ידועה לנו, המערכת עוברת מבחינתנו למצב </p>
+<p><span class="math">\(\rho\mapsto\sum_{i=0}^{t}M_{i}\rho M_{i}^{\dagger}\)</span></p>
+<p>ייתכן מאוד שכבר שמתם לב שאם "מודדים" את המערכת באמצעות אופרטור מדידה בודד, <span class="math">\(\left\{ U\right\} \)</span>, שהוא אוניטרי, השינוי של המערכת עקב ה"מדידה" הזו הוא </p>
+<p><span class="math">\(\rho\mapsto U\rho U^{\dagger}\)</span></p>
+<p>כלומר, השינוי ה"רגיל". של מצב המערכת. רק שעכשיו יש לנו קבוצה גדולה בהרבה של שינויים אפשריים, ואנחנו רוצים להבין אותה יותר טוב - למה? לא רק כי הם מייצגים מדידות, אלא גם כי הם מייצגים <strong>רעשים</strong>, שאפשר לחשוב עליהם בדיוק בתור "מדידות שלא אומרים לנו את התוצאה שלהן" ו"מדידות שמבוצעות באופן אקראי". בשביל לתאר את הדברים הללו אנחנו כבר חייבים את הפורמליזם של מטריצת הצפיפיות, מה שמצדיק את כל הפוסט הזה. אבל מה בדיוק מאפיין את קבוצת כל השינויים האפשריים הללו ואיך מייצגים איברים שלה? על זה נדבר בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2022/10/12/quantum_state_tomography/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">טומוגרפיה קוונטית: איך מגלים מה כבר יש לנו?</span>
+            </a>
+            
+            
+            
+            <a href="/2022/09/30/shor_algorithm_revisit/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי: האלגוריתם של שור</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

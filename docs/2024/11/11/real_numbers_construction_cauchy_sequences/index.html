@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה זה בעצם המספרים הממשיים? (חלק ד&#39;: בונים את המספרים הממשיים עם סדרות קושי) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז מה זה בעצם המספרים הממשיים? (חלק ד&#39;: בונים את המספרים הממשיים עם סדרות קושי)</h1>
+            <div class="post-meta">
+                <span class="date">2024-11-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מספרים ממשיים.html">מספרים ממשיים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>סדרת הפוסטים שלי על המספרים הממשיים כבר אמרה המון דברים על המספרים הממשיים חוץ מדבר בסיסי אחד: מהם המספרים הממשיים. קיבלנו אינטואיציה וקיבלנו רשימת תכונות שאנחנו <strong>מצפים</strong> שהמספרים הממשיים יקיימו, אבל לא קיבלו בניות קונקרטיות שלהם. בפוסט הזה סוף סוף נגיע להגדרה פורמלית: זו של קנטור שמסתמכת על <strong>סדרות</strong>. בנוסף להגדרה הזו יש גם את ההגדרה של דדקינד שמסתמכת על <strong>חתכים</strong>, אבל אני דוחה אותה לפוסט הבא כי ההוכחה שהיא עובדת היא טכנית להחריד (אפילו יותר מהדברים הטכניים להחריד שיהיו בהמשך הפוסט הזה) וסדר ההצגה של דברים בה הוא שונה, כך שבפוסט הזה אני אתמקד על הבניה של קנטור שהיא קצת יותר קלה לעיכול מבחינת הפרטים הטכניים.</p>
+<p>לפני שנתחיל, בואו ניזכר שוב מה היה האפיון שנתתי למספרים הממשיים: המספרים הממשיים הם <strong>השדה הסדור השלם</strong>. כאשר "שדה", "סדור" ו"שלם" כולם מוגדרים על ידי <strong>אקסיומות</strong> (תכונות בסיסיות שאנחנו מצפים מהאובייקט שלנו לקיים אם הוא רוצה להיקרא "שדה", "סדור", "שלם") והשימוש שלי בה' הידיעה הוצדק על ידי הוכחה שיש בדיוק אובייקט אחד (עד כדי איזומורפיזם) שמקיים את כל האקסיומות הללו.</p>
+<p>זה אומר מה בעצם אני צריך לעשות בפוסט הזה והבא אחריו: לא סתם להציג בניה, אלא להסביר או אפילו להוכיח עד הסוף למה הבניה מקיימות את כל האקסיומות הללו (בכך זה שונה מאוד מפעמים אחרות שבהן הזכרתי את הבניות בבלוג; אף פעם לא הראיתי שהן מקיימות את האקסיומות, כלומר שהן עושות את מה שהן אמורות לעשות). לכן נתחיל עם להזכיר את רשימת כל האקסיומות:</p>
+<p>האובייקט הבסיסי שלנו מסומן ב-<span class="math">\(\mathbb{F}\)</span> והוא פשוט קבוצה. אנחנו אומרים שהוא <strong>שדה</strong> אם בנוסף ל-<span class="math">\(\mathbb{F}\)</span> מוגדרות לנו שתי פונקציות בינאריות על <span class="math">\(\mathbb{F}\)</span> (פונקציות בינאריות: מקבלות שני קלטים ומחזירות פלט אחד) שמסומנות ב-"<span class="math">\(+\)</span>" וב-"<span class="math">\(\cdot\)</span>" כך שמתקיימות התכונות הבאות:</p>
+<ul> <li><span class="math">\(\left(A+B\right)+C=A+\left(B+C\right)\)</span></li>
+
+
+<li><span class="math">\(\left(A\cdot B\right)\cdot C=A\cdot\left(B\cdot C\right)\)</span></li>
+
+
+<li><span class="math">\(A+B=B+A\)</span></li>
+
+
+<li><span class="math">\(A\cdot B=B\cdot A\)</span> </li>
+
+
+<li><span class="math">\(A\cdot\left(B+C\right)=A\cdot B+A\cdot C\)</span></li>
+
+
+<li>קיים איבר שמסומן ב-0 כך ש-<span class="math">\(A+0=A\)</span> לכל <span class="math">\(A\)</span></li>
+
+
+<li>לכל <span class="math">\(A\)</span> קיים איבר שמסומן ב-<span class="math">\(-A\)</span> ונקרא <strong>הנגדי</strong> של <span class="math">\(A\)</span> כך ש-<span class="math">\(A+\left(-A\right)=0\)</span></li>
+
+
+<li>קיים איבר שמסומן ב-<span class="math">\(1\)</span> כך ש-<span class="math">\(0\ne1\)</span> ו-<span class="math">\(A\cdot1=A\)</span> לכל <span class="math">\(A\)</span></li>
+
+
+<li>לכל <span class="math">\(A\ne0\)</span> קיים איבר שמסומן ב-<span class="math">\(A^{-1}\)</span> ונקרא <strong>ההופכי</strong> של <span class="math">\(A\)</span> כך ש-<span class="math">\(A\cdot A^{-1}=1\)</span></li>
+
+</ul>
+
+<p>עבור שדה סדור דרשנו בנוסף את הקיום של קבוצה <span class="math">\(P\subseteq\mathbb{F}\)</span> שאינטואיטיבית אנחנו חושבים על אבריה בתור "המספרים החיוביים" שמקיימת:</p>
+<ul> <li>לכל <span class="math">\(A\in\mathbb{F}\)</span> בדיוק אחד מהבאים מתקיים: או ש-<span class="math">\(A\in P\)</span>, או ש-<span class="math">\(-A\in P\)</span>, או ש-<span class="math">\(A=0\)</span>.</li>
+
+
+<li>אם <span class="math">\(A,B\in P\)</span> אז <span class="math">\(A+B\in P\)</span></li>
+
+
+<li>אם <span class="math">\(A,B\in P\)</span> אז <span class="math">\(A\cdot B\in P\)</span></li>
+
+</ul>
+
+<p>לבסוף, <strong>אקסיומת השלמות</strong> הייתה האקסיומה הבאה:</p>
+<ul> <li>אם <span class="math">\(A\subseteq\mathbb{F}\)</span> היא קבוצה לא ריקה וחסומה מלעיל, אז <span class="math">\(\sup A\)</span> קיים.</li>
+
+</ul>
+
+<p>בפוסט הקודם ראינו שהאקסיומה הזו <strong>שקולה</strong> לזוג אקסיומות אחר:</p>
+<ul> <li>(ארכימדיות) לכל <span class="math">\(A\in\mathbb{F}\)</span> קיים <span class="math">\(N\in\mathbb{N}\)</span> כך ש-<span class="math">\(A<N\)</span></li>
+
+
+<li>(שלמות-קנטור) כל סדרת קושי מתכנסת</li>
+
+</ul>
+
+<p>אני לא מסביר לעומק מה כל האקסיומות אומרות כי כבר דיברנו על זה בפירוט בפוסטים הקודמים ועוד נעשה את זה בפירוט בהמשך, כחלק מההוכחות עצמן. בואו נעבור לראות את הבניה עצמה.</p>
+<h2>הבניה של קנטור למספרים הממשיים</h2>
+
+<p>קנטור ודדקינד לוקחים שניהם בתור נקודת מוצא את הרציונליים, <span class="math">\(\mathbb{Q}\)</span>, ויש לכך סיבות טובות. ראשית, זה שדה סדור, כלומר אנחנו "כמעט שם" ורק נותרה לנו עוד אקסיומה אחת; אפשר להראות ש-<span class="math">\(\mathbb{Q}\)</span> יהיה מוכל בכל שדה סדור כך שהוא בסיס טוב לצאת ממנו; ועם הבניה של <span class="math">\(\mathbb{Q}\)</span> אין לנו שום בעיות והיא די פשוטה.</p>
+<p>מה שדדקינד וקנטור עושים, וזה רעיון מקסים שחוזר על עצמו שוב ושוב במתמטיקה, הוא לבנות את האובייקט החדש <strong>בתור</strong> האובייקטים הקיים שכרגע חסר בו משהו. דדקינד אומר - יש לנו קבוצות של רציונליים שנראה שאמור להיות להן חסם עליון אבל אין? יופי, הקבוצות הללו <strong>יהיו</strong> המספר הממשי שהוא החסם העליון הזה. קנטור אומר - יש לנו סדרות קושי שנראה שאמורות להתכנס לאנשהו אבל אין להן גבול? יופי, הסדרות הללו <strong>יהיו</strong> המספר הממשי שהוא הגבול הזה. זה נראה כמו רמאות גמורה, אבל כשפורטים את זה לפרטים ברור שאין כאן שום רמאות והכל תקין מבחינה פורמלית. גם מבחינה רעיונית אפשר להבין את זה: האובייקט שממנו מתחילים, זה שמצביע על החסר, בעצם כולל את <strong>האינפורמציה</strong> שנראית לנו רלוונטית עבור המספר החדש; לכן הוא האובייקט הכי מתאים כדי להגדיר את המספר החדש הזה.</p>
+<p>בואו נראה את הדוגמא הקלאסית עם המספר האי-רציונלי <span class="math">\(\sqrt{2}=1.41421\ldots\)</span>. זה מספר אי רציונלי, אבל יש סדרת מספרים רציונליים פשוטה ששואפת אליו: <span class="math">\(1,1.4,1.41,1.414,1.4142,1.41421,\ldots\)</span>. לא קשה להראות שהסדרה הזו היא <strong>סדרת קושי</strong> ולכן אם אנחנו רוצים שתתקיים שלמות-קנטור צריך להיות לה גבול ביקום המתמטי שלנו - אז אנחנו <strong>מגדירים</strong> מספר חדש באמצעות הסדרה הזו. לכאורה המספר החדש הזה הולך להיות <span class="math">\(\sqrt{2}\)</span>, אבל אי אפשר סתם להגיד את זה - צריך להשתכנע שהמספר החדש שבנינו, אחרי שכופלים אותו בעצמו, יוצא שווה ל-2. כלומר צריך להבין איך מבצעים פעולות אלגבריות על האובייקטים החדשים שלנו, ומתי שני אובייקטים הם שווים, ואיך בכלל "2" מוגדר בגישה שלנו (ובכן, בעזרת הסדרה <span class="math">\(2,2,2,2,\ldots\)</span>, למשל).</p>
+<p>לכאורה ההגדרה שלנו פשוטה: כל איבר של <span class="math">\(\mathbb{F}\)</span> יהיה סדרת קושי של רציונליים. אבל ההגדרה הזו לא מספיק טובה כי יכולות להיות <strong>הרבה</strong> סדרות קושי שונות ש"מתכנסות לאותו איבר". הדוגמא הקלאסית היא הסדרה הקבוצה <span class="math">\(1,1,1,\ldots\)</span> והסדרה <span class="math">\(0.9,0.99,0.999,\ldots\)</span> <a href="https://gadial.net/2008/06/07/almost_1_is_one/">שהקדשתי לה כבר פוסט</a> , אבל הבעיה הרבה יותר עמוקה מזה. למשל, אפילו אם אני אקח את <span class="math">\(1,1,1\ldots\)</span> לבדה ופתאום באיבר ה-54,527,822 אשנה אותו ל-42 וכל יתר הסדרה תהיה 1 - קיבלתי סדרת קושי שמתכנסת אל 1, אבל היא שונה מהסדרה שכולה 1-ים. ואפשר גם להסתכל על סדרה כמו <span class="math">\(a_{n}=1-\frac{1}{2^{n}}\)</span> שמתכנסת גם היא אל 1 אבל בצורה שונה, ועוד ועוד ועוד.</p>
+<p>מה שקנטור אומר הוא - אוקיי, אז בואו לא ניקח סדרת קושי אחת ספציפית בתור מספר ממשי; בואו ניקח את <strong>כל</strong> הסדרות שמתכנסות לאותו מספר להיות המספר עצמו. פורמלית אנחנו יכולים לתאר את זה עם המושג של <strong>יחס שקילות</strong> (מושג <a href="https://gadial.net/2020/01/06/equivalence_relations/">שיש לי עליו פוסט בבלוג</a> וכאן אני אניח שהוא מוכר).</p>
+<p>איך מגדירים יחס שקילות שאומר "שתי סדרות הקושי הללו מתכנסות לאותו דבר" כשאין "דבר" שהן מתכנסות אליו? פשוט אומרים שהן מתקרבות מספיק אחת לשניה: אם <span class="math">\(\left\{ a_{n}\right\} _{n=0}^{\infty},\left\{ b_{n}\right\} _{n=0}^{\infty}\)</span> הן שתי סדרות קושי, נאמר שהן <strong>שקולות</strong> אם לכל <span class="math">\(\varepsilon>0\)</span> קיים <span class="math">\(N\)</span> כך שלכל <span class="math">\(n>N\)</span> מתקיים <span class="math">\(\left|a_{n}-b_{n}\right|<\varepsilon\)</span>.</p>
+<p>קל לראות שזה יחס שקילות: הוא רפלקסיבי כי <span class="math">\(\left|a_{n}-a_{n}\right|=0\)</span> לכל <span class="math">\(n\)</span>; הוא סימטרי כי <span class="math">\(\left|a_{n}-b_{n}\right|=\left|b_{n}-a_{n}\right|\)</span> לכל <span class="math">\(n\)</span>. טרנזיטיביות היא טיפה יותר עבודה טכנית אבל שום דבר חכם במיוחד: אם <span class="math">\(\left\{ a_{n}\right\} _{n=0}^{\infty},\left\{ b_{n}\right\} _{n=0}^{\infty}\)</span> שקולות וגם <span class="math">\(\left\{ b_{n}\right\} _{n=0}^{\infty},\left\{ c_{n}\right\} _{n=0}^{\infty}\)</span> שקולות נראה ש-<span class="math">\(\left\{ a_{n}\right\} _{n=0}^{\infty},\left\{ c_{n}\right\} _{n=0}^{\infty}\)</span> שקולות על פי הגדרה. יהא <span class="math">\(\varepsilon>0\)</span> כלשהו, אז קיים <span class="math">\(N_{1}\)</span> כך ש-<span class="math">\(\left|a_{n}-b_{n}\right|<\frac{\varepsilon}{2}\)</span> לכל <span class="math">\(n>N_{1}\)</span> וקיים <span class="math">\(N_{2}\)</span> כך ש-<span class="math">\(\left|b_{n}-c_{n}\right|<\frac{\varepsilon}{2}\)</span> לכל <span class="math">\(n>N_{2}\)</span> ולכן אם נגדיר <span class="math">\(N=\max\left\{ N_{1},N_{2}\right\} \)</span> אז לכל <span class="math">\(n>N\)</span> מתקיים</p>
+<p><span class="math">\(\left|a_{n}-c_{n}\right|=\left|a_{n}-b_{n}+b_{n}-c_{n}\right|\le\left|a_{n}-b_{n}\right|+\left|b_{n}-c_{n}\right|<\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon\)</span></p>
+<p>וזה מה שרצינו. אז יש לנו יחס שקילות, ואם יש לנו יחס שקילות יש לנו מחלקות שקילות, כלומר חלוקה של אוסף <strong>כל</strong> סדרות הקושי הרציונליות לקבוצות כך שכל האיברים של קבוצה שקולים זה לזה ולא שקולים לאיברים של אף קבוצה אחרת. אוסף מחלקות השקילות הזה הוא מה שקנטור מגדיר בתור <span class="math">\(\mathbb{F}\)</span>. ושוב, טרם הגדרנו חיבור או כפל או איברים חיוביים, אז בינתיים אין לנו אקסיומות כלשהן להראות שמתקיימות, אבל כן קל לראות ש-<span class="math">\(\mathbb{Q}\subseteq\mathbb{F}\)</span> כי לכל רציונלי <span class="math">\(x\in\mathbb{Q}\)</span> פשוט ניקח את מחלקת השקילות של הסדרה <span class="math">\(x,x,x,\ldots\)</span>.</p>
+<h2>חיבור וכפל של סדרות קושי</h2>
+
+<p>הגישה הסטנדרטית כשבונים אובייקט חדש מתוך אובייקט קיים שבא להרחיב אותו הוא שלא מתחילים מאפס, ומשתמשים במבנה שיש לאובייקט הקיים כדי ליצור את המבנה של האובייקט החדש. אצלנו זה אומר שאת פעולות החיבור והכפל של ממשיים נגדיר באמצעות פעולות החיבור והכפל של רציונליים, שאנחנו כבר מכירים. ברור לנו לגמרי איך לחבר ולכפול כי אנחנו יודעים לחבר ולכפול סדרות: עושים את זה "איבר-איבר". רק מה, יש לנו סיבוך בלתי נמנע שנובע מכך שאנחנו מגדירים את הממשיים לא בתור <strong>סדרות</strong> אלא בתור <strong>מחלקות שקילות</strong> של סדרות. עוד סיבוך נובע מכך שאנחנו לא סתם עובדים עם<strong> </strong>סדרות אלא עם <strong>סדרות קושי</strong> ולכן גם תוצאת החיבור והכפל צריכה להיות סדרת קושי. זה לא יהיה סיבוך נוראי אבל נצטרך טיפה לעבוד.</p>
+<p>קודם כל בואו נכניס לתמונה סימונים שיקלו עלינו את החיים. סימנתי סדרה עד כה ב-<span class="math">\(\left\{ a_{n}\right\} _{n=0}^{\infty}\)</span>, אבל בואו נחסוך כתיבה מיותרת ופשוט נסמן אותה ב-<span class="math">\(a\)</span>. עכשיו אפשר להגדיר סכום וכפל של סדרות באופן הבא:</p>
+<ul> <li><span class="math">\(a+b=c\)</span> כאשר <span class="math">\(c_{n}=a_{n}+b_{n}\)</span></li>
+
+
+<li><span class="math">\(a\cdot b=c\)</span> כאשר <span class="math">\(c_{n}=a_{n}\cdot b_{n}\)</span></li>
+
+</ul>
+
+<p>כלומר, החיבור והכפל הם "נקודתיים", איבר-איבר.</p>
+<p>עכשיו נעבור לדבר על מחלקות שקילות: דרך סטנדרטית לסמן מחלקת שקילות היא באמצעות <strong>נציג</strong>: ניקח סדרה <span class="math">\(a\)</span> ונסמן</p>
+<p><span class="math">\(A=\left[a\right]\triangleq\left\{ a^{\prime}\ |\ a\sim a^{\prime}\right\} \)</span></p>
+<p>כאשר אצלנו כזכור <span class="math">\(a\sim a^{\prime}\)</span> פירושו שלכל <span class="math">\(\varepsilon>0\)</span> קיים <span class="math">\(N\)</span> כך שלכל <span class="math">\(n>N\)</span> מתקיים <span class="math">\(\left|a_{n}-a_{n}^{\prime}\right|<\varepsilon\)</span>. כלומר, אנחנו מתארים את המחלקה בתור "כל האיברים ששקולים אל <span class="math">\(a\)</span>" - במקרה הזה <span class="math">\(a\)</span> הוא <strong>הנציג</strong> של המחלקה.</p>
+<p>בואו ניסגר על הסימונים שלנו. כשאני כותב <span class="math">\(a_{n}\)</span> אני כותב מספר רציונלי - איבר של הסדרה <span class="math">\(\left\{ a_{n}\right\} _{n=0}^{\infty}\)</span>. כשאני כותב <span class="math">\(a\)</span>, זה קיצור במקום לכתוב <span class="math">\(\left\{ a_{n}\right\} _{n=0}^{\infty}\)</span>, וכשאני כותב <span class="math">\(A\)</span> אני מתכוון למספר ממשי: מחלקת שקילות של סדרות קושי. כשאני כותב <span class="math">\(A=\left[a\right]\)</span> אני בוחר לייצג את <span class="math">\(A\)</span> באמצעות הנציג הקונקרטי <span class="math">\(a\)</span>, ולעתים קרובות אני לא אטרח לכתוב את <span class="math">\(A\)</span> במפורש אלא אכתוב פשוט <span class="math">\(\left[a\right]\)</span> מלכתחילה, שזו דרך לומר "המספר הממשי שאני מייצג כרגע עם <span class="math">\(a\)</span>".</p>
+<p>עכשיו אפשר להגדיר חיבור וכפל של ממשיים, כלומר של מחלקות השקילות, על ידי נציגים:</p>
+<ul> <li><span class="math">\(\left[a\right]+\left[b\right]=\left[a+b\right]\)</span></li>
+
+
+<li><span class="math">\(\left[a\right]\cdot\left[b\right]=\left[a\cdot b\right]\)</span></li>
+
+</ul>
+
+<p>כלומר: רוצים לחבר/לכפול שני ממשיים? קחו סדרת קירובים כלשהי לכל אחד מהם, חברו/כפלו את סדרת הקירובים והופס, קיבלתם סדרת קירובים למספר שהוא החיבור/כפל של הממשיים שהתחלתם איתם.</p>
+<p>עד כאן הכל טוב, אבל בכל פעם שבה מגדירים פונקציה על מחלקות שקילות שמתבססת על הנציגים שלהן, יש את הסכנה שעבור נציגים <strong>שונים</strong> נקבל תוצאות <strong>שונות</strong>, וזה יאמר שהפונקציה שאנחנו מגדירים היא <strong>לא מוגדרת היטב</strong> כי על אותו הקלט (זוג ממשיים) היא יכולה להחזיר יותר מפלט אחד (כלומר, כמה ממשיים שונים) בהתאם לנציגים שאנחנו לוקחים.</p>
+<p>אז בואו נראה שזה לא יכול לקרות, בצורה הסטנדרטית. לכל מחלקה ניקח <strong>שני</strong> נציגים, ונראה שהתוצאה זהה גם עבור זוג הנציגים הראשון וגם עבור זוג הנציגים השני.</p>
+<p>פורמלית, ניקח <span class="math">\(a,a^{\prime}\)</span> כך ש-<span class="math">\(\left[a\right]=\left[a^{\prime}\right]\)</span>, ניקח <span class="math">\(b,b^{\prime}\)</span> כך ש-<span class="math">\(\left[b\right]=\left[b^{\prime}\right]\)</span> ונוכיח ש:</p>
+<ul> <li><span class="math">\(\left[a+b\right]=\left[a^{\prime}+b^{\prime}\right]\)</span></li>
+
+
+<li><span class="math">\(\left[a\cdot b\right]=\left[a^{\prime}\cdot b^{\prime}\right]\)</span></li>
+
+</ul>
+
+<p>נתחיל מהמקרה הראשון. אם "נקלף" את הרמה של מחלקות השקילות, נראה שמה שצריך להוכיח פה הוא בעצם שאם <span class="math">\(a\sim a^{\prime}\)</span> וגם <span class="math">\(b\sim b^{\prime}\)</span> אז <span class="math">\(a+b\sim a^{\prime}+b^{\prime}\)</span>. כלומר, נתחיל עם "יהי <span class="math">\(\varepsilon>0\)</span>" כרגיל ונמצא <span class="math">\(N\)</span> כך שלכל <span class="math">\(n>N\)</span> מתקיים <span class="math">\(\left|\left(a_{n}+b_{n}\right)-\left(a_{n}^{\prime}+b_{n}^{\prime}\right)\right|<\varepsilon\)</span>. בשלב הזה אני מקווה שאנחנו ממש מתורגלים כבר בשטיק הזה. עושים:</p>
+<p><span class="math">\(\left|\left(a_{n}+b_{n}\right)-\left(a_{n}^{\prime}+b_{n}^{\prime}\right)\right|=\left|\left(a_{n}-a_{n}^{\prime}\right)+\left(b_{n}-b_{n}^{\prime}\right)\right|\le\left|a_{n}-a_{n}^{\prime}\right|+\left|b_{n}-b_{n}^{\prime}\right|<\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon\)</span></p>
+<p>כשהמעברים הללו עובדים עבור <span class="math">\(N=\max\left\{ N_{1},N_{2}\right\} \)</span> כש-<span class="math">\(N_{1}\)</span> הוא מה שמבטיח <span class="math">\(\left|a_{n}-a_{n}^{\prime}\right|<\frac{\varepsilon}{2}\)</span> ו-<span class="math">\(N_{2}\)</span> מבטיח את זה עבור ה-<span class="math">\(b\)</span>-ים.</p>
+<p>כפל מצריך טריק אלגברי קטן:</p>
+<p><span class="math">\(\left|a_{n}b_{n}-a_{n}^{\prime}b_{n}^{\prime}\right|=\left|\left(a_{n}-a_{n}^{\prime}\right)b_{n}+a_{n}^{\prime}\left(b_{n}-b_{n}^{\prime}\right)\right|\le\left|b_{n}\right|\left|a_{n}-a_{n}^{\prime}\right|+\left|a_{n}^{\prime}\right|\left|b_{n}-b_{n}^{\prime}\right|\)</span></p>
+<p>זה טיפה מסבך לנו את החיים כי לא מספיק לחסום את <span class="math">\(\left|a_{n}-a_{n}^{\prime}\right|\)</span> ואת <span class="math">\(\left|b_{n}-b_{n}^{\prime}\right|\)</span> כמו קודם: צריך לחסום גם את <span class="math">\(\left|b_{n}\right|\)</span> ואת <span class="math">\(\left|a_{n}^{\prime}\right|\)</span>. זו לא בעיה אמיתית כי סדרות קושי הן חסומות: אם <span class="math">\(a\)</span> היא סדרת קושי, אז קיים <span class="math">\(N\)</span> כל שלכל <span class="math">\(n>N\)</span> מתקיים <span class="math">\(\left|a_{n}-a_{N}\right|<1\)</span>, כלומר </p>
+<p><span class="math">\(\left|a_{n}\right|=\left|a_{n}-a_{N}+a_{N}\right|\le\left|a_{n}-a_{N}\right|+\left|a_{N}\right|<\left|a_{N}\right|+1\)</span></p>
+<p>לכן בכללי אפשר להניח שעבור <span class="math">\(N\)</span> גדול מספיק נקבל לכל <span class="math">\(n>N\)</span> ש-<span class="math">\(\left|b_{n}\right|<M\)</span> וגם <span class="math">\(\left|a_{n}^{\prime}\right|<M\)</span> עבור <span class="math">\(M\)</span> כלשהו. עכשיו נמצא <span class="math">\(N\)</span> גדול דיו כך שהאפקט הזה מתקיים <strong>וגם</strong> <span class="math">\(\left|a_{n}-a_{n}^{\prime}\right|<\frac{\varepsilon}{2M}\)</span> <strong>וגם <span class="math">\(</strong>\left|b_{n}-b_{n}^{\prime}\right|<\frac{\varepsilon}{2M}\)</span>, ולכן נקבל</p>
+<p><span class="math">\(\left|a_{n}b_{n}-a_{n}^{\prime}b_{n}^{\prime}\right|=\le\left|b_{n}\right|\left|a_{n}-a_{n}^{\prime}\right|+\left|a_{n}^{\prime}\right|\left|b_{n}-b_{n}^{\prime}\right|<M\cdot\frac{\varepsilon}{2M}+M\cdot\frac{\varepsilon}{2M}=\varepsilon\)</span></p>
+<p>מה שמסיים את ההוכחה שהחיבור והכפל מוגדרים היטב. למרבה השמחה, כדי להוכיח שהסכום והכפל של סדרות קושי הוא סדרת קושי אנחנו בעצם עושים <strong>את אותו דבר בדיוק</strong> כך שטיפלנו בשתי הבעיות שלנו במחיר אחת. כדי לראות את זה, בואו נחשוב מה בעצם אנחנו רוצים להוכיח: שלכל <span class="math">\(\varepsilon>0\)</span> קיים <span class="math">\(N\)</span> כך שאם <span class="math">\(n,m>N\)</span> אז</p>
+<ul> <li><span class="math">\(\left|\left(a_{n}+b_{n}\right)-\left(a_{m}+b_{m}\right)\right|<\varepsilon\)</span></li>
+
+
+<li><span class="math">\(\left|\left(a_{n}b_{n}\right)-\left(a_{m}b_{m}\right)\right|<\varepsilon\)</span></li>
+
+</ul>
+
+<p>תחליפו את <span class="math">\(a_{m},b_{m}\)</span> ב-<span class="math">\(a_{n}^{\prime},b_{n}^{\prime}\)</span> וחזרנו להוכחה שכבר ראינו. אותן טכניקות עובדות בדיוק; לב העניין הוא בכך שכמו ש-<span class="math">\(a_{n},a_{n}^{\prime}\)</span> קרובים מספיק עבור <span class="math">\(n\)</span>-ים גדולים מספיק, כך גם <span class="math">\(a_{n},a_{m}\)</span> קרובים מספיק עבור <span class="math">\(n,m\)</span>-ים גדולים מספיק. זה מסיים עבורנו את ההגדרה של חיבור וכפל של מספרים ממשיים בגישה של קנטור (אבל הפעם לא הגדרנו על הדרך מתי איבר הוא חיובי או מה המינוס של איבר, עוד נצטרך להגיע אל זה).</p>
+<h2>אסוציאטיביות, קומוטטיביות, דיסטריביוטיביות</h2>
+
+<p>הגדרנו את פעולות החיבור והכפל ועכשיו אפשר להוכיח שהן מקיימות את התכונות הבסיסיות שנדרשות מהן בשדה:</p>
+<ul> <li><span class="math">\(\left(A+B\right)+C=A+\left(B+C\right)\)</span></li>
+
+
+<li><span class="math">\(\left(A\cdot B\right)\cdot C=A\cdot\left(B\cdot C\right)\)</span></li>
+
+
+<li><span class="math">\(A+B=B+A\)</span></li>
+
+
+<li><span class="math">\(A\cdot B=B\cdot A\)</span> </li>
+
+
+<li><span class="math">\(A\cdot\left(B+C\right)=A\cdot B+A\cdot C\)</span></li>
+
+
+<li>קיים איבר שמסומן ב-0 כך ש-<span class="math">\(A+0=A\)</span> לכל <span class="math">\(A\)</span></li>
+
+</ul>
+
+<p>מה שאנחנו יכולים להסתמך עליו הוא שכל התכונות הללו <strong>כבר נכונות</strong> עבור הממשיים, <span class="math">\(\mathbb{Q}\)</span>, וזה הולך מאוד להקל עלינו.</p>
+<p>נוכיח למשל קומוטטיביות של חיבור. אני צריך להראות ש:</p>
+<ul> <li><span class="math">\(\left[a\right]+\left[b\right]=\left[b\right]+\left[a\right]\)</span></li>
+
+</ul>
+
+<p>אבל זה קל: עבור שתי סדרות, <span class="math">\(a+b\)</span> היא הסדרה שהאיבר הכללי שלה הוא <span class="math">\(a_{n}+b_{n}\)</span>, אבל מקומוטטיביות הרציונליים, האיבר הכללי הזה שווה אל <span class="math">\(b_{n}+a_{n}\)</span> ולכן <span class="math">\(a+b=b+a\)</span> ולכן <span class="math">\(\left[a+b\right]=\left[b+a\right]\)</span>. כפל מתקבל באותו אופן בדיוק וגם דיסטריביוטיביות, אבל בואו נראה דיסטריביוטיביות במפורש כדי לא לדאוג שאנחנו מדלגים על משהו קריטי:</p>
+<p><span class="math">\(\left[a\right]\cdot\left(\left[b\right]+\left[c\right]\right)=\left[a\right]\cdot\left[b+c\right]=\left[a\left(b+c\right)\right]\)</span></p>
+<p>והאיבר הכללי של <span class="math">\(a\left(b+c\right)\)</span>, על פי הגדרת חיבור וכפל סדרות, הוא <span class="math">\(a_{n}\left(b_{n}+c_{n}\right)\)</span> ולכן, על פי דיסטריביוטיביות של רציונליים, שווה אל <span class="math">\(a_{n}b_{n}+a_{n}c_{n}\)</span> כלומר אל האיבר הכללי של <span class="math">\(ab+ac\)</span>, כמו שרצינו.</p>
+<p>גם עבור אסוציאטיביות זה בעצם אותו דבר אבל כדאי לראות את זה בזהירות. מה זה <span class="math">\(\left(\left[a\right]+\left[b\right]\right)+\left[c\right]\)</span>, על פי הגדרה? זה <span class="math">\(\left[a+b\right]+\left[c\right]\)</span>, כלומר זה <span class="math">\(\left[\left(a+b\right)+c\right]\)</span> ושוב אנחנו מתדרדרים לאסוציאטיביות ברמת האיבר הכללי: <span class="math">\(\left(a_{n}+b_{n}\right)+c_{n}=a_{n}+\left(b_{n}+c_{n}\right)\)</span> ומכאן מתקדמים כרגיל. אז עבור סדרות קושי הכל פשוט (עבור חתכי דדקינד השלב הזה יהיה גיהנום).</p>
+<h2>אדיש חיבורי וכפלי, נגדי, הופכי</h2>
+
+<p>עכשיו אנחנו רוצים להראות שמתקיימות האקסיומות הבאות:</p>
+<ul> <li>קיים איבר שמסומן ב-0 כך ש-<span class="math">\(A+0=A\)</span> לכל <span class="math">\(A\)</span></li>
+
+
+<li>לכל <span class="math">\(A\)</span> קיים איבר שמסומן ב-<span class="math">\(-A\)</span> ונקרא <strong>הנגדי</strong> של <span class="math">\(A\)</span> כך ש-<span class="math">\(A+\left(-A\right)=0\)</span></li>
+
+
+<li>קיים איבר שמסומן ב-<span class="math">\(1\)</span> כך ש-<span class="math">\(0\ne1\)</span> ו-<span class="math">\(A\cdot1=A\)</span> לכל <span class="math">\(A\)</span></li>
+
+
+<li>לכל <span class="math">\(A\ne0\)</span> קיים איבר שמסומן ב-<span class="math">\(A^{-1}\)</span> ונקרא <strong>ההופכי</strong> של <span class="math">\(A\)</span> כך ש-<span class="math">\(A\cdot A^{-1}=1\)</span></li>
+
+</ul>
+
+<p>מכיוון שאנחנו מרחיבים את השדה <span class="math">\(\mathbb{Q}\)</span> מתבקש שה-0 וה-1 שלנו יהיו גם אלו של <span class="math">\(\mathbb{Q}\)</span>, כלומר ניקח את 0 להיות מחלקת השקילות של סדרת הקושי <span class="math">\(0,0,0,\ldots\)</span> ואת <span class="math">\(1\)</span> להיות המחלקה של <span class="math">\(1,1,1,\ldots\)</span>. אלו בבירור סדרות קושי; הן בבירור לא שקולות זו לזו מכיוון שההפרש ביניהן הוא 1 באופן קבוע; ולכל סדרה אחרת מתקיים <span class="math">\(a+0=a\)</span> ו-<span class="math">\(a\cdot1=a\)</span> פשוט כי ברציונליים, <span class="math">\(a_{n}+0=a_{n}\)</span> ו-<span class="math">\(a_{1}\cdot1=a_{n}\)</span>. אז יש לנו את האדישים שלנו.</p>
+<p>נגדי חיבורי יהיה קל גם כן: אם <span class="math">\(A=\left[a\right]\)</span> הוא מספר ממשי כלשהו, אני אגדיר <span class="math">\(-A=\left[-a\right]\)</span>. כרגיל, צריך להבהיר שזה מוגדר היטב, כלומר שאם <span class="math">\(a\sim a^{\prime}\)</span> אז <span class="math">\(-a\sim-a^{\prime}\)</span>; זה טריוויאלי כי המינוס הזה "נבלע" בתוך הערך המוחלט שמופיע בהגדרת השקילות. עכשיו נותר להראות ש-<span class="math">\(A+\left(-A\right)=0\)</span> וזה למרבה השמחה קל מאוד כי אנחנו יכולים לבחור איזה נציג שאנחנו רוצים ל-<span class="math">\(A\)</span> ול-<span class="math">\(-A\)</span> בגלל שהוכחנו בעמל רב שהגדרת החיבור לא תלויה בנציג: אז נבחר <span class="math">\(A=\left[a\right],-A=\left[-a\right]\)</span> ולכן</p>
+<p><span class="math">\(A+\left(-A\right)=\left[a\right]+\left[-a\right]=\left[a-a\right]=\left[0\right]=0\)</span></p>
+<p>ומה עם הופכי? הדבר המתבקש הוא לעשות את אותו קונץ, כלומר להגדיר <span class="math">\(A^{-1}=\left[a^{-1}\right]\)</span> כש-<span class="math">\(a^{-1}\)</span> מתקבל מהסדרה <span class="math">\(a\)</span> על ידי היפוך של כל איבר ב-<span class="math">\(a\)</span>, ואז יתקיים <span class="math">\(A\cdot A^{-1}=\left[a\right]\cdot\left[a^{-1}\right]=\left[aa^{-1}\right]=\left[1\right]=1\)</span>. אלא שכאן יש לנו בעיה: ראשית, כי הסדרה <span class="math">\(a\)</span> עלולה לכלול את 0, ואין לנו דרך להפוך אותו. אבל אפילו אם הסדרה לא כוללת את 0 בכלל עדיין יש לנו בעיה כי אנחנו צריכים ש-<span class="math">\(a^{-1}\)</span> תהיה <strong>סדרת קושי</strong>. אם הסדרה <span class="math">\(a\)</span> "מצטופפת" סביב 0, אפילו אם היא לא נוגעת בו בכלל, הערכים של <span class="math">\(a^{-1}\)</span> "מתפוצצים" - הם נהיים כל כך גדולים שהסדרה כבר לא תהיה סדרת קושי.</p>
+<p>מה שאני רוצה להראות הוא שכל המקרים הבעייתיים הללו צצים רק במקרה שבו <span class="math">\(a\sim0\)</span>. מה שאנחנו הולכים אוטוטו להראות כשנדבר על יחס הסדר על הממשיים הוא שלכל ממשי <span class="math">\(A\)</span> קיים נציג <span class="math">\(a\)</span> שמקיים אחד משלושת הדברים הבאים:</p>
+<ol> <li><span class="math">\(a\sim0\)</span></li>
+
+
+<li>קיים <span class="math">\(M>0\)</span> כך ש-<span class="math">\(a_{n}\ge M\)</span> לכל <span class="math">\(n>N\)</span> ("הסדרה חסומה חיובית הרחק מאפס")</li>
+
+
+<li>קיים <span class="math">\(M>0\)</span> כך ש-<span class="math">\(a_{n}\le-M\)</span> לכל <span class="math">\(n>N\)</span> ("הסדרה חסומה שלילית הרחק מאפס")</li>
+
+</ol>
+
+<p>זה משפט מועיל למדי כי הוא יאפשר לנו להגדיר את החיוביים בחלק הבא - אלו יהיו מן הסתם הממשיים שמיוצגים על ידי סדרה חסומה חיובית הרחק מאפס.</p>
+<p>עכשיו, אם סדרה מקיימת את קריטריון 2 או 3 <span class="math">\(\left|a_{n}\right|\ge M>0\)</span> לכל אבריה ובפרט כל אבריה שונים מאפס, ולכן אפשר להגדיר סדרה חדשה, שנסמן <span class="math">\(a^{-1}\)</span>, שאבריה הם <span class="math">\(a_{n}^{-1}\)</span>. אבל למה זו סדרת קושי?</p>
+<p>ובכן, בואו ניקח שני איברים כלליים של הסדרה וננסה להבין מה ההפרש ביניהם: </p>
+<p><span class="math">\(\left|a_{n}^{-1}-a_{m}^{-1}\right|=\left|\frac{1}{a_{n}}-\frac{1}{a_{m}}\right|=\left|\frac{a_{m}-a_{n}}{a_{n}a_{m}}\right|=\frac{\left|a_{m}-a_{n}\right|}{\left|a_{n}\right|\left|a_{m}\right|}\le\frac{\left|a_{m}-a_{n}\right|}{M^{2}}\)</span></p>
+<p>זה פותר לנו את הבעיה: עבור <span class="math">\(\varepsilon>0\)</span> כלשהו, נפעיל את קריטריון קושי של הסדרה המקורית כדי למצוא <span class="math">\(N\)</span> עבורו לכל <span class="math">\(n,m>N\)</span> מתקיים <span class="math">\(\left|a_{n}-a_{m}\right|\le M^{2}\cdot\varepsilon\)</span></p>
+<p>התקדמנו יפה! סיימנו את כל מה שצריך כדי להראות שהקבוצה שבנינו היא שדה, ועכשיו אפשר לדבר על סדר.</p>
+<h2>שדה סדור</h2>
+
+<p>עכשיו אנחנו רוצים להגדיר תת-קבוצה <span class="math">\(P\)</span> של השדה שלנו, ולהראות שמתקיים:</p>
+<ul> <li>לכל <span class="math">\(A\in\mathbb{F}\)</span> בדיוק אחד מהבאים מתקיים: או ש-<span class="math">\(A\in P\)</span>, או ש-<span class="math">\(-A\in P\)</span>, או ש-<span class="math">\(A=0\)</span>.</li>
+
+
+<li>אם <span class="math">\(A,B\in P\)</span> אז <span class="math">\(A+B\in P\)</span></li>
+
+
+<li>אם <span class="math">\(A,B\in P\)</span> אז <span class="math">\(A\cdot B\in P\)</span></li>
+
+</ul>
+
+<p>ההגדרה לזה טמונה במשפט שציטטתי קודם: לכל ממשי <span class="math">\(A\)</span> קיים נציג <span class="math">\(a\)</span> שמקיים בדיוק אחד משלושת הדברים הבאים:</p>
+<ol> <li><span class="math">\(a\sim0\)</span></li>
+
+
+<li>קיים <span class="math">\(M>0\)</span> כך ש-<span class="math">\(a_{n}\ge M\)</span> לכל <span class="math">\(n>N\)</span> ("הסדרה חסומה חיובית הרחק מאפס")</li>
+
+
+<li>קיים <span class="math">\(M>0\)</span> כך ש-<span class="math">\(a_{n}\le-M\)</span> לכל <span class="math">\(n>N\)</span> ("הסדרה חסומה שלילית הרחק מאפס")</li>
+
+</ol>
+
+<p>כדי לראות את זה, בואו ניקח נציג כלשהו של <span class="math">\(A\)</span> ומכיוון ש-<span class="math">\(a\)</span> תפוס לתיאור הנציג המוצלח שאנחנו מחפשים, נקרא לו <span class="math">\(a^{\prime}\)</span>: <span class="math">\(A=\left[a^{\prime}\right]\)</span>. אם <span class="math">\(a^{\prime}\sim0\)</span> אז סיימנו; נגדיר <span class="math">\(a=a^{\prime}\)</span> וחסל. אחרת, מה אני יודע על <span class="math">\(a^{\prime}\)</span>? ראשית, הוא סדרת קושי. שנית, הוא לא מקיים <span class="math">\(a^{\prime}\sim0\)</span>. מה זה אומר? <span class="math">\(a^{\prime}\sim0\)</span> אומר שלכל <span class="math">\(\varepsilon>0\)</span> קיים <span class="math">\(N>0\)</span> כך שלכל <span class="math">\(m>N\)</span> מתקיים <span class="math">\(\left|a_{m}^{\prime}-0\right|<\varepsilon\)</span>. אם אני אומר שזה לא מתקיים, אני לוקח את השלילה הלוגית של הטענה הזו: זה אומר ש<strong>קיים</strong> <span class="math">\(\varepsilon>0\)</span> כך ש<strong>לכל</strong> <span class="math">\(N>0\)</span> <strong>קיים</strong> <span class="math">\(m>N\)</span> שעבורו מתקיים <span class="math">\(\left|a_{m}^{\prime}\right|\ge\varepsilon\)</span>. זה טוב, אבל לא מספיק למצוא איבר אחד - אני רוצה שכל האיברים של הסדרה החל ממקום מסוים יהיו מרוחקים מאפס. בשביל זה אני אשתמש בכך שזו סדרת קושי, ולכן עבור <span class="math">\(\frac{\varepsilon}{2}\)</span> קיים <span class="math">\(N\)</span> כך שלכל <span class="math">\(n,m>N\)</span> מתקיים <span class="math">\(\left|a_{n}^{\prime}-a_{m}^{\prime}\right|<\frac{\varepsilon}{2}\)</span>, ובמילים אחרות: <span class="math">\(a_{m}^{\prime}-\frac{\varepsilon}{2}<a_{n}^{\prime}<a_{m}^{\prime}+\frac{\varepsilon}{2}\)</span>.</p>
+<p>עכשיו, אם <span class="math">\(a_{m}^{\prime}\)</span> הוא חיובי אז מ-<span class="math">\(\left|a_{m}^{\prime}\right|\ge\varepsilon\)</span> נקבל <span class="math">\(a_{m}^{\prime}\ge\varepsilon\)</span>, כלומר <span class="math">\(a_{n}^{\prime}>a_{m}^{\prime}-\frac{\varepsilon}{2}\ge\frac{\varepsilon}{2}\)</span>. אם לעומת זאת <span class="math">\(a_{m}^{\prime}\)</span> שלילי אז <span class="math">\(a_{m}^{\prime}\le-\varepsilon\)</span> ולכן <span class="math">\(a_{n}^{\prime}<a_{m}^{\prime}+\frac{\varepsilon}{2}\le-\frac{\varepsilon}{2}\)</span>. בכל מקרה קיבלנו ש-<span class="math">\(\left|a_{n}^{\prime}\right|\ge\frac{\varepsilon}{2}\)</span> לכל <span class="math">\(n>N\)</span>, ונשאר רק לסמן <span class="math">\(M=\frac{\varepsilon}{2}\)</span>.</p>
+<p>עדיין לא סיימתי; מצאתי מקום <span class="math">\(N\)</span> שהחל ממנו, <span class="math">\(a^{\prime}\)</span> עונה לקריטריונים, אבל אני לא רוצה שזה יהיה <strong>החל ממקום מסויים</strong> אלא לכל אברי הסדרה - אז אני אגדיר סדרה חדשה שפשוט מתחילה מאותו המקום המסוים. פורמלית, אני מגדיר <span class="math">\(a_{n}=a_{N+n}^{\prime}\)</span>, ואז מובטח לי שאכן <span class="math">\(a_{n}\ge M\)</span> או לכל <span class="math">\(n\)</span> (או <span class="math">\(a_{n}\le-M\)</span> לכל <span class="math">\(n\)</span>), וברור ש-<span class="math">\(a_{n}\)</span> היא עדיין סדרת קושי כי היא הסיפא של סדרת קושי.</p>
+<p>עכשיו ברור איך להגדיר את <span class="math">\(P\)</span> שלנו: היא תכלול את כל הממשיים <span class="math">\(A\)</span> שקיים להם נציג שמקיים את קריטריון 2.</p>
+<p>נשאר להוכיח את שלוש האקסיומות. בשביל הראשונה, בואו ניקח <span class="math">\(A\)</span> כלשהו ונציג <span class="math">\(A=\left[a\right]\)</span> כלשהו. אם <span class="math">\(a\sim0\)</span> אז <span class="math">\(A=0\)</span>; אם <span class="math">\(a\)</span> מקיים את קריטריון 2 אז <span class="math">\(A\in P\)</span>; נשאר להראות שאם <span class="math">\(a\)</span> מקיים את קריטריון 3 אז <span class="math">\(-A\in P\)</span>, אבל זה מובן מאליו: <span class="math">\(-A=\left[-a\right]\)</span> ואם <span class="math">\(a_{n}\ge M\)</span> לכל <span class="math">\(n\)</span> אז <span class="math">\(-a_{n}\le-M\)</span> לכל <span class="math">\(n\)</span>.</p>
+<p>בשביל שתי האקסיומות האחרות צריך להראות בעצם שאם <span class="math">\(a,b\)</span> סדרות שמקיימות את קריטריון 2, אז גם <span class="math">\(a+b\)</span> וגם <span class="math">\(ab\)</span> מקיימות את קריטריון 2. בשני המקרים נשתמש בקריטריון 2 כדי לקבל קיום של <span class="math">\(M_{a},M_{b}>0\)</span>כך ש-<span class="math">\(a_{n}\ge M_{a}\)</span> ו-<span class="math">\(b_{n}\ge M_{b}\)</span> לכל <span class="math">\(n\)</span>. עכשיו נחבר/נכפול את אי השוויונים ונקבל שלכל <span class="math">\(n\)</span> מתקיים <span class="math">\(a_{n}+b_{n}\ge M_{a}+M_{b}\)</span> ו-<span class="math">\(a_{n}b_{n}\ge M_{a}M_{b}\)</span> וסיימנו בזכות העובדה ש-<span class="math">\(M_{a}+M_{b}>0\)</span> וגם <span class="math">\(M_{a}M_{b}>0\)</span> - כלומר, תכונות 2,3 עבור הממשיים שאנחנו בונים נובעות בסופו של דבר מכך שהן מתקיימות עבור הרציונליים <span class="math">\(M_{a},M_{b}\)</span>.</p>
+<p>עכשיו אפשר לשאול את עצמנו מתי, עבור שני ממשיים <span class="math">\(A,B\)</span>, מתקיים <span class="math">\(A<B\)</span>. כזכור, מרגע שהגדרנו את <span class="math">\(P\)</span> אנחנו מקבלים את <span class="math">\(<\)</span> "בחינם": <span class="math">\(A<B\)</span> על פי הגדרה אם <span class="math">\(B-A\in P\)</span>.</p>
+<p>אז הגדרה יש לנות אבל לא יזיק אם יהיה לנו גם משפט שמקל עלינו להוכיח בפועל שמתקיים <span class="math">\(A<B\)</span> וכאן המצב יהיה טיפה טריקי. מה <strong>שהייתי רוצה</strong> להוכיח הוא שאם מצאתי נציגים <span class="math">\(a,b\)</span> ל-<span class="math">\(A,B\)</span> כך ש-<span class="math">\(a_{n}<b_{n}\)</span> לכל <span class="math">\(n\)</span> החל ממקום מסוים, אז <span class="math">\(A<B\)</span>, אלא שזה פשוט <strong>לא נכון</strong>: תסתכלו על הסדרות <span class="math">\(a_{n}=0\)</span> ו-<span class="math">\(b_{n}=\frac{1}{n}\)</span> למשל שמייצגות שתיהן את 0. מה <strong>שכן נכון</strong> הוא שאם <span class="math">\(a_{n}\le b_{n}\)</span> החל ממקום מסוים, אז <span class="math">\(A\le B\)</span>.</p>
+<p>בואו נוכיח את זה. כלומר, יש לנו שתי סדרות <span class="math">\(a,b\)</span> ואני מניח ש-<span class="math">\(a_{n}\le b_{n}\)</span> החל ממקום מסוים. אז הסדרה <span class="math">\(b_{n}-a_{n}\)</span> היא נציג של <span class="math">\(B-A\)</span>. אם נסתכל על ההוכחה של הטענה הקודמת, הראינו שכל נציג של מספר ממשי הוא או שקול לאפס, או חסום הרחק מאפס החל ממקום מסוים. אם <span class="math">\(b_{n}-a_{n}\sim0\)</span> אז <span class="math">\(B-A=0\)</span>, כלומר <span class="math">\(B=A\)</span>; אחרת, <span class="math">\(b_{n}-a_{n}\)</span> חסום הרחק מאפס החל ממקום מסוים, וכמו כן <span class="math">\(a_{n}\le b_{n}\)</span> החל ממקום מסוים, כלומר <span class="math">\(b_{n}-a_{n}\ge0\)</span> החל ממקום מסוים, ולכן <span class="math">\(b_{n}-a_{n}\)</span> חסום <strong>חיובית</strong> הרחק מאפס החל ממקום מסוים, כלומר <span class="math">\(B-A>0\)</span> וקיבלנו <span class="math">\(A<B\)</span>. זה מסיים את ההוכחה הזו.</p>
+<p>עוד דבר שאנחנו יכולים לדבר עליו עכשיו הוא ערך מוחלט. כזכור, הגדרנו</p>
+<p><span class="math">\(\left|A\right|=\begin{cases} A & A\ge0\\ -A & A<0 \end{cases}\)</span></p>
+<p>מושג הערך המוחלט מתקבל "בחינם" מרגע שיש לנו את <span class="math">\(P\)</span>, ובזכות אקסיומות השדה הסדור אנחנו גם מקבלים את התכונות המועילות שלו, למשל אי שוויון המשולש <span class="math">\(\left|A+B\right|\le\left|A\right|+\left|B\right|\)</span>.</p>
+<p>סיימנו עם השדה הסדור! עכשיו אנחנו מגיעים סוף סוף למטרה שלשמה התכנסנו.</p>
+<h2>אקסיומת השלמות</h2>
+
+<p>בפוסט הקודם ראינו שעבור אקסיומת השלמות אנחנו יכולים להסתפק בלהוכיח שני דברים:</p>
+<ul> <li>(ארכימדיות) לכל <span class="math">\(A\in\mathbb{F}\)</span> קיים <span class="math">\(N\in\mathbb{N}\)</span> כך ש-<span class="math">\(A\le N\)</span></li>
+
+
+<li>(שלמות-קנטור) כל סדרת קושי מתכנסת</li>
+
+</ul>
+
+<p>שלמות-קנטור נראית כמו משהו שטבעי יותר להוכיח מאשר את אקסיומת השלמות, כי כל הבנייה של קנטור את המספרים הממשיים מכוונת אליה: אנחנו לוקחים את האובייקט הבסיסי של סדרת קושי ו"מכריחים" את הגבול שלו להתקיים על ידי כך שאנחנו בונים אותו. בפועל העניינים לא כל כך פשוטים ותכף אסביר גם למה, אבל לפני זה בואו נטפל בארכימדיות.</p>
+<p>בואו ניקח <span class="math">\(A=\left[a\right]\)</span> ממשי כלשהו עם נציג שרירותי <span class="math">\(a\)</span>. כל סדרת קושי של רציונליים היא חסומה, כלומר קיים <span class="math">\(q\)</span> רציונלי כך ש-<span class="math">\(a_{k}\le q\)</span> לכל <span class="math">\(k\)</span>. עכשיו אני אשתמש בארכימדיות של הרציונליים ואקבל שקיים <span class="math">\(n\)</span> טבעי כך ש-<span class="math">\(q\le n\)</span>. אני אגדיר את הממשי <span class="math">\(N\)</span> על ידי הסדרה הקבועה <span class="math">\(n,n,n,\ldots\)</span> - לא קשה להראות ש-<span class="math">\(N\)</span> הוא טבעי, כלומר הוא איבר של השדה <span class="math">\(\mathbb{F}\)</span> שלנו שאפשר לכתוב בתור <span class="math">\(1+1+\ldots+1\)</span>. עכשיו, מכיוון ש-<span class="math">\(a_{k}\le n\)</span> לכל <span class="math">\(k\)</span>, מהמשפט שהראיתי קודם נובע ש-<span class="math">\(A\le N\)</span>. אז ארכמדיות היה קל.</p>
+<p>למה ששלמות-קנטור תהיה בעייתית? ניקח סדרת קושי <span class="math">\(a\)</span>, אז <span class="math">\(A=\left[a\right]\)</span> הוא הגבול שלה, לא? ככה בנינו את הממשיים. אבל הנה העניין: <span class="math">\(a\)</span> היא סדרת קושי של <strong>מספרים רציונליים</strong> ושלמות-קנטור שאנחנו רוצים להוכיח מדברת על התכנסות של סדרות קושי של <strong>מספרים ממשיים</strong>, כלומר על סדרות קושי של מחלקות שקילות של סדרות קושי של מספרים רציונליים. זה הולך להיות טיפה יותר טריקי.</p>
+<p>הסיטואציה הזו צצה די הרבה במתמטיקה: יש לנו אובייקט מתמטי ש"חסר בו" משהו, אז אנחנו מרחיבים אותו בצורה שבאופן מובהק מטפלת במה שהיה חסר קודם - אלא שאחרי ההרחבה, האובייקט שלנו יותר גדול ומסובך, ויש סיכוי שעכשיו חסרים בו דברים <strong>חדשים</strong>, שלא היו במסגרת ההתייחסות שלנו קודם ולכן לא יכלו להיות חסרים. בניה חכמה היא בניה שמצליחה למנוע מהבעיה הזו להיווצר. <a href="https://gadial.net/2023/07/27/continuum_hypothesis_forcing_intro/">ראינו לא מזמן בבלוג</a> סוג מרשים במיוחד של בניה חכמה שכזו - <strong>כפייה</strong> בתורת הקבוצות האקסיומטית. יש עוד דוגמאות קלילות יותר, למשל <strong>המשפט היסודי של האלגברה</strong>: הרעיון שם הוא שגם במספרים ממשיים עדיין "חסרים דברים" - למשל, פתרון למשוואה הפולינומית <span class="math">\(x^{2}+1=0\)</span>. אז מרחיבים את הממשיים אל <strong>המספרים המרוכבים</strong> ואז קורה הקסם ש<strong>כל</strong> משוואה פולינומית היא פתירה; לא רק המשוואות שקודם לא היו פתירות, אלו שהמקדמים שלהן הם מספרים ממשיים, אלא גם כל המשוואות הפולינומיות החדשות שקיבלנו, עכשיו כשהמקדמים יכולים להיות גם מרוכבים.</p>
+<p>פורמלית, מה שאנחנו צריכים לעשות הוא זה: לקחת סדרה <span class="math">\(A_{1},A_{2},A_{3},\ldots\)</span> כש-<span class="math">\(A_{n}\in\mathbb{F}\)</span> ולהוכיח שאם הסדרה הזו היא סדרת קושי, אז קיים <span class="math">\(B\)</span> כך ש-<span class="math">\(\lim_{n\to\infty}A_{n}=B\)</span>. איך נבנה את <span class="math">\(B\)</span>? אנחנו צריכים לבנות סדרה של רציונליים, <span class="math">\(\left\{ b_{n}\right\} _{n=1}^{\infty}\)</span> ואנחנו צריכים שהסדרה הזו תהיה סדרת קושי, ובנוסף שהיא "תתקרב" אל סדרת ה-<span class="math">\(A_{n}\)</span>-ים כרצוננו. זה מייד מזכיר תכונה שנקראת <strong>צפיפות</strong> הרציונליים: שעבור כל מספר ממשי, קיים מספר רציונלי שקרוב אליו כרצוננו. ראינו כבר תכונה <strong>אחרת</strong> שנקראה צפיפות - שבין כל שני ממשיים קיים רציונלי - אבל אני לא אכנס כאן לשאלה עד כמה התכונות הללו קשורות, אלא פשוט אוכיח פורמלית את תכונת הצפיפות שאני רוצה עכשיו.</p>
+<p>אני רוצה להראות שאם <span class="math">\(A\)</span> הוא מספר ממשי, אז קיים רציונלי <span class="math">\(q\)</span> שקרוב אליו כרצוננו. פורמלית, אם <span class="math">\(\varepsilon>0\)</span> אז קיים <span class="math">\(Q\in\mathbb{Q}\)</span> כך ש-<span class="math">\(\left|Q-A\right|\le\varepsilon\)</span>. שימו לב שכל המעורבים פה הם מספרים ממשיים: גם <span class="math">\(A\)</span>, גם <span class="math">\(Q\)</span> (שהולך להיות מיוצג על ידי סדרה קבועה של מספר רציונלי ספציפי) וגם <span class="math">\(\varepsilon\)</span>. אבל שזה ש-<span class="math">\(\varepsilon\)</span> הוא ממשי ולא בהכרח רציונלי זה מעצבן, כי זה אומר שאני צריך לתאר אותו עם סדרה במקום פשוט עם קבוע, אז נתבסס על זה שכבר הוכחתי ארכימדיות: זה אומר שקיים <span class="math">\(N\)</span> טבעי כך ש-<span class="math">\(\frac{1}{\varepsilon}\le N\)</span>, כלומר <span class="math">\(\frac{1}{N}\le\varepsilon\)</span>, ואם נראה שמשהו קטן מ-<span class="math">\(\frac{1}{N}\)</span> (הרציונלי) אז הוא בוודאי קטן גם מ-<span class="math">\(\varepsilon\)</span>, אז אני יכול פשוט להניח מכאן והלאה ש-<span class="math">\(\varepsilon\)</span> רציונלי.</p>
+<p>איפה כדאי לחפש את <span class="math">\(q\)</span>? ובכן, זה קל: מכיוון ש-<span class="math">\(A\)</span> הוא מספר ממשי, הוא בנוי <strong>מתוך</strong> הרציונליים, כלומר כדאי לחפש את <span class="math">\(q\)</span> בתוך נציג <span class="math">\(A=\left[a\right]\)</span> של <span class="math">\(A\)</span>. הנציג הזה הוא סדרת קושי של רציונליים, אז עבור <span class="math">\(\varepsilon>0\)</span> רציונלי קיים <span class="math">\(N\)</span> כך שלכל <span class="math">\(n>N\)</span> מתקיים <span class="math">\(\left|a_{N}-a_{n}\right|<\varepsilon\)</span>. עכשיו אני אגדיר את <span class="math">\(Q\)</span> בתור המספר הממשי שמיוצג על ידי הסדרה הקבועה <span class="math">\(q_{n}=a_{N}\)</span>, ובואו נראה מה קיבלנו. אמרתי קודם שכדי להוכיח <span class="math">\(A\le B\)</span> עבור ממשיים, מספיק להראות שעבור נציגים שלהם מתקיים <span class="math">\(a_{n}\le b_{n}\)</span> החל ממקום מסוים. אצלנו הסיטואציה טיפה יותר מורכבת: אגף שמאל של <span class="math">\(\left|Q-A\right|\le\varepsilon\)</span> כולל את הביטוי <span class="math">\(\left|Q-A\right|\)</span> בזמן שאגף ימין הוא עדיין פשוט וכולל רק את <span class="math">\(\varepsilon\)</span>, שמיוצג על ידי הסדרה הקבועה <span class="math">\(\varepsilon_{n}=\varepsilon\)</span>. כשאני יורד לרמת הנציגים אני מקבל <span class="math">\(\left|q_{n}-a_{n}\right|<\varepsilon_{n}\)</span>, וזה הולך לתת לי את <span class="math">\(\left|Q-A\right|\le\varepsilon\)</span> אם אני רק אשתכנע שהסדרה <span class="math">\(\left|q_{n}-a_{n}\right|\)</span> היא נציג של המספר הממשי <span class="math">\(\left|Q-A\right|\)</span>.</p>
+<p>את זה יחסית קל להראות: אם <span class="math">\(Q\ge A\)</span> אז <span class="math">\(\left|Q-A\right|=Q-A\)</span> וכמו כן בגלל ש-<span class="math">\(Q-A\ge0\)</span> אז החל ממקום מסוים, <span class="math">\(q_{n}-a_{n}\ge0\)</span>, כלומר <span class="math">\(\left|q_{n}-a_{n}\right|=q_{n}-a_{n}\)</span> וזו אכן סדרה שמייצגת את <span class="math">\(Q-A\)</span>. אם <span class="math">\(Q<A\)</span> אז <span class="math">\(\left|Q-A\right|=A-Q\)</span> ומכיוון ש-<span class="math">\(Q-A<0\)</span> החל ממקום מסוים <span class="math">\(q_{n}-a_{n}\le0\)</span>, כלומר <span class="math">\(\left|q_{n}-a_{n}\right|=a_{n}-q_{n}\)</span> וגם את הכיוון הזה סיימנו. זה מסיים את הוכחת תכונת הצפיפות.</p>
+<p>עכשיו, אם נסתכל על מה שהוכחנו, בעצם ראינו משהו חזק יותר מאשר "סתם" צפיפות: ראינו שלכל מספר ממשי <span class="math">\(A\)</span> ונציג שלו <span class="math">\(a\)</span>, אברי הנציג קרובים אל <span class="math">\(A\)</span> כרצוננו. זה נשמע כמעט מובן מאליו, אז הנה המשמעות הפורמלית: לכל <span class="math">\(\varepsilon>0\)</span> קיים <span class="math">\(N\)</span> כך שאם <span class="math">\(n>N\)</span> אז <span class="math">\(\left|a_{n}-A\right|\le\varepsilon\)</span>. גם בתכונה המחוזקת הזו תכף אשתמש.</p>
+<p>חזרה אל הטענה המקורית שאני רוצה להוכיח: <span class="math">\(\left\{ A_{n}\right\} _{n=1}^{\infty}\)</span> היא סדרת קושי של ממשיים שאני מחפש לה גבול. אני אבנה מספר ממשי <span class="math">\(B=\left[b\right]\)</span> באופן הבא: לכל <span class="math">\(n\)</span>, מתכונת הצפיפות של הרציונליים קיים רציונלי <span class="math">\(b_{n}\)</span> כך ש-<span class="math">\(\left|b_{n}-A_{n}\right|\le\frac{1}{n}\)</span>. זהו, זו כל ההגדרה.</p>
+<p>עכשיו קל להוכיח ש-<span class="math">\(\lim_{n\to\infty}A_{n}=B\)</span>. יהא <span class="math">\(\varepsilon>0\)</span> כלשהו, אז אני יודע שקיימים:</p>
+<ul> <li><span class="math">\(N_{1}\)</span> כך שלכל <span class="math">\(n>N_{1}\)</span> מתקיים <span class="math">\(\left|b_{n}-B\right|\le\frac{\varepsilon}{2}\)</span> (זו תכונת הצפיפות ה"מחוזקת")</li>
+
+
+<li><span class="math">\(N_{2}\)</span> כך ש-<span class="math">\(\frac{1}{N_{2}}<\frac{\varepsilon}{2}\)</span>, ולכן לכל <span class="math">\(n>N_{2}\)</span> מתקיים <span class="math">\(\left|b_{n}-A_{n}\right|\le\frac{1}{n}\le\frac{1}{N_{2}}<\frac{\varepsilon}{2}\)</span> (כי כך בנינו את ה-<span class="math">\(b_{n}\)</span>-ים).</li>
+
+</ul>
+
+<p>נגדיר <span class="math">\(N=\max\left\{ N_{1},N_{2}\right\} \)</span> וקיבלנו שלכל <span class="math">\(n>N\)</span> מתקיים:</p>
+<p><span class="math">\(\left|A_{n}-B\right|=\left|A_{n}-b_{n}+b_{n}-B\right|\le\left|A_{n}-b_{n}\right|+\left|b_{n}-B\right|<\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon\)</span></p>
+<p>האם סיימנו? ובכן, עוד לא! כי קפצתי באלגנטיות על שלב קריטי בדרך: הגדרתי את <span class="math">\(B\)</span> באמצעות הסדרה <span class="math">\(b_{1},b_{2},b_{3},\ldots\)</span> אבל בשום מקום לא הוכחתי שזו <strong>סדרת קושי</strong>. ודי ברור שטרם סיימתי את ההוכחה, כי בעצם לא השתמשתי בשום שלב בכך שסדרת הממשיים, <span class="math">\(A_{1},A_{2},A_{3},\ldots\)</span> היא סדרת קושי. אבל בואו נחשוב שניה בהגיון - אם היא לא הייתה סדרת קושי, אז סדרת ה-<span class="math">\(b_{n}\)</span>--ים הזו הייתה סדרה אקראית של מספרים שקרובים ל-<span class="math">\(A_{1},A_{2},A_{3}\)</span> וכן הלאה אבל אין שום סיבה שיהיו קרובים זה לזה, כי ה-<span class="math">\(A_{n}\)</span>-ים הללו לא קרובים זה לזה.</p>
+<p>הנה מה שנעשה: בהינתן <span class="math">\(\varepsilon>0\)</span>, אני יודע שקיימים:</p>
+<ul> <li><span class="math">\(N_{1}\)</span> כך שאם <span class="math">\(n,m>N_{1}\)</span> אז <span class="math">\(\left|A_{n}-A_{m}\right|<\frac{\varepsilon}{3}\)</span> (כי ה-<span class="math">\(A_{n}\)</span>-ים הם סדרת קושי).</li>
+
+
+<li><span class="math">\(N_{2}\)</span> כך ש-<span class="math">\(\frac{1}{N_{2}}<\frac{\varepsilon}{3}\)</span> ולכן עבור <span class="math">\(n,m>N_{2}\)</span> מתקיים <span class="math">\(\left|b_{n}-A_{n}\right|<\frac{\varepsilon}{3}\)</span> וגם <span class="math">\(\left|b_{m}-A_{m}\right|<\frac{\varepsilon}{3}\)</span> (כי כך בנינו את ה-<span class="math">\(b_{n}\)</span>-ים).</li>
+
+</ul>
+
+<p>ניקח <span class="math">\(N=\max\left\{ N_{1},N_{2}\right\} \)</span> ואז לכל <span class="math">\(n,m>N\)</span>:</p>
+<p><span class="math">\(\left|b_{n}-b_{m}\right|=\left|b_{n}-A_{n}+A_{n}-A_{m}+A_{m}-b_{m}\right|\le\)</span></p>
+<p><span class="math">\(\le\left|b_{n}-A_{n}\right|+\left|A_{n}-A_{m}\right|+\left|A_{m}-b_{m}\right|<\)</span></p>
+<p><span class="math">\(\frac{\varepsilon}{3}+\frac{\varepsilon}{3}+\frac{\varepsilon}{3}=\varepsilon\)</span></p>
+<p>וזה.. מסיים את הכל... אני חושב? אין לי אף מקור שמציג את הדברים ברמות הפירוט שאליה נכנסתי כאן (כדי לשכנע את עצמי אחת ולתמיד שהכל עובד) אז בטח יש לי שלל טעויות - אבל היי, נראה לי שבגדול ככה זה הולך! עוד פינה שסגרתי לעצמי אחרי עשרים שנים בערך!</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2024/11/24/real_numbers_construction_dedekind_cuts/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אז מה זה בעצם המספרים הממשיים? (חלק ה&#39;: בונים את המספרים הממשיים עם חתכי דדקינד)</span>
+            </a>
+            
+            
+            
+            <a href="/2024/10/12/real_numbers_two_completness/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז מה זה בעצם המספרים הממשיים? (חלק ג&#39;: על שתי שלמויות)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי בגישה מתמטית, חלק ה&#39;: אלגוריתם דויטש-ג&#39;וזה - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי בגישה מתמטית, חלק ה&#39;: אלגוריתם דויטש-ג&#39;וזה</h1>
+            <div class="post-meta">
+                <span class="date">2022-08-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מה אנחנו רוצים לפתור?</h2>
+
+<p>עד עכשיו בסדרת הפוסטים על חישוב קוונטי ראינו את הבסיס המתמטית שאפשר לצמצם לכמה משפטי מחץ:</p>
+<ul> <li>בחישוב קוונטי האובייקט שמשתנה עם הזמן הוא <strong>המצב הקוונטי</strong> של המערכת, שמיוצג בתור וקטור <span class="math">\(\left|\psi\right\rangle \in\mathbb{C}^{2^{n}}\)</span>.</li>
+
+
+<li>סוג אחד של שינוי הוא כפל המצב <span class="math">\(v\)</span> במטריצה אוניטרית <span class="math">\(U\in\mathbb{C}^{2^{n}\times2^{n}}\)</span>, כלומר מבצעים <span class="math">\(\left|\psi\right\rangle \leftarrow U\left|\psi\right\rangle \)</span>.</li>
+
+
+<li>סוג נוסף של שינוי הוא <strong>מדידה</strong>, שבגרסה הפשוטה שלנו מוגדרת לכל קיוביט עבור שני אופרטורים <span class="math">\(M_{0},M_{1}\)</span> (שתלויים בקיוביט), בחירת <span class="math">\(M_{0}\)</span> בהסתברות <span class="math">\(\left\langle \psi\right|M_{0}\left|\psi\right\rangle \)</span> ובחירת <span class="math">\(M_{1}\)</span> בהסתברות <span class="math">\(\left\langle \psi\right|M_{1}\left|\psi\right\rangle \)</span> ובהינתן ש-<span class="math">\(M_{i}\)</span> עלה בגורל, הפלט שחוזר מהמדידה הוא <span class="math">\(i\)</span> והיא מעבירה את המצב הקוונטי של המערכת למצב <span class="math">\(\left|\psi\right\rangle \leftarrow\frac{M_{i}\left|\psi\right\rangle }{\sqrt{\left\langle \psi\right|M_{i}\left|\psi\right\rangle }}\)</span>.</li>
+
+</ul>
+
+<p>זה הכל. מה שמעניין פה הוא שאלו הם חישובים שלא מסובך במיוחד לתכנת גם במחשב סטנדרטי. אמנם אין לנו יכולת לשמור מספרים מרוכבים ברמת דיוק אינסופית, אבל אנחנו לא באמת צריכים את זה - הייצוגים הקיימים של מרוכבים במחשב עובדים מספיק טוב. למעשה, אין שום בעיה עקרונית לכתוב סימולטור של חישוב קוונטי שרץ במחשב רגיל, וזה אפילו תרגיל נחמד למי שרוצה ללמוד את התחום (מגלים מהר מאוד שהפעלת אופרטורים זה עסק קצת מעצבן ויש דרכי קיצור). זה גורם לאתגר הגדול של בניית מחשבים קוונטיים להיראות קצת מיותר - מה הטעם ליצור מכשיר הנדסי מסובך שהחישוב שהוא מבצע זה משהו שאפשר לעשות במחשב רגיל?</p>
+<p>לנקודה הזו כבר התייחסתי בעבר. מכיוון שהאובייקט הספציפי שאנחנו שומרים ופועלים עליו הוא וקטור ב-<span class="math">\(\mathbb{C}^{2^{n}}\)</span>, כמות המידע שצריך לשמור, והזמן שלוקח לפעול עליה, גדלה <strong>אקספוננציאלית</strong> עם <span class="math">\(n\)</span>. עבור 50 קיוביטים, למחשבים רגילים מאוד מאתגר לסמלץ חישוב קוונטי; עבור 100 קיוביטים כבר אין על מה לדבר. נכון לכתיבת שורות אלו יש ליבמ מחשב קוונטי פעיל של 127 קיוביטים, למרות שהחישוב בו לא חף מבעיות (מתישהו אני מקווה בסדרת הפוסטים הזו להגיע לדבר על רעשים ותיקון שגיאות), וזו רק תחילת הדרך. כשיהיה חישוב קוונטי רציני, לא יהיה שום סיכוי לסמלץ אותו במחשב.</p>
+<p>אבל זה עדיין לא עונה על השאלה האמיתית - <strong>בשביל מה זה טוב</strong>? אילו בעיות נוכל לפתור עם מחשבים קוונטיים שלא נוכל לפתור במחשב רגיל? הדוגמא הנפוצה שנזרקת לחלל באוויר בשלב הזה היא <strong>בעיית הפירוק לגורמים</strong> שהאלגוריתם הקוונטי של שור פותר ביעילות. זו דוגמא מצויינת, אבל יש בה בעיה פשוטה - זה אלגוריתם מסובך יחסית וקשה להציג אותו ישר אחרי שמבינים איך עובד חישוב קוונטי. אז בפוסט הזה אני רוצה להציג בעיה פשוטה הרבה יותר, שנפתרת על ידי אלגוריתם פשוט בצורה קיצונית, אבל כבר היא מספיקה לתת תחושה טובה למה בחישוב קוונטי יש "יותר" מאשר בחישוב קלאסי. האלגוריתם שאציג נקרא <strong>אלגוריתם דויטש-ג'וזה</strong>.</p>
+<p>נתחיל עם להציג את הבעיה עצמה. אני מזהיר מראש שזו <strong>לא</strong> בעיה "מעניינת". לפתור אותה לא הולך לשבור מערכות הצפנה. היא אפילו נראית די מלאכותית. היופי בבעיה הוא שקל מאוד להבין למה נסיון לפתור אותה קלאסית יהיה קשה, ואז העובדה שהיא נפתרת בקלות קוונטית מחדדת מאוד את ההבדל.</p>
+<p>הקלט לבעיה הוא פונקציה <span class="math">\(f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\} \)</span>, כלומר פונקציה <strong>בינארית</strong> שמקבלת קלט שהוא מחרוזת באורך <span class="math">\(n\)</span> של ביטים (אפשר לחשוב עליה בתור מספר טבעי בתחום <span class="math">\(0,1,\ldots,2^{n}-1\)</span>) ועל כל קלט כזה מחזירה 0 או 1. הפונקציה נתונה לנו בתור <strong>קופסה שחורה</strong>, כלומר משהו שאנחנו לא יכולים לראות איך המימוש שלו עובד; הדבר היחיד שאנחנו יכולים לעשות הוא לחשב את <span class="math">\(f\)</span> על קלטים מסוימים. תחשבו על <span class="math">\(f\)</span> כאילו מה שמחשב אותו יושב על מחשב מרוחק, וכל מה שאנחנו יכולים לעשות הוא לשלוח לו מחרוזות של <span class="math">\(n\)</span> ביטים ולקבל חזרה פלט של ביט בודד.</p>
+<p>מה שידוע לנו על <span class="math">\(f\)</span> זה שהיא בדיוק אחד משני הבאים:</p>
+<ul> <li><span class="math">\(f\)</span> <strong>קבועה</strong>, כלומר לכל קלט <span class="math">\(x\)</span> מתקיים <span class="math">\(f\left(x\right)=0\)</span>, או שלכל קלט <span class="math">\(x\)</span> מתקיים <span class="math">\(f\left(x\right)=1\)</span>.</li>
+
+
+<li><span class="math">\(f\)</span> <strong>מאוזנת</strong>, כלומר בדיוק על חצי מהקלטים מתקבל 0 ועל החצי השני מתקבל 1. אם נסמן <span class="math">\(N=2^{n}\)</span>, זה אומר ש-<span class="math">\(\left|\left\{ x\in\left\{ 0,1\right\} ^{n}\ |\ f\left(x\right)=0\right\} \right|=\left|\left\{ x\in\left\{ 0,1\right\} ^{n}\ |\ f\left(x\right)=1\right\} \right|=\frac{N}{2}\)</span>.</li>
+
+</ul>
+
+<p>המשימה שלנו: לקבל מה משני המקרים הללו מתקיים.</p>
+<p>איך עושים את זה באופן קלאסי? ובכן, אם לא מערבים הסתברות בסיפור, די ברור שאנחנו חייבים <span class="math">\(\frac{N}{2}+1\)</span> קריאות ל-<span class="math">\(f\)</span>. למה? כי אנחנו תמיד חושבים מה יקרה <strong>במקרה הגרוע ביותר</strong>, והמקרה הגרוע ביותר הוא זה שבו אין לנו מזל - ש-<span class="math">\(f\)</span> היא מאוזנת, ואיכשהו כל <span class="math">\(\frac{N}{2}\)</span> ההפעלות הראשונות שלה שביצענו נפלו <strong>בדיוק</strong> על כל הערכים שעליהם <span class="math">\(f\)</span> נותנת 0. בשלב הזה אנחנו עדיין לא יכולים להגיד בודאות האם <span class="math">\(f\)</span> תהיה 0 על הכל, או רק על חצי. רק כשנחשב את הערך שלה על האיבר ה-<span class="math">\(\frac{N}{2}+1\)</span> נוכל להיות בטוחים: אם קיבלנו <span class="math">\(0\)</span> אז <span class="math">\(f\)</span> קבועה, ואם קיבלנו 1 אז <span class="math">\(f\)</span> מאוזנת.</p>
+<p>להראות שגם אם מערבים הסתברות עדיין נזדקק למספר גדול של שאילות זה חישוב מסובך יותר ולא אעשה אותו כרגע, כי אני לא צריך - אלגוריתם דויטש-ג'וזה הולך להשתמש בקריאה <strong>אחת בלבד</strong> לפונקציה, ולהחזיר תשובה שהיא <strong>נכונה תמיד</strong>, ב-100 אחוז מהמקרים, אפילו אם חישוב קוונטי הוא לכאורה עניין הסתברותי. איך זה יעבוד? ובכן, זה דורש מהקופסה השחורה שמחשבת את <span class="math">\(f\)</span> להיות קוונטית בעצמה: במקום לחשב את <span class="math">\(f\)</span> על ביט ספציפי <span class="math">\(x\)</span> שנותנים, לחשב את <span class="math">\(f\)</span> על <strong>סופרפוזיציה</strong>, כלומר: הקלט ש-<span class="math">\(f\)</span> תקבל יהיה מצב על <span class="math">\(n\)</span> קיוביטים, <span class="math">\(\left|\psi\right\rangle =\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}\left|x\right\rangle \)</span> ואינטואיטיבית, הפלט יהיה</p>
+<p><span class="math">\(f\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}\left|x\right\rangle \right)=\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}f\left(\left|x\right\rangle \right)\)</span></p>
+<p>האינטואיציה הזו לא מלאה; בדויטש-ג'וזה נשתמש בקופסה שחורה שמתנהגת קצת שונה, ואחר כך נסביר איך עוברים מהאינטואיציה שאני מציג כאן אל הקופסה השחורה של דויטש-ג'וזה.</p>
+<p>ייתכן מאוד שהצלחתי לאכזב אתכם עם ה"הקופסה השחורה תהיה קוונטית". זה נשמע כאילו שיניתי פתאום את הגדרת הבעיה, ואין פלא שעם מחשב קוונטי אפשר להשיג יותר. אבל נניח שהייתי אומר מלכתחילה שהקופסה השחורה היא קוונטית, האם מחשב קלאסי היה מצליח יותר? הוא לא מסוגל לייצר סופרפוזיציה של מצבים קוונטיים, כל מה שהוא היה יכול לעשות הוא לשלוח מצבי בסיס <span class="math">\(\left|x\right\rangle \)</span>. זה שהקופסה השחורה היא קוונטית לא עוזר לנו בלי שיהיה לנו מחשב קוונטי שמנצל את זה. עדיין, אני לגמרי מסכים שזו לא דוגמת מחץ כמו האלגוריתם של שור, שלא נזקק לקופסאות שחורות קוונטיות שכאלו; תזכרו שמה שאני עושה כרגע הוא לא לתת דוגמת מחץ לעליונות החישוב הקוונטי, אלא לתת תחושה ראשונית של הקסם הנחמד הזה.</p>
+<h2>איך דויטש-ג'וזה עובד?</h2>
+
+<p>דויטש-ג'וזה הוא אלגוריתם פשוט בצורה קיצונית:</p>
+<ol> <li>אתחלו מצב קוונטי אל <span class="math">\(\left|0^{n}\right\rangle \)</span></li>
+
+
+<li>הפעילו <span class="math">\(H\)</span> על כל הקיוביטים.</li>
+
+
+<li>הפעילו את הקופסה השחורה על המצב שקיבלתם.</li>
+
+
+<li>הפעילו <span class="math">\(H\)</span> על המצב שקיבלתם.</li>
+
+
+<li>מדדו את כל הקיוביטים במצב שקיבלתם.</li>
+
+
+<li>אם קיבלתם <span class="math">\(0^{n}\)</span>, אז <span class="math">\(f\)</span> קבועה; אם קיבלתם משהו אחר, אז <span class="math">\(f\)</span> מאוזנת.</li>
+
+</ol>
+
+<p>הדבר היחיד שלא הסברתי עדיין איך הוא בדיוק עובד הוא שלב "הפעלת הקופסה השחורה". לצורך כך אני מניח שיש לי אופרטור אוניטרי <span class="math">\(U_{f}\)</span> שפועל בצורה הבאה על איבר בסיס <span class="math">\(\left|x\right\rangle \)</span>:</p>
+<ul> <li><span class="math">\(U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \)</span></li>
+
+</ul>
+
+<p>במילים אחרות: אם <span class="math">\(f\left(x\right)=0\)</span> אז <span class="math">\(U_{f}\)</span> לא משנה את <span class="math">\(\left|x\right\rangle \)</span> , ואם <span class="math">\(f\left(x\right)=1\)</span> אז הוא מכפיל אותו ב-<span class="math">\(-1\)</span>. זה מזכיר את האופרטור <span class="math">\(Z\)</span>, רק כזה שפועל בבת אחת על <span class="math">\(n\)</span> קיוביטים ותלוי בתכונות הספציפיות של <span class="math">\(f\)</span>. איך אפשר לממש אופרטור קוונטי כזה? נדבר על זה בהמשך.</p>
+<p>הנה איור סכמטי של האלגוריתם, במקרה של שלושה קיוביטים:</p>
+<p><img src="/img/2022/deutsch_jozsa_3_qubits.png" alt=""/></p>
+<p>אפשר גם לצייר את זה באופן כללי ל-<span class="math">\(n\)</span> קיוביטים בצורה קומפקטית:</p>
+<p><img src="/img/2022/deutsch_jozsa_n_qubits.png" alt=""/></p>
+<p>הסימן שנראה כמו מחוג של מכשיר מדידה בצד ימין הוא, ובכן, מדידה. ה-<span class="math">\(H^{\otimes n}\)</span> הוא הפעלת <span class="math">\(H\)</span> על כל השערים, שתכף אתאר; אני מניח שהרעיון ברור.</p>
+<p>כרגע אני רוצה לראות איך האלגוריתם פותר לנו את הבעיה. בסופו של דבר, להבין את האלגוריתם קם ונופל על להבין משהו כללי קצת יותר ושימושי מאוד: מה בעצם הפעלת <span class="math">\(H\)</span> על כל הקיוביטים עושה.</p>
+<p>כזכור, <span class="math">\(H\)</span> הוא האופרטור שיוצר לנו סופרפוזיציה אחידה:</p>
+<p><span class="math">\(H\left|0\right\rangle =\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span></p>
+<p><span class="math">\(H\left|1\right\rangle =\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\)</span></p>
+<p>אבל זה עבור קיוביט יחיד. מה קורה כשמפעילים <span class="math">\(H\)</span> על כל אחד מהקיוביטים? מקבלים את ההרכבה של <span class="math">\(H\otimes I\otimes\ldots\otimes I\)</span> ו-<span class="math">\(I\otimes H\otimes\ldots\otimes I\)</span> וכן הלאה - זה יוצא האופטור <span class="math">\(H\otimes H\otimes\ldots\otimes H\)</span>, או בסימון מקוצר, <span class="math">\(H^{\otimes n}\)</span>. עכשיו, אם נפעיל את האופרטור הזה על המצב ההתחלתי <span class="math">\(\left|0^{n}\right\rangle \)</span> נקבל:</p>
+<p><span class="math">\(H^{\otimes n}\left|0^{n}\right\rangle =\left(H\left|0\right\rangle \right)\otimes\ldots\otimes\left(H\left|0\right\rangle \right)=\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)\otimes\ldots\otimes\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)\)</span></p>
+<p>מה שצריך לזכור על מכפלה טנזורית הוא האופן שבו היא מתנהגת בדומה למכפלה רגילה - אפשר להוציא החוצה סקלרים (את כל ה-<span class="math">\(\frac{1}{\sqrt{n}}\)</span>), ואפשר להשתמש בדיסטריביוטיביות. יש לנו כאן מכפלה של <span class="math">\(n\)</span> מחוברים מהצורה <span class="math">\(\left(\left|0\right\rangle +\left|1\right\rangle \right)\)</span>; זו סיטואציה שמזכירה, למשל, את הבינום של ניוטון. כשאנחנו פותחים סוגריים, אנחנו מקבלים סכום שכולל את כל המחוברים שהם מהצורה של מכפלה של <span class="math">\(n\)</span> איברים שכל אחד מהם הוא או <span class="math">\(\left|0\right\rangle \)</span> או <span class="math">\(\left|1\right\rangle \)</span> - במילים אחרות, הסכום <span class="math">\(\sum_{y\in\left\{ 0,1\right\} ^{n}}\left|y\right\rangle \)</span>. לכן בסך הכל קיבלנו:</p>
+<p><span class="math">\(H^{\otimes n}\left|0^{n}\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left|y\right\rangle \)</span></p>
+<p>זה מתאים יפה לאינטואיציה שלפיה <span class="math">\(H\)</span> יוצר סופרפוזיציה אחידה: כשהפעלנו אותו על כל הקיוביטים, קיבלנו סופרפוזיציה אחידה של כל <span class="math">\(2^{n}\)</span> אברי הבסיס האפשריים. שימו לב, זה כבר קסם בפני עצמו - הפעלנו רק <span class="math">\(n\)</span> שערים (זה לוקח זמן קצר) וקיבלנו סופרפוזיציה של מספר אקספוננציאלי של איברים.</p>
+<p>מה שעשינו פה הוא להבין איך <span class="math">\(H^{\otimes n}\)</span> עובד על מצב בסיס אחד ספציפי: <span class="math">\(\left|0^{n}\right\rangle \)</span>. אבל איך הוא עובד על מצבים אחרים, כאלו שיש בהם גם 1-ים? כאן אנחנו מגיעים לנקודה הכי טכנית בפוסט, אבל גם הכי יפה שלו. כמו שתמיד כדאי כדי להבין משהו מסובך, כדאי להסתכל על דוגמא פשוטה קודם.</p>
+<p>נניח שאני מפעיל את <span class="math">\(H^{\otimes3}\)</span> על המצב <span class="math">\(\left|101\right\rangle \)</span>. מה אני אקבל? על פי מה שראינו קודם, נקבל</p>
+<p><span class="math">\(H^{\otimes3}\left|101\right\rangle =\frac{1}{\sqrt{2^{3}}}\left(\left|0\right\rangle -\left|1\right\rangle \right)\left(\left|0\right\rangle +\left|1\right\rangle \right)\left(\left|0\right\rangle -\left|1\right\rangle \right)\)</span></p>
+<p>כשאני פותח סוגריים אני עדיין אקבל את כל האיברים מהצורה <span class="math">\(\left|x\right\rangle \)</span>, אבל הפעם חלקם יהיו עם מקדם <strong>מינוס</strong>. מתי? ובכן, בואו נתחיל לפתוח את הסוגריים. נניח שאני בוחר מכל אחד משלושת הסוגרים את האיבר <strong>הראשון</strong>, אני אכפיל שלושה איברים מהצורה <span class="math">\(\left|0\right\rangle \)</span> ואקבל <span class="math">\(\left|000\right\rangle \)</span> - בלי סימן מינוס. ולמה שיהיה סימן מינוס? על ה-<span class="math">\(\left|0\right\rangle \)</span>-ים אין מינוס בכלל. כדי שיהיה מינוס, חייב להשתתף <span class="math">\(\left|1\right\rangle \)</span> בסיפור הזה. למשל, אם אני אקח את האיבר <strong>השני</strong> מהסוגר הראשון, ומשני האחרים את האיבר <strong>הראשון</strong>, אני אקבל <span class="math">\(-\left|100\right\rangle \)</span>.</p>
+<p>לעומת זאת, אם אני אקח את האיבר <strong>השני</strong> מהסוג <strong>השני</strong> ומשני האחרים את הראשון, אני אקבל <span class="math">\(\left|010\right\rangle \)</span>, בלי מינוס. למה? כי בסוגר השני, ה-<span class="math">\(\left|1\right\rangle \)</span> מופיע בלי סימן מינוס. ולמה לא? כי במצב המקורי שעליו פעלנו, <span class="math">\(\left|101\right\rangle \)</span>, הסוגר השני מתאים לאיבר השני במחרוזת, כלומר אל 0. מכאן המסקנה היא שכדי לקבל מינוס, אני חייב לקחת את <span class="math">\(\left|1\right\rangle \)</span> מתוך סוגריים ששייכים לאיבר בקלט שהיה <span class="math">\(\left|1\right\rangle \)</span> בעצמו.</p>
+<p>זה תנאי <strong>הכרחי</strong> כדי לקבל מינוס, אבל הוא לא מספיק, כי בואו נראה למשל מה שקורה כשאני לוקח את ה-<span class="math">\(\left|1\right\rangle \)</span> מכל שלושת זוגות הסוגריים. אני מקבל את המכפלה</p>
+<p><span class="math">\(-\left|1\right\rangle \otimes\left|1\right\rangle \otimes\left(-\left|1\right\rangle \right)=\left|111\right\rangle \)</span></p>
+<p>כלומר, הפעם קיבלתי איבר ללא מינוס כי בדיוק <strong>שני</strong> איברים במכפלה היו עם סימן מינוס. הסימן באיבר שאקבל בסוף תלוי בשאלות הבאות:</p>
+<ul> <li>האם מופיעים 1-ים במצב שעליו פעלנו?</li>
+
+
+<li>האם מופיעים 1-ים במצב שאנחנו מסתכלים עליו כרגע בפלט?</li>
+
+
+<li>האם יש אינדקסים שבהם מופיע 1 גם בקלט <strong>וגם</strong> בפלט?</li>
+
+
+<li>האם המספר של האינדקסים הללו הוא <strong>אי זוגי</strong>?</li>
+
+</ul>
+
+<p>זה מאוד מסורבל לדבר על זה ככה, אבל למרבה השמחה יש כלי מתמטי פשוט מאוד שמאפשר לתאר את זה בצורה שקל לעבוד איתה: <strong>מכפלה סקלרית מודולו </strong><strong>2</strong>. בהינתן שני וקטורים מאותו אורך, <span class="math">\(x=\left(x_{1},\ldots,x_{k}\right)\)</span> ו-<span class="math">\(y=\left(y_{1},\ldots,y_{k}\right)\)</span>, המכפלה הסקלרית שלהם היא <span class="math">\(x\cdot y=\sum_{i=1}^{k}x_{i}y_{i}\)</span>. אם <span class="math">\(x,y\in\left\{ 0,1\right\} ^{k}\)</span> אז המכפלה הסקלרית שלהם תהיה מספר שלם, ואפשר לקחת אותו מודולו 2 (לחלק ב-2 ולהחזיר את השארית; 0 אם המספר זוגי ו-1 אם הוא אי זוגי). </p>
+<p>אולי אתן אומרות "היי, זו כמו מכפלה פנימית!" וזה נכון - אפשר לחשוב על מכפלות פנימיות כאילו הן מוגדרות בעזרת סכום כזה, אבל אין למכפלה פנימית משמעות מעל <span class="math">\(\mathbb{Z}_{2}\)</span> (השדה שמעליו אנחנו עובדים כרגע במובלע) אלא רק מעל <span class="math">\(\mathbb{R},\mathbb{C}\)</span>; כי למשל, אחת הדרישות ממכפלה פנימית היא שאם <span class="math">\(x\ne0\)</span> אז <span class="math">\(\left\langle x,x\right\rangle >0\)</span> וזה בוודאי לא מתקיים כאן (חשבו על הוקטור <span class="math">\(x=11\)</span>). אבל גם בלי להיות מכפלה פנימית, למכפלה סקלרית כזו יש תכונות אלגבריות נחמדות, למשל <span class="math">\(\left(x+y\right)\cdot z=x\cdot z+y\cdot z\)</span>.</p>
+<p>בעזרת מכפלה סקלרית אפשר לנסח מאוד בקלות את המהומה שהלכה קודם:</p>
+<p><span class="math">\(H^{\otimes n}\left|x\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot y}\left|y\right\rangle \)</span></p>
+<p>כי מה קורה כאן? המכפלה הסקלרית <span class="math">\(x\cdot y=\sum_{i=1}^{k}x_{i}y_{i}\)</span> בעצם סופרת את מספר האינדקסים <span class="math">\(i\)</span> שבהם <strong>גם</strong> <span class="math">\(x_{i}=1\)</span> <strong>וגם</strong> <span class="math">\(y_{i}=1\)</span>, ביחד - אלו שני הדברים שהיו חייבים להתקיים סימולטנית כדי שהאינדקס <span class="math">\(i\)</span> יתרום <span class="math">\(-1\)</span> למקדם של <span class="math">\(\left|y\right\rangle \)</span>. כשלוקחים את זה מודולו 2, מקבלים 0 אם מספר המוכפלים זוגי (ולכן המקדם הכולל יהיה 1) ו-<span class="math">\(1\)</span> אם הוא יהיה אי זוגי (ולכן המקדם הכולל יהיה <span class="math">\(-1\)</span>). הטריק הזה של להעלות את <span class="math">\(-1\)</span> בחזקה שהיא או זוגית או אי זוגית כדי לקבל אפקט של כפל ב-1 או ב-<span class="math">\(-1\)</span> הוא נפוץ ביותר בכל חלקי המתמטיקה ומשרת אותנו גם כאן.</p>
+<p>במקרה הפרטי שראינו בהתחלה, זה שבו <span class="math">\(x=0^{n}\)</span>, פשוט מתקיים <span class="math">\(x\cdot y=0\)</span> לכל <span class="math">\(y\)</span>, ולכן המקדם יוצא תמיד חיובי ואנחנו מקבלים את הסכום הנחמד שראינו קודם: <span class="math">\(H^{\otimes n}\left|0^{n}\right\rangle =\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \)</span>.</p>
+<p>עכשיו אפשר לחזור סוף סוף אל דויטש-ג'וזה ולהבין מה קורה בו: כל מה שנשאר לנו הוא חשבון פשוט ביותר.</p>
+<p>ההתחלה של דויטש-ג'וזה מאפסת מצב התחלתי <span class="math">\(\left|0^{n}\right\rangle \)</span> ואז מפעילה עליו <span class="math">\(H^{\otimes n}\)</span>, כלומר אנחנו מגיעים אל <span class="math">\(\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \)</span>. בשלב הבא מפעילים את הקופסה השחורה על המצב הזה. נזכיר מה היא עושה:</p>
+<p><span class="math">\(U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \)</span></p>
+<p>ולכן נקבל</p>
+<p><span class="math">\(U_{f}\left(\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \right)=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}U_{f}\left(\left|x\right\rangle \right)=\)</span></p>
+<p><span class="math">\(=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \)</span></p>
+<p>עכשיו על כל זה אני מפעיל שוב <span class="math">\(H^{\otimes n}\)</span> ומקבל סכום כפול:</p>
+<p><span class="math">\(H^{\otimes n}\left(\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \right)=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}H^{\otimes n}\left(\left|x\right\rangle \right)=\)</span></p>
+<p><span class="math">\(=\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\frac{1}{\sqrt{2^{n}}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot y}\left|y\right\rangle \)</span></p>
+<p>זה סכום סופי, אז קל להפוך בו את סדר הסכימה: לכל <span class="math">\(y\in\left\{ 0,1\right\} ^{n}\)</span>, לקבץ את האיברים שמתאימים למקדם <span class="math">\(\left|y\right\rangle \)</span>:</p>
+<p><span class="math">\(=\frac{1}{2^{n}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle \)</span></p>
+<p>ה-<span class="math">\(\left|y\right\rangle \)</span> השונים הם תוצאות המדידה השונות האפשריות, והמקדם שאני מחשב ילמד אותי מה ההסתברות להעלות את <span class="math">\(\left|y\right\rangle \)</span> בגורל. האלגוריתם, כזכור, מכריע את ההכרעה שלו על פי השאלה האם <span class="math">\(\left|0^{n}\right\rangle \)</span> עלה בגורל, אז בואו נבדוק ספציפית את המקדם של <span class="math">\(y=0^{n}\)</span>:</p>
+<p><span class="math">\(\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\)</span></p>
+<p>עכשיו, אם <span class="math">\(f\)</span> היא פונקציה קבועה, כל האיברים בסכום יהיו <strong>אותו הדבר</strong> ולכן נקבל <span class="math">\(\frac{1}{2^{n}}\cdot\left(\pm2^{n}\right)=\pm1\)</span>. זה לא משנה אם המקדם חיובי או שלילי, כי כזכור - כדי לקבל את ההסתברות אנחנו לוקחים ערך מוחלט של המקדם ומעלים אותו בריבוע, ולכן בכל אחד מהמקרים הללו נקבל 1: בהסתברות של 1 בדיוק מובטח לנו שנקבל את המצב <span class="math">\(0^{n}\)</span>, כמו שאמור לקרות.</p>
+<p>אם <span class="math">\(f\)</span> היא פונקציה מאוזנת, אז <span class="math">\(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)}\)</span> הולך לכלול את אותו מספר של <span class="math">\(+1\)</span> ושל <span class="math">\(-1\)</span>, וכולם יבטלו זה את זה, כך שאני אקבל 0. עזבו אתכם ממה שקורה עם שאר המקדמים של שאר האיברים במצב שהגעתי אליו - המקדם של <span class="math">\(0^{n}\)</span> הוא 0, ולכן אין לי סיכוי לקבל אותו. אני בודאות אקבל תוצאה אחרת ולכן האלגוריתם יענה נכון גם במקרה הזה. זה מסיים את ההוכחה שהוא עובד, וגם נותן לנו תחושה טובה מאיפה הגיעו ה"פונקציה קבועה או מאוזנת" הללו; נראה כאילו היה לנו כאן אלגוריתם שחיפש בעיה לפתור, אבל זה לא משנה את זה שהפתרון מרהיב ממש באלגנטיות המתמטית שלו.</p>
+<h2>אלגוריתם ברנשטיין-וזירני</h2>
+
+<p>אמרתי שדויטש-ג'וזה נשמע כמו אלגוריתם שמחפש בעיה לפתור, והיופי פה הוא שבעצם יש <strong>עוד</strong> בעיה שאפשר לפתור, בצורה כזו שלא זורקת הצידה את תוצאת המדידה אם היא שונה מ-<span class="math">\(0^{n}\)</span>. גם הבעיה הנוספת הזו עדיין מרגישה קצת מלאכותית, אבל אולי פחות? בהקשר של הבעיה הזו, אלגוריתם דויטש-ג'וזה נקרא גם <strong>אלגוריתם ברנשטיין-וזירני</strong> למרות שזה אותו אלגוריתם בדיוק; המאמר המקורי של ברנשטיין ווזריני הוא גדול ומורכב ועוסק בהגדרות של מחלקות סיבוכיות קוונטיות והפרדה שלהן ממחלקות סיבוכיות הסתברותיות ובהקשר הזה מופיע השימוש שאני מתאר כאן; זה לא שברנשטיין-וזירני ישבו ואמרו "היי, תראו, יש עוד משמעות לדויטש-ג'וזה" וישבו לכתוב על זה מאמר.</p>
+<p>דויטש-ג'וזה עוסק בנסיון להבין פונקציה <span class="math">\(f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\} \)</span> כלשהי שהיא או קבועה, או מאוזנת. ברנשטיין-וזירני עוסק בנסיון להבין פונקציה <span class="math">\(f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\} \)</span> שהיא לאו דווקא קבועה או מאוזנת, אבל היא <strong>לינארית</strong>, כלומר <span class="math">\(f\left(x+y\right)=f\left(x\right)+f\left(y\right)\)</span> וגם <span class="math">\(f\left(\lambda x\right)=\lambda f\left(x\right)\)</span> (לא כזה מרשים כי <span class="math">\(\lambda\in\left\{ 0,1\right\} \)</span>), כשהחיבור והכפל בסקלר הם מעל <span class="math">\(\mathbb{Z}_{2}^{n}\)</span>. בואו נראה שאפשר לחשוב על הפונקציה הזו בתור מכפלה סקלרית, כלומר שקיים <span class="math">\(w\in\left\{ 0,1\right\} ^{n}\)</span> כך ש-<span class="math">\(f\left(x\right)=w\cdot x\)</span>: </p>
+<p>אם נגדיר <span class="math">\(e_{i}=\left(0,\ldots,1,\ldots,0\right)\)</span>, כלומר ה-<span class="math">\(1\)</span> נמצא רק במקום ה-<span class="math">\(i\)</span> של <span class="math">\(e_{i}\)</span>, אז נקבל בסיס של <span class="math">\(\mathbb{Z}_{2}^{n}\)</span>: אפשר להציג כל <span class="math">\(x\in\mathbb{Z}_{2}^{n}\)</span> בתור <span class="math">\(x=\sum_{i=1}^{n}x_{i}e_{i}\)</span>. מתכונת הלינאריות של <span class="math">\(f\)</span> נקבל</p>
+<p><span class="math">\(f\left(x\right)=f\left(\sum_{i=1}^{n}x_{i}e_{i}\right)=\sum_{i=1}^{n}x_{i}f\left(e_{i}\right)\)</span></p>
+<p>אז פשוט נגדיר <span class="math">\(w_{i}=f\left(e_{i}\right)\)</span> ונקבל שאכן, <span class="math">\(f\left(x\right)=w\cdot x\)</span> לכל <span class="math">\(x\in\mathbb{Z}_{2}^{n}\)</span>. שימו לב שרוב הפונקציות אינן לינאריות; יש <span class="math">\(2^{2^{n}}\)</span> פונקציות מ-<span class="math">\(\left\{ 0,1\right\} ^{n}\)</span> אל <span class="math">\(\left\{ 0,1\right\} \)</span>, אבל מכיוון שיש רק <span class="math">\(2^{n}\)</span> איברים <span class="math">\(w\in\left\{ 0,1\right\} ^{n}\)</span> יש רק <span class="math">\(2^{n}\)</span> פונקציות לינאריות. מכאן שברנשטיין-וזירני מראש מטפל רק במחלקה קטנה יחסית של פונקציות, בדומה לדויטש-ג'וזה.</p>
+<p>המשימה של ברנשטיין-וזירני היא זו: בהינתן <span class="math">\(f\)</span> לינארית שכזו, למצוא את ה-<span class="math">\(w\)</span> שמגדיר אותה. שימו לב: בניגוד לדויטש-ג'וזה, כאן אנחנו לא רוצים להכריע בין שתי סיטואציות אלא ממש למצוא משהו. אבל אותו אלגוריתם יעבוד:</p>
+<ol> <li>אתחלו מצב קוונטי אל <span class="math">\(\left|0^{n}\right\rangle \)</span></li>
+
+
+<li>הפעילו <span class="math">\(H\)</span> על כל הקיוביטים.</li>
+
+
+<li>הפעילו את הקופסה השחורה על המצב שקיבלתם.</li>
+
+
+<li>הפעילו <span class="math">\(H\)</span> על המצב שקיבלתם.</li>
+
+
+<li>מדדו את כל הקיוביטים במצב שקיבלתם.</li>
+
+
+<li>תוצאת המדידות <span class="math">\(w\)</span> היא הערך המבוקש.</li>
+
+</ol>
+
+<p>לי זה נראה כמו קסם, שפתאום נקבל את ה-<span class="math">\(w\)</span> הזה, אבל האמת היא שזה די פשוט. בואו ניזכר מה מקבלים אחרי שלב 4, כי כבר ביצענו את החישוב קודם:</p>
+<p><span class="math">\(\frac{1}{2^{n}}\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle \)</span></p>
+<p>עכשיו, ה-<span class="math">\(f\left(x\right)+x\cdot y\)</span> הזה שלמעלה נהיה פשוט יותר במקרה שלנו, כי <span class="math">\(f\left(x\right)=w\cdot x=x\cdot w\)</span> ולכן נקבל</p>
+<p><span class="math">\(f\left(x\right)+x\cdot y=x\cdot w+x\cdot y=x\cdot\left(w+y\right)\)</span></p>
+<p>עכשיו, במקרה שבו <span class="math">\(w=y\)</span> אנחנו מקבלים <span class="math">\(w+y=2y=0\)</span> (כי זכרו, אנחנו מעל <span class="math">\(\mathbb{Z}_{2}\)</span>) ולכן המקדם של <span class="math">\(\left|y\right\rangle =\left|w\right\rangle \)</span> יהיה</p>
+<p><span class="math">\(\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{0}=\frac{1}{2^{n}}\sum_{x\in\left\{ 0,1\right\} ^{n}}1=1\)</span></p>
+<p>קסם!</p>
+<p>בשלב הזה אני כבר ממש מוטרד. זה מרגיש כמו "קסם" במובן של אחיזת עיניים של קוסם, שגורם לנו כל הזמן להתמקד במקום אחד - במקרה זה, במקדם של ה-<span class="math">\(\left|y\right\rangle \)</span> הספציפי שמעניין אותנו, ובגלל שהוא יוצא 1 אנחנו אמורים איכשהו להיות מרוצים ולהניח שכל שאר המקדמים יוצאים 0. אבל למה? ובכן, זה די קל: בואו ניקח <span class="math">\(y\ne w\)</span>, אז זה אומר ש-<span class="math">\(y+w\ne0\)</span> לפחות באינדקס אחד. נניח בלי הגבלת הכלליות שזה האינדקס הראשון, אז אפשר לכתוב <span class="math">\(y+w=1z^{\prime}\)</span> כאשר <span class="math">\(z^{\prime}\in\left\{ 0,1\right\} ^{n-1}\)</span>.</p>
+<p>עכשיו, אנחנו מסתכלים על הסכום <span class="math">\(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\)</span>, שאחרי הפישוטים שלנו יוצא <span class="math">\(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot1z^{\prime}}\)</span>. אני הולך לחלק את ה-<span class="math">\(x\)</span>-ים לשתי קבוצות: אלו שמתחילים ב-0 ואלו שמתחילים ב-1. מן הסתם שתי הקבוצות הללו מאותו גודל, אבל שימו לב לכך שאם <span class="math">\(x=0x^{\prime}\)</span> אז <span class="math">\(x\cdot1z^{\prime}=x^{\prime}\cdot z^{\prime}\)</span> ואילו אם <span class="math">\(x=1x^{\prime}\)</span> אז <span class="math">\(x\cdot1z^{\prime}=1+x^{\prime}\cdot z^{\prime}\)</span>. במילים אחרות, הזוג <span class="math">\(0x^{\prime},1x^{\prime}\)</span> יניב תוצאות שונות כשמעלים את <span class="math">\(-1\)</span> בחזקת <span class="math">\(x\cdot1z^{\prime}\)</span>, ולכן הסכום של שניהם יצא 0. בצורה הזו חילקנו את <strong>כל</strong> ה-<span class="math">\(x\)</span>-ים שלנו לזוגות שמבטלים זה את זה, ולכן באמת נקבל 0. אני מקווה שזה משכנע גם את מי שכמוני קשה לו לקבל את זה שאם המקדם של איבר אחד יצא 1 זה אומר ששאר המקדמים הם בהכרח 0.</p>
+<h2>מה למדנו מכל זה?</h2>
+
+<p>כאמור, אני לא מביא את האלגוריתמים הללו בשביל להוכיח את עליונות החישוב הקוונטי על החישוב הרגיל, והטיעון המתמטי המדויק שרלוונטי לנסח בהקשר הזה הוא ארוך ומסובך למדי ואין לי כוח אליו. אני מביא אותם כדי שנרגיש מה הולך באלגוריתמים קוונטיים. באופן מאוד גס אוהבים לומר שהכוח של אלגוריתם קוונטי נובע משלושה היבטים של חישוב קוונטי:</p>
+<ul> <li>סופרפוזיציה</li>
+
+
+<li>שזירה</li>
+
+
+<li>התאבכות</li>
+
+</ul>
+
+<p>בדויטש-ג'וזה-ברנשטיין-וזירני אין ממש שזירה (ה-<span class="math">\(H\)</span>-ים בהתחלה ובסוף לא יוצרים שזירה, וגם ה-<span class="math">\(U\)</span> באמצע לא חייבת ליצור שזירה). בהחלט יש סופרפוזיציה - זה מה שה-<span class="math">\(H\)</span> בהתחלה עושה לנו מייד. אבל האספקט המעניין שטרם ראינו הוא שיש כאן <strong>התאבכות</strong>.</p>
+<p>בפיזיקה, במשמעות המקורית של המילהת "התאבכות" באה לתאר סיטואציה שבה גלים שונים ש"מתנגשים" יכולים לחזק או להחליש זה את זה בנקודות ההתנגשות, בהתאם למצב הנוכחי שלהם. אפשר לחשוב על גל בתור משהו שכל הזמן עולה ויורד. אם בנקודת ההתנגשות של שני גלים, שנים בנקודה הגבוהה ביותר שלהם, הם יחזקו זה את זה ונקבל גל עוד יותר גבוה ("התאבכות בונה") ואם הם ייפגשו בנקודה הנמוכה ביותר שלהם התוצאה תהיה עוד יותר נמוכה וגם זו תהיה התאבכות בונה. אבל אם גל אחד יהיה גבוה והשני נמוך, הם יבטלו זה את זה ונקבל איזור שבו לא רואים שום דבר ("התאבכות הורסת"). מה שיפה בדויטש-ג'וזה הוא שזה בדיוק מה שקורה גם כאן.</p>
+<p>כשביצענו את הסופרפוזיציה הראשונית עם <span class="math">\(H^{\otimes n}\)</span>, אפשר לחשוב על כך כאילו לקחנו את המצב <span class="math">\(\left|0^{n}\right\rangle \)</span> ופירקנו אותו לסכום של <span class="math">\(2^{n}\)</span> גלים שונים: <span class="math">\(\frac{1}{\sqrt{2^{n}}}\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \)</span>. ברגע הזה, כל הגלים נמצאים באיזור ה"גבוה" שלהם, שבא לידי ביטוי בפאזה החיובית שלהם (הפאזה בהקשר הנוכחי היא הסימן של המקדם של <span class="math">\(\left|x\right\rangle \)</span>).</p>
+<p>אחר כך אנחנו מפעילים את <span class="math">\(U_{f}\)</span>, וההשפעה שלו היא פשוטה: הוא משנה את הפאזה של <span class="math">\(\left|x\right\rangle \)</span>-ים מסויימים, מחיובית לשלילית. במקום שכל הגלים יהיו מסונכרנים, <span class="math">\(U_{f}\)</span> פיצל את הגלים לשתי קבוצות, כל אחת עם הסינכרון שלה. לבסוף מגיע ה-<span class="math">\(H^{\otimes n}\)</span> השני, ומה שהוא עושה הוא לגרום לכל הגלים להתנגש ולהסתכל מה קרה. כשהגלים "מתנגשים", לכל <span class="math">\(\left|y\right\rangle \)</span> אנחנו מקבלים בנקודת ההתנגשות את</p>
+<p><span class="math">\(\frac{1}{\sqrt{2^{n}}}\left(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{f\left(x\right)+x\cdot y}\right)\left|y\right\rangle \)</span></p>
+<p>בברנשטיין-וזירני, עבור רוב ערכי ה-<span class="math">\(\left|y\right\rangle \)</span>, ההתאבכות תהיה הורסת והם ייעלמו לגמרי. המקום היחיד שבו תהיה התאבכות בונה הוא ה-<span class="math">\(\left|y\right\rangle \)</span> שאנו חפצים ביקרו. בדויטש-ג'וזה תהיה התאבכות בונה ב-<span class="math">\(\left|0^{n}\right\rangle \)</span> רק אם הפונקציה קבועה, ואחרת תהיה שם התאבכות הורסת.</p>
+<p>זו בעצם המהות של רבים מהאלגוריתמים הקוונטיים: לגרום איכשהו לחלקים השונים של הסופרפוזיציה "להתנגש" אלו באלו, כך שהחלקים הלא מועילים מתבטלים, והחלקים המועילים נשארים. בדויטש-ג'וזה, בגלל הפשטות הגדולה שלו, אנחנו יכולים לראות בדיוק מה גורם להתאבכויות הללו לעבוד - העובדה שהמקדמים של ה-<span class="math">\(\left|x\right\rangle \)</span>-ים יכולים להיות <strong>שליליים</strong>. וכאן אנחנו מגיעים אל מה שהוא אולי לב-לבו של ההבדל המרכזי בין חישוב קוונטי וחישוב הסתברותי "רגיל". ריצ'ארד פיינמן, בהרצאה מפורסמת שלו, Simulating Physics with Computers, אמר (כחלק מתיאור יותר מפורט, כמובן)</p>
+<blockquote dir="ltr" style="text-align:left">
+  <p>The only difference between a probabilistic classical world and the equations of the quantum world is that somehow or other it appears as if the probabilities would have to go negative.</p>
+</blockquote>
+
+<p>וזה בדיוק מה שקורה פה. אם אני מבצע חישוב הסתברותי "רגיל" שבו אני מגריל מחרוזת <span class="math">\(x\in\left\{ 0,1\right\} ^{n}\)</span> בהתפלגות אחידה, אפשר יהיה לחשוב על מצב החישוב שלי אחרי השלב הראשון הזה כאילו הוא ב"סופרפוזיציה" שבו ההסתברות של כל <span class="math">\(x\)</span> היא בדיוק <span class="math">\(\frac{1}{2^{n}}\)</span>. אחר כך אני יכול לבצע חישובים שעבור <span class="math">\(x\)</span>-ים שונים יובילו לאותה תוצאה, ובכך "לחזק" את ההסתברות של אותה תוצאה להתקבל. אבל האופן שבו ה"חיזוק" הזה מתבצע הוא על ידי חיבור הסתברויות, אין לי חיסור. אם לחדד: אפשר לתאר חישוב הסתברותי רגיל בתור כפל של וקטור <strong>סטוכסטי</strong> (וקטור שבו כל הכניסות בין 0 ל-1 ומסתכמות ל-1) במטריצה <strong>סטוכסטית</strong> (מטריצה שבה כל הכניסות בין 0 ל-1 וכל שורה מסתכמת ל-1). זה נותן הרבה, אבל זה פשוט לא מאפשר לנו לבצע את אותה אלגברה שאנחנו עושים בחישוב קוונטי, עם מטריצות שיש בהן גם מספרים שליליים.</p>
+<p>עוד דרך לחשוב על זה: בחישוב הסתברותי, מה שיש לנו ביד בכל רגע נתון הוא ההסתברויות של התוצאות האפשריות. בחישוב קוונטי, מה שיש לנו ביד בכל רגע נתון הוא <strong>האמפליטודות</strong> של החישוב - אותן <span class="math">\(\alpha_{x}\)</span>-ים. ה-<span class="math">\(\alpha_{x}\)</span>-ים הן <strong>לא</strong> הסתברויות; הן מספרים שיכולים להיות גם שליליים וגם מרוכבים, ואת ההסתברויות אנחנו מחשבים מתוכן בעזרת שלב הביניים <span class="math">\(\left|\alpha_{x}\right|^{2}\)</span>. כלומר, אנחנו מסוגלים לבצע אלגברה יותר מתוחכמת, ש"מוסתרת" בסופו של דבר בידי המעבר מ-<span class="math">\(\alpha_{x}\)</span> אל <span class="math">\(\left|\alpha_{x}\right|^{2}\)</span>. אבל כל עוד לא מדדנו, אנחנו עדיין בעולם של האלגברה המתוחכמת יותר, והיא זו שמאפשרת לנו להשיג את האפקט של ההתאבכות. חישוב קוונטי מאפשר לנו לרתום את הטבע עצמו כדי לבצע אלגברה שהיא יותר מתוחכמת מאלגברה בוליאנית.</p>
+<p>זהו, זו הדרך הכי טובה שיש לי לתת את האינטואיציה האישית שלי לסיבה שבגללה חישוב קוונטי הוא "יותר" מחישוב רגיל. עכשיו רק נשאר לי לסגור את החוב מתחילת הפוסט לגבי הקופסאות השחורות.</p>
+<h2>אז איך מממשים קופסא שחורה קוונטית?</h2>
+
+<p>בתחילת הפוסט מלמלתי משהו על חישוב של <span class="math">\(f\)</span> בעזרת קופסא שחורה ואז קפצתי לכך שיש לנו אופרטור <span class="math">\(U_{f}\)</span> שעושה את הקסם <span class="math">\(U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \)</span>. אני עדיין צריך להסביר איך כזה דבר עובד.</p>
+<p>אם תחשבו על זה רגע, עדיין בסדרת הפוסטים לא הסברתי איך מבצעים חישוב <strong>רגיל</strong> בעזרת מחשב קוונטי. אמנם, אמרתי ש-<span class="math">\(X\)</span> זה כמו NOT, אבל אין לי שום פעולה שהיא כמו AND, למשל: פעולה שמחזירה 1 רק אם שני הקלטים היו 1, ואחרת מחזירה 0. ויש סיבה טובה שבגללה אין לי כזו: כי AND היא פעולה <strong>לא הפיכה</strong> אבל בחישוב קוונטי כל פעולה צריכה להיות אופרטור אוניטרי, כלומר הפיכה. אם ב-AND קיבלתי 0, אני לא יודע אם זה בגלל ששני הקלטים היו 0, או בגלל שאחד מהם היה 0 והשני 1, ואיזה מהם. אינפורמציה הלכה לאיבוד.</p>
+<p>האם זה אומר שלא ניתן לממש פעולת AND בחישוב קוונטי? לא בדיוק. אפשר, אבל צריך יהיה לשלם מחיר כלשהו. המחיר הוא שימוש בקיוביט "זבל" שישתתף בחישוב בתור מעין משתתף זמני ואחר כך נוכל לשכוח מערכו. אני לא אכנס לפרטים הללו עכשיו אלא אציג פוסט יותר מפורט עליהם בהמשך. למה לא הראיתי את זה קודם? כי זו אחת מהבעיות הללו שכל עוד לא מרגישים שחסר לה פתרון, קצת טרחני להציג אותו.</p>
+<p>אז נניח שיש לנו מעגל קוונטי שיודע גם לבצע חישוב רגיל. יש לו <span class="math">\(n\)</span> קיוביטי קלט, וקיוביט נוסף שאנו מניחים שמאותחל ל-<span class="math">\(\left|0\right\rangle \)</span> ובסוף החישוב יהיה בו הפלט, ואולי גם קיוביט עזר שלא נטרח לכתוב. כלומר, מה שיש לנו הוא מעגל שמחשב</p>
+<p><span class="math">\(O_{f}\left(\left|x\right\rangle \otimes\left|0\right\rangle \right)=\left|x\right\rangle \otimes\left|f\left(x\right)\right\rangle \)</span></p>
+<p>שימו לב: כאן במכפלה הטנזורית, הרכיב השמאלי, <span class="math">\(\left|x\right\rangle \)</span>, הוא בעצמו מכפלה טנזורית של <span class="math">\(n\)</span> קיוביטים, בעוד שהרכיב הימני הוא קיוביט בודד.</p>
+<p>הבעיה עם ההגדרה שנתתי כרגע היא שזו עדיין לא הגדרה שלמה. הגדרתי את <span class="math">\(O_{f}\)</span> <strong>לחלק </strong>מהקלטים שהם אברי בסיס, אבל לא לכולם. מה עם הקלטים מהצורה <span class="math">\(\left|x\right\rangle \otimes\left|1\right\rangle \)</span>? כדי לטפל בכל המקרים, אני אגדיר</p>
+<p><span class="math">\(O_{f}\left(\left|x\right\rangle \otimes\left|b\right\rangle \right)=\left|x\right\rangle \otimes\left|f\left(x\right)\oplus b\right\rangle \)</span></p>
+<p>כאן <span class="math">\(\oplus\)</span> מציין חיבור מודולו 2, ולכן מה ש-<span class="math">\(O_{f}\)</span> עושה הוא או להחזיר את <span class="math">\(f\left(x\right)\)</span> (אם הקלט הנוסף הוא 0) או את <span class="math">\(\neg f\left(x\right)\)</span> (אם הקלט הנוסף הוא 1). מה שאני רוצה להסביר עכשיו הוא איך לבנות את <span class="math">\(U_{f}\)</span> שבו השתמשתי קודם מתוך <span class="math">\(O_{f}\)</span> הזה. הטריק הוא חמוד ממש: במקום להפעיל את <span class="math">\(O_{f}\)</span> על <span class="math">\(\left|x\right\rangle \otimes\left|0\right\rangle \)</span> או על <span class="math">\(\left|x\right\rangle \otimes\left|1\right\rangle \)</span>, אני אפעיל אותו על <span class="math">\(\left|x\right\rangle \otimes\left|-\right\rangle \)</span>.</p>
+<p>כזכור, <span class="math">\(\left|-\right\rangle \)</span> הוא המצב הקוונטי שמתקבל מ-<span class="math">\(H\left|1\right\rangle \)</span>, כלומר <span class="math">\(\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}\)</span>. בואו נראה מה <span class="math">\(O_{f}\)</span> עושה כשהוא מקבל קלט כזה, תוך התבססות על הלינאריות שלו:</p>
+<p><span class="math">\(O_{f}\left(\left|x\right\rangle \otimes\left|-\right\rangle \right)=\frac{1}{\sqrt{2}}\left[O_{f}\left(\left|x\right\rangle \otimes\left|0\right\rangle \right)-O_{f}\left(\left|x\right\rangle \otimes\left|1\right\rangle \right)\right]=\)</span></p>
+<p><span class="math">\(=\frac{1}{\sqrt{2}}\left[\left|x\right\rangle \left|f\left(x\right)\right\rangle -\left|x\right\rangle \left|f\left(x\right)\oplus1\right\rangle \right]=\)</span></p>
+<p><span class="math">\(=\left|x\right\rangle \frac{\left|f\left(x\right)\right\rangle -\left|f\left(x\right)\oplus1\right\rangle }{\sqrt{2}}\)</span></p>
+<p>עכשיו, בואו נבדיל בין שני המקרים האפשריים:</p>
+<ul> <li>אם <span class="math">\(f\left(x\right)=0\)</span> אז מה שקיבלנו מימין ל-<span class="math">\(\left|x\right\rangle \)</span> הוא את <span class="math">\(\frac{\left|0\right\rangle -\left|1\right\rangle }{\sqrt{2}}=\left|-\right\rangle \)</span></li>
+
+
+<li>אם <span class="math">\(f\left(x\right)=1\)</span> אז מה שקיבלנו מימין ל-<span class="math">\(\left|x\right\rangle \)</span> הוא את <span class="math">\(\frac{\left|1\right\rangle -\left|0\right\rangle }{\sqrt{2}}=-\left|-\right\rangle \)</span></li>
+
+</ul>
+
+<p>ובמילים אחרות, קיבלנו ש-</p>
+<p><span class="math">\(O_{f}\left(\left|x\right\rangle \left|-\right\rangle \right)=\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \left|-\right\rangle \)</span></p>
+<p>קיבלנו שהפעלה של <span class="math">\(O_{f}\)</span> לא משנה את המצב הקוונטי כלל, חוץ מאשר על ידי כפל שלו ב-<span class="math">\(\left(-1\right)^{f\left(x\right)}\)</span>. לכן, אם נסתכל על האפקט רק ל-<span class="math">\(n\)</span> הקיוביטים הראשונים, נקבל בדיוק את <span class="math">\(U_{f}\)</span> שרצינו. זה מסיים גם את ההסבר שלי לגבי הופעת הקופסה השחורה המסתורת <span class="math">\(U_{f}\)</span>, אבל עדיין נשאר לי חוב של להסביר איך בכלל מבצעים חישובים רגילים בעזרת חישוב קוונטי. אל זה נגיע בעתיד. אסיים עם האיור שנותן לנו את כל דויטש-ג'וזה בעזרת <span class="math">\(O_{f}\)</span> הזה, שכן גם באיור הזה אפשר להיתקל לפעמים ושווה לראות אותו, עכשיו כשאנחנו מבינים שזה אותו הדבר:</p>
+<p><img src="/img/2022/deutsch_jozsa_full.png" alt=""/></p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2022/09/01/quantum_fourier_transform/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">התמרת פורייה הקוונטית</span>
+            </a>
+            
+            
+            
+            <a href="/2022/08/03/quantum_computing_math_4/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי בגישה מתמטית, חלק ד&#39;: שערים קוונטיים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

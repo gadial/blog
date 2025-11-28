@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP=PSPACE - ההוכחה (חלק ב&#39;) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>IP=PSPACE - ההוכחה (חלק ב&#39;)</h1>
+            <div class="post-meta">
+                <span class="date">2011-05-14</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/IP=PSPACE.html">IP=PSPACE</a>
+                    
+                    <a href="/tags/הוכחות יפות.html">הוכחות יפות</a>
+                    
+                    <a href="/tags/טכני.html">טכני</a>
+                    
+                    <a href="/tags/פרוייקט &#34;תוצאות מפתיעות בסיבוכיות&#34;.html">פרוייקט &#34;תוצאות מפתיעות בסיבוכיות&#34;</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2011/05/07/ip_equals_pspace_proof_1/">בפוסט הקודם שעסק בהוכחה</a> ש-<span class="math">\(\mbox{IP}=\mbox{PSPACE}\)</span> הראיתי מערכת הוכחה אינטראקטיבית עבור השפה <span class="math">\(\overline{3\mbox{SAT}}\)</span>. זו הייתה הדוגמה הראשונה למערכת הוכחה "רצינית", כזו שמשתמשת בכל הכוח של האינטראקטיביות; במערכות האחרות שהראיתי תוך סיבוב או שניים המשחק נגמר, ואילו כאן ההוכחה הייתה דיאלוג ארוך ומתמשך, שבו לאט לאט המוכיח והמוודא התקרבו אל עצם העניין. הרעיון, כזכור, היה כזה: בהינתן פסוק לוגי <span class="math">\(\varphi\)</span>, אפשר היה לתרגם אותו לפולינום <span class="math">\(P_{\varphi}\left(X_{1},\dots,X_{n}\right)\)</span> ב-<span class="math">\(n\)</span> משתנים ואת שאלת הספיקות של <span class="math">\(\varphi\)</span> לתרגם לשאלה האם <span class="math">\(\sum_{b_{1}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P_{\varphi}\left(b_{1},\dots,b_{n}\right)=K\)</span> עבור <span class="math">\(K\)</span> כלשהו. בפולינום הזה טיפלנו על ידי כך שהצלחנו לצמצם את הבדיקה של המשוואה לעיל לבדיקה של משוואה מהצורה <span class="math">\(\sum_{b_{1}\in\left\{ 0,1\right\} }\dots\sum_{b_{n-1}\in\left\{ 0,1\right\} }P^{\prime}\left(b_{1},\dots,b_{n-1}\right)=K^{\prime}\)</span> - כלומר, צמצנו את הבעיה באופן רקורסיבי לבעיה קטנה יותר (עם משתנה אחת פחות בפולינום החדש) מאותו הסוג. הרעיונות הללו הם בדיוק הרעיונות שנשתמש בהם גם בהוכחה ש-<span class="math">\(\mbox{IP=PSPACE}\)</span>, שהיא פשוט הוכחה לכך שהשפה <span class="math">\(\mbox{TQBF}\)</span> שייכת ל-<span class="math">\(\mbox{IP}\)</span>.</p>
+<p>פסוק של <span class="math">\(\mbox{TQBF}\)</span>, כזכור, הוא פסוק מהצורה <span class="math">\(\exists x_{1}\forall x_{2}\exists x_{3}\dots\forall x_{n}\varphi\left(x_{1},\dots,x_{n}\right)\)</span>, כלומר כזה שבו מחליפים לסירוגין בין כמתי "קיים" ו"לכל". זה הבדל משמעותי מפסוק <span class="math">\(\mbox{CNF}\)</span> רגיל שבו כל הכמתים היו "קיים". הערך <span class="math">\(\sum_{b_{1}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P_{\varphi}\left(b_{1},\dots,b_{n}\right)\)</span> כבר לא ממש עוזר לנו - הוא אומר לנו מה מספר ההצבות של ערכים למשתני <span class="math">\(\varphi\)</span> שיניבו <span class="math">\(\mbox{T}\)</span>, אבל המספר הזה לא עוזר לנו ממש - למשל, נניח ש-<span class="math">\(\varphi\)</span> הוא הפסוק <span class="math">\(\varphi\left(x_{1},x_{2}\right)=\left(x_{1}\vee x_{2}\right)\wedge\left(\overline{x_{1}}\vee\overline{x_{2}}\right)\)</span>, שמוכר גם בסימון קצת יותר פופולרי כ-<span class="math">\(x_{1}\oplus x_{2}\)</span> (פעולת XOR). לא קשה לראות כי <span class="math">\(\sum_{b_{1}\in\left\{ 0,1\right\} }\sum_{b_{2}\in\left\{ 0,1\right\} }\varphi\left(b_{1},b_{2}\right)=2\)</span>, אבל <span class="math">\(\exists x_{1}\forall x_{2}\varphi\left(x_{1},x_{2}\right)\)</span> הוא בבירור בעל ערך <span class="math">\(\mbox{F}\)</span> (כי לא קיים <span class="math">\(x_{1}\)</span> שעבורו <strong>כל</strong> <span class="math">\(x_{2}\)</span> יניב ערך אמת כשמציבים את שניהם ב-<span class="math">\(\varphi\)</span>). לעומת זאת, <span class="math">\(\varphi\left(x_{1},x_{2}\right)=x_{1}\)</span> הוא פסוק קטן ביותר ומטופש שגם בו הסכום יהיה בדיוק 2, אבל בו התכונה כן מתקיימת (הצבה של <span class="math">\(\mbox{T}\)</span> ל-<span class="math">\(x_{1}\)</span> מספקת את הפסוק בלי תלות ב-<span class="math">\(x_{2}\)</span>, כמובן).</p>
+<p>למרבה המזל, טריק פשוט יחסית פותר את הבעיה הזו. כל מה שאנחנו רוצים לדעת בהינתן פסוק <span class="math">\(\mbox{TQBF}\)</span> הוא אם ערך האמת שלו הוא <span class="math">\(\mbox{T}\)</span> או <span class="math">\(\mbox{F}\)</span>. אז בואו נשים לב שערך האמת של <span class="math">\(\exists x_{1}\forall x_{2}\exists x_{3}\dots\forall x_{n}\varphi\left(x_{1},\dots,x_{n}\right)\)</span> הוא <span class="math">\(\mbox{T}\)</span> אם ורק אם <span class="math">\(\sum_{b_{1}\in\left\{ 0,1\right\} }\prod_{b_{2}\in\left\{ 0,1\right\} }\sum_{b_{3}\in\left\{ 0,1\right\} }\dots\prod_{b_{n}\in\left\{ 0,1\right\} }P_{\varphi}\left(b_{1},\dots,b_{n}\right)\ne0\)</span>. נסו להוכיח את זה לעצמכם - ההוכחה היא באינדוקציה פשוטה על מספר הכמתים, ומתבססת על כך ש-<span class="math">\(P_{\varphi}\)</span> מקבל או 0 או 1, ושמכפלה של שני ערכים שהוא מקבל היא 1 רק אם שניהם היו 1, ושסכום של שני ערכים שהוא מקבל הוא 0 רק אם שניהם היו 0.</p>
+<p>אז איך הפרוטקול של הפוסט הקודם יעבוד כאן? פשוט מאוד: המוכיח ישלח למוודא פולינום במשתנה יחיד <span class="math">\(g\left(X_{1}\right)\)</span> שבתיאוריה מוגדר באמצעות הנוסחה <span class="math">\(g\left(X_{1}\right)=\prod_{b_{2}\in\left\{ 0,1\right\} }\sum_{b_{3}\in\left\{ 0,1\right\} }\dots\prod_{b_{n}\in\left\{ 0,1\right\} }P_{\varphi}\left(X_{1},b_{2},\dots,b_{n}\right)\)</span>, והמוודא יוודא ש-<span class="math">\(g\left(0\right)+g\left(1\right)\ne0\)</span>; וכעת המוודא ירצה להשתכנע ש-<span class="math">\(g\left(X_{1}\right)\)</span> אכן הוגדר על פי הנוסחה הנ"ל ושהמוכיח לא סתם שלח לו פולינום מונפץ, אז הוא יגריל ערך <span class="math">\(a\)</span> כלשהו מהשדה שמעליו עובדים (שהוא כזכור <span class="math">\(\mathbb{Z}_{p}\)</span> עבור <span class="math">\(p\)</span> ראשוני גדול מספיק), יחשב את <span class="math">\(K=g\left(a\right)\)</span> ויתבע מהמוכיח שיוכיח לו כעת ש-<span class="math">\(\prod_{b_{2}\in\left\{ 0,1\right\} }\sum_{b_{3}\in\left\{ 0,1\right\} }\dots\prod_{b_{n}\in\left\{ 0,1\right\} }P_{\varphi}\left(a,b_{2},\dots,b_{n}\right)=K\)</span>, והמשחק יימשך. בסיבוב הבא, המוודא יבדוק שהפולינום <span class="math">\(g\left(X_{2}\right)\)</span> שהוא קיבל מקיים דווקא <span class="math">\(g\left(0\right)\cdot g\left(1\right)=K\)</span>, אבל זה לא הבדל עקרוני.</p>
+<p>פוף! סיימנו. זה היה קל!</p>
+<p>...</p>
+<p>כן, ברור לכם שזה לא כזה קל, נכון? אחרת הייתי מראה את זה כבר בפוסט הקודם. האם כבר הבנתם מה הבעיה? אני בכוונה משאיר אתכם קצת במתח, ובכוונה קצת ניסיתי לעבוד עליכם. חשוב לראות, ולהרגיש, עד כמה העסק הזה חמקמק ועד כמה הדקויות קריטיות כאן. זה מה שקורה כשמתעסקים קצת במתמטיקה "אמיתית" - מצד אחד חייבים להשתמש בקיצורי דרך ונפנופי ידיים והוכחות שאינן פורמליות עד הסוף, ומצד שני יש הרבה סכנות לקיצורי הדרך הללו ואפשר בקלות ליפול לתהום.</p>
+<p>אז מה הבעיה? הבעיה היא שלא בטוח שהמוכיח יהיה מסוגל לשלוח למוודא את <span class="math">\(g\left(X_{1}\right)\)</span>, כי הדרגה של <span class="math">\(g\left(X_{1}\right)\)</span> עשויה להיות גבוהה מדי מכדי ששליחה שלו תאפשר לפרוטוקול להמשיך להיות יעיל מבחינת זמן הריצה. בואו נעשה סדר בדברים: זמן הריצה של הבעיה נמדד ביחס לגודל הקלט, כלומר גודל הנוסחה <span class="math">\(\varphi\)</span>. אפשר גם כאן להניח שזו נוסחת <span class="math">\(3\mbox{CNF}\)</span> - נוסחה שמורכבת מפסוקיות כך שכל פסוקית מכילה שלושה משתנים בדיוק; נסמן ב-<span class="math">\(m\)</span> את מספר הפסוקיות. את <span class="math">\(P_{\varphi}\)</span> מייצגים בתור מכפלה של פולינומים שכל אחד מהם מייצג את אחת מהפסוקיות; פולינום שכזה, עם שיטת התרגום שהצגתי בפוסט הקודם, יהיה מדרגה 3, ולכן קל לייצוג (צריך לזכור את המקדמים של הפולינום, אבל יש מעט כאלו - כמה?). בסך הכל צריך כמות זכרון שהיא "בערך <span class="math">\(m\)</span>" כדי לייצג את <span class="math">\(P_{\varphi}\)</span>, כש"בערך" פירושו "<span class="math">\(m\)</span> כפול קבוע כלשהו" - מסמנים זאת <span class="math">\(O\left(m\right)\)</span>.</p>
+<p>כעת, בפרוטוקול שהראינו בפוסט הקודם, שבו <span class="math">\(g\left(X_{1}\right)\)</span> הוגדר בתור <span class="math">\(\sum_{b_{2}\in\left\{ 0,1\right\} }\sum_{b_{3}\in\left\{ 0,1\right\} }\dots\sum_{b_{n}\in\left\{ 0,1\right\} }P_{\varphi}\left(X_{1},b_{2},\dots,b_{n}\right)\)</span>, מה שקרה הוא ש-<span class="math">\(g\left(X_{1}\right)\)</span> היה פולינום שהתקבל מחיבור הרבה פולינומים במשתנה יחיד שדרגתם לכל היותר <span class="math">\(3m\)</span> (כי דרגת <span class="math">\(P_{\varphi}\)</span> הייתה <span class="math">\(3m\)</span>). חיבור פולינומים לא יכול להגדיל את הדרגה שלהם, ולכן <span class="math">\(3m\)</span> נותר חסם גם על דרגת <span class="math">\(g\left(X_{1}\right)\)</span>, מה שאומר שכמות המקדמים שהמוכיח צריך לשלוח למוודא כדי לשדר אליו את <span class="math">\(g\left(X_{1}\right)\)</span> הייתה סבירה ביחס לגודל הקלט של הפרוטוקול, והכל עבד יופי טופי.</p>
+<p>בפרוטוקול החדש, לעומת זאת, הכשל הוא מוחץ, שכן <span class="math">\(g\left(X_{1}\right)\)</span> נבנה לא רק באמצעות חיבור פולינומים אלא גם הכפלתם; והכפלה של שני פולינומים בהחלט יכולה להגדיל את הדרגה של התוצאה: <span class="math">\(\left(x+1\right)\left(x-1\right)=x^{2}-1\)</span>. מכיוון שהדרגה של פולינום התוצאה יכולה להכפיל את עצמה בכל פעם שבה אנחנו נתקלים בפעולת כפל בהגדרה של <span class="math">\(g\left(X_{1}\right)\)</span>, הדרגה של <span class="math">\(g\left(X_{1}\right)\)</span> עשויה להיות אקספוננציאלית (ב-<span class="math">\(n\)</span>; שהוא בתורו עשוי בהחלט לפעמים להיות מאותו סדר גודל של <span class="math">\(m\)</span>). בקיצור, רק לשלוח את כל המקדמים של <span class="math">\(g\left(X_{1}\right)\)</span> מהמוכיח אל המוודא ייקח זמן רב מדי מכדי שהפרוטוקול ייחשב יעיל והכל הלך לעזאזל.</p>
+<p>אז מה עושים? מכניסים לתמונה עוד טריק אחד, שפותר את הבעיה - <strong>לינאריזציה</strong>. לינאריזציה פירושה לקחת פולינום <span class="math">\(P\left(X_{1},\dots,X_{n}\right)\)</span> כלשהו, שבו המשתנה <span class="math">\(X_{i}\)</span> עשוי להופיע בדרגה גבוהה, ולהחליף אותו בפולינום חדש, <span class="math">\(Q\left(X_{1},\dots,X_{n}\right)\)</span> שבו הדרגה של <span class="math">\(X_{i}\)</span> היא 1 (כלומר, ב-<span class="math">\(Q\)</span> לא מופיע <span class="math">\(X_{i}^{2}\)</span>, או <span class="math">\(X_{i}^{3}\)</span> וכדומה), ועם זאת <span class="math">\(Q\)</span> הוא "שקול" ל-<span class="math">\(P\)</span> במובן זה שעל הצבה של ערכי 0 ו-1 למשתנים שלהם מתקבלת אותה התוצאה (וזה, כזכור, כל מה שחשוב לנו - אנחנו מנסים לברר מה מתקבל מ-<span class="math">\(P_{\varphi}\)</span> כשמציבים בו 0 ו-1 בכל הצורות האפשריות ואז עושים מיש-מש מכל התוצאות).</p>
+<p>בואו נעבור לתאר את העסק בצורה פורמלית, וכזו שלוכדת בו זמנית הן את פעולת הלינאריזציה והן את האופן שבו "מחסלים" כמתים - בעזרת אופרטורים. "אופרטור" כאן זה שם מפוצץ לפונקציה שלוקחת פולינום אחד ומחזירה פולינום אחר, במקרה שלנו אחד פשוט יותר. בשביל פעולת הלינאריזציה נגדיר אופרטור <span class="math">\(L_{X_{i}}\)</span> - "לינאריזציה על פי המשתנה <span class="math">\(X_{i}\)</span>", שפועל כך:</p>
+<p><span class="math">\(L_{X_{i}}P\left(X_{1},\dots,X_{i},\dots,X_{n}\right)=X_{i}\cdot P\left(X_{1},\dots,1,\dots X_{n}\right)+\left(1-X_{i}\right)\cdot P\left(X_{1},\dots,0,\dots X_{n}\right)\)</span></p>
+<p>כלומר, האופרטור לוקח את <span class="math">\(P\)</span>, מציב פעם 0 ופעם 1 במקום <span class="math">\(X_{i}\)</span>, מקבל שני פולינומים חדשים עם משתנה אחד פחות, כופל את האחד במשתנה <span class="math">\(X_{i}\)</span> ואת השני במשתנה <span class="math">\(1-X_{i}\)</span>, ומחבר. הנה דוגמה: נניח ש-<span class="math">\(P\left(X_{1},X_{2}\right)=X_{1}^{5}+2X_{1}^{2}X_{2}+X_{2}^{3}\)</span>. אז נקבל:</p>
+<p><span class="math">\(L_{X_{1}}P=X_{1}\left(1+2X_{2}+X_{2}^{3}\right)+\left(1-X_{1}\right)X_{2}^{3}=X_{1}+2X_{1}X_{2}+X_{2}^{3}\)</span></p>
+<p>שימו לב שקיבלנו את הפולינום המקורי, רק שבכל מקום שבו הופיע <span class="math">\(X_{1}\)</span> בחזקה כלשהי, עכשיו הוא מופיע בלי חזקה (או פורמלית, עם החזקה 1). זה לא מקרי, כמובן; <span class="math">\(P\left(X_{1},\dots,1,\dots X_{n}\right)\)</span> הוא הפולינום <span class="math">\(P\)</span> על כל מחובריו, כשהמשתנה <span class="math">\(X_{i}\)</span> פשוט נמחק ממנו. לכן <span class="math">\(X_{i}\cdot P\left(X_{1},\dots,1,\dots X_{n}\right)\)</span> הוא הפולינום <span class="math">\(P\)</span> כאשר כל מופע קיים של <span class="math">\(X_{i}\)</span> בחזקה כלשהי שונה למופע בחזקה 1; אבל לרוע המזל גם מחוברים שבהם <span class="math">\(X_{i}\)</span> לא הופיע כעת כוללים אותו. זה מתוקן עם <span class="math">\(\left(1-X_{i}\right)P\left(X_{1},\dots,0,\dots X_{n}\right)\)</span> - נסו להסביר לעצמכם מדוע!</p>
+<p>כעת הבה ונגדיר אופרטורים עבור <span class="math">\(\forall\)</span> ו-<span class="math">\(\exists\)</span>:</p>
+<p><span class="math">\(\forall_{X_{i}}P\left(X_{1},\dots,X_{n}\right)=P\left(X_{1},\dots,0,\dots,X_{n}\right)\cdot P\left(X_{1},\dots,1,\dots,X_{n}\right)\)</span></p>
+<p><span class="math">\(\exists_{X_{i}}P\left(X_{1},\dots,X_{n}\right)=P\left(X_{1},\dots,0,\dots,X_{n}\right)+P\left(X_{1},\dots,1,\dots,X_{n}\right)\)</span></p>
+<p>כעת אפשר לנסח מחדש את הבעיה שלנו: בהינתן פולינום <span class="math">\(P\left(X_{1},\dots,X_{n}\right)\)</span>, נשים לב ש-<span class="math">\(\exists_{X_{1}}\forall_{X_{2}}\dots\exists_{X_{n}}P\left(X_{1},\dots,X_{n}\right)\)</span> הוא פולינום קבוע, ללא משתנים, כלומר הוא ערך מספרי; האתגר של המוכיח יהיה להוכיח כי <span class="math">\(\exists_{X_{1}}\forall_{X_{2}}\dots\exists_{X_{n}}P\left(X_{1},\dots,X_{n}\right)=K\)</span> עבור <span class="math">\(K\)</span> נתון כלשהו.</p>
+<p>האבחנה החשובה כאן היא שאם מגניבים לתוך הפעלות האופרטורים הללו גם הפעלות של אופרטור הלינאריזציה, זה לא משנה את התוצאה הסופית - זאת מכיוון שהתוצאה הזו מתקבלת אך ורק על ידי הצבת 0 ו-1 לפולינומים שבדרך, ואמרנו כבר שלינאריזציה לא משפיעה על הערכים שהפולינום מחזיר עבור הצבות שכאלו. לכן אפשר לעדכן את החישוב שאנחנו רוצים לבצע - המוכיח רוצה להוכיח כי:</p>
+<p><span class="math">\(\exists_{X_{1}}L_{X_{1}}\forall_{X_{2}}L_{X_{1}}L_{X_{2}}\dots\exists_{X_{n}}L_{X_{1}}\dots L_{X_{n}}P\left(X_{1},\dots,X_{n}\right)=K\)</span></p>
+<p>יש כאן בסך הכל <span class="math">\(1+2+\dots+n=O\left(n^{2}\right)\)</span> הפעלות של אופרטור הלינאריזציה, כך שהוא לא מבזבז יותר מדי זמן ריצה.</p>
+<p>הפרוטוקול כעת "מקלף" את הכמתים משמאל לימין באותה שיטה של הפוסט הקודם. למשל, שימו לב לכך ש-<span class="math">\(L_{X_{1}}\forall_{X_{2}}L_{X_{1}}L_{X_{2}}\dots\exists_{X_{n}}L_{X_{1}}\dots L_{X_{n}}P\left(X_{1},\dots,X_{n}\right)\)</span> הוא פולינום במשתנה יחיד, <span class="math">\(X_{1}\)</span>, ושבגלל אופרטור הלינאריזציה בקצה השמאלי, זה פולינום ממעלה נמוכה (מעלה 1, למעשה!) ולכן המוכיח בוודאי יכול לשלוח למוודא פולינום <span class="math">\(g\left(X_{1}\right)\)</span> שלכאורה אמור להיות שווה אליו. המוודא יבדוק ש-<span class="math">\(g\left(0\right)+g\left(1\right)=K\)</span>, ואז יציב אתגר חדש למוכיח, שמטרתו להוכיח ש-<span class="math">\(g\left(X_{1}\right)\)</span> הוא מה שהוא מתיימר להיות: הוא יגריל <span class="math">\(a_{1}\)</span> כלשהו מהשדה, יחשב את <span class="math">\(K^{\prime}=g\left(a_{1}\right)\)</span>, ויבקש מהמוכיח להוכיח לו ש-<span class="math">\(L_{X_{1}}\forall_{X_{2}}L_{X_{1}}L_{X_{2}}\dots\exists_{X_{n}}L_{X_{1}}\dots L_{X_{n}}P\left(a_{1},\dots,X_{n}\right)=K^{\prime}\)</span> (חשבו על זה כעל הפולינום <span class="math">\(L_{X_{1}}\forall_{X_{2}}L_{X_{1}}L_{X_{2}}\dots\exists_{X_{n}}L_{X_{1}}\dots L_{X_{n}}P\left(X_{1},\dots,X_{n}\right)\)</span>, שהוא פולינום במשתנה היחיד <span class="math">\(X_{1}\)</span>, שאחר כך מציבים בו גם <span class="math">\(a_{1}\)</span>).</p>
+<p>מה יקרה עכשיו? המוכיח ישלח למוודא איזה <span class="math">\(g\left(X_{1}\right)\)</span> שאמור להיות <span class="math">\(\forall_{X_{2}}L_{X_{1}}L_{X_{2}}\dots\exists_{X_{n}}L_{X_{1}}\dots L_{X_{n}}P\left(X_{1},\dots,X_{n}\right)\)</span>; המוודא יוודא ש-<span class="math">\(a_{1}g\left(1\right)+\left(1-a_{1}\right)g\left(0\right)=K^{\prime}\)</span>, כלומר שאם עושים ל-<span class="math">\(g\)</span> לינאריזציה לפיה <span class="math">\(X_{1}\)</span> ואז מציבים ב-<span class="math">\(X_{1}\)</span> את הערך <span class="math">\(a_{1}\)</span>, אכן מקבלים את ה-<span class="math">\(K^{\prime}\)</span> שאנו מצפים לקבל. כעת המוודא יבחן את המוכיח על ה-<span class="math">\(g\)</span> הזה על ידי הגרלת ערך <span class="math">\(a\)</span> חדש, ותביעה מהמוכיח להוכיח ש-<span class="math">\(g\left(a\right)=\forall_{X_{2}}L_{X_{1}}L_{X_{2}}\dots\exists_{X_{n}}L_{X_{1}}\dots L_{X_{n}}P\left(a,\dots,X_{n}\right)\)</span> (הערך <span class="math">\(a_{1}\)</span> הקודם נזרק לפח), וכן הלאה וכן הלאה. בסופו של דבר כל האופרטורים מקולפים, ולמוודא נשאר רק לוודא שמתקיים <span class="math">\(P\left(a_{1},a_{2},\dots,a_{n}\right)=K\)</span> עבור ערכים <span class="math">\(a_{1},\dots,a_{n}\)</span> ספציפיים, ואת זה הוא כמובן מסוגל לעשות בעצמו.</p>
+<p>בואו נתאר את התהליך באופן כללי. בכל שלב של האלגוריתם יש למוודא פולינום כלשהו, <span class="math">\(h\left(X_{1},\dots,X_{n}\right)\)</span> (שהוא <span class="math">\(P\left(X_{1},\dots,X_{n}\right)\)</span> אחרי שהופעלו עליו חלק מהאופרטורים, מימין לשמאל) ותפקידו של המוודא בחיים הוא לבדוק ש-<span class="math">\(h\left(a_{1},\dots,a_{n}\right)=K\)</span> עבור <span class="math">\(K\)</span> קבוע וערכים <span class="math">\(a_{1},\dots,a_{n}\)</span> מסויימים. שימו לב שהשימוש שלי בסימונים עשוי להיות מבלבל למדי כאן - למשל, בסיבוב הראשון של הפרוטוקול <span class="math">\(h\)</span> הוא פשוט <span class="math">\(\exists_{X_{1}}L_{X_{1}}\forall_{X_{2}}L_{X_{1}}L_{X_{2}}\dots\exists_{X_{n}}L_{X_{1}}\dots L_{X_{n}}P\left(X_{1},\dots,X_{n}\right)\)</span>, וזה פולינום בלי משתנים חופשיים כלל. אז את הסימון <span class="math">\(h\left(X_{1},\dots,X_{n}\right)\)</span> יש לקרוא כאומר שהמשתנים ש<strong>עשויים</strong> להופיע ב-<span class="math">\(h\)</span> הם <span class="math">\(X_{1},\dots,X_{n}\)</span>, וש-<span class="math">\(h\left(a_{1},\dots,a_{n}\right)\)</span> הוא מה שמתקבל ב-<span class="math">\(h\)</span> כשמציבים להם את הערכים <span class="math">\(a_{1},\dots,a_{n}\)</span>, כאשר משתנה שכלל לא מופיע ב-<span class="math">\(h\)</span> מן הסתם לא משפיע על התוצאה. כמו כן, לא ברור מיהם <span class="math">\(a_{1},\dots,a_{n}\)</span> בתחילת הפרוטוקול (ראינו שהם נקבעים במהלכו, ולפעמים עוברים מספר שינויים) - אז אפשר לאתחל את כולם להיות 0 או כל ערך שרירותי אחר, אבל אם אתם עדיין מצליחים לעקוב אחרי מה שהולך כאן בוודאי תראו שזה לא באמת משנה.</p>
+<p>מה שהמוודא עושה הוא לקלף את האופרטור הבא, אם עוד קיים כזה: כלומר, לשים לב לכך ש-<span class="math">\(h\left(X_{1},\dots,X_{n}\right)=\Phi f\left(X_{1},\dots,X_{n}\right)\)</span>, כאשר <span class="math">\(\Phi\)</span> הוא או אופרטור <span class="math">\(L\)</span>, או אופרטור <span class="math">\(\forall\)</span>, או אופרטור <span class="math">\(\exists\)</span>. כעת הפרוטוקול מתנהג בשלוש דרכים שונות, בהתאם לזהות האופרטור:</p>
+<p>אם <span class="math">\(\Phi=\forall_{X_{i}}\)</span> אז המוכיח שולח למוודא פולינום במשתנה יחיד <span class="math">\(g\left(X_{i}\right)\)</span> שאמור להיות <span class="math">\(f\left(a_{1},\dots,X_{i},\dots,a_{n}\right)\)</span>. המוודא בודק ש-<span class="math">\(g\left(0\right)\cdot g\left(1\right)=K\)</span>. אם לא, הוא דוחה; אחרת, הוא מגריל ערך חדש של <span class="math">\(a_{i}\)</span> ומבקש מהמוכיח להוכיח לו ש-<span class="math">\(f\left(a_{1},\dots a_{i},\dots,a_{n}\right)=g\left(a_{i}\right)\)</span>.</p>
+<p>אם <span class="math">\(\Phi=\exists_{X_{i}}\)</span> קורה אותו הסיפור כמו במקרה של <span class="math">\(\forall\)</span>, פרט לכך שהמוודא בודק ש-<span class="math">\(g\left(0\right)+g\left(1\right)=K\)</span>.</p>
+<p>אם <span class="math">\(\Phi=L_{X_{i}}\)</span> אז שוב, קורה אותו הסיפור פרט לכך שהמוודא בודק ש-<span class="math">\(a_{i}g\left(1\right)+\left(1-a_{i}\right)g\left(0\right)=K\)</span>.</p>
+<p>זה סוף ההוכחה. כלומר, עוד נשאר לעשות את ניתוח הסיבוכיות וניתוח ההסתברויות המדויק, אבל אין הבדל מהותי בינו ובין מה שראינו בפוסט הקודם ומה שאמרנו עד כה. למוכיח יש הסתברות זניחה מאוד להצליח לעבוד על המוודא עם הפולינומים שהוא שולח מאותה סיבה שהייתה בפוסט הקודם - יש המון ערכים שהמוודא יכול לבחור באקראי מהשדה, ואם המוכיח רימה בפולינום <span class="math">\(g\)</span> שהוא שלח, רוב הסיכויים שהמוודא יצליח להגריל ערך שעליו <span class="math">\(g\)</span> לא מניב את התוצאה שהוא אמור להניב, והמוכיח יוותר עם טענה שקרית שעליו להוכיח, אבל סיבוב אחד פחות שבו יש לו הזדמנות לרמות.</p>
+<p>ובכן, האם זו הוכחה קשה? מסובכת? מצד אחד, היא בהחלט אינה טריוויאלית - חשבו על כך שהיא מכילה גם את תעלול האריתמטיזציה, וגם את תעלול הלינאריזציה - אך מצד שני, אני סבור שניתן להבין את כל מה שהולך בה יחסית בקלות. זו עדיין לא תוצאה מתמטית מפלצתית שנדרשים חמישים עמודים כדי להוכיח. עם זאת, למי שסקרן לדעת איך נראות הוכחות "רציניות" בתורת הסיבוכיות, אני חושב שההוכחה הזו היא מבוא נאה ביותר לעניין.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/05/18/rice_theorem_full_version/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט רייס - הגרסה המלאה</span>
+            </a>
+            
+            
+            
+            <a href="/2011/05/10/the_canon_anti_math/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מדוע &#34;הקנון המדעי&#34; לא כולל מתמטיקה?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

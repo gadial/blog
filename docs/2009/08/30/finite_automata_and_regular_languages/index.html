@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אוטומטים סופיים ושפות רגולריות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אוטומטים סופיים ושפות רגולריות</h1>
+            <div class="post-meta">
+                <span class="date">2009-08-30</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוביות.html">חישוביות</a>
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>נתקלתי לא מזמן בתוצאה פשוטה אך מקסימה בקומבינטוריקה, שעוסקת באופן שבו ניתן למצוא <a href="http://he.wikipedia.org/wiki/%D7%A4%D7%95%D7%A0%D7%A7%D7%A6%D7%99%D7%94_%D7%99%D7%95%D7%A6%D7%A8%D7%AA">פונקציות יוצרות</a> ל<a href="http://he.wikipedia.org/wiki/%D7%A9%D7%A4%D7%94_%D7%A8%D7%92%D7%95%D7%9C%D7%A8%D7%99%D7%AA">שפות רגולריות</a>. לרוע המזל, כדי להסביר את הקשר צריך להסביר ראשית כל מהן פונקציות יוצרות ומהן שפות רגולריות, ולכן אקדיש לכך את הפוסטים הבאים - בשני המקרים מדובר בנושאים מתמטיים בסיסיים בתחומם ומעניינים מאוד גם בלי הקשר שבינם. אתחיל מהנושא שמוכר לי קצת יותר (לא שאני יכול להתיימר לבקיאות רבה באף אחד מהם) - השפות הרגולריות; זה נושא שניתן לגשת אליו במספר דרכים, ואבחר דרך "חישובית" משהו.</p>
+<p><a href="http://www.gadial.net/2007/09/23/turing_machine/">דיברתי כאן בעבר</a> על המודל המתמטי של חישוב - <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%9B%D7%95%D7%A0%D7%AA_%D7%98%D7%99%D7%95%D7%A8%D7%99%D7%A0%D7%92">מכונת טיורינג</a>. אין צורך להיכנס שום לפרטי המודל, אלא רק לכך שהוא היה מעין מחשב פרימיטיבי מאוד, ועם זאת חזק מספיק כדי להריץ כל תוכנית מחשב קיימת (אולי לא הכי ביעילות). ה"כוח" של מכונת טיורינג נמדד בדרך כלל בכמות המשאבים שמותר לה להשתמש בה, ושני המשאבים העיקריים הם זמן וזיכרון. קשה להפריד את שני המשאבים הללו זה מזה, בגלל שניתן להשיג שיפור בזמן הריצה אם מגדילים את כמות הזכרון (ומה קורה כשמביאים את הגישה הזו לאבסורד <a href="http://www.gadial.net/2009/07/22/bad_math_rsa/">הדגמתי לא מזמן</a>), וגם ניתן לשפר את הזכרון לעתים במחיר זמן ריצה גדול יותר (על כך לא פירטתי ולא אכנס לנושא כעת). לכן דיון בהגבלות סיבוכיות, כדאי שיביא בחשבון את שניהם. אתמקד דווקא במדד הפחות "פופולרי" של סיבוכיות זכרון - הסיבה לכך תתברר בהמשך.</p>
+<p>השאלה היא אילו בעיות עדיין ניתן לפתור ככל שאנחנו מצמצמים את צריכת הזכרון של המכונה שלנו. הזכרון שמותר להשתמש בו תמיד נמדד כפונקציה של אורך הקלט, <span class="math">\(n\)</span>; ותמיד מתכוונים ל"זכרון העבודה" בלבד - כלומר, לא כוללים את הזכרון שהקלט עצמו דורש. אם מרשים למכונה להשתמש בכמות פולינומית של זכרון (ולא מגבילים את זמן הריצה), התוצאה היא מחלקת הבעיות PSPACE, שהיא ענקית וכוללת את המחלקה P (שנחשבת ל"מחלקת כל הבעיות שניתנות לפתרון בזמן יעיל"), את NP (שעליה <a href="http://www.gadial.net/2007/12/16/np_haystack/">פירטתי בעבר</a>) ועוד ועוד. אז כמות פולינומית של זכרון זה יותר מדי; השלב הבא הוא לבצע צמצום דרסטי ולהרשות רק כמות לוגריתמית של זכרון, כלומר רק <span class="math">\(O\left(\log n\right)\)</span> זכרון. בניסוח מילולי לא פורמלי - מותר להשתמש במעט מאוד זכרון ביחס לגודל הקלט. גם במחלקה המצומצמת הזו, שנקראת L, עדיין יש בעיות מעניינות - המפורסמת שבהן היא בעית הישיגות בגרף לא מכוון (האם ניתן להגיע מצומת א' לצומת ב' בגרף לא מכוון); ההוכחה לכך שבעיה זו פתירה בזכרון לוגריתמי ניתנה בשנת 2004 על ידי מדען המחשב הישראלי עומר ריינגולד (ממכון וייצמן). עם זאת, אני רוצה לחלוף ביעף גם על פני המחלקה המעניינת הזו ולהמשיך לצמצם - כמה עוד אפשר?</p>
+<p>מסתבר שלא הרבה. אפשר לדבר גם על המחלקה של הבעיות שפתירות בזכרון <span class="math">\(O\left(\log\log n\right)\)</span>, אבל כל מגבלה חריפה עוד יותר מכך תפיל אותנו אל התחתית - זכרון <span class="math">\(O\left(1\right)\)</span>. דהיינו - אם אנחנו מרשים רק כמות זכרון קטנה מאוד מאוד מאוד ביחס לקלט, למשל <span class="math">\(\log\log\log n\)</span>, כבר אפשר היה לוותר על זה לחלוטין ולהסתפק בכמות זכרון <strong>קבועה</strong> מבלי לשנות את קבוצת הבעיות שאנו יכולים לפתור. לא אכנס כרגע להוכחה של הטענה הזו, אבל בהחלט ייתכן שאדבר עליה ב<a href="http://www.gadial.net/2009/10/04/sub_loglog_space_is_constant/">פוסט בהמשך</a>, שכן לטעמי היא מעניינת למדי (אם כי לא מסובכת).</p>
+<p>אז מעתה ואילך נמקד את הדיון הכי נמוך שרק אפשר - זכרון קבוע. "זכרון קבוע" משמעותו שכמות הזכרון שבה האלגוריתם משתמש אינה תלויה בגודל הקלט בכלל. רק כדי להבין מה זה אומר, למתכנתים שבכם, חשבו על תוכנית שאסור לה לבצע רקורסיות ואסור לה להקצות דינמית זכרון בתוך לולאות, ואסור לה להשתמש במשתנים שגודלם דינמי (כלומר, ספריות של "מספרים שלמים גדולים כרצונך" לא מותרות).</p>
+<p>השאלה המעניינת הראשונה היא מה קורה מבחינת סיבוכיות זמן. האם ייתכן שנוכל עדיין לפתור בעיות מסובכות, אם ירשו לנו לרוץ זמן רב מאוד? התשובה (המפתיעה?) שלילית - מסתבר שדי בזמן ריצה <strong>לינארי</strong> באורך הקלט, <span class="math">\(O\left(n\right)\)</span>, כדי לפתור את כל מה שבכלל פתיר בזכרון קבוע. יותר מכך - מספיק שהאלגוריתם יקרא כל ביט בקלט בדיוק פעם אחת, יבצע חישוב כלשהו (בזכרון קבוע ובזמן קבוע גם כן) ואז יעבור לביט הבא - ואחרי קריאת כל הביטים, יעצור ויחזיר את הפלט (במקרה שלנו מדברים על פלט של "כן/לא", למרות שאפשר לדבר גם על פלטים אחרים). גם זו תוצאה מפתיעה למדי (לדעתי) ואציג אותה שוב מנקודת מבט שונה עוד מעט.</p>
+<p>אם כן, אנחנו רוצים לעבור מדיבורים על מכונות טיורינג לדיבורים על מודל חישובי עוד יותר פרימיטיבי - יש לו רק כמות קבועה של זכרון עבודה (שתלויה באלגוריתם שהוא מריץ אבל לא בקלט הספציפי), הוא רץ על הקלט בדיוק פעם אחת באופן סדרתי, ובסוף מחזיר תשובה. למודל המוגבל הזה קוראים <strong><a href="http://he.wikipedia.org/wiki/%D7%90%D7%95%D7%98%D7%95%D7%9E%D7%98_%D7%A1%D7%95%D7%A4%D7%99">אוטומט סופי</a></strong>. ברשותכם, אתאר את האוטומט הזה בצורה יחסית פורמלית, כולל סימונים מתמטיים - הדבר חשוב לתוצאה שאני רוצה לתאר בסופו של דבר. מי שלא אוהב אותיות יווניות יכול שלא להסתכל על המתמטיקה, בינתיים.</p>
+<p>השלב הראשון בהגדרה הפורמלית של המודל הוא לפשט עוד יותר את כל עניין זכרון העבודה. במקום לדבר על סרט זכרון עם ראש קורא וכותב, כמו שיש במכונת טיורינג, מסתפקים בלהגיד שיש לאוטומט "מצבים". אפשר לחשוב על כל מצב כמייצג יחידת מידע בסיסית כלשהי. למשל, אם האוטומט שלנו מנסה לפתור את הבעיה "האם המספר שקיבלת כקלט מתחלק ב-3 ללא שארית?" המצבים שלו יהיו "מה שקראתי עד כה מהקלט הוא מספר שמתחלק ב-3 ללא שארית", "מה שקראתי עד כה מהקלט הוא מספר שמתחלק ב-3 עם שארית 1", ו-"מה שקראתי עד כה מהקלט הוא מספר שמתחלק ב-3 עם שארית 2". מסתבר שדי בשלושת המצבים הללו כדי לפתור את הבעיה. מבחינה פורמלית נוהגים לסמן את קבוצת המצבים של האוטומט באות <span class="math">\(Q\)</span>, ואת המצבים עצמם לסמן בסימונים קומפקטיים, למשל <span class="math">\(q_{0},q_{1},q_{2}\)</span> הם המצבים במקרה של האוטומט שלעיל.</p>
+<p>כעת ניתן לתאר את הריצה של אוטומט על קלט כלשהו באופן הבא: האוטומט קורא ביט מהקלט (נניח לצורך העניין שהקלט מיוצג בבסיס בינארי). על בסיס הביט הזה, ועל בסיס המצב הנוכחי שלו, הוא "בוחר" מצב חדש לעבור אליו. כך אחרי כל קריאת ביט האוטומט עובר מצב, ואפשר לתאר את החישוב שלו כולו בתור מעבר בין מצבים, עד שלבסוף מסתיים הקלט והאוטומט צריך להחזיר תשובה. כדי לפשט את החיים עוד יותר, מגדירים מראש קבוצה של "מצבים מקבלים" - אם החישוב מסתיים במצב מקבל, האוטומט מחזיר "כן", אחרת הוא מחזיר "לא". בדוגמה שלנו, <span class="math">\(q_{0}\)</span> הוא מצב מקבל והשאר לא. את קבוצת המצבים המקבלים מסמנים בדרך כלל באות <span class="math">\(F\)</span>.</p>
+<p>את האופן שבו האוטומט "בוחר" איך לעבור בין מצבים אפשר לתאר באמצעות פונקציה: <span class="math">\(\delta\left(q,\sigma\right)=p\)</span> אם האוטומט עובר מהמצב <span class="math">\(q\)</span> למצב <span class="math">\(p\)</span> אחרי קריאת התו <span class="math">\(\sigma\)</span>. מי שלא אוהב פונקציות יכול לחשוב על זה בתור "טבלת מעברים" שהשורות בה הן המצבים של האוטומט, והעמודות הן התווים האפשריים לקריאה, כך שבתא שבשורה שמסומנת על ידי <span class="math">\(q\)</span> והעמודה שמסומנת על ידי <span class="math">\(\sigma\)</span> כתוב <span class="math">\(p\)</span> אם האוטומט עובר מהמצב <span class="math">\(q\)</span> למצב <span class="math">\(p\)</span> אחרי קריאת התו <span class="math">\(\sigma\)</span>.</p>
+<p>ייתכן שלחלק מכם פתאום מצלצלת בראש המילה "גרף". אכן, אפשר לתאר כל אוטומט באופן ציורי בתור גרף. הנה הגרף של האוטומט שתיארתי כאן:</p>
+<p><img src="/img/2009/08/automata.png" alt=""/><br />
+כמו שאפשר לראות, קל מאוד לתאר באמצעות ציור את פונקצית המעברים של האוטומט. חץ שנכנס משום מקום למצב מרמז שזהו המצב ההתחלתי, ומצב שמסומן בעיגול כפול הוא מצב מקבל. עכשיו תוכלו "לשחק" עם האוטומט ולראות שהוא עובד - כתבו מספר כלשהו בבסיס בינארי, "הריצו" את האוטומט על המספר משמאל לימין, כשאתם מתחילים במצב <span class="math">\(q_{0}\)</span>, ותראו לאן תגיעו.</p>
+<p>אם כן, זהו המודל הבסיסי. המילה "סופי" בשם האוטומט מרמזת שמספר המצבים שלו הוא סופי (מספר מצבים אינסופי יגרום למודל להיות חזק יותר ממכונת טיורינג, ולמעשה - כל יכול מבחינה חישובית). אפשר קצת להקל על ההנחה המובלעת שלי שהאוטומט יודע לעבוד רק על מספרים בייצוג בינארי, ולהרשות לו לעבוד על סדרות של תווים כלשהם מתוך קבוצה סופית מסויימת - לקבוצה שכזו קוראים "אלפבית" ונהוג לסמן אותה באות <span class="math">\(\Sigma\)</span>. קלט לאוטומט יהיה סדרה סופית של אותיות מתוך <span class="math">\(\Sigma\)</span> - לסדרה כזו נהוג לקרוא "מילה", ולאוסף של מילים - "שפה". המילה "שפה" אולי קצת מטעה כאן - באמצעות סדרות סופיות כאלו של תווים אפשר לתאר דברים רבים ושונים - מספרים שלמים, גרפים, רצפים של DNA, קבצי וידאו, מודל של מערכת השמש וכו'.</p>
+<p>לסיום נחזור להערה שהערתי בהתחלה. המודל שתיארתי כאן קורא את הקלט סדרתית, ביט אחרי ביט, ולא חוזר אחורה אף פעם. ניתן להוכיח (וההוכחה אינה פשוטה) שמודל זה שקול למודל שכן מותר לו לחזור אחורה - למעשה, שיכול ללכת קדימה ואחורה כאוות נפשו. במילים אחרות, אין <strong>צורך</strong> בקריאת כל תו קלט יותר מפעם אחת. זה מוביל מייד למסקנה שאם הגבלנו את כמות הזכרון שלנו ל-<span class="math">\(O\left(1\right)\)</span>, אז <strong>אין צורך</strong> בזמן ריצה גדול יותר מ-<span class="math">\(O\left(n\right)\)</span> (אבל זמן ריצה כזה הוא הכרחי; לפעמים כל תו במילה יכול לשנות התשובה שיש להחזיר עליה, והאוטומט שנתתי לעיל הוא דוגמה לכך, ועל כן חייבים לקרוא את כל הקלט).</p>
+<p>אם יש לנו אוטומט, אז אוסף המילים שעליהן הוא אומר "כן" הוא "השפה שמקבל האוטומט". לשפה כזו, שיש אוטומט סופי שמזהה אותה, קוראים <strong>שפה רגולרית</strong>. השאלה הראשונה שקופצת לראש היא מהן, אם כן, כל השפות הרגולריות - האם יש להן אפיון פשוט? למרבה השמחה, מתברר שכן. כל שפה סופית היא רגולרית (כי כל מה שצריך לעשות הוא להשוות את מילת הקלט לרשימה סופית ונתונה מראש של מילים - אין צורך בזכרון עבודה שתלוי בגודל הקלט כדי לעשות זאת). אם יש שתי שפות רגולריות, גם איחודן - השפה שהמילים בה הן מילים ששייכות לפחות לאחת משתי השפות המקוריות - הוא רגולרי. בנוסף לכך, יש עוד שתי פעולות הרכבה מתוחכמת יותר שניתן לבצע על שפות כדי לקבל שפה רגולרית.</p>
+<p>ראשית, אם יש לנו שתי מילים כלשהן, <span class="math">\(u,v\)</span>, אז אפשר לדבר על ה<strong>שרשור</strong> שלהן, שמסומן ב-<span class="math">\(u\cdot v\)</span> - זו פשוט מילה שמתחילה ב-<span class="math">\(u\)</span>, ואחרי ש-<span class="math">\(u\)</span> נגמרת, מתחילה <span class="math">\(v\)</span>. למשל, אם <span class="math">\(u=101\)</span> ואילו <span class="math">\(v=110\)</span>, אז השרשור שלהן הוא <span class="math">\(u\cdot v=101110\)</span>. כעת אפשר לדבר גם על שרשור של שפות - שרשור שתי שפות <span class="math">\(L_{1},L_{2}\)</span> הוא אוסף כל המילים שהן שרשור של מילה מ-<span class="math">\(L_{1}\)</span> עם מילה מ-<span class="math">\(L_{2}\)</span>. בצורה פורמלית, <span class="math">\(L_{1}\cdot L_{2}=\left\{ u\cdot v|u\in L_{1},v\in L_{2}\right\} \)</span>.</p>
+<p>בעזרת פעולת השרשור אפשר להגדיר גם פעולת "חזקה" - <span class="math">\(L^{i}\)</span> הוא פשוט שרשור של <span class="math">\(L\)</span> עם עצמה בדיוק <span class="math">\(i\)</span> פעמים. ניתן להראות ששרשור של שתי שפות רגולריות הוא שפה רגולרית בעצמו, ולכן גם חזקה כלשהי של שפה תהיה רגולרית. אלא שכל הפעולות הללו הן סופיות במהותן - אם נפעיל אותן על שפות סופיות, נקבל שוב שפות סופיות, אבל הרי יש גם שפות לא סופיות שהן רגולריות, כמו זו בדוגמת ההתחלקות ב-3 שנתתי. אז מה עוד חסר?</p>
+<p>הפעולה הנוספת אינה כה מסובכת. כבר הסכמנו שלכל <span class="math">\(i\)</span>, החזקה ה-<span class="math">\(i\)</span>-ית של <span class="math">\(L\)</span> רגולרית היא בעצמה רגולרית. אם כן, למה לא לבנות שפה שמורכבת מאיחוד <strong>כל</strong> החזקות הללו? מכאן מגיעה ההגדרה הפורמלית של "סגור קלייני" (Kleene) <span class="math">\(L^{*}=\bigcup_{i=0}^{\infty}L^{i}\)</span> (<span class="math">\(L^{0}\)</span> מוגדרת בתור שפה שמכילה רק את המילה הריקה - מושג טכני שלא אכנס אליו כאן). ניתן להוכיח כי גם <span class="math">\(L^{*}\)</span> רגולרית אם <span class="math">\(L\)</span> רגולרית (ולעתים אף יותר מכך - תוצאה יפה ומעניינת היא שאם האלפבית של המילים בשפה <span class="math">\(L\)</span> כלשהי מכיל תו בודד, אז <span class="math">\(L^{*}\)</span> תהיה תמיד רגולרית). מה שעוד ניתן להוכיח והוא הפאנץ' של כל זה הוא ש<strong>כל</strong> שפה רגולרית יכולה להתקבל מהשפות הסופיות על ידי הפעלות נשנות של שלוש הפעולות שהצגתי - איחוד, שרשור וסגור קלייני. האפיון הזה הוא הבסיס לעיסוק בביטויים הרגולריים - עוד נושא שראוי לפוסט נפרד.</p>
+<p>אם כן, "שדה המשחק" של השפות הרגולריות הוא יחסית ברור. בדרך כלל הדיון ממשיך מכאן לכיוון מציאת תכונות סגור נוספות ואפיונים נוספים של שפות רגולריות, אך כאמור - אני רוצה לעבור כעת לקומבינטוריקה ולדבר על פונקציות יוצרות. על כך - בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2009/08/31/questions_and_answers_6/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">שאלות ותשובות - מקבץ מס’ 6</span>
+            </a>
+            
+            
+            
+            <a href="/2009/08/18/probablistic_algorithms/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">דיון מקרי על אלגוריתמים הסתברותיים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

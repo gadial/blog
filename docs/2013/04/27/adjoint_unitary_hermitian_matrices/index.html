@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מטריצות צמודות, הרמיטיות, אוניטריות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מטריצות צמודות, הרמיטיות, אוניטריות</h1>
+            <div class="post-meta">
+                <span class="date">2013-04-27</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/tags/מטריצות אוניטריות.html">מטריצות אוניטריות</a>
+                    
+                    <a href="/tags/מטריצות הרמיטיות.html">מטריצות הרמיטיות</a>
+                    
+                    <a href="/tags/מרחבי מכפלה פנימית.html">מרחבי מכפלה פנימית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אולי התוצאה המעניינת ביותר באלגברה לינארית בסיסית היא הקשר שיש בין טרנספורמציות לינאריות <span class="math">\(T:V\to V\)</span> המוגדרות על מרחב וקטורי ממימד סופי <span class="math">\(V\)</span> ובין מטריצות. כזכור, מרגע שבו אנחנו קובעים בסיס <span class="math">\(B\)</span> ל-<span class="math">\(V\)</span>, אוטומטית נובעת מכך התאמה חד-חד-ערכית ועל בין אוסף הטרנספורמציות הלינאריות <span class="math">\(T:V\to V\)</span> (לפעמים אכתוב "אופרטור לינארי" במקום; המילה "אופרטור" רומזת שמדובר על טרנספורמציה ממרחב לעצמו) ובין המטריצות מסדר <span class="math">\(n\times n\)</span> מעל אותו שדה כמו <span class="math">\(V\)</span>, כאשר <span class="math">\(n\)</span> הוא מימד המרחב <span class="math">\(V\)</span>. הרעיון בהתאמה הזו הוא שמתקיים השוויון <span class="math">\(\left[T\right]_{B}\left[v\right]_{B}=\left[T\left(v\right)\right]_{B}\)</span> - במילים, הכפלת המטריצה שמייצגת את האופרטור <span class="math">\(T\)</span> בוקטור הקואורדינטות שמייצג את הוקטור <span class="math">\(v\)</span> על פי הבסיס <span class="math">\(B\)</span> מחזירה את וקטור הקואורדינטות של <span class="math">\(T\left(v\right)\)</span> על פי <span class="math">\(B\)</span>. עבור בסיסים שונים, ל-<span class="math">\(T\)</span> יהיו מטריצות מייצגות שונות, ואחד מהדברים שעוסקים בהם באלגברה לינארית הוא השאלה הבאה: בהינתן <span class="math">\(T\)</span>, אילו בסיסים קיימים שבהם <span class="math">\(\left[T\right]_{B}\)</span> היא פשוטה במיוחד (למשל, אלכסונית)?</p>
+<p>על כל זה <a href="http://www.gadial.net/2011/10/27/coordinates_transformations_matrices/">כבר דיברתי בעבר</a>. ההקשר הנוכחי שלנו הוא מרחבים וקטוריים עם מבנה נוסף - מרחבי מכפלה פנימית. בפרט, אנחנו רוצים להבין איך המושג של <strong>אופרטור צמוד</strong> בא לידי ביטוי במטריצות. <a href="http://www.gadial.net/2012/04/29/inner_product_space_adjoint/">כזכור</a>, אם <span class="math">\(T\)</span> הוא אופרטור אז קיים אופרטור יחיד <span class="math">\(T^{*}\)</span> כך שמתקיים <span class="math">\(\left\langle T\left(v\right),u\right\rangle =\left\langle v,T^{*}\left(u\right)\right\rangle \)</span> לכל <span class="math">\(v,u\in V\)</span>. הוכחת הקיום של <span class="math">\(T^{*}\)</span> היא אמנם קונסטרוקטיבית, במובן זה שאפשר להבין ממנה איך למצוא את <span class="math">\(T^{*}\)</span>, אבל בדרך עקיפה וסבוכה; יהיה הרבה יותר פשוט לקבוע בסיס כלשהו ולמצוא ל-<span class="math">\(T^{*}\)</span> מטריצה מייצגת על פי הבסיס הזה בהינתן המטריצה המייצגת של <span class="math">\(T\)</span>. אלא שכפי שנראה בקרוב, כבר אי אפשר לקחת "סתם" בסיס - כדי שמציאת המטריצה של <span class="math">\(T^{*}\)</span> מתוך המטריצה של <span class="math">\(T\)</span> תהיה פשוטה, אנחנו צריכים לקחת בסיס <strong>אורתונורמלי</strong> למרחב. למזלנו מובטח לנו שתמיד יש כזה, אבל מציאה של בסיס כזה עשויה להיות כרוכה לפעמים בחישובים לא נעימים.</p>
+<p>אם כן, יהא <span class="math">\(B=\left\{ b_{1},\dots,b_{n}\right\} \)</span> בסיס אורתונורמלי ל-<span class="math">\(V\)</span> ותהא <span class="math">\(T\)</span> טרנספורמציה כלשהי. נסמן <span class="math">\(A=\left[T\right]_{B}\)</span>. איך נראית <span class="math">\(A\)</span>? העמודה ה-<span class="math">\(j\)</span>-ית של <span class="math">\(A\)</span> היא בעצם וקטור הקואורדינטות, לפי <span class="math">\(B\)</span>, של <span class="math">\(T\left(b_{j}\right)\)</span> (למה? ובכן, צריך להוכיח את זה). עכשיו, עבור בסיסים אורתונורמליים אנחנו יודעים למצוא בקלות את הקואורדינטות של וקטור <span class="math">\(v\)</span> לפי הבסיס <span class="math">\(B\)</span>: הקואורדינטה שמתאימה לאיבר הבסיס <span class="math">\(b_{i}\)</span> היא פשוט <span class="math">\(\left\langle v,b_{i}\right\rangle \)</span>. לכן במקרה שלנו, <span class="math">\(A_{ij}=\left\langle T\left(b_{j}\right),b_{i}\right\rangle \)</span> (הכניסה בשורה ה-<span class="math">\(i\)</span> והעמודה ה-<span class="math">\(j\)</span> במטריצה היא המכפלה הפנימית <span class="math">\(\left\langle T\left(b_{j}\right),b_{i}\right\rangle \)</span>).</p>
+<p>באופן דומה, אם <span class="math">\(A^{*}\)</span> היא המטריצה המייצגת של <span class="math">\(T^{*}\)</span> אז יתקיים עבורה <span class="math">\(A_{ij}^{*}=\left\langle T^{*}\left(b_{j}\right),b_{i}\right\rangle \)</span>. עכשיו אעשה תעלול קטן ופשוט אחליף את האינדקסים: <span class="math">\(A_{ji}^{*}=\left\langle T^{*}\left(b_{i}\right),b_{j}\right\rangle \)</span>. כעת שימו לב לזה:</p>
+<p><span class="math">\(A_{ij}=\left\langle T\left(b_{j}\right),b_{i}\right\rangle =\left\langle b_{j},T^{*}\left(b_{i}\right)\right\rangle =\overline{\left\langle T^{*}\left(b_{i}\right),b_{j}\right\rangle }=\overline{A_{ji}^{*}}\)</span></p>
+<p>מה הלך פה? השתמשתי במעברים פה בכך ש-<span class="math">\(T^{*}\)</span> צמודה ל-<span class="math">\(T\)</span>, ובכך שמכפלה פנימית מקיימת <strong>הרמיטיות</strong> - אפשר להחליף את הסדר של שני המוכפלים, במחיר של הצמדה (במשמעות של "צמוד מרוכב") של הערך של המכפלה (כבר <a href="http://www.gadial.net/2012/02/06/inner_products_intro/">הסברתי בעבר</a> למה ההצמדה הזו הכרחית). הגענו למסקנה ש-<span class="math">\(A^{*}\)</span> מתקבלת מ-<span class="math">\(A\)</span> על ידי הצמדה (מרוכבת) ושחלוף של <span class="math">\(A\)</span> (הפיכת השורה ה-<span class="math">\(i\)</span> של <span class="math">\(A\)</span> לעמודה ה-<span class="math">\(i\)</span> של <span class="math">\(A^{*}\)</span>). לדוגמה, אם</p>
+<p><span class="math">\(A=\left[\begin{array}{cc}1 & -3\\5-i & i\end{array}\right]\)</span></p>
+<p>אז</p>
+<p><span class="math">\(A^{*}=\left[\begin{array}{cc}1 & 5+i\\-3 & -i\end{array}\right]\)</span></p>
+<p>זה מוביל אותנו להגדרה - אם <span class="math">\(A\)</span> היא מטריצה ריבועית, אז <span class="math">\(A^{*}\)</span> היא המטריצה שמתקבלת משחלוף והצמדה של <span class="math">\(A\)</span> והיא נקראת <strong>המטריצה הצמודה</strong> של <span class="math">\(A\)</span>. זה זמן טוב להזכיר עוד מטריצה שגם היא נקראת לפעמים "המטריצה הצמודה" והתנגשות השמות הזו היא אסון - מטריצה שקראתי לה <strong>המטריצה המצורפת</strong> ל-<span class="math">\(A\)</span>, שמסומנת בתור <span class="math">\(\mbox{adj}A\)</span> ו<a href="http://www.gadial.net/2011/11/21/matrix_revolutions/">תיארתי בעבר</a> בבלוג.</p>
+<p>עכשיו, דיברנו על אופרטורים צמודים לעצמם ועל אופרטורים אוניטריים, וההגדרות עוברות באופן חלק למטריצות: מטריצה שמקיימת <span class="math">\(A^{*}=A\)</span> נקראת <strong>מטריצה צמודה לעצמה</strong> או <strong>מטריצה הרמיטית</strong>, ואילו מטריצה שמקיימת <span class="math">\(A^{-1}=A^{*}\)</span> נקראת <strong>מטריצה אוניטרית</strong>. בואו ננסה להבין איך הן נראות.</p>
+<p>בתור התחלה, אם <span class="math">\(A^{*}=A\)</span> עבור מטריצה שכל הכניסות בה ממשיות, פירוש הדבר הוא שהמטריצה <strong>סימטרית</strong>. כי היא שווה לשחלוף של עצמה. עבור כניסות מרוכבות המצב קצת יותר מסובך. הנה דוגמה למטריצה הרמיטית:</p>
+<p><span class="math">\(\left[\begin{array}{cc}1 & -i\\i & 1\end{array}\right]\)</span></p>
+<p>כמו שאתם רואים, היא לא בדיוק סימטרית. אם נפרק אותה לסכום של שתי מטריצות שאחת מהן כוללת את כל הרכיבים הממשיים והשניה את כל הרכיבים המדומים נקבל שהמטריצה הממשית היא סימטרית, בעוד שהמטריצה המדומה היא אנטי-סימטרית (מטריצה אנטי סימטרית היא מטריצה <span class="math">\(A\)</span> כך ש-<span class="math">\(A^{t}=-A\)</span>). בפרט, האיברים על האלכסון הראשי של המטריצה שווים להצמדה של עצמם ולכן הם חייבים להיות מספרים ממשיים "טהורים". זה יהיה חשוב בהמשך.</p>
+<p>בואו נעבור לדבר על מטריצות אוניטריות. ראשית כל אני רוצה להבין מה הדטרמיננטה של מטריצה כזו יכולה להיות. אם <span class="math">\(A^{-1}=A^{*}\)</span> אז <span class="math">\(A\cdot A^{*}=I\)</span> ולכן <span class="math">\(1=\left|I\right|=\left|AA^{*}\right|=\left|A\right|\left|A^{*}\right|\)</span>. ומהי <span class="math">\(\left|A^{*}\right|\)</span>? תחושת הבטן היא ש-<span class="math">\(\left|A^{*}\right|=\overline{\left|A\right|}\)</span>, כלומר הדטרמיננטה של הצמוד היא ההצמדה המרוכבת של הדטרמיננטה של <span class="math">\(A\)</span>. לא קשה לראות את זה ישירות מההגדרה הפורמלית של דטרמיננטה, למשל בתור סכום של מכפלות. זכרו שלכל מספר מרוכב <span class="math">\(z\)</span> מתקיים <span class="math">\(z\cdot\overline{z}=\left|z\right|^{2}\)</span>, ולכן המסקנה היא ש-<span class="math">\(\left|\det A\right|^{2}=1\)</span> (עברתי לסמן דטרמיננטה ב-<span class="math">\(\det\)</span> מסיבות ברורות). מכאן שהדטרמיננטה של <span class="math">\(A\)</span> חייבת להיות 1 בערכה המוחלט (מכיוון שהיא עשויה להיות מספר מרוכב זה עדיין נותן לה לא מעט אפשרויות).</p>
+<p>עכשיו בואו נעבור לדבר על מקרה קונקרטי יותר. ראשית כל, הבה וניזכר באופן כללי מהי ההופכית של מטריצה מסדר <span class="math">\(2\times2\)</span> כלשהי. אם</p>
+<p><span class="math">\(A=\left[\begin{array}{cc}a & b\\c & d\end{array}\right]\)</span></p>
+<p>אז ההופכית שלה היא</p>
+<p><span class="math">\(A^{-1}=\frac{1}{\left|A\right|}\left[\begin{array}{cc}d & -b\\-c & a\end{array}\right]\)</span></p>
+<p>לא מאמינים? פשוט תכפילו ותראו... הנוסחה הזו היא מקרה פרטי של המשפט לפיו <span class="math">\(A^{-1}=\frac{\mbox{adj}A}{\left|A\right|}\)</span> שהראיתי בעבר. עכשיו, באופן כללי מתקיים</p>
+<p><span class="math">\(A^{*}=\left[\begin{array}{cc}\overline{a} & \overline{c}\\\overline{b} & \overline{d}\end{array}\right]\)</span></p>
+<p>כך שאם מתקיים <span class="math">\(A^{-1}=A^{*}\)</span> אנחנו יכולים להסיק את <span class="math">\(c,d\)</span> בתור פונקציות של <span class="math">\(a,b\)</span>:</p>
+<p><span class="math">\(c=-\left|A\right|\overline{b}\)</span></p>
+<p><span class="math">\(d=\left|A\right|\overline{a}\)</span></p>
+<p>מכיוון ש-<span class="math">\(\left|A\right|=ad-bc\)</span> אז בפרט נקבל <span class="math">\(\left|A\right|=\left|A\right|a\overline{a}+\left|A\right|b\overline{b}=\left|A\right|\left(\left|a\right|^{2}+\left|b\right|^{2}\right)\)</span>, כלומר <span class="math">\(\left|a\right|^{2}+\left|b\right|^{2}=1\)</span>.</p>
+<p>כעת, אפשר לכתוב קונקרטית <span class="math">\(\left|A\right|=e^{i\theta}\)</span> עבור <span class="math">\(0\le\theta\le2\pi\)</span> - זו דרך ההצגה הקוטבית של מספר מרוכב עם ערך מוחלט 1. לכן נקבל שמטריצה <span class="math">\(A\)</span> מסדר <span class="math">\(2\times2\)</span> היא אוניטרית אם ורק אם היא מהצורה</p>
+<p><span class="math">\(\left[\begin{array}{cc}a & b\\-e^{i\theta}\overline{b} & e^{i\theta}\overline{a}\end{array}\right]\)</span></p>
+<p>כך ש-<span class="math">\(\left|a\right|^{2}+\left|b\right|^{2}=1\)</span>.</p>
+<p>במקרה של מטריצה עם מקדמים ממשיים העסק הופך לפשוט מאוד: במקרה הזה <span class="math">\(\overline{a}=a,\overline{b}=b\)</span> ואילו <span class="math">\(e^{i\theta}\)</span> יכול להיות רק 1 או <span class="math">\(-1\)</span>. לכן נקבל שיש בדיוק שני סוגים של מטריצות אוניטריות ממשיות:</p>
+<p><span class="math">\(\left[\begin{array}{cc}a & b\\-b & a\end{array}\right]\)</span></p>
+<p>או</p>
+<p><span class="math">\(\left[\begin{array}{cc}a & b\\b & -a\end{array}\right]\)</span></p>
+<p>בשני המקרים חייב להתקיים <span class="math">\(a^{2}+b^{2}=1\)</span>.</p>
+<p>עכשיו, כל מטריצה כזו מגדירה אופרטור לינארי על <span class="math">\(\mathbb{R}^{2}\)</span>. מה האופרטורים הללו עושים? ראשית כל, השוויון הנחמד <span class="math">\(a^{2}+b^{2}=1\)</span> מזכיר לי את הזהות המתמטית <span class="math">\(\sin^{2}\theta+\cos^{2}\theta=1\)</span>, אז בואו נסמן <span class="math">\(a=\cos\theta\)</span> ו-<span class="math">\(b=-\sin\theta\)</span> (שימו לב שצריך <strong>להוכיח</strong> שזה אפשרי - אשאיר זאת לכם). אז מטריצה מהסוג הראשון היא מהצורה</p>
+<p><span class="math">\(\left[\begin{array}{cc}\cos\theta & -\sin\theta\\\sin\theta & \cos\theta\end{array}\right]\)</span></p>
+<p>יש סיכוי טוב שהמטריצה הזו מוכרת לכם, אבל במקרה שלא, בואו נבין מה המשמעות של כפל בה. מספיק להבין איך היא פועלת על אברי הבסיס הסטנדרטי:</p>
+<p><span class="math">\(\left[\begin{array}{cc}\cos\theta & -\sin\theta\\\sin\theta & \cos\theta\end{array}\right]\left[\begin{array}{c}1\\0\end{array}\right]=\left[\begin{array}{c}\cos\theta\\\sin\theta\end{array}\right]\)</span></p>
+<p><span class="math">\(\left[\begin{array}{cc}\cos\theta & -\sin\theta\\\sin\theta & \cos\theta\end{array}\right]\left[\begin{array}{c}0\\1\end{array}\right]=\left[\begin{array}{c}-\sin\theta\\\cos\theta\end{array}\right]\)</span></p>
+<p>אני מתעצל לצייר את זה, אבל ציירו! השוויון הראשון אומר שהוקטור האופקי שפונה "ימינה" (לצד החיובי של ציר <span class="math">\(x\)</span>) עובר לוקטור שיוצר זווית של <span class="math">\(\theta\)</span> <strong>מעל</strong> הכיוון החיובי של ציר <span class="math">\(x\)</span>. הוקטור שפונה "למעלה" עובר לוקטור שיוצר זווית <span class="math">\(\theta\)</span> <strong>משמאל</strong> לכיוון החיובי של ציר <span class="math">\(y\)</span>, ובסך הכל המטריצה <strong>מסובבת</strong> את שני הוקטורים הללו בזווית <span class="math">\(\theta\)</span> <strong>נגד כיוון השעון</strong>. מכיוון שהיא עושה זאת לוקטורים של בסיס כלשהו למרחב, זה מה שהיא עושה לכל וקטור - זוהי מטריצת סיבוב בזווית <span class="math">\(\theta\)</span> (ובחרתי את <span class="math">\(a\)</span> להיות <span class="math">\(\cos\theta\)</span> ואת <span class="math">\(b\)</span> להיות <span class="math">\(-\sin\theta\)</span> כדי לקבל סיבוב במובן שאנחנו רגילים אליו - אם הייתי בוחר, למשל <span class="math">\(a=\sin\theta\)</span> ו-<span class="math">\(b=\cos\theta\)</span> עדיין הייתי מקבל סיבוב, אבל חשבו מה תהיה הזווית ומה יהיה הכיוון של הסיבוב).</p>
+<p>מי שעדיין לא משוכנע יכול לכתוב במפורש מה המטריצה עושה על וקטור כללי, אבל כזה שנכתב בצורה קוטבית, של רדיוס וזווית עם הכיוון החיובי של ציר <span class="math">\(x\)</span>:</p>
+<p><span class="math">\(\left[\begin{array}{cc}\cos\theta & -\sin\theta\\\sin\theta & \cos\theta\end{array}\right]\left[\begin{array}{c}r\cos t\\r\sin t\end{array}\right]=\left[\begin{array}{c}r\cos\theta\cos t-r\sin\theta\sin t\\r\sin\theta\cos t+r\sin t\cos\theta\end{array}\right]=\left[\begin{array}{c}r\cos\left(t+\theta\right)\\r\sin\left(t+\theta\right)\end{array}\right]\)</span></p>
+<p>כאשר המעבר האחרון נובע מהזהויות הטריגונומטריות הסטנדרטיות על סכום זוויות, וכעת אפשר לראות בבירור שהכפל במטריצה סובב את הוקטור בזווית של <span class="math">\(\theta\)</span>.</p>
+<p>אם כן, הבנו מה עושה <strong>כל</strong> מטריצה אוניטרית מהצורה <span class="math">\(\left[\begin{array}{cc}a & b\\-b & a\end{array}\right]\)</span>. מה עם מטריצות מהצורה השניה? יש כמה דרכים להבין מה הן עושות, אבל בואו נתחיל מדרך שבה כדאי לנקוט תמיד עם מטריצות לא ברורות - ננסה ללכסן. המטריצה שלנו, כזכור, היא מהצורה</p>
+<p><span class="math">\(\left[\begin{array}{cc}a & b\\b & -a\end{array}\right]\)</span></p>
+<p>כאשר <span class="math">\(a^{2}+b^{2}=1\)</span>. הפולינום האופייני, אם כן, הוא</p>
+<p><span class="math">\(\left(a-x\right)\left(-a-x\right)-b^{2}=x^{2}-a^{2}-b^{2}=x^{2}-1\)</span></p>
+<p>והשורשים שלו הם 1 ו-<span class="math">\(-1\)</span>. מה אומר ערך עצמי 1? שיש תת-מרחב ממימד 1 - קו ישר העובר דרך הראשית - שהאופרטור <strong>מקבע</strong> - משאיר במקום ללא שינוי. ומה זה ערך עצמי <span class="math">\(-1\)</span>? זהו קו ישר שהאופרטור מעביר כל נקודה בו אל הנגדי שלה - הנקודה האחרת על אותו קו שמרחקה מהראשית זהה. נסו לצייר את זה ותראו (אני מקווה) חיש קל שהאופרטור הזה הוא אופרטור של <strong>שיקוף</strong> ביחס לציר שהוא הישר שהאופרטור מקבע. בואו נמצא אותו על ידי כך שנמצא וקטור עצמי שמתאים לערך העצמי 1. לשם כך צריך לפתור את מערכת המשוואות הלינארית</p>
+<p><span class="math">\(\left[\begin{array}{cc}a-1 & b\\b & -a-1\end{array}\right]\left[\begin{array}{c}x\\y\end{array}\right]=\left[\begin{array}{c}0\\0\end{array}\right]\)</span></p>
+<p>נניח ש-<span class="math">\(b\ne0\)</span> ונפתור אותה עם דירוג סטנדרטי, תוך שימוש בכך ש-<span class="math">\(a^{2}+b^{2}=1\)</span>:</p>
+<p><span class="math">\(\left[\begin{array}{cc}a-1 & b\\b & -a-1\end{array}\right]\to\left[\begin{array}{cc}-1 & b+\frac{a\left(a+1\right)}{b}\\b & -a-1\end{array}\right]\to\left[\begin{array}{cc}1 & -\frac{1+a}{b}\\b & -\left(1+a\right)\end{array}\right]\to\left[\begin{array}{cc}1 & -\frac{1+a}{b}\\0 & 0\end{array}\right]\)</span></p>
+<p>מכאן נקבל שכל פתרון של המשוואה הוא מהצורה <span class="math">\(\left(\frac{1+a}{b}t,t\right)\)</span>. אם נבחר, לצורך נוחות, <span class="math">\(t=b\)</span> נקבל את היוצר <span class="math">\(\left(1+a,b\right)\)</span>. בדקו ישירות כדי לראות שהוא אכן וקטור עצמי!</p>
+<p>אם תחזרו ל<a href="http://www.gadial.net/2011/11/29/eigenvalues_intro/">אחד הפוסטים המוקדמים</a> שלי על אלגברה לינארית תראו שכבר חישבנו פעם במפורש את המטריצה עבור אופרטור שיקוף, אבל הגענו לתוצאה שנראית מפחידה בהרבה. מטריצת השיקוף דרך ציר שנפרש על ידי <span class="math">\(\left(x,y\right)\)</span> הייתה</p>
+<p><span class="math">\(\frac{1}{x^{2}+y^{2}}\left[\begin{array}{cc}x^{2}-y^{2} & 2xy\\2xy & y^{2}-x^{2}\end{array}\right]\)</span></p>
+<p>ומה שראינו עכשיו הוא שאם <span class="math">\(\left(x-1\right)^{2}+y^{2}=1\)</span> אז המטריצה שמתקבלת היא מהצורה</p>
+<p><span class="math">\(\left[\begin{array}{cc}x-1 & y\\y & 1-x\end{array}\right]\)</span></p>
+<p>שהיא נחמדה יותר, אבל לא תמיד <span class="math">\(\left(x-1\right)^{2}+y^{2}=1\)</span> ולא פשוט למצוא <span class="math">\(\left(x,y\right)\)</span> שמקיימים את זה אם נתון לנו הישר שאנו רוצים לשקף דרכו.</p>
+<p>בואו ננסה להבין את האופרטור הזה בצורה נוספת, כפי שעשינו עבור סיבוב - לכתוב הכל בצורה טריגונומטרית ולראות מה מקבלים:</p>
+<p><span class="math">\(\left[\begin{array}{cc}\cos\theta & \sin\theta\\\sin\theta & -\cos\theta\end{array}\right]\left[\begin{array}{c}r\cos t\\r\sin t\end{array}\right]=\left[\begin{array}{c}r\cos\theta\cos t+r\sin\theta\sin t\\r\sin\theta\cos t-r\sin t\cos\theta\end{array}\right]=\left[\begin{array}{c}r\cos\left(\theta-t\right)\\r\sin\left(\theta-t\right)\end{array}\right]\)</span></p>
+<p>זה מזכיר סיבוב, אבל זה לא סיבוב בגלל שהזווית של הוקטור המקורי, <span class="math">\(t\)</span>, הפכה למינוס <span class="math">\(t\)</span>. קצת חשבון מראה שעבור <span class="math">\(t=\frac{\theta}{2}\)</span> נקבל נקודות שבת של האופרטור, ולכן הפעולה שהאופרטור מבצע היא שיקוף ביחס לציר שהזווית שלו עם הכיוון החיובי של ציר <span class="math">\(x\)</span> היא <span class="math">\(\frac{\theta}{2}\)</span>.</p>
+<p>כל החישובים הללו מראים את שלל הדרכים שבהן ניתן להגיע למסקנה הבאה: האופרטורים הלינאריים היחידים על <span class="math">\(\mathbb{R}^{2}\)</span> שמשמרים זווית ואורך הם סיבובים ושיקופים. זו לא תוצאה מובנת מאליה, ולדעתי זה יפה למדי איך שאפשר להגיע אליה בהתבסס על מה שאנחנו כבר יודעים על טרנספורמציות אוניטריות וקצת חשבונות.</p>
+<p>אחרי שסיימנו עם המשחקים והדוגמאות מגיעה מאליה השאלה - מה הלאה? מה האתגר האמיתי שלנו? התשובה היא שהגיע הזמן לנסות להבין איך המושג של לכסינות של מטריצות משתלב עם מרחבי מכפלה פנימית, ובניסוח קונקרטי - בהינתן אופרטור לינארי מעל מרחב מכפלה פנימית, מתי קיים למרחב בסיס <strong>אורתונורמלי</strong> שבו האופרטור מיוצג על ידי מטריצה ריבועית, כלומר מתי קיים למרחב בסיס אורתונורמלי שמורכב כולו מוקטורים עצמיים של האופרטור? בשאלה הזו נעסוק בפוסט הבא בנושא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/05/06/quantifier_busters/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מכסחי הכמתים</span>
+            </a>
+            
+            
+            
+            <a href="/2013/04/18/unitary_transformations/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">טרנספורמציות אוניטריות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

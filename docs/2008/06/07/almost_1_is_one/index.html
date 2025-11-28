@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1=…0.999 - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>1=…0.999</h1>
+            <div class="post-meta">
+                <span class="date">2008-06-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                    <a href="/categories/מספרים.html">מספרים</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>המוטיבציה הראשונית שלי לעיסוק בנושא הנוכחי מגיעה משאילתת חיפוש כושלת שהביאה נפש תועה לאתר - במקרה הזה, לגבי <a href="http://he.wikipedia.org/wiki/%D7%91%D7%A1%D7%99%D7%A1_%D7%A2%D7%A9%D7%A8%D7%95%D7%A0%D7%99">הפיתוח העשרוני</a> של מספרים רציונליים. נראה לי שהדרך הטובה ביותר להציג את הנושא היא באמצעות אחת מהבעיות ה"לוהטות" ביותר שעולות ממנו - סוגיית המספר <span class="math">\(0.999\dots\)</span>.</p>
+<p>חשוב להדגיש מלכתחילה שהסוגייה הזו, כמו גם מושג הפיתוח העשרוני של מספרים (רציונליים או ממשיים), היא טריוויאלית לחלוטין מבחינה מתמטית; לא קיים (או לפחות, נדיר ביותר) אדם בעל השכלה בסיסית במתמטיקה שמסוגל לחלוק על האבחנה האלמנטרית לפיה ...0.999 הוא פשוט ייצוג שונה למספר 1. עם זאת ולמרות זאת, קיימים רבים שחולקים בדיוק על זה - ולרוב שורש אי ההסכמה נובע בדיוק מחוסר הבנה בסיסי במתמטיקה - לא במובן של "לא יודע לחשב אינטגרלים" או "גרוע בחשבון", אלא במובן של "לא מבין את השפה". הטענות הנפוצות ביותר שלהם הן "זה לא אחד אלא רק <strong>שואף</strong> לאחד", "זה <strong>כמעט</strong> אחד", "זה יצור אינסופי בניגוד לאחד שהוא יצור סופי" וכיוצא בזה. ובכן, לא. לא נכון. לא במה שנקרא "מתמטיקה". במתמטיקה, זה 1. <strong>בדיוק</strong> 1.</p>
+<p>אין בי רצון עז לחפש דוגמאות רבות לאלו שמסרבים להאמין ש-...0.999=1 (או חמור מכך, טוענים שהם יכולים להוכיח ההפך). <a href="http://mathforum.org/kb/message.jspa?messageID=79717&amp;tstart=0">הנה</a> דוגמה טיפוסית אחת מתוך sci.math; <a href="http://forum.bgu.co.il/lofiversion/index.php?t46751.html">הנה</a> דוגמה תוצרת בית, פרי עטו של דורון שדמי שכבר הוזכר כאן.</p>
+<p>לפני שאכנס לנבכי המספר המוזר הזה ומה הוא בעצם אומר, הנה כמה הוכחות "אינטואטיביות" לנכונות השוויון. קשה לקרוא להן פורמליות, שכן כולן מתבססות על הנחות לא מוכחות; עם זאת, אני סבור שהאינטואיציה של רבים מהקוראים תסכים עם נכונות ההנחות הללו, ולכן ההוכחות יהיו משכנעות מספיק כדי שניתן יהיה לעבור בלב שקט לשלב הבא. פרט לכך, אני חושב שההוכחות הללו נחמדות מאוד (בניגוד להוכחה ה"אמיתית", שהיא סתם טכנית).</p>
+<p>ובכן, גישה אלמנטרית ומשעשעת אומרת כך: אנחנו יודעים ש-<span class="math">\(\frac{1}{3}=0.333\dots\)</span>. נכפול את שני האגפים בשלוש ונקבל <span class="math">\(1=0.999\dots\)</span> מייד. כמובן שהאינסטינקט הראשוני של קורא ההוכחה עלול להיות זריקה לעזאזל של האמונה ש-<span class="math">\(\frac{1}{3}=0.333\dots\)</span>; אני מקווה שלא גרמתי זאת לאיש.</p>
+<p>הוכחה חביבה עוד יותר היא זו: נסמן <span class="math">\(x=0.999\dots\)</span> (כבר הנחנו שהסימון הזה הוא מספר). נכפול ב-10 ונקבל <span class="math">\(10x=9.999\dots\)</span> (מה הנחנו כאן?). כעת נחסר 9 משני האגפים ונקבל <span class="math">\(10x-9=0.999\dots=x\)</span>. נעביר אגפים ונקבל <span class="math">\(9x=9\)</span>, נצמצם ונקבל <span class="math">\(x=1\)</span>, כנדרש.</p>
+<p>טיעון משכנע ביותר (שקשה לקרוא לו "הוכחה" בשום צורה שהיא) הוא פשוט לשאול "אם 1 שונה מ-...0.999, אז מה זה <span class="math">\(1-0.999\dots\)</span>?". כמובן שהעונה לא יכול להגיד <span class="math">\(0.000\dots\)</span> (או שהוא טוען שהביטוי הזה אינו אפס?), ולכן התשובה תהיה משהו מוזר כמו <span class="math">\(0.000\dots1\)</span> - כלומר, אינסוף אפסים ו"בסוף" 1 - אבל כמובן שזה לא פיתוח עשרוני חוקי - ואם זה לא מובן, עוד מעט אסביר.</p>
+<p>אם כן, ההוכחות הללו הובילו אותנו  אל המושג של פיתוח עשרוני. בשורה התחתונה, אי אפשר להימנע ממנו; הסיבה היחידה שבגללה כל מהומת ...0.999 קיימת היא שהסימון הזה הוא פיתוח עשרוני, ושליצורים הללו המוזרויות שלהם.</p>
+<p>פיתוח עשרוני, בראש ובראשונה, הוא <strong>סימון</strong>. הוא דרך שבה אנחנו לוקחים אוסף של סמלים - "תווים", מצרפים אותם אחד לשני ונותנים לצירוף הזה משמעות מוסכמת. בלי שתהיה מראש הסכמה על המשמעות של הסימון הזה, כל דיון עליו הוא חסר ערך. אני סבור שכל מהומות ...0.999 נובעות מחוסר הסכמה כבר בשלב הזה. אנשים פשוט מנסים לייחס לסימון הזה יותר ממה שיש בו. המשמעות המקובלת של פיתוח עשרוני היא פשוטה - הסכום של טור <strong>מתכנס</strong> של מספרים רציונליים. כאן כדאי לעצור ולהדגיש את הנקודה - כשיש לנו טור מתכנס, אז הסכום שלו הוא <strong>מספר</strong>. לא "בערך מספר" ולא "שואף למספר". זה הפירוש של "סכום" - "<strong>מספר</strong> שמותאם לטור, על פי התנאים הזה והזה". מהם התנאים - זה כבר עניין הגדרתי שעוד נגיע אליו.</p>
+<p>הרעיון בפיתוח עשרוני הוא להציג כל מספר ממשי בתור סכום של חזקות של 10. עבור מספרים טבעיים זה קל. כך למשל 123 הוא הסכום הבא:</p>
+<p><span class="math">\(123=100+20+3=1\cdot 10^2+2\cdot 10^1+3\cdot 10^0\)</span></p>
+<p>אנחנו מורגלים לחלוטין לצורת הכתיבה הזו, ומקבלים כמובן מאליו את הרעיון הגאוני שמאחוריה, שכלל איננו מובן מאליו - ערכי מיקום. כלומר, אותה ספרה, כשהיא מופיעה במקומות שונים במספר, יכולה לייצג מספרים שונים לחלוטין. אם 5 היא ספרת האחדות, היא מייצגת את המספר "חמש"; אם לעומת זאת היא ספרת המאות, היא מייצגת את המספר "חמש מאות". זה לא רעיון טריוויאלי. ב<a href="http://he.wikipedia.org/wiki/%D7%A1%D7%A4%D7%A8%D7%95%D7%AA_%D7%A8%D7%95%D7%9E%D7%99%D7%95%D7%AA">ספרות רומיות</a> זה לא קיים.</p>
+<p>המספר 10, שאת החזקות שלו אנחנו סוכמים, נקרא "<a href="http://he.wikipedia.org/wiki/%D7%91%D7%A1%D7%99%D7%A1_(%D7%90%D7%A8%D7%99%D7%AA%D7%9E%D7%98%D7%99%D7%A7%D7%94)">בסיס הספירה</a>". אין שום דבר קדוש במספר 10, כמובן; אפשר להשתמש בכל מספר טבעי אחר כבסיס (כולל אפילו 1, אבל זה כבר קצת יותר מסובך). במחשבים נפוצים מאוד הבסיסים 2, 8 ו-16. ה<a href="http://he.wikipedia.org/wiki/%D7%A1%D7%A4%D7%A8%D7%95%D7%AA_%D7%9E%D7%90%D7%99%D7%94">מאיה</a> השתמשו בבסיס 20. ה<a href="http://he.wikipedia.org/wiki/%D7%A1%D7%A4%D7%A8%D7%95%D7%AA_%D7%91%D7%91%D7%9C%D7%99%D7%95%D7%AA">בבלים</a> - בבסיס 60 (רעיון לא מופרך כפי שעלול להתקבל הרושם; לבבלים הייתה שיטת ייצוג פשוטה ונאה לכל המספרים עד 60. עם זאת, השיטה "שלנו" עדיין טובה יותר). לפחות בחלק מהמאה ה-20, <a href="http://en.wikipedia.org/wiki/Duodecimal#Advocacy_and_.22dozenalism.22">הייתה קבוצה</a> שקראה למעבר לבסיס 12 בחיי היום יום, והיו להם כמה נימוקים מוצלחים מאוד. עם זאת, בסיס 10 הוא הבסיס השולט היום, וכנראה שהמצב לא עומד להשתנות, למרות שהוא לא אופטימלי עד כדי כך. היתרון הגודל שעומד לזכותו - לרוב בני האדם יש 10 אצבעות.</p>
+<p>אם כן, מספרים טבעיים קל לייצג בשיטה הזו. גם מספרים שליליים שלמים קל - פשוט מוסיפים סימן מינוס. הכיף מתחיל כשמגיעים למספרים הרציונליים. כזכור, יש כבר צורת סימון מקובלת לרציונליים, כמנה של שני מספרים שלמים. למשל <span class="math">\(\frac{2}{5}\)</span>. דא עקא, רוצים לייצג אותם <strong>גם</strong> כסכום של חזקות של 10. בשביל זה, השינוי המהותי שמתירים הוא חזקות שליליות של 10. שימו לב - חזקה שלילית אין פירושה מספר שלילי, אלא פשוט שבר: כלומר, <span class="math">\(10^{-1}=\frac{1}{10}\)</span>, ובאופן כללי <span class="math">\(10^{-k}=\frac{1}{10^k}\)</span>.</p>
+<p>יש מקרים שבהם זה עובד מצויין. למשל, <span class="math">\(\frac{1}{2}=5\cdot 10^{-1}\)</span>, ולכן כותבים <span class="math">\(\frac{1}{2}=0.5\)</span>. הכלל פשוט: כותבים נקודה באמצע המספר -  "הנקודה העשרונית" - ומה שמימין לה הוא חזקות שליליות של 10 (המספר הראשון מימין - מינוס 1. השני - מינוס 2, וכן הלאה). עם זאת, הצרות מתחילות כבר במספר הנחמד <span class="math">\(\frac{1}{3}\)</span> שקשה לייצג אותו בצורה דומה (בבסיס 12 זה לא היה קורה - הרי לכם נימוק לטובת בסיס 12). מה קורה עם <span class="math">\(\frac{1}{3}\)</span>? הוא קטן מ-0.4 אבל גדול מ-0.3 ולכן המספר שמייצג אותו חייב להתחיל בספרות 0.3. מה הלאה? שוב - קטן מ-0.34, גדול מ-0.33, ולכן חייב להתחיל בספרות 0.33 אבל שם זה לא נגמר, וכן הלאה וכן הלאה. הבנתם מה קורה - חייבים להשתמש כאן באינסוף ספרות בשביל לתת ייצוג "מדויק".</p>
+<p>מן הסתם, אינסוף ספרות הן לא משהו שניתן לכתוב בצורה מפורשת. למרבה המזל, אין בכך צורך; הרעיון של "מכאן והלאה הביטוי חוזר על עצמו" הוא משהו שאדם מסוגל לתפס גם בשכלו ה"מוגבל" (טיעון נפוץ בדיונים בנושא הוא שאדם, שמוחו סופי, לא מסוגל "לתפוס" משהו אינסופי). את הרעיון הזה מסמנים באמצעות שלוש נקודות, שמופיעות אחרי שהקטע שחוזר על עצמו הופיע כבר מספר פעמים כזה שמאפשר להבין מה הולך כאן. זה לא תיאור פורמלי במיוחד, אך כמעט תמיד הוא מספיק. המהדרין כותבים את המספר בלי שלוש נקודות, ועם קו מעל החלק המחזורי. למשל, <span class="math">\(0.123\overline{456}\)</span> מייצג את המספר שניתן לכתוב גם כ-...0.123456456456 - כלומר, בהתחלה מופיעות הספרות 123, אבל מאז ועד עולם יופיעו 456.</p>
+<p>ומה המשמעות המדוייקת של סימון שכזה?</p>
+<p>ובכן, הזכרתי כבר את המילה הגסה "<a href="http://he.wikipedia.org/wiki/%D7%98%D7%95%D7%A8_%D7%9E%D7%AA%D7%9B%D7%A0%D7%A1">טור מתכנס</a>", ואכן אין לחמוק ממנה. באופן כללי, "טור" במתמטיקה הוא סכום של מספרים. נהוג לסמן טור בעל t איברים באופן הבא: <span class="math">\(\sum_{n=1}^ta_n\)</span>, כאשר <span class="math">\(a_n\)</span> זה פשוט סימון כללי ל"האיבר ה-n-י בטור". לרוב הצורה שבה כותבים טור ספציפי היא באמצעות נוסחה כלשהו שקושרת את <span class="math">\(a_n\)</span> לערכו של <span class="math">\(n\)</span>, כך למשל <span class="math">\(\sum_{n=1}^t\frac{1}{n}\)</span> (כלומר, <span class="math">\(a_n=\frac{1}{n}\)</span> הוא טור - וטור מיוחד, שזכה לשם משל עצמו: "הטור ההרמוני".</p>
+<p>אם כן, טור הוא בסך הכל סדרה של איברים שמצויירת בצורה מסויימת. מה שבאמת מעניין בטור הוא הסכום שלו - מספר מיוחד שמוגדר באמצעותו. ההגדרה די ברורה - זה מה שמתקבל כשמחברים את כל איברי הטור (אנחנו יודעים לחבר שני איברים; סכום של שלושה איברים הוא סכום האיבר שמתקבל מסכום שני הראשונים והשלישי; וכו' וכו').</p>
+<p>המספר הזה מקיים כמה תכונות "נחמדות" וצפויות - למשל, אם מחברים שני טורים, גם הסכומים שלהם מתחברים ואם כופלים את כל אבריו של טור במספר כלשהו, גם הסכום מוכפל במספר זה. זה, פחות או יותר, הרעיון שיש לנו בראש כשאנחנו פונים לחשוב על טורים אינסופיים.</p>
+<p>מה ההבדל בין <span class="math">\(\sum_{n=1}^t\frac{1}{n}\)</span> ובין <span class="math">\(\sum_{n=1}^\infty\frac{1}{n}\)</span>? הבדל של סימן אחד, שם למעלה - במקום האות t כתבנו סימן שהמשמעות המקובלת שלו היא "אינסוף". פירוש הדבר הוא ש<strong>לכל מספר טבעי</strong> n מותאם איבר <span class="math">\(a_n\)</span> בתוך הטור (יש סימונים עוד יותר כלליים והגדרות עוד יותר כלליות שאליהן לא אכנס).</p>
+<p>אם כן, השאלה הראשונה היא האם לכל סדרה של מספרים אפשר להתאים "סכום" שיתנהג בצורה נחמדה? התשובה המצערת היא שממש, אבל ממש, לא. הנה שתי דוגמאות קלאסיות.</p>
+<p>הדוגמה הראשונה היא הסכום <span class="math">\(\sum_{n=0}^\infty 2^n\)</span>, כלומר <span class="math">\(1+2+4+8+\dots\)</span>. אם מניחים שלברנש הזה אפשר להתאים מספר שיקיים את תכונות החשבון הרגילות, אנו צפויים לאכזבה. נניח שיש כזה מספר - נסמנו A, כלומר  <span class="math">\(1+2+4+8+\dots=A\)</span>. כעת נבצע להטוט - נכפול את שני האגפים ב-2. התוצאה?</p>
+<p><span class="math">\(2+4+8+16+\dots=2A\)</span></p>
+<p>השלב הבא - נוסיף 1 לשני האגפים:</p>
+<p><span class="math">\(1+2+4+8+16+\dots=1+2A\)</span></p>
+<p>אבל מה יש לנו כרגע באגף שמאל? בדיוק את A המקורי. כלומר, קיבלנו:</p>
+<p><span class="math">\(A=1+2A\)</span></p>
+<p>ואחרי העברת אגפים:</p>
+<p><span class="math">\(A=-1\)</span></p>
+<p>מסקנה - ה"סכום" של הטור הזה, שכולו מספרים חיוביים, הוא מינוס אחד. מספר שלילי. ברור שזה כבר מקלקל לנו לחלוטין את המשמעות האינטואיטיבית שהיינו רוצים לייחס לסכומים; יתר על כן, הלהטוט הזה בסך הכל הצביע על מוזרות אחת שנובעת מההגדרה - אולי יש מוזרות נוספת, סותרת, שתנבע מלהטוט אחר? בקיצור, מעדיפים שלא להגדיר את סכום הטור הזה וחסל (אפשר להגדיר אותו בתור "אינסוף" וגם לכך יש שימושים, אבל לא נעסוק בזה).</p>
+<p>הדוגמה השנייה היא הסכום <span class="math">\(\sum_{n=0}^\infty(-1)^n\)</span>, ובמילים אחרות, הסכום <span class="math">\(1-1+1-1+\dots\)</span>.לכאורה טור תמים ונחמד. הבעיה מתחילה אם מנסים לעשות לו כינוס איברים. אפשר לכתוב את הסכום בשתי הצורות הבאות:</p>
+<p><span class="math">\((1-1)+(1-1)+\dots \)</span></p>
+<p><span class="math">\(1-(1-1)-(1-1)-\dots\)</span></p>
+<p>מה הבעיה? בשיטת הכינוס הראשונה יש לנו סכום של אפסים - ועל פי כל אינטואיציה אפשרית, סכום שכזה הוא אפס; על פי שיטת הכינוס השנייה נקבל 1 פחות (סכום של אפסים), כלומר 1. קיבלנו שני ערכים אפשריים שונים - שוב, בעיה.</p>
+<p>אם כן, איך מגדירים סכום של טור שכזה? אציג את ההגדרה הפורמלית, והרעיון המקסים שמאחוריה, בפוסט הבא, ואז גם יתברר מדוע על פי ההגדרה הפורמלית מקבלים תכף ומייד <span class="math">\(0.999\dots=1\)</span> (רמז: <a href="http://he.wikipedia.org/wiki/%D7%A1%D7%93%D7%A8%D7%94_%D7%94%D7%A0%D7%93%D7%A1%D7%99%D7%AA">טור הנדסי מתכנס</a>).</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2008/06/17/infinite_series/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">טרטורי טורים</span>
+            </a>
+            
+            
+            
+            <a href="/2008/06/06/prefix_trees_and_zip/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">דיון מכווץ בצורה שבה עצי סיומות עוזרים לכיווץ</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

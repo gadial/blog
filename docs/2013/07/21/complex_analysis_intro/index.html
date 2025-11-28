@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה זו אנליזה מרוכבת? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז מה זו אנליזה מרוכבת?</h1>
+            <div class="post-meta">
+                <span class="date">2013-07-21</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אנליזה מרוכבת.html">אנליזה מרוכבת</a>
+                    
+                    <a href="/tags/מבוא למתמטיקה.html">מבוא למתמטיקה</a>
+                    
+                    <a href="/tags/מספרים מרוכבים.html">מספרים מרוכבים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בזמן הלא מועט שחלף מאז שהתחלתי את כתיבת הבלוג אני מקווה שהצלחתי לגעת במשהו מכמעט כל נושאי הבסיס שבהם סטודנטים לתואר ראשון במתמטיקה יתקלו בודאות במהלך התואר שלהם. אלא שעדיין, רק כמעט, ועוד נותרו מספר חורים מטרידים. אני רוצה להתחיל עכשיו לסגור את החור המטריד ביותר, של נושא חשוב ויפה מאין כמותו שטרם כתבתי עליו שום דבר בבלוג - אנליזה מרוכבת. קשה לי לחשוב על נושא בסיסי יותר, או יפה יותר, או חשוב יותר, שלא הוקדש לו שום דבר בבלוג עד עכשיו.</p>
+
+<p>אז מה זו אנליזה מרוכבת? במשפט מחץ אחד, זה מה שקורה כשלוקחים את החשבון האינפיניטסימלי (החשבון הדיפרנציאלי והאינטגרלי) ועושים אותו לא על המספרים הממשיים אלא על המספרים המרוכבים. ובתיאור הזה אני כבר רומז שרצוי מאוד, ואפילו הכרחי, להכיר את החשבון האינפיניטסימלי של המספרים הממשיים לפני שמתחילים לדבר על אנליזה מרוכבת. יש לי <a href="http://www.gadial.net/2010/09/05/calculus_intro/">פוסטים בנושא</a> ואני אניח מכאן והלאה שהקוראים מכירים אינפי, למרות שאני מקווה שהפוסט הספציפי הזה יהיה נגיש עדיין גם למי שלא מכירים אותו. אני אמנם מתכוון להגדיר את המושגים המרכזיים בכל מקרה, אבל להכיר אנליזה מרוכבת בלי להכיר אינפי רגיל זה בערך כמו<strong> </strong>לשמוע שוסטקוביץ' בלי להכיר מוזיקה קלאסית - אפשר ליהנות, אולי, אבל הרבה מזה יישמע מוזר ובלי ההקשר הרלוונטי לא יהיה ברור מה הקטע. כך גם עם אנליזה מרוכבת ואינפי: בלי נקודת הייחוס של האינפי קשה יותר להבין את התעלולים שעושים באנליזה מרוכבת, וגם קשה יותר להבין למה התוצאות שלה כל כך יפות.</p>
+
+<p>ולמה שאנליזה מרוכבת תעניין אותנו בכלל? למה שנרצה לעשות אינפי על מספרים מרוכבים? ובכן, יש לכך שלוש תשובות, שהן לרוב התשובות לכל שאלה של "למה עושים משהו במתמטיקה: <ol><li> כי אנחנו יכולים. </li><li> כי זה יפה. </li><li> כי זה שימושי. </li></ol> "כי אנחנו יכולים" זו תשובה טיפה מוגזמת, כי במתמטיקה אפשר לעשות שלל דברים שאף אחד לא מעלה על דעתו לעשות כי אין בהם טעם; נימוק יותר מדויק יהיה "כי אנחנו יכולים, כי זה מתבקש וכי יוצאים מזה דברים". אינפי על מספרים ממשיים זה מגניב; המרכיבים הדרושים לביצוע אינפי נמצאים גם במספרים המרוכבים, והמספרים המרוכבים הם ההרחבה הטבעית ביותר של הממשיים; לעשות אינפי על המרוכבים ממש מתבקש.</p>
+
+<p>למה זה יפה? ובכן, חכו ותראו, זה כל מה שאני יכול להבטיח בינתיים. ומה באשר לשימושים? גם כאלו נראה בהמשך, אבל כבר עכשיו חשוב להבהיר שמדובר על שימושים שחורגים מהתחום של המספרים המרוכבים לבדם: יש לאנליזה מרוכבת שימושים שמתקשרים לנושאים שלא מזכירים אפילו ברמז את המספרים המרוכבים. הדוגמא המפורסמת ביותר, ש<a href="http://www.gadial.net/2010/02/08/riemann_hypothesis_overview/">כן הזכרתי בעבר</a> בבלוג, היא <strong>משפט המספרים הראשוניים</strong>, שהוא תוצאה חשובה מאין כמותה שמתארת את ההתפלגות של המספרים הראשוניים - שהם מספרים טבעיים שמתחלקים רק ב-1 ובעצמם, ועל פניו אין בינם ובין מספרים מרוכבים שום קשר; ועם זאת, הוכחת משפט המספרים הראשוניים היא הוכחה באנליזה מרוכבת, באמצעות כלים של אנליזה מרוכבת.</p>
+
+<p>מבחינה היסטורית, למרות שמספרים מרוכבים היו מוכרים עוד במאה ה-16 בתור כלי לפתרון משוואות אלגבריות, ולמרות שאוילר התעסק איתם במאה ה-18, "תור הזהב" של האנליזה המרוכבת, שבו נוסח ונתגלה הבסיס שאותו מלמדים באוניברסיטאות עד היום, היה במאה ה-19 (ולדעתי האנליזה המרוכבת היא אחד מההישגים המתמטיים הכבירים ביותר של המאה ה-19). שני השמות המפורסמים ביותר בהקשר הזה הם של אוגוסטין לואי קושי ושל ברנהרד רימן, אבל מן הסתם היה מדובר על פרי עבודה משמעותית של מתמטיקאים נוספים רבים. אני לא בקיא יותר מדי בפרטים ההיסטוריים של התפתחות התחום ואולי אקדיש להם פוסטים בעתיד, אבל לעת עתה אסתפק בכך.</p>
+
+<p>נעבור לדבר עכשיו על הכוכבים של האנליזה המרוכבת - המספרים המרוכבים. מיהם ומהם? ובכן, נניח שאנחנו יודעים מהם המספרים הממשיים, <span class="math">\(\mathbb{R}\)</span> (וזו בעיה בפני עצמה, הרי הם אובייקט מורכב מאוד, אבל נעזוב את זה). המספרים המרוכבים הם מה שמקבלים כאשר מכניסים למשחק מספר חדש, <span class="math">\(i\)</span>, שמקיים את התכונה המלבבת ש-<span class="math">\(i^{2}=-1\)</span> (וזאת בזמן שכל מספר ממשי בריבוע הוא בהכרח אי שלילי), ואז מסתכלים על כל המספרים מהצורה <span class="math">\(a+bi\)</span> כאשר <span class="math">\(a,b\)</span> ממשיים. לאוסף הזה קוראים <strong>המספרים המרוכבים</strong>, מסמנים אותו ב-<span class="math">\(\mathbb{C}\)</span>, ומגדירים עליו פעולות חשבון באופן "טבעי": <span class="math">\(\left(a+bi\right)+\left(c+di\right)=\left(a+c\right)+\left(b+d\right)i\)</span> לחיבור, ו-</p>
+
+<p><span class="math">\(\left(a+bi\right)\left(c+di\right)=ac+adi+bci+bdi^{2}=\left(ac-bd\right)+\left(ad+bc\right)i\)</span></p>
+
+<p>עבור כפל.</p>
+
+<p>הגישה הזו היא מה שאני מכנה "גישת בית הספר", כי בבית הספר שבו הייתי פשוט זרקו על התלמידים את <span class="math">\(i\)</span> הזה ונתנו להם להתמודד איתו. זו כמובן גישה מטרידה מאוד - אין לנו מושג מאיפה בא ה-<span class="math">\(i\)</span> הזה או למה שמשהו מוזר כל כך יהיה קיים בכלל. כתוצאה מהגישה הזו נוצר אנטגוניזם די גדול כלפי המספרים המרוכבים, עד כדי תפיסה שהם "לא מציאותיים" (גם העובדה שקוראים ל-<span class="math">\(i\)</span> "מספר מדומה" - כפי שדקארט קרא לו בלעג הרבה לפני שהמספרים המרוכבים הפכו לאובייקט מרכזי במתמטיקה כמו שהם היום - לא עוזרת). לכן בדרך כלל בספרי לימוד נוקטים בגישה אחרת. כולם מסכימים שמספרים ממשיים קיימים, ולכן במקום לדבר על מספרים מרוכבים, מדברים על <strong>זוגות של ממשיים</strong>, כלומר על יצורים מהצורה <span class="math">\(\left(a,b\right)\)</span> כאשר <span class="math">\(a,b\)</span> ממשיים. על היצורים הללו מגדירים חיבור "איבר איבר", כלומר <span class="math">\(\left(a,b\right)+\left(c,d\right)=\left(a+c,b+d\right)\)</span>, ומגדירים גם כפל בצורה שנראית מוזרה בהתחלה: <span class="math">\(\left(a,b\right)\left(c,d\right)=\left(ac-bd,ad+bc\right)\)</span>. כמובן שכשאנחנו יודעים מה המטרה של ההגדרה הזו היא נראית קצת פחות מוזרה. כעת אפשר לשים לב לכך ש-<span class="math">\(\left(0,1\right)\left(0,1\right)=\left(-1,0\right)\)</span> על פי הגדרת הכפל הזו, ואז אפשר <strong>לסמן</strong> את <span class="math">\(\left(0,1\right)\)</span> בסימון <span class="math">\(i\)</span> ואת הזוג <span class="math">\(\left(a,b\right)\)</span> בסימון <span class="math">\(a+bi\)</span>, והופס! קיבלנו את המספרים המרוכבים שתיארנו קודם, רק שעכשיו קשה לחלוק על כך שהם קיימים, כי בסך הכל מדובר על קבוצה של זוגות של ממשיים עם פעולות חיבור וכפל מסויימות. בניה דומה היא זו שמגדירה את המספרים הרציונליים: אפשר לחשוב עליהם כעל (בערך) אוסף של זוגות של מספרים שלמים עם פעולות חיבור וכפל מסויימות.</p>
+
+<p>למרות שהגישה לעיל נפוצה ברוב ספרי המתמטיקה שמציגים מספרים מרוכבים, די בבירור היא עדיין מרגישה מלאכותית משהו. הדרך הנכונה לטעמי להציג את המספרים המרוכבים היא כחלק ממושג כללי הרבה יותר, של <strong>הרחבה אלגברית</strong> של שדות; אלא שזה מושג שמצריך ידע כלשהו באלגברה מופשטת שבדרך כלל לא מניחים שיש אצל הקורא ולכן לא מתארים את הגישה הזו, וגם אני לא אעשה זאת כאן (פורמלית, למי שמכיר את המושגים, המרוכבים מתקבלים כחוג המנה של חוג הפולינומים במשתנה אחד מעל <span class="math">\(\mathbb{R}\)</span> כשמחלקים אותו באידאל שנוצר על ידי הפולינום האי-פריק <span class="math">\(x^{2}+1\)</span> - אבל מי שמבין את מה שאמרתי כרגע כנראה כבר מכיר את הבניה הזו).</p>
+
+<p>עדיין, גם אם לא מערערים על קיומם של המספרים המרוכבים, פעולת הכפל שלהם נראית מוזרה למדי. הרבה יותר טבעי היה לכפול "איבר איבר", כמו שמחברים: <span class="math">\(\left(a,b\right)\left(c,d\right)=\left(ac,bd\right)\)</span>. למה לא עושים זאת? ובכן, כי המטרה שלנו היא להרחיב את <span class="math">\(\mathbb{R}\)</span> כדי שנקבל <strong>שדה</strong>. שדה היא קבוצה של איברים שמוגדרות עליה פעולות חיבור וכפל שמתנהגות, ובכן, כמו שחיבור וכפל ב-<span class="math">\(\mathbb{R}\)</span> מתנהגים: חוקי החילוף, הקיבוץ והפילוג, וכמו כן שיהיה איבר נייטרלי לחיבור (0), איבר נייטרלי לכפל (1), איברים נגדיים לחיבור (לכל <span class="math">\(x\)</span> יש מספר <span class="math">\(y\)</span> כך ש-<span class="math">\(x+y=0\)</span>) ואיברים הופכיים לכפל (לכל <span class="math">\(x\ne0\)</span> יש מספר <span class="math">\(y\)</span> כך ש-<span class="math">\(xy=1\)</span>). אם נבחר בהגדרת הכפל הנאיבית, לא נקבל שדה, כי למשל ל-<span class="math">\(\left(1,0\right)\)</span> לא יהיה איבר הופכי לכפל (למה? מי האיבר הנייטרלי לכפל בקבוצה הזו?)</p>
+
+<p>לעומת זאת, המספרים המרוכבים עם פעולת הכפל ה"מוזרה" אכן מהווים שדה. לשם כך צריך להראות כיצד, בהינתן מספר <span class="math">\(a+bi\)</span> כך ש-<span class="math">\(a\ne0\)</span> או ש-<span class="math">\(b\ne0\)</span>, אפשר למצוא לו הופכי כפלי. במילים אחרות, מהו <span class="math">\(\frac{1}{a+bi}\)</span>? האם אפשר לכתוב אותו בתור מספר מהצורה <span class="math">\(x+yi\)</span>? ובכן, בואו ננסה, עם תעלול סטנדרטי: נכפול מונה ומכנה באותו מספר, שבמקרה שלנו יהיה <span class="math">\(a-bi\)</span>. למה? כי <span class="math">\(\left(a+bi\right)\left(a-bi\right)=a^{2}-b^{2}i^{2}=a^{2}+b^{2}\)</span>, ולכן נקבל ש-<span class="math">\(\frac{1}{a+bi}=\frac{a-bi}{a^{2}+b^{2}}\)</span>, וזה כבר מספר מהצורה <span class="math">\(x+yi\)</span> (עם <span class="math">\(x=\frac{a}{a^{2}+b^{2}}\)</span> ו-<span class="math">\(y=-\frac{b}{a^{2}+b^{2}}\)</span>).</p>
+
+<p>כמובן שלא מספיק להראות את זה כדי להראות שהמרוכבים הם שדה, אבל אני עצלן ולא אכנס לבדיקת שאר התכונות. תחת זאת, אני רוצה לתת מעמד מיוחד לשני המספרים שהופיעו בביטוי <span class="math">\(\frac{a-bi}{a^{2}+b^{2}}\)</span>. הראשון, <span class="math">\(a-bi\)</span>, בעצם זהה ל-<span class="math">\(a+bi\)</span> שממנו התחלנו פרט לכך שהמקדם של <span class="math">\(i\)</span> הפך את הסימן שלו. באופן כללי אם <span class="math">\(z=a+bi\)</span> (בדרך כלל מסמנים מספרים מרוכבים ב-<span class="math">\(z,w\)</span> ואותיות דומות) אז <strong>הצמוד</strong> של <span class="math">\(z\)</span>, שמסומן <span class="math">\(\overline{z}\)</span>, מוגדר להיות <span class="math">\(\overline{z}=a-bi\)</span>. בתור תרגיל מומלץ להוכיח ש-<span class="math">\(\overline{z+w}=\overline{z}+\overline{w}\)</span> ו-<span class="math">\(\overline{zw}=\overline{z}\cdot\overline{w}\)</span>.</p>
+
+<p>עכשיו, המספר השני שאפשר "להפיק" מתוך <span class="math">\(z=a+bi\)</span> הוא <span class="math">\(a^{2}+b^{2}\)</span>. שימו לב שזה תמיד מספר ממשי, ותמיד מספר אי שלילי. עוד רגע נדבר על המשמעות הגיאומטרית שלו ואז יתברר למה זה מעניין, וגם יתברר למה אני מגדיר את ההגדרה הבאה: ה<strong>מודולוס</strong>, או <strong>הערך המוחלט</strong> של <span class="math">\(z=a+bi\)</span> מוגדר להיות <span class="math">\(\left|z\right|=\sqrt{a^{2}+b^{2}}\)</span>. מה שאומר ש-<span class="math">\(a^{2}+b^{2}=\left|z\right|^{2}\)</span>.</p>
+
+<p>כעת יש לנו דרך קומפקטית לרשום את מה שגילינו: <span class="math">\(\frac{1}{z}=\frac{\overline{z}}{\left|z\right|^{2}}\)</span>, ובאופן כללי שמנו לב לכך ש-<span class="math">\(z\cdot\overline{z}=\left|z\right|^{2}\)</span>. לסיום סקירת התכונות של צמוד ומודולוס, בואו נכניס עוד סימון לתמונה: אם <span class="math">\(z=a+bi\)</span> אז מסמנים <span class="math">\(\mbox{Re}z=a\)</span> ו-<span class="math">\(\mbox{Im}z=b\)</span> ("החלק הממשי" ו"החלק המדומה" של <span class="math">\(z\)</span>, בהתאמה). עכשיו קל לראות ש-<span class="math">\(\mbox{Re}z=\frac{z+\overline{z}}{2}\)</span> ו-<span class="math">\(\mbox{Im}z=\frac{z-\overline{z}}{2i}\)</span>.</p>
+
+<p>בואו נעבור לדבר על גיאומטריה. באופן כללי באנליזה מורכבת אין מנוס מדיבור על גאומטריה - זו כנראה הדרך הטבעית ביותר לדבר על הנושא הזה, והרבה יותר קל להבין אותו בעזרתה. האבחנה הבסיסית היא שקל לחשוב על המספרים המרוכבים בתור <strong>נקודות במישור</strong>, וכך גם מציירים אותם. כדי שיהיה ברור שמדובר על מספרים מרוכבים קוראים למישור הזה "המישור המרוכב", אבל הוא נראה בדיוק כמו מישור רגיל. המספר <span class="math">\(a+bi\)</span> מיוצג בו על ידי הנקודה <span class="math">\(\left(a,b\right)\)</span>.</p>
+
+<p>עכשיו, כל נקודה שהיא מספר מרוכב אפשר לחבר בקו ישר לראשית. לקו הזה יש אורך, ושימוש זריז במשפט פיתגורס מראה שהאורך הזה הוא <span class="math">\(\sqrt{a^{2}+b^{2}}\)</span> עבור המספר המרוכב <span class="math">\(a+bi\)</span>. במילים אחרות - המשמעות הגאומטרית של <span class="math">\(\left|z\right|\)</span> היא המרחק של <span class="math">\(\left|z\right|\)</span> מראשית הצירים. ומה המשמעות הגאומטרית של <span class="math">\(\overline{z}\)</span>? שלפו נייר ועט וציירו בעצמכם; לא קשה לראות ש-<span class="math">\(\overline{z}\)</span> הוא הנקודה שמתקבלת כאשר <strong>משקפים</strong> את <span class="math">\(z\)</span> ביחס לציר <span class="math">\(x\)</span>. (מה זה חוסר הסימטריה הזה בין ציר <span class="math">\(x\)</span> וציר <span class="math">\(y\)</span>, שעוד יחזור בהמשך? זה בגלל שציר <span class="math">\(x\)</span> מייצג את המספרים הממשיים וציר <span class="math">\(y\)</span> את המדומים).</p>
+
+<p>כאשר מייצגים מספר מרוכב בתור <span class="math">\(a+bi\)</span>, בעצם נותנים את הקואורדינטות <strong>הקרטזיות </strong>שלו במישור המרוכב. זו דרך אחת לייצג מספרים מרוכבים, אבל דרך אחרת היא לתת שני פרמטרים שונים - המרחק של הנקודה מראשית הצירים, והזווית שהקטע שמחבר את הנקודה עם ראשית הצירים יוצר עם אחד הצירים. מכיוון שרוצים שעבור מספרים ממשיים חיוביים הזווית הזו תהיה אפס, בוחרים לדבר על הזווית של הקטע הזה ביחס לכיוון החיובי של ציר <span class="math">\(x\)</span> - כמה צריך לסובב את הקטע <strong>עם כיוון השעון</strong> כדי שהוא יתלכד עם ציר <span class="math">\(x\)</span>. לזווית הזו קוראים <strong>הארגומנט</strong> של המספר המרוכב. למשל, לא קשה לראות שהמספר <span class="math">\(1+i\)</span> הוא בעל ארגומנט של 45 מעלות - ומכיוון שאנחנו עוסקים בחדו"א, לא נדבר על מעלות אלא על <strong><a href="http://www.gadial.net/2008/01/11/radians/">רדיאנים</a></strong>, כלומר הארגומנט הוא בעל <span class="math">\(\frac{\pi}{4}\)</span> רדיאנים. מסמנים זאת <span class="math">\(\mbox{Arg}\left(1+i\right)=\frac{\pi}{4}\)</span>.</p>
+
+<p>אלא שיש עם המושג של הארגומנט בעיה - אם נסובב את הקטע שמחבר את <span class="math">\(1+i\)</span> עם ראשית הצירים בזווית של <span class="math">\(\frac{\pi}{4}\)</span> הוא יתלכד עם ציר <span class="math">\(x\)</span>, אבל גם אם נסובב אותו בזווית של <span class="math">\(\frac{9\pi}{4}\)</span>, וגם אם נסובב אותו בזווית של <span class="math">\(-\frac{7\pi}{4}\)</span>, ובאופן כללי - כל סיבוב בזווית <span class="math">\(\frac{\pi}{4}+2k\pi\)</span> כאשר <span class="math">\(k\in\mathbb{Z}\)</span> ייתן את אותו אפקט. בעצם, יש לנו קבוצה אינסופית של זוויות, שמסומנת בתור <span class="math">\(\mbox{arg}\left(1+i\right)=\left\{ \frac{\pi}{4}+2k\pi\ |\ k\in\mathbb{Z}\right\} \)</span>. מכיוון שלפעמים אנחנו רוצים לדבר על נציג <strong>קנוני</strong> של הקבוצה הזו, אנחנו מגדירים את <span class="math">\(\mbox{Arg}\)</span> (עם אות גדולה בהתחלה, להבדיל מ-<span class="math">\(\mbox{arg}\)</span> שמייצג את הקבוצה כולה) בתור האיבר היחיד של <span class="math">\(\mbox{arg}\)</span> שהוא בין <span class="math">\(-\pi\)</span> ו-<span class="math">\(\pi\)</span>.</p>
+
+<p>הדיון התמים הזה מסתיר בתוכו את אחת המהומות הגדולות ביותר שנתקלים בהן כשמתחילים לדבר על פונקציות מרוכבות. <span class="math">\(\mbox{arg}\)</span> היא דוגמה לפונקציה שכזו, שסובלת מ"בעיה" קטנה - היא מחזירה לא ערך אחד, אלא קבוצה שלמה של ערכים. לפונקציה כזו קוראים <strong>פונקציה מרובת ערכים</strong>. פורמלית, פונקציה <span class="math">\(f:A\to B\)</span> מוגדרת בתור משהו שלכל איבר ב-<span class="math">\(A\)</span> מתאים איבר <strong>יחיד</strong> ב-<span class="math">\(B\)</span>, כך שאם מדברים על "פונקציה מרובת ערכים" <span class="math">\(f:A\to B\)</span> ברור שזו לא פונקציה במובן הפורמלי של ההגדרה, אבל זו כן פונקציה אם משנים את הטווח: <span class="math">\(f:A\to2^{B}\)</span> (לכל איבר ב-<span class="math">\(A\)</span> מתאימים תת-קבוצה של <span class="math">\(B\)</span>). כשמתעסקים בפונקציות מרוכבות הפורמליזם הזה לא מעניין אף אחד ולכן ממשיכים לדבר על הפונקציות מרובות הערכים כפונקציות מ-<span class="math">\(A\)</span> ל-<span class="math">\(B\)</span>, פשוט כאלו שמקבלות יותר מערך אחד. אם יש לנו פונקציה כזו, אפשר להגדיר מתוכה פונקציה חד ערכית על ידי בחירה של נציג מכל קבוצה - פונקציה חד ערכית כזו נקראת <strong>ענף</strong> של הפונקציה המקורית. </p>
+
+<p>בואו נראה דוגמה פשוטה: פונקציית השורש, <span class="math">\(f\left(z\right)=\sqrt{z}\)</span>. עזבו אתכם ממספרים מרוכבים לבינתיים ותחשבו על מספרים ממשיים כי הדיון הזה עובד גם שם: אנחנו יודעים שלכל מספר חיובי <span class="math">\(a\)</span> קיימים <strong>שני </strong>שורשים ממשיים, שבדרך כלל אנחנו מסמנים בתור <span class="math">\(\sqrt{a}\)</span> ובתור <span class="math">\(-\sqrt{a}\)</span>, כאשר המוסכמה היא ש-<span class="math">\(\sqrt{a}\)</span> מסמן את השורש החיובי. למשל, אם <span class="math">\(a=9\)</span> אז השורשים של <span class="math">\(a\)</span> הם 3 ו-<span class="math">\(-3\)</span>.</p>
+
+<p>אם כן, אם חושבים על שורש בתור פונקציה מרובת ערכים, מקבלים את הפונקציה <span class="math">\(g\left(a\right)=\left\{ \sqrt{a},-\sqrt{a}\right\} \)</span>. עכשיו אפשר להגדיר את הענף <span class="math">\(g_{+}\left(a\right)=\sqrt{a}\)</span> ואת הענף <span class="math">\(g_{-}\left(a\right)=-\sqrt{a}\)</span> - קיבלנו מהפונקציה מרובת הערכים <span class="math">\(g\)</span> שתי פונקציות "רגילות". איך הן משחקות זו עם זו? איך "מחברים" אותן ביחד? האם לקיחת ענף כזו לא יוצרת בעיות? למה לא לקחת ענף יותר מסובך, שבו לפעמים מחזירים <span class="math">\(\sqrt{a}\)</span> ולפעמים מחזירים <span class="math">\(-\sqrt{a}\)</span> לפי מצב הרוח? אלו שאלות טובות ונדון בהן בהמשך.</p>
+
+<p>בואו נחזור לגאומטריה. אמרנו שאפשר לתאר כל מספר מרוכב לפי אורך הקטע שמחבר אותו עם הראשית והזווית של הקטע הזה עם הכיוון החיובי של ציר <span class="math">\(x\)</span>: אם האורך הוא <span class="math">\(r\)</span> והזווית היא <span class="math">\(\theta\)</span>, אז טריגונומטריה בסיסית מראה שהקואורדינטות הקרטזיות הרגילות של המספר המרוכב הן <span class="math">\(r\cos\theta\)</span> ו-<span class="math">\(r\sin\theta\)</span>, כלומר אפשר לכתוב את המספר המרוכב בתור <span class="math">\(r\cos\theta+ri\sin\theta\)</span>, או להוציא את <span class="math">\(r\)</span> כגורם משותף החוצה ולכתוב <span class="math">\(r\left(\cos\theta+i\sin\theta\right)\)</span>. מכיוון שמסורבל לכתוב את הקוסינוס והסינוס בכל פעם כשהם תמיד עם אותה זווית, משתמשים לפעמים בקיצור <span class="math">\(\mbox{cis}\)</span> (קיצור של <span class="math">\(\cos\)</span> ואז המספר המדומה <span class="math">\(i\)</span> ואז <span class="math">\(\sin\)</span>) וכותבים את המספר בתור <span class="math">\(r\mbox{cis}\theta\)</span>. זו שיטת כתיב נפוצה מאוד בבית הספר התיכון, אבל כמעט ולא נתקלתי בה במקומות אחרים. לרוב במקום לכתוב <span class="math">\(\mbox{cis}\theta\)</span> כותבים <span class="math">\(e^{i\theta}\)</span> כאשר <span class="math">\(e\)</span> הוא הקבוע המתמטי המפורסם ("בסיס הלוגריתם הטבעי"). הסיבה לכך שאפשר להשתמש בקיצור המוזר הזה היא שמתקיים <span class="math">\(e^{i\theta}=\cos\theta+i\sin\theta\)</span> - תוצאה זו נקראת <strong>נוסחת אוילר</strong> והיא רק דוגמה אחת לדברים המגניבים שמקבלים כשמתחילים להתעסק עם אנליזה מרוכבת. לעת עתה אני ארשה לעצמי להשתמש בחופשיות בסימון הזה ובתכונות שנגזרות ממנו; בהמשך אני אוכיח שהוא נכון ואסביר מאיפה הוא מגיע (כדאי להעיר ש"נכונות" כאן היא עניין סובייקטיבי; כל עוד לא הגדרנו מהי חזקה מרוכבת של מספר מותר לנו להגדיר אותה להיות מה שמתחשק לנו, ואפשר לקחת את נוסחת אוילר בתור <strong>הגדרה</strong>; עם זאת, אני חושב שה"הוכחה" שאציג תהיה משכנעת למדי בהסבר מדוע זו ההגדרה הנכונה).</p>
+
+<p>אילו תכונות נובעות מנוסחת אוילר? למשל, מה אנחנו יודעים קורה לחזקה של סכום? היא מתפרקת למכפלה של חזקות. כלומר, <span class="math">\(e^{x+y}=e^{x}e^{y}\)</span>. לכן:</p>
+
+<p><span class="math">\(\cos\left(\alpha+\beta\right)+i\sin\left(\alpha+\beta\right)=e^{i\left(\alpha+\beta\right)}=e^{i\alpha}e^{i\beta}=\left(\cos\alpha+i\sin\alpha\right)\left(\cos\beta+i\sin\beta\right)\)</span></p>
+
+<p><span class="math">\(=\left(\cos\alpha\cos\beta-\sin\alpha\sin\beta\right)+i\left(\sin\alpha\cos\beta+\cos\alpha\sin\beta\right)\)</span></p>
+
+<p>וקיבלנו בן רגע שתי זהויות טריגונומטריות שסטודנטים מסכנים בבית הספר צריכים פשוט לשנן או לקרוא בדף הנוסחאות ומשום מה אף פעם לא נותנים להם שיטה אינטואיטיבית כמו זו כדי לזכור אותן:</p>
+
+<p><span class="math">\(\cos\left(\alpha+\beta\right)=\cos\alpha\cos\beta-\sin\alpha\sin\beta\)</span></p>
+
+<p><span class="math">\(\sin\left(\alpha+\beta\right)=\sin\alpha\cos\beta+\cos\alpha\sin\beta\)</span></p>
+
+<p>שימו לב למה שנחמד פה - הזהויות הללו מתארות את סינוס וקוסינוס על זוויות ממשיות, כלומר אלו הן זהויות של פונקציות ממשיות, שמספרים מרוכבים לא מופיעים בהן ולו ברמז; עם זאת, להוכיח אותן באמצעות התבססות על תוצאות שמתקבלות ממספרים מרוכבים זה פשוט בצורה קיצונית (מרגע שיש לנו את התוצאות הללו, כמובן) ודרך ההוכחה הזו מספקת לנו תובנה נאה שמאפשרת לנו לראות <strong>למה</strong> הנוסחאות הללו נכונות - המספרים המרוכבים הרחיבו את אופק ההתבוננות שלנו גם על העולמות שאינם מרוכבים. זו אחת הסיבות שבגללן התחום הזה יפה כל כך - אבל כמובן, לא היחידה. כמו כל תחום מתמטי שמכבד את עצמו, גם לתחום הזה יש תוצאות יפהפיות שלא מחפשות הצדקה לקיומן בתוך תחומים אחרים. </p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/07/28/student_and_computer_11/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">פרוייקט &#34;התלמיד והמחשב&#34;, בעיה 11</span>
+            </a>
+            
+            
+            
+            <a href="/2013/07/17/student_and_computer_10/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">פרוייקט &#34;התלמיד והמחשב&#34;, בעיה 10</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי - האלגוריתם של סימון - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי - האלגוריתם של סימון</h1>
+            <div class="post-meta">
+                <span class="date">2014-08-20</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>כמעט הגענו אל מה שהוא הגביע הקדוש של סדרת הפוסטים הזו: האלגוריתם הקוונטי של שור לפירוק מספרים לגורמים. ממש לפני שאנחנו נכנסים לפרטי האלגוריתם הזה, שהוא הדבר המסובך ביותר שניתקל בו, אני רוצה להציג אלגוריתם פשוט יותר שנותן טעימה כלשהי מהרעיון שמאחורי שור (וגם נתן השראה לשור עצמו): האלגוריתם של סימון.</p>
+<p>הבעיה העיקרית עם האלגוריתם של סימון היא לתת לו מוטיבציה, מכיוון שהוא פותר בעיה שנראית על פניו מלאכותית לחלוטין ולא מעניינת. עם זאת, עדיין יש לו מוטיבציה תיאורטית נחמדה: הוא מראה ש-BQP (חישוב קוונטי)שונה מ-BPP (חישוב הסתברותי) <strong>ביחס לאורקל</strong> מסויים. זה לא אומר ש-BQP שונה מ-BPP, אבל זה כן מצביע על כך שאלגוריתם BPP עבור בעיה מסויימת יהיה חייב במובן מסויים "להיות יותר מתוחכם" מאשר אלגוריתם ה-BQP של סימון, ותכף אסביר זאת יותר.</p>
+<p>הבעיה של סימון היא זו: נתונה פונקציה <span class="math">\(f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\} ^{n}\)</span> שמקבלת <span class="math">\(n\)</span> ביטים (קלאסיים) ומחזירה <span class="math">\(n\)</span> ביטים. הפונקציה הזו היא מאוד מיוחדת, במובן זה שכל ערך שהיא מחזירה, היא מחזירה בדוק פעמיים, ובאופן שהוא מעין מחזורי. פורמלית, קיים <span class="math">\(a\in\left\{ 0,1\right\} ^{n}\)</span> כך ש-<span class="math">\(f\left(x\right)=f\left(y\right)\)</span> עבור <span class="math">\(x\ne y\)</span> אם ורק אם <span class="math">\( x\oplus y=a\)</span> (או בסימון אחר, <span class="math">\(x=y\oplus a\)</span>). זה מזכיר פונקציות מחזוריות "קלאסיות": <span class="math">\(g:\mathbb{R}\to\mathbb{R}\)</span> היא מחזורית אם <span class="math">\(g\left(x+a\right)=g\left(x\right)\)</span> עבור <span class="math">\(a\in\mathbb{R}\)</span> כלשהו, שהוא ה"מחזור" של <span class="math">\(g\)</span>; עבור <span class="math">\(f\)</span> אנחנו משתמשים בפעולת ה-XOR שאני מסמן <span class="math">\(\oplus\)</span> מכיוון שאנחנו מתעסקים לא עם מספרים ממשיים אלא עם מחרוזות בינאריות.</p>
+<p>אם כן, הקלט לבעיה היא <span class="math">\(f\)</span> שמובטח שהיא מחזורית במובן שהוצג לעיל. המטרה? למצוא את המחזור שלה, דהיינו את <span class="math">\(a\)</span>.</p>
+<p>איך יעבוד אלגוריתם קלאסי שמנסה לפתור את הבעיה? הפתרון הנאיבי ביותר הוא פשוט להזין ל-<span class="math">\(f\)</span> ערכים ולקוות שנקבל את אותו פלט פעמיים; אם זה קורה, מן הסתם מצאנו את <span class="math">\(a\)</span> (אם מצאנו <span class="math">\(x\ne y\)</span> כך ש-<span class="math">\(f\left(x\right)=f\left(y\right)\)</span> אז <span class="math">\(a=x\oplus y\)</span>). הבעיה היא שאלגוריתם כזה <strong>קל להכשיל</strong>, במובן זה שיידרש ממנו המון זמן לפתור את הבעיה. חשבו על כך שאליס בוחרת אילו ערכים להזין ל-<span class="math">\(f\)</span>, ואילו בוב בוחר מראש את <span class="math">\(f\)</span> כדי להקשות עליה. אם דרך הפעולה של אליס היא דטרמיניסטית, אז לבוב ממש קל להכשיל אותה - הוא יבחר <span class="math">\(f\)</span> שנותנת תשובות שונות לכמה שיותר שאילתות של אליס שרק אפשר (ואפשר בערך <span class="math">\(2^{\frac{n}{2}}\)</span> שאילתות להפיל ככה). אם אליס נוקטת בגישה הסתברותית ומגרילה את הערכים שהיא שואלת עליהם אז לבוב יהיה קצת יותר קשה לבחור את <span class="math">\(f\)</span> מראש, אבל הוא עדיין יכול לעשות את זה בצורה שתדרוש מאליס מספר אקספוננציאלי של שאלות במקרים מסויימים. אז הפתרון הנאיבי הזה הוא בעייתי.</p>
+<p>עכשיו, הנקודה היא שאם <span class="math">\(f\)</span> נתונה על ידי אורקל, <strong>הפתרון הנאיבי הוא כל מה שיש</strong>. הכוונה ב"<span class="math">\(f\)</span> נתונה על ידי אורקל" (או כפי שאולי יותר נכון לכנות את זה, <span class="math">\(f\)</span> נתונה בתור <strong>קופסה שחורה</strong>) הוא שאין לאליס שום מידע על האופן שבו <span class="math">\(f\)</span> עובדת - כל מה שהיא יכול לעשות במודל הזה הוא להזין לה קלטים ולקבל פלטים. בעיות אמיתיות הן לרוב לא כאלו - לאליס יש גישה כלשהי לקוד של <span class="math">\(f\)</span> ואולי היא יכולה לנצל אינפורמציה כלשהי מתוכו כדי להתמודד עם הבעיה טוב יותר; אבל זה אומר שהאלגוריתם שלה יצטרך להיות <strong>מתוחכם</strong>; הוא יצטרך להתחשב בפרטים הספציפיים של <span class="math">\(f\)</span>. היופי באלגוריתם של סימון הוא שהוא אינו צריך לעשות את זה, והוא עובד עבור <span class="math">\(f\)</span> במודל הקופסה השחורה ופותר אותו ביעילות, עם בערך <span class="math">\(O\left(n\right)\)</span> שאילתות לאורקל, להבדיל מה-<span class="math">\(O\left(2^{\frac{n}{2}}\right)\)</span> של אליס. כלומר, יש לנו כאן שיפור <strong>אקספוננציאלי</strong> בסדר הגודל (לעומת זאת השיפור של גרובר היה פולינומי).</p>
+<p>אז מה סימון עושה?</p>
+<p>מה שכל כך נחמד באלגוריתם הזה הוא הגישה השונה מהותית שלו לענייני החישוב הקוונטי ביחס לאלגוריתם של גרובר. מה שגרובר עשה היה לחזור שוב ושוב על פעולת <strong>הגברה</strong> שקירבה את המצב הקוונטי של החישוב שלו אל הפתרון הנכון, כך שכאשר מדדנו לבסוף את מצב הרגיסטר הקוונטי, בהסתברות גבוהה הוא החזיר לנו את הפתרון הנכון. סימון עושה משהו שונה לגמרי: הוא משתמש בכך שהמידע על <span class="math">\(a\)</span> במובן מסויים "מפוזר בכל המרחב" (כי לכל <span class="math">\(x\in\left\{ 0,1\right\} ^{n}\)</span> שרק ניקח, קיים <span class="math">\(y\in\left\{ 0,1\right\} ^{n}\)</span> כך ש-<span class="math">\(f\left(x\right)=f\left(y\right)\)</span> ועל כן <span class="math">\(a=x\oplus y\)</span>) והוא משתמש בחישוב הקוונטי כדי לשלוף מידע לא טריוויאלי כלשהו על <span class="math">\(a\)</span> מתוך מקום אקראי במרחב הזה. הוא חוזר על השיטה הזו מספר פעמים עד שהוא שולף די והותר מידע על <span class="math">\(a\)</span> שמאפשר את השחזור המדויק שלו.</p>
+<p>במבט ראשון, נפנוף הידיים שלעיל נשמע כמו משהו שניתן לבצע גם בחישוב הסתברותי רגיל - אם כן, איפה חבוי הקסם הקוונטי? בפרטים הקטנים, שהם פשוטים יחסית. בואו ניכנס אליהם.</p>
+<p>האלגוריתם, כאמור, מורכב חזרה שוב ושוב על אותו חישוב, כאשר הפלט הסופי של החישוב בכל איטרציה הוא וקטור <span class="math">\(b\in\left\{ 0,1\right\} ^{n}\)</span> המקיים <span class="math">\(a\cdot b=0\)</span> ונבחר באקראי מבין כל הוקטורים שמקיימים את התכונה הזו. כלומר, אנחנו מקבלים סדרה <span class="math">\(b_{1},b_{2},\dots,b_{k}\)</span> של וקטורים כאלו, ואחרי שאנחנו מוצאים מספיק מהם נוכל לשחזר את <span class="math">\(a\)</span> על ידי פתרון של מערכת המשוואות הלינאריות שמוגדרת על ידי ה-<span class="math">\(b\)</span>-ים הללו (נצטרך <span class="math">\(n-1\)</span> וקטורים בלתי תלויים לינארית כדי להבטיח קיום פתרון לא טריוויאלי יחיד למערכת - אפשר להוכיח שעבור <span class="math">\(k\ge2n\)</span> ההסתברות שיהיו לנו כאלו היא גבוהה). מכירים את הציטוט הידוע שמיוחס לאיינשטיין על כך ש"טירוף הוא לחזור שוב ושוב על אותה פעולה ולצפות לתוצאות אחרות"? זה בדיוק מה שנעשה (ומיותר לציין שאיינשטיין מעולם לא אמר משהו טיפשי שכזה, אפילו לא בתור בדיחה).</p>
+<p>כל איטרציה שמניבה <span class="math">\(b\)</span> תכלול חישוב קוונטי בפני עצמו, שכולל מדידה בסופו, וגם מדידה באמצע. הפדנטים שבחבורה כנראה ירצו להעיר בשלב הזה שזה לא מתאים לפורמליזם של BQP שנתתי לפני כמה פוסטים. בתיאוריה הייתי רוצה להסביר למה זה לא באמת פוגע בכלליות, אבל בפרקטיקה אני בעיקר רוצה להגיד - נו, עזבו אותי משטויות. ראיתם איך קוראים לבלוג? יאללה, בואו נעבור לאלגוריתם עצמו.</p>
+<p>האלגוריתם של סימון משתמש ברגיסטר קוונטי של <span class="math">\(2n\)</span> קיוביטים שעובדים עליהם בפועל (ועוד מספר קיוביטים "זבליים" שנדרשים לצורך ביצוע חישובים - כפי שראינו בפוסט הקודם על המעגלים הקוונטיים - ולא אדבר עליהם). כרגיל, אנחנו מתחילים במצב <span class="math">\(\left|0^{n}\right\rangle \left|0^{n}\right\rangle \)</span>. הדבר הראשון שאנחנו עושים הוא להפעיל את <span class="math">\(H\)</span> על <span class="math">\(n\)</span> הקיוביטים הראשונים כדי להגיע למצב "אחיד", <span class="math">\(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \left|0\right\rangle \)</span>, ועכשיו אנחנו מבצעים חישוב של <span class="math">\(f\)</span>, שזה מה שהאורקל נותן לנו. כזכור ממה שהלך אצל גרובר, הרעיון באורקל הוא שהוא מאפשר לנו לבצע את החישוב הבא: <span class="math">\(\left|x\right\rangle \left|y\right\rangle \mapsto\left|x\right\rangle \left|y\oplus f\left(x\right)\right\rangle \)</span>. על כן, אחרי הפעלת האורקל על המצב האחיד שלנו, אנחנו מגיעים למצב הבא: <span class="math">\(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \left|f\left(x\right)\right\rangle \)</span>.</p>
+<p>הסכום שלעיל כולל <span class="math">\(2^{n}\)</span> מחוברים, אחד לכל <span class="math">\(x\in\left\{ 0,1\right\} ^{n}\)</span>. אבל אם חושבים על זה, אפשר לפרק אותו ל-<span class="math">\(2^{n-1}\)</span> מחוברים על ידי קיבוץ כל זוג איברים שעבורם מקבלים את אותו ערך של <span class="math">\(f\)</span>. נכתוב זאת כך:</p>
+<p><span class="math">\(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \left|f\left(x\right)\right\rangle =\sum\left(\left|x\right\rangle +\left|x\oplus a\right\rangle \right)\left|f\left(x\right)\right\rangle \)</span></p>
+<p>(אין אינדקס סכימה בסכום באגף ימין כי כאמור, בחירת האיברים קצת מוזרה - לכל זוג שמחזיר את אותו ערך אנחנו בוחרים אחד מהם באופן שרירותי, מסמנים אותו ב-<span class="math">\(x\)</span> ואז מסמנים את השני ב-<span class="math">\(x\oplus a\)</span>; אני בטוח שאתם מבינים את הרעיון).</p>
+<p>עכשיו מה עושים? מודדים את <span class="math">\(n\)</span> הביטים האחרונים. כתוצאה מכך אנחנו מקבלים באופן אקראי (בהתפלגות אחידה) ערך כלשהו של <span class="math">\(f\)</span> (משהו שהוא כמובן חסר ערך עבורנו) והמערכת הקוונטית שלנו קורסת למצב הקוונטי <span class="math">\(\left|x\right\rangle +\left|x\oplus a\right\rangle \)</span>. כלומר, מה שעשינו עד כה הניב לנו סופרפוזיציה מהצורה <span class="math">\(\left|x\right\rangle +\left|y\right\rangle \)</span> בין שני איברים קונקרטיים של המרחב שנותנים לנו אותו ערך של <span class="math">\(f\)</span>.</p>
+<p>הסיטואציה הזו היא ממש "הושט היד וגע בם". אם נדע גם את הערך של <span class="math">\(x\)</span> וגם את הערך של <span class="math">\(y\)</span>, סיימנו. הבעיה היא שמדידה של המצב הקוונטי הזה תניב רק אחד משני הערכים הללו, והשני יאבד לנו לנצח (ובפעם הבאה שבה נריץ את האלגוריתם נקבל באקראי זוג שונה של <span class="math">\(x,y\)</span> ולכן לא הרווחנו כלום). אני לא חושב שתהיה המחשה כל כך ברורה למגבלה שיש עלינו בזמן ביצוע חישוב קוונטי: גם אם הגענו למצב קוונטי שהוא בדיוק מה שאנחנו רוצים, אין לנו שום דרך להפיק ממנו מידע למעט מדידה ש"מקלקלת" חלק נכבד מהאינפורמציה הזו. על כן, זו גם המחשה מצויינת לסיבה שבגללה חישוב קוונטי <strong>אינו</strong> מה שאני קורא "סופר-דופר חישוב מקבילי" - בחישוב מקבילי "רגיל" היינו מחשבים את <span class="math">\(f\)</span> במקביל על <span class="math">\(2^{n}\)</span> הערכים האפשריים של הפונקציה ומוצאים צ'יק צ'ק <span class="math">\(x,y\)</span> שמחזירים את אותו ערך. המקביליות של החישוב הקוונטי היא מוגבלת יותר.</p>
+<p>מצד שני, וגם את זה כבר אמרתי, חישוב קוונטי הוא גם חזק יותר מחישוב הסתברותי רגיל בכך שיש לנו סט אופרטורים מתוחכם יותר שבו אפשר להשתמש. מן הסתם נצטרך לשלוף אחד כזה מהשרוול עכשיו, ומה שנשלוף מהשרוול יהיה שוב את ידידינו הותיק <span class="math">\(H\)</span>. כל שנעשה הוא להפעיל את <span class="math">\(H\)</span> על <span class="math">\(n\)</span> הקיוביטים של <span class="math">\(\left|x\right\rangle +\left|x\oplus a\right\rangle \)</span> ונבצע מדידה. ה-<span class="math">\(b\)</span> שהמדידה תחזיר יקיים <span class="math">\(a\cdot b=0\)</span> וייבחר באקראי מבין מרחב ה-<span class="math">\(b\)</span>-ים שמקיימים את זה.</p>
+<p>כדי להבין למה זה עובד, צריך להבין קצת יותר טוב מה <span class="math">\(H\)</span> עושה. בואו ניקח רגע ונבצע ניתוח קצר. על פי הגדרתו, <span class="math">\(H\left(\left|0\right\rangle \right)=\left|0\right\rangle +\left|1\right\rangle \)</span> ו-<span class="math">\(H\left(\left|1\right\rangle \right)=\left|0\right\rangle -\left|1\right\rangle \)</span> (כל זה כפול קבוע נירמול, אבל אין בו צורך כרגע). דרך קומפקטית לכתוב את זה, עבור ביט <span class="math">\(x_{i}\)</span>, היא זו: <span class="math">\(H\left(\left|x_{i}\right\rangle \right)=\left|0\right\rangle +\left(-1\right)^{x_{i}}\left|1\right\rangle \)</span>. לכן, על מחרוזת <span class="math">\(\left|x\right\rangle \)</span> שלמה של ביטים, אנחנו מקבלים את הדבר הבא:</p>
+<p><span class="math">\(H\left(\left|x\right\rangle \right)=H\left(\left|x_{1}x_{2}\dots x_{n}\right\rangle \right)=\prod_{i=1}^{n}\left(\left|0\right\rangle +\left(-1\right)^{x_{i}}\left|1\right\rangle \right)=\)</span></p>
+<p><span class="math">\(\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(\prod_{i:y_{i}=1}\left(-1\right)^{x_{i}}\right)\left|y\right\rangle =\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(-1\right)^{x\cdot y}\left|y\right\rangle \)</span></p>
+<p>קחו את הזמן כדי לוודא שאתם מבינים את כל המעברים כאן. זה הכל חשבון סטנדרטי שמי שקורא את סדרת הפוסטים הזו אמור להכיר כבר, אבל תוודאו שאתם באמת מבינים אותו. לתחושתי, בלי "להתיידד" עם החשבון הזה, <span class="math">\(H\)</span> נשאר יצור זר ומוזר והוא ממש לא צריך להיות כזה. אחרי שתבינו את החשבון הזה, גם יהיה ברור מייד למה להפעיל את <span class="math">\(H\)</span> על <span class="math">\(\left|0^{n}\right\rangle \)</span> נותן לנו את הפיזור האחיד על וקטורים - כי <span class="math">\(0^{n}\cdot y=0\)</span> לכל <span class="math">\(y\)</span>, ולכן כל המקדמים בפיזור יהיו 1. עכשיו אולי גם קצת יותר ברור למה <span class="math">\(H\)</span> כל כך מועיל - הוא במובן מסויים מכניס מכפלות פנימיות אל העולם שלנו. <span class="math">\(H\)</span> הזה הוא בדיוק הנשק הסודי שאנחנו יכולים להשתמש בו כאן אבל בחישוב הסתברותי לא.</p>
+<p>חזרה לענייננו. אנחנו במצב הקוונטי <span class="math">\(\left|x\right\rangle +\left|x\oplus a\right\rangle \)</span>. מה נקבל אחרי הפעלה של <span class="math">\(H\)</span>? ובכן, זכרו ש-<span class="math">\(H\)</span> הוא אופרטור לינארי, כלומר <span class="math">\(H\left(\left|x\right\rangle +\left|x\oplus a\right\rangle \right)=H\left(\left|x\right\rangle \right)+H\left(\left|x\oplus a\right\rangle \right)\)</span>. מכאן זה רק חישוב קטן, ומקבלים שנגיע אל המצב:</p>
+<p><span class="math">\(\sum_{y\in\left\{ 0,1\right\} ^{n}}\left(\left(-1\right)^{x\cdot y}+\left(-1\right)^{x\cdot y+a\cdot y}\right)\left|y\right\rangle \)</span></p>
+<p>כעת, <span class="math">\(\left(-1\right)^{x\cdot y+a\cdot y}\)</span> יהיה אחד משניים: אם <span class="math">\(a\cdot y=1\)</span> אז נקבל <span class="math">\(\left(-1\right)^{x\cdot y+a\cdot y}=-\left(-1\right)^{x\cdot y}\)</span>, וכתוצאה מכך אחרי חיבור עם <span class="math">\(\left(-1\right)^{x\cdot y}\)</span> נתאפס; ואם <span class="math">\(a\cdot y=0\)</span> אז נקבל <span class="math">\(\left(-1\right)^{x\cdot y+a\cdot y}=\left(-1\right)^{x\cdot y}\)</span> ולכן אחרי חיבור עם <span class="math">\(\left(-1\right)^{x\cdot y}\)</span> נקבל <span class="math">\(2\left(-1\right)^{x\cdot y}\)</span>. דהיינו, הסכום שלעיל שווה ל:</p>
+<p><span class="math">\(\sum_{y:a\cdot y=0}2\left(-1\right)^{x\cdot y}\left|y\right\rangle \)</span></p>
+<p>המקדם לא חשוב; מה שחשוב הוא שנפטרנו מכל ה-<span class="math">\(y\)</span>-ים במרחב שעבורם <span class="math">\(a\cdot y=1\)</span> וקיבלנו פיזור אחיד על כל ה-<span class="math">\(y\)</span>-ים במרחב שעבורם <span class="math">\(a\cdot y=0\)</span>. לכן מדידה תניב אחד כזה באקראי (מה שקראתי לו קודם <span class="math">\(b\)</span>), ומספיק מדידות יניבו לנו את <span class="math">\(a\)</span>. זה מסיים את הצגת האלגוריתם. עכשיו, תגידו לי שהצעד האחרון, שבו הפעלת <span class="math">\(H\)</span> פתאום הניבה לנו פיזור אחיד על כל ה-<span class="math">\(y\)</span>-ים שאורתוגונליים ל-<span class="math">\(a\)</span>, לא נראה לכם כמו קסם!</p>
+<p>למי שזה עדיין לא נראה לו כמו קסם, אני רוצה שתשימו לב לעובדה הבאה: מה שסימון עושה מזכיר בצורה משונה את <strong>ניסוי שני הסדקים</strong> שהראיתי בתחילת סדרת הפוסטים הזו. רגע, מה? איך זה קשור בכלל? ובכן, הנה האינטואיציה. הפיזור האחיד שממנו התחלנו את האלגוריתם, <span class="math">\(\sum_{x\in\left\{ 0,1\right\} ^{n}}\left|x\right\rangle \left|f\left(x\right)\right\rangle \)</span>, הוא מעין מקור אור שיורה לכל הכיוונים. מה שאנחנו עושים במדידה הראשונה שלנו הוא לבחור באקראי את אחד מהכיוונים ולשים מחיצה עם שני סדקים שמאפשרת רק לקרניים ב"כיוון" <span class="math">\(f\left(x\right)\)</span> לעבור - אנחנו נשארים עם שתי קרניים, מה שמתואר על ידי המצב <span class="math">\(\left|x\right\rangle +\left|x\oplus a\right\rangle \)</span> (האור בסופרפוזיציה בין שני הסדקים שהוא יכל לעבור דרכם). כעת, גם בניסוי שני הסדקים אור שעבר דרך סדק לא עבר רק בכיוון אחד ספציפי - היה פיזור כלשהו של האור שעובר דרך סדק מסויים ופוגע בקיר. אצלנו <span class="math">\(H\)</span> מקבלת את התפקיד של תיאור ה"פיזור" הזה. לכל נקודה <span class="math">\(\left|y\right\rangle \)</span> על ה"קיר", <span class="math">\(H\)</span> נותנת שמפזרת את האור שעובר דרך <span class="math">\(\left|x\right\rangle \)</span> נותנת ערך <span class="math">\(x\cdot y\)</span>. מה שמעניין הוא שהערך הזה הוא או 1 או <span class="math">\(-1\)</span>, כלומר הוא מתאר בדיוק את אותה "עוצמה", רק בפאזה שונה (או קיטוב שונה או איך שלא תרצו לקרוא לזה כדי להבין). אם לא היה לנו את הסדק <span class="math">\(x\oplus a\)</span> והיינו מודדים איפה האור שלנו פגע בקיר, היינו רואים שכל נקודה מתקבלת באותה הסתברות. אבל מכיוון שיש לנו את הסדק <span class="math">\(x\oplus a\)</span> והסדק הזה גורם לפיזור אור עם פאזה <span class="math">\(x\cdot y+a\cdot y\)</span> בנקודה <span class="math">\(\left|y\right\rangle \)</span>, אנחנו מקבלים על הקיר <strong>תבנית התאבכות</strong>: כאשר <span class="math">\(a\cdot y=1\)</span> ההתאבכות הזו היא <strong>הורסת</strong> ואנחנו מקבלים הסתברות 0 שהנקודה הזו בקיר תיפגע; וכאשר <span class="math">\(a\cdot y=0\)</span> זו <strong>התאבכות בונה </strong>ואנחנו מקבלים בדיוק שאלו הנקודות על הקיר שיהיו "מוארות".</p>
+<p>התיאור הזה הוא כמובן אינטואיציה נטו; אני לא רומה שאפשר לבצע ניסוי שני סדקים אמיתי שמסמלץ את האלגוריתם של סימון, אבל אני חושב שזו אינטואיציה נהדרת לאופן שבו האלגוריתם מתנהל ולסיבות שהוא עובד. אולי אתם עוד לא חושבים על זה בתור קסם מהסוג שרק נהיה יותר יפה אחרי שמבינים אותו, אבל אני בהחלט כן.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2014/08/24/shor_algorithm/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חישוב קוונטי - האלגוריתם של שור</span>
+            </a>
+            
+            
+            
+            <a href="/2014/08/19/quantum_circuits_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">שערים ומעגלים קוונטיים - מבוא על קצה המזלג</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

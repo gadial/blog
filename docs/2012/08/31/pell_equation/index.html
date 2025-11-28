@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משוואת פל - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>משוואת פל</h1>
+            <div class="post-meta">
+                <span class="date">2012-08-31</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה מופשטת.html">אלגברה מופשטת</a>
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/גם טכני זה כיף!.html">גם טכני זה כיף!</a>
+                    
+                    <a href="/tags/הרחבות ריבועיות.html">הרחבות ריבועיות</a>
+                    
+                    <a href="/tags/משוואת פל.html">משוואת פל</a>
+                    
+                    <a href="/tags/שברים משולבים.html">שברים משולבים</a>
+                    
+                    <a href="/tags/תורת המספרים האלגברית.html">תורת המספרים האלגברית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אני רוצה לדבר הפעם על משוואת פל ואיך פותרים אותה. ממבט ראשון, משוואת פל היא בסך הכל איזו משוואה מוזרה שלא ברור מה טוב בה ומה מעניין בה ומה יפה בה, אבל אחרי שמתעמקים בה קצת ורואים דוגמאות, היופי שבעניין מתחיל לצוץ. זה לפחות היה התהליך שעבר עלי, ואני חושב שזה תהליך שמתרחש בתחומים רבים של המתמטיקה, שבהם עיסוק במשהו שנראה "קטנוני" למתבונן מהצד בעצם מכיל חשיבות ויופי רבים. בפרט, הפוסט הזה יקח כלים מכמה תחומים מתמטיים שונים ויזרוק אותם על בעיה קונקרטית מאוד ויפתור אותה לחלוטין באמצעותם.</p>
+<p>נתחיל מכך ש"משוואת פל" זה שם מטעה פעמיים. ראשית, כי לא מדובר על משוואה אחת אלא על משפחה אינסופית של משוואות; ושנית, כי למתמטיקאי שנקרא פל לא היה קשר למשוואה - לאונרד אוילר, מגדולי המתמטיקאי של כל הזמנים, ייחס בטעות לפל עיסוק במשוואה הזו והשם השתרש.</p>
+<p>אז על מה מדובר? על משוואה שנראית כך:</p>
+<p><span class="math">\(x^{2}-Ny^{2}=1\)</span></p>
+<p>כאשר <span class="math">\(x,y\)</span> הם משתנים ואילו <span class="math">\(N\)</span> הוא <strong>פרמטר</strong>, כלומר מספר קבוע כלשהו, שהוא מספר שלם חיובי. עבור פרמטרים שונים נקבל משוואות שונות, למשל:</p>
+<p><span class="math">\(x^{2}-2y^{2}=1\)</span></p>
+<p>זו דוגמה קונקרטית אחת למשוואת פל, עם <span class="math">\(N=2\)</span>, ואילו</p>
+<p><span class="math">\(x^{2}-7y^{2}=1\)</span></p>
+<p>היא דוגמה אחרת, עבור <span class="math">\(N=7\)</span>.</p>
+<p>משוואת פל היא דוגמה למשוואה <strong>דיופנטית</strong> - זו משוואה פולינומית, המקדמים שמופיעים בה הם שלמים, והשאלה שמעניינת אותנו היא "מה הפתרונות השלמים למשוואה?". דיברתי על משוואות דיופנטיות בפוסט הקודם (ואני מדבר על משוואת פל עכשיו בין היתר כי היא תהיה רלוונטית להמשך הטיפול בנושאים שדיברתי עליהם <a href="http://www.gadial.net/2012/08/27/hilbert_tenth_intro/">בפוסט הקודם</a>) וזו דוגמה נאה למשוואה דיופנטית שכזו.</p>
+<p>השאלה הראשונה שמשוואה כמו זו מעוררת היא "למה לעזאזל שמישהו יתעניין במשוואה הזו?". התשובה היא שהמשוואה צצה בהקשרים רבים ושונים, ולא אציג אף אחד מהם כרגע כי זה יקח יותר מדי מקום בפוסט (חוץ מאחד מההקשרים שיהיה מאוד רלוונטי בהמשך). ב<a href="http://projecteuler.net/">פרוייקט אוילר</a> נתקלתי בכמה וכמה שאלות שבסופו של דבר, אחרי כל הפישוטים וההתאמות, התגלה שהקושי הטכני האמיתי בפתרונן הוא פתרון של משוואת פל מסויימת. סמכו עלי - כמו משוואות רבות אחרות בתורת המספרים, יש למשוואה הזו את הכשרון לצוץ בדיוק כשלא מצפים לה.</p>
+<p>השאלה הבאה, שהיא קצת יותר מעשית, היא "איך פותרים את המשוואה?". אבל מה זה בעצם אומר, לפתור את המשוואה? למצוא זוג ערכים של <span class="math">\(x,y\)</span> שמקיימים את המשוואה? להכריע אם קיים או לא קיים זוג כזה? למצוא <strong>כמה</strong> זוגות כאלו יש? למצוא אלגוריתם שמייצר סדרתית את כל הפתרונות? להבין את המבנה האלגברי שלהם, אם קיים כזה? כל אלו הן תשובות אפשריות; מה שיפה במשוואת פל הוא שיש תשובה משביעת רצון לכולן.</p>
+<p>נתחיל בדברים הברורים מאליהם. למשוואה תמיד יש פתרון שבו <span class="math">\(x=1\)</span> ו-<span class="math">\(y=0\)</span>. הפתרון הזה מכונה "הפתרון הטריוויאלי" והוא לא מעניין במיוחד, אז לא נדבר עליו יותר. האתגר הוא למצוא פתרונות שבהם גם <span class="math">\(x\)</span> וגם <span class="math">\(y\)</span> הם חיוביים. עכשיו, אם <span class="math">\(N\)</span> הוא בעצמו ריבוע של מספר כלשהו, אז <span class="math">\(x^{2}-Ny^{2}\)</span> הוא הפרש של שני ריבועים; ההפרש הקטן ביותר של שני ריבועים שונים הוא 3 (<span class="math">\(2^{2}-1^{2}\)</span>) ובאופן כללי הוא יהיה גדול יותר, כי <span class="math">\(a^{2}-b^{2}=\left(a-b\right)\left(a+b\right)\)</span> ועבור שני מספרים חיוביים שונים, <span class="math">\(a+b\)</span> יהיה לפחות 3. לכן למשוואה <strong>אין פתרון לא טריוויאלי</strong> אם <span class="math">\(n\)</span> הוא ריבוע, ולכן מראש מדברים על המשוואה רק במקרה שבו <span class="math">\(n\)</span> אינו ריבוע. במקרה זה למשוואה <strong>יש אינסוף פתרונות</strong>, תמיד. מהם הפתרונות הללו ואיך מוצאים אותם - זה מה שאני רוצה לדבר עליו בפוסט הזה.</p>
+<p>נתחיל מהסוף - לכל <span class="math">\(n\)</span> שאינו ריבוע, יש למשוואה פתרון לא טריוויאלי מסויים, שנקרא לו "הפתרון היסודי", ויש שיטה פשוטה יחסית למצוא אותו. מרגע שמצאנו אותו, כל פתרון אחר (ויש אינסוף כאלו) מתקבל <strong>מתוך</strong> הפתרון היסודי באמצעות שיטה פשוטה אחרת. כל העסק מוסבר בצורה יפהפיה בעזרת <strong>המבנה האלגברי</strong> של הפתרונות.</p>
+<p>המתמטיקאים ההודי בראהמגופטה גילה, אי שם במאה ה-7 לספירה, שאם יש לנו שני פתרונות למשוואה <span class="math">\(x^{2}-Ny^{2}=1\)</span> אז אפשר "לבנות" מהם פתרון חדש, באופן הזה: נסמן את הפתרונות בתור <span class="math">\(\left(x_{1},y_{1}\right),\left(x_{2},y_{2}\right)\)</span>, אז מתקיימת המשוואה הבאה:</p>
+<p><span class="math">\(\left(x_{1}^{2}-Ny_{1}^{2}\right)\left(x_{2}^{2}-Ny_{2}^{2}\right)=\left(x_{1}x_{2}+Ny_{1}y_{2}\right)^{2}-N\left(x_{1}y_{2}+x_{2}y_{1}\right)^{2}\)</span></p>
+<p>מה קורה כאן? מכיוון ש-<span class="math">\(\left(x_{1},y_{1}\right)\)</span> ו-<span class="math">\(\left(x_{2},y_{2}\right)\)</span> הם פתרונות למשוואת פל עם הפרמטר <span class="math">\(N\)</span>, אגף שמאל הוא פשוט 1 כפול 1; אגף ימין, לעומת זאת, נראה כמו משוואת פל - משהו בריבוע פחות <span class="math">\(N\)</span> כפול משהו אחר בריבוע. מכאן שקיבלנו פתרון חדש של משוואת פל: <span class="math">\(\left(x_{1}x_{2}+Ny_{1}y_{2},x_{1}y_{2}+x_{2}y_{1}\right)\)</span>.</p>
+<p>כדי לראות שהנוסחה נכונה אפשר פשוט לפתוח סוגריים ולבדוק, אבל זה מזוויע. תחת זאת, אפשר לתת לה פירוש אלגברי מודרני יותר. אלו מכם שמכירים מספרים מרוכבים אולי מרגישים שהפתרון החדש הוא בעל צורה שמזכירה מאוד כפל של מרוכבים; זה לא מקרי. הרעיון הוא שאת הביטוי <span class="math">\(x^{2}-Ny^{2}\)</span> אפשר לפרק לשני חלקים: <span class="math">\(x^{2}-Ny^{2}=\left(x+\sqrt{N}y\right)\left(x-\sqrt{N}y\right)\)</span>. אם <span class="math">\(N\)</span> איננו ריבוע אז <span class="math">\(\sqrt{N}\)</span> כלל לא יהיה מספר שלם (ואפילו <a href="http://www.gadial.net/2008/10/31/irrationality_of_square_roots/">לא מספר רציונלי</a>). מנקודת מבט אלגברית, זה הופך ביטוי כמו <span class="math">\(x+\sqrt{N}y\)</span> למעניין <strong>יותר</strong>. המתמטיקאים מתחילים לדבר בשלב הזה על קבוצת <strong>כל</strong> המספרים מהצורה <span class="math">\(x+y\sqrt{N}\)</span> כאשר <span class="math">\(x,y\)</span> הם שלמים, ולנסות להבין עד כמה הקבוצה הזו דומה למספרים השלמים ועד כמה היא שונה. זה אחד מהדברים הבסיסיים שבהם עוסקת <strong>תורת המספרים האלגברית</strong>; לקבוצה <span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]=\left\{ x+y\sqrt{N}\ |\ x,y\in\mathbb{Z}\right\} \)</span> קוראים <strong>חוג השלמים</strong> של שדה המספרים <span class="math">\(\mathbb{Q}\left(\sqrt{N}\right)\)</span> (אני משקר כאן קצת - אם <span class="math">\(N\)</span> שקול ל-1 מודולו 4 חוג השלמים של <span class="math">\(\mathbb{Q}\left(\sqrt{N}\right)\)</span> הוא מסובך יותר, אבל זה לא יהיה מהותי עבורנו). <a href="http://www.gadial.net/2011/08/19/algebraic_number_theory_intro_1/">דיברתי קצת</a> על תורת המספרים האלגברית בעבר בבלוג, אבל לא הגעתי אז אל המשפט ה"כבד" (יחסית; זה אחד מהמשפטים הרציניים הראשונים שמציגים בכל מבוא לתחום) שבו אני רוצה להשתמש עכשיו.</p>
+<p>כשאומרים ש-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span> הוא "חוג", למה הכוונה? לכך שיש פעולות חיבור וכפל על איברי החוג שמתנהגות כפי שאנו מצפים מחיבור וכפל להתנהג - חוקי הקיבוץ, החילוף והפילוג מתקיימים. בואו נניח שיש לנו שני מספרים, <span class="math">\(x_{1}+y_{1}\sqrt{N}\)</span> ו-<span class="math">\(x_{2}+y_{2}\sqrt{N}\)</span>. הסכום שלהם הוא</p>
+<p><span class="math">\(\left(x_{1}+y_{1}\sqrt{N}\right)+\left(x_{2}+y_{2}\sqrt{N}\right)=\left(x_{1}+x_{2}\right)+\left(y_{1}+y_{2}\right)\sqrt{N}\)</span></p>
+<p>כאן השתמשנו בחוקי החילוף, הקיבוץ והפילוג של מספרים שלמים "רגילים" וראינו שחיבור פועל "רכיב רכיב" (אפשר לכתוב מספר מהצורה <span class="math">\(x+y\sqrt{N}\)</span> באופן מקוצר כ-<span class="math">\(\left(x,y\right)\)</span>; האיבר השמאלי הוא "הרכיב השמאלי" והימני הוא "הרכיב הימני" ואז פעולת החיבור מקיימת <span class="math">\(\left(x_{1},y_{1}\right)+\left(x_{2},y_{2}\right)=\left(x_{1}+x_{2},y_{1}+y_{2}\right)\)</span>). כפל, לעומת זאת, יתנהג באופן קצת יותר מורכב - בואו פשוט נבצע את החישוב:</p>
+<p><span class="math">\(\left(x_{1}+y_{1}\sqrt{N}\right)\left(x_{2}+y_{2}\sqrt{N}\right)=x_{1}x_{2}+\left(y_{1}\sqrt{N}\right)x_{2}+x_{1}\left(y_{2}\sqrt{N}\right)+\left(y_{1}\sqrt{N}\right)\left(y_{2}\sqrt{N}\right)\)</span></p>
+<p><span class="math">\(=x_{1}x_{2}+x_{2}y_{1}\sqrt{N}+x_{1}y_{2}\sqrt{N}+y_{1}y_{2}N=\left(x_{1}x_{2}+Ny_{1}y_{2}\right)+\left(x_{1}y_{2}+x_{2}y_{1}\right)\sqrt{N}\)</span></p>
+<p>נראה מוכר? זה בדיוק מה שהופיע באגף ימין משוואה של בראהמגופטה. במילים אחרות, עכשיו אפשר לנסח את התגלית של בראהמגופטה כך: אם אנחנו חושבים על פתרון <span class="math">\(\left(x,y\right)\)</span> למשוואת פל בתור האיבר <span class="math">\(x+y\sqrt{N}\)</span> בחוג השלמים <span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span>, אז גם מכפלה של פתרונות (עם פעולת הכפל של <span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span>) היא פתרון.</p>
+<p>טוב ויפה, אבל שימו לב שעדיין אין לנו הוכחה אלטרנטיבית לתוצאה הזו - <strong>למה</strong> מכפלה של פתרונות היא גם פתרון? האם יש איזה עקרון עמוק שעומד מאחורי זה? התשובה חיובית, ומצריכה הכנסת מושג נוסף לתמונה - <strong>נורמה</strong>.</p>
+<p>למילה "נורמה" מספר שימושים שונים במתמטיקה שהמשמעות שלהם שונה. <a href="http://www.gadial.net/2012/03/01/inner_product_spaces_geometry/">הצגתי כבר</a> שימוש אחד כזה, באלגברה לינארית, וחשוב לי להבהיר שמה שאני מדבר עליו עכשיו הוא לא אותו דבר (למרות שבמקרים מאוד מסויימים שני המושגים מתלכדים). המקרה שלנו הוא נורמה של שדה מספרים. להגדיר נורמה כזו באופן כללי - זה קצת קשה ולא אעשה את זה. הגדרה קצת פחות כללית, שעדיין תהיה בלתי מובנת לרבים מהקוראים, היא זו: הנורמה של איבר <span class="math">\(\alpha\)</span> היא מכפלת כל הצמודים של <span class="math">\(\alpha\)</span>, כלומר מכפלת ההפעלות של כל איברי חבורת הגלואה של ההרחבה של שדה המספרים על <span class="math">\(\alpha\)</span>. למרות שזו הגדרה שנשמעת ג'יברישית לחלקכם חשוב לי שתראו איך הכל הוא חלק מתורה כללית ורבת שימושים לכשעצמה, ואיך שום דבר שאנחנו עושים כאן הוא לא אד-הוקי.</p>
+<p>בפועל, עבור <span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span>, להגדרה הזו יש משמעות מאוד פשוטה: הנורמה של <span class="math">\(x+y\sqrt{N}\)</span> היא המכפלה שלו באיבר <span class="math">\(x-y\sqrt{N}\)</span> (ה"צמוד" שלו), וחישוב מהיר מראה שזה יוצא <span class="math">\(x^{2}-Ny^{2}\)</span>. במילים אחרות, איבר של <span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span> הוא פתרון של משוואת פל אם ורק אם הוא מנורמה 1. עכשיו, מההגדרה הכללית של נורמה נובע די בקלות שהיא <strong>כפלית</strong>, כלומר הנורמה של מכפלה של איברים היא מכפלת הנורמות שלהם (<span class="math">\(\mbox{Norm}\left(\alpha\cdot\beta\right)=\mbox{Norm}\left(\alpha\right)\cdot\mbox{Norm}\left(\beta\right)\)</span>). אם כופלים שני איברים מנורמה 1, אז הנורמה של המכפלה גם כן תהיה 1, ולכן גם היא תהיה פתרון למשוואת פל - הופס! הוכחנו את בראהמגופטה בלי להיכנס לחישובים טכניים (כמובן, נפנפתי את העניין הזה שנורמה היא תמיד כפלית, וגם את זה שאנחנו יודעים מה הנורמה של איבר ב-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span>, אבל סמכו עלי שאין שם סיבוך טכני). לא רק שהוכחנו, עכשיו אנחנו גם מבינים יותר טוב מה הולך כאן, והצלחנו להמיר את הבעיה של הכרת המבנה של אוסף הפתרונות של משוואת פל לבעיה אחרת - הבנת המבנה של קבוצת האיברים ב-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span> שהם מנורמה 1.</p>
+<p>עכשיו, אם איבר הוא מנורמה 1, אז הוא <strong>הפיך</strong> (אפשר לכפול אותו במשהו ולקבל 1 - זה נובע מכך שהנורמה היא מכפלת איבר בכל הצמודים שלו, אז מכפלת כל הצמודים הזו היא בדיוק ההופכי). לרוע המזל, ההפך לא נכון - איבר הפיך יכול להיות גם מנורמה <span class="math">\(-1\)</span>. עם זאת, היתרון שבלעבור לדבר על הבעיה של הבנת המבנה של קבוצת כל ההפיכים ב-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span> הוא שעכשיו אפשר להכניס לתמונה את המשפט ה"כבד" שדיברתי עליו - משפט ההפיכים של דיריכלה (באנגלית זה Dirichlet Unit Theorem כאשר Unit הוא השם המקובל לאיבר הפיך בחוג; אני מעדיף לתרגם בתור "משפט ההפיכים" מאשר בתור "משפט היחידות" שנשמע יותר מדי כמו "Uniqueness Theorem'').</p>
+<p>מהמשפט הזה נובע שאת<strong> כל</strong> ההפיכים ב-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span> ניתן לקבל על ידי כך שמתחילים מאיבר הפיך ספציפי (שכבר קראתי לו "הפתרון היסודי" קודם) וכופלים אותו בעצמו, שוב ושוב ושוב. במילים אחרות, כל פתרון הוא חזקה של הפתרון היסודי. פורמלית זה הולך כך: אם <span class="math">\(\left(x_{0},y_{0}\right)\)</span> הוא הפתרון היסודי, אז נגדיר רקורסיבית את הסדרה הבאה:</p>
+<p><span class="math">\(x_{n+1}=x_{n}x_{0}+Ny_{n}y_{0}\)</span></p>
+<p><span class="math">\(y_{n+1}=x_{n}y_{0}+y_{n}x_{0}\)</span></p>
+<p>וכך נקבל סדרה <span class="math">\(\left(x_{0},y_{0}\right),\left(x_{1},y_{1}\right),\left(x_{2},y_{2}\right),\dots\)</span> שבה נמצאים <strong>כל</strong> האיברים ההפיכים ב-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span>, ולכן בפרט גם את <strong>כל </strong>הפתרונות למשוואת פל <span class="math">\(x^{2}-Ny^{2}=1\)</span> (אבל, אם הפתרון היסודי מקיים <span class="math">\(x_{0}^{2}-Ny_{0}^{2}=-1\)</span>, אז גם איברים שאינם פתרון למשוואת פל אם כי הם פותרים משוואה קרובה שגם היא מעניינת לעתים - <span class="math">\(x^{2}-Ny^{2}=-1\)</span>, או אם תרצו <span class="math">\(Ny^{2}-x^{2}=1\)</span>).</p>
+<p>איך זה נובע מהמשפט של דיריכלה? כאן כבר אין מנוס - אני הולך להיות טכני, ומי שיאבד אותי כאן יכול לקפוץ לפסקה הבאה. קל לראות שקבוצת כל ההפיכים בחוג שלמים היא תמיד חבורה, וחבורה אבלית, כי הכפל בחוג הוא קומוטטיבי. עכשיו, כל חבורה אבלית איזומורפית לחבורה מהצורה <span class="math">\(\mathbb{Z}^{r}\times\mathbb{Z}_{k_{1}}\times\dots\times\mathbb{Z}_{k_{t}}\)</span>, כאשר <span class="math">\(\mathbb{Z}^{r}\)</span> נקרא <strong>הרכיב החופשי</strong> של החבורה ו-<span class="math">\(r\)</span> נקרא <strong>המימד</strong> שלו, ואילו <span class="math">\(\mathbb{Z}_{k_{1}}\times\dots\times\mathbb{Z}_{k_{t}}\)</span> נקרא <strong>הפיתול</strong> של החבורה - החלק בה שמכיל את האיברים מסדר סופי (אפשר אפילו להגיד עוד משהו על הקשר בין ה-<span class="math">\(k_{i}\)</span>-ים השונים, אבל זה לפוסט אחר). בחבורה האבלית של ההפיכים של חוג שלמים כלשהו, הפיתול כולל בדיוק את <strong>שורשי היחידה</strong> בחוג הזה; ב-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span> מדובר רק על <span class="math">\(\left\{ 1,-1\right\} \)</span> כך שהפיתול לא מעניין במיוחד. מה שמעניין הוא <span class="math">\(r\)</span>. משפט היחידה של דיריכלה מצביע על ערכו של <span class="math">\(r\)</span>: הוא שווה ל-<span class="math">\(r_{1}+r_{2}-1\)</span>, כאשר <span class="math">\(r_{1}\)</span> הוא מספר השיכונים של <span class="math">\(\mathbb{Q}\left(\sqrt{N}\right)\)</span> ב-<span class="math">\(\mathbb{R}\)</span> ו-<span class="math">\(r_{2}\)</span> הוא מספר השיכונים של <span class="math">\(\mathbb{Q}\left(\sqrt{N}\right)\)</span> ב-<span class="math">\(\mathbb{C}\)</span>, חלקי 2 (שיכונים כאלו תמיד באים בזוגות צמודים, אז סופרים את הזוגות). בפועל, <span class="math">\(r_{1}\)</span> הוא פשוט מספר הצמודים של <span class="math">\(\sqrt{N}\)</span> שהם ממשיים (יש שניים - <span class="math">\(\sqrt{N}\)</span> ו-<span class="math">\(-\sqrt{N}\)</span>) ו-<span class="math">\(2r_{2}\)</span> הוא מספר הצמודים של <span class="math">\(\sqrt{N}\)</span> שאינם ממשיים (לפעמים קוראים להם "מרוכבים" למרות שזה קצת שקר כי גם ממשי הוא מרוכב). כאן אין ל-<span class="math">\(\sqrt{N}\)</span> צמודים שאינם ממשיים, כך ש-<span class="math">\(r_{1}=2\)</span> ו-<span class="math">\(r_{2}=0\)</span> וקיבלנו ממשפט דיריכלה שמבנה חבורת ההפיכים ב-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span> הוא איזומורפי ל-<span class="math">\(\mathbb{Z}\times\left\{ 1,-1\right\} \)</span>, וזה מה שרצינו.</p>
+<p>נותרנו רק עם שאלה אחת - איך מוצאים את הפתרון היסודי? התשובה לוקחת אותנו לתחום אחר לגמרי - שברים משולבים. כבר תיארתי שברים משולבים <a href="http://www.gadial.net/2010/05/29/continued_fractions_1/">בפוסט קודם</a> ולכן לא אציג את הכל מחדש, אבל בכל זאת אציג משהו מחדש. אתחיל, כמקודם, מהשורה התחתונה: מפתחים את <span class="math">\(\sqrt{N}\)</span> לשבר משולב; בגלל ש-<span class="math">\(\sqrt{N}\)</span> הוא שורש של פולינום ממעלה שניה, השבר המשולב יהיה מחזורי; הפתרון היסודי מסתתר בדיוק לפני שלב בפיתוח שבו הפיתוח מתחיל לחזור על עצמו. עכשיו בואו נראה את הפרטים.</p>
+<p>שבר משולב הוא ביטוי שנראה כך: <span class="math">\(a_{0}+\frac{1}{a_{1}+\frac{1}{a_{2}+\frac{1}{a_{3}+\dots}}}\)</span>. במילים אחרות, אפשר לאפיין שבר משולב על ידי סדרה של מספרים <span class="math">\(a_{0},a_{1},a_{2},\dots\)</span> ולא לכתוב את השבר המפחיד בכל פעם מחדש. שבר משולב יכול להיות סופי, כלומר שסדרת המספרים המתאימה לו היא סופית, ואז אפשר לחשב אותו "עד הסוף" ולקבל מספר רציונלי; הוא גם יכול להיות סדרה אינסופית, ואז הוא מגדיר סדרה אינסופית של מספרים רציונליים, שמתכנסת למספר ממשי כלשהו. אפשר להראות שלכל מספר ממשי יש פיתוח כזה כשבר משולב, ואפשר להראות משהו מעניין עוד יותר - שכל מספר ממשי אי רציונלי שהוא פתרון של משוואה ממעלה שניה מתואר על ידי שבר משולב אינסופי שהוא <strong>מחזורי</strong>החל ממקום מסוים. למעשה, אפשר להוכיח אפילו יותר מזה! שהשבר המשולב תמיד יהיה מהצורה הבאה - <span class="math">\(a_{0},a_{1},a_{2},\dots,a_{n}\dots,a_{2}a_{1},2a_{0},a_{1},a_{2},\dots\)</span>, כלומר הוא יהיה מורכב באופן הבא:</p>
+<ol>
+    <li>איבר התחלתי <span class="math">\(a_{0}\)</span>.</li>
+    <li>קטע סימטרי <span class="math">\(a_{1},a_{2},\dots,a_{n},\dots,a_{2},a_{1}\)</span>.</li>
+    <li>האיבר ההתחלתי כפול 2: <span class="math">\(2a_{0}\)</span>.</li>
+</ol>
+<p>כאשר 2 ו-3 חוזרים על עצמם לאין קץ.</p>
+<p>איך מוצאים את הייצוג הזה בפועל? ובכן, פשוט מחשבים. תכף אתן את האלגוריתם, אבל בואו ננסה להבין באמצעות דוגמה קודם. למשל, <span class="math">\(\sqrt{19}\)</span>.</p>
+<p>מתחילים מהערך השלם התחתון של <span class="math">\(\sqrt{19}\)</span>, כלומר <span class="math">\(\left\lfloor \sqrt{19}\right\rfloor =4\)</span>. כן, צריך לחשב אותו - אף אחד לא אמר שאפשר למצוא את השבר המשולב של <span class="math">\(\sqrt{19}\)</span> בלי לעשות חישובים! (איך מוציאים שורש? גם על זה <a href="http://www.gadial.net/2007/10/31/finding_square_roots/">כבר יש לי פוסט</a>). נגדיר <span class="math">\(a_{0}=4\)</span>. עכשיו כותבים:</p>
+<p><span class="math">\(\sqrt{19}=4+\frac{1}{x}\)</span></p>
+<p>איך נמצא את <span class="math">\(x\)</span>? ובכן, נעביר את <span class="math">\(4\)</span> אגף, ניקח את ההופכיים של שני האגפים, ונקבל:</p>
+<p><span class="math">\(x=\frac{1}{\sqrt{19}-4}\)</span></p>
+<p>עכשיו נשתמש בתעלול מימי בית הספר - נכפיל מונה ומכנה ב<strong>צמוד</strong> של הביטוי שלמטה (האם עכשיו המילה "צמוד" מצלצלת לכם?), כלומר ב-<span class="math">\(\sqrt{19}+4\)</span>. נקבל:</p>
+<p><span class="math">\(x=\frac{\sqrt{19}+4}{3}\)</span></p>
+<p>לכאורה רק סיבכנו את עצמנו - רצינו למצוא את השורש של 19, ועכשיו קיבלנו מספר שנראה עוד יותר מסובך. עם זאת, אל דאגה! פשוט ממשיכים באותה השיטה לטפל גם בו. ראשית, מחשבים את הערך התחתון שלו: <span class="math">\(\left\lfloor \frac{\sqrt{19}+4}{3}\right\rfloor =2\)</span>. מגדירים <span class="math">\(a_{1}=2\)</span> וכותבים:</p>
+<p><span class="math">\(\frac{\sqrt{19}+4}{3}=2+\frac{1}{x}\)</span></p>
+<p>איך נמצא את <span class="math">\(x\)</span>? ובכן, באותה שיטת חילוץ! נעביר את 2 אגף ונקבל</p>
+<p><span class="math">\(\frac{1}{x}=\frac{\sqrt{19}+4-6}{3}\)</span></p>
+<p>ניקח הופכי לשני האגפים ונקבל</p>
+<p><span class="math">\(x=\frac{3}{\sqrt{19}-2}\)</span></p>
+<p>נכפול בצמוד <span class="math">\(\sqrt{19}+2\)</span> ונקבל</p>
+<p><span class="math">\(x=\frac{3\left(\sqrt{19}+2\right)}{15}=\frac{\sqrt{19}+2}{5}\)</span></p>
+<p>ואתם כבר מבינים איך זה נמשך מכאן.</p>
+<p>פורמלית, האלגוריתם פועל כך:</p>
+<p>מאתחלים משתנים</p>
+<p><span class="math">\(a_{0}=\left\lfloor \sqrt{N}\right\rfloor \)</span></p>
+<p><span class="math">\(m_{0}=0\)</span></p>
+<p><span class="math">\(d_{0}=1\)</span></p>
+<p>ועכשיו בכל שלב מבצעים את החישובים הבאים:</p>
+<p><span class="math">\(m_{n+1}=a_{n}d_{n}-m_{n}\)</span></p>
+<p><span class="math">\(d_{n+1}=\frac{N-m_{n+1}^{2}}{d_{n}}\)</span></p>
+<p><span class="math">\(a_{n+1}=\left\lfloor \frac{\sqrt{N}+m_{n+1}}{d_{n+1}}\right\rfloor \)</span></p>
+<p>מה קורה כאן? ובכן, בשלב <span class="math">\(n\)</span> המספר שאנחנו מנסים לחשב את השבר המשולב שלו הוא <span class="math">\(\frac{\sqrt{N}+m_{n}}{d_{n}}\)</span>. אנחנו יודעים שהשבר המשולב הזה הוא מהצורה <span class="math">\(a_{n}+\frac{1}{x}\)</span> ורוצים למצוא את <span class="math">\(x\)</span>. כפי שכבר ראינו, יתברר בסוף ש-<span class="math">\(x\)</span> הוא מהצורה <span class="math">\(x=\frac{\sqrt{N}+y}{z}\)</span> כך ש-<span class="math">\(y,z\)</span> הם שלמים, וצריך רק לחשב אותם.</p>
+<p>אז <span class="math">\(a_{n}\)</span> יהיה <span class="math">\(\left\lfloor \frac{\sqrt{N}+m_{n}}{d_{n}}\right\rfloor \)</span>. עכשיו, אם <span class="math">\(\frac{\sqrt{N}+m_{n}}{d_{n}}=a_{n}+\frac{1}{x}\)</span> אז <span class="math">\(\frac{1}{x}=\frac{\sqrt{N}+m_{n}-a_{n}d_{n}}{d_{n}}\)</span>, ולכן <span class="math">\(x=\frac{d_{n}}{\sqrt{N}-\left(a_{n}d_{n}-m_{n}\right)}\)</span>. שימו לב שהפכתי את האיבר <span class="math">\(m_{n}-a_{n}d_{n}\)</span> שבמכנה על ידי הוצאת סימן מינוס החוצה, וקיבלתי בדיוק את האיבר שהגדרתי כ-<span class="math">\(m_{n+1}\)</span>. כלומר, קיבלנו <span class="math">\(x=\frac{d_{n}}{\sqrt{N}-m_{n+1}}\)</span>. עכשיו מגיע שלב הכפל בצמוד, שהוא במקרה שלנו <span class="math">\(\sqrt{N}+m_{n+1}\)</span>, ומקבלים <span class="math">\(x=\frac{d_{n}\left(\sqrt{N}+m_{n+1}\right)}{N-m_{n+1}^{2}}=\frac{d_{n}}{N-m_{n+1}^{2}}\left(\sqrt{N}+m_{n+1}\right)\)</span>.</p>
+<p>עכשיו, מה הוא הגורם <span class="math">\(\frac{d_{n}}{N-m_{n+1}^{2}}\)</span>? שוב, שימו לב להגדרות שלי - זה בדיוק <span class="math">\(\frac{1}{d_{n+1}}\)</span>. לכן קיבלנו <span class="math">\(x=\frac{\sqrt{N}+m_{n+1}}{d_{n+1}}\)</span>. כלומר, <span class="math">\(y=m_{n+1}\)</span> ו-<span class="math">\(z=d_{n+1}\)</span>, כפי שהיה ניתן לצפות, ולכן המשך החישוב הוא בדיוק ביצוע החישוב <span class="math">\(\left\lfloor \frac{\sqrt{N}+m_{n+1}}{d_{n+1}}\right\rfloor \)</span> וכן הלאה.</p>
+<p>כזכור, הובטח לנו שהחישוב הופך למחזורי מתישהו. לא ניכנס לפרטי ההוכחה הזו עכשיו; רק נציין שאפשר לזהות מתי זה מתרחש בתוך האלגוריתם עצמו. כפי שראינו, בשלב <span class="math">\(n\)</span> המצב של האלגוריתם מאופיין על ידי שלושה ערכים: <span class="math">\(a_{n},m_{n},d_{n}\)</span>. שלושת אלו קובעים את השלב הבא של האלגוריתם (<span class="math">\(a_{n+1},m_{n+1},d_{n+1}\)</span>). האלגוריתם מתחיל לחזור על עצמו בדיוק כשאנחנו חוזרים לשלשה שכבר היינו בה.</p>
+<p>חזרה לשורש 19. הפעלת האלגוריתם עליו "עד הסוף" מניבה את השבר המשולב המחזורי הבא: <span class="math">\(\left[4,2,1,3,1,2,8,2,1,3,1,2,8,\dots\right]\)</span>, כאשר המספרים הללו הם סדרת ה-<span class="math">\(a_{n}\)</span>-ים. אתם רואים שבאופן לא מפתיע זה מציית לתבנית שתיארתי - <span class="math">\(q_{0}=4\)</span> הוא החלק ההתחלתי, החלק המחזורי הסימטרי הוא <span class="math">\(2,1,3,1,2\)</span>, וה-<span class="math">\(8\)</span> הוא <span class="math">\(2q_{0}\)</span>.</p>
+<p>מה עושים עכשיו?</p>
+<p>לוקחים את החלק מהשבר המשולב עד <strong>ולא כולל</strong> <span class="math">\(2q_{0}\)</span>, כלומר את <span class="math">\(\left[4,2,1,3,1,2\right]\)</span>. זה שבר משולב סופי, ולכן הוא מייצג מספר רציונלי שאפשר לחשב עד הסוף. אם נעשה זאת, נקבל <span class="math">\(\frac{170}{39}\)</span>. כעת מגדירים <span class="math">\(x=170,y=39\)</span>, מחשבים את <span class="math">\(x^{2}-19y^{2}\)</span> ומגלים, למרבה התדהמה, שקיבלנו 1! מצאנו פתרון למשוואת פל עם הפרמטר <span class="math">\(N=19\)</span>, ולא סתם פתרון - את הפתרון היסודי!</p>
+<p>אם המתמטיקה לא נראית לכם כמו קסם אפילו עכשיו, אין לי מושג איך עוד אפשר לשכנע אתכם. כמובן שיש הסבר הגיוני מאחורי כל זה ונראה אותו, אבל בינתיים בואו נעצור לשניה ונעריך את הקסם שיש כאן. אין לי מושג איך הגיעו לתגלית הזו לראשונה (דומני שהיה זה לגראנז' שהוכיח את הזהות בין שברים משולבים מחזוריים אינסופיים ופתרונות של משוואות ריבועיות, ואילו ברוקנר היה זה שמצא את הקשר בינם לבין משוואת פל, אבל אולי אני טועה), אבל אני מנחש שזה היה בראש ובראשונה על ידי התקלות ב<strong>תגלית</strong> לפיה התופעה המתרחשת הזו מתקיימת - שיש קשר הדוק בין המספרים הרציונליים שמתקבלים בפיתוח לשבר משולב של <span class="math">\(\sqrt{N}\)</span> והפתרונות של משוואת פל עבור הפרמטר <span class="math">\(N\)</span> (המספרים הרציונליים שמתקבלים בפיתוח של <span class="math">\(\sqrt{N}\)</span> הם לא מקריים; בפוסטים על שברים משולבים ניסיתי להסביר למה אלו במובן מסויים "הקירובים הטובים ביותר" של <span class="math">\(\sqrt{N}\)</span> על ידי מספרים רציונליים).</p>
+<p>מה שעשיתי עבור <span class="math">\(N=19\)</span> תקף תמיד, כמובן. בהינתן <span class="math">\(N\)</span>, מפתחים את <span class="math">\(\sqrt{N}\)</span> לשבר משולב מחזורי אינסופי, לוקחים את המספר הרציונלי שמתאים לשבר המשולב שמתקבל מעצירת הסדרה המחזורית בדיוק בתום המחזור הראשון שלה, לפני <span class="math">\(q_{0}\)</span>; המונה יהיה <span class="math">\(x\)</span> והמכנה יהיה <span class="math">\(y\)</span>. הבעיה היחידה היא שלא תמיד יתקיים <span class="math">\(x^{2}-Ny^{2}=1\)</span>, כי עלול להתקיים גם <span class="math">\(x^{2}-Ny^{2}=-1\)</span>, אבל בכל מקרה נקבל את היוצר של כל ההפיכים ב-<span class="math">\(\mathbb{Z}\left[\sqrt{N}\right]\)</span> ולכן נוכל לקבל ממנו את כל הפתרונות.</p>
+<p>זהו, עכשיו אתם יודעים לפתור, אלגוריתמית, את משוואת פל. כמובן, הייתי יכול לתת את האלגוריתם חיש קל בתחילת הפוסט (הוא בסך הכל פשוט למדי, עניין של כמה שורות) אבל עכשיו אני מקווה שאנחנו גם מבינים בערך <strong>מה</strong> הולך פה, גם אם אנחנו עדיין לא מבינים למה הקסם עם השבר המשולב עובד.</p>
+<p>בואו נעבור להסבר של הקסם הזה - הסבר שיהיה כרוך, כמובן, בפרטים טכניים.</p>
+<p>טוב, אז בואו נסמן את השבר שמתקבל מהשבר המשולב עד ולא כולל <span class="math">\(2q_{0}\)</span> בתור <span class="math">\(\frac{A_{n}}{B_{n}}\)</span>, ונסמן את השבר שבא לפניו (כלומר, לא כולל האיבר שממש לפני <span class="math">\(2q_{0}\)</span>) בתור <span class="math">\(\frac{A_{n-1}}{B_{n-1}}\)</span>. אנחנו רוצים להוכיח ש-<span class="math">\(A_{n}^{2}-NB_{n}^{2}=\pm1\)</span>. זה מוכיח שאנחנו מקבלים פתרון; זה עדיין לא מוכיח שהוא הפתרון היסודי, אבל זה כבר באמת יהיה קצת יותר מדי עבורנו.</p>
+<p>בואו ניזכר בתוצאה שהוכחנו בדי עמל בפוסט הראשון שלי על שברים משולבים: באופן כללי, אפשר לפתח את המספר <span class="math">\(\alpha\)</span> לשבר משולב תוך שאנו מרשים למספר האחרון להיות לא שלם, ומסמנים אותו בסימון <span class="math">\(\alpha_{n+1}\)</span>, כלומר <span class="math">\(\alpha=a_{0}+\frac{1}{a_{1}+}\frac{1}{a_{2}+}\cdots\frac{1}{a_{n}+}\frac{1}{\alpha_{n+1}}\)</span>. עבור <span class="math">\(\alpha_{n+1}\)</span> הזה הוכחנו שמתקיימת המשוואה</p>
+<p><span class="math">\(\alpha=\frac{\alpha_{n+1}A_{n}+A_{n-1}}{\alpha_{n+1}B_{n}+B_{n-1}}\)</span></p>
+<p>אז בואו נחיל את זה על המקרה שלנו. אצלנו <span class="math">\(\alpha\)</span> הוא <span class="math">\(\sqrt{N}\)</span> שמיוצג על ידי השבר המשולב <span class="math">\(\left[q_{0},q_{1},\dots,q_{n},2q_{0},q_{1},\dots,q_{n},2q_{0},q_{1},\dots\right]\)</span>, ואילו <span class="math">\(\frac{A_{n}}{B_{n}}=\left[q_{0},q_{1},\dots,q_{n}\right]\)</span> ו-<span class="math">\(\frac{A_{n-1}}{B_{n-1}}=\left[q_{0},q_{1},\dots,q_{n-1}\right]\)</span>, והכי חשוב - <span class="math">\(\alpha_{n+1}=\left[2q_{0},q_{1},\dots,q_{n},2q_{0},q_{1},\dots\right]\)</span>. שימו לב כמה הוא דומה ל-<span class="math">\(\sqrt{N}\)</span> - ההבדל היחיד הוא האיבר הראשון, שהוא <span class="math">\(2q_{0}\)</span> במקום <span class="math">\(q_{0}\)</span>. כלומר מתקיים ש-<span class="math">\(\alpha_{n+1}=q_{0}+\sqrt{N}\)</span>.</p>
+<p>הבה ונציב את כל זה במשוואה שלעיל, ונקבל:</p>
+<p><span class="math">\(\sqrt{N}=\frac{\left(q_{0}+\sqrt{N}\right)A_{n}+A_{n-1}}{\left(q_{0}+\sqrt{N}\right)B_{n}+B_{n-1}}\)</span></p>
+<p>נכפול את שני האגפים במכנה של אגף ימין ונקבל:</p>
+<p><span class="math">\(\sqrt{N}\left(q_{0}+\sqrt{N}\right)B_{n}+\sqrt{N}B_{n-1}=\left(q_{0}+\sqrt{N}\right)A_{n}+A_{n-1}\)</span></p>
+<p>למשוואה הזו תכונה מעניינת - היא למעשה כוללת שתי משוואות שונות. זאת מכיוון שפרט ל-<span class="math">\(\sqrt{N}\)</span>, כל שאר המספרים במשוואה הם שלמים, ולכן כפל שלהם ב-<span class="math">\(\sqrt{N}\)</span> מותיר אותו אי רציונלי. אז אפשר לחשוב על המשוואה הזו כאילו היא מהצורה <span class="math">\(a_{1}+b_{1}\sqrt{N}=a_{2}+b_{2}\sqrt{N}\)</span> ולהסיק את זוג המשוואות</p>
+<p><span class="math">\(a_{1}=a_{2}\)</span></p>
+<p><span class="math">\(b_{1}=b_{2}\)</span></p>
+<p>(נסו להוכיח פורמלית שאכן אפשר להסיק את שתי המשוואות הללו).</p>
+<p>במקרה שלנו, אחרי פישוט, נקבל שהמשוואה לעיל יכולה להיכתב כך:</p>
+<p><span class="math">\(NB_{n}+\left(q_{0}B_{n}+B_{n-1}\right)\sqrt{N}=q_{0}A_{n}+A_{n-1}+A_{n}\sqrt{N}\)</span></p>
+<p>ומכאן שתי המשוואות:</p>
+<p><span class="math">\(NB_{n}=q_{0}A_{n}+A_{n-1}\)</span></p>
+<p><span class="math">\(q_{0}B_{n}+B_{n-1}=A_{n}\)</span></p>
+<p>אפשר מהמשוואות הללו לחלץ את <span class="math">\(A_{n-1}\)</span> ואת <span class="math">\(B_{n-1}\)</span>:</p>
+<p><span class="math">\(A_{n-1}=NB_{n}-q_{0}A_{n}\)</span></p>
+<p><span class="math">\(B_{n-1}=A_{n}-q_{0}B_{n}\)</span></p>
+<p>וכעת אפשר לשלוף עוד נוסחה מהפוסט הראשון שלי על שברים משולבים, נוסחה יפהפיה במיוחד:</p>
+<p><span class="math">\(A_{n}B_{n-1}-A_{n-1}B_{n}=\left(-1\right)^{n-1}\)</span></p>
+<p>נציב את <span class="math">\(A_{n-1},B_{n-1}\)</span> בנוסחה הזו ונקבל:</p>
+<p><span class="math">\(A_{n}\left(A_{n}-q_{0}B_{n}\right)-B_{n}\left(NB_{n}-q_{0}A_{n}\right)=\left(-1\right)^{n-1}\)</span></p>
+<p>נפתח סוגריים ונקבל:</p>
+<p><span class="math">\(A_{n}^{2}-q_{0}A_{n}B_{n}-NB_{n}^{2}+q_{0}A_{n}B_{n}=\left(-1\right)^{n-1}\)</span></p>
+<p>ולסיום, קיבלנו:</p>
+<p><span class="math">\(A_{n}^{2}-NB_{n}^{2}=\left(-1\right)^{n-1}\)</span></p>
+<p>שזה בדיוק מה שרצינו.</p>
+<p>בשבילי כל העסק הזה הוא כל כך Mind Blowing שאני חושב שאעצור כאן לפני שהמקלדת תתפוצץ.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2012/09/04/hilbert_tenth_diophantic_functions/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">הבעיה העשירית של הילברט - פונקציות דיופנטיות וחיות אחרות (רקורסיביות)</span>
+            </a>
+            
+            
+            
+            <a href="/2012/08/27/hilbert_tenth_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הבעיה העשירית של הילברט - מבוא</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

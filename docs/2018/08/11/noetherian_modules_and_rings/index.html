@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מודולים וחוגים נתריים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מודולים וחוגים נתריים</h1>
+            <div class="post-meta">
+                <span class="date">2018-08-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה מופשטת.html">אלגברה מופשטת</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חוג נתרי.html">חוג נתרי</a>
+                    
+                    <a href="/tags/מודול נתרי.html">מודול נתרי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>כפי שאני אומר שוב ושוב, היעד שלי בסדרת הפוסטים על מודולים הוא <strong>משפט המבנה למודולים נוצרים סופית מעל תחום ראשי</strong>. אז בואו נדבר על התכונה הזו של "מודול נוצר סופית". כזכור, אם <span class="math">\(A\subseteq M\)</span> היא קבוצה של איברים של <span class="math">\(R\)</span>-מודול <span class="math">\(M\)</span>, אני מסמן ב-<span class="math">\(RA\)</span> את קבוצת כל הצירופים הלינאריים הסופיים מהצורה <span class="math">\(\sum r_{i}a_{i}\)</span> כאשר <span class="math">\(r_{i}\in R\)</span> ו-<span class="math">\(a_{i}\in A\)</span>, ואני אומר ש-<span class="math">\(A\)</span> <strong>יוצרת</strong> את <span class="math">\(M\)</span> אם <span class="math">\(RA=M\)</span>. אם <span class="math">\(A\)</span> סופית אני אומר - כמה מפתיע - ש-<span class="math">\(M\)</span> <strong>נוצר סופית</strong>. במקרה הזה גם נחמד לפעמים לסמן <span class="math">\(A=\left\{ a_{1},\dots,a_{n}\right\} \)</span> ולכתוב <span class="math">\(M=Ra_{1}+\dots+Ra_{n}\)</span>.</p>
+<p>כשהצגתי מודולים הראיתי על הדרך גם אנומליה - ייתכן ש-<span class="math">\(M\)</span> הוא נוצר סופית אבל יש ל-<span class="math">\(M\)</span> תת-מודולים שאינם נוצרים סופית. מכיוון שזו סיטואציה לא רצויה, אני רוצה שננסה להבין אילו מודולים מתחמקים ממנה. זה מוביל אותנו להגדרה של <strong>מודול נתרי</strong>, על שם אמי נתר. בנוסף לכך שנתר המציאה את המושג האבסטרקטי של מודול, היא גם הבחינה בתכונה הקריטית שמאפשרת לזהות ש-<span class="math">\(M\)</span> יהיה בעל התכונה הרצויה הנ"ל; אפשר לנסח את התכונה שהיא מצאה בתור <strong>אין ב-<span class="math">\(M\)</span> שרשרת עולה אינסופית</strong>, או "<span class="math">\(M\)</span> מקיים את תנאי השרשרת העולה". בואו נדבר פורמלית.</p>
+<p><strong>שרשרת</strong> של תת-מודולים של <span class="math">\(M\)</span> היא סדרה <span class="math">\(M_{1},M_{2},M_{3},\dots\)</span> של תת-מודולים כך ש-<span class="math">\(M_{1}\subseteq M_{2}\subseteq M_{3}\subseteq\dots\)</span> (כל מי שמכיר קצת את הטרמינולוגיות של קבוצות סדורות כבר נתקל ב"שרשרת" בהקשר הזה). השרשרת הזו היא אינסופית - יש אינסוף תת-מודולים בסדרה <span class="math">\(M_{1},M_{2},M_{3},\dots\)</span> - אבל ייתכן שהאינסופיות הזו היא "מדומה" - החל ממקום מסויים בשרשרת כל האיברים זהים, כלומר קיים <span class="math">\(N\)</span> כך שלכל <span class="math">\(k\ge N\)</span> מתקיים <span class="math">\(M_{k}=M_{N}\)</span>. אם <strong>כל</strong> שרשרת של תת-מודולים של <span class="math">\(M\)</span> מקיימת זאת, אז <span class="math">\(M\)</span> נקרא נתרי.</p>
+<p>בשביל לקבל אינטואיציה, בואו נעבור לרגע לחוגים. כזכור, <strong>כל חוג הוא גם מודול</strong> ולכן כל ההגדרות פה עובדות גם עבור חוגים. בחוג, במקום "תת-מודול" יש לנו אידאלים, כך ש<strong>חוג נתרי</strong> הוא חוג שבו אין שרשרת עולה אינסופית של <strong>אידאלים</strong>. עכשיו, בואו נזכור שהאינטואיציה שלנו להכלה של אידאלים היא "חלוקה" - אם <span class="math">\(I\subseteq J\)</span> אז אינטואיטיבית, <span class="math">\(J\)</span> מחלק את <span class="math">\(I\)</span>. כאשר <span class="math">\(R=\mathbb{Z}\)</span> זה בדיוק מה שקורה: <span class="math">\(\left\langle a\right\rangle \subseteq\left\langle b\right\rangle \)</span> פירושו ש-<span class="math">\(b|a\)</span>. לכן, אפשר לחשוב על "שרשרת עולה של תת-מודולים" בתור סדרה <strong>יורדת</strong> אינסופית של מחלקים של איבר כלשהו. מה שנתר אומרת לנו הוא שאנחנו צריכים שהתהליך שבו לוקחים איבר, ואז לוקחים גורם שלו, ואז לוקחים גורם שלו, ושוב ושוב - זה חייב להסתיים. למשל, עבור השלמים, קחו את 60, ואז קחו את הגורם שלו 12, ואז את הגורם שלו 4, ואז את 2, ואז את 1 - וסיימנו; אני לא יכול לקחת מחלק של 1 ששונה ממנו. קיבלתי את השרשרת ה"אינסופית" <span class="math">\(\left\langle 60\right\rangle \subseteq\left\langle 12\right\rangle \subseteq\left\langle 4\right\rangle \subseteq\left\langle 2\right\rangle \subseteq\left\langle 1\right\rangle \subseteq\left\langle 1\right\rangle \subseteq\dots\)</span>.</p>
+<p>האם כבר ראינו משהו דומה בעבר בסדרת הפוסטים הזו? ובכן, כן. <a href="https://gadial.net/2018/03/01/euclidean_domains_and_pids/">בשלב כלשהו</a> הוכחתי שכל תחום ראשי הוא תחום פריקות יחידה; האתגר המרכזי היה דווקא להראות שלכל איבר בתחום ראשי קיים פירוק לגורמים, ושם השתמשתי ברעיון דומה וב<strong>אקסיומת הבחירה</strong> שהולכת לככב גם בפוסט הזה.</p>
+<p>אני רוצה להוכיח עכשיו את השקילות בין <strong>שלוש</strong> תכונות שונות של מודולים, שכולן סובבות סביב אותו הדבר:</p>
+<ol>
+    <li><span class="math">\(M\)</span> הוא מודול נתרי.</li>
+    <li>לכל קבוצה לא ריקה של תת-מודולים של <span class="math">\(M\)</span> יש איבר מקסימלי.</li>
+    <li>כל תת-מודול של <span class="math">\(M\)</span> הוא נוצר סופית.</li>
+</ol>
+<p>הגרירה מהתכונה הראשונה לשניה מזכירה בצורה חשודה את <strong>הלמה של צורן</strong>, שבתורה שקולה לאקסיומת הבחירה; הלמה של צורן אומרת שאם יש לנו קבוצה סדורה חלקית שבה לכל שרשרת יש חסם מלעיל, אז קיים בקבוצה איבר מקסימלי. ההגדרה של נתריות קצת יותר מחמירה - היא בעצם דורשת שאותו חסם מלעיל יהיה <strong>חלק מהשרשרת</strong>. זה מקטין משמעותית את הקושי של ההוכחה; בהוכחה של הלמה של צורן יש סיבוך מזעזע שנובע מכך שהשרשרת יכולה להיות אינסופית וענקית בגודלה וצריך להכניס סודרים לתמונה. כאן כל שרשרת היא <strong>סופית</strong> (אין טעם להמשיך אותה מעבר למופע הראשון של האיבר שחוזר על עצמו).</p>
+<p>אז איך הולכת ההוכחה ש-1 גורר את 2? נניח ש-<span class="math">\(A\)</span> היא קבוצה לא ריקה של תת-מודולים של <span class="math">\(M\)</span>. ניקח איזה שהוא <span class="math">\(M_{1}\in A\)</span>. אם הוא מקסימלי, סיימנו; אחרת, קיים <span class="math">\(M_{2}\in A\)</span> כך ש-<span class="math">\(M_{1}\subseteq M_{2}\)</span>. אם <span class="math">\(M_{2}\)</span> מקסימלי, סיימנו; אחרת קיים <span class="math">\(M_{3}\in A\)</span> כך ש-<span class="math">\(M_{2}\subseteq M_{3}\)</span> וכן הלאה. נקבל שרשרת <span class="math">\(M_{1}\subseteq M_{2}\subseteq\dots\)</span> עם איבר אחרון <span class="math">\(M_{n}\)</span> שהוא בהכרח איבר מקסימלי ב-<span class="math">\(A\)</span> אחרת היה אפשר להמשיך את השרשרת גם אחריו.</p>
+<p>אקסיומת הבחירה נכנסת לפעולה כאן עבור הבניה של השרשרת <span class="math">\(M_{1}\subseteq M_{2}\subseteq\dots\)</span>. בלעדיה אי אפשר להוכיח שהשרשרת הזו (שהיא בעצם פונקציה מהטבעיים החיוביים ל-<span class="math">\(A\)</span>) קיימת. אלא שזה לא מדויק; אפשר להסתפק בגרסה חלשה יותר של אקסיומת הבחירה, שנקראת <strong>אקסיומת הבחירה התלויה</strong> (Dependent choice). זו אקסיומה שמבטיחה הרבה פחות - היא מאפשרת לנו רק לבנות סדרות בנות מניה (להבדיל מאקסיומת הבחירה הכללית שמאפשרת לבנות פונקציות שתחומן כל דבר) עבור הסיטואציה שבה האפשרויות שלנו לבחור איבר עבור מקום בסדרה <strong>תלויות</strong> בבחירה של האיבר הקודם, כמו כאן.</p>
+<p>כדי להראות ש-2 גורר את 3, ניקח תת-מודול <span class="math">\(N\)</span> של <span class="math">\(M\)</span>, ונגדיר קבוצה של כל תת-המודולים של <span class="math">\(M\)</span> שנוצרים על ידי מספר <strong>סופי</strong> של איברים מ-<span class="math">\(N\)</span>. על פי ההנחה של 2, בקבוצה הזו יש איבר מקסימלי, <span class="math">\(N^{\prime}\)</span>; נסמן את הקבוצה היוצרת שלו ב-<span class="math">\(A=\left\{ a_{1},\dots,a_{n}\right\} \)</span>. אם <span class="math">\(N=RA\)</span> אז סיימנו, כי זה מראה ש-<span class="math">\(N\)</span> נוצר סופית; אחרת קיים <span class="math">\(b\in N\)</span> כך ש-<span class="math">\(b\notin RA\)</span>. אבל אז <span class="math">\(RA+Rb\)</span> הוא תת-מודול של <span class="math">\(M\)</span> שהוא נוצר סופית (על ידי <span class="math">\(n+1\)</span> איברים) ומכיל ממש את האיבר ה"מקסימלי" <span class="math">\(N^{\prime}\)</span> וזה בלתי אפשרי, מה שמסיים את הההוכחה. שימו לב שבגרירה הזו לא נזקקנו לאקסיומת הבחירה כלל.</p>
+<p>בשביל להראות ש-3 גורר את 1, בואו ניקח שרשרת <span class="math">\(M_{1}\subseteq M_{2}\subseteq\dots\)</span> ונראה שהיא מגיעה לנקודת שבת. אני אשתמש בתעלול שמאוד מזכיר את האופן שבו "מטפלים" בשרשראות כשמוכיחים דברים עם הלמה של צורן: אני אגדיר <span class="math">\(N=\bigcup_{n=1}^{\infty}M_{n}\)</span> ואקבל תת-מודול של <span class="math">\(M\)</span>. באופן כללי איחוד של תת-מודולים לא חייב לצאת תת-מודול, אבל בגלל תכונת ההכלה זה כן קורה כאן: אם <span class="math">\(a,b\in N\)</span> אז <span class="math">\(a\in M_{k}\)</span> ו-<span class="math">\(b\in M_{t}\)</span> עבור <span class="math">\(k,t\)</span> כלשהם; נניח בלי הגבלת הכלליות ש-<span class="math">\(k\le t\)</span> אז <span class="math">\(a,b\in M_{t}\)</span> ואז מכיוון ש-<span class="math">\(M_{t}\)</span> הוא תת-מודול גם <span class="math">\(r_{1}a+r_{2}b\in M_{t}\subseteq M\)</span> לכל צירוף לינארי של שני אלו; זה מוכיח את תכונת הסגירות הנדרשת.</p>
+<p>עכשיו ניתן להשתמש בתכונה 3 ולקבל קבוצת יוצרים <span class="math">\(A=\left\{ a_{1},\dots,a_{n}\right\} \)</span> של <span class="math">\(N\)</span>, כלומר <span class="math">\(N=RA\)</span>. מכיוון ש-<span class="math">\(N\)</span> הוא איחוד, לכל <span class="math">\(a_{i}\)</span> קיים <span class="math">\(M_{k_{i}}\)</span> כך ש-<span class="math">\(a_{i}\in M_{k_{i}}\)</span>. מכיוון שיש רק מספר סופי של <span class="math">\(k_{i}\)</span>-ים כאלו, יש <span class="math">\(k\)</span> שגדול או שווה לכולם, ועבורו נקבל <span class="math">\(A\subseteq M_{k}\)</span>. מכאן שב-<span class="math">\(M_{k}\)</span> יש את <strong>כל</strong> האיברים של <span class="math">\(N\)</span>, ולכן <span class="math">\(M_{k}\)</span> הוא נקודת השבת המבוקשת. גם בכיוון הזה לא נזקקנו לאקסיומת הבחירה.</p>
+<p>שאלה מעניינת אחת שנשארה לנו היא האם צריך את אקסיומת הבחירה אם רוצים לעבור ישירות מ-1 אל 3. זוכרים איך הוכחתי שחוג אוקלידי גורר תחום ראשי גורר תחום פריקות יחידה? בשביל ה"תחום ראשי גורר תחום פריקות יחידה" נזקקתי לאקסיומת הבחירה, אבל יכלתי "לדלג" על הצורך הזה עבור חוגים אוקלידיים ולהשתמש בהוכחה אחרת, ישירה, שמראה שכל חוג אוקלידי הוא תחום פריקות יחידה ולא דורשת את אקסיומת הבחירה. אולי זה המצב פה?</p>
+<p>ובכן, לא. אני לא יכול להוכיח לכם ש<strong>חייבים</strong> את אקסיומת הבחירה התלויה פה, אבל אני לא מכיר דרך להוכיח את הגרירה הזו בלעדיה. אם אני מנסה לחשוב איך להוכיח מ-1 את 3 באופן "טבעי", ההוכחה שאני מקבל היא זו: יהא <span class="math">\(N\)</span> תת-מודול של <span class="math">\(M\)</span> שאנחנו רוצים להוכיח שהוא נוצר סופית. <strong>נבחר</strong> איבר <span class="math">\(a_{1}\in N\)</span>. אם <span class="math">\(Ra_{1}=N\)</span> סיימנו, הידד. אחרת, <strong>נבחר</strong> <span class="math">\(a_{2}\notin Ra_{1}\)</span> (הרי לכם בחירה <strong>תלויה</strong>) ונבדוק האם <span class="math">\(N=Ra_{1}+Ra_{2}\)</span>, וכן הלאה. בצורה הזו נבנה שרשרת עולה של תתי-מודולים <span class="math">\(M_{n}=Ra_{1}+\dots+Ra_{n}\)</span> שאם היא נעצרת, חייבת להיעצר כי קיבלנו שוויון ל-<span class="math">\(N\)</span>.</p>
+<p>יש לי עוד דבר קטן אחד לומר על מודולים נתריים - או ליתר דיוק, על חוגים נתריים. אנחנו הולכים לדבר מעכשיו על חוגים שהם תחומים ראשיים - ואני אזכיר שזה אומר שכל אידאל נוצר בידי איבר בודד. מכיוון שכאשר חושבים על <span class="math">\(R\)</span> בתור מודול מעל עצמו, תתי-המודולים הם אידאלים, הרי שתחום ראשי הוא דוגמא למודול שבו כל תת-מודול הוא נוצר סופית, ואפילו על ידי איבר בודד. מכאן בפרט (ללא אקסיומת הבחירה) שכל חוג שהוא תחום ראשי הוא בפרט חוג נתרי (אבל הכיוון ההפוך לא נכון; חוגים נתריים הם כלליים יותר מתחומים ראשיים).</p>
+<p>זה מסיים את כל הרקע שרציתי להציג; בפוסט הבא אוכל להציג את משפט המיון של מודולים נוצרים סופית מעל תחומים ראשיים. אני לא אכנס לכל פרטי ההוכחה אלא אשאיר אותם לפוסטים בהמשך, אבל את הרעיון הכללי אני מקווה להציג במלואו.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2018/09/16/structure_theorem_for_finitely_generated-modules_over_a_pid/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט המבנה למודולים נוצרים סופית מעל תחום ראשי</span>
+            </a>
+            
+            
+            
+            <a href="/2018/08/07/free_modules_and_direct_products/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מודולים חופשיים ומכפלות ישרות של מודולים</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משפט מייהיל-נרוד - נקודת מבט נוספת, ואלגוריתמי מינימיזציה - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>משפט מייהיל-נרוד - נקודת מבט נוספת, ואלגוריתמי מינימיזציה</h1>
+            <div class="post-meta">
+                <span class="date">2015-05-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/משפט מייהיל-נרוד.html">משפט מייהיל-נרוד</a>
+                    
+                    <a href="/tags/שפות פורמליות.html">שפות פורמליות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בכל הנושא של תורת השפות הפורמליות, המשפט החביב עלי הוא משפט <a href="http://www.gadial.net/2015/02/11/myhill_nerode_theorem/">מייהיל-נרוד</a>. כל כך חביב עלי, שבפוסט הזה אני הולך להציג אותו שוב, ובצורה שונה מזו שבה הצגתי אותו בפוסט הקודם שלי בנושא. שתי נקודות המבט על המשפט הן דואליות באופיין (הן אומרות את אותו הדבר, אבל כל אחת מסתכלת על הדבר הזה מנקודת מבט שונה ואפילו מנוגדת קצת), וזו שאציג עכשיו תהיה שימושית בהמשך, עם עוד כמה תוצאות יפות שאני רוצה להראות. בפרט, היא תהיה שימושית כדי לטפל בבעיה שעד כה לא התייחסתי אליה - איך אפשר <strong>למצוא</strong> בפועל את האוטומט המינימלי עבור שפה שמשפט מייהיל-נרוד מבטיח את קיומו. אראה שני אלגוריתמים שעושים את זה - הראשון הוא נחמד ואינטואיטיבי יחסית, והשני הוא משהו פסיכי לחלוטין: כשראיתי אותו בפעם הראשונה התגובה שלי הייתה "מה, לעזאזל?!". הטיזר הזה מספיק לכם כדי שיתחשק לכם לראות איך אני מנסח מחדש את כל המונחים של נרוד בלשון אחרת? אחלה.</p>
+<p>נתחיל בתזכורת מה הולך במשפט מייהיל-נרוד. בהינתן שפה <span class="math">\(L\)</span> כלשהי מעל <span class="math">\(\Sigma^{*}\)</span>, הגדרנו יחס שקילות <span class="math">\(R_{L}\)</span> מעל <span class="math">\(\Sigma^{*}\)</span>: <span class="math">\(xR_{L}y\)</span> אם ורק אם לא קיימת "סיפא מפרידה" של <span class="math">\(x,y\)</span> ביחס ל-<span class="math">\(L\)</span>, כלומר לכל <span class="math">\(z\in\Sigma^{*}\)</span> מתקיים <span class="math">\(xz\in L\iff yz\in L\)</span>. סימנו את אוסף מחלקות השקילות של היחס הזה ב-<span class="math">\(\Sigma^{*}/R_{L}\)</span>, והמשפט אמר ש-<span class="math">\(L\)</span> רגולרית אם ורק אם מספר מחלקות השקילות של היחס הוא סופי. האינטואיציה היא שניתן לבנות אוטומט (לאו דווקא סופי) עבור <span class="math">\(L\)</span> שמצביו הם בדיוק <span class="math">\(\Sigma^{*}/R_{L}\)</span>, המצב ההתחלתי שלו הוא <span class="math">\(\left[\varepsilon\right]\)</span> (מחלקת השקילות של <span class="math">\(\varepsilon\)</span>), מצביו המקבלים הם מהצורה <span class="math">\(\left[w\right]\)</span> עבור כל <span class="math">\(w\in L\)</span>, ופונקציית המעברים שלו היא <span class="math">\(\delta\left(\left[w\right],\sigma\right)=\left[w\sigma\right]\)</span>. הוכחנו שהאוטומט הזה הוא בעל מספר המצבים <strong>המינימלי</strong> מבין כל האוטומטים עבור <span class="math">\(L\)</span>, ולכן <span class="math">\(L\)</span> הייתה רגולרית אם ורק אם המספר המינימלי הזה היה סופי.</p>
+<p>עכשיו בואו נתאר את כל העסק הזה מזווית ראייה אחרת. אני הולך להשתמש במושג שהזכרתי קודם אבל לא קיבל עד כה את הזרקור שמגיע לו - המושג של <strong>חלוקה</strong> של שפות. נתחיל הפעם דווקא עם חלוקה במילה בודדת, ועם סימון חדש כדי להציג את זה. אם <span class="math">\(w=uv\)</span> היא מילה ש-<span class="math">\(u\)</span> היא רישא שלה, אז אסמן <span class="math">\(u^{-1}w\triangleq v\)</span>. כלומר, <span class="math">\(u^{-1}w\)</span> היא מה שמקבלים מ-<span class="math">\(w\)</span> אחרי שמסלקים ממנו את הרישא <span class="math">\(u\)</span>. האינטואיציה לסימון הזה עם החזקה של המינוס 1 מגיעה מתורת החבורות, ולא אכביר עליה מילים. צריך להיזהר קצת עם הסימון - אם <span class="math">\(u\)</span> איננה רישא של <span class="math">\(w\)</span>, אז אין שום משמעות לסימון <span class="math">\(u^{-1}w\)</span> בהקשר שלנו. כמו כן, באופן דומה אפשר גם להגדיר <span class="math">\(wu^{-1}\)</span> אבל לא אזדקק לסימון הזה ולכן לא אציג אותו בהמשך.</p>
+<p>עכשיו, אם <span class="math">\(L\)</span> היא שפה כלשהו, אפשר להכליל את פעולת החלוקה עבורה: להגדיר <span class="math">\(u^{-1}L\triangleq\left\{ u^{-1}w\ |\ w\in L\right\} \)</span>, כאשר המוסכמה כאן היא שאם <span class="math">\(u^{-1}w\)</span> אינו מוגדר הוא אינו משתתף בקבוצה (מבחינה פורמלית הסימון שלי לא תקין והייתי צריך להוסיף במפורש את התנאי ש-<span class="math">\(u\)</span> היא רישא של <span class="math">\(w\)</span>, אבל אני בכוונה משתמש פה בסימון לא תקין - מה שנקרא Abuse of notation - כי חשוב לי להדגיש שככה זה עובד במתמטיקה - יותר חשובה לנו נוחות הסימון כל עוד כולם מבינים את הכוונה, מאשר נוקדנות ברמת הסימונים). גם את זה אפשר להכליל ולקבל חלוקה משמאל של שפות כדי שהגדרתי אותה פעם: <span class="math">\(L_{2}^{-1}L_{1}\triangleq\left\{ u^{-1}w\ |\ u\in L_{2},\in L_{1}\right\} \)</span>, אבל לא אזדקק לסימון הזה יותר מדי הפעם.</p>
+<p>עכשיו אפשר לנסח את משפט מייהיל-נרוד בטרמינולוגיה החדשה שלנו: שפה <span class="math">\(L\)</span> היא רגולרית אם ורק אם הקבוצה <span class="math">\(\left\{ u^{-1}L\ |\ u\in\Sigma^{*}\right\} \)</span> סופית; וגודל הקבוצה שווה למספר המצבים באוטומט סופי דטרמיניסטי מינימלי עבור <span class="math">\(L\)</span>.</p>
+<p>במבט ראשון אולי לא ברור מה הקשר, אבל במבט שני די ברור שזה בדיוק אותו דבר: דרך אחרת ושקולה לנסח את הטענה ש-<span class="math">\(xR_{L}y\)</span> היא לומר ש-<span class="math">\(x^{-1}L=y^{-1}L\)</span> - כלומר, שאוסף כל המילים <span class="math">\(z\)</span> כך ש-<span class="math">\(xz\in L\)</span> שווה לאוסף כל המילים כך ש-<span class="math">\(yz\in L\)</span>. אז עד כה לא עשיתי כלום חוץ מאשר הצבעה על העובדה (הנחמדה) שאפשר לנסח את המשפט בעזרת מושג החלוקה, במקום להזדקק למחלקות שקילות.</p>
+<p>עכשיו בואו נכניס אוטומטים לתמונה. ניקח אוטומט סופי דטרמיניסטי כלשהו <span class="math">\(A=\left(Q,\Sigma,q_{0},\delta,F\right)\)</span>. עכשיו, לכל מצב <span class="math">\(q\in Q\)</span> בואו נסמן ב-<span class="math">\(L_{q}\)</span> את שפת כל המילים שאם אנחנו נמצאים ב-<span class="math">\(q\)</span> וקוראים אותן, נגיע למצב מקבל: <span class="math">\(L_{q}\triangleq\left\{ w\in\Sigma^{*}\ |\ \hat{\delta}\left(q,w\right)\in F\right\} \)</span>. בבירור <span class="math">\(L\left(A\right)=L_{q_{0}}\)</span> (אם זה לא ברור נסו להסביר לעצמכם את ההגדרה). עכשיו, לפני שנמשיך, אני רוצה להציג סימון שיחסוך לי את הצורך לכתוב <span class="math">\(\hat{\delta}\)</span> עם סוגריים כל הזמן: במקום לכתוב <span class="math">\(\hat{\delta}\left(q,w\right)\)</span> אני אכתוב <span class="math">\(q\cdot w\)</span>. פורמלית, אפשר לחשוב על זה כאילו <span class="math">\(w\)</span> <strong>פועלת</strong> על <span class="math">\(q\)</span>, למי שמכיר את המושג הזה (כאן זו פעולה של המונואיד <span class="math">\(\Sigma^{*}\)</span> על הקבוצה <span class="math">\(Q\)</span>, למי שמכיר את ההגדרות). התכונה שמעניינת אותנו כאן היא ש-<span class="math">\(q\cdot\left(uv\right)=\left(q\cdot u\right)\cdot v\)</span> (מה שהוכחתי בעבר בתור <span class="math">\(\hat{\delta}\left(q_{0},uv\right)=\hat{\delta}\left(\hat{\delta}\left(q_{0},u\right),v\right)\)</span>) ובגללה בחרתי את הסימון בצורה שבה בחרתי (נראה לי בהתחלה יותר טבעי לסמן <span class="math">\(w\cdot q\)</span>, אבל אני רוצה להימנע מזוועות כמו <span class="math">\(\left(uv\right)\cdot q=v\cdot\left(u\cdot q\right)\)</span>). בסימון הזה, <span class="math">\(L_{q}\triangleq\left\{ w\in\Sigma^{*}\ |\ q\cdot w\in F\right\} \)</span></p>
+<p>בואו נניח שכל המצבים ב-<span class="math">\(A\)</span> ישיגים (לאוטומט כזה אקרא <strong>נגיש</strong>), כי קל להעיף מאוטומט מצבים לא ישיגים ומקבלים אוטומט שקול. זה אומר שלכל <span class="math">\(q\)</span> קיימת מילה <span class="math">\(u\)</span> כך ש-<span class="math">\(q=q_{0}\cdot u\)</span>. אני טוען ש-<span class="math">\(L_{q}=u^{-1}L\)</span>, ודי קל לראות את זה: <span class="math">\(w\in u^{-1}L\)</span> אם ורק אם <span class="math">\(uw\in L\)</span>, אם ורק אם <span class="math">\(q_{0}\cdot uw\in F\)</span>, אם ורק אם <span class="math">\(\left(q_{0}\cdot u\right)\cdot w=q\cdot w\in F\)</span>, אם ורק אם <span class="math">\(w\in L_{q}\)</span>. באופן דומה, אם <span class="math">\(q=q_{0}\cdot v\)</span> עבור <span class="math">\(v\ne u\)</span> אז נקבל ש-<span class="math">\(L_{q}=v^{-1}L\)</span> ולכן בפרט <span class="math">\(u^{-1}L=v^{-1}L\)</span>. המסקנה היא שהפונקציה <span class="math">\(f\left(q\right)=L_{q}\)</span> היא פונקציה מ-<span class="math">\(Q\)</span> <strong>על</strong> הקבוצה <span class="math">\(\left\{ u^{-1}L\ |\ u\in\Sigma^{*}\right\} \)</span>, כלומר הגודל של <span class="math">\(Q\)</span> הוא לפחות כגודל הקבוצה הזו, ומכאן שמספר המצבים באוטומט שבונים בהוכחת מייהיל-נרוד הוא אכן מינימלי (כי מספר מצביו שווה לגודל הקבוצה <span class="math">\(\left\{ u^{-1}L\ |\ u\in\Sigma^{*}\right\} \)</span>).</p>
+<p>עכשיו, נניח שיש לנו שני מצבים <span class="math">\(q,p\)</span> כך ש-<span class="math">\(L_{q}=L_{p}\)</span>. מה זה אומר? זה אומר ששני חישובים, שאחד מהם הגיע אל <span class="math">\(q\)</span> והשני הגיע אל <span class="math">\(p\)</span>, יהיו משם והלאה שקולים במובן מסויים; אם נמשיך את שני החישובים על אותה מילה, או ששניהם יסתיימו בקבלה או ששניהם יסתיימו בדחיה (אבל זה ממש לא אומר שהחישובים יגיעו לאותם מצבים - ייתכן שלא יהיו להם מצבים משותפים בכלל). אינטואיטיבית זה אומר שאין לנו צורך בשני מצבים שונים עבור <span class="math">\(q,p\)</span>; אם החישוב מכאן והלאה הוא אותו הדבר, למה לא לאחד את שניהם למצב אחד?</p>
+<p>בואו נחדד את מה שאני עושה. אגדיר יחס שקילות <span class="math">\(\equiv\)</span> על <span class="math">\(Q\)</span> באופן הבא: <span class="math">\(q\equiv p\)</span> אם ורק אם <span class="math">\(L_{q}=L_{p}\)</span>. די קל לראות שזה יחס שקילות (כל יחס על קבוצה <span class="math">\(A\)</span> שמוגדר באמצעות פונקציה <span class="math">\(f:A\to B\)</span> כלשהי כך ש-<span class="math">\(a\equiv a^{\prime}\)</span> אם ורק אם <span class="math">\(f\left(a\right)=f\left(a^{\prime}\right)\)</span> הוא יחס שקילות). כעת אני טוען שקבוצת המנה <span class="math">\(Q/\equiv\)</span> <strong>איזומורפית</strong> לקבוצת המנה <span class="math">\(\Sigma^{*}/R_{L}\)</span>, כאשר האיזומורפיזם נתון על ידי <span class="math">\(\left[w\right]_{R_{L}}\mapsto\left[q_{0}\cdot w\right]_{\equiv}\)</span>. להוכיח את זה - זה קצת סיפור. צריך להוכיח שהאיזומורפיזם הזה הוא באמת פונקציה; ושהיא חח"ע ועל.</p>
+<p>כדי להוכיח שזו פונקציה צריך להוכיח שאין בהגדרה שלה תלות בנציג, כלומר שאם <span class="math">\(uR_{L}v\)</span> אז <span class="math">\(q_{0}\cdot u\equiv q_{0}\cdot v\)</span>, כלומר ש-<span class="math">\(L_{q_{0}\cdot u}=L_{q_{0}\cdot v}\)</span>. נניח בשלילה שקיים <span class="math">\(z\)</span> כך ש-<span class="math">\(z\in L_{q_{0}\cdot u}\)</span> אבל <span class="math">\(z\notin L_{q_{0}\cdot v}\)</span>, אז <span class="math">\(\left(q_{0}\cdot u\right)\cdot z\in F\)</span>, כלומר <span class="math">\(uz\in L\)</span>, אבל <span class="math">\(vz\notin L\)</span>, בסתירה לכך ש-<span class="math">\(uR_{L}v\)</span>.</p>
+<p>כדי להוכיח שהפונקציה היא חח"ע צריך להוכיח את הכיוון ההפוך - שאם <span class="math">\(L_{q_{0}\cdot u}=L_{q_{0}\cdot v}\)</span> אז <span class="math">\(uR_{L}v\)</span> - זה פשוט היפוך של הטיעון שנתתי קודם.</p>
+<p>כדי להראות שהפונקציה היא על, ניקח מחלקת שקילות <span class="math">\(\left[q\right]_{\equiv}\)</span> כלשהי. מכיוון שהנחתי שכל מצבי האוטומט ישיגים (בדיוק בשביל השלב הזה) הרי שקיים <span class="math">\(w\)</span> כך ש-<span class="math">\(q=q_{0}\cdot w\)</span>, ולכן <span class="math">\(\left[w\right]_{R_{L}}\)</span> הוא מקור של <span class="math">\(\left[q\right]_{\equiv}\)</span>, וסיימנו.</p>
+<p>המסקנה היא שכדי לחשב את האוטומט המינימלי, מספיק לנו למצוא את מחלקות השקילות של <span class="math">\(\equiv\)</span>. אחרי שעשינו זאת, עדיין צריך להסביר מה יהיה המצב ההתחלתי שלנו, מי יהיו המצבים המקבלים ומה תהיה פונקציית המעברים. נלך על פי האיזומורפיזם שהצעתי: המצב ההתחלתי יהיה התמונה של <span class="math">\(\left[\varepsilon\right]_{R_{L}}\)</span>, כלומר <span class="math">\(\left[q_{0}\right]_{\equiv}\)</span>; התמונה של כל מצב מקבל <span class="math">\(\left[w\right]_{R_{L}}\)</span> (כאשר <span class="math">\(w\in L\)</span>) תהיה <span class="math">\(\left[q_{0}\cdot w\right]_{\equiv}\)</span>, ואנחנו יודעים ש-<span class="math">\(q_{0}\cdot w\in F\)</span>, כלומר המצבים המקבלים באוטומט שלנו יהיו מחלקות השקילות של מצבים מקבלים ב-<span class="math">\(Q\)</span>; ופונקציית המעברים תוגדר בתור <span class="math">\(\delta\left(\left[q\right]_{\equiv},\sigma\right)=\left[q\cdot\sigma\right]_{\equiv}\)</span>. זה נותן לנו את האוטומט האופטימלי של מייהיל-נרוד. כל מה שנשאר להסביר הוא איך מוצאים את מחלקות השקילות של <span class="math">\(\equiv\)</span>.</p>
+<p>הדרך שבה אעשה זאת היא איטרטיבית - אני אתחיל מיחס שקילות שגוי, שהוא <strong>גס מדי</strong> - כלומר, כל מי ש<strong>אמור</strong> להיות שקול אכן שקול, אבל יש גם איברים לא שקולים ב-<span class="math">\(\equiv\)</span> שיהיו שקולים ביחס שלי. לאט לאט אני אלך ו<strong>אעדן</strong> את היחס - כלומר, אם שני איברים לא היו שקולים, הם ימשיכו להיות כאלו, אבל בכל איטרציה אני אקח כמה איברים שהיו שקולים קודם ואפריד אותם זה מזה. נמשיך לבצע את זה עד שנגיע לאיטרציה שבה היחס לא השתנה, ואני אטען שאז הגעתי אל <span class="math">\(\equiv\)</span>. פורמלית, אבנה סדרה של יחסי שקילות <span class="math">\(\mathcal{Q}_{0},\mathcal{Q}_{1},\dots\)</span> עד שאגיע למצב שבו <span class="math">\(\mathcal{Q}_{k}=\mathcal{Q}_{k+1}\)</span>, והטענה תהיה שאז <span class="math">\(\mathcal{Q}_{k}\)</span> הוא בדיוק <span class="math">\(\equiv\)</span>, כלומר ש-<span class="math">\(q\mathcal{Q}_{k}p\)</span> אם ורק אם <span class="math">\(L_{q}=L_{p}\)</span>.</p>
+<p>הנה הצעה לגבי האופן שבו כדאי לאתחל:<span class="math">\(\mathcal{Q}_{0}=\left\{ Q\right\} \)</span> (אני מתאר כאן את יחס השקילות בתור <strong>חלוקה</strong> של <span class="math">\(Q\)</span>), כלומר כל האיברים יהיו שקולים זה לזה. מכאן והלאה אנחנו "מתקנים" כשאנחנו מוצאים דוגמאות נגדיות לכך שזוגות של מצבים הם שקולים. הדוגמה הנגדית הראשונה היא <span class="math">\(\varepsilon\)</span>. מן הסתם היא מפרידה בדיוק את אותם מצבים שהם מקבלים מאלו שאינם מקבלים (למה?) ולכן יותר הגיוני לאתחל <span class="math">\(\mathcal{Q}_{0}=\left\{ Q\backslash F,F\right\} \)</span> במקום לאתחל עם קבוצה אחת. מכאן והלאה נפעל איטרטיבית: בהינתן <span class="math">\(\mathcal{Q}_{k}\)</span> נחשב מתוכה את <span class="math">\(\mathcal{Q}_{k+1}\)</span> שהיא קצת יותר מדוייקת מ-<span class="math">\(\mathcal{Q}_{k}\)</span>, עד שנגיע למצב שבו אין יותר שינויים.</p>
+<p>עכשיו, בהינתן <span class="math">\(p,q\)</span> שהם שקולים ב-<span class="math">\(\mathcal{Q}_{k}\)</span>, אני אבדוק אם קיים <span class="math">\(a\)</span> כך ש-<span class="math">\(q\cdot a,p\cdot a\)</span> <strong>לא שקולים</strong> ש-<span class="math">\(\mathcal{Q}_{k}\)</span>. אם קיים כזה, אני מפריד את <span class="math">\(p,q\)</span> ב-<span class="math">\(\mathcal{Q}_{k+1}\)</span>. אם <span class="math">\(p,q\)</span> היו שקולים ב-<span class="math">\(\mathcal{Q}_{k}\)</span> ולא מצאתי <span class="math">\(a\)</span> מפריד שכזה, אני ממשך לסמן אותם כשקולים. הניסוח המילולי הזה מסתיר מאחוריו סכנה כלשהי לסיטואציה לא מוגדרת היטב - שיהיו לי שלושה מצבים <span class="math">\(p,q,r\)</span> כך ש-<span class="math">\(p,q\)</span> אמורים להיות לא שקולים אבל <span class="math">\(p,r\)</span> אמורים להיות שקולים וגם <span class="math">\(q,r\)</span> אמורים להיות שקולים. אם זה מטריד אתכם קחו רגע כדי להוכיח שזה לא יכול לקרות, ולכן אנחנו מקבלים שגם <span class="math">\(\mathcal{Q}_{k+1}\)</span> הוא יחס שקילות, וכזה שמעדן את <span class="math">\(\mathcal{Q}_{k}\)</span>. מכיוון שאלו יחס שקילות על קבוצה סופית וכל אחד מהם מעדן את קודמו, מתישהו בהכרח נגיע לנקודת שבת - <span class="math">\(\mathcal{Q}_{k}=\mathcal{Q}_{k+1}\)</span>, מה שמוכיח שהאלגוריתם תמיד מסתיים. נותר להוכיח שהתוצאה היא אכן יחס השקילות שאנחנו רוצים.</p>
+<p>כיוון אחד קל. נוכיח באינדוקציה על <span class="math">\(t\)</span> שאם עבור זוג מצבים כלשהו <span class="math">\(p,q\)</span> מתקיים ש-<span class="math">\(L_{p}=L_{q}\)</span> אז <span class="math">\(q\mathcal{Q}_{t}p\)</span>. עבור <span class="math">\(t=0\)</span> זה בבירור עובד, כי אם <span class="math">\(q\)</span> לא שקול ל-<span class="math">\(p\)</span> ב-<span class="math">\(\mathcal{Q}_{0}\)</span> אז בלי הגבלת הכלליות <span class="math">\(p\in F\)</span> ו-<span class="math">\(q\notin F\)</span>, מה שאומר ש-<span class="math">\(\varepsilon\in L_{p}\)</span> אבל <span class="math">\(\varepsilon\notin L_{q}\)</span>. כעת, נניח שזה עובד עבור <span class="math">\(t\)</span> ונוכיח ל-<span class="math">\(t+1\)</span>: אם <span class="math">\(L_{p}=L_{q}\)</span> אבל <span class="math">\(p,q\)</span> לא שקולים ב-<span class="math">\(\mathcal{Q}_{t+1}\)</span>. הנחת האינדוקציה שלנו אומרת ש-<span class="math">\(p,q\)</span> כן היו שקולים ב-<span class="math">\(\mathcal{Q}_{t}\)</span>, ולכן על פי אופן פעולת האלגוריתם, זה אומר שקיים <span class="math">\(a\)</span> כך ש-<span class="math">\(p\cdot a\)</span> ו-<span class="math">\(q\cdot a\)</span> לא שקולים ב-<span class="math">\(\mathcal{Q}_{t}\)</span>; מכאן שבהכרח <span class="math">\(L_{q\cdot a}\ne L_{p\cdot a}\)</span> (למה?). בלי הגבלת הכלליות נובע מכך שקיים <span class="math">\(z\)</span> כך ש-<span class="math">\(z\in L_{q\cdot a}\)</span> אבל <span class="math">\(z\notin L_{p\cdot a}\)</span> - מכאן נובע ש-<span class="math">\(az\in L_{q}\)</span> אבל <span class="math">\(az\notin L_{p}\)</span>, בסתירה לכך ש-<span class="math">\(L_{q}=L_{p}\)</span>, מה שמסיים את הכיוון הזה.</p>
+<p>בכיוון השני, אני רוצה להוכיח שאם <span class="math">\(p\mathcal{Q}_{k}q\)</span> אז <span class="math">\(L_{p}=L_{q}\)</span>. נניח שזה לא המצב, אז תהיה לי לפחות דוגמה נגדית אחת. דוגמה נגדית מורכבת משלושה דברים: זוג מצבים <span class="math">\(p,q\)</span> כך ש-<span class="math">\(p\mathcal{Q}_{k}q\)</span>, וכמו כן מילה <span class="math">\(z\)</span> כך ש-<span class="math">\(z\in L_{p}\)</span> אבל <span class="math">\(z\notin L_{q}\)</span>. כדי שההוכחה תעבוד, אני לא סתם אסתכל על דוגמה נגדית אקראית, אלא אקח כזו שבה <span class="math">\(z\)</span> הוא הקצר ביותר האפשרי - כלומר, שכל מילה קצרה יותר מ-<span class="math">\(z\)</span> לא מופיעה באף דוגמה נגדית.</p>
+<p>עכשיו אפשר לפרק את <span class="math">\(z\)</span> באופן הבא: <span class="math">\(z=az^{\prime}\)</span> (אני מניח ש-<span class="math">\(z\)</span> הוא מאורך לפחות 1 - למה זה אפשרי?). נקבל ש-<span class="math">\(z^{\prime}\in L_{p\cdot a}\)</span> אבל <span class="math">\(z^{\prime}\notin L_{q\cdot a}\)</span>. אני חותר לכך שזו סתירה למינימליות של האורך של <span class="math">\(z\)</span>; לצורך כך צריך להשתכנע שהשלשה <span class="math">\(p\cdot a,q\cdot a\)</span>ו-<span class="math">\(z^{\prime}\)</span> גם היא דוגמה נגדית, כלומר ש-<span class="math">\(p\cdot a\mathcal{Q}_{k}q\cdot a\)</span>. הסיבה שזה נכון היא שאם לא היה מתקיים ש-<span class="math">\(p\cdot a\mathcal{Q}_{k}q\cdot a\)</span> אז האלגוריתם שלנו היה מפריד את <span class="math">\(p,q\)</span> ב-<span class="math">\(\mathcal{Q}_{k+1}\)</span> ובוודאי שלא היינו מקבלים <span class="math">\(\mathcal{Q}_{k}=\mathcal{Q}_{k+1}\)</span>. זה מסיים את הוכחת הנכונות של האלגוריתם. עכשיו לכו לתכנת אותו!</p>
+<p>חזרתם? יופי. בואו נעבור לחלק המוזר של הפוסט - עוד אלגוריתם מינימזציה שלא ברור בכלל מאיפה הוא הגיע ולמה הוא עובד.</p>
+<p>כדי שנוכל לתאר את האלגוריתם בצורה פשוטה, כמה סימונים חדשים. נסמן ב-<span class="math">\(A\)</span> אוטומט סופי כלשהו (לאו דווקא דטרמיניסטי, אבל בלי מסעי-<span class="math">\(\varepsilon\)</span>). נסמן ב-<span class="math">\(A_{\mbox{det}}\)</span> את ה<strong>דטרמיניזציה</strong> של <span class="math">\(A\)</span> - האוטומט שמתקבל מאוטומט החזקה של <span class="math">\(A\)</span> על ידי הסרת מצבים לא ישיגים (אסביר את זה בפירוט בהמשך). נסמן ב-<span class="math">\(A^{R}\)</span> את <strong>ההיפוך</strong> של <span class="math">\(A\)</span> - אוטומט שמתקבל מ-<span class="math">\(A\)</span> על ידי היפוך כל כיווני הקשתות והחלפת תפקידי המצבים ההתחלתיים והמקבלים (כזכור, <span class="math">\(L\left(A^{R}\right)=\left(L\left(A\right)\right)^{R}\)</span> כאשר <span class="math">\(L^{R}\)</span> היא היפוך כל המילים ב-<span class="math">\(L\)</span>), ונסמן ב-<span class="math">\(A_{\mbox{min}}\)</span> את האוטומט הדטרמיניסטי המינימלי ששקול ל-<span class="math">\(A\)</span>. אז אני טוען שמתקיים:</p>
+<p><span class="math">\(A_{\mbox{min}}=\left(\left(\left(A^{R}\right)_{\mbox{det}}\right)^{R}\right)_{\mbox{det}}\)</span></p>
+<p>במילים: כדי לקבל את האוטומט הדטרמיניסטי המינימלי ששקול ל-<span class="math">\(A\)</span>, פעלו כך: קודם כל הפכו את <span class="math">\(A\)</span>. בצעו דטרמיניזציה לתוצאה. הפכו את התוצאה ובצעו למה שקיבלתם דטרמיניזציה. הופס! קיבלתם את האוטומט המינימלי.</p>
+<p>לא יודע מה אתכם, אני עדיין מרגיש שמשהו מאוד מוזר הולך פה גם בזמן שבו אני כותב את השורות הללו. בתקווה עד שאסיים לכתוב את הפוסט תהיה לכולנו אינטואיציה יותר טובה למה זה עובד, ולא סתם הוכחה פורמלית.</p>
+<p>סיבה עיקרית לקושי שאני מרגיש ללא ספק נובעת מכך שאני רגיל לחשוב על דטרמיניזציה של אוטומט בתור משהו ש"מנפח" אותו, ולכן לא ייתכן ששתי דטרמיניזציות יקטינו את מספר המצבים ויתנו לנו אוטומט מינימלי. לכן חשוב להסביר מה זו בעצם הדטרמיניזציה הזו. <a href="http://www.gadial.net/2014/11/19/nondeterministic_automata/">בפוסט</a> על אוטומט אי דטרמיניסטי הצגתי את ההוכחה שקיים לו אוטומט דטרמיניסטי שקול - מה שנקרא <strong>אוטומט חזקה</strong>. כל מצב של אוטומט החזקה הוא קבוצה של מצבים של האוטומט המקורי - אחרי קריאת <span class="math">\(w\)</span> אנחנו מגיעים לקבוצת כל המצבים שיש ריצה על <span class="math">\(w\)</span> באוטומט המקורי שמביאה אותו אליהם.</p>
+<p>באופן הזה, הרבה פעמים אנחנו מקבלים מצבים מיותרים. דוגמה טריוויאלית היא מה שנקבל אם נבצע את הבניה הזו על אוטומט שהוא כבר דטרמיניסטי, המצבים היחידים שנזדקק להם בפועל הם קבוצות שהן סינגלטונים (למה?). כל שאר המצבים פשוט יהיו לא ישיגים מהמצב ההתחלתי. אז כשרוצים לבצע דטרמיניזציה בפועל של אוטומט, לא מתחילים מבניה של כל המצבים האפשריים (יש המון כאלו - 2 בחזקת מספר המצבים של האוטומט המקורי). פשוט מבצעים DFS מהמצב ההתחלתי, שהוא <span class="math">\(\left\{ q_{0}\right\} \)</span>. לכל אות מחשבים לאיזה מצב של אוטומט החזקה עוברים ממנו, ולכל מצב כזה מבצעים את אותו חישוב, וכדומה. התוצאה <strong>עשויה</strong> להיות אוטומט החזקה המלא, במקרה שבו כל המצבים שלו הם ישיגים; אבל לרוב היא תהיה הרבה יותר קטנה ולכן העניין הזה פרקטי בפועל. כאמור, אם <span class="math">\(A\)</span> הוא אוטומט, אז אסמן ב-<span class="math">\(A_{\mbox{det}}\)</span> את הדטרמיניזציה הזו שלו.</p>
+<p>כדי לקבל אינטואיציה כלשהי לכך שזה עובד, בואו נראה דוגמת צעצוע. אני אקח אוטומט עבור שפת כל המילים מאורך אי-זוגי מעל <span class="math">\(\left\{ a,b\right\} \)</span> ובכוונה האוטומט הזה יהיה לא מינימלי - במקום שני מצבים יהיו לו שלושה, כשבבירור אפשר לאחד את המצב הראשון והשלישי:</p>
+<p><strong><a href="/img/2015/05/diagram005.png"><img class="aligncenter size-full wp-image-3245" alt="diagram005" src="/img/2015/05/diagram005.png" width="448" height="75" /></a></strong></p>
+<p>הדבר הראשון שנעשה יהיה היפוך של האוטומט הזה. אני הופך את כיווני הקשתות, הופך כל מצב התחלתי למקבל, וכל מצב מקבל להתחלתי. כאן יש רק מצב מקבל אחד אז אני לא מקבל תופעה מוזרה של אוטומט עם כמה מצבים התחלתיים (כבר ראינו שאוטומט כזה הוא לגיטימי ושקול למודל הדטרמיניסטי):</p>
+<p><strong><a href="/img/2015/05/diagram006.png"><img class="aligncenter size-full wp-image-3246" alt="diagram006" src="/img/2015/05/diagram006.png" width="322" height="162" /></a></strong></p>
+<p>ועכשיו אני מבצע דטרמיניזציה:</p>
+<p><a href="/img/2015/05/diagram007.png"><img class="aligncenter size-full wp-image-3247" alt="diagram007" src="/img/2015/05/diagram007.png" width="398" height="129" /></a>הופס! קיבלנו רק שני מצבים במקום שלושה - איכשהו הדטרמיניזציה זיהתה ש-<span class="math">\(q_{0},q_{2}\)</span> הם אותו הדבר מבחינתנו והם נדחסו למצב יחיד. למעשה, מה שקיבלנו הוא כבר אוטומט עבור השפה שלנו - לא צריך את ההיפוך והדטרמיניזציה הנוספים, והם גם לא משנים את האוטומט כלל (למה?).</p>
+<p>כדי להבין למה כאן הספיק לנו רק "חצי" מהאלגוריתם, הנה המשפט הכללי שעליו אני מסתמך באלגוריתם. לפני כן, הגדרה אחרונה: נאמר שאוטומט <span class="math">\(A\)</span> הוא <strong>קו-בלהבלה</strong>, כאשר במקום "בלהבלה" קחו את התכונה החביבה עליכם, אם <span class="math">\(A^{R}\)</span> מקיים את בלהבלה. למשל, <span class="math">\(A\)</span> הוא קו-דטרמיניסטי אם <span class="math">\(A^{R}\)</span> הוא דטרמיניסטי; והוא קו-נגיש אם <span class="math">\(A^{R}\)</span> נגיש, כלומר כל מצבי <span class="math">\(A^{R}\)</span> ישיגים. הנה המשפט: אם <span class="math">\(A\)</span> הוא קו-דטרמיניסטי וקו-נגיש, אז <span class="math">\(A_{\mbox{min}}=A_{\mbox{det}}\)</span>. מכאן יותר קל להבין מה קרה בנוסחה <span class="math">\(A_{\mbox{min}}=\left(\left(\left(A^{R}\right)_{\mbox{det}}\right)^{R}\right)_{\mbox{det}}\)</span>: החלק הפנימי, <span class="math">\(\left(\left(A^{R}\right)_{\mbox{det}}\right)^{R}\)</span>, הוא פשוט מה שצריך לעשות כדי לקבל מ-<span class="math">\(A\)</span> שהתחלנו ממנו אוטומט שקול שהוא קו-דטרמיניסטי וקו-נגיש (שתי התכונות הללו מושגות בו זמנית על ידי ביצוע דטרמיניזציה). בדוגמת הצעצוע שנתתי, <span class="math">\(A\)</span> שלי <strong>לא</strong> היה קו-דטרמיניסטי, אבל מה שכן היה נכון הוא ש-<span class="math">\(A^{R}\)</span> קיבל את אותה שפה כמו <span class="math">\(A\)</span> (כי מילה היא מאורך אי זוגי אם ורק אם ההיפוך שלה כזה), ואותו <span class="math">\(A^{R}\)</span> דווקא <strong>כן</strong> מקיים את התכונה שהוא קו-דטרמיניסטי וקו-נגיש (כי <span class="math">\(A\)</span> היה דטרמיניסטי ונגיש). לכן כשביצענו את הדטרמיניזציה של <span class="math">\(A^{R}\)</span> קיבלנו אוטומט מינימלי עבור השפה של <span class="math">\(A^{R}\)</span>, ובמקרה שלנו זו הייתה השפה שאנחנו מחפשים.</p>
+<p>אז הקסם הוא בכך שדטרמיניזציה של אוטומט עשויה, בתנאים נחמדים מסויימים, לבנות ממנו את האוטומט המינימלי. זה לא באמת מופרך, אם חושבים על זה לרגע. דטרמיניזציה בונה אוטומט חדש, שמצביו הם <strong>קבוצות</strong> של מצבים של האוטומט המקורי - זה בדיוק גם מה שעשינו באלגוריתם הקודם שהצגנו. אבל הסיטואציה בכל זאת שונה - הקבוצות שנקבל <strong>לא</strong> יהיו מחלקות השקילות של היחס <span class="math">\(\equiv\)</span> (למשל, בדוגמה שלי, <span class="math">\(q_{0}\)</span> מתקבץ יחד עם <span class="math">\(q_{2}\)</span> למרות שאחד הוא מצב מקבל והשני איננו). יש בעיה מהותית לדבר בכלל על היחס <span class="math">\(\equiv\)</span> כי הוא הוגדר עבור אוטומטים דטרמיניסטיים, אבל <span class="math">\(A\)</span> שלנו עשוי להיות אי-דטרמיניסטי. לכן בואו נחזור לתיאור האוטומט המינימלי שנתתי בתחילת הפוסט - מצבי האוטומט הם השפות <span class="math">\(u^{-1}L\)</span>. כלומר, אני אראה התאמה חח"ע ועל בין מצבי <span class="math">\(A_{\mbox{det}}\)</span> ובין השפות <span class="math">\(u^{-1}L\)</span>. האינטואיציה ברורה - לכל <span class="math">\(u\in\Sigma^{*}\)</span>, נעביר את המצב שאליו מגיעים על ידי קריאת <span class="math">\(u\)</span> ב-<span class="math">\(A_{\mbox{det}}\)</span> אל <span class="math">\(u^{-1}L\)</span> (דהיינו, אם <span class="math">\(S=\hat{\delta}\left(q_{0},u\right)\)</span>, אז מבצעים <span class="math">\(S\mapsto u^{-1}L\)</span>). כדי להיווכח בכך שההתאמה הזו היא בכלל פונקציה ושהיא חח"ע צריך להראות שלכל זוג מילים <span class="math">\(u,v\)</span> מתקיים ש-<span class="math">\(\hat{\delta}\left(q_{0},u\right)=\hat{\delta}\left(q_{0},v\right)\)</span> אם ורק אם <span class="math">\(u^{-1}L=v^{-1}L\)</span> - אנחנו מקבלים את אותו הפלט. מרגע שהראיתי את זה, סיימתי, כי ההתאמה היא בבירור על (הרי התחלנו עם <span class="math">\(u\in\Sigma^{*}\)</span> כלשהי, זה מבטיח שנוכל לכסות את כל ה-<span class="math">\(u^{-1}L\)</span>-ים)</p>
+<p>בכיוון אחד, אם <span class="math">\(\hat{\delta}\left(q_{0},u\right)=\hat{\delta}\left(q_{0},v\right)\)</span> אז מן הסתם לכל הרחבה של החישוב באמצעות <span class="math">\(z\)</span>, אם יהיה חישוב מקבל באחד האוטומטים יהיה גם בשני. לכן <span class="math">\(uz\in L\iff vz\in L\)</span> מה שמראה ש-<span class="math">\(u^{-1}L=v^{-1}L\)</span>. הכיוון המעניין הוא השני: אנו מניחים ש-<span class="math">\(u^{-1}L=v^{-1}L\)</span> וצריכים להראות שהמצבים שאליהם <span class="math">\(A\)</span> יכול להגיע על ידי קריאת <span class="math">\(u\)</span> הם בדיוק המצבים שאליהם <span class="math">\(A\)</span> יכול להגיע על ידי קריאת <span class="math">\(v\)</span>. כאן מן הסתם ייכנסו לפעולה התכונות שמאפיינות את <span class="math">\(A^{R}\)</span>.</p>
+<p>בואו ניקח <span class="math">\(p\)</span> כך שקיימת ריצה של <span class="math">\(A\)</span> על <span class="math">\(u\)</span> שמסתיימת ב-<span class="math">\(p\)</span>. האבחנה הראשונה שלנו היא שאפשר להמשיך את הריצה הזו ולהגיע למצב מקבל; זה נובע מכך ש-<span class="math">\(A^{R}\)</span> הוא אוטומט ישיג, ולכן <span class="math">\(p\)</span> ישיג ממצב התחלתי של <span class="math">\(A^{R}\)</span> - כלומר, ב-<span class="math">\(A\)</span> העסק מתהפך ואנחנו מקבלים שיש מצב מקבל של <span class="math">\(A\)</span> שישיג מ-<span class="math">\(p\)</span>. כלומר, קיים <span class="math">\(z\)</span> כך ש-<span class="math">\(uz\in L\)</span>, דהיינו <span class="math">\(z\in u^{-1}L=v^{-1}L\)</span>, ולכן גם <span class="math">\(vz\in L\)</span>. כלומר: קיימת ריצה של <span class="math">\(A\)</span> על <span class="math">\(vz\)</span> שמסתיימת במצב מקבל. עכשיו נכניס לתמונה את העובדה ש-<span class="math">\(A^{R}\)</span> הוא דטרמיניסטי; בפרט זה אומר שקיים לו מצב התחלתי <strong>יחיד</strong> ולכן ל-<span class="math">\(A\)</span> יש מצב מקבל יחיד, כלומר הריצה של <span class="math">\(A\)</span> על <span class="math">\(vz\)</span> מסתיימת באותו מצב כמו הריצה של <span class="math">\(A\)</span> על <span class="math">\(uz\)</span>. בואו נסמן ב-<span class="math">\(p^{\prime}\)</span> את המצב שאליו הריצה הזו מגיעה אחרי סיום קריאת <span class="math">\(v\)</span>.</p>
+<p>מה למדנו? שב-<span class="math">\(A\)</span> קיימים שני מצבים, <span class="math">\(p,p^{\prime}\)</span>, שעל ידי קריאת <span class="math">\(z\)</span> ניתן לעבור <strong>מכל אחד מהם</strong> אל המצב המקבל היחיד של <span class="math">\(A\)</span>. זה אומר שב-<span class="math">\(A^{R}\)</span>, על ידי קריאת <span class="math">\(z^{R}\)</span>, אפשר להגיע גם ל-<span class="math">\(p\)</span> וגם ל-<span class="math">\(p^{\prime}\)</span>. אבל הרי <span class="math">\(A^{R}\)</span> הוא דטרמיניסטי, ולכן זה אפשרי רק אם <span class="math">\(p=p^{\prime}\)</span>. המסקנה: קיימת ריצה של <span class="math">\(A\)</span> על <span class="math">\(v\)</span> שמסתיימת ב-<span class="math">\(p\)</span>, ולכן <span class="math">\(\hat{\delta}\left(q_{0},u\right)\subseteq\hat{\delta}\left(q_{0},v\right)\)</span>. ההוכחה בכיוון השני זהה, וקיבלנו שהאיזומורפיזם שהגדרתי בין מצבי <span class="math">\(A_{\mbox{det}}\)</span> ובין השפות <span class="math">\(u^{-1}L\)</span> עובד. עדיין צריך להשתכנע ש-<span class="math">\(A_{\mbox{det}}\)</span> זהה לאוטומט שבונים מתוך <span class="math">\(u^{-1}L\)</span>, אבל קל למדי לוודא את זה. סיימנו את הבניה הזו!</p>
+<p>כמובן, נשאלת השאלה איזה מבין שני האלגוריתמים הוא עדיף. בשניהם זמן הריצה עשוי להיות אקספוננציאלי במספר המצבים (נסו למצוא דוגמאות נגדיות!) ולכן אין לי תשובה טובה - כנראה שכדאי לנסות להריץ אחד, ואם לא עובד מהר, לנסות את השני. יש גם שאלה של מה בעצם הקלט שלנו - אם נתון לנו אוטומט דטרמיניסטי, כנראה עדיף להפעיל את האלגוריתם הראשון; אם נתון אוטומט אי-דטרמיניסטי, אז כדי להפעיל את האלגוריתם הראשון ממילא יהיה צורך לבצע דטרמיניזציה, אז אפשר כבר לנסות ולהפעיל את האלגוריתם השני (ולבדוק אם יש לנו מזל והוא קו-נגיש וקו-דטרמיניסטי מראש). אבל אם אם זמן הריצה של האלגוריתם השני היה נחות מזה של הראשון זה לא היה כל כך אכפת לי - פשוט כי זה כל כך מגניב.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2015/05/14/pumping_lemma_full/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">למת הניפוח לשפות רגולריות - גרסה מלאה</span>
+            </a>
+            
+            
+            
+            <a href="/2015/04/29/formal_languages_decision_problems/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">בעיות הכרעה עבור שפות פורמליות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

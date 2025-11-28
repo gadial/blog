@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המותר האדם מן האלגוריתם? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>המותר האדם מן האלגוריתם?</h1>
+            <div class="post-meta">
+                <span class="date">2011-04-21</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/הגיגים מתמטיים כלליים.html">הגיגים מתמטיים כלליים</a>
+                    
+                    <a href="/categories/חישוביות.html">חישוביות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיית העצירה.html">בעיית העצירה</a>
+                    
+                    <a href="/tags/המותר האדם מן האלגוריתם?.html">המותר האדם מן האלגוריתם?</a>
+                    
+                    <a href="/tags/יותר מדי לא מדויק.html">יותר מדי לא מדויק</a>
+                    
+                    <a href="/tags/רוג&#39;ר פנרוז.html">רוג&#39;ר פנרוז</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אחד מהספרים שאני נאבק איתם בקביעות עוד מתחילת הלימודים שלי באוניברסיטה הוא The Emperor's New Mind ("תודעת המלך החדשה"? על משקל "בגדי המלך החדשים") של רוג'ר פנרוז. בפשטות, הספר מתעסק באחת השאלות הפילוסופיות המרתקות ביותר שאני, כאדם המתעניין במדעי המחשב, יכול להעלות על הדעת - האם התודעה האנושית היא בסך הכל אלגוריתם שרץ על מחשב ביולוגי מחוכם, או שיש בה "משהו נוסף". נזכרתי בספר לאחר שמוסף הארץ פרסמו רשימת "שאלות ותשובות" מעניינת, ואחת מהן עסקה ב"<a href="http://www.haaretz.co.il/hasite/spages/1225006.html">למה המוח הוא בסך הכל מכונה?</a>". האם אתם שמים לב להנחה הסמויה בכותרת?</p>
+<p>פנרוז אינו מקבל את ההנחה הסמויה הזו. הספר מוקדש לתיאור מה שהוא מבהיר מראש שהיא דעתו האישית, וכזו שאינה ממש בקונצנזוס, לפיה "יש עוד משהו". כדי לנמק את עצמו פנרוז נכנס לאלף ואחד תחומים - חישוביות, משפטי גדל, פיזיקה קלאסית ומודרנית, מבנה המוח הביולוגי... כך שאי אפשר לומר שהוא לא מתאמץ, או שהוא סתם זורק קשקושים לאוויר. לפחות בכל הנוגע לתחומים שבהם אני מבין, הוא אינו כותב קשקושים ולמעט אי דיוקים פה ושם, הצגת הדברים <strong>המתמטית</strong> שלו היא נכונה לגמרי ואם יש בעיה היא בפרשנות. כך שעל פניו זה ספר מרתק.</p>
+<p>לרוע המזל, אני חושב שהכתיבה של הספר היא טרחנית ומייגעת ביותר. כדי להציג את תורת החישוביות הוא עוסק במשך עמודים על גבי עמודים בתכנות של מכונות טיורינג ובהמוני פרטים קטנים אחרים שאפילו בספרי חישוביות לא טורחים להיכנס אליהם. הספר הוא גם כבד וטכני מכדי להיות ספר מדע פופולרי, אבל גם מפוזר מדי מכדי להיות ספר לימוד. זו אולי הסיבה שבגללה אני כל הזמן נתקע איתו - בשלב כלשהו אני מגלה שאני פוסח על דפים על גבי דפים שכוללים חומר שאני כבר מכיר ומוצג באופן מייגע, ובסוף מרגיש שלא קראתי מספיק מהספר כדי לבקר אותו. יש לספר ספר המשך, שאמור להתמודד עם חלק מהביקורת עליו - Shadows of the Mind. אליו בכלל לא הגעתי. לכן, ברשותכם, אני לא הולך לכתוב מסה הפוסלת את הספר מכל וכל, אלא להתייחס לטיעון שמופיע בשלב מוקדם של הספר, באופן מנותק למדי משאר הספר. אני מקווה שאני לא מפספס משהו מהותי בכך שאני מתרכז לבינתיים רק בטיעון הזה - הקוראים מוזמנים לתקן אותי.</p>
+<p>הטיעון עצמו, שמופיע בפרק 2 תחת הכותרת "How to outdo an algorithm", נראה לי חזק ומשכנע ביותר ממבט ראשון. בפשטות, פנרוז מתאר מטלה חישובית כלשהי שבה אנחנו, בני האדם, נהיה טובים יותר מכל אלגוריתם שמבצע אותה; כלומר, שתמיד יהיה קלט שעליו האלגוריתם כושל באופן מחפיר ועם זאת אנחנו, בני האדם, נדע מה התשובה הנכונה במקרה הזה. זו וריאציה על טיעון דומה שמושמע לעתים קרובות (ומושמע גם בספר על ידי פנרוז עצמו) שמשפט גדל מראה שהחשיבה האנושית "גדולה יותר" מהפורמליסטיקה המתמטית שכן במהלך הוכחת המשפט נבנה פסוק ש"אי אפשר להוכיח אבל אנחנו יודעים שהוא נכון" (אני מגחיך פה את הטענה וכמובן שלא מתאר נכונה את משפט גדל; לזכותי ייאמר ש<a href="http://www.gadial.net/2009/05/03/godel_incompleteness_yes/">יש לי פוסט</a> שכן מנסה לתת תיאור הולם של המשפט).</p>
+<p>אז איך הטיעון של פנרוז הולך? לפני כן, חזרה קצרה על חישוביות על רגל אחת - ומי שאינו מכיר את הנושא ולא יצליח לעקוב אחרי החזרה, יש לי <a href="http://www.gadial.net/2007/09/23/turing_machine/">פוסטים</a> בעניין ויש ספרי לימוד טובים וזה נושא מרתק ואלמנטרי לחלוטין מבחינה מתמטית (כלומר, לא נדרש כמעט שום ידע מתמטי קודם עבורו).</p>
+<p>המושג של "אלגוריתם" הוא מעורפל. ההגדרה הפורמלית לאלגוריתם היא באמצעות מין מחשב מתמטי אבסטרקטי שמכונה "מכונת טיורינג". הפרטים הספציפיים של איך המכונה מבצעת חישובים לחלוטין לא רלוונטיים כרגע; הדבר היחיד שחשוב הוא שניתן לקודד את התיאור של מכונת טיורינג באמצעות מחרוזת תווים סופית, ואפשר לקחת את המחרוזת הזו ולסמלץ את ריצת המכונה שהיא מקודדת (ליצור שיודע לבצע סימולציה שכזו קוראים "מכונת טיורינג אוניברסלית", אבל באותה מידה אפשר גם לעשות את זה במחשב האישי שלכם). התפקיד של מכונת טיורינג בחיים הוא להמיר קלטים לפלטים - אם נותנים לה 7, היא עושה המון חישובים ובסוף כותבת 13, ואז אומרים שהקלט 7 עבר לפלט 13. זה אולי כבר נשמע מוזר לתוהים על סוגיית "האם המוח הוא מכונת טיורינג", שכן המוח בכלל לא עסוק בתרגום קלטים לפלטים - הוא פשוט קיים! כמובן, כשהמוח מקבל אותות חשמליים מהעיניים, למשל, הוא מתרגם אותם למה שאנחנו מבינים בתור "ראייה" בתודעה שלנו, אבל לחשוב על זה כפלט מספרי זה קצת מוזר. כלומר, יש כאן חוסר התאמה כלשהו כבר ברמת ההגדרות. אבל במקום להסתבך עם הגדרות יותר מחוכמות לאלגוריתמים, אפשר לעשות בדיוק את ההפך - לטעון שהאדם מנצח את מכונת הטיורינג כבר במגרש הביתי שלה; לחשוב על אותו אספקט של המוח שכן עובד עם קלט/פלט. במילים אחרות, לשאול - האם אדם עם עט ונייר, שמקבל מחרוזת על פיסת נייר ובסוף מחזיר מחרוזת חדשה על פיסת נייר, יכול לעשות דברים שמכונות טיורינג לא יכולות?</p>
+<p>השלב הראשון הוא כמובן להוכיח שיש בכלל דברים חישוביים שמכונות טיורינג לא מסוגלות לעשות. הדוגמה הקלאסית לכך נקראת "<a href="http://www.gadial.net/2007/09/26/halting_problem/">בעיית העצירה</a>" אבל פנרוז מציג שיטת הוכחה טיפה שונה (לא מהותית) מהמקובלת כדי להתאים יותר לשאר חלקי הספר. לכן אציג את הגישה שלו, שבה מובלט מאוד הדמיון של הוכחת האי-יכולת הזו לשיטת <a href="http://www.gadial.net/2007/08/29/cantor_diagonal/">האלכסון של קנטור</a> הקלאסית. אשנה באופן קל את הסימונים ותו לא.</p>
+<p>פנרוז מניח שקיים מספור כלשהו של מכונות הטיורינג הקיימות, <span class="math">\(M_{1},M_{2},M_{3}\dots\)</span> וכמובן שאכן יש כזה - אפשר למספר את כל המחרוזות בעולם, וכל מחרוזת מייצגת מכונת טיורינג כלשהי (גם למחרוזת שנראית כמו ג'יבריש ולא כמו קידוד "חוקי" של מכונת טיורינג אפשר לייחס מכונת טיורינג - למשל, לומר שכל מחרוזות הג'יבריש בעולם מייצגות מכונה שעוצרת מייד על כל קלט ומחזירה פלט 0). מכאן שבהינתן מספר <span class="math">\(n\)</span> אפשר לדעת בקלות מהי <span class="math">\(M_{n}\)</span>, ומעתה ואילך אניח שזה מובן מאליו.</p>
+<p>כעת, נסמן ב-<span class="math">\(M_{n}\left(k\right)\)</span> את הפלט של המכונה ה-<span class="math">\(n\)</span>-ית על הקלט שהוא המספר <span class="math">\(k\)</span>. בתיאוריה, הפלט הזה יהיה מספר; בפועל, אף אחד לא מבטיח לנו שהחישוב של <span class="math">\(M_{n}\)</span> על <span class="math">\(k\)</span> חייב להסתיים! זו הבעיה הבסיסית עם מכונות טיורינג וחישובים בכלל; החישוב מורכב ממספר שיכול להיות אינסופי של צעדים, ואם ננסה להגביל את מספר הצעדים שמותר למכונה לבצע, קרוב לוודאי שנצמצם משמעותית את כמות הבעיות שאנחנו יכולים לפתור (כמובן, לא <strong>עד כדי כך</strong> משמעותית; לרובן המוחץ של הבעיות שמתמודדים איתן במדעי המחשב אכן קיימים פתרונות-מוגבלי-צעדים שכאלו). על כל פנים, כשמריצים מכונת טיורינג תמיד קיימת הסכנה שהיא לא תעצור בכל, ואת המקרה הזה פנרוז מסמן ב-<span class="math">\(M_{n}\left(k\right)=\square\)</span>.</p>
+<p>האתגר החישובי שמכונות טיורינג לא מסוגלות להתמודד איתו הוא לדעת, בהינתן מכונה וקלט, האם היא עוצרת על הקלט או לא. פנרוז שואל האם קיימת מכונה <span class="math">\(H\)</span> שעל זוג הקלטים <span class="math">\(\left(n,k\right)\)</span> מחזירה 1 אם <span class="math">\(M_{n}\)</span> עוצרת על <span class="math">\(k\)</span>, ו-0 אם <span class="math">\(M_{n}\)</span> לא עוצרת על <span class="math">\(k\)</span> (כלומר, <span class="math">\(M_{n}\left(k\right)=\square\)</span>). התשובה היא "לא" חד משמעי. הסיבה לכך היא שאם <span class="math">\(H\)</span> כזו הייתה קיימת, היינו מנצלים אותה באופן הבא: בונים מכונה <span class="math">\(Q\)</span> (זהו, אין יותר סימונים פרט לכך!) שעל קלט <span class="math">\(n\)</span> עושה את הדבר הבא: מחשבת את <span class="math">\(H\left(n,n\right)\)</span>; אם <span class="math">\(H\left(n,n\right)=0\)</span> אז <span class="math">\(Q\)</span> פולטת 1; ואם <span class="math">\(H\left(n,n\right)=1\)</span> אז <span class="math">\(Q\)</span> מחשבת את <span class="math">\(M_{n}\left(n\right)\)</span> (מריצה את המכונה שמקודדת על ידי המספר <span class="math">\(n\)</span>, על הקלט שהוא <span class="math">\(n\)</span> עצמה) ועונה שונה ממנה - למשל, מוסיפה 1 לפלט. באנג! אתם רואים את הסתירה?</p>
+<p>אה... כן, אני חייב להודות שבדרך הצגת הדברים הזו של פנרוז די מבלבל לראות את הסתירה. כאמור, יש הגיון כלשהו בגישה שלו, אבל אני חושב שהוא מסתבך יותר מדי. בואו בכל זאת נמשיך לרגע עד הסוף ונראה איך הוא מציג את הדברים. פנרוז מתאר את מה שקרה באמצעות המשוואה <span class="math">\(Q\left(n\right)=1+M_{n}\left(n\right)\times H\left(n,n\right)\)</span>, מה שאכן נכון תחת המוסכמה ש-<span class="math">\(\square\times0=0\)</span> (זה ממדל את ה"אם <span class="math">\(H\left(n,n\right)=0\)</span> אז <span class="math">\(Q\)</span> פולטת 1"). כעת טיעון המחץ שלו הוא שגם <span class="math">\(Q\)</span> היא מכונת טיורינג חוקית, ולכן מקודדת על ידי מספר <span class="math">\(k\)</span>. במילים אחרות, <span class="math">\(Q=M_{k}\)</span>. כעת, איך <span class="math">\(Q\)</span> מתנהגת על הקלט <span class="math">\(k\)</span>? קיבלנו את המשוואה <span class="math">\(M_{k}\left(k\right)=1+M_{k}\left(k\right)\times H\left(k,k\right)\)</span>, וקל לראות שהמשוואה הזו תמיד שגויה, בין אם <span class="math">\(H\left(k,k\right)=1\)</span> (ואז נקבל <span class="math">\(M_{k}\left(k\right)=1+M_{k}\left(k\right)\)</span>) ובין אם <span class="math">\(H\left(k,k\right)=0\)</span> (ואז נקבל <span class="math">\(\square=1+0\)</span>). הגענו לסתירה, ולכן ההנחה שלנו ש-<span class="math">\(H\)</span> אכן קיימת ויודעת להגיד לכל מכונה וקלט האם הם עוצרים או לא שגויה - סוף ההוכחה.</p>
+<p>אני חושב שפנרוז מסתבך כאן הרבה יותר מדי עם המשוואות הללו. כאמור, אני מבין את הרצון שלו לדמות את כל העסק לאלכסון של קנטור (למרות שבשלב זה של הספר הוא טרם הציג את האלכסון של קנטור - עוד בעיה של הספר היא הסדר המבולבל שבו הוא מציג דברים) אבל לטעמי הוא מפספס קצת את לב הבעיה והורג קוראים. בואו ננסה להבין מה באמת הבעיה עם <span class="math">\(Q\)</span> המדוברת. איך היא רצה על <span class="math">\(k\)</span>? ובכן, זה תהליך דו שלבי. ראשית היא מחשבת את <span class="math">\(H\left(k,k\right)\)</span> - לגיטימי לחלוטין. אם <span class="math">\(H\left(k,k\right)=0\)</span> אז היא פולטת מייד 1; ואילו אם <span class="math">\(H\left(k,k\right)=1\)</span> אז היא עוברת להריץ את <span class="math">\(M_{k}\)</span> על הקלט <span class="math">\(k\)</span>. אבל, כפי שאמרנו, <span class="math">\(Q=M_{k}\)</span>. במילים אחרות, <span class="math">\(Q\)</span> על הקלט <span class="math">\(k\)</span> פונה להריץ את <strong>עצמה</strong> על הקלט <span class="math">\(k\)</span>. <span class="math">\(Q\)</span> על <span class="math">\(k\)</span> מריצה את <span class="math">\(Q\)</span> על <span class="math">\(k\)</span>! מבינים את הבעיה? גם באותה ריצה פנימית של <span class="math">\(Q\)</span> על <span class="math">\(k\)</span> היא תתחיל להריץ את <span class="math">\(Q\)</span> על <span class="math">\(k\)</span>, וכן הלאה וכן הלאה עד סוף הדורות. כלומר, <span class="math">\(Q\)</span> <strong>אינה עוצרת</strong> על <span class="math">\(k\)</span>.</p>
+<p>מה קיבלנו? אם <span class="math">\(H\left(k,k\right)=0\)</span>, כלומר <span class="math">\(H\)</span> אומרת "<span class="math">\(M_{k}\)</span> לא תעצור על <span class="math">\(k\)</span>", אז <span class="math">\(Q\)</span> עוצרת מייד על <span class="math">\(k\)</span> ובכך עושה צחוק מ-<span class="math">\(H\)</span>; ואם <span class="math">\(H\left(k,k\right)=1\)</span>, כלומר <span class="math">\(H\)</span> אומרת "<span class="math">\(M_{k}\)</span> תעצור על <span class="math">\(k\)</span>" אז <span class="math">\(Q\)</span> נכנסת (בטעות!) ללולאה אינסופית ובכך שוב עושה צחוק מ-<span class="math">\(H\)</span>. הבעיה היא בכלל לא בפלט של <span class="math">\(Q\)</span>; הבעיה היא בכך ש-<span class="math">\(Q\)</span> מתנהגת הפוך ממה ש-<span class="math">\(H\)</span> מנבאת לה.</p>
+<p>זה מוביל אותנו לאופן שבו בדרך כלל מנסחים את בעיית העצירה - בונים <span class="math">\(Q\)</span> שעל קלט <span class="math">\(n\)</span> מחשבת את <span class="math">\(H\left(n,n\right)\)</span>; אם <span class="math">\(H\left(n,n\right)=0\)</span> אז <span class="math">\(Q\)</span> עוצרת מייד, ואם <span class="math">\(H\left(n,n\right)=1\)</span> אז <span class="math">\(Q\)</span> נכנסת ללולאה אינסופית. בפועל זו גם <strong>בדיוק </strong>הבניה של פנרוז, רק שהוא מעמיס עליה עוד פרטים מיותרים.</p>
+<p>חדי העין מביניכם אולי שמים לב שגם בבניה ה"סטנדרטית" הזו יש משהו מיותר - אנחנו ממילא לא מתעניינים ביכולת של <span class="math">\(H\)</span> לענות על קלטים <span class="math">\(\left(n,k\right)\)</span> שבהם <span class="math">\(n\ne k\)</span>; אפשר היה להראות שאפילו בעיה פחות שאפתנית מבעיית העצירה אינה ניתנת לפתרון - הבעיה "בהינתן <span class="math">\(n\)</span>, האם <span class="math">\(M_{n}\)</span> עוצרת על <span class="math">\(n\)</span>?" ואכן, כשאני למדתי קורס בתורת החישוביות זו הייתה הבעיה הראשונה שאת אי הפתירות שלה הוכחנו (עם זאת, בהצגות פופולריות של הבעיה עדיין מעדיפים את הניסוח הכללי יותר של בעיית העצירה שכן הוא מרגיש "טבעי" יותר לקוראים; אבל פנרוז <strong>לא</strong> כותב הצגה פופולרית, הוא נכנס הרבה יותר מדי לפרטים טכניים).</p>
+<p>אם כן, הראינו שמכונות טיורינג לא יודעות לפתור את בעיית העצירה. אם היינו יודעים שבני אדם <strong>כן</strong> יכולים לפתור את בעיית העצירה (כלומר, <strong>לכל</strong> זוג <span class="math">\(\left(n,k\right)\)</span> לומר אם <span class="math">\(M_{n}\)</span> עוצרת על <span class="math">\(k\)</span> או לא) זה היה מוכיח מייד שבני אדם הם אכן יותר ממכונות טיורינג גם מבחינה חישובית טהורה. לרוע המזל, אנחנו לא יודעים שבני אדם יכולים לפתור את בעיית העצירה, ואני מאמין בכל לבי שהם לא. פנרוז מסתפק בטיעון הרבה יותר צנוע כדי לשכנע אותנו שבני אדם הם בכל זאת "קצת יותר" (בשלב זה של הספר; אני משער שבהמשך מגיעים טיעונים חזקים בהרבה). כאמור, הטיעון נשמע מאוד משכנע ממבט ראשון - אני ממליץ לכם לחשוב עליו קצת ולחפש בו בעיות.</p>
+<p>פנרוז אומר - "אז נכון שראינו שבעיית העצירה לא פתירה, אבל בינתיים לא ממש ראינו אף מכונה <strong>ספציפית</strong> שאיננו יכולים לדעת אם היא עוצרת או לא; למעשה, השיטה שראינו קודם אומרת לנו במובלע האם המכונה שנבנית בה עוצרת או לא". כדי להבהיר את המשפט הזה פנרוז מסתכל כעת על מכונה <span class="math">\(H\)</span> ש<strong>מנסה</strong> לפתור את בעיית העצירה. הדרישה שלנו מ-<span class="math">\(H\)</span> היא שהיא לא תטעה - אם <span class="math">\(H\)</span> עוצרת על קלט <span class="math">\(\left(n,k\right)\)</span> עם תשובה, התשובה חייבת להיות נכונה. מצד שני, אנחנו מרשים ל-<span class="math">\(H\)</span> לא לעצור על חלק מהקלטים - אלו קלטים ש-<span class="math">\(H\)</span> "נכשלת" עליהם. מכונות כאלו קיימות בודאות; הנה דוגמה לאחת כזו - <span class="math">\(H\)</span> שעל קלט <span class="math">\(n,k\)</span> מריצה את <span class="math">\(M_{n}\)</span> על <span class="math">\(k\)</span> ומחזירה 1 אם <span class="math">\(M_{n}\)</span> עצרה. זו כמובן מכונה מטופשת למדי (היא לא עונה 0 אף פעם) אבל היא מתאימה לגמרי להגדרה שלנו. בנוסף, כמובן שאפשר לחשוב על שיפורים פשוטים ל-<span class="math">\(H\)</span> שיאפשרו לה לגלות לפעמים אם <span class="math">\(M_{n}\)</span> לא עוצרת על <span class="math">\(k\)</span> (שיפורים כאלו כבר תלויים בהגדרה המדוייקת של מכונת טיורינג והאופן שבו היא מבצעת חישובים - אתם לא חייבים לשבור את הראש בחיפוש אחריהם).</p>
+<p>כעת פנרוז טוען שבהינתן <span class="math">\(H\)</span> כזה, אנחנו מסוגלים למצוא מכונה <span class="math">\(M_{k}\)</span> כך ש-<span class="math">\(H\)</span> נכשל ולא עוצר על <span class="math">\(\left(k,k\right)\)</span> אבל אנחנו יודעים את התשובה הנכונה על <span class="math">\(\left(k,k\right)\)</span>. הבניה היא בדיוק אותה בניה כמו קודם - בונים מכונה <span class="math">\(Q\)</span> שמחשבת את <span class="math">\(Q\left(n\right)=1+M_{n}\left(n\right)\times H\left(n,n\right)\)</span>. וכמו קודם, <span class="math">\(Q\)</span> היא חוקית לחלוטין ולכן <span class="math">\(Q=M_{k}\)</span> עבור <span class="math">\(k\)</span> מסויים; וכמו קודם, אם <span class="math">\(H\left(k,k\right)=0\)</span> או <span class="math">\(H\left(k,k\right)=1\)</span> המשוואה <span class="math">\(M_{k}\left(k\right)=1+M_{k}\left(k\right)\times H\left(k,k\right)\)</span> מובילה לסתירה ולכן לא ייתכן שהמקרים הללו מתרחשים; אבל לא הגענו לסתירה במתמטיקה כי כעת ייתכן גם ש-<span class="math">\(H\left(k,k\right)=\square\)</span> ואז נקבל משוואה מהצורה <span class="math">\(\square=\square\)</span> שהיא בסדר. במילים - הדבר היחיד שיכול לקרות הוא ש-<span class="math">\(H\)</span> כלל לא תעצור על <span class="math">\(\left(k,k\right)\)</span>, ולכן גם <span class="math">\(Q\)</span>, שמריצה אותה, לא תעצור על <span class="math">\(k\)</span>. כלומר, <span class="math">\(H\)</span> נכשלת בנסיון שלה לדעת אם <span class="math">\(Q\)</span> עוצרת על <span class="math">\(k\)</span>, אבל אנחנו כן יודעים זאת - אנחנו יודעים בודאות ש-<span class="math">\(Q\)</span> אינה עוצרת על <span class="math">\(k\)</span>. זה מראה שאנחנו יותר טובים מ-<span class="math">\(H\)</span> - כי כל דבר ש-<span class="math">\(H\)</span> יכולה לדעת גם אנחנו יכולים (כי נסמלץ את הריצה של <span class="math">\(H\)</span> - אפשר לעשות זאת עם נייר ועט וסבלנות), ובנוסף אנחנו יודעים משהו ש-<span class="math">\(H\)</span> לא יכולה לדעת.</p>
+<p>ועכשיו, ברשותכם, נזרוק את המתמטיקה לפח ונעבור לתמהיל מוזר של פילוסופיה ומתמטיקה. זו ארץ לא נודעת בשבילי ולכן הקוראים הזועמים מוזמנים לקרוע אותי בתגובות. שורש העניין שעליו צריך לדבר כאן הוא המושג של "לדעת", שאינו מוגדר מתמטית (בשלב זה של הספר; אני חושב שבספר ההמשך פנרוז מנסה לתת הגדרה כלשהי), ולדעתי לא ניתן להגדיר אותו בצורה מיישבת דעת שעדיין מאפשרת לאדם לנצח את המכונה. אני חושב שמה שפנרוז עושה בתעלול שהצגתי זה עתה, באמצעות המניפולציה הזו של המילה "לדעת", משהו ששקול לכל דבר ועניין לאמירה "אם האדם אינו מכונת טיורינג, אז האדם אינו מכונת טיורינג". וכעת אסביר.</p>
+<p>פנרוז מצביע בעצמו על כך שהתהליך שבו הפקנו מ-<span class="math">\(H\)</span> את <span class="math">\(Q\)</span> היה <strong>אלגוריתמי</strong>. כלומר, יש אלגוריתם שבהינתן הקידוד של המכונה <span class="math">\(H\)</span> פולט את הקידוד של המכונה <span class="math">\(Q\)</span> שעבורה <span class="math">\(H\)</span> "לא יודעת" את התשובה, ואילו אנחנו בני האדם כן יודעים. פנרוז גם מתייחס לכך שהאלגוריתם הזה יכול בעצמו "לשפר את <span class="math">\(H\)</span>" על ידי כך שהוא ידע לענות פרטנית ש-<span class="math">\(Q\)</span> אינה עוצרת. רק מה, פנרוז גם ממשיך ואומר שגם את האלגוריתם המשופר הזה אפשר לתקוף באותה דרך וכן הלאה. זה סוף ההתייחסות של פנרוז לעניין בפרק זה של הספר. אני חושב שכדאי להביא את הדברים בשם אומרם כדי להסתכן כמה שפחות בהוצאה מהקשר:</p>
+<blockquote>
+<p dir="ltr">In fact the procedure is so well defined that we could find an algorithm for generating k, given H. So, before we get too complacent, we have to realize that this algorithm can improve on H since, in effect, it 'knows' that <span class="math">\(M_{k}\left(k\right)=\square\)</span> — or does it? It has been helpful in the above description to use the anthropomorphic term 'know' in reference to an algorithm. However, is it not we who are doing the 'knowing', while the algorithm just follows the rules we have told it to follow? Or are we ourselves merely following rules that we have been programmed to follow from the construction of our brains and from our environment? The issue is not really simply one of algorithms, but also question of how judges what is true and what is not true.</p>
+</blockquote>
+<p>אני לא יכול לומר שאני מבין עד הסוף את מה שפנרוז אומר כאן על "לדעת", וזה נראה לי כמו התחמקות. אבל זה לא חשוב; פנרוז מפספס משום מה את הבעיה העיקרית כאן - גם <span class="math">\(H\)</span> יכולה "לדעת" ש-<span class="math">\(Q\)</span> לא עוצרת; היא פשוט לא יכולה <strong>להגיד את זה</strong>.</p>
+<p>האס שאני שולף מהשרוול כאן (ואני <strong>בטוח</strong> שפנרוז מכיר אותו - פנרוז מפגין בקיאות רבה בחומר שהוא כותב עליו; לכן חורה לי שהוא בכלל לא מתייחס לזה) הוא מה שנקרא "משפט הרקורסיה של קלייני", שתיארתי כבר (לא בשם זה) ב<a href="http://www.gadial.net/2009/11/27/quine_and_recursion_theorem/">פוסט</a> בעבר. משפט הרקורסיה הוא תוצאה אלגנטית ויפהפיה, שמראה שכאשר בונים מכונת טיורינג, אפשר להניח שהיא יודעת את הקידוד שלה עצמה; היא מסוגלת איכשהו לבצע בתחילת הריצה שלה חישוב ולייצר את הקידוד הזה יש מאין - "נס" מתמטי שכזה, שכמובן מעוגן היטב במציאות (לא קשה לכתוב בפועל תוכניות מחשב שמבצעות את הנס הזה). מכיוון שפנרוז מנסה לתקוף <strong>כל</strong> <span class="math">\(H\)</span> שמנסה לפתור את בעיית העצירה, בפרט הוא צריך לתקוף גם <span class="math">\(H\)</span> כזו שכחלק ממה שהיא עושה היא מחשבת את <span class="math">\(Q\)</span> מתוך הקידוד שלה עצמה, ואז בודקת האם <span class="math">\(Q=M_{n}\)</span>, כאשר <span class="math">\(\left(n,n\right)\)</span> הוא הקלט שלה. אם התשובה חיובית, אז <span class="math">\(H\)</span> <strong>יודעת</strong> שהקלט שהיא מטפלת בו כרגע הוא מה שאכנה "הנודניק של פנרוז". היא יודעת שהקלט הנוכחי היא מכונה שמנסה להכשיל אותה. ו-<span class="math">\(H\)</span>, גיבורה טרגית אמיתית, גם יודעת שאין לה שום דרך לענות נכון על הקלט <span class="math">\(n\)</span>; אם <span class="math">\(H\)</span> תענה 1 ("המכונה <span class="math">\(M_{n}\)</span> עוצרת על <span class="math">\(n\)</span>") אז אותה <span class="math">\(M_{n}\)</span> זדונית לא תעצור על <span class="math">\(n\)</span>; ואם היא תענה 0, אז <span class="math">\(M_{n}\)</span> המרשעת כן תעצור על <span class="math">\(n\)</span>. הנקודה המהותית כאן היא שהפרדוקסליות לא נובעת ממה ש-<span class="math">\(H\)</span> <strong>יודעת</strong> אלא ממה ש-<span class="math">\(H\)</span> <strong>אומרת</strong>: <span class="math">\(Q\)</span> לוקחת את התשובה של <span class="math">\(H\)</span> ועושה ממנה חוכא ואיטלולא. זה לא אומר ש-<span class="math">\(H\)</span> לא מבינה מראש שזה מה שהולך לקרות. אם <span class="math">\(H\)</span> תענה תשובה כלשהי, <span class="math">\(Q\)</span> תגרום לתשובה הזו להיות שקר, ולכן <span class="math">\(H\)</span> חייבת לא לעצור, ובכך לגרום גם ל-<span class="math">\(Q\)</span> לא לעצור. וכאשר <span class="math">\(H\)</span> תרוץ ותרוץ עוד ועוד אל הנצח, היא תדע כל הזמן שהקלט הנוכחי שלה לא הולך לעצור. היא פשוט לא תוכל לעצור ולהגיד את זה.</p>
+<p>אם כן, אם אנחנו מבצעים הפרדה פילוסופית בין "מה שהמכונה יודעת" ובין "מה שהמכונה אומרת", אין ספק שהדוגמה של פנרוז קורסת לחלוטין. אנחנו בני האדם, חד משמעית, <strong>לא</strong> יודעים יותר מאשר המכונה <span class="math">\(H\)</span>. אבל, האם פנרוז מרשה את זה? נניח שלא. נניח שהמכונה <strong>חייבת</strong> לומר את מה שהיא חושבת כדי שנדע שהיא חושבת אותו; במקרה זה אכן <span class="math">\(H\)</span> "לא יודעת" ש-<span class="math">\(Q\)</span> לא תעצור, אבל אנחנו כן. במילותיו של פנרוז:</p>
+<blockquote>
+<p dir="ltr">Let us see how this comes about. Suppose we have some algorithm which is sometimes effective for telling us when a Turing machine will not stop. Turing's procedure, as outlined above, will explicitly exhibit a Turing machine calculation for which that particular algorithm is not able to decide whether or not the calculation stops. However, in doing so, it actually enables us to see the answer in this case! The particular Turing machine calculation that we exhibit will indeed not stop.</p>
+</blockquote>
+<p>וכאן אנחנו מגיעים לנקודה המרכזית, ה"שקר" שאני רואה אצל פנרוז. המשחק שהוא דורש שנשחק כאן הוא לא הוגן - הוא דורש מהמכונה "להכריע" (Decide) האם החישוב עוצר או לא, כש"הכרעה" שכזו חייבת לבוא לידי ביטוי בסיום החישוב והוצאת פלט; אבל מבני האדם הוא דורש רק שהם "יראו" (See) האם התשובה נכונה או לא. בשום מקום הוא לא דורש מבני האדם להשתתף באותו מבחן כמו המכונות ולטרוח לכתוב את התשובה על דף!</p>
+<p>ומה יקרה אם בני האדם יחוייבו להשתתף במשחק? אם הם יחוייבו לכתוב על דף, או לומר בקול, או משהו, את מה שהם "רואים"? כמובן, הם יפסידו מייד; כי אז נבנה מכונה <span class="math">\(Q\)</span> באותו אופן כמו קודם, רק שבמקום להריץ את <span class="math">\(H\)</span> על <span class="math">\(\left(n,n\right)\)</span> המכונה <span class="math">\(Q\)</span> תשאל את האדם "תגיד, מה יש לך לומר על <span class="math">\(\left(n,n\right)\)</span>?" והאדם יהיה באותה בעיה שבה <span class="math">\(H\)</span> הייתה קודם - אם הוא מזהה ש-<span class="math">\(M_{n}=Q\)</span> הוא יודע בודאות ש-<span class="math">\(M_{n}\)</span> מנסה להכשיל אותו, אבל <strong>הוא לא יכול להגיד זאת</strong>. הוא יהיה חייב לשתוק לנצח, ואז רובוט-פנרוז יכתוב עליו בספר "The Emperor's New Algorithm", תחת הכותרת "How to outdo a human''. בעסה לאדם.</p>
+<p>בפסקה הקודמת אני טיפה מרמה, כי הרעיון הוא ש-<span class="math">\(Q\)</span> תוכל להסתדר בעצמה, בלי אדם בכלל - שהיא תוכל <strong>לסמלץ</strong> את האדם במובן זה שהיא תדע מה הפלט שהוא יוציא לכל קלט שהיא נותנת. אם זה לא נכון, כמובן שהאדם חזק מהמכונה - אבל זו תהיה בדיוק הנחת המבוקש של פנרוז; מה שקראתי לו קודם "אם האדם חזק מהמכונה, אז האדם חזק מהמכונה". כל עוד האדם אינו חזק <strong>חישובית</strong> מהמכונה - כלומר, כל עוד לכל קלט שנותנים לאדם, גם המכונה יכולה לדעת מה יהיה הפלט, אז גם היתרון של ה"ידיעה" שפנרוז מנסה להצביע עליו לא קיים, כי המכונה יכולה "לדעת" דברים שהאדם לא יכול לומר במפורש.</p>
+<p>השורה התחתונה פשוטה - פנרוז מראש מארגן משחק מכור של אדם-נגד-מכונה, ותובע מהאדם הרבה פחות; פלא שהאדם מנצח? כמובן, ייתכן שבהמשך פנרוז מתייחס בהרחבה לכל הנקודות הללו ומציע משחק יותר הוגן; אבל אין לכך שום רמז בחלק שבו הוא מציג את הטיעון לראשונה. הקוראים מוזמנים לתקן אותי אם אני מפספס משהו.</p>
+<p>אני חושב שכל העניין הזה מצביע יפה על הבעייתיות הגדולה שבנסיון להסיק מסקנות פילוסופיות מתוצאות מתמטיות. המעבר ממתמטיקה - מוגדרת היטב, חד משמעית, מדויקת - לפילוסופיה, שהיא הרבה יותר מילולית ומסתמכת על אינטואיציות שלנו - הוא מאוד מסוכן. אפשר "להחביא" בתוך המעבר הזה (ואפילו בטעות) מעין רמאויות שהופכות את כל התוצאות המתמטיות המדוייקות לחסרות משמעות. שימו לב לכך בפעם הבאה שמישהו ישכנע אתכם בטיעון פילוסופי כלשהו באמצעות מתמטיקה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/04/23/against_penrose_emperor_2/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">המותר האדם מן האלגוריתם, חלק 2 - הנקמה?</span>
+            </a>
+            
+            
+            
+            <a href="/2011/04/12/gelfond_schneider_theorem/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הוכחה לא קונסטרוקטיבית לכך שרציונלי זה טרנסצנדנטי (טוב, לא בדיוק...)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

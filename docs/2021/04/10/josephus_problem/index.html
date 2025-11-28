@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בעיית יוספוס - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>בעיית יוספוס</h1>
+            <div class="post-meta">
+                <span class="date">2021-04-10</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיית יוספוס.html">בעיית יוספוס</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בעיית יוספוס, על שם ההיסטוריון יוספוס פלביוס, היא ההוכחה שמתמטיקאים יכולים למצוא בעיה מתמטית בכל סיפור שרק נותן להם שמץ של הזדמנות לעשות זאת. במקרה הזה, הספר "תולדות מלחמת היהודים עם הרומאים" של יוספוס שמתאר את המרד הגדול ברומאים. בזמן המלחמה הזו פלביוס עדיין נקרא יוסף בן מתיתיהו והיה אחד ממפקדי הצבא היהודי, אך לבסוף <a href="http://www.daat.ac.il/daat/vl/milhamot/milhamot10.pdf">("תולדות מלחמת היהודים עם הרומאים", ספר 3, פרק שמיני)</a> הובס על ידי הרומאים ביודפת ומצא את עצמו מסתתר במערה עם ארבעים אנשים.</p>
+<p>כשהיה ברור לאנשים במערה שהרומאים עומדים ללכוד אותם, החליטו שעדיף להם להתאבד מאשר ליפול בידיהם. חוץ מאשר יוספוס שלא התלהב כל כך מכל הקטע הזה של מות קדושים וניסה להסתלק אבל לא בדיוק נתנו לו ("מהרו אליו מכל עברים בחרבות שלופות וחרפו אותו על מרך-לבו").</p>
+<p>אלא ש"גם בעת המצוקה הזאת לא נבצרה מזימה מיוסף" והוא הציע שאם כבר עליהם למות, שיעשו זאת בהגרלה. בכל סיבוב של ההגרלה ייבחר אדם אחד, שיהרוג את האדם שנבחר קודם ("הבו ונטיל גורלות, מי ממנו ימית את חברו. והנלכד בגורל יפול בחרב הבא אחריו"), וכך זה יימשך עד שכולם מתים. וכך הנה, ורצה הגורל שיוסף ואדם אחד יחיד נותרו בחיים עד הסוף ("אולי היה זה מקרה ואולי אצבע אלוהים") ויוסף הצליח לשכנע את האדם האחר לא להשתתף בהימור, וכך ניצלו חייו (של יוסף; לא בדיוק מסופר מה עלה בגורל השני ומכיוון שמדובר ברומאים אני לא אופטימי).</p>
+<p>בתור סיפור, זה סיפור מוצלח למדי, למי שאוהבים דם ואש ותמרות עשן; אבל כמה הוא אמין? והאם אפשר לחלץ מפה חידה מתמטית מעניינת?</p>
+<p>ראשית, מה הסיכוי של יוסף לשרוד הרפתקאה כזו ב"מקרה", כדבריו? על פי הסיפור, היו עם יוסף 40 אנשים נוספים, כלומר בסך הכל היו 41. אם ההגרלה שבוצעה היא הוגנת, הסיכוי של יוסף להיות האחרון ששורד הוא <span class="math">\(\frac{1}{41}\approx2.44\%\)</span> - ממש לא משהו. איך הגעתי למספר הזה? דרך אחת היא פשוט לומר שלכל האנשים אותו סיכוי בדיוק; דרך מסורבלת יותר עם פחות נפנוף ידיים היא להגיד שכל הגרלה יוצרת <strong>סידור בשורה</strong> של האנשים - האיש הראשון, האיש השני וכן הלאה, מה שנקרא ב<a href="https://gadial.net/2010/06/20/combinatorics_intro/">קומבינטוריקה</a> <strong>תמורה</strong>. יש <span class="math">\(41!\)</span> תמורות כאלו, כאשר סימן הקריאה מתאר את פעולת ה<strong>עצרת</strong>: <span class="math">\(n!=1\cdot2\cdot3\cdots n\)</span>. אם נספור רק את התמורות שבהן יוסף הוא אחרון, נראה שיש <span class="math">\(40!\)</span> כאלו, כי פשוט מסדרים בשורה את כל האנשים מלבד יוסף, ואז מוסיפים אותו בסוף. לכן יש ליוסף סיכוי של <span class="math">\(\frac{40!}{41!}=\frac{1}{41}\)</span> להישאר אחרון.</p>
+<p>אבל רגע, יוסף סיפר שנשאר איתו עוד אדם אחד. אם נניח שלא משנה איזה אדם היה שורד עם יוסף, די בכך שנשאר רק אחד נוסף כדי שיוסף יוכל לשכנע אותו, הסיכוי של יוסף לשרוד גדל פי 2; עכשיו כדי לקבל תמורה שבה הוא שורד, מסדרים את 40 האנשים האחרים בשורה ואז בוחרים אחד משני המקומות האחורנים בשביל יוסף ומסדרים את האחרים "סביבו" (או כולם לפניו, או שהאחרון בסידור של האנשים האחרים יהיה אחריו) ויוסף מקבל סיכוי של <span class="math">\(\frac{2\cdot40!}{41!}=\frac{2}{41}\approx4.88\%\)</span> לשרוד (ובאופן כללי, אם יוסף היה מצליח לשכנע את הנותרים כשנשארו <span class="math">\(k\)</span> אנשים, אז הסיכוי שלו לשרוד היה <span class="math">\(\frac{k\cdot40!}{41!}=\frac{k}{41}\)</span>).</p>
+<p>העניין הוא שגם <span class="math">\(4.88\%\)</span> הוא לא סיכוי גדול במיוחד. במילים אחרות, אנחנו לא מאמינים ל"אולי היה זה מקרה ואולי אצבע אלוהים" של יוסף ומעדיפים לחשוב עליו בתור תחמן שהצליח איכשהו להנדס את ההגרלה לטובתו. הבעיה היא שאנחנו לא יודעים מה <strong>הייתה</strong> ההגרלה - יוסף לא מספר לנו שום דבר מעבר ל"הבו ונטיל גורלות". אז מה עושים? ממציאים! איכשהו בפולקלור המתמטי השתרשה גרסה מאוד ספציפית של הגרלה שבה לכאורה השתמשו בסיפור הזה, והמתמטיקה מתעניינת בדיוק במחקר של סוג ההגרלה הזה.</p>
+<p>בהגרלה הזו האנשים עומדים במעגל - נסמן אותם בתור המספרים מ-1 עד 41 (יש גרסאות מתמטיות שמתארות את הסיפור עם מספר שונה של אנשים, אבל המספר מהסיפור של יוסף עצמו הוא 41). בוחרים מספר כלשהו, נאמר 3 (גם פה, בגרסאות מתמטיות שונות ומשונות משתמשים גם במספרים אחרים), ואז מתחילים לעבור על המעגל 3 צעדים בפעם. בפעם הראשונה מגיעים אל איש מס' 3 ומסירים אותו מהמעגל (אני אוותר על תיאורים אלימים יותר); אחר כך אל איש מספר 6 ומסירים גם אותו, וכך זה נמשך; אנו מסירים מהמעגל את אנשים <span class="math">\(3,6,9,12,15,18,21,24,27,30,33,36,39\)</span> ולכאורה האיש הבא שנסיר אמור להיות מס' 42, אבל אין במעגל 42 אנשים אלא רק 41, אז מתחילים מחדש ומסירים את איש מס' 1. עכשיו נראה שהבא בתור הוא 4, אבל זה לא מה שקורה. כזכור, כבר הסרנו מהמעגל את איש מס' 3, ולכן אם נספור שלושה צעדים החל מאיש מס' 1, נקבל את איש 2, איש 4 ואיש 5, ולכן 5 הוא הבא בתור שיוסר מהמעגל, וכן הלאה.</p>
+<p>בשיטה הזו בכלל אין חשיבות ל<strong>מזל</strong>. היא מרגישה קצת אקראית במובן זה שהיא יוצרת לנו תמורה כלשהי של האנשים, שאחרי הסיבוב הראשון סביב המעגל כבר נראית "מבולגנת", אולם בתיאוריה, מי שיודע שיש 41 אנשים והולכים לעבור 3 בכל פעם יכול לעשות חישוב מהיר בראש ולגלות את המקום שבו כדאי לו להיות במעגל כדי להיות זה שנשאר אחרון.</p>
+<p>האם זה מה שיוסף עשה, והוא גם מחשב אנושי בנוסף להיסטוריון מחונן? ובכן... כנראה שלא. כאשר יוסף נשאר עם האדם הבודד הנוסף, הוא אומר שהוא "לא רצה להלכד בגורל ולמות, וגם לא לטמא את ידו בדם אחים אם ישאר האחרון". אבל הרי אם הייתה ננקטת שיטה דטרמיניסטית, בשלב הזה יוסף בודאות כבר היה יודע אם הוא יישאר האחרון או לא; כלומר, נראה שבכל שלב בוצעה הגרלה חדשה, בשונה מהשיטה של המעגל. אלא שזה לא משנה לנו כי עם כל הכבוד לסיפור המעניין של יוסף, אנחנו פה בשביל חידת המעגל עצמה.</p>
+<p>אם כן, מה המטרה שלנו בחידה? באופן כללי, לכל מספר אנשים <span class="math">\(n\)</span> ומספר צעדים <span class="math">\(q\)</span> אנחנו מקבלים <strong>תמורה</strong> <span class="math">\(J_{n,q}\)</span>, ויכולים לשאול את עצמנו כל מני שאלות עליה - איך מחשבים אותה? מה האיבר האחרון בה? מה המבנה שלה? וכדומה. זה תחום רחב שלא ידוע עליו יותר מדי במקרה הכללי, ולכן אספר כמה סיפורים ספציפיים שקשורים אליו, ונתחיל ממה שאני מחבב במיוחד: במקרה שבו <span class="math">\(q=2\)</span>, כלומר מתקדמים במעגל שני צעדים בכל פעם, איך אפשר לחשב מה המקום של האדם האחרון שיישאר במעגל, מבלי לחשב את כל <span class="math">\(J_{n,2}\)</span>?</p>
+<p>מה שיש לנו פה בעצם הוא <strong>סדרה</strong> של מספרים - לכל <span class="math">\(n\)</span>, מתאים המיקום שתקף לאותו מספר אנשים <span class="math">\(n\)</span>. בואו נסמן ב-<span class="math">\(a_{n}\)</span> את אברי הסדרה הזו. לפנינו בעיה קומבינטורית סטנדרטית - למצוא חוקיות בתוך סדרת מספרים. איך עושים את זה? דבר ראשון שתמיד כדאי לעשות - לחשב כמה ערכים ראשונים, פשוט על ידי כך שמשחקים את המשחק. בבירור <span class="math">\(a_{1}=1\)</span> (כי אדם בודד הוא כבר האחרון) ו-<span class="math">\(a_{2}=1\)</span> (כי בשלב הראשון הולכים שני צעדים, שהראשון חולף על פני 1 והשני מגיע אל 2 ומוציא אותו) ו-<span class="math">\(a_{3}=3\)</span> וכך נמשיך ונקבל את הסדרה:</p>
+<p><span class="math">\(1,1,3,1,3,5,7,1,3,5,7,9,11,13,15,1,3,5,7,\ldots\)</span></p>
+<p>לא טרחתי לחשב את הסדרה בעצמי, כמובן; קל לכתוב קוד (למשל, בפייתון) שמייצר אותה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">josephus_permutation</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+    <span class="n">people</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">people</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="p">(</span><span class="n">location</span> <span class="o">+</span> <span class="n">q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">people</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">people</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">josephus_permutation</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">)])</span>
+</code></pre></div>
+
+
+</div>
+<p>עכשיו, הסדרה נראית כמו ערבוביה גדולה אבל כמה דברים ברורים - קודם כל, יש מספרים שחוזרים על עצמם המון, אפילו בסוג של מחזוריות. שנית, כל המספרים הם <strong>אי זוגיים</strong>. אלו אבחנות פשוטות ולא מפתיעות אבל הן מצביעות על כך שיש פה סדר שאפשר למצוא. בואו נחשוב על זה - למה כל המספרים אי זוגיים? כמובן, כי מאחר ו-<span class="math">\(q=2\)</span> הרי שבסיבוב הראשון של ה"משחק" נפטרים מכל הערכים הזוגיים שהיו. למשל, אם <span class="math">\(n=8\)</span> אז הסיבוב הראשון מסלק את <span class="math">\(2,4,6,8\)</span> ואז בסיבוב השני נשארנו עם <span class="math">\(1,3,5,7\)</span> (שמתוכם נסיר את <span class="math">\(3,7\)</span> ובסיבוב השלישי נסיר את <span class="math">\(5\)</span>). בשלב הזה האינטואיציה המתמטית עשויה לקפוץ - הסיבוב הראשון בעצם מייצר לנו בעיית יוספוס <strong>חדשה</strong>, עם חצי ממספר האיברים בבעיה המקורית. </p>
+<p>מהבעיה <span class="math">\(n=8\)</span> עברנו אל בעיה קצת מוזרה, שבה <span class="math">\(n=4\)</span> אבל האיברים לא ממוספרים בתור <span class="math">\(1,2,3,4\)</span> אלא בתור <span class="math">\(1,3,5,7\)</span>. מה הקשר בין שתי הסדרות הללו, <span class="math">\(1,2,3,4\)</span> ו-<span class="math">\(1,3,5,7\)</span>? זה לא קשר של שוויון, אבל אפשר <strong>לנחש</strong> שיש קשר פשוט ולראות אם זה עובד בפועל. קשר פשוט במיוחד הוא קשר <strong>לינארי</strong>, <span class="math">\(y=ax+b\)</span> כאשר <span class="math">\(a,b\)</span> הם קבועים. מספיק להציב ערכי <span class="math">\(x,y\)</span> עבור שני האיברים הראשונים בסדרה כדי להסיק מה <span class="math">\(a,b\)</span> חייבים להיות אם הקשר אכן מתקיים:</p>
+<p><span class="math">\(1=a\cdot1+b\)</span></p>
+<p><span class="math">\(3=a\cdot2+b\)</span></p>
+<p>נחסר את המשוואה הראשונה מהשניה ונקבל <span class="math">\(2=a\)</span> ואז נציב את זה במשוואה הראשונה ונקבל <span class="math">\(1=2\cdot1+b\)</span>, כלומר <span class="math">\(b=-1\)</span>. במילים אחרות, אנחנו מנחשים שמתקיים הקשר הפשוט <span class="math">\(y=2x-1\)</span>. בדיקה זריזה תראה שהוא אכן מתקיים.</p>
+<p>ייתכן שזה נראה מיותר לגמרי - שאפשר לראות "בעין" שזה הקשר בין <span class="math">\(1,2,3,4\)</span> ובין <span class="math">\(1,3,5,7\)</span>, ולחלקנו זה כנראה המצב; אבל מה שנחמד פה הוא שגם לניחושים ואינטואיציות כאלו יש דרך שיטתית שבה אפשר להגיע אליהם.</p>
+<p>אם כן, גילינו שיטה שבה אפשר לצמצם את ממדי בעיית יוספוס: לחלק את מספר האיברים ב-2 לקבלת בעיה קטנה יותר, לקחת את התוצאה שלה, להכפיל ב-2 ולהחסיר 1. או בניסוח מתמטי:</p>
+<p><span class="math">\(a_{2n}=2a_{n}-1\)</span></p>
+<p>קל לבדוק שזה עובד לכל <span class="math">\(n\)</span> - אבל הנוסחה הזו מטפלת רק במקרים שבהם התחלנו עם מספר <strong>זוגי</strong> של שחקנים. מה קורה במקרה האי זוגי, כלומר עבור <span class="math">\(a_{2n+1}\)</span>?</p>
+<p>ובכן, שוב כדאי להסתכל על דוגמא, נאמר עבור <span class="math">\(1,2,3,4,5,6,7,8,9\)</span>. כאן אחרי הסיבוב הראשון נישאר עם <span class="math">\(1,3,5,7,9\)</span>, כשהבא בתור יהיה 1. בואו נסלק גם את ה-1 הזה מהתמונה, ונישאר עם <span class="math">\(3,5,7,9\)</span>. קיבלנו 4 איברים כמו קודם, רק שעכשיו ההתאמה שלו צריכה להתאים את <span class="math">\(1,2,3,4\)</span> אל <span class="math">\(3,5,7,9\)</span> - חישוב זריז יראה שהפעם צריך לכפול ב-2 <strong>ולחבר</strong> 1, ונקבל</p>
+<p><span class="math">\(a_{2n+1}=2a_{n}+1\)</span></p>
+<p>המסקנה שלנו היא שאפשר לתת <strong>נוסחת נסיגה</strong> פשוטה עבור <span class="math">\(a_{n}\)</span>:</p>
+<p><span class="math">\(a_{n}=\begin{cases} 1 & n=1\\ 2a_{k}-1 & n=2k\\ 2a_{k}+1 & n=2k+1 \end{cases}\)</span></p>
+<p>הנוסחה הזו מאפשרת לנו לחשב את הרשימה <span class="math">\(1,1,3,1,3,5,7,1,3,5,7,9,11,13,15,1,3,5,7,\ldots\)</span> הרבה יותר בקלות. הנה קוד שעושה את זה:</p>
+<div class="code-block">
+
+<div class="highlight"><pre><span></span><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="p">[</span><span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div>
+
+
+</div>
+<p>זה לכשעצמו כבר מאפשר לנו לחשב בקלות את הפתרון של בעיית יוספוס גם עבור ערכים גבוהים מאוד, אבל יש דרך לעשות את זה <strong>עוד יותר נחמד</strong>. אז בואו נראה אותה. אנחנו רוצים "לפתור" את נוסחת הנסיגה - לקבל דרך לחשב את <span class="math">\(a_{n}\)</span> ישירות מתוך <span class="math">\(n\)</span>, בלי לעבור דרך ערכים קטנים יותר.</p>
+<p>ראשית, בואו נסתכל שוב על רשימת המספרים:</p>
+<p><span class="math">\(1,1,3,1,3,5,7,1,3,5,7,9,11,13,15,1,3,5,7,\ldots\)</span></p>
+<p>אמרנו כבר שרואים פה חזרתיות. עכשיו אולי יהיה יותר קל להבין מאיפה היא מגיעה. נוסחת הנסיגה בעצם אומרת לנו שלמעט האיבר הראשון, כל זוג אברים אחר כך יגיע בתור צמד מהצורה <span class="math">\(2a_{k}\pm1\)</span> כאשר <span class="math">\(a_{k}\)</span> הוא איבר מוקדם יותר. לי קל לדמיין את זה במבנה של <strong>עץ בינארי</strong>, כשלוקחים את האיבר הראשון בסדרה לצומת העליון, את שני הבאים להיות הבנים שלו, את <strong>ארבעת</strong> הבאים להיות הבנים של הבנים, וכן הלאה:</p>
+<p><img src="/img/2021/josephus_graph.png" alt=""/></p>
+<p>בצורה הזו רואים שאפשר לחלק את המספרים בסדרה לקבוצות מגודל <span class="math">\(2^{k}\)</span> (כאשר <span class="math">\(k\)</span> הוא מספר השורה שלהן, החל משורה 0):</p>
+<p><span class="math">\(1\)</span></p>
+<p><span class="math">\(1,3\)</span></p>
+<p><span class="math">\(1,3,5,7\)</span></p>
+<p><span class="math">\(1,3,5,7,9,11,13,15\)</span></p>
+<p>וכל שכבה פשוט חוזרת על כל המספרים האי-זוגיים מ-1 ועד שהיא מתמלאת.</p>
+<p>בניסוח מתמטי פורמלי אפשר לומר זאת כך: <span class="math">\(a_{2^{k}+m}=2m+1\)</span>, כאשר <span class="math">\(m<2^{k}\)</span>.</p>
+<p>קיבלנו נוסחה סגורה יפה עבור <span class="math">\(a_{n}\)</span>, אבל אפשר להציג אותה בצורה <strong>עוד יותר יפה</strong> אם חושבים לרגע על מה היא בעצם עושה. בשביל זה כדאי להסתכל על <strong>הייצוג הבינארי</strong> של <span class="math">\(n\)</span>.</p>
+<p>ייצוג בינארי של מספר הוא כתיבה שלו בתור סכום של חזקות של 2. כשאני כותב "1101" אני מדבר על הסכום <span class="math">\(1\cdot2^{0}+0\cdot2^{1}+1\cdot2^{2}+1\cdot2^{3}=1+4+8=13\)</span>. עכשיו, אם ידוע לי ש-<span class="math">\(n\)</span> הוא מספר מהצורה <span class="math">\(2^{k}+m\)</span> כאשר <span class="math">\(m<2^{k}\)</span>, מה זה אומר על הייצוג הבינארי של <span class="math">\(n\)</span>? זה אומר שהייצוג הזה כולל <span class="math">\(k\)</span> ספרות כשהספרה ה-<span class="math">\(k\)</span>-ית היא 1, ויתר הספרות מרכיבות את המספר <span class="math">\(m\)</span>. זה אומר שאם אני אקח את הייצוג הבינארי הזה ו<strong>אמחק</strong> ממנו את הספרה האחרונה הזו, אני אקבל את הייצוג הבינארי של <span class="math">\(m\)</span> עצמו.</p>
+<p>עכשיו, אם אני לוקח מספר וכופל אותו ב-2, הייצוג הבינארי שלו זז צעד אחד שמאלה: אם אני כופל את 1101 ב-2 אני מקבל 11010. אם אני לוקח את זה ומוסיף לו 1, אני משנה את הספרה הימנית ביותר מ-0 ל-1. לכן את הנוסחה <span class="math">\(a_{2^{k}+m}=2m+1\)</span> אפשר לתאר גם בצורה הבאה:</p>
+<p>בהינתן <span class="math">\(n\)</span>, קחו את הייצוג הבינארי שלו, הסירו מהמספר את ה-1 השמאלי ביותר והכניסו אותו מחדש במקום הימני ביותר. קיבלתן את הייצוג הבינארי של <span class="math">\(a_{n}\)</span>. למשל, ראינו שהייצוג הבינארי של 13 הוא 1101 ולכן אחרי התעלול נעבור אל 1011, שהוא הייצוג הבינארי של <span class="math">\(1+2+8=11\)</span>. כך אנו יודעים שבמקום ה-13 בסדרה יהיה האיבר 11.</p>
+<p>עכשיו קיבלנו משהו שיוסף היה יכול לעשות בראש, אילו באמת היו משתמשים בשיטה הזו עם <span class="math">\(q=2\)</span>. היו במעגל 41 אנשים, והייצוג הבינארי של 41 הוא 101001 (את זה אפילו אני מצליח לחשב בראש) ולכן המקום שיישאר אחרון הוא 10011, שהוא המספר <span class="math">\(16+2+1=19\)</span>, ולכן זה המקום שיוסף היה צריך להיות בו.</p>
+<p>שימו לב שבמעבר מ-101001 אל 10011 "איבדנו" ספרה - זה כי אחרי הסרת ה-1 השמאלי ביותר מ-101001 נשארנו עם 01001, והאפס השמאלי הזה מתפוגג לו. זה בעצם מלמד אותנו מה יקרה אם נשחק את המשחק שבו אנו מתחילים עם <span class="math">\(n\)</span>, מחליפים אותו ב-<span class="math">\(a_{n}\)</span>, מחליפים אותו ב-<span class="math">\(a_{a_{n}}\)</span> וכן הלאה - אנחנו הולכים לקחת את המספר <span class="math">\(n\)</span> ולהעביר 1-ים משמאל לימין תוך שאנו מאבדים את כל האפסים בדרך, ואחרי מספר סיבובים ששווה למספר הספרות הבינאריות של <span class="math">\(n\)</span> נישאר עם מספר שכולו 1-ים, כמספר ה-<span class="math">\(1\)</span>-ים שהיו ב-<span class="math">\(n\)</span> במקור. פורמלית, נגיע אל <span class="math">\(2^{\#_{1}\left(n\right)}-1\)</span> כאשר <span class="math">\(\#_{1}\left(n\right)\)</span> הוא מספר ה-1-ים בייצוג בינארי של <span class="math">\(n\)</span>.</p>
+<p>זו התוצאה שרציתי להציג בפוסט, למרות שאפשר לשאול עוד הרבה שאלות אחרות על בעיית יוספוס, אבל במהלך קריאה של דברים לקראת כתיבת הפוסט נתקלתי במשהו שהוא כל כך הזוי ממבט ראשון שאני חייב לספר גם עליו, אם כי הוא ידרוש גלישה למונחים טכניים מתקדמים יחסית.</p>
+<p>התוצאה הזו מוזכרת בספר Matters Mathematical של Herstein ו-Kaplansky. הם מציבים לעצמם למטרה להתעניין לא בפתרון ל"בעיית יוספוס" (מי נשאר אחרון) אלא בהבנת המבנה של התמורה <span class="math">\(J_{n,q}\)</span> כולה. בפרט, לכל תמורה הם מפרקים אותה <a href="https://gadial.net/2017/03/14/permutation_groups/">למבנה המעגלי</a> שלה.</p>
+<p>למשל, את <span class="math">\(J_{11,2}\)</span> אפשר לתאר בתור הרשימה <span class="math">\(2,4,6,8,10,1,5,9,3,11,7\)</span>. הרשימה הזו היא דרך פשוטה לומר "1 עובר ל-2, 2 עובר ל-4, 3 עובר ל-6" וכן הלאה. כשרוצים לתאר דבר כזה בתור <strong>מעגל</strong> פשוט מתחילים מאיבר כלשהו ורואים לאן הוא עובר, ולאן עובר מי שהוא עובר אליו, וכן הלאה - עד שחוזרים לאיבר שהתחלנו ממנו, ואז בוחרים איבר שטרם בחרנו ופותחים מעגל חדש. אם נעשה את זה על <span class="math">\(J_{11,2}\)</span> נקבל את הייצוג <span class="math">\(\left(1\ 2\ 4\ 8\ 9\ 3\ 6\right)\left(5\ 10\ 11\ 7\right)\)</span> כלומר, קיבלנו שני מעגלים, שהאחד הוא מאורך 7 והשני הוא מאורך 4.</p>
+<p>הרשטיין וקפלנסקי מתארים כמה תוצאות על התמורות הללו. למשל, אם <span class="math">\(n\equiv1\left(\text{mod }4\right)\)</span> (כלומר, כשמחלקים את <span class="math">\(n\)</span> ב-4 מקבלים שארית 1) ובנוסף לכך גם <span class="math">\(n\)</span> וגם <span class="math">\(2n+1\)</span> הם ראשוניים, אז <span class="math">\(J_{n,2}\)</span> תורכב ממעגל אחד גדול (זה קורה עבור <span class="math">\(J_{5,2}\)</span>, למשל). אבל התוצאה המעניינת ביותר שלהם נוגעת למקרה של <span class="math">\(n\equiv3\left(\text{mod }4\right)\)</span> כך ש-<span class="math">\(n\)</span> ו-<span class="math">\(2n+1\)</span> שניהם ראשוניים (למשל <span class="math">\(n=11\)</span> שבדוגמא שלי). במקרה כזה אפשר להוכיח שיהיו בדיוק <strong>שני</strong> מעגלים בפירוק. והנה רשימה של ה<strong>אורכים</strong> של המעגלים הללו עבור ערכים קטנים של <span class="math">\(n\)</span> שמקיימים את התנאי:</p>
+<p><span class="math">\(\begin{array}{cc} 3: & 2,1\\ 11: & 7,4\\ 23: & 14,9\\ 83: & 47,36\\ 131: & 72,59\\ 179: & 99,80\\ 191: & 104,87\\ 239: & 132,107\\ 251: & 136,115 \end{array}\)</span></p>
+<p>קיבלנו כאן רשימה די מוזרה של מספרים אקראיים לכאורה. מתמטיקאים אוהבים למצוא סדר בדברים האקראיים לכאורה, וכאן הסדר הוא מפתיע למדי וקשור אל <strong>תורת המספרים האלגברית</strong>. זה תחום עשיר ויפה שרק <a href="http://gadial.net/2011/08/19/algebraic_number_theory_intro_1/">נגעתי בקצה-קצהו</a> בבלוג, אבל לשמחתי ברמה שמקיפה את כל המושגים שבהם אשתמש עכשיו.</p>
+<p>בתורת המספרים האלגברית מתעסקים במשהו שנקרא <strong>חוגי שלמים</strong>. בלי להיכנס להגדרה המלאה (כי אני מחביא פה כל מני מורכבויות לא רלוונטיות), אם ניקח את <span class="math">\(\mathbb{Z}\)</span> ונרחיב אותו על ידי הוספת מספר "מבחוץ" כמו <span class="math">\(\sqrt{-11}\)</span>, ונקבל את מה שמסומן בתור <span class="math">\(\mathbb{Z}\left[\sqrt{-11}\right]\)</span>: אוסף כל האיברים מהצורה <span class="math">\(a+b\sqrt{-11}\)</span> כך ש-<span class="math">\(a,b\in\mathbb{Z}\)</span>, התוצאה תהיה מבנה אלגברי שנקרא <strong>חוג</strong> שיש בו פעולות כפל וחיבור. כך למשל</p>
+<p><span class="math">\(\left(a+b\sqrt{-11}\right)\left(c+d\sqrt{-11}\right)=\left(ac-11bd\right)+\left(ad+bc\right)\sqrt{-11}\)</span></p>
+<p>החוגים שמתקבלים בצורה הזו הם מעניינים מאוד, ואפשר לחקור אותם באמצעות כלים דומים לאלו שבהם חוקרים את <span class="math">\(\mathbb{Z}\)</span> עצמו, אבל מהר מאוד מגיעים לחוגים שבהם אחד הכלים הבסיסיים ביותר שלנו נשבר. ב-<span class="math">\(\mathbb{Z}\)</span> יש למספרים מה שנקרא <strong>פריקות יחידה</strong>, כלומר כל מספר שלם ניתן להצגה בצורה אחת ויחידה בתור מכפלה של אי-פריקים. בחוגי שלמים כלליים יותר, לא בהכרח. הדוגמא הקלאסית היא החוג <span class="math">\(\mathbb{Z}\left[\sqrt{-5}\right]\)</span> שבו <span class="math">\(6=2\cdot3=\left(1+\sqrt{-5}\right)\left(1-\sqrt{-5}\right)\)</span> הם שני פירוקים שונים של 6 לאי-פריקים.</p>
+<p>בלי פריקות יחידה, הרבה מתורת המספרים נזרק לפח, וזה מאוד מצער. לכן תורת המספרים האלגברית מוצאת דרך לתקן חלקית את הבעיה. במקום לדבר על פריקות יחידה של מספרים לאי-פריקים, מדברים על פריקות שלהם ל<strong>אידאלים</strong>, כשאידאלים הם קבוצות של מספרים בעלי תכונות מסויימות (אינטואיטיבית אפשר לחשוב על אידאלים בתור משהו שאפשר לפרק אליו אי-פריקים כדי שפירוקים שאינם יחידים יגיעו בסוף לאטומים עוד יותר בסיסיים שכן יהיו משותפים). למרבה השמחה, בחוגי השלמים זה אכן מחזיר את מושג הפריקות היחידה; רק נשאר להבין מה אנחנו מאבדים במעבר מפריקות יחידה לאי-פריקים אל פריקות יחידה לאידאלים.</p>
+<p>כאן נכנסת לתמונה חבורה שנקראת Ideal Class Group ("חבורת מחלקות האידאלים"?) שבמובן מסויים מתארת את האופן שבו הפריקות היחידה "נשברת" - ככל שהיא יותר גדולה ומסובכת, כך הפריקות היחידה הרוסה יותר (וה"מחיר" של תיקון שלו כדי לשמר חלק מהמתמטיקה שלנו יהיה כרוך בויתורים גדולים יותר). הקטע הזה של פריקות יחידה לאידאלים קיים במחלקה רחבה של חוגים, שנקראים <strong>חוגי דדקינד</strong>; מה שיפה בחוגי שלמים ספציפית הוא שבהם החבורה הזו יחסית נחמדה - בפרט, היא <strong>סופית</strong>. הגודל שלה נקרא "מספר המחלקה", Class Number.</p>
+<p>איך כל זה קשור אל בעיית יוספוס? פשוט מאוד, נכון שאמרתי שעבור ערכי <span class="math">\(n\)</span> כך ש-<span class="math">\(n,2n+1\)</span> שניהם ראשוניים, <span class="math">\(n\equiv3\left(\text{mod }4\right)\)</span> אז התמורה <span class="math">\(J_{n,2}\)</span> מורכבת בדיוק משני מעגלים, וכתבתי רשימה של אורכי המעגלים הללו?</p>
+<p><span class="math">\(\begin{array}{cc} 3: & 2,1\\ 11: & 7,4\\ 23: & 14,9\\ 83: & 47,36\\ 131: & 72,59\\ 179: & 99,80\\ 191: & 104,87\\ 239: & 132,107\\ 251: & 136,115 \end{array}\)</span></p>
+<p>אז אם ניקח <span class="math">\(n\)</span> ונסתכל בחוג השלמים <span class="math">\(\mathbb{Z}\left[\sqrt{-\left(2n+1\right)}\right]\)</span>, נקבל שמספר המחלקה שלו שווה ל<strong>הפרש</strong> בין גדלי שני המעגלים שמרכיבים את <span class="math">\(J_{n,2}\)</span>. למשל, עבור <span class="math">\(n=11\)</span> נקבל שמספר המחלקה של <span class="math">\(\mathbb{Z}\left[\sqrt{-23}\right]\)</span> הוא <span class="math">\(7-4=3\)</span>.</p>
+<p>מה הולך פה? אין לי מושג, לא קראתי את ההוכחה. אני מניח שאחרי שרואים את ההוכחה התוצאה הזו הרבה פחות מפתיעה, אבל כרגע היא עבורי סוג של קסם - קישור שממש לא ציפיתי לו בין שני תחומים לכאורה שונים במתמטיקה. קצת מזכיר את עניין ה-Monstrous Moonshine המפורסם <a href="https://gadial.net/2009/07/14/monster/">שכתבתי עליו בבלוג</a>. במתמטיקה דברים כאלו הם חלק מהכיף.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2021/05/13/trigonometry_intro/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מה בעצם הולך בטריגונומטריה בתיכון? (חלק א&#39;)</span>
+            </a>
+            
+            
+            
+            <a href="/2021/03/24/how_to_division/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">ארבע פעולות החשבון - חילוק</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

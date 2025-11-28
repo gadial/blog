@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מטריצות הפיכות, ומה שלדטרמיננטות יש לומר בעניין - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מטריצות הפיכות, ומה שלדטרמיננטות יש לומר בעניין</h1>
+            <div class="post-meta">
+                <span class="date">2011-11-21</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/דטרמיננטות.html">דטרמיננטות</a>
+                    
+                    <a href="/tags/מטריצות.html">מטריצות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסט הקודם הצגתי את מושג הדטרמיננטה של מטריצה ריבועית <span class="math">\(A\)</span>, שסימנתי כ-<span class="math">\(\left|A\right|\)</span>. נתתי שלוש הגדרות שונות (אקסיומטית - הפונקציונל מולטי-לינארי על שורות <span class="math">\(A\)</span> היחיד שהוא גם מתחלף ומחזיר 1 על מטריצת היחידה), ישירה (<span class="math">\(\left|A\right|=\sum_{\sigma}\mbox{sgn}\left(\sigma\right)\prod_{i=1}^{n}A_{i\sigma\left(i\right)}\)</span>) ורקורסיבית, וכעת נותרה לי רק תכונה מרכזית אחת של הדטרמיננטה לתאר - היא <strong>כפלית</strong>, כלומר <span class="math">\(\left|AB\right|=\left|A\right|\left|B\right|\)</span>, כאשר <span class="math">\(A,B\)</span> מטריצות ריבועיות מאותו סדר (יש גם נוסחה בשם "נוסחת קושי-בינה" שלא אציג שמכלילה את הנוסחה הזו למקרה שבו <span class="math">\(A,B\)</span> אינן ריבועיות אך מכפלתן ריבועית). תכף אוכיח את התכונה אבל קודם כל בואו נשים לב למשהו מיידי שעולה ממנה.</p>
+<p>אמרתי פעם ש-<span class="math">\(A\)</span> היא מטריצה <strong>הפיכה</strong> אם קיימת מטריצה <span class="math">\(A^{-1}\)</span> כך ש-<span class="math">\(AA^{-1}=A^{-1}A=I\)</span>, כאשר <span class="math">\(I\)</span> היא מטריצת היחידה (המטריצה שבה אברי האלכסון הראשי הם 1 ושאר האיברים הם 0). מהכפליות נובע ש-<span class="math">\(1=\left|I\right|=\left|AA^{-1}\right|=\left|A\right|\left|A^{-1}\right|\)</span>, כלומר <span class="math">\(\left|A^{-1}\right|=\left|A\right|^{-1}\)</span>. זה אומר, בפרט, שאם מטריצה היא הפיכה, אז הדטרמיננטה שלה שונה מאפס. גם ההפך נכון - הדטרמיננטה של מטריצה שאינה הפיכה היא בהכרח אפס - אבל בואו נוכיח את הכפליות של דטרמיננטה לפני שנדבר על כך.</p>
+<p>על פניו נראה שההוכחה צריכה להיות טכנית להחריד, אבל התכונות היפות של הדטרמיננטה חוסכות לנו את רוב כאב הראש. אחת האבחנות שלנו בפוסט הקודם הייתה שכל פונקציה <span class="math">\(f\)</span> שהיא מולטי-לינארית ומתחלפת (עם <span class="math">\(n\)</span> משתנים שהם וקטורים ב-<span class="math">\(\mathbb{F}^{n}\)</span>) נקבעת באופן יחיד על פי ערכה על וקטורי הבסיס הסטנדרטי, כלומר <span class="math">\(f\left(e_{1},\dots,e_{n}\right)\)</span>. קצר יותר קונקרטית, ראינו (אם כי לא הצגתי זאת כך) ש-<span class="math">\(f\left(v_{1},\dots,v_{n}\right)=\chi\left(v_{1},\dots,v_{n}\right)f\left(e_{1},\dots,e_{n}\right)\)</span> כאשר <span class="math">\(\chi\left(v_{1},\dots,v_{n}\right)\)</span> הוא איזה סקלר שמחושב מתוך <span class="math">\(v_{1},\dots,v_{n}\)</span> באופן ש<strong>אינו תלוי ב-<span class="math">\(f\)</span></strong> אלא רק באופן שבו <span class="math">\(v_{1},\dots,v_{n}\)</span> מוצגים כצירופים לינאריים של אברי הבסיס הסטנדרטי. כעת, זכרו שהגדרנו דטרמיננטה בתור הפונקציה המולטי-לינארית המתחלפת שמחזירה 1 על וקטורי הבסיס הסטנדרטי, ולכן (אם מציבים <span class="math">\(f=\det\)</span> בנוסחה שכתבתי לפני רגע) <span class="math">\(\det\left(v_{1},\dots,v_{n}\right)=\chi\)</span>. במילים אחרות, לכל פונקציה מולטי-לינארית מתחלפת <span class="math">\(f\)</span>, אנו רואים ש-<span class="math">\(f=f\left(e_{1},\dots,e_{n}\right)\cdot\det\)</span>. זה אומר ש-<span class="math">\(\det\)</span> פורשת את מרחב הפונקציות המולטי-לינאריות המתחלפות, ומקל עלינו מאוד את הצעד הבא.</p>
+<p>התעלול כעת הוא כדלהלן: אנו רוצים להוכיח כי <span class="math">\(\det AB=\det A\det B\)</span>. בואו נקבע את <span class="math">\(B\)</span> ונגדיר פונקציונל מולטי-לינארי מתחלף <span class="math">\(f\left(v_{1},\dots,v_{n}\right)=\det\left(v_{1}B,\dots,v_{n}B\right)\)</span> (<span class="math">\(v_{i}B\)</span> מוגדר באמצעות כפל מטריצות רגיל - מכיוון שזה כפל של וקטור <span class="math">\(1\times n\)</span> במטריצה <span class="math">\(n\times n\)</span> התוצאה היא שוב וקטור <span class="math">\(1\times n\)</span>). לא קשה לראות ש-<span class="math">\(f\)</span> הזה הוא באמת מולטי-לינארי מתחלף - זה נובע מתכונות <span class="math">\(\det\)</span> ומכך שכפל מטריצות הוא דיסטריביוטיבי. כעת, ראינו שכל פונקציונל מולטי-לינארי מתחלף הוא כפולה בסקלר של <span class="math">\(\det\)</span>, כלומר <span class="math">\(f\left(v_{1},\dots,v_{n}\right)=\det\left(v_{1},\dots,v_{n}\right)\cdot f\left(e_{1},\dots,e_{n}\right)=\det\left(v_{1},\dots,v_{n}\right)\det\left(e_{1}B,\dots,e_{n}B\right)\)</span>. כעת, מהו <span class="math">\(e_{i}B\)</span>? לא קשה לראות מההגדרה שזוהי השורה ה-<span class="math">\(i\)</span> של <span class="math">\(B\)</span>, ומכאן ש-<span class="math">\(\det\left(e_{1}B,\dots,e_{n}B\right)=\left|B\right|\)</span>. כל מה שנשאר לעשות הוא להציב ב-<span class="math">\(v_{1},\dots,v_{n}\)</span> את שורות <span class="math">\(A\)</span> ולשים לב לכך ש-<span class="math">\(v_{i}B\)</span> הוא "השורה ה-<span class="math">\(i\)</span> במטריצה <span class="math">\(AB\)</span>", וקיבלנו ש-<span class="math">\(\det AB=\det A\det B\)</span>.</p>
+<p>עכשיו, בואו ניזכר רגע בדירוג מטריצות. אמרתי בשעתו שכל פעולה בדירוג - החלפה בין שורות, כפל שורה בסקלר או הוספת כפולה בסקלר של שורה אחת לשורה אחרת - ניתנת לתיאור באמצעות כפל במטריצה, וזוהי מטריצה הפיכה כי הפעולה הפיכה. אם <span class="math">\(A\)</span> היא מטריצה שאחרי דירוג מתקבלת ממנה <span class="math">\(D\)</span>, זה אומר שקיימת <span class="math">\(E\)</span> הפיכה כך ש-<span class="math">\(EA=D\)</span>. לכן גם <span class="math">\(\left|E\right|\left|A\right|=\left|D\right|\)</span>, ולכן אם <span class="math">\(\left|D\right|=0\)</span> נובע שבהכרח <span class="math">\(\left|A\right|=0\)</span> שכן <span class="math">\(\left|E\right|\ne0\)</span>, בהיותה מטריצה הפיכה. במילים אחרות, כדי להראות שכל מטריצה לא הפיכה <span class="math">\(A\)</span> היא בעלת דטרמיננטה אפס, מספיק להראות שאחרי דירוג אפשר להביא כל מטריצה ריבועית שאינה הפיכה למטריצה <span class="math">\(D\)</span> שיש בה שורת אפסים; מטריצה כזו בהכרח מקיימת <span class="math">\(\left|D\right|=0\)</span> (דרך פשוטה לראות זאת - מפתחים את הדטרמיננטה לפי שורת האפסים, ומקבלים שהדטרמיננטה היא סכום של איברים מהצורה אפס-כפול-משהו).</p>
+<p>הנימוק הוא פשוט ואלגנטי להפתיע. אנחנו יודעים שצורה מדורגת מצומצמת של מטריצה <strong>ריבועית</strong> יכולה להיות בדיוק אחד משניים: או מטריצת היחידה (1 על האלכסון הראשי ו-0 בכל מקום אחר) או מטריצה שכוללת שורות אפסים; זה נובע ישירות מההגדרה של מטריצה מצומצמת. אם אפשר לקבל מ-<span class="math">\(A\)</span> את מטריצת היחידה לאחר דירוג, זה אומר ש-<span class="math">\(EA=I\)</span> עבור <span class="math">\(E\)</span> כלשהי, ועל ידי כפל ב-<span class="math">\(E^{-1}\)</span> רואים ש-<span class="math">\(A=E^{-1}\)</span>, מה שאומר ש-<span class="math">\(A\)</span> הפיכה וההופכית שלה היא <span class="math">\(E\)</span> (נקודה עדינה - אנו משתמשים כאן בכך שידוע ש-<span class="math">\(E\)</span> הפיכה; המשוואה <span class="math">\(EA=I\)</span> לבדה לא מוכיחה ש-<span class="math">\(A\)</span> הפיכה כי למטריצות עשוי להיות "הופכי חד צדדי", כלומר בתיאוריה היה עשוי להתקיים ש-<span class="math">\(AE\ne I\)</span> ואז <span class="math">\(A\)</span> לא הייתה הפיכה).</p>
+<p>אני רוצה לדבר עכשיו על מה שהיה עבורי הדבר הכי קשה לעיכול, טכנית, כשלמדתי אלגברה לינארית - <strong>המטריצה הצמודה</strong> של <span class="math">\(A\)</span>. למעשה, כבר כשמדברים על השם צריך להיזהר כי באלגברה לינארית השם הזה משמש לתיאור שתי מטריצות שונות לגמרי. בעברית קוראים לפעמים למטריצה שאדבר עליה עכשיו "מטריצה מצורפת" ובאנגלית קוראים לה Adjugate או classical adjoint. משסיימנו את ענייני הטרמינולוגיה, בפוסט הזה אני כן אדבר על מטריצה צמודה וחסל.</p>
+<p>מטריצה צמודה מכלילה במובן מסויים את המושג של מטריצה הופכית גם עבור מטריצות שאינן הפיכות. איזה מובן? אם <span class="math">\(A\)</span> היא מטריצה, אסמן את הצמודה שלה כ-<span class="math">\(\mbox{adj}A\)</span>. המשפט שאוכיח עכשיו ("כלל קרמר") הוא ש-<span class="math">\(A\cdot\mbox{adj}A=\mbox{adj}A\cdot A=\left|A\right|I\)</span>. כלומר, אם <span class="math">\(A\)</span> הפיכה אז <span class="math">\(A^{-1}=\frac{\mbox{adj}A}{\left|A\right|}\)</span>, ואם <span class="math">\(A\)</span> לא הפיכה אז <span class="math">\(\mbox{adj}A\)</span> מאפסת אותה.</p>
+<p>משזה נאמר, ההגדרה של <span class="math">\(\mbox{adj}A\)</span> היא לא הדבר הכי נעים בעולם ולא ברור כל כך איך הגיעו אליה (כנראה באמצעות הרבה חשיבה או הנדסה-לאחור של המשפט שאוכיח תכף). הכניסה ה-<span class="math">\(i,j\)</span> של <span class="math">\(\mbox{adj}A\)</span> שווה ל-<span class="math">\(\left(-1\right)^{i+j}\)</span> כפול המינור ה-<span class="math">\(j,i\)</span>-י של <span class="math">\(A\)</span>: <span class="math">\(\left[\mbox{adj}A\right]_{ij}=\left(-1\right)^{i+j}\left|A^{ji}\right|\)</span>. כזכור, המינור ה-<span class="math">\(j,i\)</span>-י הוא מה שמקבלים מ-<span class="math">\(A\)</span> כאשר מסירים את השורה ה-<span class="math">\(j\)</span> ואת העמודה ה-<span class="math">\(i\)</span> ולוקחים את הדטרמיננטה של היתר. שימו לב להיפוך שיש כאן - הכניסה בשורה ה-<span class="math">\(i\)</span> והעמודה ה-<span class="math">\(j\)</span> של הצמודה נקבעות על פי המינור של השורה ה-<span class="math">\(j\)</span> והעמודה ה-<span class="math">\(i\)</span>.</p>
+<p>טוב. אז איך נראה ש-<span class="math">\(A\cdot\mbox{adj}A=\left|A\right|I\)</span>? בדם ואש, כמובן. אנחנו רוצים להראות ש-<span class="math">\(\left[A\cdot\mbox{adj}A\right]_{ij}=\left|A\right|\delta_{ij}\)</span> (הדלתא של קרונקר - אפס או אחד, בהתאם לשאלה אם <span class="math">\(i\ne j\)</span> או <span class="math">\(i=j\)</span>). על פי ההגדרה, אנו יודעים ש:</p>
+<p><span class="math">\(\left[A\cdot\mbox{adj}A\right]_{ij}=\sum_{k=1}^{n}A_{ik}\left[\mbox{adj}A\right]_{kj}=\sum_{k=1}^{n}A_{ik}\left(-1\right)^{k+j}\left|A^{jk}\right|\)</span></p>
+<p>אם <span class="math">\(i=j\)</span>, אז הנוסחה <span class="math">\(\sum_{k=1}^{n}A_{ik}\left(-1\right)^{k+i}\left|A^{ik}\right|\)</span> היא בדיוק, אבל בדיוק, הנוסחה לפיתוח של <span class="math">\(\left|A\right|\)</span> על פי השורה ה-<span class="math">\(i\)</span>. לכן אנו מקבלים <span class="math">\(\sum_{k=1}^{n}A_{ik}\left(-1\right)^{k+i}\left|A^{ik}\right|=\left|A\right|\)</span> במקרה זה. נותר לטפל במקרה שבו <span class="math">\(i\ne j\)</span>. התעלול הוא כזה: בואו נדמיין מטריצה <span class="math">\(B\)</span> שזהה ל-<span class="math">\(A\)</span> בהכרח פרט לכך שהשורה ה-<span class="math">\(j\)</span> שלה שווה לשורה ה-<span class="math">\(i\)</span> שלה. שתי שורות שוות גוררות מייד <span class="math">\(\det B=0\)</span> (למה? ובכן, <span class="math">\(\det\)</span> היא פונקציה מתחלפת וזו בדיוק ההגדרה של מתחלפת...), ואפשר לכתוב את הפיתוח של <span class="math">\(B\)</span> לפי השורה ה-<span class="math">\(j\)</span> ולקבל:</p>
+<p><span class="math">\(0=\left|B\right|=\sum_{k=1}^{n}\left(-1\right)^{j+k}B_{jk}\left|B^{jk}\right|\)</span></p>
+<p>רק מה, אם אנו מסירים מ-<span class="math">\(B\)</span> את השורה ה-<span class="math">\(j\)</span>, אנו מקבלים מטריצה שזהה ל-<span class="math">\(A\)</span>, כלומר <span class="math">\(\left|B^{jk}\right|=\left|A^{jk}\right|\)</span>; ובגלל שהשורה ה-<span class="math">\(j\)</span> של <span class="math">\(B\)</span> היא בדיוק השורה ה-<span class="math">\(i\)</span> של <span class="math">\(A\)</span>, הרי ש-<span class="math">\(B_{jk}=A_{ik}\)</span>. במילים אחרות -</p>
+<p><span class="math">\(0=\sum_{k=1}^{n}\left(-1\right)^{j+k}B_{jk}\left|B^{jk}\right|=\sum_{k=1}^{n}\left(-1\right)^{j+k}A_{ik}\left|A^{jk}\right|=\left[A\cdot\mbox{adj}A\right]_{ij}\)</span></p>
+<p>וזה מסיים את ההוכחה הזו (עדיין צריך להוכיח ש-<span class="math">\(\mbox{adj}A\cdot A=\left|A\right|I\)</span> - הרעיון זהה).</p>
+<p>על פניו, עושה רושם שנוסחת קרמר נותנת לנו דרך מצויינת לחשב את ההופכי של מטריצה. אבל בפועל זו דרך גרועה למדי כי חישוב של כל כניסה של <span class="math">\(\mbox{adj}A\)</span> הוא תובעני - צריך לחשב דטרמיננטה. הדרך ה"נכונה" למצוא הופכי של מטריצה <span class="math">\(A\)</span> הוא פשוט לדרג אותה: אם <span class="math">\(EA=I\)</span> אז <span class="math">\(E\)</span> היא בדיוק ההופכית המבוקשת. כשרוצים לחשב דבר כזה בפועל באופן ידני, מה שבדרך כלל עושים הוא לדרג את <span class="math">\(A\)</span> ובו זמנית את אותן פעולות שמבצעים בדירוג של <span class="math">\(A\)</span>, לבצע על מטריצת היחידה <span class="math">\(I\)</span> (כלומר - מתחילים כש-<span class="math">\(A\)</span> ו-<span class="math">\(I\)</span> כתובות האחת מעל השניה, ומתחילים לדרג את <span class="math">\(A\)</span> שלמעלה כשכל פעולה שמבצעים מבוצעת גם על המטריצה שלמטה). עם זאת, עדיין יש יתרונות לשימוש ב-<span class="math">\(\mbox{adj}\)</span> אם רוצים למצוא רק כניסה אחת מתוך המטריצה ההופכית (לפעמים זה כל מה שצריך) ובהקשרים תיאורטיים שונים ומשונים.</p>
+<p>בפוסט הבא נתחיל לקצור את הפירות של מה שדיברנו עליו כאן, ונדבר על מושג <strong>הערכים העצמיים</strong> של מטריצות - מושג שהעיסוק בו ידרוש פחות או יותר את כל מה שלמדנו עד כה על אלגברה לינארית.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/11/27/beatty_sequences/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">סדרות ביטי ומלכות שחמט</span>
+            </a>
+            
+            
+            
+            <a href="/2011/11/10/determinants/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">דטרמיננטות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הומומורפיזמים של חבורות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הומומורפיזמים של חבורות</h1>
+            <div class="post-meta">
+                <span class="date">2017-02-26</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה מופשטת.html">אלגברה מופשטת</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הומומורפיזם.html">הומומורפיזם</a>
+                    
+                    <a href="/tags/משפט האיזומורפיזם הראשון.html">משפט האיזומורפיזם הראשון</a>
+                    
+                    <a href="/tags/תורת החבורות.html">תורת החבורות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בסדרת הפוסטים שלי על תורת החבורות פיזרתי עד כה על ימין ועל שמאל הבטחות מסוג "שתי החבורות הללו הן בעצם אותו הדבר במובן מסויים כלשהו שאני לא אומר עליו כלום כרגע אבל בבקשה בבקשה תאמינו לי". הגיע הזמן להציג את המובן הזה, וגם לראות איך הוא מתקשר כמעט מאליו למושגים של תת-חבורה וחבורת מנה שהצגתי עד כה. המושג שאני צריך הוא <strong>הומומורפיזם</strong> של חבורות.</p>
+<p>ככה זה לעתים קרובות במתמטיקה: קודם כל מציגים סוג חדש של עולם מתמטי (במקרה שלנו, חבורות) ואז מתחילים לתהות לגבי הקשרים בין האובייקטים השונים בעולם הזה. מתי שתי חבורות הן אותו דבר. מתי חבורה אחת כוללת עותק של חבורה אחרת בתור תת-חבורה שלה. מה הדרכים השונות שבהן ניתן להמיר חבורה אחת לחבורה אחרת, וכן הלאה. כשזה קורה, מתחילים לדבר על <strong>פונקציות</strong> בין האובייקטים השונים בעולם שלנו, אבל לא סתם כל פונקציה, אלא פונקציות ש<strong>משמרות את המבנה</strong> שמייחד את האובייקטים. במקרה שלנו, את המבנה של "חבורה".</p>
+<p>בואו נחזור לרגע לבסיס. פונקציה <span class="math">\(f:A\to B\)</span> היא משהו שלוקח איברים מ-<span class="math">\(A\)</span> ומחזיר איברים מ-<span class="math">\(B\)</span>. הרעיון הוא ש<strong>לכל</strong> קלט מתוך <span class="math">\(A\)</span> יהיה קיים פלט ב-<span class="math">\(B\)</span>, והפלט הזה יהיה יחיד, כלומר אפשר יהיה אינטואיטיבית לחשוב על <span class="math">\(f\)</span> כאילו היא מבצעת איזה שהוא תהליך המרה דטרמיניסטי שתמיד מצליח. בפועל פונקציה לא מוגדרת בתור "תהליך" או בתור "כלל" אלא פשוט בתור אוסף של זוגות הקלט/פלט שלה, מה שמאפשר לטפל בפונקציות גם כשאין כלל ברור שמגדיר אותן, אבל גישת ה"תהליך/כלל" היא נוחה מאוד עבור האינטואיציה.</p>
+<p>פונקציה היא <strong>חד-חד-ערכית</strong> (חח"ע) אם עבור קלטים שונים מתקבלים פלטים שונים; היא <strong>על</strong> אם כל איבר מ-<span class="math">\(B\)</span> מתקבל כפלט של קלט כלשהו מ-<span class="math">\(A\)</span>. אנחנו אוהבים מאוד פונקציות שהן בו זמנית חח"ע ועל כי אפשר <strong>להפוך</strong> אותן - בהינתן איבר כלשהו מ-<span class="math">\(b\)</span>, הכלל שמתאים לו איבר מ-<span class="math">\(a\)</span> כך ש-<span class="math">\(f\left(a\right)=b\)</span> הוא גם כן פונקציה חח"ע ועל, שמסמנים <span class="math">\(f^{-1}\)</span> (דהיינו <span class="math">\(f^{-1}\left(b\right)=a\)</span> אם ורק אם <span class="math">\(f\left(a\right)=b\)</span>). אם יש פונקציה <span class="math">\(f:A\to B\)</span> שהיא חח"ע ועל אז אפשר לחשוב על <span class="math">\(A\)</span> ועל <span class="math">\(B\)</span> בתור "אותה קבוצה עד כדי שינוי שמות האיברים", כש-<span class="math">\(f\)</span> מתארת את האופן שבו משנים את שמות האיברים. גם אם <span class="math">\(f\)</span> לא על <span class="math">\(B\)</span>, תמיד אפשר לדבר על תת-הקבוצה של <span class="math">\(B\)</span> שמורכבת בדיוק מהפלטים האפשריים של <span class="math">\(A\)</span>, מה שנקרא <strong>התמונה </strong>של <span class="math">\(f\)</span> על <span class="math">\(A\)</span> ומסומן כך: <span class="math">\(f\left(A\right)=\left\{ f\left(a\right)\ |\ a\in A\right\} \)</span>. כל פונקציה היא אוטומטית על התמונה שלה, ולכן אם <span class="math">\(f\)</span> חח"ע אז אפשר לחשוב על <span class="math">\(A\)</span> ועל <span class="math">\(f\left(A\right)\)</span> בתור "אותה קבוצה עד כדי שינוי שמות האיברים".</p>
+<p>בואו נראה עכשיו שתי דוגמאות לפונקציות. שתיהן יוגדרו על <span class="math">\(\mathbb{Z}_{4}=\left\{ 0,1,2,3\right\} \)</span> עם חיבור מודולו 4 - החבורה הציקלית היחידה עם 4 איברים. הטווח יהיה <span class="math">\(\mathbb{C}\)</span>, המספרים המרוכבים. ואני אכתוב אותן במפורש:</p>
+<p><span class="math">\(f\left(n\right)=\begin{cases}1 & n=0\\i & n=1\\-1 & n=2\\-i & n=3\end{cases}\)</span></p>
+<p><span class="math">\(g\left(n\right)=\begin{cases}i & n=0\\1 & n=1\\-i & n=2\\-1 & n=3\end{cases}\)</span></p>
+<p>בשני המקרים התמונה של הפונקציות היא הקבוצה <span class="math">\(\left\{ 1,i,-1,-i\right\} \)</span> שמן הסתם לא נבחרה במקרה. הקבוצה הזו היא בעצמה חבורה, עם פעולת הכפל הרגילה. יותר מכך: <span class="math">\(i\)</span> הוא יוצר שלה (כי <span class="math">\(i^{2}=-1\)</span> ו-<span class="math">\(i^{3}=-i\)</span> ו-<span class="math">\(i^{4}=1\)</span>). אז הקבוצה הזו היא חבורה ציקלית, דרך אחרת לכתוב את <span class="math">\(\mathbb{Z}_{4}\)</span>. יש לה אפילו שם: <strong>חבורת שורשי היחידה מסדר </strong><strong>4</strong>, דהיינו החבורה של כל הפתרונות המרוכבים למשוואה <span class="math">\(x^{4}=1\)</span>. באופן כללי חבורת שורשי היחידה מסדר <span class="math">\(n\)</span>, אוסף כל הפתרונות המרוכבים ל-<span class="math">\(x^{n}=1\)</span> גם היא מהווה חבורה ציקלית מסדר <span class="math">\(n\)</span>, וחבורת כל שורשי היחידה היא עסק מגניב לגמרי כי היא חבורה שבנויה "מכל החבורות הציקליות הסופיות ביחד", אבל אני כל כך מתלהב שסטיתי לגמרי מהנושא. נחזור לזה בהמשך.</p>
+<p>אז ראינו ש-<span class="math">\(\mathbb{Z}_{4}\)</span> ו-<span class="math">\(\left\{ 1,i,-1,-i\right\} \)</span> הן אותה קבוצה עד כדי שינוי שמות של איברים. התחושה היא שאותו דבר הולך להתקיים גם למבנה ה"חבורה" שיש על שתי הקבוצות הללו. עבור <span class="math">\(\mathbb{Z}_{4}\)</span> הפעולה היא חיבור מודולו 4 ועל שורשי היחידה הפעולה היא כפל, אבל התחושה היא שזו אותה פעולה ב"תחפושת". למשל, אם אני לוקח את <span class="math">\(1\in\mathbb{Z}_{4}\)</span> ומחבר אותו לעצמו, אני אקבל את 2. ואם אני אקח את <span class="math">\(i\)</span> מחבורת שורשי היחידה ואכפול אותו בעצמו אני אקבל <span class="math">\(-1\)</span>. בבירור עשיתי פה את אותו הדבר על אותה חבורה עם שתי שיטות סימון שונות: <span class="math">\(i\)</span> הוא בסך הכל סימון שונה ל-<span class="math">\(1\)</span> (כי <span class="math">\(f\left(1\right)=i\)</span>) ואילו <span class="math">\(-1\)</span> הוא בסך הכל סימון שונה ל-<span class="math">\(2\)</span> (כי <span class="math">\(f\left(2\right)=-1\)</span>). אפשר אפילו לכתוב זאת כך: <span class="math">\(f\left(1+1\right)=f\left(1\right)\cdot f\left(1\right)\)</span> (החיבור באגף שמאל הוא החיבור מודולו 4 והכפל באגף ימין הוא כפל מרוכבים).</p>
+<p>זה עבד כל כך יפה לשיטת הסימון של <span class="math">\(f\)</span> שאנחנו רצים לעשות את אותו דבר עבור <span class="math">\(g\)</span> ואז אנחנו נופלים על האף, כי זה פשוט לא עובד. למשל, <span class="math">\(g\left(1+1\right)=g\left(2\right)=-i\)</span> אבל <span class="math">\(g\left(1\right)\cdot g\left(1\right)=1\cdot1=1\)</span>. זה אומר שאי אפשר סתם לקחת את האיברים של חבורה אחת, לשנות את השמות שלהם לאיברים של חבורה שניה ולהגיד היי תראו זה אותו דבר; צריך לבצע את ההתאמה הזו מאוד בזהירות. אם לנסח במפורש מה אנחנו רוצים: אם <span class="math">\(G,H\)</span> הן שתי חבורות, אנחנו רוצים למצוא פונקציה <span class="math">\(f:G\to H\)</span> כך שבהינתן שני איברים <span class="math">\(a,b\in G\)</span> אין חשיבות לשאלה אם אני קודם כל <strong>כופל</strong> אותם עם הפעולה של <span class="math">\(G\)</span> ורק אז מפעיל את <span class="math">\(f\)</span> על התוצאה, או שקודם אני מפעיל את <span class="math">\(f\)</span> על האיברים ורק אחר כך מבצע את פעולת הכפל של <span class="math">\(H\)</span> על תמונות האיברים. בשתי הדרכים הללו אני אגיע לאותה התוצאה. אפשר לנסח את זה במשוואה פשוטה מאוד. באופן חריג, אסמן את פעולת הכפל של <span class="math">\(G\)</span> בעזרת נקודה, <span class="math">\(\cdot\)</span>, ואילו את פעולת הכפל של <span class="math">\(H\)</span> בעזרת <span class="math">\(*\)</span>, כדי שיהיה לנו קל להבין את ההבדלים. כעת, הדרישה שלנו מ-<span class="math">\(f\)</span> היא שתקיים:</p>
+<p><span class="math">\(f\left(a\cdot b\right)=f\left(a\right)*f\left(b\right)\)</span></p>
+<p>וזאת לכל <span class="math">\(a,b\in G\)</span>. פונקציה שמקיימת את התכונה הזו נקראת <strong>הומומורפיזם</strong> מ-<span class="math">\(G\)</span> אל <span class="math">\(H\)</span> ("הומומורפיזם" ביוונית פירושו, בערך, "אותה צורה"). אם <span class="math">\(f:G\to H\)</span> היא הומומורפיזם חח"ע ועל אז קוראים לה <strong>איזומורפיזם</strong>, ואז אומרים ש-<span class="math">\(G,H\)</span> הן "איזומורפיות" ומסמנים זאת <span class="math">\(G\cong H\)</span> שזו הדרך שלנו להגיד את ה"אותו דבר עד כדי שינוי הסימונים" מתחילת הפוסט.</p>
+<p>את רעיון ה"יש לי שתי דרכים שבהן אני מגיע לאותה תוצאה" אוהבים לתאר באלגברה גם באופן ציורי, בעזרת משהו שנקרא <strong>דיאגרמה קומוטטיבית</strong>. אין בה צורך של ממש כאן, אבל למה לא לנצל את ההזדמנות כדי להראות לכם את הדבר הזה. הנה הדיאגרמה הקומוטטיבית שמתאימה לסיטואציה שלנו:</p>
+<p><img src="/img/2017/02/group_homomorphisms_diagram1.png" alt="\xymatrix{G\times G\ar[r]^{\cdot}\ar[d]^{f\times f} && G\ar[d]^{f}\\H\times H\ar[r]^{*} && H}"/></p>
+<p>מה יש לנו פה? הדיאגרמה מורכבת משני מרכיבים: <strong>אובייקטים וחצים</strong>. האובייקטים אצלנו הם <span class="math">\(G\times G\)</span> (כל הזוגות של איברים מ-<span class="math">\(G\)</span>), <span class="math">\(G\)</span>, <span class="math">\(H\times H\)</span> (כל הזוגות של איברים מ-<span class="math">\(H\)</span>) ו-<span class="math">\(H\)</span>. כלומר, האובייקטים הם קבוצות. על כל חץ יש סימון של פונקציה כלשהי שמוגדרת מקבוצה אחת אל הקבוצה השניה. למשל, החץ <span class="math">\(G\times G\overset{\cdot}{\to}G\)</span> אומר שיש לנו פונקציה שמסומנת ב-<span class="math">\(\cdot\)</span> ומעבירה זוג מ-<span class="math">\(G\times G\)</span> אל איבר ב-<span class="math">\(G\)</span> - זה הרי מה שכפל באמת עושה. אותו דבר גם עם <span class="math">\(H\times H\overset{*}{\to}H\)</span> למטה. גם החץ <span class="math">\(G\overset{f}{\to}H\)</span> ברור - הוא בא לתאר את ההומומורפיזם מ-<span class="math">\(G\)</span> ל-<span class="math">\(H\)</span> שלכבודו נתכנסנו. אבל מה זה <span class="math">\(G\times G\overset{f\times f}{\to}H\times H\)</span>? שום דבר מחוכם - פשוט דרך להגיד "יש לך זוג איברים מ-<span class="math">\(G\)</span>? תפעיל את <span class="math">\(f\)</span> על כל אחד מהם". כלומר, זה בא לתאר את האופן שבו <span class="math">\(\left(a,b\right)\)</span> הופך ל-<span class="math">\(\left(f\left(a\right),f\left(b\right)\right)\)</span>.</p>
+<p>עכשיו, בדיאגרמה הזו יש נקודת התחלה ברורה - <span class="math">\(G\times G\)</span>, שאף חץ לא נכנס אליה. יש גם נקודת סיום ברורה - <span class="math">\(H\)</span>, שאף חץ לא יוצא ממנה. יש לנו שתי דרכים שונות ללכת מ-<span class="math">\(G\times G\)</span> אל <span class="math">\(H\)</span>: או שקודם כל נפנה ימינה ואז נרד למטה, מה שאומר ש-<span class="math">\(\left(a,b\right)\)</span> קודם כל יועבר אל <span class="math">\(a\cdot b\)</span> ואז יופעל עליו <span class="math">\(f\)</span> לקבלת התוצאה <span class="math">\(f\left(ab\right)\)</span>, או שקודם כל נרד למטה ואז נלך ימינה, מה שאומר ש-<span class="math">\(\left(a,b\right)\)</span> קודם כל יועבר אל <span class="math">\(\left(f\left(a\right),f\left(b\right)\right)\)</span> ואז יופעל <span class="math">\(*\)</span> לקבלת התוצאה <span class="math">\(f\left(a\right)*f\left(b\right)\)</span>. בכך שאנחנו אומרים שהדיאגרמה קומוטטיבית, אנחנו אומרים שאין חשיבות לשאלה באיזו דרך נלך, ולכן שמתקיים <span class="math">\(f\left(ab\right)=f\left(a\right)*f\left(b\right)\)</span>. בניסוח אחר, אומרים שהומומורפיזם מוגדר בתור כל <span class="math">\(f\)</span> שתגרום לדיאגרמה לעיל להיות קומוטטיבית. תגידו, ובצדק, שזו דרך מאוד מסורבלת לכתוב משוואה כל כך פשוטה ואני אסכים איתכם; בפועל משתמשים בדיאגרמות קומוטטיביות לדברים מסובכים יותר, ונראה דוגמה עוד בפוסט הזה.</p>
+<p>בואו נראה מה יוצא לנו מייד מההגדרה של הומומורפיזם <span class="math">\(f:G\to H\)</span>. ראשית כל יוצא שהאיבר האדיש של <span class="math">\(G\)</span> חייב לעבור לאדיש של <span class="math">\(H\)</span>, ושההופכי ב-<span class="math">\(H\)</span> של האיבר <span class="math">\(f\left(a\right)\)</span> שווה ל-<span class="math">\(f\left(a^{-1}\right)\)</span>. בואו נראה למה. ראשית, אם <span class="math">\(e\in G\)</span> הוא האדיש של <span class="math">\(G\)</span> אז <span class="math">\(f\left(e\right)=f\left(e\cdot e\right)=f\left(e\right)f\left(e\right)\)</span> ועל ידי כפל בהופכי של <span class="math">\(f\left(e\right)\)</span> מקבלים ש-<span class="math">\(f\left(e\right)\)</span> הוא האדיש של <span class="math">\(H\)</span>. שנית, <span class="math">\(f\left(e\right)=f\left(a\cdot a^{-1}\right)=f\left(a\right)f\left(a^{-1}\right)\)</span> וקיבלנו ש-<span class="math">\(f\left(a^{-1}\right)\)</span>, כשמכפילים אותו ב-<span class="math">\(f\left(a\right)\)</span>, מחזיר את ההופכי של <span class="math">\(H\)</span>.</p>
+<p>משני אלו נובעת תכונה מרכזית עבורנו: אם <span class="math">\(f:G\to H\)</span> הוא הומומורפיזם אז התמונה <span class="math">\(f\left(G\right)\)</span>, שהיא תת-קבוצה של <span class="math">\(H\)</span>, היא למעשה תת-חבורה. כדי לראות את זה ניקח <span class="math">\(x,y\in f\left(G\right)\)</span> ונוכיח ש-<span class="math">\(xy^{-1}\in f\left(G\right)\)</span>. מכיוון ש-<span class="math">\(x,y\)</span> בתמונה של <span class="math">\(G\)</span> קיימים <span class="math">\(a,b\)</span> כך ש-<span class="math">\(x=f\left(a\right)\)</span> ו-<span class="math">\(y=f\left(b\right)\)</span>. על כן:</p>
+<p><span class="math">\(xy^{-1}=f\left(a\right)f\left(b\right)^{-1}=f\left(a\right)f\left(b^{-1}\right)=f\left(ab^{-1}\right)\in f\left(G\right)\)</span></p>
+<p>למעשה, השוויון הזה מראה יותר: הוא מראה שהתמונה של כל <strong>תת-חבורה</strong> של <span class="math">\(G\)</span> תהיה תת-חבורה של <span class="math">\(H\)</span>. עכשיו, אם <span class="math">\(f\)</span> חח"ע, ברור מהי תת-החבורה הזו: זה עותק של <span class="math">\(G\)</span> עצמה ש"משוכן" בתוך <span class="math">\(H\)</span>. לדוגמה, בואו נסתכל על <span class="math">\(G=\mathbb{R}\)</span> ועל <span class="math">\(H=\mathbb{R}^{2}\)</span>, שתיהן עם פעולת החיבור, ועל ההומומורפיזם <span class="math">\(f\left(a\right)=\left(a,2a\right)\)</span>. התמונה שלו היא הישר <span class="math">\(y=2x\)</span> שהוא תת-חבורה של <span class="math">\(\mathbb{R}^{2}\)</span> שנראית כמו "עותק של <span class="math">\(\mathbb{R}\)</span>". הרי בתכל'ס <span class="math">\(\mathbb{R}\)</span> הוא קו ישר אופקי, אז סובבנו אותו קצת. אנחנו גם רואים כאן שלפעמים יש <strong>המון</strong> דרכים שונות לשכן את <span class="math">\(G\)</span> בתוך <span class="math">\(H\)</span> (בדוגמה שלנו, כל זווית סיבוב בין 0 ל-180 מעלות תוביל לתת-חבורה שונה).</p>
+<p>כעת נשאלת השאלה, מה אם <span class="math">\(f\)</span> איננה חח"ע? מה המשמעות של התמונה שלה אז? התשובה לזה נקראת <strong>משפט האיזומורפיזם הראשון</strong> והיא לטעמי אחד מהדברים החשובים ביותר בכל סדרת הפוסטים שאני הולך לכתוב, אם לא החשוב שבהם. הרעיון הבסיסי הוא שהתמונה של <span class="math">\(f\)</span> היא <strong>תמיד</strong> איזומורפית ל<strong>חבורת מנה</strong> של <span class="math">\(G\)</span>. כדי לראות את זה, בואו נכניס מושג חדש לתמונה - <strong>גרעין</strong> של הומומורפיזם. אם <span class="math">\(f:G\to H\)</span> הוא הומומורפיזם ו-<span class="math">\(e_{H}\in H\)</span> הוא האיבר האדיש ב-<span class="math">\(H\)</span> אז <span class="math">\(\ker f\triangleq\left\{ a\in G\ |\ f\left(g\right)=e_{H}\right\} \)</span> (כאן <span class="math">\(\ker\)</span> הוא קיצור של kernel, גרעין). קל מאוד להוכיח שהגרעין הוא תת-חבורה של <span class="math">\(G\)</span>: אם <span class="math">\(x,y\in\ker f\)</span> אז <span class="math">\(f\left(xy^{-1}\right)=f\left(x\right)f\left(y\right)^{-1}=e_{H}e_{H}^{-1}=e_{H}\)</span>.</p>
+<p>הגרעין הוא מעין מדד "עד כמה <span class="math">\(f\)</span> לא חד-חד-ערכית". אם <span class="math">\(f\left(a\right)=f\left(b\right)\)</span> אז <span class="math">\(f\left(a\right)f\left(b\right)^{-1}=e_{H}\)</span>, כלומר <span class="math">\(f\left(ab^{-1}\right)=e_{H}\)</span>, ומכאן ש-<span class="math">\(ab^{-1}\in\ker f\)</span>. זה אומר בפרט שאם <span class="math">\(\ker f=\left\{ e\right\} \)</span> ("הגרעין טריוויאלי") אז <span class="math">\(f\left(a\right)=f\left(b\right)\)</span> יגרור <span class="math">\(ab^{-1}=e\)</span> כלומר <span class="math">\(a=b\)</span>; דהיינו, הגרעין של <span class="math">\(f\)</span> טריוויאלי אם ורק אם <span class="math">\(f\)</span> חד-חד-ערכית. אבל אנחנו בעצם רואים כאן הרבה יותר. האם הסימון <span class="math">\(ab^{-1}\in\ker f\)</span> נראה מוכר? זה בדיוק יחס השקילות שראינו בפוסט על חבורות מנה. במילים אחרות, כל קוסט של <span class="math">\(\ker f\)</span> הוא בעצם "קבוצת איברים ש-<span class="math">\(f\)</span> מעבירה את כולם לאותו איבר בתמונה". מכאן קצרה הדרך לטענה שאפשר <strong>לזהות</strong> את התמונה של <span class="math">\(f\)</span> עם הקוסטים של <span class="math">\(\ker f\)</span>, וזה מה שנקרא משפט האיזומורפיזם הראשון:</p>
+<p>אם <span class="math">\(f:G\to H\)</span> הוא הומומורפיזם כלשהו של חבורות שהוא על <span class="math">\(H\)</span>, אז <span class="math">\(G/\ker f\cong H\)</span>.</p>
+<p>(אפשר כמובן לנסח את המשפט גם בלי ש-<span class="math">\(f\)</span> יהיה על, ואז מקבלים <span class="math">\(G/\ker f\cong f\left(G\right)\)</span>).</p>
+<p>לפני שאני אוכיח את המשפט, בואו בכלל נשתכנע ש-<span class="math">\(G/\ker f\)</span> היא אכן חבורה. בפוסט על חבורות מנה ראינו שלא בכל פעם שבה לוקחים את אוסף הקוסטים של תת-חבורה כלשהי מקבלים שמושרית על האוסף הזה פעולת החבורה של <span class="math">\(G\)</span>; צריך שתת-החבורה תהיה מה שקראנו לו <strong>נורמלית</strong>. בניסוח אחד, נורמליות הייתה סגירות להצמדה. אנחנו צריכים לקחת <span class="math">\(a\in G\)</span> כלשהו ולהוכיח ש-<span class="math">\(a\left(\ker f\right)a^{-1}\subseteq\ker f\)</span>, אבל זה קל. נניח ש-<span class="math">\(b\in\ker f\)</span>, כלומר <span class="math">\(f\left(b\right)=e_{H}\)</span>. אז</p>
+<p><span class="math">\(f\left(aba^{-1}\right)=f\left(a\right)f\left(b\right)f\left(a\right)^{-1}=f\left(a\right)e_{H}f\left(a\right)^{-1}=e_{H}\)</span></p>
+<p>ולכן <span class="math">\(aba^{-1}\in\ker f\)</span>. קיבלנו שהגרעין של <span class="math">\(f\)</span> הוא תמיד תת-חבורה נורמלית. תכף נראה גם את ההפך - שכל תת-חבורה נורמלית של <span class="math">\(G\)</span> היא גרעין של הומומורפיזם <strong>כלשהו</strong> שתחומו <span class="math">\(G\)</span>. לפני כן, בואו נוכיח את משפט האיזומורפיזם הראשון. אנחנו רוצים להראות <span class="math">\(G/\ker f\cong H\)</span>, אז בואו נראה הומומורפיזם שהוא חח"ע ועל <span class="math">\(\Phi:G/\ker f\to H\)</span>. אני משתמש באות <span class="math">\(\Phi\)</span> שהיא אות יוונית גדולה כדי שלא נתבלבל עם אותיות לטיניות כמו <span class="math">\(f\)</span> שאינטואיטיבית מתארות הומומורפיזמים שהתחום שלהם הוא החבורה <span class="math">\(G\)</span> ולא חבורת מנה של <span class="math">\(G\)</span>. כדי לפשט את הסימונים אני גם אכתוב את הקוסט של <span class="math">\(a\)</span> בתור <span class="math">\(\left[a\right]\)</span> במקום לכתוב <span class="math">\(a\cdot\ker f\)</span> כמו בדרך כלל.</p>
+<p>את <span class="math">\(\Phi\)</span> צריך להגדיר על הקוסטים של <span class="math">\(G/\ker f\)</span>. איך נעשה את זה? הדרך המקובלת לעבוד עם קוסטים היא <strong>לבחור נציג</strong>. מה אני יכול לעשות עם נציג בהקשר הזה? להפעיל עליו את <span class="math">\(f\)</span>. אז בואו נגדיר: <span class="math">\(\Phi\left(\left[a\right]\right)=f\left(a\right)\)</span>. אני צריך להראות את הדברים הבאים: ש-<span class="math">\(\Phi\)</span> <strong>מוגדרת היטב</strong>. שהיא הומומורפיזם. שהיא על. שהיא חח"ע.</p>
+<p>המשמעות של "מוגדרת היטב" כאן היא שהערך שהיא מחזירה על קוסט לא תלוי בבחירה של הנציג לאותו קוסט. זה נובע בדיוק מכך שכאן כל האיברים בקוסט נשלחים לאותו פלט של <span class="math">\(f\)</span>. בואו נראה את זה פורמלית: אם <span class="math">\(\left[a\right]=\left[b\right]\)</span> זה אומר ש-<span class="math">\(ab^{-1}\in\ker f\)</span>, כלומר ש-<span class="math">\(f\left(ab^{-1}\right)=e_{H}\)</span>, כלומר ש-<span class="math">\(f\left(a\right)=f\left(b\right)\)</span>, כפי שרצינו (בעצם כבר ראינו את זה קודם - מפה התחלנו). אם כן, ההגדרה שלנו עובדת במקרה הנוכחי כי אני יודע מראש שהקוסטים הם ספציפית של הגרעין של ההומומורפיזם <span class="math">\(f\)</span>; סתם לקחת הומומורפיזם כלשהו שתחומו <span class="math">\(G\)</span> ולהגדיר אותו כך על הקוסטים לאו דווקא היה עובד.</p>
+<p>העובדה ש-<span class="math">\(\Phi\)</span> הומומורפיזם נובעת מכך ש-<span class="math">\(G/\ker f\)</span> הוא לא סתם אוסף קוסטים אלא חבורה שבה אפשר לבצע כפל קוסטים באמצעות כפל נציגים:</p>
+<p><span class="math">\(\Phi\left(\left[a\right]\cdot\left[b\right]\right)=\Phi\left(\left[a\cdot b\right]\right)=f\left(a\cdot b\right)=f\left(a\right)f\left(b\right)=\Phi\left(\left[a\right]\right)\Phi\left(\left[b\right]\right)\)</span></p>
+<p>העובדה ש-<span class="math">\(\Phi\)</span> על נובעת מכך ש-<span class="math">\(f\)</span> היא על. אם <span class="math">\(y\in H\)</span> הוא איבר כלשהו אז קיים <span class="math">\(x\in G\)</span> כך ש-<span class="math">\(f\left(x\right)=y\)</span> ולכן <span class="math">\(\Phi\left(\left[x\right]\right)=y\)</span>.</p>
+<p>נשארה רק החד-חד-ערכיות שהיא בעצם הסיבה שבגללה אנחנו כאן. אינטואיטיבית, כל הרעיון במשפט האיזומורפיזם הראשון הוא "למזג" את האיברים שמקלקלים את החד-חד-ערכיות לאיבר בודד, כך שהחד-חד-ערכיות תחזור לעצמה. אם כן, נניח ש-<span class="math">\(\Phi\left(\left[a\right]\right)=\Phi\left(\left[b\right]\right)\)</span>, כלומר <span class="math">\(f\left(a\right)=f\left(b\right)\)</span>, כלומר <span class="math">\(f\left(ab^{-1}\right)=e_{H}\)</span>, כלומר <span class="math">\(ab^{-1}\in\ker f\)</span>, כלומר <span class="math">\(\left[a\right]=\left[b\right]\)</span>, כפי שרצינו. זה מסיים את הוכחת המשפט.</p>
+<p>למה המשפט הזה בעצם מועיל? במתמטיקה מאוד אוהבים את הקטע הזה של להראות ששני דברים הם איזומורפיים, כי אז אנחנו יכולים להשתמש באחד מהם כדי להבין את השני. במקרה הנוכחי, אם אנחנו מבינים טוב את חבורות המנה של חבורה מסויימת אז אפשר להבין טוב את כל מה שיכול להתקבל בתור תמונה של החבורה הזו; ובכיוון השני, אם אנחנו מבינים טוב תמונות של חבורה כלשהי אז אנחנו מבינים טוב את חבורות המנה שלה. בואו נראה דוגמה לסיטואציה הראשונה - איך הבנה טובה של חבורות המנה של חבורה מסויימת עוזרת לנו להבין חבורות אחרות. הדוגמה הזו היא סגירת חוב שיש לי מפוסטים קודמים: טענתי שהחבורות הציקליות היחידות הן <span class="math">\(\mathbb{Z}\)</span> ו-<span class="math">\(\mathbb{Z}_{n}\)</span> לכל <span class="math">\(n\)</span> טבעי. עכשיו אפשר לנסח את זה פורמלית: כל חבורה ציקלית איזומורפית ל-<span class="math">\(\mathbb{Z}\)</span> או ל-<span class="math">\(\mathbb{Z}_{n}\)</span> עבור <span class="math">\(n\)</span> טבעי כלשהו.</p>
+<p>בואו נוכיח את זה. תהא <span class="math">\(G=\left\langle g\right\rangle \)</span> חבורה ציקלית כלשהי עם יוצר <span class="math">\(g\)</span>. כלומר, אנחנו יודעים שכל איבר ב-<span class="math">\(G\)</span> הוא מהצורה <span class="math">\(g^{k}\)</span> עבור <span class="math">\(k\in\mathbb{Z}\)</span> כלשהו. רואים לאן זה הולך? החבורה <span class="math">\(\mathbb{Z}\)</span> צצה כאן כמעט מאליה. בואו נגדיר את ההומומורפיזם המתבקש כאן: <span class="math">\(f:\mathbb{Z}\to G\)</span> על ידי <span class="math">\(f\left(k\right)=g^{k}\)</span>. משפט האיזומורפים נותן לנו מייד ש-<span class="math">\(\mathbb{Z}/\ker f\cong G\)</span>. מיהן בכלל המנות של <span class="math">\(\mathbb{Z}\)</span>? כל תת-חבורה של <span class="math">\(\mathbb{Z}\)</span> היא מהצורה <span class="math">\(n\mathbb{Z}\)</span> עבור <span class="math">\(n\)</span> טבעי או שהיא תת-החבורה הטריוויאלית <span class="math">\(\left\{ 0\right\} \)</span>. המנה <span class="math">\(\mathbb{Z}/n\mathbb{Z}\)</span> איזומורפית ל-<span class="math">\(\mathbb{Z}_{n}\)</span> ואילו <span class="math">\(\mathbb{Z}/\left\{ 0\right\} \)</span> איזומורפית ל-<span class="math">\(\mathbb{Z}\)</span>. זה מסיים את ההוכחה. ייתכן שאתם תוהים למה <span class="math">\(\mathbb{Z}/n\mathbb{Z}\cong\mathbb{Z}_{n}\)</span>; האיזומורפיזם הוא פשוט <span class="math">\(f\left(\left[a\right]\right)=a\text{ mod }n\)</span>.</p>
+<p>ההוכחה לעיל היא די נפלאה לטעמי. זה לא שאי אפשר בלי משפט האיזומורפיזם הראשון. אפשר! פשוט אומרים משהו בסגנון "אם הסדר של <span class="math">\(g\)</span> הוא <span class="math">\(n\)</span> אז כך וכך ואם הסדר הוא אינסופי אז כך וכך", כלומר יש טיפה חלוקה למקרים וטיפה צריך לנמק יותר. אבל ההוכחה בעזרת משפט האיזומורפיזם הראשון קולעת בול ולעניין. מה שנחמד פה הוא שאפשר לחשוב על כך שיש רק חבורה ציקלית "בסיסית" אחת, <span class="math">\(\mathbb{Z}\)</span>, וכל יתר החבורות הציקליות נגזרות ממנה איכשהו.</p>
+<p>בואו נחדד טיפה את העניין הזה. ניקח חבורה <span class="math">\(G\)</span> עם תת-חבורה נורמלית <span class="math">\(N\)</span> ונסתכל על חבורת המנה <span class="math">\(G/N\)</span>. כמעט מאליה צצה לנו לעיניים הפונקציה <span class="math">\(\pi:a\to aN\)</span> ששולחת את <span class="math">\(a\in G\)</span> לקוסט שלו ב-<span class="math">\(G/N\)</span>. הפונקציה הזו היא הומומורפיזם כי <span class="math">\(\pi\left(a\right)\pi\left(b\right)=aNbN=abN=\pi\left(ab\right)\)</span> - זו הייתה המהות של כך שחבורת המנה היא חבורה שפעולת הכפל שלה ניתנת לביצוע "ברמת האיברים" (וכבר השתמשנו בזה קודם בפוסט). מה הגרעין של ההומומורפיזם? איבר היחידה של <span class="math">\(G/N\)</span> הוא <span class="math">\(eN=N\)</span>. כלומר, <span class="math">\(\ker\pi=N\)</span>. הנה קיבלנו שכל תת-חבורה נורמלית של <span class="math">\(G\)</span> היא גרעין של <strong>איזה שהוא</strong> הומומורפיזם על <span class="math">\(G\)</span> - ולא היינו צריכים הומומורפיזם שהולך אי שם מעבר לקשת אלא פשוט אחד שהולך לחבורת המנה עצמה. להומומורפיזם ה"טבעי" הזה אני קורא <strong>הטלה</strong> של <span class="math">\(G\)</span> על <span class="math">\(G/N\)</span>, או אפילו בשם הפלצני <strong>ההטלה הטבעית</strong> של <span class="math">\(G\)</span> על <span class="math">\(G/N\)</span>, אם כי כדי להסביר מה "טבעי" כאן בצורה מדויקת אני אצטרך לגלוש לענייני תורת הקטגוריות שאני לא רוצה להיכנס אליהם כאן.</p>
+<p>עדיין, אני כן רוצה לומר <strong>משהו</strong> שיתן את הרוח של תורת הקטגוריות כאן. לחבורות מנה יש תכונה שנקראת <strong>תכונה אוניברסלית</strong>, שההגדרה המדויקת שלה (שלא אביא כאן) תופסת את התחושה הזו של "הדרך הקנונית להבין תמונות של חבורה <span class="math">\(G\)</span> היא על ידי הסתכלות על חבורות המנה של <span class="math">\(G\)</span>".</p>
+<p>אז תהא <span class="math">\(G\)</span> חבורה עם תת-חבורה נורמלית <span class="math">\(N\)</span> וההטלה <span class="math">\(\pi:G\to G/N\)</span>. כעת, יהא <span class="math">\(f:G\to H\)</span> הומומורפיזם כלשהו מ-<span class="math">\(G\)</span> לחבורה כלשהי <span class="math">\(H\)</span> שאנחנו דורשים ממנו רק דבר אחד: <span class="math">\(N\subseteq\ker f\)</span>. זו דרך אחרת לומר "איברים שנמצאים באותו קוסט של <span class="math">\(N\)</span> מועתקים על ידי <span class="math">\(f\)</span> לאותו פלט" (כי אם <span class="math">\(x,y\)</span> באותו קוסט אז <span class="math">\(xy^{-1}\in N\)</span> ולכן <span class="math">\(xy^{-1}\in\ker f\)</span> ולכן <span class="math">\(f\left(x\right)=f\left(y\right)\)</span>). עכשיו מתקיים הקסם הבא: קיים הומומורפיזם <strong>יחיד</strong> <span class="math">\(h:G/N\to H\)</span> כך שמתקיים <span class="math">\(f=h\circ\pi\)</span>. כלומר, אפשר <strong>לפרק</strong> את <span class="math">\(f\)</span> להרכבה של שני הומומורפיזמים: קודם הולכים אל המנה עם <span class="math">\(\pi\)</span> ואחר כך הולכים מהמנה אל <span class="math">\(H\)</span> עם ה-<span class="math">\(h\)</span> החדש הזה. בניסוח אחר, <span class="math">\(G/N\)</span> היא בעלת התכונה שלכל <span class="math">\(f:G\to H\)</span> עם <span class="math">\(N\subseteq\ker f\)</span> <strong>קיים ויחיד</strong> <span class="math">\(h:G/N\to H\)</span> שגורם לדיאגרמה הבאה להיות קומוטטיבית:</p>
+<p><img src="/img/2017/02/group_homomorphisms_diagram2.png" alt="\xymatrix{G\ar[d]_{\pi}\ar[dr]^{f}\\G/N\ar[r]_{h} & H}"/></p>
+<p>זה אומר שעל כל ההומומורפיזמים מ-<span class="math">\(G\)</span> שהגרעין שלהם מכיל את <span class="math">\(N\)</span> אפשר לחשוב כאילו הם בנויים מאיזה "מקטע התחלתי" שהוא תמיד אותו דבר - <span class="math">\(\pi\)</span> - ואחרי המקטע ההתחלתי הזה מגיע "התוכן האמיתי" של ההומומורפיזם, כשאותו "תוכן אמיתי" מוגדר כבר על אברי <span class="math">\(G/N\)</span>. דהיינו, האובייקט שאנחנו באמת רוצים להבין כשאנחנו מדברים על הומומורפיזמים כאלו הוא <span class="math">\(G/N\)</span>.</p>
+<p>ה"אוניברסליות" של התכונה הזו מתבטאת בכך ש-<span class="math">\(G/N\)</span> הוא יחיד עד כדי איזומורפיזם. אפשר היה אולי לחשוב שקיימת חבורה כלשהי <span class="math">\(E\)</span> והומומורפיזם <span class="math">\(\tau:G\to E\)</span> כך שאפשר לפרק כל הומומורפיזם מ-<span class="math">\(G\)</span> שמכיל כך-וכך למקטע התחלתי של <span class="math">\(\tau\)</span> ואז משהו שנקבע ביחידות; אבל אפשר להוכיח שאם יש <span class="math">\(E\)</span> כזו אז היא איזומורפית ל-<span class="math">\(G/N\)</span>, כך שבמובן מסויים <span class="math">\(G/N\)</span> הוא האובייקט היחיד מסוגו.</p>
+<p>כאמור, את נפנופי הידיים הללו אפשר לפרמל במסגרת תורת הקטגוריות, למקרה שמישהו התחיל להתעניין. אנחנו נמשיך לראות עוד דוגמאות לתכונות אוניברסליות שכאלו בהמשך.</p>
+<p>השם "משפט האיזומורפיזם הראשון" מרמז שיש יותר מאחד. למעשה, יש בסך הכל ארבעה ונראה אותם בפוסט הבא, החל כמובן ממשפט האיזומורפיזם הרביעי. למה להתחיל מהרביעי? אשאיר אתכם במתח!</p>
+<p>&nbsp;</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2017/03/06/group_isomorphism_theorems/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפטי האיזומורפיזם של חבורות</span>
+            </a>
+            
+            
+            
+            <a href="/2017/02/08/cosets_and_quotient_groups/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">קוסטים, משפט לגראנז&#39; וחבורות מנה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

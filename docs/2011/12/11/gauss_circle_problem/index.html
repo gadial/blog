@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בעיית המעגל של גאוס (וגם קצת על טרחנות) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>בעיית המעגל של גאוס (וגם קצת על טרחנות)</h1>
+            <div class="post-meta">
+                <span class="date">2011-12-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיית המעגל של גאוס.html">בעיית המעגל של גאוס</a>
+                    
+                    <a href="/tags/טרחנים מתמטיים.html">טרחנים מתמטיים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>הפנו אותי לאתר <a href="http://www.q-spacetheory.org/59888/%D7%9E%D7%93%D7%A2%D7%9D%D7%A8%D7%95%D7%97">הבא</a>, שבו מציג כותב ישראלי משהו בשם "Q-space theory" שהיא "An attempt to intuitively unify physics". ובכן, אתם ודאי יכולים לנחש מה אני חושב כשאני רואה משהו כזה. רוב תוכנו של האתר הוא קישורים לסרטוני יוטיוב שכבר הוסרו, אבל הסיבה שבגללה קישרו אותי אליו היא <a href="http://www.q-spacetheory.org/image/users/59888/ftp/my_files/2%D7%94%D7%AA%D7%9B%D7%A0%D7%A1%D7%95%D7%AA%20%D7%9C%D7%A2%D7%A8%D7%9B%D7%95%20%D7%A9%D7%9C%20%D7%A4%D7%90%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%94%D7%A4%D7%AA%D7%A8%D7%95%D7%A0%D7%95%D7%AA%20%D7%94%D7%A4%D7%99%D7%AA%D7%92%D7%95%D7%A8%D7%90%D7%99%D7%99%D7%9D%20%D7%94%D7%98%D7%91%D7%A2%D7%99%D7%99%D7%9D.pdf?id=9428063">קובץ</a> שבו מדובר על "התכנסות לערכו של פאי דרך הפתרונות הפיתגוראיים הטבעיים". ובכן, אתם ודאי יכולים לנחש מה אני חושב כשאני רואה משהו כזה. אבל, כמו תמיד בעניינים הללו, לא הייתי טורח לכתוב על זה אם לא הייתה מתמטיקה מעניינת בפנים.</p>
+<p>אם לסכם את המטרה של הקובץ, אחרי שמוצג בו מה שמוצג, הכותב כותב ש"הכפפה למתמטיקאי או למתמטיקאית היא: נסו לנסח את הממצא הנ"ל בשפה ובסטנדרטים הנדרשים על מנת לפרסם את הממצא באקדמיה". ומהו אותו ממצא? ובכן, הכותב מתחיל עם הגדרה: הוא אומר ש-"<span class="math">\(i\)</span> הוא "פתרון פיתגוראי טבעי" של <span class="math">\(a\)</span> ו-<span class="math">\(b\)</span> אם סכום ריבועים של <span class="math">\(a\)</span> ו-<span class="math">\(b\)</span> שווה ל-<span class="math">\(i\)</span>". בעולם המתמטי הרגיל קוראים ל-<span class="math">\(i\)</span> כזה בדרך כלל "סכום ריבועים". סכומי ריבועים, שלא יהיה לכם ספק, הם תחום מרתק ביותר בתורת המספרים שלעת עתה לא דיברתי עליו מספיק אם כי כבר דיברתי עליו <a href="http://www.gadial.net/2009/06/26/sums_of_squares_and_quadratic_reciprocity/">קצת</a>.</p>
+<p>כעת, הכותב אומר שהוא "צפה את הקשר הבא מתוך שיקולים פיסיקליים", וברשותכם אביא את הניסוח המקורי שלו:</p>
+<blockquote>בהינתן מספר טיבעי כלשהו <span class="math">\(n\)</span>, היחס בין מספר הפתרונות הפיתגוראיים הטבעיים שבהם סכום ריבועי הניצבים קטן או שווה ל-<span class="math">\(n\)</span> (עם חשיבות לסדר הניצבים) לבין מחצית ערכו של <span class="math">\(n\)</span> מתכנס לערך פאי חלקי 2 ככל ש-<span class="math">\(n\)</span> גדל.</blockquote>
+<p>בנוסף, הוא מצרף קוד של תוכנית מחשב קצרה שמראה את ההתכנסות הזו. ברשותכם אמנע מלהציג אותו כאן, אבל הקוד בהחלט עובד והתוצאה שהוא מתאר בהחלט נכונה, וזה בהחלט נחמד שהוא גילה אותה באופן עצמאי. אז מה הבעיה כאן? שמדובר על ניסוח מחדש של בעיה בת 250 שנה לערך ושנפתרה כבר בידי גאוס - "<a href="http://en.wikipedia.org/wiki/Gauss_circle_problem">בעיית המעגל של גאוס</a>". אמנם, צריך להיזהר קצת כי למרות שהאבחנה שיש פה התכנסות לפאי היא דבר אלמנטרי שנובע ממה שגאוס הראה, הבעיה האמיתית היא קצת יותר מורכבת ואין לה פתרון מלא עד היום.</p>
+<p>אז מה הולך כאן ואיך מעגל נכנס לתמונה? ובכן, תשכחו מ"פתרון פיתגוראי טבעי" ותחשבו באופן גיאומטרי. אם <span class="math">\(a^{2}+b^{2}\le n\)</span> ("הפתרונות הפיתגוראיים הטבעיים שבהם סכום ריבועי הניצבים קטן או שווה ל-<span class="math">\(n\)</span>") זה אומר שהנקודה <span class="math">\(\left(a,b\right)\)</span> במישור <span class="math">\(\mathbb{R}^{2}\)</span> היא במרחק לכל היותר <span class="math">\(\sqrt{n}\)</span> מראשית הצירים, כלומר היא נמצאת בתוך העיגול שרדיוסו <span class="math">\(\sqrt{n}\)</span>. מכיוון שלא נוח לערב שורשים, בואו נדבר על עיגול ברדיוס <span class="math">\(n\)</span> ולכן המשוואה היא <span class="math">\(a^{2}+b^{2}\le n^2\)</span>. בנוסף, מכיוון שהוא מדבר רק על מספרים טבעיים הוא מדבר רק על הרבע הימני-עליון של העיגול - בואו נדבר על העיגול כולו, כלומר נרשה ל-<span class="math">\(a,b\)</span> להיות גם שליליים (אבל עדיין מספרים שלמים). אז השאלה היא כזו: בתוך עיגול שרדיוסו <span class="math">\(n\)</span>, כמה נקודות יש שהקואורדינטות שלהן הן מספרים שלמים?</p>
+<p>אפשר להגדיר את זה הכי פורמלית בעולם כך: <span class="math">\(N\left(n\right)=\left|\mathbb{Z}^{2}\cap\left\{ \left(a,b\right)\in\mathbb{R}^{2}|a^{2}+b^{2}\le n^{2}\right\} \right|\)</span>. בסימונים הללו, ההשערה שהועלתה היא שמתקיים <span class="math">\(\lim_{n\to\infty}\frac{N\left(n\right)}{n^{2}}=\pi\)</span>. את זה אפשר גם לסמן בצורה קצת שונה, שמתאימה קצת יותר לאופי של בעיות מסוג זה בתורת המספרים: <span class="math">\(N\left(n\right)=\pi n^{2}+o\left(n^{2}\right)\)</span>, או במילים: <span class="math">\(N\left(n\right)\)</span> שווה ל-<span class="math">\(\pi n^{2}\)</span> ועוד שגיאה שגדלה בקצב אסימפטוטי נמוך ממש יותר מ-<span class="math">\(n^{2}\)</span>, ובמילים אחרות אם מחלקים אותה ב-<span class="math">\(n^{2}\)</span> ומשאיפים את <span class="math">\(n\)</span> לאינסוף מקבלים אפס.</p>
+<p>זו תוצאה יפה למדי; היא מראה, באופן אינטואיטיבי, שמספר הנקודות השלמות בתוך עיגול ברדיוס <span class="math">\(n\)</span> הוא קירוב טוב לשטח של אותו עיגול. למה זה לא מפתיע ואפילו צפוי? ובכן, בגלל שאפשר לקרב את שטח עיגול היחידה באופן הבא: נגזור מעיגול היחידה ריבועים בעלי אורך צלע 1. כל ריבוע כזה הוא בעל שטח 1, ולכן שטח עיגול היחידה הוא מספר הריבועים שאנחנו יכולים לגזור ממנו "ועוד קצת" ממה שהולך בשוליים. הריבועים שנגזור יהיו בדיוק הריבועים שמוכלים בעיגול היחידה וגם קואורדינטות הקודקודים שלהם שלמות (למשל הריבוע עם הקודקודים <span class="math">\(\left(0,0\right),\left(0,1\right),\left(1,0\right),\left(1,1\right)\)</span>) ואפשר למשל לזהות כל ריבוע עם הקואורדינטה הימנית-עליונה ביותר שלו (הריבוע שבדוגמה יזוהה עם <span class="math">\(\left(1,1\right)\)</span>). בצורה הזו רוב הנקודות השלמות שבתוך העיגול יגדירו ריבוע שכולו בתוך העיגול למעט כמה מהנקודות שהן על השפה, אבל ככל ש-<span class="math">\(n\)</span> גדול יותר כך מספר הנקודות הבעייתיות הופך לקטן יותר ביחס למספר הנקודות הכולל בעיגול (אינטואיטיבית: בגלל שהנקודות הבעייתיות הן באיזור השפה החד-ממדית, והנקודות ה"בסדר" הן באיזור הפנים הדו-ממדי) ולכן הקירוב ישתפר. זו אינטואיציה גסה מאוד אבל לטעמי היא מאפשרת להבין היטב מה הולך כאן.</p>
+<p>מה גאוס הוכיח? ובכן, נסמן <span class="math">\(N\left(n\right)=\pi^{2}n+E\left(n\right)\)</span> כש-<span class="math">\(E\left(n\right)\)</span> היא פונקציית ה"שגיאה"; גאוס הוכיחש-<span class="math">\(\left|E\left(n\right)\right|\le2\sqrt{2}\pi n\)</span> (לפחות על פי ויקיפדיה; ברפרנס שהם מביאים בכלל לא מדובר על הקבוע), ומכאן קל לראות ש-<span class="math">\(E\left(n\right)=o\left(n^{2}\right)\)</span> וזה נותן את התוצאה שדובר עליה מייד. זה לא מסיים את הסיפור כי החסם של גאוס הוא עדיין גס למדי ויש חסמים טובים יותר; ההשערה היא ש-<span class="math">\(E\left(n\right)=O\left(n^{\frac{1}{2}+\varepsilon}\right)\)</span>, כלומר חזקה של <span class="math">\(n\)</span> שהיא הרבה פחות מ-1 כמו בחסם של גאוס, אבל כיום החזקה הטובה ביותר שהגיעו אליה (על פי ויקיפדיה) היא <span class="math">\(0.6298\dots\)</span>. בקיצור, חסם טוב על גודל השגיאה הוא עדיין אתגר פתוח במתמטיקה.</p>
+<p>אני ארצה להוכיח כאן את התוצאה של גאוס, אבל לפני כן, עוד מילה אחת על "הכפפה למתמטיקאי": כבר אמרתי כאן בעבר כי אחד מהמאפיינים של הטרחנים המתמטיים הוא הנטייה להמציא מחדש את הגלגל, לתת לו שם מפוצץ וכנראה לחשוב שאף אחד לא חשב על זה לפניך. כאן יש לנו מקרה קלאסי של הבעיה הזו - נותנים את השם המפוצץ "פתרונות פיתגוראיים טבעיים" למשהו שלא ממש זקוק לשם נוסף, מנסחים מחדש אבחנה שהיא כבר עתיקה למדי (בניסוח מילולי מסורבל) ומציגים את זה בתור "אתגר" לקהילה המתמטית. זה לא רציני. הדבר הראשון שצריך לעשות מישהו שמגלה תוצאה זו או אחרת במתמטיקה הוא לבדוק האם כבר שמעו עליה לפני שהוא מתחיל לפמפם אותה בתור תגלית שלו בתוספת אתגר למתמטיקאים שיואילו נא לנסח פורמלית ולהוכיח אותה. איכשהו אנשים סבורים לפעמים שניתן לעסוק במתמטיקה בלי ללמוד מתמטיקה כלל; אבל אפילו רמנוג'אן קרא ספרי מתמטיקה - ורובנו, מה לעשות, לא רמנוג'אן. מישהו שמצד אחד מתיימר לפתור את הבעיה המרכזית של עולם הפיזיקה כיום (תיאוריה מאוחדת) אבל מצד שני מראה שהוא לא מסוגל לעשות סקר ספרות אלמנטרי של בעיות מתמטיות פשוט לא יכול להילקח ברצינות.</p>
+<p>הנה דרך נחמדה לבצע סקר ספרות שכזה. נניח שכבר הבנתם שמה שמעניין פה הוא העיגול כולו ולא רבע העיגול. אז אחד מהדברים שאפשר לעשות הוא לספור ממש כמה נקודות יש בו. הנה קוד בשפה Sage (שמבוססת על פייתון - ויסלח לי אלוהי הפייתון, אבל הבלוג מסרב להציג כאן רווח/טאב בתחילת שורה) שעושה את זה:<br />
+<code><br />
+</code></p>
+<p dir="ltr" style="text-align: left;"><code>def N(n):
+return len([(a,b) for a in range(-n,n+1) for b in range(-n,n+1) if a^2+b^2&lt;=n^2])
+print [N(n) for n in range(10)]</code></p>
+<p><code> </code><br />
+שימו לב כמה העסק פשוט כאשר עובדים בשפה המתאימה - נדרשת בערך שורה אחת (שהיא אפילו קריאה, עבור מי שמכיר את השפה) כדי לעשות את החישוב שב"כפפה" דרש הרבה יותר קוד. כעת, אם מריצים את הקוד הזה יתקבל הפלט <span class="math">\([1,5,13,29,49,81,113,149,197,253]\)</span>, ומה שעושים עם דבר כזה הוא ללכת ל<a href="http://oeis.org">אנציקלופדיה האלקטרונית של סדרות מספרים</a>. הסדרה מופיעה שם, כמו גם קישור לבעיית המעגל של גאוס. זו כמובן לא הדרך היחידה שאפשר לנקוט בה, אבל אני חושב שראוי להציג אותה כי לפעמים אנשים מפספסים את העובדה שסדרה של מספרים קונקרטיים שהיא לכאורה לא מעניינת לכשעצמה (כי מה אכפת לנו אם זה 197 שם ולא 196?) יכולה להיות מאוד מועילה כשמגששים באפלה של בעיה מסויימת (כמו גם שפת תכנות נוחה עבור מי שרוצה לחשב דברים "ביד", אם כי צריך להיזהר ולא להגזים עם זה כי אינטואיציות באות לפעמים דווקא כשעושים את החישובים באמת ביד).</p>
+<p>בואו נעבור להוכחת הטענה של גאוס (עם קבוע קצת יותר גדול ממה שנטען בויקיפדיה) באופן פורמלי יותר, אבל עדיין לא פורמלי עד הסוף כי אשתמש בשיקולים גיאומטריים שיהיו רבע נפנוף ידיים. ראשית, תמונה אחת שווה כאן אלף מילים:</p>
+<p><strong><a href="/img/2011/12/gauss_circle.png"><img class="alignnone size-full wp-image-1447" title="gauss_circle" alt="" src="/img/2011/12/gauss_circle.png" width="484" height="484" /></a></strong></p>
+<p>העיגול שלנו מסומן בקו האחיד. הרעיון הוא זה שאמרתי קודם - יש התאמה בין ריבועי היחידה שקודקודיהם הם בעלי קואורדינטות שהן מספר שלם, והנקודות עם קואורדינטות שלמות במישור - לכל ריבוע פשוט מתאימים את הקודקוד הימני-עליון שלו. כעת, כל ריבוע שמוכל כולו בתוך העיגול, בפרט גם הקודקוד הימני-עליון שלו נמצא בתוך העיגול, ולכן התרומה של הריבוע לשטח (1) נספרת בהתאמה עם זה שהקודקוד של הריבוע נספר. אז מתי משהו יכול להשתבש? ברור שלא בריבועים שכולם מחוץ לעיגול - גם הקודקוד הימני-עליון שלהם מחוץ לעיגול ולכן איננו נספר. בעיה יכולה להתקיים באחד משני מקרים: או ריבוע שחלקו בתוך העיגול אבל הקודקוד הימני-עליון שלו בחוץ, ואז הוא תורם חלקית לשטח העיגול אבל לא לספירת הנקודות שבעיגול; או ריבוע שחלקו בתוך העיגול כולל הקודקוד הימני-עליון, אבל לא כולו בתוך העיגול ואז הוא לא תרם מספיק לשטח העיגול כדי לכסות על זה שהוא תרם נקודה לספירה.</p>
+<p>מה שנעשה יהיה לבחור בגישה הכי נאיבית לחסימה של השגיאה כאן: על כל ריבוע שחלקו בתוך העיגול וחלקו מחוץ לעיגול, נגיד שגודל הטעות שהריבוע גרם לה הוא המקסימלי - 1. כל מה שעלינו להראות הוא שלא יכולות להיות הרבה טעויות, כלומר אנחנו רוצים לספור את הריבועים הבעייתיים. אלו בדיוק הריבועים שמצויירים באיור.</p>
+<p>כעת, ריבוע שאורך צלעו יחידה הוא בעל אלכסון שאורכו <span class="math">\(\sqrt{2}\)</span> (משפט פיתגורס). זה אומר שהמרחק המקסימלי בין כל שתי נקודות בריבוע הוא <span class="math">\(\sqrt{2}\)</span>. כעת, בואו ניקח ריבוע שחלקו בתוך העיגול אבל יש בו נקודה מחוץ לעיגול, ונמתח קו ישר ממרכז העיגול אל הנקודה בתוך הריבוע שהיא המרוחקת ביותר ממרכז העיגול. מרגע שהקו הזה מגיע אל הגבול של העיגול ועד שהוא מגיע אל הקודקוד הבעייתי הוא יכול לעבור רק מרחק של <span class="math">\(\sqrt{2}\)</span> לכל היותר (כאן צריך קצת יותר הצדקה ואני מחפף), ולכן אם נצייר עיגול שרדיוסו גדול ב-<span class="math">\(\sqrt{2}\)</span> מרדיוס העיגול המקורי שלנו, הוא יכיל את כל הריבועים הבעייתיים. העיגול הגדול יותר הזה הוא הגדול מבין שני העיגולים המקווקווים.</p>
+<p>באופן דומה, הבה וניקח ריבוע שחלקו בתוך העיגול אבל לא כולו, אז אפילו הנקודה בו שמרחקה ממרכז העיגול הוא הקטן ביותר לא יכולה להיות במרחק גדול מ-<span class="math">\(\sqrt{2}\)</span> משפת העיגול, אחרת כל הריבוע היה בפנים. לכן אפשר לצייר עיגול פנימי שרדיוסו קטן ב-<span class="math">\(\sqrt{2}\)</span> מרדיוס העיגול - זה העיגול המקווקו השני. אם מסתכלים על השטח של העיגול המקווקו החיצוני, שממנו מחסירים את השטח של העיגול המקווקו הפנימי, מקבלים טבעת. כל הריבועים הבעייתיים נמצאים בשלמותם בתוך הטבעת הזו, ולכן שטח כל הריבועים הבעייתיים קטן או שווה לשטח הטבעת. רק ששטח טבעת קל לחשב - פשוט מחסרים משטח העיגול המקווקו החיצוני את שטח העיגול המקווקו הפנימי, ומקבלים:</p>
+<p><span class="math">\(\pi\left(n+\sqrt{2}\right)^{2}-\pi\left(n-\sqrt{2}\right)^{2}=4\pi\sqrt{2}n\)</span></p>
+<p>וזהו ההפרש המקסימלי בין שטח העיגול (<span class="math">\(\pi n^{2}\)</span>) ובין מספר הנקודות השלמות שבו (<span class="math">\(N\left(n\right)\)</span>), מה שמסיים את ההוכחה וסוגר את עניין ה"כפפה".</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/12/24/simultaneous_diagonalization/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">להטיל לכסון סימולטני בתת-מרחב שמור, בערך</span>
+            </a>
+            
+            
+            
+            <a href="/2011/12/07/minimal_polynomial_and_cayley_hamillton/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">השילוש הקדוש, הפולינום המינימלי ומשפט קיילי-המילטון</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

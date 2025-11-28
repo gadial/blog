@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>על משוואות בלי פתרון, ולמה זה לא רציונלי - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>על משוואות בלי פתרון, ולמה זה לא רציונלי</h1>
+            <div class="post-meta">
+                <span class="date">2007-06-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/מספרים.html">מספרים</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בניית מערכת המספרים שלנו הגיעה בפעם הקודמת לנקודת שיא מסויימת - קיבלנו את ה<a href="http://he.wikipedia.org/wiki/%D7%A9%D7%93%D7%94_%28%D7%9E%D7%91%D7%A0%D7%94_%D7%90%D7%9C%D7%92%D7%91%D7%A8%D7%99%29">שדה</a> (מ<a href="http://he.wikipedia.org/wiki/%D7%9E%D7%90%D7%A4%D7%99%D7%99%D7%9F_%D7%A9%D7%9C_%D7%A9%D7%93%D7%94">מציין</a> 0...) הקטן ביותר - ולכן גם האובייקט הבסיסי בענף של תורת השדות. משמעות המילה "שדה" היא שקיבלנו סגירות ל<a href="http://he.wikipedia.org/wiki/%D7%90%D7%A8%D7%91%D7%A2_%D7%A4%D7%A2%D7%95%D7%9C%D7%95%D7%AA_%D7%94%D7%97%D7%A9%D7%91%D7%95%D7%9F">ארבע פעולות החשבון</a> הבסיסיות, ולכן גם את היכולת לפתור כל משוואה ממעלה ראשונה. אולם הצרות מתחילות כבר במשוואות ממעלה שנייה - ולמעשה, עד שנגיע אל המרוכבים הן לא ייפתרו לגמרי. הבעיה הראשונה היא כבר במשוואה <span class="math">\(x^2-2=0\)</span> שאין לה פתרון: את המספר שאנו מכנים "שורש שתיים", שמשמעותו היא "המספר החיובי שכשמעלים אותו בריבוע מקבלים שתיים" לא ניתן להציג בתור <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%A8%D7%A6%D7%99%D7%95%D7%A0%D7%9C%D7%99">מספר רציונלי</a> - כלומר, בתור מנה של שני מספרים שלמים. מכאן שהוא לא מספר רציונלי, או כפי שנהוג לומר - הוא מספר <strong>אי רציונלי</strong> (Irrational).</p>
+<p>כאן נשאלת השאלה הפשוטה - רגע, אם אנחנו קוראים "מספרים" רק לדברים שבנינו עד עכשיו, ומה שאנחנו קוראים לו "שורש שתיים" לא מתאים בכלל להגדרה הזו, למה אנחנו קוראים לו "מספר"? לא עדיף לומר שאין כזה דבר, שורש שתיים?</p>
+<p>ייתכן שהשאלה הזו נראית מעט מוזרה לנו, שהתרגלנו לחשוב על שורש שתיים כדבר מה קיים: פשוט לוקחים את הספרה 2, מציירים מעליה <span class="math">\(\sqrt{2}\)</span>, וחסל! אלא שכמובן שהדברים אינם עובדים בדרך הזו; אם הנימוק הזה היה מקובל עלינו, היה עלינו לקבל מייד גם את קיומם של המספרים המרוכבים: פשוט לוקחים את המספר "מינוס אחד" (שאין לנו ספק יותר - אני מקווה - שקיים), מציירים מעליו שורש, וחסל. אם כן, בינתיים שורש שתיים מוטל בספק לפחות כמו i הידוע לשמצה.</p>
+<p>אולם יש לשורש שתיים יתרון עצום, שאין ל-i המסכן: יש לו אינטואיציה גאומטרית, ואחת חזקה מאוד.</p>
+<p><a title="ריבוע" href="/img/2007/06/square.png"><img alt="ריבוע" src="/img/2007/06/square.png" /></a></p>
+<p>כשאנו מציירים קטע, אנו מייחסים לו אוטומטית מספר כלשהו - ה"אורך" שלו. המשמעות הפורמלית של המושג הזה לא ברורה בכלל, אבל המשמעות האינטואיטיבית (שהיא זו שמעניינת אותנו כאן) ברורה לחלוטין - ומבלי שנרד לעומקם של דברים, אנו (טוב, לפחות אני) מרגישים שהאורך הזה "קיים" במובן שבו מספרים קיימים. (אגב, שימו לב לכך שהדבר נותן משמעות רק למספרים <strong>חיוביים</strong> - איננו מכירים קטעים בעלי אורך שלילי, ואפילו לא בעלי אורך אפס, למרות ש"נקודה" היא מועמד טוב לכך - אבל זה כבר דיון פילוסופי אחר לגמרי).<br />
+כעת, אחת מהצורות הגיאומטריות הפשוטות ביותר היא הריבוע - יצור המורכב מארבעה קטעים באותו אורך המתחברים זה לזה בזוויות ישרות. נסמן את אורך כל אחד מהקטעים הללו בתור "1". זוהי בחירה שרירותית, שפירושה שנמדוד אורכי קטעים אחרים <strong>ביחס</strong> לצלע הריבוע: כך למשל אם קטע כלשהו הוא מאורך "2" פירוש הדבר הוא שאורכו כפול מאורך צלע הריבוע. גם למספרים רציונליים קל לחשוב על משמעות: אם קטע כלשהו הוא באורך 3/5, פירוש הדבר הוא שאורכו כפול חמש שווה בגודלו לאורך צלע הריבוע כפול שלוש. בגישה אחרת, ניתן לומר שזה אומר שקיים קטע קטן עוד יותר, שנכנס מספר שלם של פעמים הן בצלע הריבוע והן בקטע שאורכו 3/5 - במקרה שלנו קטע זה הוא 1/5, שנכנס שלוש פעמים בקטע שבאורך 3/5, וחמש פעמים בצלע הריבוע. אם קטע קטן משותף שכזה קיים עבור שני קטעים, אומרים שיש להם <strong>מידה משותפת</strong>. לא קשה להראות (נסו!) שאם יש לקטע כלשהו מידה משותפת עם קטע באורך 1, אורכו של קטע זה הוא מספר רציונלי.<br />
+והנה, כבר בריבוע החביב צץ לנו מושג האי רציונליות ישר לפרצוף, ועוד עם הקטע הבסיסי ביותר שניתן לחשוב עליו בריבוע פרט לצלעות - האלכסון. הקו שמחבר שני קודקודים מנוגדים. גיאומטריה אלמנטרית אומרת לנו שהאלכסון הוא היתר במשולש ישר זווית (ששוקיו הן שתיים מצלעות הריבוע), ואנו משתמשים ב<a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%A4%D7%98_%D7%A4%D7%99%D7%AA%D7%92%D7%95%D7%A8%D7%A1">משפט פיתגורס</a> (שלא אוכיח כאן, אך אני מקווה שאתם מקבלים כנכון - יש לו למעלה ממאה הוכחות שונות!) כדי לקבל שאורך האלכסון הוא <span class="math">\(\sqrt{1^2+1^2}=\sqrt{2}\)</span>.</p>
+<p>וכאן, כאמור, מגיע הבוקס לפנים, שכן שורש שתיים אינו רציונלי - ובמילים אחרות, אין לאלכסון הריבוע מידה משותפת עם צלע הריבוע.</p>
+<p>התגלית הזו מיוחסת כבר ל<a href="http://he.wikipedia.org/wiki/%D7%94%D7%90%D7%A1%D7%9B%D7%95%D7%9C%D7%94_%D7%94%D7%A4%D7%99%D7%AA%D7%92%D7%95%D7%A8%D7%90%D7%99%D7%AA">פיתגוראים</a> - תלמידיו (ויש שיאמרו חסידיו הקנאים) של פיתגורס, שחיו בסביבות השנים 500 לפנה"ס. חשוב לציין שהתגלית בניסוחה המקורי דיברה על "אין מידה משותפת" ולא על "המספר שורש שתיים הוא אי רציונלי" - מושג המספר לא היה קיים אצל הפיתגוראים בצורה שבה אנו מכירים בו כיום, והם חשבו על "מספר" בתור אורך של קטע. מפאת חוסר בקיאות לא אכנס כאן לתורה המיסטית השלמה שפיתחו הפיתגוראים סביב המספרים שלהם - רק אומר שהיא התבססה במידה רבה על מספרים שניתן להביע בתור יחסים בין מספרים שלמים, ולכן גילוי המספרים האי רציונליים היווה מכה עבורם, והאגדות מספרות שהם הטביעו את זה מביניהם שגילה את ה"סוד" לעולם הרחב (אגב, איני בטוח אם התגלית אכן הייתה על אלכסון הריבוע - בגרסה אחרת ששמעתי, התגלית הגיעה בכלל מאורך של קטע בתוך פנטגרם - מה ששקול להוכחה ששורש חמש אינו רציונלי, לא שורש שתיים).</p>
+<p>העובדה שאלכסון הריבוע הוא יצור גאומטרי שאיננו מטילים ספק רב בקיומו מונעת מאיתנו לומר "זה לא הגיוני, ולכן אין אורך לאלכסון הריבוע", ואכן - כדאי להבהיר ש"מספר אי רציונלי" אין פירושו "מספר לא הגיוני", ממש כפי שפירוש "מספר רציונלי" אין פירושו "מספר הגיוני". עם זאת, האטימולוגיה של המילה ratio היא (בערך) במילה הלטינית של "לחשב", ויש הגיון מאחורי הדבר - אין ייצוג סופי "פשוט" למספר אי רציונלי - כאמור, לא ניתן לייצג אותו כמנה בין שני מספרים שלמים, ואם מנסים לכתוב אותו כשבר עשרוני (או בכל בסיס ספירה אחר), אין קץ למספר הספרות שצריך לכתוב, ואין בהן מחזוריות.</p>
+<p>טוב ויפה, אבל <strong>למה</strong> בעצם שורש 2 הוא אי רציונלי? ההוכחה לכך (זו האלגברית המקובלת כיום, לא הגאומטרית) פשוטה עד להפתיע, והיא זכתה לכך שהמתמטיקאי האנגלי בן המאה העשרים, ג'.ה. הארדי (<a title="G. H. Hardy" href="http://en.wikipedia.org/wiki/G._H._Hardy">G. H. Hardy</a>) יכלול אותה בתור דוגמה ל"יופי מתמטי" בספרו "התנצלותו של מתמטיקאי" (A Mathematician's Apology) (המילה "התנצלות" אולי אינה מדוייקת, שכן הכוונה אינה ל"בקשת סליחה", אלא להצדקה - אולם "הצטדקותו של מתמטיקאי" נשמע גרוע אף יותר). קטונתי מלהיות הארדי, אבל אנסה גם אני להעביר כאן את פרטי ההוכחה.</p>
+<p>השיטה שבה נפעל היא "הוכחה בדרך השלילה" - נניח שהטענה שאנו מבקשים להוכיח אינה נכונה, ונגיע מההנחה הזו למשהו שאנו יודעים בודאות שהוא שגוי. מכיוון שהוא שגוי, אחת מהנחותינו בטעות יסודה - ומכיוון שאנו פחות או יותר בטוחים בקשר לכל ההנחות פרט לזו הנוגעת לטענה שאנו מנסים להוכיח, אנו מסיקים שההנחה שהיא אינה נכונה הייתה טעות. למרות שזו דרך הוכחה בסיסית ומקובלת במתמטיקה, יש גם כאלו שאינם מקבלים אותה, וגם אתם אינכם חייבים.</p>
+<p>ובכן, נניח ששורש 2 הוא כן רציונלי, אז קיימים שני מספרים שלמים, a,b ששורש שתיים הוא מנתם: <span class="math">\(\sqrt{2}=\frac{a}{b}\)</span>. ייתכן שאתם זוכרים מפוסט קודם משהו שאמרתי על כך שלאותו מספר רציונלי יש מספר רב של ייצוגים, ושבוחרים לעתים קרובות ייצוג "קנוני" של שבר מצומצם, כלומר שבו a,b לא מתחלקים באף מספר משותף חוץ מ-1 - ובכן, זה אחד מהמקרים הללו. ה"משהו שאנו יודעים בודאות שהוא שגוי" שנגיע אליו הוא שדווקא כן קיים מחלק משותף ל-a ול-b - במקרה הזה, המספר 2.</p>
+<p>ראשית, נעלה בריבוע את שני אגפי השוויון שראינו קודם, ונקבל <span class="math">\(2=\frac{a^2}{b^2}\)</span>. נעביר אגפים ונקבל <span class="math">\(2b^2=a^2\)</span>. פירוש הדבר הוא שהמספר <span class="math">\(a^2\)</span> הוא זוגי - כי הצגנו אותו בתור מספר כלשהו כפול 2.</p>
+<p>כעת, לא קשה להוכיח (נסו!) שאם מעלים מספר זוגי בריבוע מקבלים מספר זוגי, ואילו אם מעלים מספר אי זוגי בריבוע מקבלים מספר אי זוגי. לכן, אם <span class="math">\(a^2\)</span> זוגי, בהכרח גם <span class="math">\(a\)</span> זוגי. כלומר, אפשר לכתוב <span class="math">\(a=2t\)</span> כאשר t הוא מספר שלם כלשהו.</p>
+<p>אבל מה קיבלנו כעת? קיבלנו ש-<span class="math">\(2b^2=a^2=(2t)^2=4t^2\)</span> ולכן, לאחר צמצום ב-2, נקבל <span class="math">\(b^2=2t\)</span>. מכאן שגם b זוגי - ולכן גם הוא וגם a מתחלקים ב-2, וזו הסתירה המבוקשת.<br />
+אם כן, ראינו בעיה אחת שיש לשדה המספרים הרציונליים. יש דרך לא רעה להתגבר על בעיה זו, ולהבטיח שלכל משוואה פולינומית יש פתרון. בפרט, דרך זו מכניסה לתמונה ישר גם את i הידוע לשמצה. אלא שלא זו הדרך שבה נלך.</p>
+<p>במקום זאת, נצביע על בעיות <strong>נוספות</strong>, לא אלגבריות, שיש למספרים הרציונליים, ועל הדרך המקובלת לפתור אותן - פתרון שיחסל את בעיית שורש שתיים לחלוטין, אבל ישאיר את בעיית השורש של מינוס אחת על כנה. לפתרון הזה קוראים "המספרים הממשיים".</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2007/06/13/algebraic_numbers/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מטרנסצנדנטלי יוצא אלגברי?</span>
+            </a>
+            
+            
+            
+            <a href="/2007/05/23/integer_numbers/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הדרך השלילית אל שדות הרציונליות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תורת הקבוצות - עוצמות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תורת הקבוצות - עוצמות</h1>
+            <div class="post-meta">
+                <span class="date">2023-01-24</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/עוצמות.html">עוצמות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>אחד המושגים הבסיסיים בתורת הקבוצות הוא המושג של <strong>שקילות עוצמה</strong> של קבוצות; זו בעצם ההכללה של האמירה ששתי קבוצות הן "מאותו גודל" גם למקרה שבו הן אינסופיות. ההגדרה המתמטית, <a href="https://gadial.net/2020/10/09/what_are_infinite_sets/">שהראיתי בפוסט קודם</a>, הייתה יחסית פשוטה: אמרנו ש-<span class="math">\(A\)</span> שקולת עוצמה ל-<span class="math">\(B\)</span> וכתבנו <span class="math">\(\left|A\right|=\left|B\right|\)</span> (או <span class="math">\(A\sim B\)</span> אבל הפעם אני מעדיף את הסימון הראשון) אם קיימת פונקציה חד-חד-ערכית ועל <span class="math">\(f:A\to B\)</span>. קל לראות שעבור קבוצות סופיות שתי קבוצות הן שקולות עוצמה אם הן מאותו גודל, וגם היה קל יחסית לראות שעבור קבוצות אינסופיות יש מספר אינסופי של "גדלים" שונים: ראינו שלכל <span class="math">\(A\)</span> מתקיים <span class="math">\(\left|A\right|<\left|\mathcal{P}\left(A\right)\right|\)</span> (כאן <span class="math">\(\mathcal{P}\left(A\right)\)</span> היא <strong>קבוצה החזקה</strong> של <span class="math">\(A\)</span> והסימון <span class="math">\(<\)</span> אומר שקיימת פונקציה חח"ע מהקבוצה השמאלית לימנית אבל <strong>לא קיימת</strong> פונקציה חח"ע ועל).</p>
+<p>כל זה טוב ויפה, אבל בנוסף לזה ביצענו פשע מזעזע: אמרנו שקבוצה <span class="math">\(A\)</span> היא <strong>בת מניה</strong> אם <span class="math">\(\left|A\right|=\left|\mathbb{N}\right|\)</span>, וסימנו את זה על ידי <span class="math">\(\left|A\right|=\aleph_{0}\)</span>. וזה כבר פשוט מוזר. מה זה <span class="math">\(\aleph_{0}\)</span>? מי זה? אמרנו שזו <strong>העוצמה</strong> של <span class="math">\(A\)</span>, אבל <strong>מה זה</strong>? לא הסברנו. זה רק סימון? זה אובייקט? ואם זה <span class="math">\(\aleph_{0}\)</span> האם גם יש <span class="math">\(\aleph_{1}\)</span>? וכן הלאה. בפוסט הזה נסביר את הכל, והתשובה תהיה די פשוטה: עוצמה של קבוצה היא <strong>סודר</strong>; זו אחת הסיבות למה הצגתי אותם. אז בואו נעבור להגדרות הפורמליות.</p>
+<h2>מה זו עוצמה, פורמלית?</h2>
+
+<p>דרך אחת לדמיין עוצמה היא בתור <strong>מחלקת שקילות</strong>. מכיוון ששקילות עוצמות מקיימת רפלקסיביות, סימטריות וטרנזיטיביות, אפשר לומר שהיא יחס שקילות. אבל יחס שקילות <strong>על מה</strong>? על פניו, על אוסף כל הקבוצות, אבל אוסף כזה הוא גדול מכדי להיחשב "קבוצה" בעצמו - הוא מה שקוראים <strong>מחלקה</strong>, בעוד שיחס שקילות הוא תמיד תת-קבוצה של קבוצה.</p>
+<p>ובכן, <a href="https://gadial.net/2023/01/18/classes_and_transfinite/">בפוסט הקודם</a> ראינו שהמתמטיקאים לא כל כך דוגמטיים בקטע הזה. אפשר לעבוד עם מחלקות, אפשר להגיד על מחלקה שהיא "פונקציה", ואפשר גם בצורה דומה להגדיר יחסי שקילות על מחלקות ולדבר על מחלקות שקילות. הבעיה היא שגם מחלקות השקילות הללו יהיו, ובכן, מחלקות במובן של "אוספים שאינם קבוצות", אבל יש טריק מרהיב למדי שמאפשר להגדיר "סוג של מחלקות שקילות" שהן כן קבוצות ולכן אובייקטים לגיטימיים בעולם, ו<strong>אפשר</strong> אם ממש רוצים להגדיר עוצמות בעזרתו - העוצמה של <span class="math">\(A\)</span> תהיה פשוט מחלקת השקילות המתאימה. </p>
+<p>אני הולך להראות את הגישה הזו בפוסט בעתיד, אבל היא <strong>לא</strong> מה שאני הולך להשתמש בו עכשיו; ההגדרה המקובלת יותר היא להגדיר עוצמה בתור סודר, וזה מה שנעשה כאן. החיסרון של השימוש בסודרים הוא שבהגדרה הזו, כדי שלכל קבוצה תהיה עוצמה מוגדרת, אנחנו נזקקים לאקסיומת הבחירה, ועוד רגע אסביר למה. השורה התחתונה של כל זה היא שבגלל שבתיאוריה יש יותר מהגדרה אפשרית אחת לעוצמה, אני אעבור להשתמש בשם אחר עבור המושג שאגדיר - <strong>מספר מונה</strong> (או בלועזית, מספר <strong>קרדינלי</strong>, Cardinal) ובקיצור, <strong>מונה</strong>, כמו שהגדרתי קודם <strong>סודר</strong>. </p>
+<p>אם כן, מונה הוא סוג מסויים של סודר: כזה שאינו שקול עוצמה לאף סודר שבא לפניו. פורמלית, סודר <span class="math">\(\alpha\in\text{Ord}\)</span> הוא מונה אם לכל <span class="math">\(\beta<\alpha\)</span> לא קיימת פונקציה חח"ע ועל <span class="math">\(f:\beta\to\alpha\)</span>. עכשיו אפשר להגדיר עוצמה של קבוצה כך: בהינתן קבוצה <span class="math">\(A\)</span> כלשהי, <span class="math">\(\left|A\right|\)</span> יהיה הסודר המינימלי במחלקת הסודרים שיש פונקציה חח"ע ועל מ-<span class="math">\(A\)</span> אליהם: </p>
+<p><span class="math">\(\left|A\right|=\min\left\{ \alpha\in\text{Ord}\ |\ A\sim\alpha\right\} \)</span></p>
+<p>אלא שנשאלת השאלה - למה המחלקה הזו לא ריקה? האם תמיד קיים סודר ששקול ל-<span class="math">\(A\)</span>? ובכן, אם <span class="math">\(A\)</span> קבוצה סדורה היטב, בהחלט; קיים איזומורפיזם בין <span class="math">\(A\)</span> ובין הסודר שמייצג את טיפוס הסדר של הקבוצה הזו, ועבדנו קשה כדי להראות את זה. אבל אם <span class="math">\(A\)</span> לא סדורה היטב אנחנו בבעיה אמיתית. לכן אנחנו מגייסים לעזרתנו את אקסיומת הבחירה שמראה לנו שאפשר לסדר את <span class="math">\(A\)</span> בסדר טוב, ולכן קיים סודר כלשהו שיש התאמה חח"ע ועל בינו ובין <span class="math">\(A\)</span>, מה שהופך את ההגדרה של <span class="math">\(\left|A\right|\)</span> לתקינה. מכאן ואילך אשתמש בהגדרה הזו בצורה חופשית, אבל צריך לזכור שיש את אקסיומת הבחירה ברקע ואם נחליט לוותר עליה נצטרך להסביר מה נשמר ומה לא.</p>
+<p>אוקיי, אז הגדרנו מונים, אבל <strong>מי הם</strong>? בתור התחלה, יש לנו את המונים הסופיים: <span class="math">\(0,1,2,\ldots\)</span>. זאת מכיוון שקבוצות סופיות הן שקולות עוצמה אם ורק אם יש בהן אותו מספר של איברים (צריך כמובן להוכיח את זה אבל עזבו אותי מזה כרגע). אחר כך יש לנו את <span class="math">\(\omega\)</span> שכמובן לא שקול עוצמה לאף סודר שקדם לו, כי כל מי שקודמים לו הם סופיים ולכן לא שקולים אליו (צריך כמובן להוכיח את זה אבל עזבו אותי מזה כרגע). </p>
+<p>כשאנחנו מדברים על <span class="math">\(\omega\)</span> בתור מונה ולא בתור סודר, אנחנו משתמשים בסימון אחר עבורו: <span class="math">\(\aleph_{0}\)</span>. למה בכלל לעשות הפרדה כזו? כי, למשל, עוד מעט נראה שיש עבור מונים כללי חיבור, כפל וחזקה, והכללים הללו <strong>שונים</strong> מהכללים עבור סודרים (למשל, חיבור וכפל הם כן קומוטטיביים) ולכן ההקשר פה הוא קריטי. גם הסימונים שבהם אשתמש כדי לתאר מונים "כלליים" יהיו שונים: <span class="math">\(\kappa,\lambda,\theta\)</span> וכאלו, להבדיל מה-<span class="math">\(\alpha,\beta,\gamma\)</span> ששימשו אותנו בהקשר של סודרים.</p>
+<p>איזה עוד מונה אנחנו מכירים? האלכסון של קנטור מלמד אותנו ש-<span class="math">\(\left|\mathbb{N}\right|<\left|\mathbb{R}\right|\)</span> ולכן אנחנו מצפים שיהיה מונה שמתאים ל-<span class="math">\(\left|\mathbb{R}\right|\)</span> והוא יהיה גדול מ-<span class="math">\(\aleph_{0}\)</span>. אולי אפילו מפתה לקרוא לו <span class="math">\(\aleph_{1}\)</span>, אבל <strong>זהירות!</strong> זו לא ההגדרה של <span class="math">\(\aleph_{1}\)</span>. אז איך כן מסמנים את <span class="math">\(\left|\mathbb{R}\right|\)</span>? שאלה טובה. ראיתי לפעמים שמשתמשים ב-<span class="math">\(\aleph\)</span> (בלי אינדקס בכלל) אבל זה לא סימון רשמי במיוחד. אנחנו הולכים לראות עוד מעט סימון רשמי יותר, אבל בואו נבין מה זה ה-<span class="math">\(\aleph\)</span>-ים הללו בכללי.</p>
+<p>בזכות משפט קנטור על קבוצת החזקה אנחנו יודעים שלכל <span class="math">\(A\)</span> קיימת קבוצה <span class="math">\(B\)</span> כך ש-<span class="math">\(\left|A\right|<\left|B\right|\)</span>. כלומר, לכל מונה <span class="math">\(\kappa\)</span> קיים מונה <span class="math">\(\lambda\)</span> כך ש-<span class="math">\(\kappa<\lambda\)</span> (יש גם הוכחה ישירה בלי אקסיומת הבחירה אם רוצים). אם כן, עבור <span class="math">\(\aleph_{0}\)</span> אפשר להסתכל על מחלקת המונים שגדולים ממנו ולקחת את האיבר המינימלי שלה ולקרוא לו <span class="math">\(\aleph_{1}\)</span> - זה המונה שבא "מייד אחרי" <span class="math">\(\aleph_{0}\)</span>. בדומה מוגדר <span class="math">\(\aleph_{n+1}\)</span> בתור המונה שבא מייד אחרי <span class="math">\(\aleph_{n}\)</span>, וקיבלנו סדרה אינסופית יפה של מונים:</p>
+<p><span class="math">\(\aleph_{0}<\aleph_{1}<\aleph_{2}<\ldots\)</span></p>
+<p>האם זה נגמר כאן? הו, לא ולא! בשביל מה הגדרנו סודרים אם לא כדי להגדיר באמצעותם סדרות ארוכות להחריד? אפשר ללכת לאינסוף ומעבר בעזרת ההגדרה</p>
+<p><span class="math">\(\aleph_{\omega}=\sup\left\{ \aleph_{0},\aleph_{1},\aleph_{2},\ldots\right\} \)</span></p>
+<p>מה זה סופרמום של קבוצת סודרים? הראינו כבר שאם לוקחים קבוצת סודרים ומאחדים את כל איבריה, מקבלים סודר חדש שגדול מכל האיברים בקבוצה הזו. מה שמעניין הוא שאם זו קבוצה של <strong>מונים</strong>, אז גם הסופרמום שיתקבל יהיה <strong>מונה</strong>, וזה כבר הרבה פחות מובן מאליו כי מונים הם סודרים "מיוחדים" שכאלו. אז בואו נוכיח את הטענה הכללית: אם <span class="math">\(A\)</span> היא קבוצה של מונים, אז <span class="math">\(\sup A\)</span> הוא מונה.</p>
+<p>כדי להוכיח, נסמן <span class="math">\(\alpha=\sup A\)</span>. אני יודע ש-<span class="math">\(\alpha\)</span> הוא סודר, אבל אני צריך גם להראות שלכל סודר אחר <span class="math">\(\beta<\alpha\)</span> לא קיימת פונקציה חח"ע ועל בין <span class="math">\(\alpha\)</span> ו-<span class="math">\(\beta\)</span>; מספיק להראות שאם קיימת <span class="math">\(f:\alpha\to\beta\)</span> שהיא חח"ע אז מגיעים לסתירה. עכשיו, מכיוון ש-<span class="math">\(\alpha=\text{sup}A\)</span> הוא הסודר הקטן ביותר שגדול או שווה לכל אברי <span class="math">\(A\)</span>, מה שאומר בפרט ש-<span class="math">\(\beta\)</span> אינו כזה, ולכן קיים <span class="math">\(\kappa\in A\)</span> כך ש-<span class="math">\(\beta<\kappa\le\alpha\)</span>. מצד שני, מכיוון ש-<span class="math">\(\kappa\)</span> הוא מונה אז <span class="math">\(\kappa=\left|\kappa\right|\)</span>, ומכיוון ש-<span class="math">\(\kappa<\alpha\)</span> ו-<span class="math">\(\alpha\)</span> סודר אז <span class="math">\(\kappa\subseteq\alpha\)</span> ולכן אפשר לצמצם את <span class="math">\(f\)</span> אל <span class="math">\(\kappa\)</span> ולקבל פונקציה חח"ע <span class="math">\(f|_{\kappa}:\kappa\to\beta\)</span>. קיבלנו <span class="math">\(\left|\kappa\right|=\left|f|_{\kappa}\left(\kappa\right)\right|\)</span>, ומכיוון ש-<span class="math">\(f|_{\kappa}\left(\kappa\right)\subseteq\beta\)</span> אז <span class="math">\(\left|f|_{\kappa}\left(\kappa\right)\right|\le\left|\beta\right|\)</span>, אז בסך הכל קיבלנו את השרשרת</p>
+<p><span class="math">\(\kappa=\left|\kappa\right|=\left|f|_{\kappa}\left(\kappa\right)\right|\le\left|\beta\right|\)</span></p>
+<p>ומכך ש-<span class="math">\(\kappa\le\left|\beta\right|\)</span> אנחנו מקבלים בפרט <span class="math">\(\kappa\le\beta\)</span> (כי <span class="math">\(\kappa\)</span> קטן או שווה לסודר הראשון ששווה עוצמה ל-<span class="math">\(\beta\)</span>), בסתירה להנחה ש-<span class="math">\(\beta<\kappa\)</span>. זה מסיים את ההוכחה.</p>
+<p>מה שטוב בהוכחה הזו הוא שהיא לא סתם מראה לנו ש-<span class="math">\(\aleph_{\omega}\)</span> היא מונה; היא מאפשרת לנו להראות ש<strong>לכל</strong> סודר <span class="math">\(\alpha\)</span> קיים מונה <span class="math">\(\aleph_{\alpha}\)</span> ששונה מקודמיו. ההגדרה של האלפים היא ברקורסיה על-סופית:</p>
+<ul> <li><span class="math">\(\aleph_{0}=\omega\)</span></li>
+
+
+<li><span class="math">\(\aleph_{\alpha+1}=\aleph_{\alpha}^{+}\)</span> לכל סודר <span class="math">\(\alpha\)</span> כאשר <span class="math">\(\aleph_{\alpha}^{+}\)</span> מסמן את המונה הקטן ביותר שגדול מ-<span class="math">\(\aleph_{\alpha}\)</span>.</li>
+
+
+<li><span class="math">\(\aleph_{\alpha}=\text{sup}\left\{ \aleph_{\beta}\ |\ \beta<\alpha\right\} \)</span> כאשר <span class="math">\(\alpha\)</span> הוא סודר גבולי.</li>
+
+</ul>
+
+<p>האם כל המונים האינסופיים הם מהצורה <span class="math">\(\aleph_{\alpha}\)</span> עבור סודר <span class="math">\(\alpha\)</span> כלשהו? כן! בהינתן מונה <span class="math">\(\kappa\)</span> כלשהו, אפשר להסתכל על אוסף כל המונים שקטנים ממנו. האוסף הזה הוא תת-קבוצה של <span class="math">\(\kappa\)</span> עצמו (כי <span class="math">\(\kappa\)</span> הוא בפרט סודר ולכן כולל את כל הסודרים הקטנים ממנו) ולכן האוסף הזה הוא בעצמו קבוצה, ולא סתם קבוצה - קבוצה של סודרים, ולכן קבוצה שסדורה בסדר טוב, ולכן איזומורפית לסודר <span class="math">\(\alpha\)</span> כלשהו, וקיבלנו את ה-<span class="math">\(\aleph_{\alpha}\)</span> שאנחנו מחפשים, כי <span class="math">\(\left\{ \aleph_{\beta}\ |\ \beta<\alpha\right\} \)</span> זה בדיוק אוסף המונים שקטן מ-<span class="math">\(\kappa\)</span>.</p>
+<p>יפה, הבנו מה זה סימון ה-<span class="math">\(\aleph\)</span> המוזר הזה, אבל מה עם <span class="math">\(\left|\mathbb{R}\right|\)</span>? אם זה לא <span class="math">\(\aleph_{1}\)</span>, מה זה כן? בשביל זה נצטרך לדבר קודם כל על <strong>חשבון עוצמות.</strong></p>
+<h2>אריתמטיקה של עוצמות</h2>
+
+<p>מה שנחמד בחשבון עוצמות הוא שיש לנו הגדרה פשוטה לכל הפעולות בלשון של קבוצות, מה שלא קרה בסודרים (שם נזקקנו להגדרה רקורסיבית). נתחיל מהמקרה שבו <span class="math">\(A,B\)</span> הן קבוצות סופיות, ואז אנחנו ממש יכולים להוכיח שמתקיים:</p>
+<ul> <li><span class="math">\(\left|A\right|+\left|B\right|=\left|A\cup B\right|\)</span> (בהינתן <span class="math">\(A\cap B=\emptyset\)</span>)</li>
+
+
+<li><span class="math">\(\left|A\right|\cdot\left|B\right|=\left|A\times B\right|\)</span></li>
+
+
+<li><span class="math">\(\left|A\right|^{\left|B\right|}=\left|A^{B}\right|\)</span></li>
+
+</ul>
+
+<p>כמובן, בשביל להבין מה הולך פה צריך להכיר את הפעולות על הקבוצות עצמן. אז בואו נזכיר אותן.</p>
+<p>ראשית יש לנו איחוד: <span class="math">\(A\cup B\)</span> היא הקבוצה שכוללת את כל האיברים של <span class="math">\(A\)</span> ואת כל האיברים של <span class="math">\(B\)</span>. מן הסתם נצפה שהגודל שלה יהיה שווה לסכום הגדלים של <span class="math">\(A\)</span> ושל <span class="math">\(B\)</span>, אבל יש כאן עניין טריקי אחד: אם יש ל-<span class="math">\(A,B\)</span> איברים משותפים, אז האיברים המשותפים הללו אמורים להיספר רק פעם אחת (אין כפילויות בתוך קבוצה). לכן הנוסחה הנכונה באופן כללי עבור קבוצות סופיות היא <span class="math">\(\left|A\cup B\right|=\left|A\right|+\left|B\right|-\left|A\cap B\right|\)</span>, שמחסרת את מספר האיברים שנספרו פעמיים. יש לזה גם הכללה מאוד יפה למספר גדול יותר של קבוצות שנקראת <strong>עקרון ההכלה וההפרדה</strong> אבל <a href="https://gadial.net/2011/12/31/inclusion_exclusion_principle/">זה באמת לפוסט אחר</a>. כשאנחנו באים להגדיר חיבור, אנחנו פשוט מניחים שהקבוצות זרות, ללא איברים משותפים; תמיד אפשר להשיג את האפקט הזה על ידי שינוי שמות האיברים באחת הקבוצות, אם צריך (יש ממש פעולה שנקראת <strong>איחוד זר</strong> שמבצעת את שינוי השמות הזה על הדרך, אבל אין טעם להיכנס לרמת הפורמליסטיקה הזו).</p>
+<p>עבור כפל אנחנו מסתמכים על מושג המכפלה הקרטזית של קבוצות, <span class="math">\(A\times B=\left\{ \left(a,b\right)\ |\ a\in A,b\in B\right\} \)</span>. למה זה יוצא כפל? כי לכל איבר <span class="math">\(a\in A\)</span>, קיימים <span class="math">\(\left|B\right|\)</span> זוגות מהצורה <span class="math">\(\left(a,b\right)\)</span> כש-<span class="math">\(b\in b\)</span>; ויש <span class="math">\(\left|A\right|\)</span> ערכים אפשריים של <span class="math">\(A\)</span> שעבורם יהיו <span class="math">\(\left|B\right|\)</span> זוגות כאלו - בסך הכל <span class="math">\(\left|A\right|\times\left|B\right|\)</span>, קל למדי.</p>
+<p>ועבור חזקה? כזכור, השימוש <span class="math">\(A^{B}\)</span> משמש אותנו להגדרת קבוצת הפונקציות מ-<span class="math">\(B\)</span> אל <span class="math">\(A\)</span> (לאו דווקא פונקציות חח"ע/על; כל פונקציה). אם <span class="math">\(A,B\)</span> קבוצות סופיות, אז קל לספור כמה פונקציות כאלו יש: כל פונקציה כזו צריכה לבצע <span class="math">\(\left|B\right|\)</span> בחירות, אחת לכל איבר של <span class="math">\(B\)</span> , לאן היא רוצה להעביר אותו. יש לנו <span class="math">\(\left|A\right|\)</span> אפשרויות לכל בחירה כזו, כלומר מספר האפשרויות הכולל הוא <span class="math">\(\left|A\right|\cdot\left|A\right|\cdots\left|A\right|\)</span> בדיוק <span class="math">\(\left|B\right|\)</span> פעמים, ולכן בסך הכל <span class="math">\(\left|A\right|^{\left|B\right|}\)</span>. זה מסביר גם את מה שנראה כמו "היפוך" שבו <span class="math">\(A^{B}\)</span> הוא פונקציות מ-<span class="math">\(B\)</span> אל <span class="math">\(A\)</span> ולא ההפך; זה מה שמסתדר לנו עם התוצאה המספרית המתמטית.</p>
+<p>יופי, אז הוכחנו את הטענות על הגדלים של קבוצות סופיות - זה ממש הבסיס של התחום שנקרא <strong>קומבינטוריקה</strong>. אבל אנחנו פה כדי לדבר על קבוצות אינסופיות, אז אנחנו רוצים להפוך את התוצאות שלעיל להגדרות של ממש, עבור כל זוג מספרים מונים <span class="math">\(\kappa,\lambda\)</span>.</p>
+<p>זה הולך ככה:</p>
+<ul> <li><span class="math">\(\kappa+\lambda\triangleq\left|A\cup B\right|\)</span> עבור קבוצות <span class="math">\(A,B\)</span> כך ש-<span class="math">\(\left|A\right|=\kappa,\left|B\right|=\lambda\)</span> ו-<span class="math">\(A\cap B=\emptyset\)</span></li>
+
+
+<li><span class="math">\(\kappa\cdot\lambda\triangleq\left|A\times B\right|\)</span> עבור קבוצות <span class="math">\(A,B\)</span> כך ש-<span class="math">\(\left|A\right|=\kappa,\left|B\right|=\lambda\)</span></li>
+
+
+<li><span class="math">\(\kappa^{\lambda}\triangleq\left|A^{B}\right|\)</span> עבור קבוצות <span class="math">\(A,B\)</span> כך ש-<span class="math">\(\left|A\right|=\kappa,\left|B\right|=\lambda\)</span></li>
+
+</ul>
+
+<p>ההגדרה הזו טיפה בעייתית כי היא מסתמכת על <strong>בחירת נציגים</strong> עבור <span class="math">\(\kappa,\lambda\)</span>, וצריך להוכיח שלמרות זאת הכל <strong>מוגדר היטב</strong>. כלומר, שאם ניקח <span class="math">\(A^{\prime},B^{\prime}\)</span> כך ש-<span class="math">\(\left|A^{\prime}\right|=\kappa,\left|B^{\prime}\right|=\lambda\)</span> אז נקבל ש-<span class="math">\(\left|A\cup B\right|=\left|A^{\prime}\cup B^{\prime}\right|\)</span> (אם גם הקבוצות החדשות זרות) ו-<span class="math">\(\left|A\times B\right|=\left|A^{\prime}\times B^{\prime}\right|\)</span> ו-<span class="math">\(\left|A^{B}\right|=\left|\left(A^{\prime}\right)^{B^{\prime}}\right|\)</span>. </p>
+<p>אלו הוכחות סטנדרטיות אבל בואו נבין את הרעיון עבור המקרה של <span class="math">\(\left|A\times B\right|=\left|A^{\prime}\times B^{\prime}\right|\)</span>: אם <span class="math">\(\left|A\right|=\kappa=\left|A^{\prime}\right|\)</span> אז בפרט קיימת פונקציה <span class="math">\(f_{A}:A\to A^{\prime}\)</span> שהיא חח"ע ועל, ובדומה קיימת <span class="math">\(f_{B}:B\to B^{\prime}\)</span> חח"ע ועל. עכשיו נגדיר <span class="math">\(g:A\times B\to A^{\prime}\times B^{\prime}\)</span> בדרך ה"טבעית": <span class="math">\(g\left(\left(a,b\right)\right)=\left(f_{A}\left(a\right),f_{B}\left(b\right)\right)\)</span>. זו פונקציה חח"ע כי אם <span class="math">\(g\left(\left(a,b\right)\right)=g\left(\left(x,y\right)\right)\)</span> אז <span class="math">\(\left(f_{A}\left(a\right),f_{B}\left(b\right)\right)=\left(f_{A}\left(x\right),f_{B}\left(y\right)\right)\)</span> ומהגדרת מכפלה קרטזית נקבל שוויון רכיב-רכיב, כלומר <span class="math">\(f_{A}\left(a\right)=f_{A}\left(x\right)\)</span> ומכך ש-<span class="math">\(f_{A}\)</span> חח"ע נקבל <span class="math">\(a=x\)</span> ובאופן דומה נקבל <span class="math">\(b=y\)</span> ולכן <span class="math">\(\left(a,b\right)=\left(x,y\right)\)</span>. בנוסף, <span class="math">\(g\)</span> גם על כי אם <span class="math">\(\left(x,y\right)\in A^{\prime}\times B^{\prime}\)</span> אז מהגדרת מכפלה קרטזית <span class="math">\(x\in A^{\prime}\)</span> ומכיוון ש-<span class="math">\(f_{A}\)</span> על קיים <span class="math">\(a\in A\)</span> כך ש-<span class="math">\(f_{A}\left(a\right)=x\)</span> ובדומה קיים <span class="math">\(b\in B\)</span> כך ש-<span class="math">\(f_{B}\left(b\right)=y\)</span> ולכן <span class="math">\(g\left(\left(a,b\right)\right)=\left(f_{A}\left(a\right),f_{B}\left(b\right)\right)=\left(x,y\right)\)</span>.</p>
+<p>בקיצור, קל להראות שבחירת הנציגים לא משפיעה, גם בלי להזדקק במיוחד לאקסיומת הבחירה או משהו דומה. זה מאפשר לנו לעבור בלב שקט להוכחה של <strong>תכונות</strong> האריתמטיקה של עוצמות (אני משתמש בחופשיות בסימן <span class="math">\(\cdot\)</span> לכפל ולפעמים משמיט אותו):</p>
+<ul> <li><span class="math">\(\kappa+\lambda=\lambda+\kappa\)</span> וגם <span class="math">\(\kappa\cdot\lambda=\lambda\cdot\kappa\)</span> (קומוטטיביות)</li>
+
+
+<li><span class="math">\(\left(\kappa+\lambda\right)+\theta=\lambda+\left(\kappa+\theta\right)\)</span> וגם <span class="math">\(\left(\kappa\cdot\lambda\right)\cdot\theta=\lambda\cdot\left(\kappa\cdot\theta\right)\)</span> (אסוציאצטיביות)</li>
+
+
+<li><span class="math">\(\kappa\left(\lambda+\theta\right)=\kappa\lambda+\kappa\theta\)</span> (דיסטריביוטיביות)</li>
+
+
+<li><span class="math">\(\left(\kappa\lambda\right)^{\theta}=\kappa^{\theta}\lambda^{\theta}\)</span></li>
+
+
+<li><span class="math">\(\kappa^{\lambda+\theta}=\kappa^{\lambda}\cdot\kappa^{\theta}\)</span></li>
+
+
+<li><span class="math">\(\left(\kappa^{\lambda}\right)^{\theta}=\kappa^{\lambda\theta}\)</span></li>
+
+
+<li>אם <span class="math">\(\kappa\le\lambda\)</span> אז <span class="math">\(\kappa^{\theta}\le\lambda^{\theta}\)</span></li>
+
+
+<li>אם <span class="math">\(0<\lambda\le\theta\)</span> אז <span class="math">\(\kappa^{\lambda}\le\kappa^{\theta}\)</span></li>
+
+
+<li><span class="math">\(\kappa^{0}=1\)</span>, <span class="math">\(1^{\kappa}=1\)</span> ו-<span class="math">\(0^{\kappa}=0\)</span> אם <span class="math">\(\kappa>0\)</span></li>
+
+</ul>
+
+<p>כל הטענות הללו הן טענות סטנדרטיות באריתמטיקה <strong>רגילה</strong> של מספרים, והן עוברות כמות שהן גם לאריתמטיקה של עוצמות, אבל כמובן שצריך להוכיח כל דבר פה. ההוכחות הן מה שאוהבים לכנות "תרגיל טוב": מצד אחד הן לא קשות, מצד שני לכו תוכיחו את הכל בעצמכם, עדיף לתת לסטודנטים לשבור את הראש על כמה מהן ואז שיעזבו את היתר בשקט.</p>
+<p>יש דברים שהם קצת יותר ברורים מהאחרים: למשל, קומוטטיביות ואסוציאטיביות של חיבור וכפל נובעת מהקומוטטיביות והאסוציאטיביות של איחוד ומכפלה קרטזית של קבוצות (מכפלה קרטזית של שתי קבוצות היא לא בדיוק אסוציאטיבית אבל קרוב מספיק: <span class="math">\(\left(A\times B\right)\times C\sim A\times\left(B\times C\right)\)</span> בצורה פשוטה). מעניין לחשוב על מה "נשבר" בקומוטטיביות בהקשר של חיבור וכפל של סודרים, הרי משתמשים גם שם באיחוד זר ובמכפלה קרטזית - אלא שבמקרה של סודרים יש מבנה נוסף של <strong>יחס סדר</strong> שמוגדר על הקבוצות הללו, והוא מוגדר בצורה מאוד לא סימטרית.</p>
+<p>בכל זאת, בלי להוכיח <strong>משהו</strong> מהטענות אי אפשר, אז אני אבחר את החביבה עלי (ולטעמי הכי מורכבת להוכחה כאן): <span class="math">\(\left(\kappa^{\lambda}\right)^{\theta}=\kappa^{\lambda\theta}\)</span>. כלומר, אני צריך להראות שעבור שלוש קבוצות <span class="math">\(A,B,C\)</span> מתקיים <span class="math">\(\left(\left|A\right|^{\left|B\right|}\right)^{\left|C\right|}=\left|A\right|^{\left|B\right|\left|C\right|}\)</span>, כלומר שמתקיים <span class="math">\(\left|\left(A^{B}\right)^{C}\right|=\left|A^{B\times C}\right|\)</span>, כלומר שמתקיים <span class="math">\(\left(A^{B}\right)^{C}\sim A^{B\times C}\)</span>. כלומר, מספיק אם אראה פונקציה חח"ע ועל <span class="math">\(\Psi:A^{B\times C}\to\left(A^{B}\right)^{C}\)</span>: אני בונה התאמה <span class="math">\(\Psi\)</span> שמקבלת <strong>פונקציה</strong> בשני משתנים <span class="math">\(f:B\times C\to A\)</span>, ובונה מתוכה <strong>פונקציה שמחזירה פונקציות</strong>. אותי זה קצת הפחיד בהתחלה, אבל אפשר לחשוב על זה בדרך נוחה: על <span class="math">\(f\left(b,c\right)\)</span> אני חושב בתור פונקציה במשתנה יחיד <strong>שתלויה בפרמטר</strong>. <span class="math">\(b\)</span> הוא המשתנה, ו-<span class="math">\(c\)</span> הוא הפרמטר. למשל, פונקציית הלוגריתם היא כזו: <span class="math">\(\log x\)</span> מניחה באופן מובלע שיש בסיס ללוגריתם. כשכותבים <span class="math">\(\log\)</span> בדרך כלל מתכוונים במובלע לבסיס 10, וכשכותבים <span class="math">\(\ln\)</span> מתכוונים לבסיס <span class="math">\(e\)</span> וכשכותבים <span class="math">\(\lg\)</span> מתכוונים לבסיס 2; באופן כללי כותבים <span class="math">\(\log_{b}x\)</span> כדי לציין שזה לוגריתם בבסיס <span class="math">\(b\)</span>. אז, קונספטואלית, <span class="math">\(\log_{b}x\)</span> היא פונקציה במשתנה יחיד (<span class="math">\(x\)</span>) שתלויה בפרמטר (<span class="math">\(b\)</span>). אם ממש רוצים, אפשר גם לחשוב עליה בתור פונקציה בשני משתנים, <span class="math">\(\left(x,b\right)\)</span>. ההתאמה <span class="math">\(\Phi\)</span> עושה את הסוויץ' בין שתי נקודות המבט הללו.</p>
+<p>הרעיון הוא כזה: נניח שיש לי ביד פונקציה של שני משתנים, <span class="math">\(f\left(x,y\right)\)</span>, ואני מקבל ערך קונקרטי, <span class="math">\(c\in C\)</span>, שאני יכול להציב בתוך המשתנה השני. אז אני מציב אותו ומשאיר את המשתנה הראשון "פתוח" ומקבל פונקציה במשתנה אחד, <span class="math">\(f_{c}\left(x\right)=f\left(x,c\right)\)</span>. הטריק הזה שבו אני מקבל פונקציה של כמה משתנים, מבצע בה "הצבה חלקית" ומקבל פונקציה חדשה נקרא Currying, על שם הלוגיקאי והפילוסוף הסקל קרי. אם חושבים על מה שהלך בטריק הזה, מה שקרה הוא שלכל ערך <span class="math">\(c\in C\)</span> אני ייצרתי פונקציה <span class="math">\(f_{c}:B\to A\)</span>. כלומר, יש לי פונקציה <span class="math">\(\Phi_{f}:C\to A^{B}\)</span> שמוגדרת על ידי <span class="math">\(\Phi_{f}\left(c\right)=f_{c}\)</span>.</p>
+<p>עכשיו אפשר לחזור אל האובייקט שאני אמור להראות את קיומו: פונקציה חח"ע ועל <span class="math">\(\Psi:A^{B\times C}\to\left(A^{B}\right)^{C}\)</span>. אני יכול סוף סוף להגדיר אותו, וזה יוצא די פשוט עם הסימונים שנתתי:</p>
+<p><span class="math">\(\Psi\left(f\right)=\Phi_{f}\)</span></p>
+<p>למה זו פונקציה חח"ע ועל? ראשית, אם <span class="math">\(\Psi\left(f\right)=\Psi\left(g\right)\)</span>, כלומר אם <span class="math">\(\Phi_{f}=\Phi_{g}\)</span>, זה אומר שלכל <span class="math">\(c\in C\)</span> <span class="math">\(\Phi_{f}\left(c\right)=\Phi_{g}\left(c\right)\)</span>, כלומר לכל <span class="math">\(c\in C\)</span> <span class="math">\(f_{c}=g_{c}\)</span>, כלומר לכל <span class="math">\(\left(b,c\right)\)</span> מתקיים <span class="math">\(f\left(b,c\right)=f_{c}\left(b\right)=g_{c}\left(b\right)=g\left(b,c\right)\)</span>, ומכאן ש-<span class="math">\(f=g\)</span>, מה שמראה ש-<span class="math">\(\Psi\)</span> חח"ע.</p>
+<p>שנית, אם יש לנו <span class="math">\(\Phi\in\left(A^{B}\right)^{C}\)</span> <strong>כלשהי</strong>, אני אגדיר פונקציה <span class="math">\(f\in A^{B\times C}\)</span> באופן הבא:</p>
+<p><span class="math">\(f\left(b,c\right)\triangleq\Phi\left(c\right)\left(b\right)\)</span></p>
+<p>כלומר, אני קודם כל מחשב את <span class="math">\(\Phi\left(c\right)\)</span>, מקבל פונקציה ב-<span class="math">\(A^{B}\)</span>, ואז מפעיל את הפונקציה הזו על <span class="math">\(b\)</span> ומחזיר את התוצאה. כעת, אני כזכור מסמן <span class="math">\(\Psi\left(f\right)=\Phi_{f}\)</span>; אם אני אראה ש-<span class="math">\(\Phi=\Phi_{f}\)</span>, סיימנו. בשביל להראות את זה, צריך להראות שהן מזדהות על כל הקלטים, כלומר לכל <span class="math">\(c\in C\)</span> מתקיים <span class="math">\(\Phi\left(c\right)=\Phi_{f}\left(c\right)\)</span>. הפלטים הללו הם בעצמם פונקציות על <span class="math">\(B\)</span>, אז צריך להראות שלכל <span class="math">\(b\in B\)</span> מתקיים <span class="math">\(\Phi\left(c\right)\left(b\right)=\Phi_{f}\left(c\right)\left(b\right)\)</span>, אבל זה נובע ישירות מההגדרה:</p>
+<p><span class="math">\(\Phi_{f}\left(c\right)\left(b\right)=f_{c}\left(b\right)=f\left(b,c\right)=\Phi\left(c\right)\left(b\right)\)</span></p>
+<p>וזה מסיים את ההוכחה. לא כל כך נורא! זה <strong>באמת</strong> תרגיל טוב לנסות להוכיח חלק מפעולות החשבון האחרות.</p>
+<h2>ועכשיו... בואו נדבר על השערת הרצף</h2>
+
+<p>לפני שנדבר על השערת הרצף, בואו נשים לב למשהו קל שנובע ממה שכבר ראינו: אם אני מסמן ב-<span class="math">\(\mathcal{P}\left(A\right)\)</span> את קבוצת החזקה של <span class="math">\(A\)</span>, כלומר קבוצת כל תתי-הקבוצות של <span class="math">\(A\)</span> (היא קיימת כי יש אקסיומה מיוחדת שמניחה שהיא קיימת), אז <span class="math">\(\left|\mathcal{P}\left(A\right)\right|=2^{\left|A\right|}\)</span>.</p>
+<p>ההוכחה די פשוטה: צריך להראות ש-<span class="math">\(\mathcal{P}\left(A\right)\sim2^{A}\)</span>. בהינתן <span class="math">\(B\in\mathcal{P}\left(A\right)\)</span> נעביר אותה אל הפונקציה <span class="math">\(\chi_{B}:A\to2\)</span> (בואו נזכר ש-<span class="math">\(2=\left\{ 0,1\right\} \)</span> על פי ההגדרות שלנו) שמוגדרת על ידי</p>
+<p><span class="math">\(\chi_{B}\left(a\right)=\begin{cases} 1 & a\in B\\ 0 & a\notin B \end{cases}\)</span></p>
+<p>זה מה שנקרא <strong>הפונקציה המציינת</strong> של <span class="math">\(B\)</span> וקל לראות שזו התאמה חח"ע ועל. זה משתלב יפה עם הבחירה שלנו לסמן את <span class="math">\(\mathcal{P}\left(A\right)\)</span> לפעמים בתור <span class="math">\(2^{A}\)</span>; אלו לא קבוצות זהות מבחינה פורמלית, אבל הן בתכל'ס אותו הדבר עד כדי סימונים.</p>
+<p>עכשיו, משפט קנטור על קבוצת החזקה מלמד אותנו ש-<span class="math">\(\left|A\right|<2^{\left|A\right|}\)</span>. בפרט עבור <span class="math">\(A=\mathbb{N}\)</span>. עבורה, כזכור, סימנו <span class="math">\(\left|\mathbb{N}\right|=\aleph_{0}\)</span> כך שאנחנו יודעים ש-<span class="math">\(\aleph_{0}<2^{\aleph_{0}}\)</span>, ומכאן ש-<span class="math">\(\aleph_{1}\le2^{\aleph_{0}}\)</span>. האם מתקיים שוויון? האם <span class="math">\(\aleph_{1}=2^{\aleph_{0}}\)</span>? ההשערה שמתקיים שוויון כזה נקראת <strong>השערת הרצף</strong>.</p>
+<p>השערת הרצף הועלתה במקור בידי גאורג קנטור, ממציא תורת הקבוצות. בנאום 23 הבעיות המתמטיות המפורסם שלו מ-1900, דויד הילברט הציב את השערת הרצף בתור השאלה הפתוחה הראשונה ברשימה. קנטור עצמו האמין שהתשובה חיובית וש-<span class="math">\(\aleph_{1}=2^{\aleph_{0}}\)</span>; שקבוצה מ"עוצמת ביניים" כזו בין <span class="math">\(\aleph_{0}\)</span> ובין <span class="math">\(2^{\aleph_{0}}\)</span> תהיה דבר מוזר ביותר, אבל הוכחה - לא נמצאה. בינתיים עבר קצת זמן, ועל תורת הקבוצות עברו תהפוכות עם גילוי הפרדוקס של ראסל. </p>
+<p>כשהאבק הזה שכך, תורת הקבוצות התהדרה במערכת אקסיומות מפוארת - ZFC (צרמלו-פרנקל עם אקסיומת הבחירה). המערכת המפוארת הזו משרתת היטב את המתמטיקה עד היום, ולא נתגלו בה בעיות מהותיות - והמערכת הזו <strong>חסרת יכולת</strong> להכריע האם השערת הרצף נכונה או לא. יש לנו הוכחה מתמטית שלא ניתן להוכיח או להפריך את השערת הרצף בעזרת ZFC; הוכחה שחצי ממנה התגלה במקור בידי קורט גדל בשנות השלושים, והחצי השני התגלה בידי פול כהן בשנות השישים. לצורך ההוכחה, כהן פיתח טכניקה חדשה שנקראת <strong>כפייה</strong> (Forcing) שאפשר להשתמש בה כדי לתת את ההוכחה המלאה, בלי להזדקק להוכחה המקורית של גדל.</p>
+<p>המטרה המרכזית שלי בסדרת הפוסטים הזו על תורת הקבוצות היא להציג את טכניקת הכפייה וההוכחה שהשערת הרצף בלתי תלויה ב-ZFC. האם אצליח להשיג את המטרה הזו? אני עוד לא בטוח. ההיכרות שלי עם ההוכחה הזו היא שטחית למדי (למרות שקראתי את כולה, אני לא ממש בקיא בכל ה"מסביב" ובשימושים נוספים של הטכניקה) וזו בהחלט הוכחה שמצריכה הסבר של התמונה הגדולה ברוב שלביה או שקל ללכת לאיבוד. נקווה לטוב.</p>
+<p>לעת עתה, בואו נדבר על <span class="math">\(\mathbb{R}\)</span>. הבטחתי כבר כמה פעמים שאגיד מהו <span class="math">\(\left|\mathbb{R}\right|\)</span>, ואין פה סוד גדול: <span class="math">\(\left|\mathbb{R}\right|=2^{\aleph_{0}}\)</span>, כך שהשערת הרצף היא השאלה האם קיימת קבוצה של ממשיים שהיא מעוצמה שונה הן מהטבעיים והן מהממשיים. אבל איך אפשר להוכיח ש-<span class="math">\(\left|\mathbb{R}\right|=2^{\aleph_{0}}\)</span>? אני אציג פה הוכחה חביבה למדי שמסתמכת על משפט <a href="https://gadial.net/2016/11/30/csb_theorem_hilbert_hotel_style/">קנטור-שרדר-ברנשטיין</a>: אני אוכיח ש-<span class="math">\(\left|\mathbb{R}\right|\le2^{\aleph_{0}}\)</span> וגם <span class="math">\(\left|\mathbb{R}\right|\ge2^{\aleph_{0}}\)</span> ומזה ינבע <span class="math">\(\left|\mathbb{R}\right|=2^{\aleph_{0}}\)</span>.</p>
+<p>כיוון אחד הוא קל: הגדרה סטנדרטית של <span class="math">\(\mathbb{R}\)</span> היא באמצעות <strong>חתכי דדקינד</strong>. בצורה זו, כל <span class="math">\(r\in\mathbb{R}\)</span> מיוצג על ידי קבוצה <span class="math">\(\left\{ q\in\mathbb{Q}\ |\ q<r\right\} \)</span>. ספציפית, מתקיים <span class="math">\(r=\sup\left\{ q\in\mathbb{Q}\ |\ q<r\right\} \)</span>. מכאן שיש לנו התאמה חח"ע מ-<span class="math">\(\mathbb{R}\)</span> אל <span class="math">\(2^{\mathbb{Q}}\)</span>, כלומר <span class="math">\(\left|\mathbb{R}\right|\le\left|2^{\mathbb{Q}}\right|=2^{\aleph_{0}}\)</span>.</p>
+<p>הכיוון השני מעניין יותר. כדי להראות <span class="math">\(2^{\aleph_{0}}\le\left|\mathbb{R}\right|\)</span> די להראות התאמה חח"ע מאוסף הסדרות הבינאריות אל <span class="math">\(\mathbb{R}\)</span>, כש"סדרה בינארית" היא פונקציה מ-<span class="math">\(\mathbb{N}\)</span> אל <span class="math">\(\left\{ 0,1\right\} \)</span> שאפשר פשוט לכתוב בתור <span class="math">\(b_{0},b_{1},b_{2},\ldots\)</span> עם <span class="math">\(b_{i}\in\left\{ 0,1\right\} \)</span>. כמובן, זה לא משנה בפועל אם בסדרה מופיע 1 או אם נחליף את כל המופעים של 1 ב-2, אז בואו נניח שהסדרה <span class="math">\(\left\{ b_{i}\right\} _{i=1}^{\infty}\)</span> שלנו מקיימת דווקא <span class="math">\(b_{i}\in\left\{ 0,2\right\} \)</span> כי זה מאוד יקל עלינו עוד שניה.</p>
+<p>עכשיו נכניס לתמונה את <a href="https://gadial.net/2010/04/21/cantor_set/">קבוצת קנטור</a>. יש לי כבר פוסט עליה, אז הנה תזכורת קצרה: הרעיון בקבוצת קנטור הוא לקחת את הקטע <span class="math">\(\left[0,1\right]\)</span>, לחלק אותו לשלושה קטעים שווים, ולמחוק את הקטע האמצעי, <strong>לא כולל</strong> נקודות הקצה שלו. זה מניב לנו את איחוד הקטעים <span class="math">\(\left[0,\frac{1}{3}\right]\cup\left[\frac{2}{3},1\right]\)</span>. עכשיו לוקחים את שני הקטעים הללו ועושים את אותו דבר עליהם - מעיפים את השליש האמצעי, משאירים את היתר. וככה זה נמשך עוד ועוד ועוד עד אינסוף, והתוצאה היא קבוצה שה<strong>מידה</strong> שלה היא 0. </p>
+<p>בלי להיכנס להגדרה של מידה, הרעיון הוא שאם אפשר לכסות קבוצה על ידי אוסף של קטעים קטנים כרצוננו (שסכום האורכים שלהם קטן מאיזה <span class="math">\(\varepsilon>0\)</span> נתון) אז היא ממידה אפס, וזה מה שקורה עם קבוצת קנטור - בכל שלב בבניה היא מכוסה על ידי אוסף הקטעים שבידינו באותו שלב, והאורך הכולל של הקטעים בשלב <span class="math">\(n\)</span> הוא <span class="math">\(2^{n}\cdot\left(\frac{1}{3}\right)^{n}=\left(\frac{2}{3}\right)^{n}\)</span> - שואף לאפס כש-<span class="math">\(n\)</span> שואף לאינסוף.</p>
+<p>והנה זה פלא, למרות שהסרנו מהקבוצה את כל ה"אורך" שלה, עדיין היא לא בת מניה; אפשר להוכיח שאיבר שייך לקבוצת קנטור אם ורק אם אפשר לכתוב אותו בתור <span class="math">\(\sum_{n=0}^{\infty}\frac{a_{i}}{3^{n}}\)</span> כך ש-<span class="math">\(a_{i}\in\left\{ 0,2\right\} \)</span>. הרעיון הוא לפתח את האיבר לייצוג <strong>טרנרי</strong> (בבסיס 3) ולהראות שאיבר מוסר מהבניה, כלומר הוא שייך לקטע אמצעי כלשהו בשלב הבניה ה-<span class="math">\(n\)</span>, רק אם הספרה במקום ה-<span class="math">\(n\)</span> בכל ייצוג טרנרי שלו היא 1 (האינטואיציה הלא מדויקת עד הסוף היא הספרה 0 מכניסה אותו לחלק השמאלי והספרה 2 מכניסה אותו לחלק הימני של הקטע שחולק לשלושה חלקים; הזסיבה שצריך להיזהר היא שיש מספרים עם שני ייצוגים טרנריים שונים ומספיק ש-1 לא יופיע בכלל באחד מהם). </p>
+<p>כל הסיפור הזה נותן לנו את ההתאמה החח"ע שמראה ש-<span class="math">\(2^{\aleph_{0}}\le\left|\mathbb{R}\right|\)</span>, ולכן מסיים את ההוכחה ש-<span class="math">\(\left|\mathbb{R}\right|=2^{\aleph_{0}}\)</span>, מה שנותן לנו אפשרות לנסח את השערת הרצף גם בניסוח המקובל שלה, עם הממשיים.</p>
+<p>עוד דרך אחת לנסח את השערת הרצף היא באמצעות ההגדרה של מה שנקרא מספרי <span class="math">\(\beth\)</span>, שמקבילים למספרי <span class="math">\(\aleph\)</span> שכבר ראינו. הם מוגדרים בצורה שאולי הייתה נראית לנו מתבקשת במבט ראשון כדי לתפוס את כל העוצמות:</p>
+<ul> <li><span class="math">\(\beth_{0}=\omega\)</span></li>
+
+
+<li><span class="math">\(\beth_{\alpha+1}=2^{\beth_{\alpha}}\)</span> לכל סודר <span class="math">\(\alpha\)</span>.</li>
+
+
+<li><span class="math">\(\beth_{\alpha}=\text{sup}\left\{ \beth_{\beta}\ |\ \beta<\alpha\right\} \)</span> כאשר <span class="math">\(\alpha\)</span> הוא סודר גבולי.</li>
+
+</ul>
+
+<p>בניסוח הזה, השערת הרצף היא הטענה <span class="math">\(\aleph_{1}=\beth_{1}\)</span>, ואפשר לנסח טענה חזקה יותר - <strong>השערת הרצף המוכללת</strong>, שאומרת ש-<span class="math">\(\aleph_{\alpha}=\beth_{\alpha}\)</span> לכל סודר <span class="math">\(\alpha\)</span>. אני לא אתעסק עם ההשערה הזו בפוסטים שלי כרגע - השערת הרצף הרגילה זה די והותר עבורי...</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2023/07/25/continuum_hypothesis_overview/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">בעקבות השערת הרצף, חלק א&#39;: מבוא</span>
+            </a>
+            
+            
+            
+            <a href="/2023/01/18/classes_and_transfinite/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">תורת הקבוצות - מחלקות, אקסיומת ההחלפה ואינדוקציה ורקורסיה על-סופיות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

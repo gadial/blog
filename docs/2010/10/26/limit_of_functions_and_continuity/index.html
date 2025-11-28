@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>גבולות של פונקציות ופונקציות רציפות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>גבולות של פונקציות ופונקציות רציפות</h1>
+            <div class="post-meta">
+                <span class="date">2010-10-26</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/גבול.html">גבול</a>
+                    
+                    <a href="/tags/חשבון אינפיניטסימלי.html">חשבון אינפיניטסימלי</a>
+                    
+                    <a href="/tags/מתמטיקה תיכונית.html">מתמטיקה תיכונית</a>
+                    
+                    <a href="/tags/רציפות.html">רציפות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2010/10/03/limit_of_sequence/">בפוסט הקודם שלי</a> על חדו"א תיכונית הצגתי מושג שלא נלמד בתיכון, אבל הוא בסיסי ביותר בחדו"א - מושג הגבול. ליתר דיוק, הצגתי את המושג עבור סדרות של מספרים ממשיים; כעת אני רוצה להציג את ההגדרה עבור פונקציות של מספרים ממשיים - בסימון שהצגתי בפוסט על פונקציות, פונקציות מהצורה <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span>. ההגדרה תהיה מעט יותר מסובכת מזו שעבור סדרות (ולכן חיכיתי איתה), אבל אחרי שתבינו אותה, לא יהיה קשה בהרבה גם להבין הגדרות כלליות עוד יותר לגבול (שלא אתן, בשלב זה, כי אז כבר לא נעסוק בחדו"א אלא במתמטיקה מתקדמת יותר).</p>
+<p>גבול של סדרה בא לתאר את התנהגות הסדרה "באינסוף". גבול של פונקציה הוא מושג מסובך יותר כי אנחנו צריכים גם להגיד <strong>איפה</strong> אנחנו מסתכלים על התנהגות הפונקציה. בואו נקפוץ למים ונציג את הסימון: <span class="math">\(\lim_{x\to x_{0}}f\left(x\right)=L\)</span> פירושו "כאשר <span class="math">\(x\)</span> שואף ל-<span class="math">\(x_{0}\)</span>, ערך הפונקציה <span class="math">\(f\)</span> שואף ל-<span class="math">\(L\)</span>". עבור סדרות אפשר היה לחשוב על הגבול כ"משחק" - נותנים לנו <span class="math">\(\varepsilon\)</span> ומטרתנו הייתה למצוא איזה <span class="math">\(N_{\varepsilon}\)</span> כך שהתנהגות אברי הסדרה שאחרי האיבר ה-<span class="math">\(N_{\varepsilon}\)</span> היא כזו, שאף אחד מהם לא נמצא במרחק גדול מ-<span class="math">\(\varepsilon\)</span> מהגבול. כעת עלינו להחליף את <span class="math">\(N_{\varepsilon}\)</span> במשהו אחר - הטענה תהיה שקיים מספר ממשי <span class="math">\(\delta&gt;0\)</span> כך שאם <span class="math">\(x\)</span> קרוב ל-<span class="math">\(x_{0}\)</span> עד כדי <span class="math">\(\delta\)</span>, אז <span class="math">\(f\left(x\right)\)</span> קרוב ל-<span class="math">\(L\)</span> עד כדי <span class="math">\(\varepsilon\)</span>. אומרים ש-<span class="math">\(\delta\)</span> מגדיר "סביבה" של <span class="math">\(x_{0}\)</span>: אוסף כל הנקודות שסביבו, במרחק לכל היותר <span class="math">\(\delta\)</span>. נעבור לפורמליסטיקה של ממש: <span class="math">\(\lim_{x\to x_{0}}f\left(x\right)=L\)</span> אם ורק אם לכל <span class="math">\(\varepsilon&gt;0\)</span> קיים <span class="math">\(\delta&gt;0\)</span> כך ש-<span class="math">\(0&lt;\left|x-x_{0}\right|&lt;\delta\Rightarrow\left|f\left(x\right)-L\right|&lt;\varepsilon\)</span> (כאן חץ כפול פירושו "גורר"). זהו, זו ההגדרה המסובכת והמפחידה ביותר שאציג בכל סדרת הפוסטים הזו. נגזרות ואינטגרלים, למרות שהגדרתם אינה מובנת מאליה, הם לדעתי קלים <strong>יותר</strong> להבנה (טוב, אולי אינטגרל לא...)</p>
+<p>שימו לב לאי השוויון <span class="math">\(0&lt;\left|x-x_{0}\right|\)</span>. הוא אומר שאם <span class="math">\(x=x_{0}\)</span>, <strong>לא</strong> חייב להתקיים <span class="math">\(\left|f\left(x\right)-L\right|&lt;\varepsilon\)</span>. במילים אחרות, דווקא בנקודה <span class="math">\(x_{0}\)</span> עצמה, הפונקציה יכולה "להשתולל"ולא חייבת להיות בסביבת הגבול. כלומר, הגבול בנקודה <span class="math">\(x_{0}\)</span> מתאר את התנהגות הפונקציה <strong>סביב</strong> הנקודה הזו, אך <strong>לא</strong> בנקודה עצמה. רוצים דוגמה? אין בעיה! נגדיר <span class="math">\(f\left(x\right)\)</span> באופן האידיוטי הבא: אם <span class="math">\(x\ne0\)</span> אז <span class="math">\(f\left(x\right)=2\)</span>, וכמו כן <span class="math">\(f\left(0\right)=42\)</span>. אם נצייר גרף של הפונקציה הוא יהיה קו אופקי בגובה 2 מעל ציר <span class="math">\(x\)</span>, פרט ל"חור" בנקודה <span class="math">\(x=0\)</span> שבמקומו יש נקודה בודדת בגובה 42 מעל ציר <span class="math">\(x\)</span>. קל לראות שהפונקציה שואפת ל-2 בנקודה 0, ועם זאת ערכה שם הוא מרוחק למדי מ-2. הפונקציה הזו נראית מלאכותית משהו כי לקחנו פונקציה פשוטה ו"קרענו" אותה; זה מוביל אותי מייד למושג הבא שעליו אני רוצה לדבר כאן ושמושג הגבול של פונקציה מאפשר לי לדבר עליו - רציפות. פונקציה <span class="math">\(f\)</span> היא רציפה בנקודה <span class="math">\(x_{0}\)</span> אם <span class="math">\(\lim_{x\to x_{0}}f\left(x\right)=f\left(x_{0}\right)\)</span>. אני אוהב לומר שפונקציה רציפה היא ההפך מפוליטיקאי - היא גם מבטיחה וגם מקיימת. מבטיחה, זה הגבול <span class="math">\(\lim_{x\to x_{0}}f\left(x\right)\)</span>, שנותן לנו את התחושה, ככל שאנו מתקרבים לנקודה <span class="math">\(x_{0}\)</span>, שערך הפונקציה מתקרב למשהו ספציפי; ומקיימת זה ש-<span class="math">\(f\left(x_{0}\right)\)</span> הוא אכן אותו משהו ספציפי.</p>
+<p>מה שתיארתי כאן הוא רציפות בנקודה מסויימת; בדרך כלל נהוג לדבר על רציפות של פונקציה בקטע כלשהו. <strong>קטע</strong> הוא פשוט קבוצת כל הנקודות שבין שני מספרים; כך למשל <span class="math">\(\left[3,4\right]\)</span> הוא אוסף כל המספרים שקטנים או שווים ל-4 וגדולים או שווים ל-3. זו דוגמה לקטע <strong>סגור</strong>; אפשר גם לדבר על הקטע הפתוח <span class="math">\(\left(3,4\right)\)</span> שמכיל את כל המספרים בין 3 ו-4 <strong>לא כולל</strong> 3 ו-4 עצמם; והקטע ה"חצי פתוח" <span class="math">\((3,4]\)</span> שאינו מכיל את 3 אבל כן מכיל את 4, והקטע <span class="math">\(\left(2,\infty\right)\)</span> שמכיל את כל המספרים הממשיים שגדולים מ-2, וכדומה. אם כן, להגיד "<span class="math">\(f\)</span> רציפה בקטע <span class="math">\(\left[3,4\right]\)</span>" זו דרך להגיד "לכל <span class="math">\(3\le x_{0}\le4\)</span>, מתקיים ש-<span class="math">\(f\)</span> רציפה ב-<span class="math">\(x_{0}\)</span>". מעתה ואילך כשאדבר על "פונקציה רציפה"תמיד יהיה ברור שאני מתכוון ל"רציפה בקטע כלשהו" (שיכול להיות גם <span class="math">\(\left(-\infty,\infty\right)\)</span> - ציר המספרים הממשיים כולו).</p>
+<p>אוהבים לומר שפונקציות רציפות הן פונקציות ש"ניתן לצייר מבלי להרים את העט מהדף". זה תיאור טיפה פשטני כי הוא עובד רק לפונקציות שקל לצייר בקו אחד - למשל, פונקציות <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span> (להבדיל מפונקציות מרוכבות, למשל). למרבה המזל, אלו בדיוק הפונקציות שעליהן אנו מדברים בחדו"א בסיסית ועבורן התיאור הזה הוא הולם למדי, למעט העובדה שעדיין יש פונקציות, ואפילו רציפות, שקשה לנו לצייר באופן כללי. לכן אני מציע להשתמש בזה בתור אינטואיציה, לא בתור הגדרה.</p>
+<p>אני רוצה להציע דרך התבוננות נוספות על פונקציות רציפות, שאולי תהיה קשה למדי להבנה בשלב הזה אבל היא הפתח להכללה חזקה ביותר של המושג הזה. חשבו על פונקציה ממשית באופן גאומטרי יותר, בתור משהו ש"תופס בידיים" את ציר המספרים <span class="math">\(\mathbb{R}\)</span>, ומתחיל לעקם ולפתל אותו בתוך המרחב הדו-ממדי שבו אפשר לדמיין ש-<span class="math">\(\mathbb{R}\)</span> חי בתור קו ישר. למשל, הפונקציה <span class="math">\(f\left(x\right)=x^{2}\)</span> תופסת את <span class="math">\(\mathbb{R}\)</span> ב"קצוות" שלו (אין לו באמת כאלו - הם באינסוף!) ומושכת אותם בחוזקה כלפי "מעלה". הפונקציה <span class="math">\(f\left(x\right)=\sin x\)</span> תופסת את הישר, מעקמת אותו ויוצרת ממנו מעין גל שחוזר על עצמו. הפונקציה <span class="math">\(f\left(x\right)=e^{x}\)</span> מרימה את הישר טיפה אל מעבר לציר <span class="math">\(x\)</span>, את הקצה הימני היא מושכת מעלה בצורה חזקה מאוד, בעוד שהקצה השמאלי ממשיך להישאר "נמוך" וקרוב לציר, וכן הלאה. לכל הדוגמאות הללו תכונה משותפת - ההתעללות שביצענו ב-<span class="math">\(\mathbb{R}\)</span> <strong>לא קרעה</strong> אותו. עשינו עיוות כלשהו של <span class="math">\(\mathbb{R}\)</span> שכלל מתיחות והזזות שלו, אבל בלי קריעה. "לקרוע" בהקשר הזה פירושו לגרום לכך שנקודות שקודם היו קרובות אחת לשנייה על הציר פתאום יהיו מרוחקות זו מזו באופן משמעותי (ושוב - זה לא מוגדר היטב - מה מבדיל בין "קריעה"ובין מתיחה חזקה במיוחד? לכן לא צריך לחפש את הצדק המתמטי במה שאני אומר אלא את האינטואיציה; הצדק המתמטי מצוי בהגדרה שכבר נתתי).</p>
+<p>למעשה - וזה כבר באמת למתקדמים מביניכם - אפילו תיאור של פונקציה רציפה כפונקציה ש"לא קורעת" אינו מדויק מספיק, למרות שבמקרה של <span class="math">\(\mathbb{R}\)</span> הוא מספיק טוב. בעולם האמיתי פונקציה רציפה יכולה גם לקרוע, בתנאי שאחר כך היא "תופרת" בחזרה את הקרעים. כך למשל כשמדברים על פונקציות על אובייקטים תלת ממדיים אפשר לדבר על פונקציה שלוקחת כדור והופכת אותו "פנימה והחוצה". אם תנסו לעשות זאת לכדור אמיתי בלי לקרוע אותו לא תצליחו; אבל אפשר לעשות זאת אם מבצעים בו קרע קטן, הופכים אותו ואז תופרים בחזרה את הקרע. אבל כאמור - דיה לצרה בשעתה, ולא על זה אני רוצה לדבר כאן.</p>
+<p>למה בעצם טרחתי לדבר על פונקציות רציפות? כי מבין כל הפונקציות הן הפונקציות ה"נחמדות" ביותר. אפשר להראות שפונקציה רציפה בקטע סגור (למשל <span class="math">\(\left[3,4\right]\)</span>) היא חסומה ומקבלת בו את המינימום והמקסימום שלה - תכונות מועילות מאוד, שעוזרות לנו לראות שלכל פונקציה רציפה קיים אינטגרל (ועל כך נדבר בהמשך). בדומה אפשר להראות שכל פונקציה שאפשר לגזור (וגם על זה נדבר בהמשך) חייבת להיות רציפה. כמו כן, הפונקציות העיקריות שאנחנו מכירים - הפולינומים, הפונקציות הטריגונומטריות, האקספוננט, הלוגריתם - כולן רציפות. זה לא מדויק במאה אחוזים - למשל, <span class="math">\(\tan x\)</span> לא מוגדר עבור ערכי <span class="math">\(x\)</span> שהן כפולה שלמה אי זוגית של <span class="math">\(\frac{\pi}{2}\)</span>; אבל בין כל שתי נקודות כאלו זו פונקציה רציפה גם כן.</p>
+<p>סיבה אחרת לכך שפונקציות רציפות הן כל כך אהובות - ושוב, אני קצת גולש - היא שאם מסתכלים על תוצאה ההפעלה שלהן על כל הנקודות בקבוצה מסויימת ולא רק על הפעולה ה"נקודתית" שלהן, יש מספר תכונות מעניינות של הקבוצה שפונקציות רציפות ישמרו. כך למשל התמונה של קטע סגור תהיה בעצמה קטע סגור (ובאופן כללי, התמונה של קטע תמיד תהיה קטע - לא ייתכן שפונקציה רציפה תעביר קטע לשני קטעים מבודדים).</p>
+<p>הנה עוד תכונה מעניינת של פונקציות רציפות. נניח שיש לנו סדרת מספרים ממשיים <span class="math">\(a_{n}\)</span> שמתכנסת לערך כלשהו <span class="math">\(a\)</span>, כלומר <span class="math">\(\lim_{n\to\infty}a_{n}=a\)</span> על פי ההגדרה של הפוסט הקודם. אז אם <span class="math">\(f\)</span> היא פונקציה רציפה, מתקיים ש-<span class="math">\(\lim_{n\to\infty}f\left(a_{n}\right)=f\left(a\right)\)</span>. במילים אחרות, מספיק שנדע את ערכה של <span class="math">\(f\)</span> על סדרת נקודות שמתכנסת ל-<span class="math">\(a\)</span> כדי שנדע את ערכה ב-<span class="math">\(a\)</span>. למה זה מעניין? כי סדרה היא קבוצה יחסית קטנה של מספרים; השוו זאת להגדרה של <span class="math">\(\lim_{x\to x_{0}}f\left(x\right)=f\left(x_{0}\right)\)</span> שבה אנחנו מדברים על אוסף <strong>כל הנקודות</strong> בסביבה כלשהי של <span class="math">\(x_{0}\)</span>.</p>
+<p>כדי להבין עד כמה זה חזק, הנה משפט: אם ידועים לנו ערכיה של פונקציה <span class="math">\(f\)</span> על <strong>המספרים הרציונליים</strong>, וידוע לנו ש-<span class="math">\(f\)</span> רציפה, אז הערכים של <span class="math">\(f\)</span> <strong>על כל המספרים הממשיים</strong> נקבעים בצורה יחידה - יש "הרחבה יחידה לממשיים" של <span class="math">\(f\)</span>. כמו כל דבר בחדו"א גם המשפט הזה ניתן להכללה רחבת היקף שעליה לא אומר כלום.</p>
+<p>דוגמה אחת לשימוש של המשפט היא במה שמכונה המשוואה הפונקציונלית של קושי. המשוואה הפונקציונלית היא זו: <span class="math">\(f\left(x+y\right)=f\left(x\right)+f\left(y\right)\)</span>, ואנו שואלים את עצמנו (או לפחות קושי שאל את עצמו) אילו פונקציות מקיימות זאת בכלל. המפתח לפתרון הוא זה: ראשית, אם <span class="math">\(n\)</span> טבעי אז <span class="math">\(f(nx)=f(x)+f\left(\left(n-1\right)x\right)=f\left(x\right)+f\left(x\right)+f\left(\left(n-2\right)x\right)=\dots=nf(x)\)</span>. כעת, מהמשוואה הזו מקבלים על ידי חלוקה ב-<span class="math">\(n\)</span> של שני האגפים ש-<span class="math">\(\frac{1}{n}f\left(nx\right)=f\left(x\right)\)</span> ועל ידי החלפת משתנה מקבלים <span class="math">\(\frac{1}{n}f\left(y\right)=f\left(\frac{y}{n}\right)\)</span>. מכאן כבר לא קשה לראות (נדרש תעלול כלשהו גם עבור מספרים שליליים) שלכל מספר רציונלי <span class="math">\(q\)</span> מתקיים <span class="math">\(f\left(q\right)=q\cdot f\left(1\right)\)</span>. כלומר, הערך של <span class="math">\(f\)</span> על כל המספרים הרציונליים נקבע על פי ערכה ב-<span class="math">\(1\)</span>, שהוא מספר קבוע כלשהו, ולכן הצורה הכללית של <span class="math">\(f\)</span> היא <span class="math">\(f\left(x\right)=c\cdot x\)</span> לכל מספר רציונלי (כאשר <span class="math">\(c\)</span> הוא קבוע ממשי שמאפיין את <span class="math">\(f\)</span>).</p>
+<p>מה שעשינו כאן היה תעלולים אלגבריים פשוטים. הם מסוגלים להביא אותנו רק עד הרציונליים - אי אפשר לטפל בממשיים בעזרת תעלולים דומים. אלא מה? אם דורשים גם ש-<span class="math">\(f\)</span> תהיה <strong>רציפה</strong>, אז ערכיה על הרציונליים קובעים את ערכה בכל מספר ממשי. אם <span class="math">\(a\)</span> הוא מספר ממשי ו-<span class="math">\(a_{n}\)</span> סדרת נקודות רציונליות שמתכנסת אליו (תמיד יש כזו) אז <span class="math">\(f\left(a_{n}\right)=c\cdot a_{n}\)</span>, ולכן <span class="math">\(f\left(a\right)=\lim f\left(a_{n}\right)=\lim c\cdot a_{n}=c\cdot a\)</span>. בקיצור, הראינו ש-<span class="math">\(f\left(x\right)=c\cdot x\)</span> <strong>לכל מספר ממשי</strong>. במילים: אם דורשים ש-<span class="math">\(f\)</span> רציפה, אז הפתרון היחיד למשוואה הפונקציונלית של קושי הוא פונקציות מהצורה <span class="math">\(f\left(x\right)=c\cdot x\)</span>.</p>
+<p>אם כן, אלו היו פונקציות רציפות על קצה המזלג. בפוסט הבא בנושא אחזור לדבר על נושא שנלמד במפורש גם בתיכון - נגזרות.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/10/29/they_shoot_equations_too/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">הם יורים גם בנוסחאות</span>
+            </a>
+            
+            
+            
+            <a href="/2010/10/23/braess_paradox/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">פרדוקס ברס ומנהרות הכרמל</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

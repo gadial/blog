@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תורת הקבוצות - קבוצות סדורות היטב - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>תורת הקבוצות - קבוצות סדורות היטב</h1>
+            <div class="post-meta">
+                <span class="date">2023-01-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/קבוצות סדורות היטב.html">קבוצות סדורות היטב</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>בסדרת הפוסטים שלי על תורת הקבוצות <a href="https://gadial.net/2020/01/10/order_relations/">הצגתי מתישהו</a> את המושג של <strong>יחס סדר</strong>. בפוסט הזה אני רוצה לדבר על סוג חשוב ומועיל של יחסי סדר: <strong>סדר טוב</strong>. בואו נתחיל קודם כל מההגדרות.</p>
+<p>כזכור, יחס סדר <span class="math">\(\le\)</span> מעל קבוצה <span class="math">\(A\)</span> הוא יחס (קבוצה של זוגות של אברי <span class="math">\(A\)</span>, כלומר תת-קבוצה של <span class="math">\(A\times A\)</span>) שהוא</p>
+<ul> <li><strong>רפלקסיבי</strong>: לכל <span class="math">\(a\in A\)</span> מתקיים <span class="math">\(a\le a\)</span>.</li>
+
+
+<li><strong>טרנזיטיבי</strong>: אם <span class="math">\(a\le b\)</span> וגם <span class="math">\(b\le c\)</span> אז <span class="math">\(a\le c\)</span></li>
+
+
+<li><strong>אנטיסימטרי</strong>: אם <span class="math">\(a\le b\)</span> וגם <span class="math">\(b\le a\)</span> אז <span class="math">\(a=b\)</span>.</li>
+
+</ul>
+
+<p>לפעמים מגדירים יחס סדר גם בצורה שונה, ובה מסמנים אותו <span class="math">\(<\)</span>; הוא עדיין צריך להיות טרנזיטיבי, אבל עכשיו הוא צריך להיות גם א-רפלקסיבי, כלומר <span class="math">\(a\not<a\)</span> לכל <span class="math">\(a\in A\)</span>. זה ניסוח קצת יותר "חסכוני" כי אנטיסימטריה לא יכולה להתקיים: אם <span class="math">\(a<b\)</span> וגם <span class="math">\(b<a\)</span> נובע מטרנזיטיביות <span class="math">\(a<a\)</span>, מה שאמרנו שלא קורה. שני הניסוחים שמישים ומקובלים וקל לעבור מאחד לשני: אם <span class="math">\(\le\)</span> הוא יחס סדר על פי הניסוח הראשון, נגדיר ש-<span class="math">\(a<b\)</span> אם ורק אם <span class="math">\(a\le b\)</span> וגם <span class="math">\(a\ne b\)</span> וקיבלנו את יחס הסדר השני <span class="math">\(<\)</span>, ובאופן דומה אם אנחנו מתחילים מ-<span class="math">\(<\)</span> אז נגדיר <span class="math">\(a\le b\)</span> אם ורק אם <span class="math">\(a<b\)</span> או <span class="math">\(a=b\)</span> וקיבלנו את <span class="math">\(\le\)</span>. בגלל ששני סוגי היחסים קשורים עד כדי כך לפעמים ארשה לעצמי להשתמש באחד ולפעמים בשני, לפי מה שיוצא ומתאים.</p>
+<p>יחס סדר הוא <strong>מלא</strong> (או <strong>לינארי</strong>) אם אפשר להשוות כל שני איברים, כלומר לכל <span class="math">\(a,b\in A\)</span> או ש-<span class="math">\(a\le b\)</span> או ש-<span class="math">\(b\le a\)</span>. ואיבר <span class="math">\(a\in A\)</span> הוא <strong>איבר ראשון</strong> על פי יחס הסדר, אם לכל <span class="math">\(b\in A\)</span> מתקיים <span class="math">\(a\le b\)</span>. </p>
+<p>עכשיו אפשר להגדיר מה זה סדר טוב: זה יחס סדר <strong>מלא</strong> שבו לכל תת-קבוצה לא ריקה של <span class="math">\(A\)</span> קיים <strong>איבר ראשון</strong>. לזוג <span class="math">\(\left(A,\le\right)\)</span> של הקבוצה ויחס הסדר הטוב עליה קוראים <strong>קבוצה סדורה היטב</strong>.</p>
+<p>בואו נראה דוגמאות. והרבה. כי מה הטעם בהגדרה בלי דוגמאות.</p>
+<p>הדוגמא המרכזית, האבטיפוס, נותן ההשראה לכל המושג הזה, היא קבוצת המספרים הטבעיים, <span class="math">\(\mathbb{N}\)</span> עם יחס הסדר הרגיל עליה, כלומר <span class="math">\(0<1<2<3<\ldots\)</span>. זה בוודאי יחס סדר מלא, ואם ניקח תת-קבוצה לא ריקה של טבעיים, האיבר הראשון שבה הוא בסך הכל האיבר המינימלי בגודלו. למשל, <span class="math">\(\left\{ 13,5,81\right\} \)</span> היא תת-קבוצה שכזו, והאיבר הראשון בה, על פי יחס הסדר, הוא 5.</p>
+<p>זו תכונה שימושית בצורה יוצאת מן הכלל: הרבה הוכחות במתמטיקה כוללות אספקט שבו לוקחים תת-קבוצה כלשהי של טבעיים ואז מסתכלים על האיבר המינימלי בה. אפילו ההוכחה שהוכחות באינדוקציה עובדות היא כזו: כזכור, הוכחה באינדוקציה אומרת שאם טענה <span class="math">\(P\)</span> כלשהי מתקיימת עבור 0 (מסמנים זאת <span class="math">\(P\left(0\right)\)</span>) ובנוסף, אם היא מתקיימת עבור טבעי <span class="math">\(n\)</span> כלשהו היא מתקיימת גם עבור <span class="math">\(n+1\)</span> (<span class="math">\(P\left(n\right)\Rightarrow P\left(n+1\right)\)</span>) אז נובע מכך שהיא מתקיימת לכל הטבעיים (<span class="math">\(\forall n\in\mathbb{N}:P\left(n\right)\)</span>). איך מוכיחים את זה? פשוט, מסתכלים על קבוצת הטבעיים שעבורם <span class="math">\(P\)</span> אינה מתקיימת; אם היא ריקה, סיימנו, ואחרת קיים לה איבר ראשון, <span class="math">\(n\)</span>. מכיוון ש-<span class="math">\(P\left(0\right)\)</span> אז <span class="math">\(n>0\)</span> ולכן גם <span class="math">\(n-1\in\mathbb{N}\)</span>, אבל מהמינימליות של <span class="math">\(n\)</span> עולה ש-<span class="math">\(P\left(n-1\right)\)</span>, ועכשיו אפשר להסיק מכך שגם <span class="math">\(P\left(\left(n-1\right)+1\right)=P\left(n\right)\)</span> - סתירה להנחה ש-<span class="math">\(P\left(n\right)\)</span> לא מתקיים.</p>
+<p>אפשר לשאול, ובצדק, מה בהוכחה שהראיתי כאן התבסס באופן ספציפי על המספרים הטבעיים - לכאורה בשינויים קלים ההוכחה תעבוד לכל קבוצה סדורה היטב. ובכן, בדיוק כך! הנה לנו אחת מהסיבות שבגללן אנחנו אוהבים קבוצות סדורות היטב. עוד אחזור לזה בהמשך.</p>
+<p>בואו נתבונן כעת על הקבוצה <span class="math">\(\mathbb{Z}=\left\{ \ldots,-2,-1,0,1,2,\ldots\right\} \)</span> של המספרים השלמים. הקבוצה הזו סדורה בסדר מלא, אבל הוא <strong>לא</strong> סדר טוב, כי אפילו לכל <span class="math">\(\mathbb{Z}\)</span> עצמה אין איבר ראשון. אותה בעיה תמנע גם מ-<span class="math">\(\mathbb{Q}\)</span> להיות סדורה בסדר טוב. אבל מה קורה אם נפטרים מהבעיה הזו? למשל, בואו נסתכל על <span class="math">\(\mathbb{Q}^{\ge0}=\left\{ q\in\mathbb{Q}\ |\ q\ge0\right\} \)</span>. לקבוצה הזו בוודאי יש איבר ראשון: 0. לרוע המזל, זה לא מספיק בשביל שהקבוצה תהיה סדורה בסדר טוב, כי צריך שיהיה איבר ראשון <strong>לכל</strong> תת-קבוצה לא ריקה של <span class="math">\(\mathbb{Q}^{\ge0}\)</span>, והנה דוגמא לתת-קבוצה כזו שאין לה איבר ראשון (אני מסדר את אבריה כך שהגדול ביותר בא תחילה): <span class="math">\(\left\{ 1,\frac{1}{2},\frac{1}{3},\frac{1}{4},\frac{1}{5},\ldots\right\} \)</span>. הקבוצה הזו "שואפת לאפס" באיזה מובן אינטואיטיבי, אבל מכיוון ש-0 אינו שייך אליה, אין לתת-הקבוצה הזו איבר ראשון. שימו לב לניואנס הזה: אם <span class="math">\(B\subseteq A\)</span> אז צריך שיהיה ל-<span class="math">\(B\)</span> איבר ראשון <strong>בתוך </strong><span class="math">\(B\)</span> עצמה. לא משנה אם קיים ב-<span class="math">\(A\backslash B\)</span> מישהו שנראה כמו אינפימום של <span class="math">\(B\)</span>.</p>
+<p>מה שכן אפשר לעשות הוא לקחת קבוצה קיימת ולהתעלל במושג הסדר הרגיל שלה - להחליף אותו במשהו שאולי נראה לנו ממש מוזר, אבל הוא כן יהיה סדר טוב. למשל, בואו נסתכל על <span class="math">\(\mathbb{Z}\)</span> ונגדיר שכל מספר <strong>שלילי</strong> יותר גדול מכל מספר <strong>חיובי</strong>, ובנוסף את השליליים אני מסדר לפי הערך המוחלט שלהם. במילים אחרות, נקבל את <span class="math">\(\mathbb{Z}=\left\{ 0,1,2,3,\ldots,-1,-2,-3,\ldots\right\} \)</span>, כשכאן אני כותב את האיברים משמאל לימין על פי הסדר שלהם. הקבוצה הזו <strong>כן</strong> סדורה היטב.</p>
+<p>גם את <span class="math">\(\mathbb{Q}^{\ge0}\)</span> אפשר לסדר די בקלות בסדר טוב, וזה בעצם מה שעושים בהוכחה הסטנדרטית ש-<span class="math">\(\mathbb{Q}\)</span> בת מניה: אנחנו כותבים סדר כמו <span class="math">\(\frac{0}{0},\frac{0}{1},\frac{1}{0},\frac{0}{2},\frac{1}{1},\frac{2}{0},\ldots\)</span> - זה משהו די מגוחך שכולל איברים לא הגיוניים כמו <span class="math">\(\frac{0}{0}\)</span>, אבל העיקרון ברור - מהרשימה הזו אנחנו לוקחים רק את המספרים של <span class="math">\(\mathbb{Q}^{\ge0}\)</span>, בפעם הראשונה שהם הופיעו, והרשימה עצמה מסודרת כך: ראשית מופיעים כל הביטויים <span class="math">\(\frac{a}{b}\)</span> עם <span class="math">\(a,b\ge0\)</span> כך ש-<span class="math">\(a+b=0\)</span>; אחר כך כל הביטויים כך ש-<span class="math">\(a+b=1\)</span> וכן הלאה, כשבכל פעם אנחנו מתחילים מ-<span class="math">\(a=0\)</span> ומגדילים אותו תוך שאנו מקטינים את <span class="math">\(b\)</span> בהדרגה. זה יניב לנו את</p>
+<p><span class="math">\(\mathbb{Q}^{\ge0}=\left\{ 0,1,\frac{1}{2},2,\frac{1}{3},3,\ldots\right\} \)</span> </p>
+<p>זו קבוצה די מבולגנת, אבל אם חושבים על זה קצת, היא בעצם לא שונה במבנה שלה מהמספרים הטבעיים: פורמלית, נראה בהמשך שהיא <strong>איזומורפית</strong> אליהם. לעומת זאת, <span class="math">\(\mathbb{Z}=\left\{ 0,1,2,3,\ldots,-1,-2,-3,\ldots\right\} \)</span> לא איזומורפית: האיבר <span class="math">\(-1\)</span> בקבוצה הזו נטול קודם מיידי (איבר שקטן ממנו ואין איברים אחרים ביניהם) אבל ב-<span class="math">\(\mathbb{N}\)</span> עם יחס הסדר הרגיל זה לא קיים.</p>
+<p>אם כן, בואו נדבר על איזומורפיזמים.</p>
+<h2>איזומורפיזם של קבוצות סדורות היטב - חימום</h2>
+
+<p>באופן כללי במתמטיקה, איזומורפיזם של שתי קבוצות אומר שהן אותו דבר עד כדי שינוי שמות - כש"אותו הדבר" צריך להתייחס גם ל<strong>מבנה</strong> הרלוונטי שיש על הקבוצות בהקשר שעליו מדברים. אם אין שום מבנה, אז איזומורפיזם <span class="math">\(f:A\to B\)</span> של קבוצות הוא בסך הכל פונקציה חח"ע ועל ביניהן; אבל בהקשר שלנו, שבו יש יחסי סדר על הקבוצות שאסמן <span class="math">\(\le_{A},\le_{B}\)</span>, איזומורפיזם הוא פונקציה <span class="math">\(f:A\to B\)</span> שהיא חח"ע, על ו<strong>משמרת סדר</strong>: כלומר, <span class="math">\(a\le b\)</span> אם ורק אם <span class="math">\(f\left(a\right)\le f\left(b\right)\)</span>.</p>
+<p>הנה דוגמא פשוטה. בואו נסדר את <span class="math">\(\mathbb{Z}\)</span> כך שמספרים חיוביים ושליליים מגיעים זה אחר זה: <span class="math">\(\mathbb{Z}=\left\{ 0,1,-1,2,-2,3,-3,\ldots\right\} \)</span>. עם הסדר הזה, <span class="math">\(\mathbb{Z}\)</span> היא בסך הכל <span class="math">\(\mathbb{N}\)</span> בתחפושת. הנה האיזומורפיזם המפורש: </p>
+<p><span class="math">\(f\left(n\right)=\begin{cases} k & n=2k-1\\ -k & n=2k \end{cases}\)</span></p>
+<p>ההגדרה הזו עובדת לקבוצות סדורות באופן כללי, ואנחנו מסמנים <span class="math">\(A\cong B\)</span> כדי לציין ששתי הקבוצות הן איזומורפיות. מה שמעניין אותנו בהקשר של קבוצות סדורות היטב הוא שאיזומורפיזם מאפשר לנו <strong>להשוות</strong> בין קבוצות סדורות היטב שונות. במובן מסויים, לכל שתי קבוצות סדורות היטב, או ששתיהן איזומורפיות זו לזו, או שאחת מהן "גדולה יותר" ואז השניה איזומורפית לחלק ממנה, אבל לא סתם חלק - <strong>קטע התחלתי</strong>, שזה מושג חדש שאני צריך להגדיר אבל הוא די אינטואיטיבי: </p>
+<p>אם <span class="math">\(\left(A,<\right)\)</span> היא קבוצה סדורה היטב ו-<span class="math">\(a\in A\)</span> אז <strong>הקטע ההתחלתי</strong> שמתאים ל-<span class="math">\(a\)</span> הוא הקבוצה <span class="math">\(a^{<}\triangleq\left\{ b\in A\ |\ b<a\right\} \)</span>, כלומר כל האיברים של <span class="math">\(A\)</span> שקטנים מ-<span class="math">\(a\)</span> עצמו (<strong>לא כולל</strong> <span class="math">\(a\)</span> עצמו, מה שיהיה רלוונטי מאוד בהוכחות שתכף נראה).</p>
+<p>אני רוצה להוכיח שאם <span class="math">\(A,B\)</span> הן שתי קבוצות סדורות היטב, אז או ש-<span class="math">\(A\cong B\)</span>, או ש-<span class="math">\(A\cong b^{<}\)</span> לאיזה <span class="math">\(b\in B\)</span>, או ש-<span class="math">\(B\cong a^{<}\)</span> לאיזה <span class="math">\(a<A\)</span>. בגלל שזו הוכחה לא טריוויאלית מחלקים אותה לשלבים של טענות פשוטות יותר.</p>
+<p>ראשית, נוכיח שאם <span class="math">\(A\)</span> סדורה היטב, אז היא <strong>לא</strong> איזומורפית לאף קטע התחלתי של עצמה, ואפילו יותר מזה - היא לא איזומורפית לאף תת-קבוצה של קטע התחלתי של עצמה. כלומר, ניקח <span class="math">\(a\in A\)</span> כלשהו ונוכיח שלכל <span class="math">\(B\subseteq a^{<}\)</span> מתקיים <span class="math">\(A\not\cong B\)</span>ֲ. נניח בשלילה שדווקא כן <span class="math">\(A\cong B\)</span> עבור <span class="math">\(B\subseteq a^{<}\)</span> כלשהי, עם איזומורפיזם <span class="math">\(f:A\to B\)</span>, ונשאל את עצמנו את השאלה - אל מי <span class="math">\(f\)</span> מעבירה את <span class="math">\(a\)</span>? היא מעבירה אותו לאיבר ב-<span class="math">\(a^{<}\)</span>, כלומר למישהו שקטן מ-<span class="math">\(a\)</span>:</p>
+<p><span class="math">\(f\left(a\right)<a\)</span></p>
+<p>עכשיו אני יכול להפעיל את <span class="math">\(f\)</span> על שני האגפים של אי השוויון הזה, ומכיוון ש-<span class="math">\(f\)</span> משמרת סדר, אני אקבל</p>
+<p><span class="math">\(f\left(f\left(a\right)\right)<f\left(a\right)\)</span></p>
+<p>וככה אפשר להמשיך באופן כללי ולקבל</p>
+<p><span class="math">\(f^{n}\left(a\right)<f^{n-1}\left(a\right)\)</span></p>
+<p>או במילים אחרות, קיבלתי סדרה יורדת אינסופית של איברים:</p>
+<p><span class="math">\(a>f\left(a\right)>f^{2}\left(a\right)>f^{3}\left(a\right)>\ldots\)</span></p>
+<p>בקבוצה סדורה היטב לא יכולה להיות סדרה כזו, כי אם נסתכל על הקבוצה <span class="math">\(\left\{ f^{n}\left(a\right)\ |\ n\in\mathbb{N}\right\} \)</span>, זו תת-קבוצה של <span class="math">\(A\)</span> ומכיוון ש-<span class="math">\(A\)</span> סדורה היטב, צריך להיות בה איבר ראשון, כזה שקטן מכל האיברים האחרים; אבל לכל איבר בסדרה הזו קיים איבר שקטן ממנו. הגענו לסתירה, והמסקנה היא ש-<span class="math">\(A\not\cong B\)</span>, כמו שרצינו.</p>
+<p>הדבר השני שאני רוצה להוכיח בדרך אל המשפט הגדול הוא שאם <span class="math">\(A\cong B\)</span>, אז האיזומורפיזם ביניהם הוא <strong>יחיד</strong>. כלומר, אם <span class="math">\(f:A\to B\)</span> וגם <span class="math">\(g:A\to B\)</span> הם איזומורפיזמים, אז <span class="math">\(f=g\)</span>, או במילים אחרות: <span class="math">\(h=g^{-1}f=\text{Id}_{A}\)</span> הוא איזומורפיזם הזהות. </p>
+<p>ה-<span class="math">\(h\)</span> הזה הוא בעצם המפתח להוכחה: אם אנחנו לוקחים <span class="math">\(a\in A\)</span> אז <span class="math">\(h\)</span> היא בפרט איזומורפיזם בין הקבוצות <span class="math">\(a^{<}\)</span> ו-<span class="math">\(h\left(a\right)^{<}\)</span>. למה? ובכן, <span class="math">\(h\)</span> היא הרכבה של פונקציות חח"ע, על ושומרות סדר ולכן היא חח"ע, על ושומרת סדר בעצמה; עכשיו, אם <span class="math">\(x\in a^{<}\)</span> זה אומר ש-<span class="math">\(x<a\)</span>, ולכן <span class="math">\(h\left(x\right)<h\left(a\right)\)</span> ומכאן ש-<span class="math">\(h\left(x\right)\in h\left(a\right)^{<}\)</span>; קיבלנו שהתמונה של <span class="math">\(a^{<}\)</span> על ידי <span class="math">\(h\)</span> מוכלת ב-<span class="math">\(h\left(a\right)^{<}\)</span>. מצד שני, אם <span class="math">\(y\in h\left(a\right)^{<}\)</span> אז <span class="math">\(y<h\left(a\right)\)</span> ולכן <span class="math">\(h^{-1}\left(y\right)<a\)</span> ולכן המקור של <span class="math">\(y\)</span> שייך ל-<span class="math">\(a^{<}\)</span>. משני אלו נקבל שהתמונה של <span class="math">\(a^{<}\)</span> היא בדיוק <span class="math">\(h\left(a\right)^{<}\)</span> ולכן <span class="math">\(h\)</span> היא איזומורפיזם בין שתי הקבוצות הללו.</p>
+<p>עכשיו, בואו נזכור ש-<span class="math">\(h\)</span> היא פונקציה מ-<span class="math">\(A\)</span> לעצמה: <span class="math">\(h:A\to A\)</span>. כלומר, <span class="math">\(a^{<}\)</span> וגם <span class="math">\(h\left(a\right)^{<}\)</span> שניהם קטעים התחלתיים של <span class="math">\(A\)</span> עצמה, ולכן או ש-<span class="math">\(a=h\left(a\right)\)</span> או ש<strong>אחד מהם הוא קטע התחלתי של השני</strong>. אבל המשפט הקודם שראינו הוא שקבוצה לא יכולה להיות איזומורפית לקטע התחלתי של עצמה, ולכן בהכרח <span class="math">\(a=h\left(a\right)\)</span>. זה מתקיים לכל <span class="math">\(a\in A\)</span> ולכן נובע מכך ש-<span class="math">\(h\)</span> היא הזהות, כמו שרצינו.</p>
+<h2>איזומורפיזם של קבוצות סדורות היטב - המשפט המרכזי</h2>
+
+<p>הגענו להוכחה של הטענה המרכזית שלנו: שאם <span class="math">\(A,B\)</span> הן קבוצות סדורות היטב אז הן איזומורפיות או שאחת מהן איזומורפית לקטע התחלתי של השניה. זו לא הוכחה קשה במיוחד, אבל היא כן קצת טריקית בגלל הטכניקה שבה משתמשים בה, שלא דומה לדברים אחרים שיש בתורת הקבוצות הנאיבית עד השלב הזה.</p>
+<p>ראשית, לפני שנתחיל את הדבר העיקרי, בואו נשים לב לשני דברים שלא הבהרתי בניסוח המשפט:</p>
+<ol> <li>רק אחד משלושת המקרים יכול להתקיים, כי אם שני מקרים מתקיימים בו זמנית אפשר לקבל סיטואציה של קבוצה שאיזומורפית לתת-קבוצה של קטע התחלתי של עצמה, וראינו שזה לא יכול לקרות. למשל, אם <span class="math">\(A\cong B\)</span> עם איזומורפיזם <span class="math">\(f\)</span> וגם <span class="math">\(A\cong b^{<}\)</span> עם עבור <span class="math">\(b\in B\)</span> עם איזומורפיזם <span class="math">\(g\)</span> אז הרכבת האיזומורפיזמים <span class="math">\(gf^{-1}\)</span> היא איזומורפיזם <span class="math">\(B\cong b^{<}\)</span> וזו סתירה. או למשל אם <span class="math">\(A\cong b^{<}\)</span> עם <span class="math">\(f\)</span> ו-<span class="math">\(B\cong a^{<}\)</span> עם <span class="math">\(g\)</span> אז נקבל פונקציה חח"ע ושומרת סדר מ-<span class="math">\(A\)</span> אל <span class="math">\(a^{<}\)</span>. היא לאו דווקא על <span class="math">\(a^{<}\)</span>, אבל היא על תת-קבוצה של <span class="math">\(a^{<}\)</span>, אז אנחנו מקבלים איזומורפיזם של <span class="math">\(A\)</span> עם תת-קבוצה של קטע התחלתי של עצמה.</li>
+
+
+<li>האיזומורפיזם שכן קיים הוא יחיד - זה בדיוק מה שהוכחנו קודם עבור שתי קבוצות כלליות.</li>
+
+</ol>
+
+<p>עכשיו בואו נעבור להוכחה עצמה. האינטואיציה היא שכדי לבנות איזומורפיזם בין שתי קבוצות סדורות היטב, מתבקש (אפילו בלתי נמנע) להתחיל מלהעביר את האיברים הראשונים של שתיהן אחד לשני, ואז את האיברים "הבאים בתור", כלומר את האיברים הראשונים בקבוצת "האיברים שטרם טיפלנו בהם" וכן הלאה, אבל זה ניסוח די מסורבל - בניה "בשלבים" כשיכולים להיות אינסוף שלבים - ולאו דווקא אינסוף בן מניה של שלבים. צריך למצוא דרך לטפל בהכל "בבת אחת".</p>
+<p>אז הנה רעיון: בואו נדמיין שאנחנו כן מבצעים את הבנייה בשלבים הזו, ובשלב מסוים אנחנו מחליטים להעביר את <span class="math">\(a\in A\)</span> אל <span class="math">\(b\in B\)</span>. מה זה אומר? מכיוון שאנחנו בונים את ההעתקה שלנו באופן הדרגתי, זה אומר שכבר טיפלנו <strong>בכל</strong> האיברים שקטנים מ-<span class="math">\(a\)</span> ו<strong>בכל</strong> האיברים שקטנים מ-<span class="math">\(b\)</span> והעברנו אותם זה לזה. במילים אחרות, כבר בנינו את האיזומורפיזם <span class="math">\(a^{<}\cong b^{<}\)</span>, וכעת אנחנו מרחיבים אותו על ידי הוספת הכלל <span class="math">\(a\mapsto b\)</span> לאיזומורפיזם. אבל למה לדבר על "הוספת כלל"? בשביל מה למדנו תורת הקבוצות אם לא כדי ללמוד שאפשר לדבר על פונקציות פשוט בתור קבוצות של זוגות? ובכן, אם כבר בנינו את האיזומורפיזם <span class="math">\(f:a^{<}\to b^{<}\)</span>, בואו נוסיף אל <span class="math">\(f\)</span> את האיבר <span class="math">\(\left(a,b\right)\)</span>!</p>
+<p>כל זה טוב ויפה, אבל איפה אני נפטר מהעניין הזה של בניה בשלבים? ובכן, אני צריך שלבים רק אם יש לי תהליך שיש בו <strong>אפשרויות בחירה</strong> כלשהן, אבל אני טוען שאין לנו שום בחירה. לא בחרתי להעביר את <span class="math">\(a\)</span> אל <span class="math">\(b\)</span> כי ככה יצא בבניה הספציפית שלי; אני מעביר את <span class="math">\(a\)</span> אל <span class="math">\(b\)</span> כי <span class="math">\(b\)</span> הוא האיבר <strong>היחיד</strong> שעבורו מתקיים <span class="math">\(a^{<}\cong b^{<}\)</span>. זכרו את מה שראינו: אם <span class="math">\(a^{<}\cong b^{<}\)</span> אז פשוט <strong>לא ייתכן</strong> ש-<span class="math">\(a^{<}\)</span> יהיה איזומורפי לכל קטע התחלתי אחר של <span class="math">\(B\)</span> (כי קטע כזה יכיל או יוכל ב-<span class="math">\(b^{<}\)</span>) והאיזומורפיזם <span class="math">\(a^{<}\cong b^{<}\)</span> הוא <strong>יחיד</strong>, אז הוא לא תלוי באיזו <span class="math">\(f\)</span> ספציפית שבניתי עד כה.</p>
+<p>זה מוביל אותי אל ההגדרה של <span class="math">\(f\)</span> שבה אנחנו הולכים להשתמש, שהיא לב ההוכחה:</p>
+<p><span class="math">\(f=\left\{ \left(a,b\right)\in A\times B\ |\ a^{<}\cong b^{<}\right\} \)</span></p>
+<p>הפונקציה הזו היא האיזומורפיזם שאנחנו רוצים. לאיזה מבין המקרים? לכולם! לפי מי מהם שנכון. אם למשל <span class="math">\(A\cong b^{<}\)</span>, זה אומר שנקבל את כל הזוגות <span class="math">\(\left(a,b\right)\)</span> עם <span class="math">\(a\in A\)</span>; לא כל ה-<span class="math">\(b\)</span>-ים של <span class="math">\(B\)</span> יופיעו, וזה בסדר גמור. אם לעומת זאת <span class="math">\(a^{<}\cong B\)</span> אז זה אומר שכל ה-<span class="math">\(b\)</span>-ים כן יופיעו אבל לא כל ה-<span class="math">\(a\)</span>-ים, וזה עדיין בסדר גמור. הפונקציה עובדת בכל מקרה.</p>
+<p>אבל קודם כל צריך להשתכנע שקבוצת הזוגות הזו היא באמת פונקציה, ופונקציה חח"ע ועל ושומרת סדר. למרבה המזל, כמעט הכל נובע מדברים שכבר הוכחנו.</p>
+<p>מה זה אומר ש-<span class="math">\(f\)</span> היא פונקציה? ראשית, זה אומר שלכל <span class="math">\(a\)</span> בתחום שלה צריך להתאים <span class="math">\(b\)</span> מהטווח, אבל מכיוון שלא התחייבנו על מה התחום אין מה להוכיח פה - את התחום נגדיר בדיוק בתור</p>
+<p><span class="math">\(\text{dom}f\triangleq\left\{ a\in A\ |\ \exists b\in B:\left(a,b\right)\in f\right\} \)</span></p>
+<p>שנית, זה אומר שלכל <span class="math">\(a\)</span> מתאים רק <span class="math">\(b\)</span> <strong>יחיד</strong>, אבל זה קל, כי אם <span class="math">\(\left(a,b_{1}\right),\left(a,b_{2}\right)\in f\)</span> אז זה אומר ש-<span class="math">\(a\cong b_{1}^{<}\)</span> וגם <span class="math">\(a\cong b_{2}^{<}\)</span> ומכאן נובע <span class="math">\(b_{1}^{<}\cong b_{2}^{<}\)</span> וזו סתירה אלא אם <span class="math">\(b_{1}=b_{2}\)</span> כי כבר הוכחנו שקבוצה לא איזומורפית לקטע התחלתי שלה.</p>
+<p>באותו אופן בדיוק מראים שאם <span class="math">\(\left(a_{1},b\right),\left(a_{2},b\right)\in f\)</span> אז <span class="math">\(a_{1}=a_{2}\)</span>, כלומר ש-<span class="math">\(f\)</span> חח"ע. וזה ש-<span class="math">\(f\)</span> היא על הוא שוב עניין של איך מגדירים, ספציפית כאן איך מגדירים את הטווח של <span class="math">\(f\)</span>, שפשוט נזהה עם התמונה שלה <span class="math">\(\left\{ b\in B\ |\ \exists a\in A:\left(a,b\right)\in f\right\} \)</span>.</p>
+<p>אז בבניה שלנו ראינו כבר ש-<span class="math">\(f\)</span> היא פונקציה חח"ע ועל בין תת-קבוצה כלשהי של <span class="math">\(A\)</span> ותת-קבוצה כלשהי של <span class="math">\(B\)</span>. אבל מהן הקבוצות הללו? בתור התחלה אני רוצה להראות שאם איבר <span class="math">\(a\in A\)</span> שייך לתחום של <span class="math">\(f\)</span>, כך גם כל <span class="math">\(a^{\prime}<a\)</span>.</p>
+<p>אם <span class="math">\(a\in\text{dom}f\)</span> אז קיים <span class="math">\(b\)</span> כך ש-<span class="math">\(a^{<}\cong b^{<}\)</span>. בואו נסמן את האיזומורפיזם הזה ב-<span class="math">\(g\)</span>: <span class="math">\(g:a^{<}\to b^{<}\)</span>. עכשיו, בואו נסתכל על <span class="math">\(\left(a^{\prime}\right)^{<}\)</span>: זו תת-קבוצה של <span class="math">\(a^{<}\)</span> ולכן אפשר <strong>לצמצם</strong> את האיזומורפיזם <span class="math">\(g\)</span> לתת-הקבוצה הזו. אם נסמן <span class="math">\(b^{\prime}=g\left(a^{\prime}\right)\)</span> נקבל שהצמצום הזה נותן לנו איזומורפיזם <span class="math">\(\left(a^{\prime}\right)^{<}\cong\left(b^{\prime}\right)^{<}\)</span> (הוא בהכרח תופס את כל האיברים ב-<span class="math">\(\left(b^{\prime}\right)^{<}\)</span> כי איבר שגדול או שווה ל-<span class="math">\(a^{\prime}\)</span> לא יכול לעבור למשהו שקטן מ-<span class="math">\(b^{\prime}\)</span>).</p>
+<p>כלומר, ראינו שאם <span class="math">\(\left(a,b\right)\in f\)</span> אז לכל <span class="math">\(a^{\prime}<a\)</span> קיים <span class="math">\(b^{\prime}<b\)</span> כך ש-<span class="math">\(\left(a^{\prime},b^{\prime}\right)\in f\)</span> (ובדומה לכל <span class="math">\(b^{\prime}<b\)</span> קיים <span class="math">\(a^{\prime}<a\)</span> מתאים). המסקנה מזה היא כפולה: ראשית, <span class="math">\(f\)</span> משמרת סדר. שנית, אם התחום של <span class="math">\(f\)</span> הוא לא כל <span class="math">\(A\)</span>, אז מכיוון ש-<span class="math">\(A\)</span> סדורה היטב אפשר להסתכל על <span class="math">\(A\backslash\text{dom}f\)</span> ולקבוצה הזו יהיה איבר ראשון, <span class="math">\(a\)</span>. לא ייתכן שיהיו איברים ב-<span class="math">\(\text{dom}f\)</span> שגדולים מ-<span class="math">\(a\)</span> אחרת מה שראינו כרגע היה מוכיח ש-<span class="math">\(a\in\text{dom}f\)</span>, ולכן המסקנה היא ש-<span class="math">\(\text{dom}f=a^{<}\)</span>. באותו האופן התמונה של <span class="math">\(f\)</span> היא או <span class="math">\(B\)</span> כולה או <span class="math">\(b^{<}\)</span> עבור <span class="math">\(b\in B\)</span> כלשהו.</p>
+<p>אז אם לסכם, הראינו ש-<span class="math">\(f\)</span> היא פונקציה חח"ע, על ומשמרת סדר שהתחום שלה הוא <span class="math">\(A\)</span> או קטע התחלתי של <span class="math">\(A\)</span> והטווח שלה הוא <span class="math">\(B\)</span> או קטע התחלתי של <span class="math">\(B\)</span>: זה מכסה את כל האפשרויות ומסיים את ההוכחה.</p>
+<h2>בונוס: האם כל קבוצה ניתנת לסידור טוב?</h2>
+
+<p>התחלנו את הפוסט עם האבחנה ש-<span class="math">\(\mathbb{Z}\)</span> ו-<span class="math">\(\mathbb{Q}\)</span> עם הסדר "הרגיל" עליהן אינן סדורות בסדר טוב, אבל אפשר איכשהו להתחכם וכן להגדיר עליהן סדרים טובים (אפילו כמה סדרים טובים שונים). האופן שבו עשיתי את זה היה מאוד <strong>ספציפי</strong> לקבוצות הללו; השתמשתי בהתחכמויות שנעזרות במבנה שכבר קיים עליהן. אם אני אצטרך לעשות משהו דומה עם <span class="math">\(\mathbb{R}\)</span>, האם אוכל למצוא התחכמות דומה? ובכן, לא. <strong>אין לי מושג</strong> איך לסדר את <span class="math">\(\mathbb{R}\)</span> בסדר טוב. זה תרגיל טוב לנסות ולעשות את זה בצורה קונסטרוקטיבית, כי לנסות ולהיתקע (או לא לדעת מאיפה להתחיל בכלל) בעצמכם זה יותר משכנע מאשר שאני סתם אגיד "אני לא יודע".</p>
+<p>עדיין, כמה מסובך סדר טוב יכול להיות? מה קשה בלהגיד "ניקח איבר כלשהו של <span class="math">\(\mathbb{R}\)</span>, זה יהיה האיבר הראשון שלנו, עכשיו ניקח עוד איבר והוא יהיה השני וכן הלאה"? ובכן, מי מבטיח לנו שבסופו של דבר נמצה באופן הזה את <strong>כל</strong> האיברים של <span class="math">\(\mathbb{R}\)</span>? הרי יש <a href="https://gadial.net/2020/10/28/diagonalizations_and_infinite_sets/">מספר לא בן מניה שלהם</a>. אנחנו צריכים איכשהו לטפל בכל האיברים בבת אחת, וזה למרות שבניגוד לבניה של האיזומורפיזם מהחלק הקודם, כאן הבניה מאוד תלויה <strong>בבחירות</strong> שביצענו בדרך. כאן נחלצת לעזרתנו <strong>אקסיומת הבחירה</strong>.</p>
+<p>הזכרתי את אקסיומת הבחירה <a href="https://gadial.net/2020/06/20/general_cartesian_products/">בפוסט על מכפלות קרטזיות כלליות</a>, בואו נזכיר אותה שוב, בניסוח שהכי נוח לי כאן: אם <span class="math">\(X\)</span> היא משפחה של קבוצות לא ריקות (<span class="math">\(A\ne\emptyset\)</span> לכל <span class="math">\(A\in X\)</span>) אז קיימת <span class="math">\(f:X\to\bigcup_{A\in X}A\)</span> ("פונקציית בחירה") כך שלכל <span class="math">\(A\in X\)</span> מתקיים <span class="math">\(f\left(A\right)\in A\)</span>. אנחנו קוראים לזה "אקסיומה" כי אי אפשר להוכיח את זה מיתר <a href="https://gadial.net/2019/10/20/zf_axioms_intro/">האקסיומות של צרמלו פרנקל</a>; האקסיומות הללו נותנות לנו סט כלים מוגבל יחסית בשביל לבנות קבוצות, כדי למנוע סיטואציה שבה אנחנו בונים בטעות קבוצה פרדוקסלית, ופונקציות בחירה הן קבוצות מורכבות מאוד לעתים, כאלו שפשוט לא ניתן לבנות עם סט הכלים המוגבל של צרמלו-פרנקל.</p>
+<p>אם אנחנו מניחים את אקסיומת הבחירה, אז די פשוט להוכיח שכל קבוצה <span class="math">\(A\)</span> ניתנת לסידור בסדר טוב. ראשית, נסתכל על אוסף כל תת-הקבוצות הלא ריקות של <span class="math">\(A\)</span> (פורמלית, <span class="math">\(X=\mathcal{P}\left(A\right)\backslash\left\{ \emptyset\right\} \)</span>) וניקח פונקציית בחירה <span class="math">\(f\)</span> על האוסף הזה, כלומר נניח שיש לנו פונקציה שמקבלת תת-קבוצה לא ריקה <span class="math">\(B\subseteq A\)</span> ומחזירה <span class="math">\(f\left(B\right)=b\in B\)</span>.</p>
+<p>סליחה, אמרתי "די פשוט"? האמת שזה לא כזה פשוט. גם עם פונקציית הבחירה לצידנו, לנסות ולחשוב מה הצעד הבא זה לא קל במיוחד. דרך אחת היא להמשיך עם הגישה של הגדרה "רקורסיבית", באמצעות כלי שנקרא <strong>רקורסיה על-סופית</strong>. זה בדיוק מה שעשיתי <a href="https://gadial.net/2012/06/04/choice_order_zorn/">בפוסט שכתבתי בעבר</a> על השקילות בין משפט הסדר הטוב ואקסיומת הבחירה. שם המחיר היה לא רק שימוש ברקורסיה על-סופית אלא גם נפנוף ידיים כללי, ולכן יכול להיות נחמד להציג כאן הוכחה שתהיה פורמלית לגמרי ולא תזדקק לכל זה, אבל המחיר יהיה טיפה מאמץ שהיא תדרוש מאיתנו (אפשר גם להשתמש במשהו אחר, שנקרא "הלמה של צורן", שהוא נפלא בפני עצמו אבל לדבר עליו יצריך אותי להכניס עוד סט חדש של מושגים שאני לא צריך כאן, במחיר של זה שההוכחה תהיה דומה מאוד לשימוש בלמה של צורן).</p>
+<p>הנה ההגדרה המרכזית שנזדקק לה: נאמר שלקבוצה <span class="math">\(B\subseteq A\)</span> יש את "תכונה X" אם <strong>קיים</strong> סדר טוב של <span class="math">\(B\)</span> כך שלכל <span class="math">\(b\in B\)</span> מתקיים <span class="math">\(f\left(A\backslash b^{<}\right)\)</span>. במילים אחרות, אם <span class="math">\(f\)</span> מגדירה לנו סדר טוב על <span class="math">\(B\)</span> בצורה הנחמדה שאנחנו מצפים לה: בהינתן כל האיברים שסידרנו עד כה, נבקש מ-<span class="math">\(f\)</span> "תני לנו איבר מ-<span class="math">\(A\)</span> שטרם סידרנו", היא תחזיר לנו את <span class="math">\(b\)</span> והוא יהיה האיבר הבא בסדר (ולכן קבוצת האיברים שסידרנו עד שהגענו אל <span class="math">\(b\)</span> היא בדיוק <span class="math">\(b^{<}\)</span>). שימו לב שזו לא הגדרה "תהליכית" כך שאנחנו לא צריכים לדבר על רקורסיות על סופיות ושאר ירקות, אבל מצד שני אם נוכיח של-<span class="math">\(A\)</span> עצמה יש את תכונה X, ניצחנו.</p>
+<p>האם בכלל יש קבוצות שמקיימות את תכונה X? ובכן, <span class="math">\(\emptyset\)</span> מקיימת אותה באופן ריק, פשוט כי תכונה X מנוסחת בתור "לכל <span class="math">\(b\in B\)</span>..." וב-<span class="math">\(\emptyset\)</span> אין איברים ואפשר "לסדר אותה בסדר טוב" ריק.</p>
+<p>בנוסף, לכל קבוצה <span class="math">\(B\subset A\)</span> ששונה מ-<span class="math">\(A\)</span> ומקיימת את תכונה X, אפשר להרחיב אותה באופן טבעי כך שתמשיך לקיים את תכונה X: נבנה את <span class="math">\(B\cup\left\{ f\left(A\backslash B\right)\right\} \)</span>, כלומר, נבקש את האיבר "הבא בתור" מ-<span class="math">\(f\)</span>, ונרחיב את הסדר הטוב על <span class="math">\(B\)</span> כך שהאיבר הזה יהיה האחרון.</p>
+<p>שני אלו מראים לנו שיש כנראה כמות יפה של קבוצות שמקיימות את תכונה X, אז אפשר לעשות תעלול סטנדרטי ולהסתכל על <strong>האיחוד</strong> שלהן, שאסמן בתור <span class="math">\(C\subseteq A\)</span>. אם גם <span class="math">\(C\)</span> מקיימת את תכונה X, ניצחנו; ינבע מכך ש-<span class="math">\(C=A\)</span>. למה? כי אם <span class="math">\(C\ne A\)</span> אז אפשר <strong>להרחיב</strong> אותה כפי שראינו קודם ולקבל קבוצה שמכילה ממש את <span class="math">\(C\)</span> אבל <strong>השתתפה באיחוד </strong>שנתן את <span class="math">\(C\)</span> מלכתחילה, וזו כמובן סתירה.</p>
+<p>אז האתגר שלנו הוא להסתכל על איחוד של קבוצות שמקיימות את תכונה X ולהראות שגם הוא מקיים את תכונה X (מי שמכירות את הלמה של צורן כנראה ממלמלות עכשיו "כל זה נשמע מוכר באופן חשוד" או משהו).</p>
+<p>מה שאני ארצה להראות הוא שאין לקבוצות הרבה גמישות בבואן לקיים את תכונה X; הפונקציה <span class="math">\(f\)</span> מכריחה באופן די קשוח כל קבוצה כזו להשתמש בסדר טוב ספציפי. בניסוח קונקרטי, אם <span class="math">\(B_{1},B_{2}\subseteq A\)</span> הן שתי קבוצות סדורות בסדר טוב שמקיימות את תכונה X ביחס לסדר הטוב הזה, כך ש-<span class="math">\(B_{1}\cong B_{2}\)</span>, אז <span class="math">\(B_{1}=B_{2}\)</span> והאיזומורפיזם שלהן הוא הזהות. כלומר, אין כזה דבר, שני סדרים טובים שונים (בין אם על אותה קבוצה ובין אם על קבוצות אחרות) שמאפשרים לקבוצה לקיים את תכונה X.</p>
+<p>ההוכחה די פשוטה: ניקח את האיזומורפיזם <span class="math">\(g:B_{1}\to B_{2}\)</span> ונניח שהוא לא פונקציית הזהות, אז יהא <span class="math">\(b\in B_{1}\)</span> האיבר הראשון מבין אלו שמקיימים <span class="math">\(b\ne g\left(b\right)\)</span>. המשמעות היא ש-<span class="math">\(b^{<}=g\left(b\right)^{<}\)</span> (כי כל האיברים שקטנים מ-<span class="math">\(b\)</span> עוברים לעצמם בגלל המינימליות של <span class="math">\(b\)</span>).</p>
+<p>עכשיו, מכיוון ש-<span class="math">\(B_{1},B_{2}\)</span> מקיימות את תכונת X, המשמעות של זה היא ש-</p>
+<p><span class="math">\(b=f\left(B_{1}\backslash b^{<}\right)=f\left(B_{1}\backslash g\left(b\right)^{<}\right)=g\left(b\right)\)</span></p>
+<p>וזו סתירה להנחה ש-<span class="math">\(b\ne g\left(b\right)\)</span>, אז קיבלנו ש-<span class="math">\(g\)</span> היא אכן הזהות.</p>
+<p>מה אפשר להסיק מכך? קחו שתי קבוצות <span class="math">\(B_{1},B_{2}\subseteq A\)</span> כלשהן שמקיימות את תכונה X. שתיהן סדורות בסדר טוב כלשהו; המשפט המרכזי שהצגנו קודם אומר שהן או איזומורפיות, או שאחת מהן איזומורפית לקטע התחלתי של השניה. אבל כפי שראינו, בסיטואציה הספציפית שלנו עם תכונה X, אין "איזומורפיזם". יש רק שוויון. או ש-<span class="math">\(B_{1}=B_{2}\)</span>, או שאחת מהן היא קטע התחלתי של השניה. במילים אחרות, כל הקבוצות הללו סדורות <strong>באותו סדר טוב</strong>.</p>
+<p>עכשיו, מה זה סדר טוב? בסופו של דבר זה יחס - קבוצה של זוגות. אם ניקח מכל קבוצה עם תכונה X את הסדר הטוב שלה ונאחד את כל הסדרים הטובים הללו, התוצאה תהיה סדר טוב על איחוד כל הקבוצות הללו, <span class="math">\(C\)</span>. כדי לראות שהסדר הזה מקיים את תכונה X, פשוט ניקח <span class="math">\(c\in C\)</span> כלשהו; הוא שייך לאחת מקבוצות ה-X שבאיחוד, והקבוצה הזו כבר מראה שהוא מקיים <span class="math">\(c=f\left(A\backslash c^{<}\right)\)</span>. סיימנו!</p>
+<h2>מה הלאה?</h2>
+
+<p>בכל הדיון שלנו על קבוצות סדורות היטב חזר שוב ושוב עניין ה"איזומורפיזם" שלהן. במקום שבו יש לי איזומורפיזמים, עולה השאלה האם יש לי אובייקטים "קנוניים" שיכולים לייצג לי את המחלקות השונות של אובייקטים איזומורפיים. אם הולכים בגישה הזו מגיעים חיש קל אל מה שנקרא <strong>סודרים</strong>, שהוא המושג הבא שנדבר עליו.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2023/01/12/ordinals/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת הקבוצות - סודרים</span>
+            </a>
+            
+            
+            
+            <a href="/2022/10/12/quantum_state_tomography/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">טומוגרפיה קוונטית: איך מגלים מה כבר יש לנו?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

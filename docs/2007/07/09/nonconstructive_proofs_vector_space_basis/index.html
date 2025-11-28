@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בסיס מוצק מי ימצא - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>בסיס מוצק מי ימצא</h1>
+            <div class="post-meta">
+                <span class="date">2007-07-09</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הוכחות לא קונסטרוקטיביות.html">הוכחות לא קונסטרוקטיביות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אין מנוס מדוגמה מתמטית "קלאסית" להוכחה לא קונסטרוקטיבית, ולכן אביא אותה כעת. כדי להבין את הדוגמה יש צורך להכיר <a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%92%D7%91%D7%A8%D7%94_%D7%9C%D7%99%D7%A0%D7%90%D7%A8%D7%99%D7%AA">אלגברה לינארית</a> בסיסית - מהו <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A8%D7%97%D7%91_%D7%95%D7%A7%D7%98%D7%95%D7%A8%D7%99">מרחב וקטורי</a> ומהו <a href="http://he.wikipedia.org/wiki/%D7%91%D7%A1%D7%99%D7%A1_%28%D7%90%D7%9C%D7%92%D7%91%D7%A8%D7%94%29">בסיס</a>. לא ארחיב כאן על המושגים הללו, אלא אקפוץ ישר לטענה: לכל מרחב וקטור <span class="math">\(V\)</span> קיים בסיס - והדבר נכון גם למרחב ממימד אינסופי. כלומר, מרחב שבו אין חסם על גודל הקבוצות הבלתי תלויות האפשריות. בקורסי המבוא של האלגברה הלינארית כמעט ולא עוסקים במרחבים כאלו, ועיקר העיסוק בהם הוא במסגרת האנליזה הפונקציונלית, שמטפלת בהם בגישה מעט שונה מזו האלגברית ה"טהורה". בפרט, מושג ה"בסיס" המקובל (קבוצה שכל איבר במרחב יכול להיכתב כצירוף לינארי של <strong>מספר סופי</strong> מאיבריה) מתגלה כשימושי פחות ביחס לסוגים אחרים של "בסיסים" (כאלו שבהם כל איבר במרחב נכתב כצירוף <strong>אינסופי</strong>, אך מתכנס, של איברים - כמובן שלצורך כך יש להגדיר מושג כלשהו של התכנסות על המרחב). אם שמעתם על <a href="http://he.wikipedia.org/wiki/%D7%98%D7%95%D7%A8_%D7%A4%D7%95%D7%A8%D7%99%D7%99%D7%94">טורי פורייה</a>, הרי שהם דוגמה לבסיס "אחר" שכזה (במקרה זה - של מרחב פונקציות אינסופי).</p>
+<p>עבור מרחב ממימד סופי המשפט טריוויאלי, והטכניקה פשוטה: לוקחים איבר <span class="math">\(a_1\)</span>. מחפשים איבר נוסף במרחב שאינו תלוי לינארית ב-<span class="math">\(a_1\)</span>. אם אין כזה - מה טוב, <span class="math">\(\{a_1\}\)</span> הוא בסיס למרחב. אחרת, יש איבר <span class="math">\(a_2\)</span> שכזה, ולכן נוסיף אותו לקבוצת ה"בסיס הפוטנציאלי" שלנו, ונמשיך הלאה. מכיוון שאנחנו במרחב ממימד סופי, יש חסם על גודל הקבוצה הבלתי תלויה המקסימלית, ולכן התהליך יהיה חייב לעצור - כלומר, נגיע לאיזו קבוצה <span class="math">\(\{a_1, a_2,\dots, a_n\}\)</span> שכל איבר במרחב תלוי לינארית בה - כלומר, ניתן לכתיבה כצירוף לינארי של איבריה, וזהו. באותה צורה אפשר להרחיב כל קבוצה בלתי תלויה לבסיס - פשוט נתחיל מאיברי הקבוצה, ונוסיף להם איברים כל עוד אפשר.</p>
+<p>במרחב אינסוף ממדי ההוכחה נכשלת מכיוון שתהליך הוספת האיברים עלול לא להסתיים לעולם. לכן יש לנקוט בגישה שונה. הרעיון הבסיסי נותר זהה - אנחנו רוצים למצוא קבוצה בלתי תלויה שהיא <strong>מקסימלית</strong> במובן זה שכל איבר שנוסיף לה יהפוך אותה לתלויה (ולכן האיבר הזה שנוסיף ניתן לכתיבה כצירוף לינארי של איברים שכבר קיימים בקבוצה), אבל בשביל למצוא קבוצה מקסימלית שכזו יש להשתמש ב<a href="http://he.wikipedia.org/wiki/%D7%94%D7%9C%D7%9E%D7%94_%D7%A9%D7%9C_%D7%A6%D7%95%D7%A8%D7%9F">למה של צורן</a>. המילה "למצוא" היא כמובן שקר גמור; כל הרעיון כאן הוא שלא נמצא שום דבר, אלא רק נוכיח קיום.</p>
+<p>הניסוח של הלמה של צורן הוא מעט טכני אך אינו מסובך בצורה יוצאת דופן. נניח שיש לנו קבוצה שמוגדר עליה יחס סדר (כלומר, אפשר להגיד על איברים "א' גדול מב'", ופירוש הדבר יהיה שלא ייתכן ש-ב' גדול מא', ושאם ב' גדול מג' אז גם א' גדול מג'). אז אם לכל "שרשרת" של איברים שמסודרים לפי גודל - <span class="math">\(A_1&lt;A_2&lt;\dots\)</span> (שימו לב - השרשרת לא בהכרח סופית) יש איזה שהוא איבר <span class="math">\(A\)</span> בקבוצה שלנו שהוא גדול מכל איברי השרשרת ("חסם מלעיל" של השרשרת), אז יש איבר מקסימלי בקבוצה שלנו - כזה שאף איבר אחר אינו גדול ממנו.</p>
+<p>הבלבול העיקרי בשימוש בלמה במקרה שלנו עשוי לנבוע מכך שהאיברים שעליהם מוגדר יחס הסדר יהיו בעצמן קבוצות, ויחס הסדר יוגדר באמצעות הכלה: הקבוצה <span class="math">\(A_1\)</span> קטנה מהקבוצה <span class="math">\(A_2\)</span> אם ורק אם היא מוכלת בה: <span class="math">\(A_1 \subseteq A_2\)</span>.</p>
+<p>עכשיו, נניח שנתונה לנו קבוצה בלתי תלויה <span class="math">\(A\)</span> של וקטורים. נגדיר את אוסף הקבוצות שעליו נרצה להפעיל את הלמה של צורן בתור אוסף הקבוצות <strong>הבלתי תלויות</strong> של איברים שמכילות את <span class="math">\(A\)</span>. אם נמצא איזו שהיא קבוצה בלתי תלויה "מקסימלית" <span class="math">\(B\)</span> מבין כל הקבוצות הללו, נסיים. למה? כי מהמקסימליות נובע שכל איבר שנוסיף לה יהפוך אותה לתלויה לינארית (כי אם כשמוסיפים את האיבר <span class="math">\(x\)</span> לקבוצה <span class="math">\(B\)</span> מקבלים שוב קבוצה בלתי תלויה זו סתירה למקסימליות של <span class="math">\(B\)</span>, שכן <span class="math">\(B\subseteq B\cup\{x\}\)</span>.</p>
+<p>כדי להשתמש בלמה של צורן, אם כן, יש צורך לקחת "שרשרת", להראות שיש לה חסם מלעיל. נניח ש-<span class="math">\(A_\Lambda\)</span> היא שרשרת שכזו (האינדקס המשונה - האות היוונית למבדא - בא לציין שהשרשרת אינה בהכרח מכילה מספר בן מניה בלבד של איברים. מי שזה לא מסתדר לו עם קיום יחס הסדר יכול להיזכר שגם על המספרים הממשיים מוגדר יחס סדר). התעלול המקובל הוא להגדיר את חסם המלעיל בתור איחוד כל הקבוצות הללו: <span class="math">\(C=\cup A_\Lambda\)</span>. ברור שהוא חסם מלעיל לשרשרת (כי הוא מכיל כל איבר באיחוד), וכל מה שצריך להראות הוא שגם הוא איבר באוסף כל הקבוצות הבלתי תלויות שמכילות את <span class="math">\(A\)</span>.</p>
+<p>טוב, ברור שהוא מכיל את <span class="math">\(A\)</span> (למה?) אבל פחות ברור שהוא בלתי תלוי. כדי להראות את זה מניחים בשלילה שהוא תלוי ולכן יש מספר <strong>סופי</strong> של וקטורים <span class="math">\(a_1,\dots,a_n\in C\)</span> שיוצרים את 0 בצירוף לינארי לא טריוויאלי. כאן נכנס העוקץ לתמונה: אמרנו ש-<span class="math">\(C\)</span> היא איחוד של כל ה-<span class="math">\(A_\Lambda\)</span>, ולכןכל איבר <span class="math">\(a_i\)</span> שייך לאיזו שהיא קבוצה <span class="math">\(A_i\)</span> מהשרשרת. מכיוון שכולן מקיימות יחס סדר, פשוט בוחרים את הקבוצה הגדולה ביותר מתוך <span class="math">\(n\)</span> הקבוצות הללו ומובטח שהיא תכיל את כל <span class="math">\(n\)</span> האיברים <span class="math">\(a_1,\dots, a_n\)</span> (למה?) אבל הקבוצה הזו היא קבוצה בלתי תלויה, על פי הגדרת השרשרת... ולכן לא ייתכן שהצירוף של <span class="math">\(a_1,\dots, a_n\)</span> נותן 0 בצורה לא טריוויאלית, וזה מסיים את ההוכחה.</p>
+<p>בכל ההוכחה הזו לא הצבענו על שום דרך לגילוי הבסיס המבוקש. שורש כל הרוע הוא בכך שהלמה של צורן מבטיחה קיום של משהו, אבל לא אומרת כלום על הדרך למצוא אותו או על המראה שלו. ככה זה. אלו מכם שכבר נתקלו בלמה של צורן לא ימצאו בהוכחה שום ייחוד - זה יישום סטנדרטי לחלוטין שלה, ועם זאת אפקטיבי וחזק להפתיע.</p>
+<p>ואיך אקסיומת הבחירה נכנסת לכל זה? היא שקולה ללמה של צורן. כלומר, אם נניח את אקסיומת הבחירה נוכל להוכיח את הלמה של צורן, וההפך - אם נניח אקסיומטית שהלמה של צורן נכונה (דבר הרבה פחות אינטואטיבי מההנחה שאקסיומת הבחירה נכונה), נוכל להוכיח מכך את אקסיומת הבחירה.</p>
+<p>אקסיומת הבחירה גוררת עוד משפטים חזקים רבים נוספים, שלא אתעכב עליהם. רק אציין משפט חשוב אחד שכבר דיברתי עליו בעבר (או לפחות, על דברים קרובים מאוד אליו): לכל שדה יש סגור אלגברי (כלומר, שדה שמכיל אותו ובו לכל פולינום יש שורש).</p>
+<p>לסיום, חידה נחמדה (וקשה), שגם בה יש צורך באקסיומת הבחירה (לפחות עד כמה שהבנתי מגעת) לצורך הפתרון: יש לנו קבוצה אינסופית של אנשים, שכל אחד מהם חובש כובע על ראשו, ורואה את הכובעים של כל האנשים (כן, כל האינסוף) מלבד זה של עצמו. כל כובע הוא או שחור או לבן - אין מידע נוסף על ההתפלגות שלהם.</p>
+<p>בהינתן אות, כל האנשים חייבים להגיד תכף ומייד מה צבע הכובע שיש להם על הראש. הם אינם רשאים לדבר או להעביר אינפורמציה זה לזה בשום צורה שהיא. המידע היחיד שיש להם הוא הכובעים שהם רואים על הראש של האנשים האחרים, וההסכמות שהם הגיעו אליהן לפני שהמשחק התחיל והכובעים הושמו.</p>
+<p>המטרה: שלכל היותר מספר סופי של אנשים יטעו בתשובה שיתנו.</p>
+<p>בהצלחה!</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2007/07/10/interactive_proof_systems/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מוכיח בשער</span>
+            </a>
+            
+            
+            
+            <a href="/2007/07/04/axiom_of_choice/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">לבחור או לא לבחור - זו השאלה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

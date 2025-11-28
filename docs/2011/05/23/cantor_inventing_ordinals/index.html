@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>איך קנטור המציא את הסודרים? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>איך קנטור המציא את הסודרים?</h1>
+            <div class="post-meta">
+                <span class="date">2011-05-23</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/ההיסטוריה של המתמטיקה.html">ההיסטוריה של המתמטיקה</a>
+                    
+                    <a href="/categories/תורת הקבוצות.html">תורת הקבוצות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/גאורג קנטור.html">גאורג קנטור</a>
+                    
+                    <a href="/tags/ההיסטוריה של תורת הקבוצות.html">ההיסטוריה של תורת הקבוצות</a>
+                    
+                    <a href="/tags/סודרים.html">סודרים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>לטעמי האישי אחת מהתוצאות המפתיעות והמרתקות ביותר במתמטיקה "אמיתית" היא גם אחת מהפשוטות והמיידיות ביותר בה, כזו שכל סטודנט בסמסטר הראשון יכול להבין: ההוכחה של גאורג קנטור לקיום גדלים שונים של אינסוף. אי אפשר שלא להעריך את קנטור - בתקופה שבה אינסוף היה מוקצה מחמת מיאוס במתמטיקה, בסופה של מאה שבה המתמטיקאים עמלו קשה כדי להעיף את האינסוף לכל הרוחות ולתאר את המתמטיקה מבלי להזדקק לו (עמל שהבשיל לכדי הגדרת מושג הגבול - עוד מושג מתמטי יפהפה), פתאום בא קנטור והעז להסתכל לנמר הזה בעיניים. לתקוף ישירות את המושג הזה שמציב קשיים כה רבים הן בפני מתמטיקאים והן בפני פילוסופים (ועד עצם היום הזה לא קשה להיתקל באנשים שגוזרים ש"אי אפשר להבין את האינסוף, וזהו"). אבל לנסות ולסכם את מה שקנטור עשה רק בסיווג גדלים שונים של אינסוף, זה כמובן שגוי ומציג באור פשטני מדי את פועלו. אני רוצה בפוסט הזה להתחיל לדבר על מושג נוסף שקנטור עסק בו - סודרים (ובעברית אורדינלים). אם להוכיח את קיומם של גדלים שונים של אינסוף זה "להסתכל לנמר בעיניים", הרי שבעיסוק בסודרים קנטור כבר ממש קופץ על גב הנמר ומתחיל לרכב עליו ברחבי העיר ולדהור הישר אל חנות החרסינה הקרובה.</p>
+<p>מהם בדיוק סודרים אסביר בפוסט הבא; בפוסט הזה, שהוא "היסטורי" באופיו, אני רוצה לומר משהו על האופן שבו קנטור הגיע להתעסק ביצורים המוזרים הללו. קנטור היה רחוק מלהיות טרחן מטורלל שיושב בבית ומתעסק בשטויות שאף מתמטיקאי אחר לא חשב עליהן; הוא התעסק במה שהיה הנושא הלוהט ביותר של זמנו - טורים טריגונומטריים. טורים אלו הם מושג מרתק בפני עצמו שראוי לסדרת פוסטים, אבל כרגע לא אספר עליהם יותר מדי. רק אגיד שהרעיון בהם הוא ייצוג של פונקציות כלליות באמצעות טורים אינסופיים של סינוסים וקוסינוסים. קשה להפריז בחשיבות המושג הזה; טורים שכאלו שימושיים בכל רחבי המתמטיקה וההנדסה. קנטור התעסק בשאלה מתי, כאשר מייצגים פונקציה באמצעות טור טריגונומטרי, הייצוג הזה הוא יחיד. הוא הצליח להוכיח משפט שכדי לא לגלוש לפרטים לא רלוונטיים כרגע אתאר באופן מגוחך כ"אם <span class="math">\(f\left(x\right)\)</span> מקיימת דברים נחמדים לכל <span class="math">\(x\)</span> בקטע שבו היא מוגדרת, הייצוג יחיד".</p>
+<p>המשפט הזה היה הישג נאה לכשעצמו, אבל קנטור היה בשוונג. כמו כל מתמטיקאי טוב, הוא ניסה לתקוף ולהחליש ככל הניתן את ההנחות של המשפט שלו. האם "דברים נחמדים" חייבים להתקיים לכל <span class="math">\(x\)</span> בקטע? האם אי אפשר להרשות שדברים יתקלקלו בחלק מהנקודות? קנטור עבד עוד קצת והצליח להראות שגם אם יש קלקול בסדרה אינסופית של נקודות התוצאה בעינה עומדת, כל עוד הסדרה מקיימת את התכונה שהנקודות לא יהיו "צפופות" - פורמלית, שאפשר לחלק את תחום ההגדרה של <span class="math">\(f\)</span> לקטעים מאורך סופי (שמספרם יכול להיות אינסופי) כך שבכל קטע יש רק מספר סופי של נקודות "רעות". באותו מאמר שבו הוכיח זאת, קנטור גם הכריז שההכללה הזו רחוקה מלהיות סוף הדרך ושהוא כבר עובד על הרחבה רחבה בהרבה.</p>
+<p>מה קנטור עשה? הוא שאל את עצמו - נניח שבקטע <span class="math">\(\left(a,b\right)\)</span> יש אינסוף נקודות רעות. אז משפט בולצאנו-ויירשטראס מבטיח שקיימת נקודה רעה שהיא <strong>נקודת הצטברות</strong> - <span class="math">\(x_{0}\)</span> בכל סביבה שלה - קטע מהצורה <span class="math">\(\left(x_{0}-\delta,x_{0}+\delta\right)\)</span> - יש אינסוף נקודות רעות. זה בעייתי, אבל מצד שני, נניח ש-<span class="math">\(x_{0}\)</span> היא נקודת ההצטברות ה<strong>יחידה</strong> בקטע, מה קורה עכשיו? ובכן, בואו נסתכל על הקטע <span class="math">\(\left(a,x_{0}-\delta\right)\)</span>. אם היו בו אינסוף נקודות רעות, הרי שהייתה בו עוד נקודת הצטברות רעה, והנחנו שאין. לכן הקטע הזה מכיל רק מספר סופי של נקודות רעות ואפשר להפעיל עליו את התוצאה המקורית של קנטור. כלומר, אפשר היה להראות ש"הכל עובד" גם בקטעים שהלכו והתקרבו עוד ועוד אל נקודת ההצטברות, וזה הספיק כדי לנטרל לחלוטין את הבעייתיות שבה. קנטור חיזק את התוצאה שלו - כעת אפשר היה להרשות אינסוף נקודות רעות, כל עוד יש רק נקודת הצטברות רעה אחת.</p>
+<p>אבל רגע, למה לעצור פה? אם יש בקטע <span class="math">\(\left(a,b\right)\)</span> שתי נקודות הצטברות רעות, <span class="math">\(x_{0}\)</span> ו-<span class="math">\(y_{0}\)</span> כך ש-נאמר, <span class="math">\(x_{0}&lt;y_{0}\)</span>, אז בקטעים <span class="math">\(\left(a,x_{0}+\delta\right)\)</span> ו-<span class="math">\(\left(x_{0}+\delta,b\right)\)</span>, עבור ערך של <span class="math">\(\delta\)</span> כך ש-<span class="math">\(x_{0}+\delta&lt;y_{0}\)</span> תהיה רק נקודת הצטברות רעה אחת בכל קטע ולכן אפשר יהיה להפעיל את המשפט גם במקרה הזה. ובעצם, לכל מספר סופי של נקודות הצטברות רעות אפשר לקצוץ את <span class="math">\(\left(a,b\right)\)</span> לפרוסות ולטפל בכל אחת בנפרד. הנה כי כן קנטור הוכיח את המשפט שלו גם במקרה שבו יש מספר סופי כלשהו של נקודות הצטברות רעות.</p>
+<p>מה עכשיו? ובכן, כבר ניחשתם - למה לעצור פה? מה קורה אם יש מספר אינסופי של נקודות הצטברות רעות? ובכן, יש נקודת הצטברות לקבוצת נקודות ההצטברות. אבל מה אם יש רק נקודת הצטברות אחת לקבוצת נקודות ההצטברות הרעות? ניחשתם - אפשר להפעיל את אותו טיעון כמו קודם באותו אופן, ובכך להראות שהמשפט עדיין עובד כשיש (תנשמו עמוק) נקודת הצטברות אחת לקבוצת נקודות ההצטברות של הנקודות הרעות. אבל את זה היה אפשר להמשיך הלאה ולהוכיח (תנשמו עמוק יותר) שהמשפט עדיין עובד כשיש רק נקודת הצטברות אחת לקבוצת נקודות ההצטברות של קבוצת נקודות ההצטברות של קבוצת הנקודות הרעות. ואת זה אפשר להמשיך...</p>
+<p>טוב, הבנתם את הרעיון. גם קנטור הבין. הוא גם הבין שכרגע כל העסק הוא בלאגן שלם. היה צריך לתאר את מה שהולך שם בצורה יותר ברורה ומסודרת. קנטור הקדיש לכך את המאמר הבא שלו. באותו מאמר עצמו הוא גם סיפק בניה פורמלית למספרים הממשיים, בנייה שנדרשה לו כדי לשמור על דיוק מתמטי; הבניה הזו היא בפני עצמה עניין מקסים (והצגתי אותה באחד מהפוסטים המוקדמים בבלוג), אך נעזוב אותה לבינתיים ונתאר את האופן שבו קנטור עשה סדר בבלאגן. אם <span class="math">\(P\)</span> היא קבוצת נקודת, אז קנטור הגדיר בתור <span class="math">\(P^{\prime}\)</span> את מה שהוא כינה <strong>הקבוצה הנגזרת</strong> שלה - קבוצת כל נקודות ההצטברות של נקודות מתוך <span class="math">\(P\)</span> (שוב, נקודת הצטברות של <span class="math">\(P\)</span> היא נקודה שבכל סביבה שלה יש אינסוף נקודות של <span class="math">\(P\)</span>). גם את הקבוצה הנגזרת אפשר לגזור "שוב" ולקבל קבוצה <span class="math">\(P^{\prime\prime}\)</span> של נקודות הצטברות של נקודות ההצטברות, וכן הלאה; את התוצר של <span class="math">\(n\)</span> גזירות שכאלו קנטור סימן ב-<span class="math">\(P^{\left(n\right)}\)</span>. כעת הוא יכל לנסח באלגנטיות את המשפט שלו - אם <span class="math">\(P\)</span> היא קבוצת הנקודות הרעות, וקיים <span class="math">\(n\)</span> כך ש-<span class="math">\(P^{\left(n\right)}\)</span> היא הקבוצה הריקה, כלומר אחרי מספר סופי של גזירות "נגמרות" נקודות ההצטברות (ובניסוח אחר, <span class="math">\(P^{\left(n-1\right)}\)</span> סופית), אז משפט היחידות של קנטור תקף גם עבור <span class="math">\(P\)</span> הזו.</p>
+<p>יש לנו כאן דוגמה נאה להוכחה באינדוקציה. בואו נאמר ש-<span class="math">\(P\)</span> היא קבוצה <span class="math">\(k\)</span>-סופית (מושג שאני ממציא כאן) עבור <span class="math">\(k\)</span> טבעי אם <span class="math">\(P^{\left(k\right)}\)</span> סופית; אז בתחילה קנטור הוכיח את המשפט שלו עבור קבוצה <span class="math">\(0\)</span>-סופית ("מספר סופי של נקודות רעות"), ואז הוא הראה תעלול נאה שמוכיח שאם המשפט נכון עבור קבוצה <span class="math">\(k\)</span>-סופית, אז הוא נכון גם עבור קבוצה <span class="math">\(k+1\)</span>-סופית; ומכאן שהוא נכון עבור כל קבוצה <span class="math">\(k\)</span>-סופית, לכל <span class="math">\(k\)</span> טבעי.</p>
+<p>כל זה התפרסם במאמר של קנטור ב-1872. כבר בשלב זה קנטור ככל הנראה התחיל להרהר כיצד ניתן להמשיך מכאן. יותר מכך - העניין שלו עבר מעיסוק בטורים טריגונומטריים, לעיסוק בקבוצות הנגזרות עצמן - מה המבנה שלהן? איך נראות קבוצות שאינן <span class="math">\(k\)</span>-סופיות והאם ניתן להגיד עליהן משהו מעניין? ככלל, קנטור התחיל לתהות לגבי אופי היצור שהוא עצמו נתן לו הגדרה פורמלית - המספרים הממשיים. מהתהיות הללו צצה ההוכחה שלו לקיום גדלים שונים של אינסוף; אולם כאמור, זה לא מה שאני מעוניין לדבר עליו בפוסט הזה. אני רוצה לקפוץ כמה שנים קדימה, למאמר שפרסם קנטור ב-1880, ומכיל את המשך הרעיונות שלו לגבי קבוצות נגזרות - רעיונות שהוא כנראה פיתח במהלך הזמן הזה.</p>
+<p>קנטור ניסה להבין מה קורה אם <span class="math">\(P^{\left(k\right)}\ne0\)</span> לכל <span class="math">\(k\)</span> טבעי. הוא שם לב לכך שעבור <span class="math">\(k&gt;0\)</span>, אם <span class="math">\(x\in P^{\left(k+1\right)}\)</span>, אז גם <span class="math">\(x\in P^{\left(k\right)}\)</span> - כלומר, מרגע שהתחלנו בגזירה של <span class="math">\(P\)</span>, אנחנו יכולים רק לאבד נקודות בכל פעם (למה? כי אם <span class="math">\(x\in P^{\left(k+1\right)}\)</span> יש בכל סביבה שלו אינסוף נקודות של <span class="math">\(P^{\left(k\right)}\)</span> - ולכל אחת מהן אפשר לקחת סביבה שלה שתהיה קטנה דיו כדי להיות מוכלת בסביבה של <span class="math">\(x\)</span>, ואז היא תכיל אינסוף נקודות של <span class="math">\(P^{\left(k-1\right)}\)</span>, ולכן כך גם <span class="math">\(x\)</span>). אם כן, אם <span class="math">\(P^{\left(k\right)}\ne0\)</span> לכל <span class="math">\(k\)</span>, זה בגלל שיש קבוצת נקודות עקשניות, שפשוט נמצאות בכל אחד ואחד מה-<span class="math">\(P^{\left(k\right)}\)</span>-ים. במילים אחרות, זוהי בדיוק הקבוצה <span class="math">\(\bigcap_{k=1}^{\infty}P^{\left(k\right)}\)</span>.</p>
+<p>דרך אחרת לכתוב את הקבוצה הזו היא כ-<span class="math">\(P^{\left(1\right)}\cap P^{\left(2\right)}\cap\dots\)</span>, וקנטור שם לב לכך שבעצם היא שווה ל-<span class="math">\(P^{\left(k\right)}\cap P^{\left(k+1\right)}\cap\dots\)</span> לכל <span class="math">\(k\)</span> טבעי, כלומר אפשר "לדחוק את <span class="math">\(k\)</span> לאינסוף" ועדיין להישאר עם אותה קבוצה. השלב הבא כלל זינוק נועז של קנטור על גב הנמר - הוא קרא לקבוצה הזו <span class="math">\(P^{\left(\infty\right)}\)</span>. ואז, מייד, הוא צעק לנמר "דיו" והמשחק התחיל מחדש: גם <span class="math">\(P^{\left(\infty\right)}\)</span> היא קבוצת נקודות לכל דבר, אז <strong>גם אותה אפשר לגזור</strong>, ולקבוצה הנגזרת קנטור קרא <span class="math">\(P^{\left(\infty+1\right)}\)</span>. וגם את זה אפשר לגזור, אז מייד קיבלנו את <span class="math">\(P^{\left(\infty+2\right)}\)</span>, וחיש קל הגדרנו את <span class="math">\(P^{\left(\infty+k\right)}\)</span>.</p>
+<p>אבל למה לעצור כאן? קנטור דירבן עוד קצת את הנמר, והגיע אל <span class="math">\(P^{\left(\infty+\infty\right)}\)</span>, שאפשר היה לסמן גם כ-<span class="math">\(P^{\left(2\cdot\infty\right)}\)</span>. ומכאן קנטור המשיך - אפשר לדבר על <span class="math">\(P^{\left(k\cdot\infty\right)}\)</span> לכל <span class="math">\(k\)</span> טבעי; ולכן גם על <span class="math">\(P^{\left(\infty\cdot\infty\right)}\)</span>, שאותו כבר אפשר לסמן כ-<span class="math">\(P^{\left(\infty^{2}\right)}\)</span>, ומכאן אפשר להגיע אל <span class="math">\(P^{\left(\infty^{\infty}\right)}\)</span>; ואפשר להגיע גם אל <span class="math">\(P^{\left(\infty^{\infty^{\infty}}\right)}\)</span>; וכן הלאה וכן הלאה וכן הלאה - קנטור והנמר דוהרים להם אל עבר הנצח.</p>
+<p>המספרים הסודרים נולדו.</p>
+<p>למי שכל דהרת הנמר הזו הייתה מהירה מדי בשבילם - אל תדאגו, בפוסט הבא אנסה להסביר את העניין בצורה מסודרת; לעת עתה רק רציתי להעביר את האופן שבו היצורים הללו צצו (אולי? מאוד מאוד אולי) במוחו של קנטור. מה שמדהים פה, לטעמי, הוא האופן שבו המושגים הללו צצים בצורה כמעט טבעית בתוך המתמטיקה הקונבנציונלית של המאה ה-19; תורת הקבוצות של קנטור נולדה עמוק מתוך המתמטיקה של תקופתה, בעזרת מוח מבריק ועתיר דמיון.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/05/25/ordinals_overview/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">סודרים - מה זה בכלל? (הסבר אינטואיטיבי תוך כדי משחק)</span>
+            </a>
+            
+            
+            
+            <a href="/2011/05/18/rice_theorem_full_version/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">משפט רייס - הגרסה המלאה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

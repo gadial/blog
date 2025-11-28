@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מה זה לוגריתמים ובשביל מה זה טוב? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מה זה לוגריתמים ובשביל מה זה טוב?</h1>
+            <div class="post-meta">
+                <span class="date">2020-06-08</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/כללי.html">כללי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/לוגריתמים.html">לוגריתמים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>מבין כל המושגים במתמטיקה שנלמדים בבית הספר, לוגריתמים הם כנראה המושג שנשכח הכי בקלות והכי פחות ברור בשביל מה הוא טוב, בעצם. זה כמובן חבל מאוד כי זה מושג מגניב מאוד (וגם שימושי, אבל לא בחיי היום יום שלנו ואני לא אנסה לטעון אחרת) והוא גם לא קשה כל כך להבנה. אני אתחיל מלהסביר מה זה בעצם, ואז נדבר על הבשביל-מה-זה-טוב.</p>
+<p>התשובה הקצרה היא "לוגריתם זו הפעולה ההפוכה לחזקה כמו שחיסור הוא הפעולה ההפוכה לחיבור וחילוק הוא הפעולה ההפוכה לכפל" אבל העלילה מסתבכת כבר בשלב הזה, כי יש <strong>שתי</strong> פעולות הפוכות לחזקה ששונות אחת מהשניה מאוד, כי בניגוד לחיבור וכפל, חזקה היא לא פעולה <strong>סימטרית</strong>. מבלבל? כן, אז בואו נתחיל מההתחלה.</p>
+<p>אני מניח שאנחנו מכירים חיבור - זו נקודת התחלה לא רעה. אנחנו יודעים ש-<span class="math">\(3+5=5+3\)</span> (זה <strong>חוק החילוף</strong>). אנחנו יודעים שחיסור הוא פעולה הפוכה לחיבור במובן הבא: <span class="math">\(3+5-5=3\)</span>. כלומר, אם חיברתי ל-3 ואז חיסרתי ממנו את אותו מספר, אז אני אחזור אל מה שהתחלתי ממנו. אני רוצה טיפה לחדד את זה בצורה שנשמעת פדנטית אבל בהמשך אולי יהיה ברור למה אני מתעקש עליה: הפעולה "לחסר 5" היא הפעולה ההפוכה של "לחבר 5". כמובן שלא נכון לומר ש"לחסר 5" היא הפעולה ההפוכה של "לחבר 4", כלומר יש חשיבות לשאלה מה המספר הספציפי שמחסרים.</p>
+<p>עכשיו נעבור אל פעולת הכפל. מה זה כפל? סביר שגם אותו אנחנו מכירים: על כפל במספר טבעי אפשר לחשוב בתור הרבה פעולות חיבור. <span class="math">\(3\times5\)</span> הוא דרך אחרת לומר <span class="math">\(3+3+3+3+3\)</span> - חיברנו את 3 לעצמו 5 פעמים. עכשיו, עבור כפל, קורה אותו הסיפור שקרה עבור חיבור בדיוק: <span class="math">\(3\times5=5\times3\)</span> - הנה שוב חוק החילוף בפעולה. והפעולה ההפוכה ל"כפל ב-5" נקראת "חלוקה ב-5" ואני לרוב מסמן אותה ככה: <span class="math">\(3\times5\times\frac{1}{5}=3\)</span> (כלומר, אני <strong>מגדיר</strong> חלוקה ב-5 בתור כפל ב-<span class="math">\(\frac{1}{5}\)</span>). ההבדל היחיד בין חיבור וחיסור ובין כפל וחילוק הוא שבכפל וחילוק, לא קיימת פעולה הפוכה ל"כפל ב-0". אבל זה <a href="https://gadial.net/2008/10/16/nullity_part_1/">סיפור לפעם אחרת</a>.</p>
+<p>אחרי כפל, הפעולה הבאה שאפשר לדבר עליה היא <strong>חזקה</strong>. אם כפל במספר טבעי מוגדר בתור "לחזור על החיבור כמה פעמים", אז העלאה בחזקת מספר טבעי מוגדרת בתור "לחזור על הכפל כמה פעמים". כלומר, הסימון <span class="math">\(3^{5}\)</span> מייצג את <span class="math">\(3\times3\times3\times3\times3\)</span> - כופלים את 3 בעצמו 5 פעמים.</p>
+<p>וכאן הסיפור מתחיל להסתבך.</p>
+<p>בניגוד לחיבור וכפל, חוק החילוף <strong>לא מתקיים</strong> עבור חזקות. אפשר פשוט לבדוק את זה בעזרת דוגמא: <span class="math">\(3^{5}=243\)</span> אבל <span class="math">\(5^{3}=125\)</span>. המקרה היחיד של שני מספרים שונים זה מזה שעבורם חוק החילוף מתקיים הוא <span class="math">\(2^{4}=4^{2}=16\)</span> (ואיכשהו אלו תמיד שני המספרים הראשונים שעולים לי לראש כשאני רוצה לתת דוגמאות לחזקה). גם הכתיב של חזקה מאפשר לנו לראות שאין סימטריה: בביטוי <span class="math">\(3^{5}\)</span> יש את המספר שכתוב בגדול ואת זה שנמצא בקטן למעלה. למספר הגדול שלמטה, 3 במקרה שלנו, קוראים <strong>בסיס החזקה</strong>. למספר הקטן שלמעלה, 5 במקרה הנוכחי, קוראים <strong>מעריך החזקה</strong>. פעולת החזקה פירושה לכפול את בסיס החזקה שוב ושוב בעצמו מספר פעמים ששווה למעריך החזקה.</p>
+<p>אם כן, העלאה בחזקה היא פעולה שכוללת שני "קלטים" שונים. נוח לדבר על הפעולה הזו כש"מקפיאים" את אחד מהקלטים להיות איזה שהוא ערך קונקרטי ואז שואלים את עצמו מה קורה כשנותנים ערכים שונים ומשונים בתור הקלט השני. קשר כזה בין קלטים ופלטים נקרא "פונקציה".</p>
+<p>בואו נראה דוגמא קונקרטית. נניח שנקפיא את <strong>מעריך</strong> החזקה להיות תמיד 2, ונשאל את עצמנו מה קורה עבור בסיסים שונים. נקבל את הפונקציה <span class="math">\(f\left(x\right)=x^{2}\)</span> שאנחנו קוראים לה <strong>העלאה בריבוע</strong>. הפעולה ה"הפוכה" להעלאה בריבוע היא הוצאת שורש ריבועי: <span class="math">\(g\left(x\right)=\sqrt{x}\)</span>. אני כותב "הפוכה" במרכאות כי זה לא מדויק במאה אחוזים: אם אני לוקח את <span class="math">\(-2\)</span> ומעלה אותו בריבוע אקבל 4, ואחרי הוצאת שורש ריבועי אקבל 2 כי מגדירים את פעולת הוצאת השורש ככזו שמחזירה את השורש החיובי.</p>
+<p>באופן דומה אפשר לדבר על העלאה בחזקות גבוהות יותר: <span class="math">\(f\left(x\right)=x^{n}\)</span> עבור <span class="math">\(n\)</span> טבעי כלשהו. הפעולה ההפוכה לזה נקראת "שורש מסדר גבוה" ומסומנת ב-<span class="math">\(g\left(x\right)=\sqrt[n]{x}\)</span>. את הפעולות הללו אנחנו מכירים יחסית טוב; למשל, הקפיצה מאורך צלע של קוביה אל הנפח שלה היא העלאה בחזקה שלישית, ולכן הקפיצה חזרה מנפח של קובייה אל אורך הצלע שלה הוא הוצאת שורש שלישי. כמובן, במכולת אנחנו לא זקוקים לפעולות הללו אבל הן יותר נטועות במציאות היומיומית שלנו מאשר מה שאנחנו הולכים לדבר עליו עכשיו.</p>
+<p>עכשיו, סוף כל סוף, אנחנו מגיעים אל לוגריתמים.</p>
+<p>ראשית, בואו נדבר על הפעולה של העלאה בחזקה כשדווקא <strong>הבסיס</strong> קבוע. בואו נקבע אותו להיות מספר שרירותי כלשהו, נאמר 10 כי אנחנו אוהבים את 10. אז יש לנו את הפונקציה <span class="math">\(f\left(x\right)=10^{x}\)</span>. הפונקציה הזו נקראת <strong>פונקציה אקספוננציאלית</strong> והיא אחת מהפונקציות שמצטלמות הכי גרוע שאפשר:</p>
+<p><img src="/img/2020/06/exponential.PNG" alt=""/></p>
+<p>לוגריתם הוא ההפך מהפונקציה האקספוננציאלית הזו: <span class="math">\(\log\left(10^{x}\right)=x\)</span>. באופן כללי: <span class="math">\(\log\)</span> על קלט <span class="math">\(y\)</span> כלשהו בודק מהו ה-<span class="math">\(x\)</span> שעבורו <span class="math">\(10^{x}=y\)</span>, ואז הוא מחזיר את ה-<span class="math">\(x\)</span> הזה. הוא עונה על השאלה "10 בחזקת איזה מעריך נותן לנו את <span class="math">\(y\)</span>?"</p>
+<p>אז כדי לראות כמה דוגמאות: <span class="math">\(\log\left(10\right)=1\)</span> ו-<span class="math">\(\log\left(1000\right)=3\)</span> ו-<span class="math">\(\log\left(10000000\right)=7\)</span> ו-<span class="math">\(\log\left(1\right)=0\)</span> כי <span class="math">\(10^{0}=1\)</span> (כי <a href="https://gadial.net/2018/01/01/zero_power_equals_one/">דברים בחזקת 0 שווים 1</a>). כאן אנחנו רואים משהו חשוב על לוגריתמים: זו פונקציה שגדלה <strong>לאט</strong>. כדי לקבל ערכים יותר ויותר גדולים של לוגריתם, צריך להזין קלטים <strong>הרבה יותר גדולים</strong>. </p>
+<p>ומה עם <span class="math">\(\log\left(121\right)\)</span>, למשל? לכמה זה שווה? אם תבדקו במחשבון הוא יגיד משהו בסגנון <span class="math">\(\log\left(121\right)=2.08278\ldots\)</span>. זה קצת מוזר, כי עד עכשיו בפוסט הזה לא דיברנו בכלל על חזקות שהן לא מספר טבעי. מה זה <span class="math">\(10^{2.08278\ldots}\)</span>? זה לכפול את 10 בעצמו פעמיים ואז... לעשות... מה בעצם?</p>
+<p>בואו ניקח, אם כן, צעד אחד אחורה וננסה להבין קצת יותר טוב איך הולך כל העניין הזה עם חזקות - כי אחרי שנבין אותו, נבין מצויין גם מה הולך עם לוגריתמים.</p>
+<p>בואו ניקח בסיס חזקה קבוע שהוא מספר חיובי, שאני אסמן באות <span class="math">\(a\)</span> כי אין לי כוח לכתוב <span class="math">\(10\)</span> או משהו דומה כל הזמן. בואו ניקח עכשיו שתי חזקות שונות של <span class="math">\(a\)</span>: <span class="math">\(a^{x},a^{y}\)</span> ו<strong>נכפול</strong> אותן. מה נקבל? אם <span class="math">\(x,y\)</span> הם מספרים טבעיים ואנחנו הולכים על פי ההגדרה של "חזקה היא ביצוע של אותה פעולת כפל שוב ושוב" קל לראות ש-<span class="math">\(a^{x}\cdot a^{y}=a^{x+y}\)</span> (שימו לב שהתחלתי לתאר כפל עם נקודה ולא עם <span class="math">\(\times\)</span> סתם כי זה סימון שיותר נוח לי). באופן דומה לא קשה לראות ש-<span class="math">\(\left(a^{x}\right)^{y}=a^{xy}\)</span>. במילים אחרות: פעולת החזקה איכשהו מתרגמת את פעולת <strong>החיבור </strong>של המעריכים לפעולת <strong>כפל </strong>של תוצאות החזקה, ואת פעולת <strong>הכפל</strong> של המעריכים לפעולת העלאה בחזקה נוספת של פעולת החזקה. זה כל כך חשוב שאני אכתוב את זה שוב במפורש:</p>
+<ul> <li><span class="math">\(a^{x+y}=a^{x}\cdot a^{y}\)</span></li>
+
+
+<li><span class="math">\(a^{xy}=\left(a^{x}\right)^{y}\)</span></li>
+
+</ul>
+
+<p>ההגדרה של פעולת החזקה לחזקות שהן לא מספרים טבעיים לוקחת את המשוואות הללו בתור נקודת המוצא ושואלת את השאלה - אם אני רוצה שהן ימשיכו להתקיים גם אחרי שנרשה ל-<span class="math">\(x,y\)</span> להיות מספרים לא טבעיים, מה חייב לקרות?</p>
+<p>אז למשל, אם <span class="math">\(y=0\)</span>, השוויון <span class="math">\(a^{x+0}=a^{x}\cdot a^{0}\)</span> מתורגם ל-<span class="math">\(a^{x}=a^{x}\cdot a^{0}\)</span> מה ש"מכריח" את <span class="math">\(a^{0}=1\)</span>. ועכשיו, <span class="math">\(a^{x+\left(-x\right)}=a^{x}\cdot a^{-x}\)</span> מתורגם ל-<span class="math">\(1=a^{x}\cdot a^{-x}\)</span> מה ש"מכריח" את <span class="math">\(a^{-x}=\frac{1}{a^{x}}\)</span> (זה לא עובד אם <span class="math">\(a=0\)</span>! לכן אני דורש ש-<span class="math">\(a\)</span> יהיה מספר חיובי!). כמו כן, מכיוון ש-<span class="math">\(\frac{1}{2}+\frac{1}{2}=1\)</span> אז <span class="math">\(a=a^{1}=a^{\frac{1}{2}+\frac{1}{2}}=\left(a^{\frac{1}{2}}\right)^{2}\)</span> "מכריח" את <span class="math">\(a^{\frac{1}{2}}=\sqrt{a}\)</span> ובאופן כללי יותר מקבלים <span class="math">\(a^{\frac{1}{n}}=\sqrt[n]{a}\)</span>. מכל אלו אנחנו מקבלים את ההגדרה <span class="math">\(a^{\frac{x}{y}}=\sqrt[y]{a^{x}}\)</span> שעובדת למעריך שהוא מספר רציונלי כללי (מספר רציונלי הוא מספר שהוא מנה של שני מספרים שלמים, <span class="math">\(\frac{x}{y}\)</span>).</p>
+<p>השלב האחרון, של להגדיר חזקה שהיא לא מספר רציונלי אלא מספר ממשי כללי, היא מסובכת יותר פשוט כי ההגדרה של "מספר ממשי כללי" היא מסובכת. אני יכול לומר ש-<span class="math">\(a^{x}\)</span> מוגדר בתור <span class="math">\(\lim_{q\to x}a^{q}\)</span> כך ש-<span class="math">\(q\)</span> היא סדרת רציונליים ששואפת ל-<span class="math">\(x\)</span>, אבל זה לא יגיד כלום אם לא מכירים את המושגים הרלוונטיים וגם אם מכירים אותם יש כל מני שאלות מציקות (למה זה אותו גבול עבור כל סדרת רציונליים?) אז אני לא אכנס לזה הפעם, אבל זה עובד יפה.</p>
+<p>עכשיו נחזור לדבר על לוגריתמים. ראשית כל, עד עכשיו דיברתי על לוגריתם שהיה קשור למספר 10, אבל אין משהו קדוש ב-10; גם מספרים אחרים יכולים להיות בסיס ללוגריתם. למשל 2: אפשר לדבר על <span class="math">\(\log_{2}\)</span> שמוגדר כך: אם <span class="math">\(y=2^{x}\)</span> אז <span class="math">\(\log_{2}y=x\)</span>. יש ל-<span class="math">\(\log_{2}\)</span> הזה אפילו סימון מיוחד: <span class="math">\(\lg\)</span>. ואפשר לעשות את אות והדבר גם עבור בסיסים אחרים. המגבלה שאנחנו דורשים היא שהבסיס יהיה מספר גדול מ-1, כי עבור 1 העסק כבר מתחיל להיות מעצבן (מכיוון שלכל <span class="math">\(x\)</span> מתקיים <span class="math">\(1^{x}=1\)</span> יוצא ש-<span class="math">\(\log\)</span> על בסיס 1 לא מוגדר לשום מספר שונה מ-1) וגם עבור מספרים קטנים ממנו העסק בעייתי בצורות דומות. לכן דורשים <span class="math">\(1<a\)</span> ואז אפשר לדבר על <span class="math">\(\log_{a}\)</span>, שמוגדרת כפי שכבר ראינו: אם <span class="math">\(y=a^{x}\)</span> אז <span class="math">\(\log_{a}\left(y\right)=x\)</span>. כלומר, יש הרבה סוגים שונים של לוגריתמים, כפי שיש הרבה סוגים שונים של שורשים (ריבועי, שורש שלישי וכן הלאה).</p>
+<p>למעשה, הבסיס <strong>הכי חשוב</strong> של הלוגריתם הוא בכלל לא מספר טבעי אלא מספר שמסומן ב-<span class="math">\(e\)</span> ושווה בערך ל-<span class="math">\(2.7182\ldots\)</span> (זה לא מספר רציונלי ולכן אין מחזוריות בספרות). מה זה המספר הזה? למה הוא חשוב כל כך? <a href="https://gadial.net/2010/03/27/exponent/">יש לי פוסט</a> שמציג אותו בצורה שנראית לי טבעית יחסית, אבל לא ניכנס לכך בפוסט הנוכחי - ההסבר המדויק מערב, כרגיל, חשבון דיפרנציאלי ואינטגרלי. גם ל-<span class="math">\(\log_{e}\)</span> יש סימון מיוחד: <span class="math">\(\ln\)</span> (ולפעמים אפילו כותבים פשוט <span class="math">\(\log\)</span> למרות שמתכוונים אל <span class="math">\(\ln\)</span>), אבל לא ארחיב על כך יותר בפוסט הזה.</p>
+<p>עכשיו, אם נסתכל שניה על מחשבון, נראה שאין בו הרבה כפתורים עבור לוגריתמים. אם יש לנו מזל יש אחד עבור <span class="math">\(\log\)</span> ואחד עבור <span class="math">\(\ln\)</span> וזהו זה.</p>
+<p><img src="/img/2020/06/calc.PNG" alt=""/></p>
+<p>איך אפשר לחשוב לוגריתמים עבור בסיסים אחרים? למרבה המזל, יש קשר הדוק בין לוגריתמים בבסיסים שונים שמאפשר לנו לחשב את <span class="math">\(\log_{a}b\)</span> גם אם כל מה שיש לנו הוא <span class="math">\(\log\)</span> רגיל על בסיס 10 (או עבור כל בסיס אחר).</p>
+<p>התעלול עובד כך: נניח ש-<span class="math">\(x=\log_{a}b\)</span>, ונחפש דרך נחמדה לבטא את <span class="math">\(x\)</span> באמצעות <span class="math">\(\log\)</span> רגיל, על בסיס 10. מכיוון ש-<span class="math">\(x=\log_{a}b\)</span> אז <strong>על פי ההגדרה ממש</strong> אנחנו יודעים ש-<span class="math">\(a^{x}=b\)</span>.</p>
+<p>עכשיו, לתעלול! כל עוד <span class="math">\(a>1\)</span>, אפשר להוכיח (שוב, זה דורש חדו"א) ש-<span class="math">\(t=\log a\)</span> הוא מספר שבאמת קיים. כלומר, שקיים <span class="math">\(t\)</span> כלשהו כך ש-<span class="math">\(a=10^{t}\)</span>. כשאנחנו מצויידים בידע הזה בואו נחזור למשוואה <span class="math">\(a^{x}=b\)</span> ונציב <span class="math">\(10^{t}\)</span> במקום <span class="math">\(a\)</span>. נקבל:</p>
+<p><span class="math">\(b=a^{x}=\left(10^{t}\right)^{x}=10^{tx}\)</span></p>
+<p>כשהמעבר האחרון נובע מחוקי החזקות שהראיתי קודם.</p>
+<p>עכשיו, מה המשמעות של השוויון <span class="math">\(b=10^{tx}\)</span>? כמקודם, <strong>על פי ההגדרה ממש</strong> משמעותו היא <span class="math">\(\log b=tx\)</span>. או במילים אחרות, <span class="math">\(x=\frac{\log b}{t}\)</span>. אבל מה היה <span class="math">\(t\)</span>? לכו טיפה אחורה ותראו ש-<span class="math">\(t=\log a\)</span>. כלומר קיבלנו <span class="math">\(x=\frac{\log b}{\log a}\)</span>, ובמילים אחרות: <span class="math">\(\log_{a}b=\frac{\log b}{\log a}\)</span>. כך אפשר לחשב לוגריתם על פי כל בסיס בעזרת מחשבון שיודע רק לחשב את <span class="math">\(\log\)</span> על בסיס 10.</p>
+<p>למעשה, אנחנו רואים כאן אפילו טיפה יותר מכך: אם נגדיר פונקציה <span class="math">\(f\left(x\right)=\log_{a}x\)</span>, אנחנו רואים ש-<span class="math">\(f\left(x\right)=\frac{1}{\log a}\log x\)</span>. במילים אחרות, ההבדל בין פונקציית הלוגריתם "הרגילה", על בסיס 10, ובין כל פונקציית לוגריתם אחרת הוא רק <strong>כפל בקבוע</strong>. זו תוצאה מעניינת מאוד כשאנחנו במדעי המחשב, למשל, ואנחנו מתעניינים רק בסדרי גודל של דברים ולא בערך המספרי המדויק שלהן; זה אומר שכל הפונקציות הלוגריתמיות הן <strong>מאותו סדר גודל.</strong></p>
+<p>עכשיו, אחרי שהבנו מה זה לוגריתמים, בואו ננסה לראות בשביל מה זה טוב. בשביל זה כדאי לראות עוד תכונות שלוגריתמים מקיימים. נתחיל עם יישום של הנוסחה <span class="math">\(\log_{a}b=\frac{\log b}{\log a}\)</span> שראינו עבור מקרה פרטי. אם <span class="math">\(b=a^{x}\)</span>, אז <span class="math">\(x=\log_{a}b=\frac{\log\left(a^{x}\right)}{\log\left(a\right)}\)</span>. אם נכפול את שני קצוות המשוואה ב-<span class="math">\(\log\left(a\right)\)</span> נקבל <span class="math">\(\log\left(a^{x}\right)=x\log\left(a\right)\)</span>. זו תכונה חשובה של לוגריתם - הוא "מוריד את המעריך" מחזקה והופך אותו לכפל; זה בעצם ההופכי של תכונת ה-<span class="math">\(a^{xy}=\left(a^{x}\right)^{y}\)</span> של הפונקציה המעריכית, שבה כפל הופך לחזקה.</p>
+<p>באופן דומה גם לתכונת ה"חיבור הופך לכפל", <span class="math">\(a^{x+y}=a^{x}\cdot a^{y}\)</span>, יש היפוך: <span class="math">\(\log_{a}x+\log_{a}y=\log_{a}\left(xy\right)\)</span>. כדי לראות את זה אני הולך להיעזר בעוד תכונה פשוטה של לוגריתמים: <span class="math">\(a^{\log_{a}x}=x\)</span>. כלומר, לוגריתם בתוך מעריך של חזקה מתבטל עם החזקה; זו פחות או יותר ההגדרה. הרי אמרנו ש-<span class="math">\(\log_{a}x=t\)</span> פירושו ש-<span class="math">\(a^{t}=x\)</span>, אז אם נכתוב את <span class="math">\(\log_{a}x\)</span> במקום <span class="math">\(t\)</span> נקבל בדיוק <span class="math">\(a^{\log_{a}x}=x\)</span>.</p>
+<p>עכשיו בואו נוכיח את התכונה על סכום הלוגריתמים. לשם כך, בואו נתקע את הסכום בתוך המעריך של חזקה:</p>
+<p><span class="math">\(a^{\log_{a}x+\log_{a}y}=a^{\log_{a}x}\cdot a^{\log_{a}y}=x\cdot y\)</span></p>
+<p>כאשר המעבר הראשון נובע מהתכונה של אקספוננטים להפוך סכום למכפלה, והמעבר השני הוא ה-<span class="math">\(a^{\log_{a}x}=x\)</span> שהראיתי. עכשיו אפשר לקחת את <span class="math">\(xy\)</span> ולהשתמש עליו באותה נוסחה: <span class="math">\(xy=a^{\log_{a}\left(xy\right)}\)</span>. קיבלנו בסך הכל:</p>
+<p><span class="math">\(a^{\log_{a}x+\log_{a}y}=a^{\log_{a}\left(xy\right)}\)</span></p>
+<p>עכשיו נפעיל את <span class="math">\(\log_{a}\)</span> על שני האגפים ונקבל <span class="math">\(\log_{a}\left(x\right)+\log_{a}\left(y\right)=\log_{a}\left(xy\right)\)</span>, כפי שרצינו.</p>
+<p>הנוסחה הזו חשובה. <strong>ממש חשובה</strong>. עד כמה חשובה? חשובה ברמה של להשפיע על כל ההיסטוריה האנושית. אבל למה? כי פעם, חברות וחברים, לא היו מחשבונים. כשאנשים רצו לחשב משהו, הם היו צריכים <strong>לחשב</strong> אותו. נניח, צריך לכפול שני מספרים גדולים, כי למשל אתם ימאים וצריכים לחשב מסלול וזה מאוד חשוב כדי לא להתרסק עם סלעים? עדיף שתעשו את זה <strong>מדויק</strong>. הצורך הזה בדיוק אצל ימאים הוביל להמצאת שעונים סופר-מדויקים שעבדו גם בים, וזה סיפור מרתק בפני עצמו; אז גם שיטות חישוב מדויקות זה דבר חשוב.</p>
+<p>עכשיו, להכפיל שני מספרים גדולים זה לא <strong>כזה</strong> קשה, אבל זה גם לא קל - תנסו לכפול שני מספרים של 10 ספרות כל אחד ומהר מאוד תראו שזו הרבה עבודה, והסכנה לטעות היא גדולה. מה שיפה בלוגריתמים זה שהם יכולים לחסוך חלק נכבד מהעבודה כי הם <strong>ממירים בעיה של כפל בבעיה של חיבור</strong>.</p>
+<p>הנה שיטת העבודה: נניח שיש לי מספרים <span class="math">\(x,y\)</span> ואני רוצה לחשב את <span class="math">\(xy\)</span> בקלות. מה אעשה? ראשית כל, אחשב את <span class="math">\(\log\left(x\right),\log\left(y\right)\)</span>; עכשיו אבצע פעולת <strong>חיבור</strong> שתיתן לי את <span class="math">\(\log\left(x\right)+\log\left(y\right)=\log\left(xy\right)\)</span>. עכשיו רק צריך לשחזר מתוך <span class="math">\(\log\left(xy\right)\)</span> את <span class="math">\(xy\)</span> ו... ניצחנו! איזה יופי! רק שאלה קטנה נשארה: איך, בהינתן <span class="math">\(x,y\)</span>, מחשבים מתוכם את <span class="math">\(\log\left(x\right)\)</span> ואת <span class="math">\(\log\left(y\right)\)</span>? ואיך מתוך <span class="math">\(\log\left(xy\right)\)</span> מקבלים חזרה את <span class="math">\(xy\)</span>? התשובה היא כמובן... מחשבון! רגע, משהו לא מסתדר פה.</p>
+<p>אפשר לחשב לוגריתמים גם בלי מחשבון, אבל זו יכולה להיות עבודה קשה למדי. הנקודה היא שזו עבודה שמספיק לבצע <strong>פעם אחת</strong>, ואז לכתוב את כל התוצאות בטבלה יפה, ואז להפיץ את הטבלה הזו באינסוף עותקים ברחבי העולם, וכולם יוכלו להשתמש בה. זה היה הרעיון מאחורי טבלות הלוגריתמים שערכו במאה ה-17 ג'ון נפייר והנרי בריגס.</p>
+<p><img src="/img/2020/06/logarithms.jpg" alt=""/></p>
+<p>אני מתחמק כאן מכניסה לפרטים הטכניים של איך להשתמש בטבלאות הללו כי הפוסט ממילא ארוך מדי, אבל הרעיון ברור - בעזרת הטבלאות היה אפשר לחשב יחסית בקלות לוגריתמים, מה שאיפשר למי שיש לו טבלה כזו להמיר כפל בחיבור. באופן דומה גם אפשר היה להמיר חילוק בחיסור, כי מתקיים גם הכלל הבא: <span class="math">\(\log_{a}x-\log_{a}y=\log_{a}\frac{x}{y}\)</span>. כדי לראות את זה אפשר להשתמש בכללים שכבר ראינו: ראינו ש-<span class="math">\(\log_{a}x^{t}=t\log_{a}x\)</span>, ולכן בפרט עבור <span class="math">\(t=-1\)</span> נקבל <span class="math">\(-\log_{a}x=\log_{a}x^{-1}=\log_{a}\frac{1}{x}\)</span>, ומכאן נשתמש בכלל החיבור עבור <span class="math">\(\log_{a}x-\log_{a}y=\log_{a}x+\left(-\log_{a}y\right)\)</span>.</p>
+<p>כדי לפשט את העניינים אף יותר, הומצא גם מכשיר שנקרא "סרגל חישוב" שדומה לסרגל רגיל פרט לכך שהסקלות שעליו הן לוגריתמיות. גם לו מגיע פוסט משל עצמו (שאני תמיד מתכנן ואף פעם לא כותב) ולא אתעכב עליו הפעם.</p>
+<p><img src="/img/2020/06/Pocket_slide_rule.jpg" alt=""/></p>
+<p>אם כן, ראינו את השימוש ה"היסטורי" החשוב של לוגריתמים. אבל בימינו יש מחשבונים וכבר לא צריך את הלוגריתמים לשם כך. האם אפשר לשכוח מהם לחלוטין?</p>
+<p>ובכן, במתמטיקה בוודאי שאין סיבה לשכוח מהם. הם היו ונותרו כלי עזר מאוד מועילים בהתמודדות עם בעיות מסויימות, בזכות התכונות הנחמדות של המרת-כפל-לחיבור והורדת-חזקה-למטה. לוגריתם הוא כלי בסיסי בארגז הכלים של מתמטיקאי שעוסק באנליזה של ביטוי מסובך כלשהו, אבל אני לא אדבר על זה יותר מדי כאן. שאלה קצת יותר מעניינת היא האם לוגריתמים רלוונטיים איכשהו בחיי היום יום שלנו. והתשובה היא - במיוחד כיום, לצערי כן.</p>
+<p>למה "לצערי"? כי הדוגמא הראשונה שקופצת לי לראש היא זו של מגיפת הקורונה של 2020.</p>
+<p>הבה ונסתכל בגרף של מספר מקרי הקורונה בעולם בין ינואר ליוני 2020:</p>
+<p><img src="/img/2020/06/corona-linear.PNG" alt=""/></p>
+<p>מה זה גרף, בעצם? לכל תאריך בטווח התאריכים המדובר, נצבעה נקודה כחולה שקואורדינטת ה-<span class="math">\(x\)</span> שלה (המיקום שלה מבחינת ימין/שמאל) היא התאריך הזה, וקואורדינטת ה-<span class="math">\(y\)</span> שלה (הגובה שלה) מתאימה למספר החולים באותו תאריך. אחר כך כל הנקודות חוברו זו לזו בצורה שמאפשרת לראות בקלות את קו המגמה. זה גרף מעניין כי הוא מתחיל אקספוננציאלי - יש קפיצה אדירה באיזור חודש מרץ - ואז משנה מגמה והופך ללינארי (כלומר, נראה כמו קו ישר).</p>
+<p>המשמעות של גידול אקספוננציאלי היא זו: שאם מחלקים את הגידול לפרקי זמן קצרים, אז בכל פרק זמן הגידול <strong>כפול</strong> ממה שהיה קודם (כפול בקבוע כלשהו,לאו דווקא ב-2). זה מאופיין על ידי פונקציה כמו <span class="math">\(f\left(t\right)=a^{t}\)</span> (כאן <span class="math">\(t\)</span> הוא הזמן). המשמעות של גידול לינארי היא שאם מחלקים את הגידול לפרקי זמן קצרים, אז בכל פרק זמן הגידול זהה למה שהיה קודם - למשל <span class="math">\(f\left(t\right)=at\)</span>. את החלק הלינארי אפשר לראות די בבירור, אבל הקפיצה האקספוננציאלית היא פשוט קפיצה: נראה שהגרף "שטוח" ברגע אחד, ופתאום הוא מתחיל לעלות - שינוי שמעביר אותו מאפס למיליון כמעט בבת אחת.</p>
+<p>אבל יש דרך אחרת להציג את הנתונים, שעוזרת להבין אותם יותר טוב - סקלה <strong>לוגריתמית</strong>. מה זה אומר? ובכן, בסקלה רגילה, לינארית, הגובה של ערך בציר <span class="math">\(y\)</span> הוא פונקציה לינארית של הערך שלו. אם נסתכל על הגרף שלמעלה, נראה שערכים של 2 מיליון מפוזרים במרווחים שווים. אם <span class="math">\(f\)</span> היא הפונקציה שמתאימה לערך את הגובה שלו אז <span class="math">\(f\left(2\cdot10^{6}\right)=a\)</span> כאשר <span class="math">\(a\)</span> הוא הגובה של הקו הראשון, זה שכתוב לידו <span class="math">\(\text{2M}\)</span>; ואז <span class="math">\(f\left(4\cdot10^{6}\right)=2a\)</span> ו-<span class="math">\(f\left(6\cdot10^{6}\right)=3a\)</span> וכן הלאה: הפונקציה באופן כללי היא <span class="math">\(f\left(x\right)=\frac{a}{2\cdot10^{6}}x\)</span>. זו דוגמא לפונקציה לינארית - היא לוקחת את <span class="math">\(x\)</span> וכופלת אותו בקבוע.</p>
+<p>הנה איך אותו גרף נראה בסקלה לוגריתמית:</p>
+<p><img src="/img/2020/06/corona-log.PNG" alt=""/></p>
+<p>מה השתנה? ציר <span class="math">\(y\)</span>. אם נסתכל על הערכים שם, נראה שעכשיו מה שקורה במרווחים שווים הוא שהערך שמיוצג <strong>מוכפל ב-</strong><strong>10</strong>. הערך הנמוך ביותר הוא 100; אחר כך, במרווח שווה ממנו, יש את <span class="math">\(1,000\)</span>; אחר כך במרווח שווה ממנו יש את <span class="math">\(10,000\)</span> וכן הלאה. אם נסמן את הגובה של הקו של ה-1,000 ב-<span class="math">\(a\)</span> אז נקבל את הפונקציה <span class="math">\(f\left(x\right)=\log\left(x\right)a-2a\)</span> (ה-<span class="math">\(-2a\)</span> מגיע מכך שהקו התחתון בגרף, זה שבגובה 0, הוא 100).</p>
+<p>דרך ההתבוננות הזו על הנתונים מאפשרת לנו לראות בצורה יותר טובה מה קרה באיזור של מרץ, שבגרף הלינארי פשוט נראה כמו קפיצה אדירה: אנחנו רואים שהעלייה כמעט נפסקה לתקופה כלשהי ואז התחדשה במלוא המרץ (זה קרה כשהוירוס התחיל להתפשט באירופה וארה"ב). זו דוגמא קטנה לשימושיות של סקלות לוגריתמיות.</p>
+<p>יש עוד סקלות לוגריתמיות שמשמשות אותנו בחיי היום יום - מדידה של חומציות עם סקלת pH היא לוגריתמית; מדידה של רעש עם סקלת הדציבלים היא לוגריתמית, ואולי הסקלה הלוגריתמית המוכרת ביותר היא סולם ריכטר למדידת העוצמה של רעידות אדמה. כשמדווחים על רעידות אדמה בדרך כלל אומרים שהן היו בעוצמה של "5.8 בסולם ריכטר" או "6.1 בסולם ריכטר" וכדומה. אל תתנו למספרים הדומים לבלבל אתכם - כל עליה בסולם ריכטר פירושה <strong>הכפלה</strong> בקבוע כלשהו של עוצמת רעידת האדמה. רעידת אדמה שהיא 3 בסולם ריכטר בקושי תורגש; רעידת האדמה של יפן ב-2011 שהייתה 9 בסולם ריכטר לא הייתה פי 3 יותר מה"בקושי תורגש" הזה אלא הייתה אסון אדיר ממדים וחריג בעוצמתו.</p>
+<p>הייתי רוצה לסיים כאן את הפוסט, אבל הוא לקח כיוון אפל מאוד לקראת סופו - מגיפות, רעידות אדמה... הלוגריתמים האומללים שבסך הכל רצו לעזור לנו לכפול ולחלק מעורבים בזוועות הללו בגלל היכולת שלהם לתאר לנו דברים בקנה מידה <strong>גדול</strong>, כולל אסונות. אז אני רוצה לסיים דווקא בגישה האופטימית - זמן ריצה של אלגוריתמים.</p>
+<p>בלי להיכנס לעובי הקורה של איך מודדים זמן ריצה של אלגוריתמים, הרעיון הוא שאם יש לנו מספר <span class="math">\(n\)</span> שמהווה מדד כלשהו לגודל של הקלט, ויש לנו פונקציה <span class="math">\(f\left(n\right)\)</span> שאומרת לנו מה הולך להיות זמן הריצה על קלט בגודל <span class="math">\(n\)</span> במקרה הגרוע ביותר, אז אנחנו מתעניינים במה סדר הגודל <strong>בערך</strong> של <span class="math">\(f\)</span> הזו. <a href="https://gadial.net/2012/07/06/asymptotic_notation/">יש לי פוסט</a> שמסביר את הסימון שבו משתמשים למטרה הזו אבל אין צורך לקרוא אותו כרגע: הרעיון הוא שאם אני כותב <span class="math">\(f\left(n\right)=O\left(n^{2}\right)\)</span>, למשל, זה אומר שאני יכול להבטיח ש-<span class="math">\(f\)</span> היא לא יותר מאשר בערך הפונקציה <span class="math">\(n^{2}\)</span>.</p>
+<p>בעיה בסיסית במדעי המחשב היא בעיה של <strong>מיון</strong>. נניח שיש לנו קבוצה של <span class="math">\(n\)</span> מספרים ואני רוצה לסדר אותם בסדר עולה. כמה זמן יידרש לי לשם כך? שיטות נאיביות כמו לקחת איבר ולהשוות אותו לכל האיברים שסידרנו עד כה כדי לדעת איפה לדחוף אותו (שיטה שנקראת <strong>מיון הכנסה</strong> ודומה לאופן שבו מסדרים קלפים ביד במשחק קלפים) לוקחות לי בערך <span class="math">\(O\left(n^{2}\right)\)</span> זמן. זה לא טוב. תחשבו על סיטואציה עם 1000 קלטים - זמן הריצה יהיה בערך 1,000,000 (מיליון מה? כאמור, אני מטאטא את הפרטים מתחת לשטיח). ואם אני מכפיל את מספר הקלטים ב-10, אז זמן הריצה גדל פי 100. זה בהחלט לא משהו.</p>
+<p>אבל יש מיונים יותר מתוחכמים ויותר מהירים, למשל <a href="https://gadial.net/2012/07/10/all_sorts_of_slow_sorts/">מיון מיזוג</a>. מבלי להיכנס לפרטים, הרעיון במיון הזה הוא לחלק את הקבוצה שצריך למיין לשני חלקים. ואז כל חלק למיין לשני חלקים. ושוב, ושוב, עד שמגיעים לקבוצות קטנות מספיק כדי שאפשר יהיה למיין אותן "מייד" ואז מתחילים למזג בצורה חכמה את הקבוצות הממויינות. והרי לכם שאלה: נניח שיש לי <span class="math">\(n\)</span> איברים ובכל סיבוב אני מחלק את קבוצות האיברים שלי ל-2; כמה סיבובים יידרשו עד שקבוצות האיברים שלי יהיו מגודל אפסי?</p>
+<p>נניח שהקבוצה שלי היא בת 16 איברים. אחרי סיבוב אחד אקבל שתי קבוצות של 8 איברים; אחרי 2 סיבובים הקבוצות יהיו בנות 4 איברים ואחרי 3 סיבובים הן יהיו בנות 2 איברים. אחרי 4 סיבובים הן יהיו בנות 4 איברים ואפשר יהיה לסיים כאן. כל סיבוב הקטין את גודל הקבוצה פי 2, כלומר כפל אותה בחצי: אם <span class="math">\(n\)</span> הוא הגודל המקורי של הקבוצה אז אחרי <span class="math">\(k\)</span> סיבובים נקבל קבוצות בנות <span class="math">\(\frac{n}{2^{k}}\)</span> איברים. אם <span class="math">\(\frac{n}{2^{k}}=1\)</span> אז <span class="math">\(n=2^{k}\)</span>, כלומר <span class="math">\(k=\lg n\)</span> (כזכור, <span class="math">\(\lg\)</span> הוא לוגריתם על בסיס 2). אם כן, מספר הצעדים עד שמגיעים לקבוצות קטנות הוא <strong>לוגריתמי</strong> ב-<span class="math">\(n\)</span>. זה אומר שגם כאשר <span class="math">\(n\)</span> הוא <strong>ממש גדול</strong>, מספר הצעדים עד לפיצול יהיה ממש קטן. המשך הניתוח של האלגוריתם יראה שבהתחשב בזמן שלוקח לבצע את המיזוג, זמן הריצה הכולל של האלגוריתם יהיה <span class="math">\(O\left(n\log n\right)\)</span>, וזאת להבדיל מהאלגוריתמים של <span class="math">\(O\left(n^{2}\right)\)</span>. הדבר הזה הוא <strong>שיפור גדול</strong>, כי <span class="math">\(\log n\)</span> הרבה יותר קטן מ-<span class="math">\(n\)</span> ולכן <span class="math">\(n\log n\)</span> הרבה יותר קטן מ-<span class="math">\(n^{2}\)</span>. למשל, עבור <span class="math">\(n=1000\)</span>, ראינו ש-<span class="math">\(n^{2}=1,000,000\)</span> בעוד ש-<span class="math">\(n\log n=3000\)</span>.</p>
+<p>והנה עוד דוגמא אחרונה לסיום - מספרים גדולים. אנחנו מתעסקים עם מספרים גדולים כל הזמן - דוגמא פופולרית במיוחד היא שיטת ההצפנה <span class="math">\(\text{RSA}\)</span> שמתבססת על עבודה עם מספרים בני מאות ספרות. אנחנו צריכים לבצע איתם פעולות כמו חיבור, כפל, העלאה בחזקה וכדומה; כמה זמן זה לוקח?</p>
+<p>ובכן, התשובה טמונה במה שאמרתי במשפט הקודם: כשאני מדבר על "מספר בן מאות ספרות" המשמעות היא "מספר שהלוגריתם שלו הוא בסדר גודל של כמה מאות". הלוגריתם בבסיס 10 של מספר כלשהו הוא פשוט מספר הספרות שלו פחות 1 ועוד תיקון כלשהו. למשל, עבור <span class="math">\(100\)</span> הלוגריתם הוא בדיוק 2, ואילו עבור 121 ראינו שהלוגריתם הוא "2 ועוד קצת משהו" שהוא פחות ממספר שלם.</p>
+<p>עכשיו, אלגוריתמים עבור חיבור וכפל, גם מאלו שלומדים בבית הספר היסודי, הם משהו שעובד <strong>על הספרות</strong> של המספר. למשל, אלגוריתם לחיבור מחבר ספרה-ספרה, החל מספרת האחדות. אז הזמן שאלגוריתמים כאלו לוקחים הוא מסדר גודל של לוגריתם של המספר, או ריבוע של לוגריתם כזה, וכו; כלומר משהו כמו <span class="math">\(O\left(\log^{2}n\right)\)</span> כדי לבצע כפל. כשמתעסקים במספרים, אלו זמני הריצה שנחשבים יעילים; זמן ריצה של <span class="math">\(O\left(n\right)\)</span> הוא אסון, כי אם <span class="math">\(n=10^{100}\)</span> למשל (וזה מספר קטן יחסית למספרים שאנחנו עשויים להתעסק איתם) אז פרק זמן ששווה בערך ל-<span class="math">\(10^{100}\)</span> הוא גדול בהרבה מהשניות שחלפו מאז תחילת היקום.</p>
+<p>לסיכום, ראינו לוגריתמים וראינו קצת איך הם רלוונטיים לדברים במתמטיקה; אני מקווה שעכשיו הם מפחידים או מסתוריים קצת פחות, כי בסך הכל הם חברים די טובים שלנו.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2020/06/20/general_cartesian_products/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">תורת הקבוצות - מכפלות קרטזיות כלליות</span>
+            </a>
+            
+            
+            
+            <a href="/2020/06/06/solving_equations_first_degree/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז איך פותרים משוואות (ממעלה ראשונה בנעלם יחיד)?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

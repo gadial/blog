@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>כפל מטריצות - מה, לעזאזל? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>כפל מטריצות - מה, לעזאזל?</h1>
+            <div class="post-meta">
+                <span class="date">2011-10-06</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/categories/תורת הגרפים.html">תורת הגרפים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/tags/כפל מטריצות.html">כפל מטריצות</a>
+                    
+                    <a href="/tags/מטריצות.html">מטריצות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסט הקודם הצגתי מטריצות בתור כלי שעוזר לי לפתור מערכת משוואות - במקום לכתוב כל פעם את כל מערכת המשוואות, אני כותב מטריצה ו"מדרג" אותה והתהליך חוסך לי כתיבה מיותרת וקצת יותר קל לקריאה. זו מן הסתם לא הסיבה למה מטריצות הן כל כך מעניינות ו"אחד המושגים הבסיסיים ביותר במתמטיקה" כפי שאני שוב ושוב מפמפם. הסיבה האמיתית היא שמטריצות הן יצורים <strong>אלגבריים</strong> - אפשר להגדיר עליהן פעולות של חיבור וכפל שבמובן מסויים מזכירות מאוד את החיבור והכפל הרגילים, וזה מעניק למטריצות <strong>מבנה</strong> מעניין.</p>
+<p>כשאני אומר "מזכיר", אני מתכוון שמתקיים למשל <span class="math">\(A+B=B+A\)</span> (כלל החילוף), ושמתקיים <span class="math">\(A\left(B+C\right)=AB+AC\)</span> (כלל הפילוג) ומתקיים <span class="math">\(\left(AB\right)C=A\left(BC\right)\)</span> (כלל הקיבוץ, שמתקיים גם לחיבור). בנוסף, עוד לפני שהפוסט הזה יסתיים נראה איך פעולת הכפל של מטריצות מתקשרת הן לפתרון משוואות והן לבעיה שונה לחלוטין - ספירת מסלולים בגרפים.</p>
+<p>בנוסף אגלה כבר עכשיו שאחד מה"גביעים הקדושים" שאני חותר אליהם בדיבורים על אלגברה לינארית הוא ייצוג של פונקציות חשובות מסויימות (טרנספורמציות לינאריות) בתור מטריצות, ואז כפל מטריצות יתאים בדיוק לפעולה של הרכבת פונקציות. אם להיות יותר קונקרטיים, דוגמה לכך באה לידי ביטוי בציור אובייקטים תלת ממדיים: אפשר לבצע עליהם מניפולציות גאומטריות שונות ומשונות דוגמת סיבוב סביב ציור מסויים, שיקוף, וכיווץ או מתיחה - כל הפעולות הללו הן טרנספורמציות לינאריות וקיימות מטריצות שמתארות אותן, ואפשר "לאגור" ביצוע של פעולות שונות על ידי כפל של המטריצות הללו עד לקבלה של מטריצה אחת סופית שמייצגת את כל השינויים שביצענו (מי שיפתח ספריה של גרפיקה תלת ממדית, נאמר OpenGL, קרוב לודאי שיתקל שם במטריצות).</p>
+<p>ולמה כל ההקדמה הזו? כי כפי שנראה, פעולת הכפל שאציג לא ממש תהיה מה שאנשים מצפים לה ממבט ראשון.</p>
+<p>בואו ניזכר טיפה מהן מטריצות. מטריצה <span class="math">\(A\)</span> שהיא מסדר <span class="math">\(n\times m\)</span> כוללת <span class="math">\(nm\)</span> "כניסות", כך שכל כניסה היא בעלת שני אינדקסים - הראשון בין 1 ו-<span class="math">\(n\)</span> ("שורה") והשני בין 1 ו-<span class="math">\(m\)</span> ("עמודה"). כל כניסה כוללת מספר כלשהו (לצורך הדיון בינתיים אני מניח שזה מספר ממשי). את הכניסה בשורה <span class="math">\(i\)</span> ועמודה <span class="math">\(j\)</span> מסמנים ב-<span class="math">\(A_{ij}\)</span>.</p>
+<p>כעת, אם יש לנו שתי מטריצות <span class="math">\(A,B\)</span>, כיצד נגדיר מטריצה <span class="math">\(C=A+B\)</span>? בתור התחלה, אף אחד לא אומר שאנחנו בכלל יודעים איך להגדיר כזה דבר; אם <span class="math">\(A,B\)</span> לא שתיהן בדיוק מאותם מימדים - כלומר, עם <span class="math">\(n\)</span> שורות ועם <span class="math">\(m\)</span> עמודות, החיבור כלל לא מוגדר פשוט כי לא ברור איך נכון להגדיר אותו. אבל, אם <span class="math">\(A,B\)</span> שתיהן מאותן מימדים יש הגדרה מאוד טבעית שצצה לראש - נחבר אותן "כניסה כניסה". בדוגמה:</p>
+<p><span class="math">\(\left[\begin{array}{cc}a_{11} & a_{12}\\a_{21} & a_{22}\end{array}\right]+\left[\begin{array}{cc}b_{11} & b_{12}\\b_{21} & b_{22}\end{array}\right]=\left[\begin{array}{cc}a_{11}+b_{11} & a_{12}+b_{12}\\a_{21}+b_{21} & a_{22}+b_{22}\end{array}\right]\)</span></p>
+<p>ובהגדרה פורמלית: אם <span class="math">\(C=A+B\)</span> אז <span class="math">\(C_{ij}=A_{ij}+B_{ij}\)</span>.</p>
+<p>זה מוביל אותנו גם להגדרה מאוד טבעית ופשוטה של כפל: אם <span class="math">\(C=AB\)</span> אז <span class="math">\(C_{ij}=A_{ij}B_{ij}\)</span>. כלומר, כופלים את המטריצות "כניסה כניסה". זו <strong>לא</strong> ההגדרה שאני רוצה להציג. לא שזו לא הגדרה קיימת; למכפלה "כניסה כניסה" קוראים "מכפלת הדמר", מסמנים אותה ב-<span class="math">\(A\circ B\)</span> ומתעסקים איתה קצת. אלא שהשם "כפל מטריצות" שמור לפעולה שונה, שהיא פי עשרות מונים יותר נפוצה ושימושית.</p>
+<p>זו נקודה שכדאי לעצור ולהתעכב עליה: אף אחד לא <strong>מחייב</strong> אותנו, כשאנחנו קוראים לפעולה כלשהי "כפל", לוודא שהיא אכן הכללה "טבעית" של פעולת כפל קיימת או כל דבר דומה; זה פשוט עניין של מתן שם שאנחנו אוהבים לפעולה שאנחנו אוהבים. ייתכן שנדמה שהיה צריך מבחינה מוסרית לקרוא לפעולת הכפל שאציג בשם "הרכבת מטריצות" או משהו דומה לכך, אבל אין לכך שום סיבה אמיתית. למעשה, ככל שמתקדמים בלימודי האלגברה כך נתקלים ביותר ויותר אובייקטים שיש בהם פעולה שמכונה "כפל" אבל איננה דומה לכפל "רגיל". המשמעות של המילה הזו אצל מתמטיקאים היא פשוט רחבה הרבה יותר מאשר נדמה במבט ראשון. אני מקווה שמספיק בשכנוע הזה כדי להסביר מדוע הטרמינולוגיה הזו היא מוזרה במבט ראשון, אבל לגיטימית לגמרי.</p>
+<p>נעבור להגדרה. ראשית כל, בואו נדבר על מטריצות פשוט במיוחד - כאלו שיש להן רק שורה אחת, או רק עמודה אחת. מטריצה כזו נקראת <strong>וקטור</strong>. יותר במדויק - מטריצה בת שורה אחת היא <strong>וקטור שורה</strong> ומטריצה בעלת עמודה אחת היא <strong>וקטור עמודה</strong>. אפשר לחשוב על וקטורים כאלו פשוט בתור סדרות של מספרים: <span class="math">\(\left(a_{1},a_{2},\dots,a_{n}\right)\)</span> ו-<span class="math">\(\left(b_{1},b_{2},\dots,b_{n}\right)\)</span> הם וקטורים בעלי <span class="math">\(n\)</span> איברים כל אחד. למי שמכיר וקטורים במשמעות גאומטרית - זה אותו הדבר, וארחיב על כך בעתיד.</p>
+<p>כעת, וקטורים אפשר לכפול באמצעות מה שנקרא <strong>מכפלה סקלרית</strong>. מכפלה סקלרית פירושו שכופלים את הוקטורים איבר-איבר, אבל לא עוצרים כאן - אחר כך גם <strong>מחברים</strong> את התוצאה של כל פעולות הכפל הללו. יש לפעולה הזו משמעות גאומטרית כאשר חושבים על הוקטורים כעל אובייקטים גאומטריים אבל לא אכנס לכך כרגע; חשוב לי להדגיש שאפילו הפעולה הזו לא באה לגמרי משום מקום.</p>
+<p>פורמלית, <span class="math">\(\left(a_{1},a_{2},\dots,a_{n}\right)\cdot\left(b_{1},b_{2},\dots,b_{n}\right)=a_{1}b_{1}+a_{2}b_{2}+\dots+a_{n}b_{n}\)</span>, וזו ההזדמנות שלי להציג סימן מקוצר לחיבור שהוא קריטי כשמדברים על כפל מטריצות: <span class="math">\(\Sigma\)</span>. בסימון המקוצר הזה המכפלה הסקלרית של הוקטורים שלמעלה מתוארת כך: <span class="math">\(\sum_{i=1}^{n}a_{i}b_{i}\)</span>. מה שקורה כאן הוא שבתחתית של ה-<span class="math">\(\Sigma\)</span> מגדירים "משתנה אינדקס" בשם <span class="math">\(i\)</span> ו"מאתחלים" אותו ל-1; ה-<span class="math">\(n\)</span> למעלה פירושו "לכל ערך טבעי של <span class="math">\(i\)</span> החל מערך האתחול שלו ועד ל-<span class="math">\(n\)</span>", וה-<span class="math">\(a_{i}b_{i}\)</span> אומר שלכל <span class="math">\(i\)</span> שרצים עליו, מוסיפים לסכום של <span class="math">\(a_{i}b_{i}\)</span>. אין כאן שום דבר יותר מאשר כתיב מקוצר של <span class="math">\(a_{1}b_{1}+a_{2}b_{2}+\dots+a_{n}b_{n}\)</span> שדורש הרבה, הרבה פחות מקום; ולשם שינוי אני לא אתחיל להגדיר פעולות כפל מוזרות גם על ה-<span class="math">\(\Sigma\)</span> הזה עצמו.</p>
+<p>עכשיו אפשר לתת הגדרה בנפנוף ידיים מהיר של כפל מטריצות: <span class="math">\(C=AB\)</span> היא מטריצה שהכניסה ה-<span class="math">\(ij\)</span> שלה היא התוצאה של המכפלה הסקלרית של השורה ה-<span class="math">\(i\)</span> של <span class="math">\(A\)</span> עם העמודה ה-<span class="math">\(j\)</span> של <span class="math">\(B\)</span>. הרי על שורה של מטריצה אפשר לחשוב גם כוקטור שורה העומד בפני עצמו; ועל עמודה של <span class="math">\(j\)</span> אפשר לחשוב גם כוקטור עמודה העומד בפני עצמו; ואפשר להכפיל אותם; והתוצאה תהיה מספר, אז ההגדרה שנתתי היא בעלת משמעות.</p>
+<p>יש בכל זאת בעיה אחת שמייד קופצת: כדי לכפול סקלרית שני וקטורים הם צריכים להיות מאותו האורך. אם אני כופל <strong>שורות</strong> של <span class="math">\(A\)</span> ב<strong>עמודות</strong> של <span class="math">\(B\)</span>, זה אומר שאני צריך שהאורך של כל שורה של <span class="math">\(A\)</span> יהיה זהה לאורך של כל עמודה של <span class="math">\(B\)</span>. זה אומר, למשל, שאי אפשר לכפול יחד שתי מטריצות מסדר <span class="math">\(2\times3\)</span>! במטריצה <span class="math">\(\left[\begin{array}{ccc}1 & 2 & 3\\1 & 2 & 3\end{array}\right]\)</span> האורך של כל שורה הוא 3 (כמספר העמודות במטריצה) והאורך של כל עמודה הוא 2 (כמספר השורות במטריצה) וזה אומר שעל פי ההגדרה שנתתי אי אפשר לכפול אותה אפילו עם עצמה! זה מוזר למדי אבל זו אכן תוצאה הכרחית של ההגדרה שלי.</p>
+<p>לכן הנה הכלל: אם <span class="math">\(A\)</span> היא מטריצה מסדר <span class="math">\(n\times m\)</span> (<span class="math">\(n\)</span> שורות, <span class="math">\(m\)</span> עמודות) ו-<span class="math">\(B\)</span> היא מטריצה מסדר <span class="math">\(k\times l\)</span> (<span class="math">\(k\)</span> שורות, <span class="math">\(l\)</span> עמודות) אז כדי שתהיה משמעות למכפלה <span class="math">\(AB\)</span> חייב להתקיים <span class="math">\(m=k\)</span> (מספר העמודות של <span class="math">\(A\)</span> שווה למספר השורות של <span class="math">\(B\)</span>). אם אכן <span class="math">\(m=k\)</span>, אז המכפלה <span class="math">\(AB\)</span> תהיה מטריצה מסדר <span class="math">\(n\times l\)</span> (<span class="math">\(n\)</span> שורות, <span class="math">\(l\)</span> עמודות), כי יש כניסה ב-<span class="math">\(AB\)</span> לכל זוג של שורה ב-<span class="math">\(A\)</span> ועמודה ב-<span class="math">\(B\)</span> שמוכפלות סקלרית.</p>
+<p>בואו נראה דוגמה: <span class="math">\(\left[\begin{array}{ccc}1 & 2 & \pi\\0 & 3 & 6\end{array}\right]\left[\begin{array}{cc}5 & 0\\1 & 0\\0 & 1\end{array}\right]=\left[\begin{array}{cc}7 & \pi\\3 & 6\end{array}\right]\)</span>. למה הכניסה <span class="math">\(1,1\)</span> של המכפלה היא 7? כי זו התוצאה של המכפלה הסקלרית <span class="math">\(\left(1,2,\pi\right)\cdot\left(5,1,0\right)=5+2+\pi\cdot0=7\)</span>. נסו להבהיר לעצמכם למה שאר הכניסות קיבלו את הערכים שהן קיבלו, ולמה הממדים של התוצאה הם <span class="math">\(2\times2\)</span>. אם הצלחתם, כבר הבנתם את ההגדרה גם אם טרם הבנתם "למה".</p>
+<p>בואו נגדיר כפל באופן פורמלי כדי שלא יהיו ספקות. אם <span class="math">\(A\)</span> היא מטריצה מסדר <span class="math">\(n\times m\)</span> ו-<span class="math">\(B\)</span> היא מטריצה מסדר <span class="math">\(m\times k\)</span> אז <span class="math">\(C=AB\)</span> היא מטריצה מסדר <span class="math">\(n\times k\)</span> כך ש-</p>
+<p><span class="math">\(C_{ij}=\sum_{r=1}^{m}A_{ir}B_{rj}\)</span></p>
+<p>זה הכל.</p>
+<p>לכפל מטריצות יש תכונה מוזרה אחת (מוזרה עבור מי שרגיל לכפל "רגיל") שצריך לשים על השולחן כמה שיותר מהר: לא בהכרח מתקיים <span class="math">\(AB=BA\)</span>. ראשית, בכלל לא ברור שתהיה משמעות גם ל-<span class="math">\(AB\)</span> וגם ל-<span class="math">\(BA\)</span>; בשביל זה שתי המטריצות חייבות להיות עם אותו מספר שורות ועמודות - מטריצות כאלו מכונות <strong>מטריצות ריבועיות</strong>. אבל גם אם <span class="math">\(A,B\)</span> שתיהן ריבועיות מסדר <span class="math">\(n\times n\)</span> זה ממש לא נכון שבהכרח יתקיים <span class="math">\(AB=BA\)</span> (אם כי לפעמים זה כן קורה). למשל, <span class="math">\(\left[\begin{array}{cc}1 & 1\\0 & 0\end{array}\right]\left[\begin{array}{cc}1 & 0\\1 & 0\end{array}\right]=\left[\begin{array}{cc}1 & 0\\0 & 0\end{array}\right]\)</span> אבל <span class="math">\(\left[\begin{array}{cc}1 & 0\\1 & 0\end{array}\right]\left[\begin{array}{cc}1 & 1\\0 & 0\end{array}\right]=\left[\begin{array}{cc}1 & 1\\1 & 1\end{array}\right]\)</span>. אתם צריכים לחשוב על זה שהתכונה הזו לא מתקיימת בתור דבר <strong>טוב</strong>: זה אומר שאפשר לתאר עם כפל מטריצות עולם יותר עשיר משנדמה לנו, כי במציאות יש גם פעולות שהן לא חילופיות באופן הזה (למשל, הטרנספורמציות של צורות תלת ממדיות שהזכרתי בתחילת הפוסט אינן כאלו - לסובב ואז לשקף לא תמיד נותן אותו דבר כמו לשקף ואז לסובב).</p>
+<p>עכשיו אני רוצה חיש קל להראות שני שימושים שונים לגמרי של הפעולה הזו. הראשון יהיה קשור למערכות של משוואות לינאריות. הטענה שלי היא פשוטה: מערכת משוואות לינארית ניתנת לתיאור פשוט באמצעות כפל מטריצות. בואו נתחיל עם דוגמה - המערכת</p>
+<p><span class="math">\(2x+3y=17\)</span></p>
+<p><span class="math">\(8x-4y=6\)</span></p>
+<p>ממש לא מעניין אותי הפתרון של המערכת. מה שכן מעניין אותי היא לתרגם את הבעיה "פתור את המערכת" לבעיה "פתור את המשוואה הבאה שמערבת מטריצות". לשם כך ראשית כל אסתכל על המטריצה של מקדמי המשוואה: <span class="math">\(\left[\begin{array}{cc}2 & 3\\8 & -4\end{array}\right]\)</span>. שימו לב שבניגוד לקודם, כעת אני לא לא מכניס פנימה גם את המספרים שמעבר לסימן השווה; אותם אני מכניס לוקטור נפרד - וקטור העמודה <span class="math">\(\left[\begin{array}{c}17\\6\end{array}\right]\)</span>. בנוסף, אני אכניס לתמונה וקטור חדש לגמרי - וקטור של <strong>משתנים</strong>: <span class="math">\(\left[\begin{array}{c}x\\y\end{array}\right]\)</span>. כעת מערכת המשוואות שלמעלה זהה לחלוטין למשוואה הבודדת הבאה על מטריצות:</p>
+<p><span class="math">\(\left[\begin{array}{cc}2 & 3\\8 & -4\end{array}\right]\left[\begin{array}{c}x\\y\end{array}\right]=\left[\begin{array}{c}17\\6\end{array}\right]\)</span></p>
+<p>לא מאמינים? ובכן, קל לחשב על פי ההגדרה שנתתי שמתקיים <span class="math">\(\left[\begin{array}{cc}2 & 3\\8 & -4\end{array}\right]\left[\begin{array}{c}x\\y\end{array}\right]=\left[\begin{array}{c}2x+3y\\8x-4y\end{array}\right]\)</span> (זכרו שוקטור עמודה הוא<strong> מטריצה</strong>, פשוט עם עמודה בודדת) ולכן השוויון שלמעלה הוא השוויון <span class="math">\(\left[\begin{array}{c}2x+3y\\8x-4y\end{array}\right]=\left[\begin{array}{c}17\\6\end{array}\right]\)</span> ומכיוון שמשווים וקטורים "כניסה כניסה" זו בדיוק מערכת המשוואות המקורית.</p>
+<p>בינתיים זה נראה עדיין כמו הבדל בשיטת הסימון, אבל מתישהו ההבדל הזה הופך להיות כל כך אפקטיבי עד שאי אפשר להתעלם ממנו יותר. עבורי זה קורה כשמבינים שאת פעולות הדירוג שהצגתי בפוסט הקודם אפשר להציג גם כן בתור פעולות של כפל מטריצות. בואו ננסה להבין איך זה קורה.</p>
+<p>ראשית, בואו נסתכל על מטריצה מיוחדת - <strong>מטריצת היחידה</strong>, <span class="math">\(I=\left[\begin{array}{ccc}1 & 0 & 0\\0 & 1 & 0\\0 & 0 & 1\end{array}\right]\)</span>. זו מטריצה מסדר <span class="math">\(3\times3\)</span> אבל על פי אותו עיקרון ניתן להגדיר מטריצת יחידה לכל סדר (אבל היא חייבת להיות ריבועית) במילים, לכל כניסה <span class="math">\(ii\)</span> יש במטריצת היחידה 1, ולכל כניסה <span class="math">\(ij\)</span> כך ש-<span class="math">\(i\ne j\)</span> יש בה 0. המקומות שבהם נמצאים ה-1-ים של המטריצה נקראים <strong>האלכסון הראשי</strong> של המטריצה.</p>
+<p>המטריצה הזו מעניינת כי אם <span class="math">\(A\)</span> היא מטריצה מסדר <span class="math">\(n\times m\)</span> ו-<span class="math">\(I\)</span> היא מטריצת יחידה מסדר <span class="math">\(n\times n\)</span> אז <span class="math">\(IA=A\)</span>. כדי להבין למה, בואו ננסה להבין מהי הכניסה ה-<span class="math">\(ij\)</span> של <span class="math">\(IA\)</span>: זו המכפלה הסקלרית של השורה ה-<span class="math">\(i\)</span> של <span class="math">\(I\)</span> בעמודה ה-<span class="math">\(j\)</span> של <span class="math">\(A\)</span>. השורה ה-<span class="math">\(i\)</span> של <span class="math">\(I\)</span> כוללת רק אפסים חוץ ממקום אחד שכולל 1 - בדיוק המקום ה-<span class="math">\(i\)</span>. אז כשכופלים את השורה הזו בעמודה ה-<span class="math">\(j\)</span> של <span class="math">\(A\)</span> אנחנו מתעלמים מכל הכניסות בעמודה הזו חוץ מאחת - הכניסה ה-<span class="math">\(i\)</span>-ית, שהיא בדיוק מה שנמצא בשורה ה-<span class="math">\(i\)</span>-ית של <span class="math">\(A\)</span>. לכן בכניסה ה-<span class="math">\(ij\)</span> של <span class="math">\(IA\)</span> יהיה בדיוק את האיבר בכניסה ה-<span class="math">\(ij\)</span> של <span class="math">\(A\)</span>.</p>
+<p>כעת בואו נחזור על אותה פעולת כפל אבל עם מטריצה שהיא "כמעט <span class="math">\(I\)</span>" פרט לכך שהחלפנו את השורה הראשונה עם השניה. מהי הכניסה ה-<span class="math">\(1j\)</span> של המכפלה הפעם? היא תכיל את האיבר ה<strong>שני</strong> בעמודה ה-<span class="math">\(j\)</span> של <span class="math">\(A\)</span>. כלומר, השורה הראשונה במכפלה תכיל את השורה ה<strong>שניה</strong> של <span class="math">\(A\)</span>, ובאופן לא מפתיע השורה השניה במכפלה תכיל את השורה הראשונה של <span class="math">\(A\)</span>. גם כאן מומלץ לבדוק אותי עצמאית.</p>
+<p>מה שראינו פה הוא עקרון כללי: אם נבצע פעולה אלמנטרית כלשהי על מטריצת היחידה <span class="math">\(I\)</span> - בין אם החלפת שורות, או כפל שורה במספר, או חיבור כפולה של שורה אחת לשורה אחרת - נקבל מטריצה (שמכונה, באופן לא מפתיע, "מטריצה אלמנטרית") שהכפל שלה ב-<span class="math">\(A\)</span> זהה להפעלת הפעולה האלמנטרית הזו על <span class="math">\(A\)</span>.</p>
+<p>אם כן, נניח ש-<span class="math">\(\overline{x}\)</span> מסמן לנו וקטור של משתנים, ו-<span class="math">\(\overline{c}\)</span> וקטור של מספרים, מערכת כללית של משוואות לינאריות מתוארת על ידי <span class="math">\(A\overline{x}=\overline{c}\)</span> (שימו לב ש-<span class="math">\(\overline{x}\)</span> ו-<span class="math">\(\overline{c}\)</span> בכלל לא חייבים להיות מאותו האורך; אורכו של הראשון הוא מספר המשתנים ואורכו של השני הוא מספר המשוואות). כעת, אם <span class="math">\(E\)</span> היא מטריצה אלמנטרית כלשהי, אפשר לכפול בה את שני אגפי המשוואה ולקבל <span class="math">\(\left(EA\right)\overline{x}=E\overline{c}\)</span> (כמובן, צריך להוכיח שדברים כאלו באמת עובדים; אלו הוכחות לא מעניינות ולא אציג אותן כאן). אם אנחנו רוצים להפעיל שתי פעולות אלמנטריות, <span class="math">\(E_{1}\)</span> ו-<span class="math">\(E_{2}\)</span>, אפשר לכפול את המשוואה בהן בזו אחר זו ולקבל <span class="math">\(\left(E_{2}\left(E_{1}A\right)\right)\overline{x}=E_{2}\left(E_{1}\overline{c}\right)\)</span>. כעת העובדה שכפל מטריצות מקיים את חוץ הקיבוץ הופכת לקריטית: זה אומר ש-<span class="math">\(E_{2}\left(E_{1}A\right)=\left(E_{2}E_{1}\right)A\)</span>, ולכן במקום לכפול את <span class="math">\(A\)</span> קודם ב-<span class="math">\(E_{1}\)</span> ואז ב-<span class="math">\(E_{2}\)</span> אפשר לכפול את <span class="math">\(A\)</span> רק פעם אחת במטריצה <span class="math">\(E_{2}E_{1}\)</span> ש"מקודדת בתוכה" הפעלה של שתי פעולות אלמנטריות ולא רק אחת. באותו אופן, אם אנחנו רוצים להפעיל על <span class="math">\(A\)</span> כמות סופית כלשהי של פעולות אלמנטריות, אפשר קודם כל לכפול את המטריצות האלמנטריות אלו באלו ובסוף לקבל מטריצה <span class="math">\(E\)</span> שכבר מאחסנת בתוכה את כל הפעולות שרוצים לבצע על <span class="math">\(A\)</span> כשהן מסודרות לפי הסדר הנכון. אחרי הכפל נקבל <span class="math">\(\left(EA\right)\overline{x}=E\overline{c}\)</span>; מכיוון ש-<span class="math">\(E\overline{c}\)</span> הוא בעצמו וקטור אחר של מספרים, מה שקיבלנו בסופו של דבר הוא משוואה אחרת מהצורה <span class="math">\(B\overline{x}=\overline{d}\)</span>, שבה אנחנו יכולים להניח ש-<span class="math">\(B\)</span> היא מטריצה מצומצמת. בקיצור, כשבפוסט הבא אחזור לעסוק בפתרון משוואות אוכל לצמצם את כל הבעיה שלנו למשוואות מהצורה <span class="math">\(B\overline{x}=\overline{d}\)</span> עם מטריצות מצומצמות.</p>
+<p>את הרעיון הזה לפיו מטריצה אחת יכולה "לאגור" הרבה פעולות שונות שכל אחד מקודדת על ידי מטריצה אחרת הזכרתי גם בהקשר של פעולות על אובייקטים תלת ממדיים קודם, וזה בדיוק אותו הסיפור שם. אני חושב שזו המחשה טובה מאין כמוה לכוח שיש בחוק הקיבוץ, שאנחנו לא תמיד שמים לב אליו. אנסה לתת המחשה פשטנית: נגיד שיש לנו אלף אובייקטים, ועל כל אחד אנחנו רוצים לבצע את אותה סדרה של אלף טרנספורמציות. בלי חוק הקיבוץ, היינו צריכים להפעיל את אותן אלף טרנספורמציות על כל אחד מאלף האובייקטים - מיליון פעולות; אבל עם חוק הקיבוץ אנחנו כופלים את המטריצות של אלף הטרנספורמציות יחד, ואת התוצאה אנחנו כופלים בכל אחד מאלף האובייקטים. סך הכל אלפיים פעולות - הבדל של סדרי גודל (כמובן, העניין הזה של "אגירה" ניתן להמחשה גם עבור פעולות פשוטות כמו חיבור מספרים - זה בדיוק מה שקורה בחשבון בנק, למשל. איכשהו, אני חושב שהדוגמה עובדת הרבה יותר טוב עבור פעולה כמו כפל מטריצות שאליה אנחנו הרבה פחות מורגלים ומסוגלת לתאר טרנספורמציות יותר מורכבות מסתם חיבור או חיסור).</p>
+<p>למשוואות נחזור בפוסט הבא, וכעת אני רוצה לדבר בחטף על דוגמה שונה לשימוש בכפל מטריצות, בהקשר של גרפים. כשאני אומר "גרף", אני מתכוון לקבוצה <span class="math">\(V\)</span> של צמתים ו-<span class="math">\(E\)</span> של קשתות שמחברות זוגות של צמתים; מי שלא מכיר את המושג מוזמן לקרוא <a href="http://www.gadial.net/2008/05/06/eulerian_graphs/">את הפוסט</a> שבו תיארתי אותו לראשונה.</p>
+<p>אנחנו רוצים לספור מסלולים בגרף. מסלול הוא פשוט סדרה של צמתים כל שכל שני צמתים בסדרה מחוברים בקשת, ואורכו הוא כמספר הקשתות שבו. לכל מסלול גם יש צומת התחלתי וצומת סופי - הצמתים הראשונים והאחרונים בסדרה. כך למשל <span class="math">\(v\to u\)</span> הוא מסלול באורך 1 מ-<span class="math">\(v\)</span> אל <span class="math">\(u\)</span>, ו-<span class="math">\(v\to u\to w\)</span> הוא מסלול באורך 2 מ-<span class="math">\(v\)</span> אל <span class="math">\(w\)</span> (שעובר ב-<span class="math">\(u\)</span>). גם <span class="math">\(v\)</span> לבדו הוא מסלול: מסלול באורך 0 עם צומת התחלה <span class="math">\(v\)</span> וצומת סיום <span class="math">\(v\)</span>. זה נשמע מטופש אבל תכף נראה שזו הגדרה מועילה.</p>
+<p>בגרף שלנו נרשה שצומת יכיל קשת אל עצמו (מה שנקרא "חוג עצמי") ולכן <span class="math">\(v\to v\)</span> הוא מסלול חוקי וגם נרשה כמה קשתות בין שני צמתים (מה שנקרא "קשתות מקבילות"); שני מסלולים שכוללים בדיוק את אותה סדרת צמתים אבל מתישהו משתמשים בקשתות שונות ייחשבו שונים. אפשר לאסור על כל השכלולים הללו ועדיין מה שאציג יעבוד, אבל אני רוצה להראות תוצאה כללית ככל האפשר ולכן מרשה את זה (ובפועל לעתים קרובות אכן יש צורך בחוגים עצמיים וקשתות מקבילות; למשל, כשהגרף שלנו מגיע מאוטומט סופי דטרמיניסטי). בנוסף, הגרף יכול להיות מכוון - קשת היא תמיד מצומת א' אל צומת ב' ומסלול חייב להיות עם כיוון הקשתות כדי להיות חוקי.</p>
+<p>כעת, נניח שיש לנו גרף עם <span class="math">\(n\)</span> צמתים, <span class="math">\(v_{1},\dots,v_{n}\)</span>. מגדירים עבורו מטריצה <span class="math">\(A\)</span> מסדר <span class="math">\(n\times n\)</span> - "מטריצת השכנויות/סמיכויות" שלו - באופן הבא: <span class="math">\(A_{ij}\)</span> שווה למספר הקשתות מ-<span class="math">\(i\)</span> אל <span class="math">\(j\)</span>. כלומר זה מספר שלם אי שלילי (בגלל שאנחנו מרשים קשתות מקבילות, <span class="math">\(A_{ij}\)</span> יכול להיות גדול מ-1; ובגלל שהגרף מכוון <span class="math">\(A_{ij}\)</span> לא בהכרח שווה ל-<span class="math">\(A_{ji}\)</span>).</p>
+<p>מכיוון ש-<span class="math">\(A\)</span> היא מטריצה ריבועית, אפשר לכפול אותה בעצמה. <span class="math">\(A^{k}\)</span> היא מה שמקבלים כשכופלים את <span class="math">\(A\)</span> בעצמה <span class="math">\(k\)</span> פעמים. כמו ש-<span class="math">\(a^{0}=1\)</span> עבור מספרים, כך מגדירים גם ש-<span class="math">\(A^{0}=I\)</span> כאשר <span class="math">\(I\)</span> היא מטריצת היחידה מסדר <span class="math">\(n\times n\)</span>.</p>
+<p>כעת אפשר לעבור לתוצאה המקסימה: <span class="math">\(A^{t}\)</span> היא מטריצה שמקודדת בדיוק את מספרי המסלולים מאורך <span class="math">\(t\)</span> בין כל שני צמתים בגרף; יותר בפירוט, <span class="math">\(A_{ij}^{t}\)</span> הוא בדיוק מספר המסלולים מאורך <span class="math">\(t\)</span> מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{j}\)</span>.</p>
+<p>למה זה עובד? ובכן, עבור <span class="math">\(A^{0}\)</span> זה ברור מההגדרה שנתתי: מסלול באורך 0 חייב להתחיל ולהסתיים באותו צומת, ויש בדיוק 1 כזה. זה מתאים בדיוק לכך שעל האלכסון הראשי של <span class="math">\(A^{0}\)</span> יש 1 ובשאר הכניסות יש 0.</p>
+<p>עבור <span class="math">\(A^{1}\)</span> זה גם ברור: כל קשת <span class="math">\(v\to u\)</span> מגדירה מסלול באורך 1 מ-<span class="math">\(v\)</span> אל <span class="math">\(u\)</span>, ולכן מספר המסלולים הכולל מ-<span class="math">\(v\)</span> אל <span class="math">\(u\)</span> באורך 1 הוא כמספר הקשתות מ-<span class="math">\(v\)</span> אל <span class="math">\(u\)</span>.</p>
+<p>הכיף מתחיל עבור <span class="math">\(A^{2}\)</span>, וכאן ההגדרה של כפל מטריצות מתגלה במלוא כוחה. מהו מסלול באורך 2? מסלול מהצורה <span class="math">\(v\to u\to w\)</span> (הצמתים לא חייבים להיות שונים אלו מאלו בהכרח). אם אנחנו מתעניינים במספר המסלולים מ-<span class="math">\(v\)</span> אל <span class="math">\(w\)</span>, אז כל מסלול כזה נבנה באופן הבא: בחר צומת <span class="math">\(u\)</span> שישמש בתור צומת האמצע; בחר קשת מ-<span class="math">\(v\)</span> אל <span class="math">\(u\)</span> (אם קיימת כזו), ואז בחר קשת מ-<span class="math">\(u\)</span> אל <span class="math">\(w\)</span> (אם קיימת כזו).</p>
+<p>כמה מסלולים כאלו יש? אם קבענו את <span class="math">\(u\)</span>, אז נותר לבחור קשת מ-<span class="math">\(v\)</span> אל <span class="math">\(u\)</span>, ולבחור קשת מ-<span class="math">\(u\)</span> אל <span class="math">\(w\)</span>, ושתי הבחירות הללו בלתי תלויות זו בזו, ולכן מספר האפשרויות הוא מכפלה של מספר האפשרויות לבחור קשת מ-<span class="math">\(v\)</span> אל <span class="math">\(u\)</span> במספר האפשרויות לבחור קשת מ-<span class="math">\(u\)</span> אל <span class="math">\(w\)</span> (זהו "עקרון הכפל" הקומבינטורי). כעת, לכל <span class="math">\(u\)</span> שיכול לשמש כצומת ביניים אנחנו מקבלים מספר אפשרויות כלשהו, ולכן מספר האפשרויות הכולל הוא סכום כל האפשרויות על כל ה-<span class="math">\(u\)</span>-ים האפשריים (זהו "עקרון החיבור" הקומבינטורי).</p>
+<p>בואו נסמן את הצמתים במספרים כדי שיהיה לנו קצת יותר קל. נניח שאנחנו רוצים לדעת כמה מסלולים יש מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{j}\)</span>, וש-<span class="math">\(v_{r}\)</span> הוא צומת הביניים שלנו. אז יש <span class="math">\(A_{ir}\)</span> קשתות מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{r}\)</span>; <span class="math">\(A_{rj}\)</span> קשתות מ-<span class="math">\(v_{r}\)</span> אל <span class="math">\(v_{j}\)</span>; ולכן <span class="math">\(A_{ir}A_{rj}\)</span> מסלולים מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{j}\)</span> שעוברים דרך <span class="math">\(v_{r}\)</span>; ולכן <span class="math">\(\sum_{r=1}^{n}A_{ir}A_{rj}\)</span> מסלולים בסך הכל מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{j}\)</span>. אבל <span class="math">\(\sum_{r=1}^{n}A_{ir}A_{rj}\)</span> ידידינו הוא <strong>בדיוק</strong> ההגדרה שלנו לכניסה ה-<span class="math">\(ij\)</span> בכפל המטריצה <span class="math">\(A\)</span> בעצמה, ולכן <span class="math">\(A^{2}\)</span> אכן מקודד בדיוק את המסלולים מאורך 2 בין צמתים בגרף.</p>
+<p>ההוכחה הכללית עבור <span class="math">\(A^{t}\)</span> פשוטה באותה מידה, אם שמים לב לכך ש-<span class="math">\(A^{t}=A^{t-1}A\)</span> ומשתמשים באינדוקציה כדי להניח ש-<span class="math">\(A^{t-1}\)</span> כבר מקודד את מספר המסלולים מאורך <span class="math">\(t-1\)</span> בין צמתים בגרף. במקרה זה, אפשר לחשוב על מסלול מאורך <span class="math">\(t\)</span> בגרף מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{j}\)</span> כאילו הוא מהצורה <span class="math">\(v_{i}\rightarrow v_{r}\to v_{j}\)</span>, כאשר <span class="math">\(v_{i}\rightarrow v_{r}\)</span> מייצג לא קשת אחת אלא מסלול שלם מאורך <span class="math">\(t-1\)</span> מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{r}\)</span>. שאר הניתוח זהה: מספר המסלולים מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{j}\)</span> מאורך <span class="math">\(t\)</span> שהצומת הלפני-אחרון בהם הוא <span class="math">\(v_{r}\)</span> הוא כמספר המסלולים מאורך <span class="math">\(t-1\)</span> מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{r}\)</span> כפול מספר הקשתות מ-<span class="math">\(v_{r}\)</span> אל <span class="math">\(v_{j}\)</span>. סוף הסיפור.</p>
+<p>אני לא יכול להתאפק כאן ולהזכיר מאוד בחטף נושא מתקדם טיפה יותר. נניח שהמטריצה <span class="math">\(A\)</span> שלנו, במקום לקודד את <strong>מספר</strong> הקשתות, הייתה מקודדת <strong>הסתברות</strong> למעבר מ-<span class="math">\(v_{i}\)</span> אל <span class="math">\(v_{j}\)</span>? כלומר, הגרף שלנו היה כזה שבו אם אתם נמצאים בצומת מסוייים, אז בסיבוב הבא עליכם לזוז לצומת אחר (או להישאר במקום - זה נחשב כאילו זזתם מהצומת אל עצמו) והייתם בוחרים לאן לעבור בהסתברות קבועה מסויימת על בסיס המיקום הנוכחי שלכם. אם <span class="math">\(A\)</span> הייתה המטריצה שמקודדת את ההסתברויות הללו, מה הייתה המשמעות של <span class="math">\(A^{t}\)</span>? כמעט אותו דבר - <span class="math">\(A_{ij}^{t}\)</span> הייתה ההסתברות שבה אם התחלתם מ-<span class="math">\(v_{i}\)</span> וביצעתם <span class="math">\(t\)</span> סיבובים, תגיעו אל <span class="math">\(v_{j}\)</span>. לכן אם אנחנו יודעים איך מתנהגת <span class="math">\(A^{t}\)</span> עבור ערכים גדולים מאוד של <span class="math">\(t\)</span>, אנחנו יודעים מה ההתנהגות לאורך זמן של ההילוך האקראי הזה - לאיזה מקומות בגרף יותר סביר להגיע ולבלות בהם יותר זמן, וכדומה. הרעיון הזה עמד בבסיס אלגוריתם הדירוג של גוגל (מה שידוע על אלגוריתם הדירוג של גוגל, לפחות) כאשר הגרף הוא "האינטרנט" (ואתרים חשובים בו הם כאלו שאליהם ההילוך המקרי מגיע לעתים קרובות יותר) והניתוח של התנהגות <span class="math">\(A^{t}\)</span> עבור ערכים גדולים של <span class="math">\(t\)</span> אכן מערב לו עוד אלגברה לינארית שטרם הגעתי אליה (בפרט, את המושגים של ערכים עצמיים ווקטורים עצמיים).</p>
+<p>אם כן, אנו רואים כאן שכפל מטריצות מקודד בתוכו סוג מסויים של פעולה יסודית למדי במתמטיקה, כזו שצצה לה בהקשרים שונים ומשונים (ותאמינו לי, עוד לא ראיתם כלום). אני מקווה שגם אלו מכם שעדיין לא התרגלו להגדרה המוזרה ילמדו לחבב אותה לאורך זמן; לטעמי, להתרגל לפעולה הזו ולטבעיות הרבה שלה היא צעד חשוב בדרך להבנה מהי מתמטיקה "אמיתית".</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/10/10/quasiperiodic_crystals/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">גבישים כמו-מחזוריים וריצופים כן-מחזוריים</span>
+            </a>
+            
+            
+            
+            <a href="/2011/10/05/matrix_row_reducing/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">מטריצות, דירוג מטריצות ומשוואות לינאריות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

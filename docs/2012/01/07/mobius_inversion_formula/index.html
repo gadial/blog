@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נוסחת ההיפוך של מביוס - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>נוסחת ההיפוך של מביוס</h1>
+            <div class="post-meta">
+                <span class="date">2012-01-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קומבינטוריקה.html">קומבינטוריקה</a>
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/נוסחת ההיפוך של מביוס.html">נוסחת ההיפוך של מביוס</a>
+                    
+                    <a href="/tags/קבוצות סדורות חלקית.html">קבוצות סדורות חלקית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2><strong>נוסחת ההיפוך הקלאסית</strong></h2>
+<p>נתחיל מדוגמה. ככה יהיה הרבה יותר קל להבין מה אני רוצה. בפוסט הקודם הזכרתי את <strong>פונקציית אוילר</strong> <span class="math">\(\varphi\left(n\right)\)</span> שלכל מספר טבעי מחזירה את מספר המספרים הקטנים ממנו שזרים לו. בנוסף לכל מעלותיה, היא מקיימת את התכונה היפה הבאה: <span class="math">\(\sum_{d|n}\varphi\left(d\right)=n\)</span>. כלומר, כל מספר טבעי שווה לסכום הערכים של פונקציית אוילר כל כל מחלקיו.</p>
+<p>לנוסחה הזו יש הוכחה קומבינטורית פשוטה שלחלוטין לא רלוונטית לפוסט אז העצלנים יכולים לדלג עליה - נספור את כל המספרים מ-1 עד <span class="math">\(n\)</span> (בדיוק <span class="math">\(n\)</span>) בדרך קצת שונה - לכל מספר <span class="math">\(1\le k\le n\)</span>, נסמן ב-<span class="math">\(N_{k}\)</span> את מספרם של המספרים בין 1 ו-<span class="math">\(n\)</span> שהמחלק המשותף המקסימלי שלהם ושל <span class="math">\(n\)</span> הוא בדיוק <span class="math">\(k\)</span>, כלומר <span class="math">\(N_{k}=\left|\left\{ 1\le a\le n|\gcd\left(a,n\right)=k\right\} \right|\)</span>. בבירור אם <span class="math">\(k\)</span> לא מחלק את <span class="math">\(n\)</span> אז <span class="math">\(N_{k}=0\)</span>; מהו <span class="math">\(N_{k}\)</span> אם <span class="math">\(k|n\)</span>? ובכן, זהו מספרם של המספרים מהצורה <span class="math">\(k,2k,3k,\dots,n\)</span> שאין להם מחלק משותף גדול מ-<span class="math">\(k\)</span> עם <span class="math">\(n\)</span>, כלומר מספרים מהצורה <span class="math">\(tk\)</span> כך ש-<span class="math">\(t\)</span> זר ל-<span class="math">\(\frac{n}{k}\)</span> (תעצרו, תנשמו עמוק ותסבירו את זה לעצמכם - אם אתם לא מצליחים, לא נורא כי זה לא קשור ממש לפוסט). נסמן <span class="math">\(d=\frac{n}{k}\)</span> ונקבל ש-<span class="math">\(N_{k}=\varphi\left(d\right)\)</span>, ומכאן נובעת הנוסחה.</p>
+<p>יופי, בשביל מה זה היה טוב? ובכן, זו דוגמה לסיטואציה שבה יש לנו פונקציה מסובכת <span class="math">\(f\)</span> שסכום שלה על פני המחלקים של <span class="math">\(n\)</span> יוצא משהו פשוט יותר. פורמלית, זה אומר שקיימת פונקציה <span class="math">\(g\left(n\right)\)</span> כך ש-<span class="math">\(g\left(n\right)=\sum_{d|n}f\left(d\right)\)</span>. היינו רוצים איכשהו "לחלץ" את <span class="math">\(f\)</span> מתוך הנוסחה הזו ולכתוב אותה כפונקציה כלשהי של <span class="math">\(g\)</span> הפשוטה יותר. נוסחת ההיפוך של מביוס נותנת לנו בדיוק את זה.</p>
+<p>אפשר עכשיו פשוט להציג את הנוסחה, אבל חבל - אני רוצה לנצל את ההזדמנות כדי להכיר לכם מושג חדש, שממנו אפשר יהיה להגיע לנוסחה באופן טבעי יותר - קונבולוציית דיריכלה. קונבולוציה "רגילה" של שתי פונקציות <span class="math">\(f,g\)</span> שמוגדרות על הטבעיים היא פונקציה חדשה <span class="math">\(h\)</span> שמוגדרת כך: <span class="math">\(h\left(n\right)=\sum_{k=0}^{n}f\left(k\right)g\left(n-k\right)\)</span>. דוגמה קלאסית לסיטואציה מתמטית שבה קונבולוצייה רגילה צצה מאליה היא כפל של פולינומים: אם <span class="math">\(p\left(x\right)=\sum a_{i}x^{i}\)</span> ו-<span class="math">\(q\left(x\right)=\sum b_{j}x^{j}\)</span> אז כל מקדם של המכפלה שלהם הוא קונבולוציה: המקדם של <span class="math">\(x^{n}\)</span> ב-<span class="math">\(p\left(x\right)q\left(x\right)\)</span> הוא <span class="math">\(\sum_{k=0}^{n}a_{k}b_{n-k}\)</span>. שימו לב, שניתן לכתוב קונבולוציה גם עם חיבור ולא חיסור: <span class="math">\(h\left(n\right)=\sum_{k+r=n}f\left(k\right)g\left(r\right)\)</span>.</p>
+<p>קונבולוציית דיריכלה היא דומה באופיה, רק שבמקום חיבור/חיסור משתמשים בכפל/חילוק, דהיינו אם <span class="math">\(h\left(n\right)\)</span> היא קונבולוציית דיריכלה של <span class="math">\(f\left(n\right),g\left(n\right)\)</span> אז</p>
+<p><span class="math">\(h\left(n\right)=\sum_{d\cdot e=n}f\left(d\right)g\left(e\right)=\sum_{d|n}f\left(d\right)g\left(\frac{n}{d}\right)\)</span></p>
+<p>זה כבר טיפה מזכיר את מה שהלך למעלה.</p>
+<p>בואו נסמן <span class="math">\(h=f*g\)</span> כדי לומר ש-<span class="math">\(h\)</span> היא קונבולוציית דיריכלה של <span class="math">\(f,g\)</span>. אז האלגבראיסט הפנימי שבנו מתלהב מכך שמצאנו פעולה חשבונית חדשה ודוחק בנו לחקור את התכונות שלה. למשל, <span class="math">\(\left(f*g\right)*h=f*\left(g*h\right)\)</span> עבור שלוש פונקציות <span class="math">\(f,g,h\)</span> כלשהן (שמוגדרות על טבעיים; זה תמיד ההקשר של הדיון), כך שקונבלוציית דיריכלה היא <strong>אסוציאטיבית</strong>. זה מגביר את ההתלהבות של האלגבראיסט הפנימי לשמיים כי הוא מקווה שיש לנו כאן <strong>חבורה</strong>, כלומר מבנה אלגברי שהפעולה שלו היא אסוציאטיבית, עם איבר יחידה, ועם הופכי לכל איבר. ובכן, איבר יחידה בהחלט יש: נסמן ב-<span class="math">\(\epsilon\)</span> את הפונקציה שמקיימת <span class="math">\(\epsilon\left(1\right)=1\)</span> ו-<span class="math">\(\epsilon\left(n\right)=0\)</span> לכל <span class="math">\(n&gt;1\)</span>, אז קל מאוד לראות מההגדרה ש-<span class="math">\(\epsilon*f=f*\epsilon=f\)</span>.</p>
+<p>וכעת, מה עם הופכי? ובכן, נניח שעבור <span class="math">\(f\)</span> קיימת <span class="math">\(g\)</span> כך ש-<span class="math">\(f*g=\epsilon\)</span>, זה אומר ש-<span class="math">\(\sum_{d|1}f\left(d\right)g\left(\frac{n}{d}\right)=1\)</span>, כלומר <span class="math">\(f\left(1\right)g\left(1\right)=1\)</span>; אבל אם <span class="math">\(f\left(1\right)=0\)</span> אז אבוד לנו - המשוואה הזו לעולם לא תתקיים. לכן תנאי הכרחי לכך ש-<span class="math">\(f\)</span> יהיה הפיך הוא ש-<span class="math">\(f\left(1\right)\ne0\)</span>. מסתבר שזה גם תנאי מספיק, אבל נעזוב את החיפוש אחר הופכי במקרה הכללי כרגע ובמקום זאת נתמקד בהופכי של פונקציה פשוטה במיוחד: הפונקציה שמחזירה 1 לכל קלט, שאסמן פשוט כ-<span class="math">\(\mathbb{I}\)</span>. את ההופכי שלה, שתכף נוכיח את קיומו, נסמן ב-<span class="math">\(\mu\)</span> מסיבות היסטורית. אם כן, <span class="math">\(\mathbb{I}*\mu=\epsilon\)</span>. בואו נראה מה נובע מכך.</p>
+<p>זכרו שהתחלנו את כל הסיפור מהמשוואה <span class="math">\(g\left(n\right)=\sum_{d|n}f\left(d\right)\)</span>. עם הטרמינולוגיה החדשה שלנו ניתן לנסח זאת בתור <span class="math">\(g=f*\mathbb{I}\)</span>. כעת נכפול את שני האגפים ב-<span class="math">\(\mu\)</span>, נשתמש באסוציאטיביות, ונקבל:</p>
+<p><span class="math">\(g*\mu=f*\left(\mathbb{I}*\mu\right)=f*\epsilon=f\)</span></p>
+<p>במילים אחרות, <span class="math">\(g=f*\mathbb{I}\)</span> אם ורק אם <span class="math">\(f=g*\mu\)</span>, ובניסוח המקורי שלנו <span class="math">\(g\left(n\right)=\sum_{d|n}f\left(d\right)\)</span> אם ורק אם <span class="math">\(f\left(n\right)=\sum_{d|n}g\left(d\right)\mu\left(\frac{n}{d}\right)\)</span>. זוהי <strong>נוסחת ההיפוך של מביוס</strong>, והפונקציה <span class="math">\(\mu\)</span> נקראת, בהתאם, <strong>פונקצית מביוס</strong>. בואו נבין איך היא נראית.</p>
+<p>ראשית, <span class="math">\(\mu\left(1\right)=1\)</span> בבירור על פי ההגדרה, כי צריך שיתקיים <span class="math">\(\mu\left(1\right)\mathbb{I}\left(1\right)=1\)</span>. שנית, לכל <span class="math">\(n&gt;1\)</span> צריך שיתקיים <span class="math">\(0=\epsilon\left(n\right)=\sum_{d|n}\mu\left(d\right)\mathbb{I}\left(\frac{n}{d}\right)=\sum_{d|n}\mu\left(d\right)\)</span>. כלומר, אם לסכם באופן קומפקטי, פונקציית מביוס חייבת לקיים <span class="math">\(\sum_{d|n}\mu\left(d\right)=\delta_{1n}\)</span>. מכאן אפשר להסיק בשלבים איך <span class="math">\(\mu\)</span> נראית על כל מספר טבעי. נתחיל מהמספרים הקלים ביותר לטיפול בהקשר הזה (כמו שקורה לעתים קרובות ביותר בתורת המספרים) - ראשוניים, אם <span class="math">\(d|p\)</span> עבור <span class="math">\(p\)</span> ראשוני, אז <span class="math">\(d=1\)</span> או <span class="math">\(d=p\)</span>, ולכן הנוסחה שלעיל מתורגמת עבורנו ל-<span class="math">\(0=\mu\left(1\right)+\mu\left(p\right)\)</span>, כלומר <span class="math">\(\mu\left(p\right)=-1\)</span> לכל ראשוני. אפשר להמשיך ולטפל בצורה דומה במכפלות של ראשוניים, אבל אני לא מכיר דרך אלגנטית במיוחד להציג את הניתוח הזה ולכן אקפוץ למסקנה הסופית: <span class="math">\(\mu\)</span> היא כפלית על מספרים זרים. מה זה אומר? שאם <span class="math">\(a,b\)</span> הם שני מספרים ללא מחלק משותף גדול מ-1, אז <span class="math">\(\mu\left(ab\right)=\mu\left(a\right)\mu\left(b\right)\)</span> (באופן הולם למדי, גם <span class="math">\(\varphi\)</span> של אוילר היא כזו). ומה אם <span class="math">\(a,b\)</span> לא זרים? גם אז המצב פשוט: <span class="math">\(\mu\left(ab\right)=0\)</span>.</p>
+<p>כעת אפשר להסיק נוסחה עבור <span class="math">\(\mu\)</span>. נניח ש-<span class="math">\(n=p_{1}p_{2}\cdots p_{k}\)</span> כאשר כל הראשוניים הללו שונים זה מזה, אז <span class="math">\(\mu\left(n\right)=\prod_{i=1}^{k}\mu\left(p_{k}\right)=\left(-1\right)^{k}\)</span>; ואילו אם <span class="math">\(n\)</span> מכיל את אותו ראשוני פעמיים בפירוק שלו, <span class="math">\(\mu\left(n\right)=0\)</span>.</p>
+<p>לא קשה לראות שאכן <span class="math">\(\sum_{d|n}\mu\left(d\right)=0\)</span> בהגדרה זו לכל <span class="math">\(n&gt;0\)</span>; אם <span class="math">\(n=p_{1}^{t_{1}}\cdots p_{k}^{t_{k}}\)</span> הרי שהסכום יהיה רק על מחלקים <span class="math">\(d\)</span> מהצורה <span class="math">\(p_{1}^{e_{1}}\cdots p_{k}^{e_{k}}\)</span> עם <span class="math">\(e_{i}\in\left\{ 0,1\right\} \)</span> (כי היתר יתאפסו), ועבור כל מכפלה כזו, <span class="math">\(\mu\left(p_{1}^{e_{1}}\cdots p_{k}^{e_{k}}\right)\)</span> שווה למינוס 1 בחזקת מספר ה-<span class="math">\(e_{i}\)</span>-ים שהם 1, ולכן <span class="math">\(\sum_{d|n}\mu\left(d\right)=\sum_{i=0}^{k}{k \choose i}\left(-1\right)^{i}=\left(1-1\right)^{k}=0\)</span> (המעבר האחרון הוא הבינום של ניוטון). כלומר, <span class="math">\(\mu\)</span> שנתתי אכן מקיימת את מה שנדרש ממנה, וזה מבטיח שהיא אכן תהיה ההופכית של <span class="math">\(\mathbb{I}\)</span> ושנוסחת ההיפוך של מביוס תתקיים.</p>
+<p>יפה, זה סוגר את העניין בכל הנוגע לנוסחת ההיפוך ה"קלאסית" של מביוס, זו שרואים בספרי תורת המספרים. אבל יש כאן יותר מזה. נתחיל מלהיזכר במה שראינו על ההכללה של עקרון ההכלה וההפרדה בפוסט הקודם. שם היו לנו שתי פונקציות <span class="math">\(f,g\)</span> כך שהתקיים</p>
+<p><span class="math">\(g\left(A\right)=\sum_{B\supseteq A}f\left(B\right)\)</span></p>
+<p>ואת הנוסחה הזו "הפכנו" לקבלת</p>
+<p><span class="math">\(f\left(A\right)=\sum_{B\supseteq A}\left(-1\right)^{\left|B-A\right|}g\left(B\right)\)</span></p>
+<p>הדמיון כאן לנוסחת ההיפוך של מביוס אדיר. במקום <span class="math">\(d|n\)</span> יש לנו <span class="math">\(B\supseteq A\)</span> כש-<span class="math">\(B\)</span> על תקן <span class="math">\(d\)</span> ו-<span class="math">\(A\)</span> על תקן <span class="math">\(n\)</span>, ובמקום <span class="math">\(\mu\left(d\right)\)</span> יש לנו <span class="math">\(\left(-1\right)^{\left|B-A\right|}\)</span>, אבל זה כל ההבדל. המבנה הרעיוני זהה. יתר על כן, הדמיון בין חלוקה והכלה של קבוצות הוא משהו שכבר ראינו בבלוג פעם, בהקשר של תורת המספרים האלגברית; אם נגדיר את <span class="math">\(A\)</span> כקבוצת "כל המספרים המתחלקים על ידי <span class="math">\(n\)</span>" ואת <span class="math">\(B\)</span> כקבוצת "כל המספרים המתחלקים על ידי <span class="math">\(d\)</span>" אז <span class="math">\(B\supseteq A\)</span> <strong>שקול</strong> לאמירה <span class="math">\(d|n\)</span> (אבל אז לא ברור מהו <span class="math">\(\left|B-A\right|\)</span> שיהיה אינסופי). הדמיון הרב מאוד בין שני המקרים לא נגמר בהם; הוא נובע מכך ששניהם מקרים פרטיים של נוסחת היפוך כללית ביותר, שתקפה לכל מבנה מתמטי שמכליל את התכונות של "הכלה" או של "חלוקה" שרלוונטיות לעניינו - ולמבנה כזה קוראים <strong>קבוצה סדורה חלקית</strong> (קס"ח).</p>
+<h2><strong>קס"חים</strong></h2>
+<p>קבוצות סדורות חלקית הן מהמבנים הבסיסיים ביותר במתמטיקה, והצורה הפשוטה ביותר שבה אנו מתארים את הרעיון של <strong>סדר</strong>. בואו ניתן את ההגדרות האבסטרקטיות התורת-קבוצתיות: קבוצה <span class="math">\(X\)</span> הוא סדורה חלקית עם יחס שמסומן ב-<span class="math">\(\le\)</span> (יחס כאן הוא אוסף של זוגות <span class="math">\(\left(a,b\right)\)</span> כך ש-<span class="math">\(a\in X\)</span> וגם <span class="math">\(b\in X\)</span>; אנחנו מסמנים <span class="math">\(a\le b\)</span>) אם <span class="math">\(\le\)</span>מקיים את שלוש התכונות הבאות:</p>
+<ol>
+    <li> (רפלקסיביות) <span class="math">\(a\le a\)</span> לכל <span class="math">\(a\in X\)</span></li>
+    <li> (אנטי-סימטריה) <span class="math">\(a\le b\)</span> וגם <span class="math">\(b\le a\)</span> גורר <span class="math">\(a=b\)</span></li>
+    <li> (טרנזיטיביות) <span class="math">\(a\le b\)</span> וגם <span class="math">\(b\le c\)</span> גורר <span class="math">\(a\le c\)</span></li>
+</ol>
+<p>צריך מייד להבהיר ש-<span class="math">\(\le\)</span> הוא <strong>סימון</strong> של היחס. זה <strong>לא</strong> "גדול או שווה" במשמעות הרגילה שלו. מה שכן, היחס "גדול או שווה" הוא יחס סדר חלקי, אולי אחד מהפשוטים ביותר, ומכאן הסימון. אם כן, <span class="math">\(\mathbb{N}\)</span> עם יחס הסדר "גדול או שווה מ-" היא דוגמה לקבוצה סדורה חלקית; אבל <span class="math">\(\mathbb{N}\)</span> עם יחד הסדר "מחלק את", כלומר אם <span class="math">\(a|b\)</span> מסמנים זאת <span class="math">\(a\le b\)</span> היא דוגמה מעניינת הרבה יותר. ברור שזה אכן יחס סדר חלקי כי <span class="math">\(a|a\)</span> לכל <span class="math">\(a\in\mathbb{N}\)</span>, וגם שתי התכונות האחרות נובעות די בקלות מההגדרות; אבל בניגוד ליחס הקטן-או-שווה הרגיל, עבור יחס החלוקה יש לנו איברים ש<strong>אינם ניתנים להשוואה</strong>. למשל, 2 ו-3 לא מחלקים זה את זה ולכן לא מתקיים לא <span class="math">\(2\le3\)</span> וגם לא <span class="math">\(3\le2\)</span> עבור יחס סדר זה. קבוצה סדורה חלקית שבה כל שני איברים כן ניתנים להשוואה נקראת קבוצה סדורה <strong>מלאה</strong>, או <strong>סדורה לינארית</strong>.</p>
+<p>שימו לב שקס"ח היא <strong>זוג</strong> - צריך לציין גם את <span class="math">\(X\)</span> וגם את <span class="math">\(\le\)</span>, כי על אותו <span class="math">\(X\)</span> אפשר להגדיר הרבה יחסי סדר שונים. למרות זאת רוב הזמן אני אכתוב כאן "קס"ח <span class="math">\(X\)</span>" ותו לא, מתוך הנחה שמה שאני אומר תקף <strong>לכל</strong> יחס סדר חלקי שנצמיד ל-<span class="math">\(X\)</span> (לפעמים עם דרישות נוספות שאציין).</p>
+<p>אם יש לנו קבוצה <span class="math">\(X\)</span> כלשהי, אז אפשר להגדיר על אוסף תת-הקבוצות שלה <span class="math">\(P\left(X\right)\)</span> יחס סדר על ידי הכלה (כלומר, לכל <span class="math">\(A,B\subseteq X\)</span> מגדירים <span class="math">\(A\le B\)</span> אם <span class="math">\(A\subseteq B\)</span>), וגם, באופן מעניין, על ידי הכלה הפוכה, כלומר <span class="math">\(A\le B\)</span> אם <span class="math">\(B\supseteq A\)</span> (אומרים שהקס"ח שסדורה על ידי הכלה הפוכה <strong>דואלית</strong> לזו שסדורה על ידי הכלה רגילה; אפשר להגדיר דואלי שבו יחס הסדר מתהפך לכל קס"ח). אם כן, המושג של יחס סדר חלקי תופס את ה"עולם" שבו מתקיימות שתי הנוסחאות שהצגתי למעלה, ועכשיו נותר רק לברר איך נראית הנוסחה הכללית ביותר. כדי לספק את הסקרנות שלכם אני אציג אותה כבר עכשיו, ואז נוכל לחשוב איך להציג אותה בצורה <strong>מעניינת</strong>, על ידי הבנה טובה יותר של קבוצות סדורות חלקית (המטרה שלנו תהיה להכליל במובן מסויים את גישת הקונבולוציה של נוסחת ההיפוך הקלאסית).</p>
+<p>ובכן, נוסחת ההיפוך הכללית אומרת שאם <span class="math">\(\left(X,\le\right)\)</span> היא קבוצה סדורה חלקית עם יחס הסדר <span class="math">\(\le\)</span> אשר מקיימת תכונת סופיות מסויימת (כל אידאל סדר ראשי הוא סופי - זה יתבהר בהמשך) אז אם יש לנו שתי פונקציות <span class="math">\(f,g:X\to\mathbb{C}\)</span> אשר מקיימות <span class="math">\(g\left(x\right)=\sum_{y\le x}f\left(y\right)\)</span>, אז מתקיים <span class="math">\(f\left(x\right)=\sum_{y\le x}g\left(y\right)\mu\left(y,x\right)\)</span>, כאשר <span class="math">\(\mu\)</span> היא פונקצית מביוס של הקס"ח <span class="math">\(X\)</span>. איך בדיוק היא מוגדרת - גם את זה נבין בהמשך. לכל קס"ח יש את פונקצית המביוס שלו, וכבר ראינו שתיים: את זו של הקס"ח עם יחס החלוקה, שהייתה <span class="math">\(\mu\)</span> הקלאסית; ואז זו של הקס"ח עם יחס ההכלה ההפוך של קבוצות, שקיימה <span class="math">\(\mu\left(B,A\right)=\left(-1\right)^{\left|B-A\right|}\)</span>.</p>
+<p>מכיוון שאני רוצה להציג את נוסחת ההיפוך ופונקצית מביוס כנובעים מרעיון עמוק יותר, מעין הכללה של קונבולוציית דיריכלה, אני צריך לתת עוד כמה הגדרות שקשורות לקס"חים. ראשית, לכל שני איברים <span class="math">\(x,y\in X\)</span> אפשר להגדיר את ה<strong>קטע</strong> <span class="math">\(\left[x,y\right]=\left\{ z\in X|x\le z\le y\right\} \)</span>, כלומר כל האיברים שניתנים להשוואה עם <span class="math">\(x,y\)</span> ונמצאים ביניהם, כולל הם עצמם. אם אין אף איבר בין <span class="math">\(x\)</span> ל-<span class="math">\(y\)</span>, כלומר <span class="math">\(\left[x,y\right]=\left\{ x,y\right\} \)</span>, אומרים ש-<span class="math">\(y\)</span> <strong>מכסה</strong> את <span class="math">\(x\)</span>. על <span class="math">\(X\)</span> אומרים שהיא סופית מקומית אם כל קטע ב-<span class="math">\(X\)</span> הוא סופי (כך למשל <span class="math">\(\mathbb{Z}\)</span> עם יחס הסדר הרגיל היא סופית מקומית, אבל <span class="math">\(\mathbb{Q}\)</span> עם אותו יחס סדר בדיוק איננה).</p>
+<p><strong>שרשרת</strong> היא פשוט קבוצה של איברים ב-<span class="math">\(X\)</span> שכולם ניתנים להשוואה זה עם זה (תת-קבוצה סדורה מלאה של <span class="math">\(X\)</span>), ושמה מגיע מכך שאפשר לכתוב את איבריה כ-<span class="math">\(x_{1}\le x_{2}\le\dots\le x_{n}\)</span> (במקרה שבו השרשרת סופית, אבל ממילא רק זה יעניין אותנו כאן). <strong>אנטי-שרשרת</strong> היא בדיוק ההפך מכך - קבוצה של איברים ב-<span class="math">\(X\)</span> שלא ניתן להשוות אף זוג מהם - למשל, אם ניקח את הטבעיים עם יחס החלוקה, אז כל קבוצה של ראשוניים היא אנטי-שרשרת.</p>
+<p><strong>אידאל סדר</strong> <span class="math">\(I\)</span> הוא תת-קבוצה של <span class="math">\(X\)</span> בעלת התכונה שאם <span class="math">\(x\in I\)</span> ו-<span class="math">\(y\le x\)</span> אז <span class="math">\(y\in X\)</span> (מי שמכיר קצת אלגברה מופשטת ודאי רואה את הדמיון להגדרה ה"קלאסית" של אידאל). יש קשר בין אידאלי סדר ואנטי-שרשראות: אם ניקח את כל האיברים המקסימליים באידאל סדר <span class="math">\(I\)</span> כלשהו (איברים <span class="math">\(x\in I\)</span> כך שלא קיים <span class="math">\(y\in I\)</span> כך ש-<span class="math">\(x\le y\)</span>) אז נקבל אנטי-שרשרת, ומצד שני אם ניקח אנטי-שרשרת <span class="math">\(A\)</span> ונגדיר <span class="math">\(I=\left\{ y\in X|\exists x\in A,y\le x\right\} \)</span> נקבל אידאל סדר, ואם <span class="math">\(X\)</span> סופית זה נותן לנו התאמה חח"ע ועל בין אנטי-שרשרות ואידאלי סדר. באופן כללי אם בהינתן <span class="math">\(A\)</span> מגדירים ממנה <span class="math">\(I\)</span> כפי שתיארתי כאן, אז אומרים ש-<span class="math">\(A\)</span> <strong>יוצרת</strong> את האידאל <span class="math">\(I\)</span>; ואידאל <span class="math">\(I\)</span> הוא אידאל סדר <strong>ראשי</strong> אם הוא נוצר בדיוק על ידי איבר אחד, כלומר קיים <span class="math">\(x\in A\)</span> כך ש-<span class="math">\(I=\left\{ y\le x|y\in X\right\} \)</span>. במקרה הזה מסמנים לעתים <span class="math">\(I=\left\langle x\right\rangle \)</span>. שוב, למי שבקיא באלגברה מופשטת הדמיון לאידאלים "קלאסיים" מאוד ברור כאן.</p>
+<h2><strong>קונבולוצייה והיפוך, הגרסה המוכללת</strong></h2>
+<p>אוקיי, הגענו לאקשן. בואו ניקח קבוצה סדורה חלקית <span class="math">\(X\)</span> שהיא סופית מקומית, ונגדיר פונקציות על קבוצת <strong>כל הקטעים</strong> ב-<span class="math">\(X\)</span> (פונקציות ממשיות, אבל אפשר גם עבור שדות אחרים). במילים אחרות, פונקציות שנראות ככה: <span class="math">\(f\left(\left[x,y\right]\right)\)</span>. לצורך פשטות אפשר לחשוב עליהן כפונקציות בשני משתנים: <span class="math">\(f\left(x,y\right)\)</span>, אבל הכרחי שיתקיים <span class="math">\(x\le y\)</span> אחרת אין משמעות ל-<span class="math">\(\left[x,y\right]\)</span>.</p>
+<p>בין כל זוג פונקציות כזה אפשר להגדיר פעולת כפל שתכליל את קונבולוציית דיריכלה, אבל נמאס לי מהכוכב המעצבן הזה אז אני פשוט אשתמש בסימון הסטנדרטי לכפל: שום סימון. אם <span class="math">\(f,g\)</span> הן פונקציות מקבוצת הקטעים של <span class="math">\(X\)</span> אל <span class="math">\(\mathbb{R}\)</span>, אז נגדיר:</p>
+<p><span class="math">\(fg\left(x,y\right)=\sum_{x\le z\le y}f\left(x,z\right)g\left(z,y\right)\)</span></p>
+<p>כאן העובדה ש-<span class="math">\(X\)</span> סופית מקומית היא קריטית; אחרת הסכום הזה לא בהכרח היה סופי.</p>
+<p>בואו נראה איך המושג הזה מכליל את זה של תחילת הפוסט. שם התעסקנו עם פונקציות שמוגדרות על הטבעיים; כאן <span class="math">\(X=\mathbb{N}\)</span> ויחס הסדר הוא חלוקה, כלומר <span class="math">\(a\le b\)</span> פירושו <span class="math">\(a|b\)</span>. כעת, אם <span class="math">\(f\)</span> היא פונקציה שמוגדרת על הטבעיים, אפשר להגדיר אותה גם על קטעים באופן הבא: <span class="math">\(f\left(a,b\right)=f\left(\frac{b}{a}\right)\)</span> (זכרו: בגלל ש-<span class="math">\(\left[a,b\right]\)</span> הוא קטע, <span class="math">\(a\le b\)</span> ולכן <span class="math">\(a|b\)</span>). לכן בפרט <span class="math">\(f\left(a\right)=f\left(1,a\right)\)</span>, ומההגדרה למעלה נקבל:</p>
+<p><span class="math">\(fg\left(n\right)=fg\left(1,n\right)=\sum_{1|d|n}f\left(1,d\right)g\left(d,n\right)=\sum_{d|n}f\left(d\right)g\left(\frac{n}{d}\right)\)</span></p>
+<p>הופה! בדיוק ההגדרה של קונבולוציית דיריכלה.</p>
+<p>אפשר להגדיר <span class="math">\(\epsilon\)</span> כמו קודם: <span class="math">\(\epsilon\left(x,x\right)=1\)</span> לכל <span class="math">\(x\in X\)</span>, ולכל <span class="math">\(x\ne y\)</span> <span class="math">\(\epsilon\left(x,y\right)=0\)</span> (למעשה, <span class="math">\(\delta\)</span> מתאים פה יותר, למי שזוכר את הדלתא של קרונקר, אבל לא חשוב). לא קשה לראות ש-<span class="math">\(\epsilon\)</span> היא איבר יחידה ביחס לכפל הפונקציות שהגדרתי לעיל. גם לא קשה לראות שהכפל אסוציאטיבי.</p>
+<p>את מקומה של הפונקציה שסימנתי אז <span class="math">\(\mathbb{I}\)</span> תופסת עכשיו פונקציית זטא: <span class="math">\(\zeta\left(x,y\right)=1\)</span> לכל <span class="math">\(x\le y\)</span>. רגע, למה זטא? אודה ואתוודה - לא יודע, אני לא בטוח מה הקשר של הפונקציה הזו לשאר פונקציות הזטא הקיימות, אבל אלו הסימונים. באופן בלתי מפתיע, מגדירים כעת את פונקצית מביוס של הקס"ח <span class="math">\(X\)</span> בתור ההופכית של <span class="math">\(\zeta\)</span>, כלומר <span class="math">\(\zeta\mu=\mu\zeta=\epsilon\)</span>. כעת, נוסחת ההיפוך של מביוס, בתיאורה האבסטרקטי ביותר, היא פשוט האבחנה הסופר-טריוויאלית ש- <span class="math">\(f\zeta=g\)</span> אם ורק אם <span class="math">\(f=g\mu\)</span> (רק שיש כאן טוויסט כאן שתכף אסביר).</p>
+<p>קרוב לודאי שאתם מרגישים שיצאתי יותר מדי בזול מכל העניין. איפה אני מוכיח משהו, בכלל? אתם כמובן צודקים - מה שחסר לי הוא הוכחה ש-<span class="math">\(\zeta\)</span>הפיכה בכלל. כדי לטפל בכך אוכיח משהו כללי יותר - שפונקציה <span class="math">\(f\)</span> היא הפיכה אם ורק אם <span class="math">\(f\left(x,x\right)\ne0\)</span> לכל <span class="math">\(x\in X\)</span>. חזרנו אל "החיפוש אחרי הופכי במקרה הכללי" של תחילת הפוסט, רק שהפעם אני לא הולך להתחמק.</p>
+<p>למרבה המזל, האתגר לא גדול במיוחד. נתונה לי <span class="math">\(f\)</span> ואני רוצה למצוא <span class="math">\(g\)</span> כך ש-<span class="math">\(fg=\epsilon\)</span>. כלומר, כך ש-<span class="math">\(fg\left(x,x\right)=\epsilon\left(x,x\right)=1\)</span> לכל <span class="math">\(x\)</span>, ומכיוון שעל פי הגדרה <span class="math">\(fg\left(x,x\right)=f\left(x,x\right)g\left(x,x\right)\)</span>, הרי ש-<span class="math">\(g\left(x,x\right)=\left(f\left(x,x\right)\right)^{-1}\)</span> (כאן אני נעזר בכך שהערכים שהפונקציות מקבלות שייכים ל<strong>שדה</strong>), ואנו רואים גם למה הכרחי שיתקיים <span class="math">\(f\left(x,x\right)\ne0\)</span>.</p>
+<p>כעת, לכל <span class="math">\(x\ne y\)</span> שניתנים להשוואה צריך להתקיים <span class="math">\(fg\left(x,y\right)=\epsilon\left(x,y\right)=0\)</span>, ולכן על פי הנוסחה <span class="math">\(\sum_{x\le z\le y}f\left(x,z\right)g\left(z,y\right)=0\)</span>. בואו נבודד מהסכום הזה את האיבר שמתקבל כש-<span class="math">\(z=x\)</span> ונעביר אגף, נקבל ש:</p>
+<p><span class="math">\(g\left(x,y\right)=-\left(f\left(x,x\right)\right)^{-1}\sum_{x&lt;z\le y}f\left(x,z\right)g\left(z,y\right)\)</span>.</p>
+<p>הנוסחה הזו מספיקה כדי <strong>להגדיר</strong> את <span class="math">\(g\)</span> לכל קטע באופן רקורסיבי. זה לא מבטיח לנו נוסחה פשוטה יותר עבור <span class="math">\(g\)</span>, ומכאן בפרט שאין לנו תמיד נוסחה פשוטה עבור <span class="math">\(\mu\)</span>. מה כן יש לנו? ובכן, אם נציב את <span class="math">\(\zeta\)</span> בתור <span class="math">\(f\)</span> בנוסחאות הללו, נקבל ש-<span class="math">\(\mu\)</span> מתוארת על ידי הנוסחאות הבאות:</p>
+<p><span class="math">\(\mu\left(x,x\right)=1\)</span> לכל <span class="math">\(x\in X\)</span>.</p>
+<p><span class="math">\(\mu\left(x,y\right)=-\sum_{x&lt;z\le y}\mu\left(z,y\right)=-\sum_{x\le z&lt;y}\mu\left(x,z\right)\)</span> לכל <span class="math">\(x&lt;y\)</span>.</p>
+<p>את נוסחת ההיפוך עצמה ניתן לתאר עם סכומים באופן הבא: אם <span class="math">\(f\zeta=g\)</span> זה אומר ש-<span class="math">\(g\left(x,y\right)=\sum_{x\le z\le y}f\left(x,z\right)\)</span>, ולכן <span class="math">\(f\left(x,y\right)=\sum_{x\le z\le y}g\left(x,z\right)\mu\left(z,y\right)\)</span>.</p>
+<p>כזכור, נוסחת ההיפוך דיברה על פונקציות שמוגדרות לא על קטעים, אלא על איברים. היא אמרה שמתקיים</p>
+<p><span class="math">\(g\left(x\right)=\sum_{y\le x}f\left(y\right)\)</span></p>
+<p>אם ורק אם</p>
+<p><span class="math">\(f\left(x\right)=\sum_{y\le x}g\left(y\right)\mu\left(y,x\right)\)</span></p>
+<p>בניסוח הזה אנחנו חייבים שב-<span class="math">\(X\)</span> כל אידאל סדר ראשי יהיה סופי פשוט כי אחרת הסכום <span class="math">\(\sum_{y\le x}\)</span> (כאשר <span class="math">\(x\)</span> קבוע - כלומר, הסכום הוא בדיוק על איברי אידאל הסדר שנוצר על ידי <span class="math">\(x\)</span>) איננו סופי. למעשה, יש כאן נקודה עדינה למדי - אותן <span class="math">\(f,g\)</span> שאני מדבר עליהן כאן מוגדרות על איברים של <span class="math">\(X\)</span>, לא על קטעים. אין בעיה של ממש לטפל בעניין הזה אבל אני חושב שהתעללתי בקוראים מספיק ואסיים כאן.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2012/01/09/primary_decomposition_theorem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט הפירוק הפרימרי</span>
+            </a>
+            
+            
+            
+            <a href="/2011/12/31/inclusion_exclusion_principle/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">עקרון ההכלה וההפרדה, ואז הכללה והפחדה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

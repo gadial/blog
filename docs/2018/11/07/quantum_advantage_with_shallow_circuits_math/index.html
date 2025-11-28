@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>”הוכחה ראשונה לעליונות מחשב קוונטי“ - מה כן (אזהרה - עלול לכלול מתמטיקה) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>”הוכחה ראשונה לעליונות מחשב קוונטי“ - מה כן (אזהרה - עלול לכלול מתמטיקה)</h1>
+            <div class="post-meta">
+                <span class="date">2018-11-07</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+<p>אחרי <a href="https://gadial.net/2018/10/23/quantum_advantage_with_shallow_circuits/">שבפוסט הקודם</a> הסברתי קצת בנפנופי ידיים מה הסיפור עם <a href="https://arxiv.org/abs/1704.00690">המאמר</a> ש"הוכיח עליונות קוונטית", בפוסט הזה אני רוצה לגשת לעובי הקורה המתמטי. אני לא לגמרי אניח ידע מוקדם כלשהו, אבל בלי ידע מוקדם שכזה ללא ספק יידרש יותר מאמץ להבין על מה אני מדבר - כדאי לקחת את זה בחשבון.</p>
+<p>התוצאה של המאמר היא הפרדה בין שני מודלים חישוביים. בהקשר שלנו, "מודל חישובי" הוא <strong>משהו</strong> שמקבל קלט ומוציא פלט, ויש אילוצים שונים ומשונים לגבי הצורה שבה הוא עושה את זה ואיך מותר לו לעשות את זה. קשר של קלט-פלט נקרא "פונקציה", ומודל חישובי א' הוא חזק יותר ממודל חישובי ב' אם כל מה פונקציה שב' יודע לחשב, גם א' יודע, ובנוסף לכך יש משהו שא' יודע לחשב וב' לא.</p>
+<p>המודלים החישוביים שאנחנו מדברים עליהם כאן מנסים למדל <strong>חישוב מקביל</strong>י<strong> קצר</strong>. המודל ה"קלאסי" שמתאר חישוב מקבילי נקרא <strong>מעגלים בוליאניים</strong> ומחלקת הסיבוכיות המתאימה לו מסומנת ב-NC (ראשי תיבות של Nick's Class. כן, ניק זה שם של מישהו. אל תשאלו). תיארתי <a href="https://gadial.net/2011/01/18/what_are_boolean_circuits/">מעגלים בוליאניים</a> כאן, אבל הנה שוב הרעיון: מעגל בוליאני הוא גרף מכוון חסר מעגלים; כל צומת שלא נכנס אליה כלום היא <strong>קלט</strong> וכל צומת שלא יוצא ממנה כלום היא <strong>פלט</strong> וכל צומת פנימי הוא <strong>שער לוגי</strong>. את הקלטים מסמנים ב-<span class="math">\(x_{1},x_{2},\dots,x_{n}\)</span> ואת הפלטים ב-<span class="math">\(y_{1},y_{2},\dots,y_{m}\)</span> (שימו לב שמספר הקלטים והפלטים יכול להיות שונה). השערים הלוגיים יכולים להיות AND, OR, NOT ואנחנו דורשים שלכל שער כזה ייכנסו שתי קשתות לכל היותר.</p>
+<p><strong>חישוב</strong> שמבצע המעגל מתבצע בדרך המתבקשת: מציבים ב-<span class="math">\(x\)</span>-ים ערכים כלשהם של 0 ו-1 ו"מפעפעים" את הערכים הללו בגרף: לכל שער לוגי שהכניסות אליו הן מצמתים שהערך שלהם כבר נקבע, מחשבים את הערך של השער הלוגי בהתאם לפונקציה שלו (שער AND שנכנסים אליו 1 ו-0? הערך שלו יהיה 0). בצורה הזו בסופו של דבר נקבעים הערכים של הפלטים, והרי לנו חישוב של פונקציה. שימו לב שזו פונקציה <span class="math">\(f:\left\{ 0,1\right\} ^{n}\to\left\{ 0,1\right\} ^{m}\)</span>, כלומר בפרט מספר הביטים בכניסה הוא קבוע (מכונות טיורינג, להבדיל, יודעות לפעול על קלטים מאורך כלשהו של ביטים). לכן יותר נפוץ לדבר על <strong>משפחה</strong> של מעגלים - לכל <span class="math">\(n\)</span> יש לנו מעגל שמחשב פונקציה על הקלטים מאורך <span class="math">\(n\)</span>; בדרך כלל דורשים שבהינתן <span class="math">\(n\)</span> נדע לבנות את המעגל הזה אלגוריתמית, אחרת משפחה של מעגלים שכזו עלולה לעשות דברים מוזרים כמו לפתור את בעיית העצירה.</p>
+<p>יש לנו שני מדדי סיבוכיות למעגלים - <strong>הגודל</strong> של המעגל, כלומר כמה צמתים יש בו בסך הכל, וה<strong>עומק</strong> שלו, כלומר מה אורך המסלול המקסימלי מקלט אל פלט. האינטואיציה היא כזו: שערים לוגיים שאין תלות בין הקלטים שלהם יכולים לבצע חישובים באופן מקבילי; לכן במקרה הכי קיצוני שבו כל שער לוגי הוא מחשב שפועל עצמאית, אפשר לחשוב על גודל המעגל בתור חסם על מספר המחשבים שנדרשים כדי להריץ את המעגל באופן מקבילי. העומק של המעגל הוא מדד לזמן החישוב - כל מסלול במעגל מייצג סיטואציה שבה מחשב אחד כן צריך לחכות לקלט מהמחשבים שבאים לפניו במסלול כדי שיוכל להמשיך בחישוב.</p>
+<p>המחלקה <span class="math">\(\text{NC}\)</span> מחולקת ל"תת-מחלקות": <span class="math">\(\text{NC}^{k}\)</span> כוללת את משפחות המעגלים שבהן <strong>הגודל</strong> של מעגל עם <span class="math">\(n\)</span> קלטים הוא <strong>פולינומי</strong> ב-<span class="math">\(n\)</span>, ואילו העומק שלו הוא <span class="math">\(O\left(\log^{k}n\right)\)</span>, מה שנקרא "פולי-לוגריתמי". המחלקה <span class="math">\(\text{NC}^{0}\)</span> כוללת, אם כן, מעגלים שבהם יש לנו חסם עליון על העומק <strong>שלא תלוי בגודל הקלט</strong>. כלומר, לא משנה אם הקלט הוא מאורך 2 ביטים או 200, עומק המעגל עדיין יהיה חסום על ידי, נאמר, 17. לא קשה לראות שההגבלה הזו יוצרת מגבלה רצינית על הפונקציות שאפשר לחשב במחלקה הזו - כל ביט של פלט יכול להיות תלוי רק במספר סופי של ביטים מהקלט (משהו כמו 2 בחזקת עומק המעגל לכל היותר).</p>
+<h2>מעגלים ושערים קוונטיים</h2>
+<p>נעבור למעגלים קוונטיים. גם על זה <a href="https://gadial.net/2014/08/19/quantum_circuits_intro/">יש לי פוסט</a>, אבל הנה הסבר שבאמת דורש מינימום היכרות עם קוונטים. אם יש לנו מעגל על <span class="math">\(n\)</span> קיוביטים, אנחנו לא מפרידים אותם, כמו ב-<span class="math">\(\text{NC}^{0}\)</span>, לכל מני אותות שרצים להם על גרף. במקום זה, אנחנו חושבים על המצב של המעגל בכל רגע נתון בתור וקטור במרחב וקטורי מעל <span class="math">\(\mathbb{C}\)</span> ממימד <span class="math">\(2^{n}\)</span>. כל אביר בסיס של המרחב הזה הוא מחרוזת ב-<span class="math">\(\left\{ 0,1\right\} ^{n}\)</span>. למשל, אם <span class="math">\(n=3\)</span> אז אברי הבסיס של המרחב הם <span class="math">\(\left|000\right\rangle ,\left|001\right\rangle ,\left|010\right\rangle ,\left|011\right\rangle ,\left|100\right\rangle ,\left|101\right\rangle ,\left|110\right\rangle ,\left|111\right\rangle \)</span>.</p>
+<p>הפעלה של שער במעגל היא כפל של הוקטור הזה במטריצה <strong>אוניטרית</strong> מעל <span class="math">\(\mathbb{C}_{2^{n}\times2^{n}}\)</span>. זה כל מה שמעגל קוונטי עושה - כופל את הוקטור בעוד ועוד מטריצות. כדי לשמור את העניינים פשוטים יותר וקרובים יותר למציאות, על פי שער קוונטי משפיע רק על קיוביט אחד או שניים בכל פעם. אבל "משפיע על קיוביט אחד" לא אומר שהפעולה שלו על הוקטור שמייצג את המצב הקוונטי תשנה רק כניסה אחת או שתיים בו; זה רק אומר שמה שהשער בעצם עושה לכל קואורדינטה יושפע רק מביט אחד או שניים במחרוזת שמתארת את הקואורדינטה הזו.</p>
+<p>בואו נראה דוגמא מרכזית שנשתמש בה כל הזמן - שער הדאמר, <span class="math">\(H\)</span>. כשחושבים על השער הזה בתור מטריצה שפועלת על מרחב עם קיוביט בודד, התיאור המפורש הוא <span class="math">\(H=\frac{\sqrt{2}}{2}\left(\begin{array}{cc} 1 & 1\\ 1 & -1 \end{array}\right)\)</span>. זו צורת כתיב סבירה, אבל אני אשתמש בצורת כתיב קצת שונה, שבה קצת יותר קל להרגיש מה <span class="math">\(H\)</span> עושה:</p>
+<ul>
+    <li><span class="math">\(H\left|0\right\rangle =\left|0\right\rangle +\left|1\right\rangle \)</span></li>
+    <li><span class="math">\(H\left|1\right\rangle =\left|0\right\rangle -\left|1\right\rangle \)</span></li>
+</ul>
+<p>הכתיב הזה קצת מרמה - מה שאני <strong>באמת</strong> צריך לכתוב הוא <span class="math">\(H\left|0\right\rangle =\frac{\sqrt{2}}{2}\left|0\right\rangle +\frac{\sqrt{2}}{2}\left|1\right\rangle \)</span> כי בלי המקדמים הללו המצב הוא לא תקין (הוא חייב להיות וקטור מנורמה 1) אבל אני מחפף בזה כי בלי המקדמים העסק יותר קריא ואין סכנה אמיתית לבלבול.</p>
+<p>עכשיו, איך <span class="math">\(H\)</span> פועל על מצב קוונטי שמורכב מ<strong>שני</strong> קיוביטים? כאן צריך להיזהר - אין משמעות לומר ש-<span class="math">\(H\)</span> פועל על המצב בלי לומר על איזה מהקיוביטים הוא פועל. אז אני אכתוב <span class="math">\(H^{1}\)</span> כדי להגיד \textquotedblright<span class="math">\(H\)</span> שמופעל על הקיוביט הראשון" ו-<span class="math">\(H^{2}\)</span> כדי לומר \textquotedblright<span class="math">\(H\)</span> שמופעל על הקיוביט השני". תחת הסימן הזה:</p>
+<ul>
+    <li><span class="math">\(H^{1}\left|00\right\rangle =\left|00\right\rangle +\left|10\right\rangle \)</span></li>
+    <li><span class="math">\(H^{1}\left|10\right\rangle =\left|00\right\rangle -\left|10\right\rangle \)</span></li>
+    <li><span class="math">\(H^{1}\left|01\right\rangle =\left|01\right\rangle +\left|11\right\rangle \)</span></li>
+    <li><span class="math">\(H^{1}\left|11\right\rangle =\left|01\right\rangle -\left|11\right\rangle \)</span></li>
+</ul>
+<p>ואתם כבר יכולים להשלים את מה ש-<span class="math">\(H^{2}\)</span> עושה בעצמכם. עכשיו, הנה השאלה המעניינת באמת - מה מקבלים אם מפעילים את <span class="math">\(H^{1}\)</span> ואחריו את <span class="math">\(H^{2}\)</span>? אפשר גם בסדר ההפעלה ההפוך, מקבלים את אותו הדבר. בואו נכתוב רגע מקרה אחד במפורש:</p>
+<p><span class="math">\(H^{2}\left(H^{1}\left|00\right\rangle \right)=H^{2}\left|00\right\rangle +H^{2}\left|10\right\rangle =\left|00\right\rangle +\left|01\right\rangle +\left|10\right\rangle +\left|11\right\rangle \)</span></p>
+<p>כלומר, קיבלנו מצב של "פיזור אחיד" בין כל וקטורי הבסיס הקיימים במרחב. כדי לפשט את הסימנים, במקום לכתוב <span class="math">\(H^{2}H^{1}\)</span> אפשר לכתוב <span class="math">\(H^{\otimes2}\)</span>, וגם אפשר "לקודד" את הפעולה הזו בתור אופרטור יחיד, כלומר מטריצה בודדת במקום מכפלה של שתי מטריצות בזו אחר זו (פשוט כפלו את האחת בשניה וקיבלתם את האופרטור). כל הסיפור הזה עובד גם ל-<span class="math">\(n\)</span> ביטים; אנחנו תמיד נקבל</p>
+<p><span class="math">\(H^{\otimes n}\left|0^{n}\right\rangle =\sum_{x}\left|x\right\rangle \)</span></p>
+<p>כאשר הסכום רץ על כל ה-<span class="math">\(x\in\left\{ 0,1\right\} ^{n}\)</span> (אני לא כותב את זה במפורש בסכום כי אשמיט את זה גם בהמשך וכדאי שנתרגל). למעשה, המון אלגוריתמים קוונטיים מתחילים בדיוק כך - לוקחים את המצב התמים <span class="math">\(\left|0^{n}\right\rangle \)</span> ומייצרים ממנו סופרפוזיציה אחידה שכזו על כל המרחב. גם אנחנו נפעל בצורה הזו בהמשך.</p>
+<p>אוקיי, אבל מה קורה אם אנחנו מפעילים את <span class="math">\(H^{\otimes n}\)</span> על וקטור בסיס שאינו מחרוזת שכולה אפסים? אני מציע לכם לנסות לעשות את התרגיל הזה בעצמכם קודם, כי זו דרך טובה להבין מה לכל הרוחות הולך פה - וזה גם יהיה קריטי בהמשך, כך שעדיף לכם לגלות את זה עצמאית מאשר שאספר לכם.</p>
+<p>חוץ מ-<span class="math">\(H\)</span> יש עוד כמה וכמה שערים נפוצים מאוד. ראשית, ישנם <strong>שערי פאולי</strong> שמסומנים ב-<span class="math">\(X,Y,Z\)</span> ומתוארים על ידי המטריצות</p>
+<p><span class="math">\(X=\left(\begin{array}{cc} 0 & 1\\ 1 & 0 \end{array}\right),Y=\left(\begin{array}{cc} 0 & -i\\ i & 0 \end{array}\right),Z=\left(\begin{array}{cc} 1 & 0\\ 0 & -1 \end{array}\right)\)</span></p>
+<p>מה ש-<span class="math">\(X\)</span> עושה הוא בעצם פעולת NOT:</p>
+<ul>
+    <li><span class="math">\(X\left|0\right\rangle =\left|1\right\rangle \)</span></li>
+    <li><span class="math">\(X\left|1\right\rangle =\left|0\right\rangle \)</span></li>
+</ul>
+<p>מה ש-<span class="math">\(Z\)</span> עושה מזכיר קצת את <span class="math">\(H\)</span>, רק ש-<span class="math">\(Z\)</span> לא מפצל לשניים, רק מכפיל במינוס 1 באחד מהמקרים:</p>
+<ul>
+    <li><span class="math">\(Z\left|0\right\rangle =\left|0\right\rangle \)</span></li>
+    <li><span class="math">\(Z\left|1\right\rangle =-\left|1\right\rangle \)</span></li>
+</ul>
+<p>ואילו מה ש-<span class="math">\(Y\)</span> עושה נראה כמו שילוב של <span class="math">\(X\)</span> ו-<span class="math">\(Z\)</span> כשגם מכניסים פנימה את המספר המרוכב <span class="math">\(i\)</span>:</p>
+<ul>
+    <li><span class="math">\(Y\left|0\right\rangle =-i\left|1\right\rangle \)</span></li>
+    <li><span class="math">\(Y\left|1\right\rangle =i\left|0\right\rangle \)</span></li>
+</ul>
+<p>הדמיון הזה לא מקרי - קל לראות ש-<span class="math">\(Y=iXZ\)</span>, ובאופן דומה גם <span class="math">\(Z=iXY\)</span> וכדומה, כל מטריצת פאולי מתקבלת מכפל של שתי האחרות וסקלר הפיך. תחת ההגדרה המתאימה (שתזהה את כל הכפולות בסקלר הפיך של המטריצות בתור אותו איבר) ותוספת מטריצת היחידה מקבלים פה חבורה - <strong>חבורת פאולי</strong>.</p>
+<p>אל האוסף הזה מצטרפת מטריצה נוספת שנקראת לפעמים <strong>פאזה</strong> ומזכירה את <span class="math">\(Z\)</span>:</p>
+<p><span class="math">\(S=\left(\begin{array}{cc} 1 & 0\\ 0 & -i \end{array}\right)\)</span></p>
+<p>קל לבדוק ש-<span class="math">\(S^{2}=Z\)</span>, כך שאפשר לחשוב על <span class="math">\(S\)</span> בתור "שורש" של <span class="math">\(Z\)</span> (למעשה, כמעט תמיד בוחרים בתור <span class="math">\(S\)</span> את המטריצה שבה הכניסה השניה היא <span class="math">\(i\)</span> ולא <span class="math">\(-i\)</span>, אבל המאמר הנוכחי לקח את זו אז אני דבק בסימון הזה). עוד דבר שקל לבדוק הוא ש-<span class="math">\(X=HZH\)</span> (תנסו!) ולכן בעצם אפשר לקבל את כל מטריצות פאולי מתוך <span class="math">\(H,S\)</span> לבד. החבורה שנוצרת על ידי <span class="math">\(H,S\)</span> באופן הזה (כזכור, כשמזהים שתי מטריצות שנבדלות זו מזו על ידי כפל בקבוע) נקראת <strong>חבורת קליפורד</strong> (עבור קיוביט בודד) והיא עומדת במרכז אחד מהמשפטים היפים שאני מכיר בתחום - משפט Gottesman--Knill שמראה כיצד ניתן לבצע סימולציה של מעגל קוונטי שנבנה מתוך שערים מחבורת קליפורד בלבד <strong>בזמן ומקום פולינומיים</strong>. אני מקווה להקדיש לזה פוסט מתישהו, אבל כרגע השורה התחתונה היא שהשערים שראינו עד כה הם לא בדיוק מה שנותן לחישוב קוונטי את הכוח שלו - צריך "עוד משהו". ה"עוד משהו" הזה נקרא שער-<span class="math">\(T\)</span> והוא מוגדר כך: <span class="math">\(T=\left(\begin{array}{cc} 1 & 0\\ 0 & e^{\frac{i\pi}{4}} \end{array}\right)\)</span>.</p>
+<p>עד עכשיו דיברתי רק על שערים על קיוביט בודד, אבל זו בעצם קצת רמאות. כל עוד כל מה שמבצעים במעגל קוונטי הוא פעולות על קיוביט בודד, אין שום דבר מעניין במעגל הזה ואפשר לסמלץ אותו קלאסית בלי בעיה - בודקים מה קורה לכל קיוביט בנפרד, וזהו. הכוח של מעגלים קוונטיים מגיע כשגורמים לקיוביטים להיות תלויים זה בזה. למשל, אם אני יוצר את המצב הקוונטי <span class="math">\(\left|00\right\rangle +\left|11\right\rangle \)</span> אז קיבלתי מצב שאי אפשר להבין אותו על ידי חשיבה על כל קיוביט בנפרד (להבדיל מ-<span class="math">\(\left|00\right\rangle +\left|01\right\rangle +\left|10\right\rangle \left|11\right\rangle \)</span> שעליו אפשר לחשוב בתור <span class="math">\(\left(\left|0\right\rangle +\left|1\right\rangle \right)\left(\left|0\right\rangle +\left|1\right\rangle \right)\)</span> שכזה). אז מה עושים? שערים "נשלטים". אלו שערים של שני קיוביטים, ולכן כאלו שמיוצגים על ידי מטריצה מסדר <span class="math">\(4\times4\)</span>. אני אציג שלושה כאלו - בשניהם הרעיון הוא "אם הקיוביט הראשון הוא 0 לא לעשות כלום, ואם הוא 1 אז להפעיל שער פאולי מסויים על הקיוביט השני". כשמפעילים <span class="math">\(X\)</span> השער נקרא CNOT וכשמפעילים <span class="math">\(Z\)</span> או <span class="math">\(S\)</span> השער נקרא, ובכן, Controlled-Z ו-Controlled-S, או בקיצור <span class="math">\(CZ\)</span> ו-<span class="math">\(CS\)</span>. דווקא <span class="math">\(CZ\)</span> ו-<span class="math">\(CS\)</span> יהיו השערים שבהם נשתמש עבור התוצאה הנוכחית למרות ש-CNOT הוא יותר פופולרי באופן כללי.</p>
+<p>המטריצות של השערים הרלוונטיים הן <span class="math">\(CNOT=\left(\begin{array}{cccc} 1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 0 & 1\\ 0 & 0 & 1 & 0 \end{array}\right),CZ=\left(\begin{array}{cccc} 1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 1 & 0\\ 0 & 0 & 0 & -1 \end{array}\right),CS=\left(\begin{array}{cccc} 1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 1 & 0\\ 0 & 0 & 0 & -i \end{array}\right)\)</span> והן פשוטות למדי - הן פשוט <strong>מטריצות בלוקים אלכסוניות</strong> שבהן הבלוק הראשון הוא מטריצת היחידה והשני הוא <span class="math">\(X\)</span> או <span class="math">\(Z\)</span> או <span class="math">\(S\)</span>, בהתאמה. הפעולה שלהן מתוארת כך:</p>
+<ul>
+    <li><span class="math">\(CNOT\left|00\right\rangle =\left|00\right\rangle \)</span></li>
+    <li><span class="math">\(CNOT\left|01\right\rangle =\left|01\right\rangle \)</span></li>
+    <li><span class="math">\(CNOT\left|10\right\rangle =\left|11\right\rangle \)</span></li>
+    <li><span class="math">\(CNOT\left|11\right\rangle =\left|10\right\rangle \)</span></li>
+</ul>
+<p>ו-</p>
+<ul>
+    <li><span class="math">\(CZ\left|00\right\rangle =\left|00\right\rangle \)</span></li>
+    <li><span class="math">\(CZ\left|01\right\rangle =\left|01\right\rangle \)</span></li>
+    <li><span class="math">\(CZ\left|10\right\rangle =\left|10\right\rangle \)</span></li>
+    <li><span class="math">\(CZ\left|11\right\rangle =-\left|11\right\rangle \)</span></li>
+</ul>
+<p>ו-</p>
+<ul>
+    <li><span class="math">\(CS\left|00\right\rangle =\left|00\right\rangle \)</span></li>
+    <li><span class="math">\(CS\left|01\right\rangle =\left|01\right\rangle \)</span></li>
+    <li><span class="math">\(CS\left|10\right\rangle =\left|10\right\rangle \)</span></li>
+    <li><span class="math">\(CS\left|11\right\rangle =-i\left|11\right\rangle \)</span></li>
+</ul>
+<p>שערי <span class="math">\(CZ\)</span> ו-<span class="math">\(CS\)</span> הם מאוד <strong>סימטריים</strong>, להבדיל מ-<span class="math">\(CNOT\)</span> - אפשר לחשוב עליהם בתור מעין שערי AND שכאלו, שמכפילים בקבוע ספציפי רק אם ה-AND של שני הקלטים הוא 1. במובן מסויים הסימטריה לא מפתיעה כי גם <span class="math">\(CNOT\)</span> הוא שער סימטרי, אם מסתכלים על הקלטים כשהם מיוצגים בבסיס קצת שונה, אבל לא ניכנס לזה כרגע.</p>
+<p>וזהו, סיימנו להציג את כל השערים הקוונטיים שיהיו רלוונטיים לנו. עכשיו אפשר לחזור למה שקראתי לו "חבורת קליפורד" קודם; ההגדרה המלאה של החבורה היא בתור החבורה שנוצרת על ידי <span class="math">\(H,S\)</span> ו-<span class="math">\(\text{CNOT}\)</span>, ומשפט Gottesman--Knill תקף עבורה - כלומר, הוספת <span class="math">\(\text{CNOT}\)</span>-ים לא מקלקלת את היכולת שלנו לסמלץ מעגלים כאלו באופן קלאסי.</p>
+<p><strong>מעגל קוונטי</strong> הוא בסך הכל סדרה של השערים הללו. את הסדרה אפשר לחלק ל"שכבות" - בכל שכבה אנחנו דורשים שכל השערים יפעלו על קיוביטים שונים (כלומר, אין שני שערים באותה שכבה שפועלים על אותו קיוביט). למשל, ביצוע פעולת <span class="math">\(H^{\otimes n}\)</span> דורש <span class="math">\(n\)</span> שערי <span class="math">\(H\)</span>, אבל כולם יכולים להתבצע "בבת אחת", באותה שכבה. המחלקה SQC כוללת את כל המשפחות של מעגלים קוונטיים עם מספר שערים פולינומי שמספר השכבות שלהם הוא חסום על ידי קבוע שלא תלוי ב-<span class="math">\(n\)</span>.</p>
+<p>עכשיו אנחנו מבינים את התוצאה: הוכחה ש-<span class="math">\(\text{SQC}\ne\text{NC}^{0}\)</span>. אבל עדיין צריך להבין את <strong>הבעיה</strong> שתהיה שייכת למחלקה אחת ולא לשניה.</p>
+<h2>בעיית ברנשטיין-וזירני</h2>
+<p>לפני שנציג את הבעיה שבה עוסק המאמר, בואו נעשה כמוהו ונסתכל קודם על בעיה פשוטה יותר, שגם התוכן שלה וגם הפתרון שלה יהיו דומים מאוד למה שנעשה בהמשך. הבעיה נקראת "בעיית ברנשטיין-וזירני" והיא עוסקת בלמידה של פונקציה לינארית "חבויה" שנתונה באמצעות אורקל. בואו ניכנס לפורמליזם.</p>
+<p>באופן כללי אם <span class="math">\(F^{n}\)</span> הוא מרחב וקטורי ממימד <span class="math">\(n\)</span> מעל שדה <span class="math">\(F\)</span> ו-<span class="math">\(f:F^{n}\to F\)</span> היא פונקציונל לינארי (<span class="math">\(f\left(\lambda x+y\right)=\lambda f\left(x\right)+f\left(y\right)\)</span>) אז קל לראות שקיים <span class="math">\(z\in F^{n}\)</span> כך ש-<span class="math">\(f\left(x\right)=z\cdot x=\sum_{i=1}^{n}z_{i}x_{i}\)</span> ; פשוט מגדירים <span class="math">\(z_{i}=f\left(e_{i}\right)\)</span> כאשר <span class="math">\(e_{i}\)</span> הוקטור ב-<span class="math">\(F^{n}\)</span> שכולו 0 למעט 1 במקום <span class="math">\(i\)</span>. כעת,</p>
+<p><span class="math">\(f\left(x\right)=f\left(\sum_{i=1}^{n}x_{i}e_{i}\right)=\sum_{i=1}^{n}x_{i}f\left(e_{i}\right)=\sum_{i=1}^{n}z_{i}x_{i}\)</span></p>
+<p>כלומר, כל פונקציונל לינארי הוא בעצם "מכפלה סקלרית", ואם יש לנו דרך לחשב את <span class="math">\(f\)</span> על הערכים <span class="math">\(e_{1},\dots,e_{n}\)</span> נוכל תוך <span class="math">\(n\)</span> הפעלות של <span class="math">\(f\)</span> "ללמוד" מהו ה-<span class="math">\(z\)</span> שמגדיר את הפונקציונל הזה, ולא משנה באיזו דרך הפונקציונל נתון לנו. גם אם הוא נתון בתור "קופסה שחורה" שכל מה שאנחנו יכולים לעשות איתה הוא להכניס קלט ולקבל פלט, תוך <span class="math">\(n\)</span> שאילתות נלמד את <span class="math">\(f\)</span>.</p>
+<p>בהקשר הקונקרטי שלנו, <span class="math">\(F=\mathbb{Z}_{2}\)</span> ו-<span class="math">\(f\)</span> נתונה באמצעות <strong>אורקל</strong>, שהוא הפורמליזם המתמטי של "קופסה שחורה" שכזו. לא קשה להוכיח, אחרי פירמול מתאים, ש<strong>חייבים</strong> <span class="math">\(n\)</span> שאילתות כדי ללמוד את <span class="math">\(z\)</span> - אחרי <span class="math">\(n-1\)</span> שאילתות, האינפורמציה שהתקבלה עדיין מתאימה לשני ערכים שונים של <span class="math">\(z\)</span>. מצד שני, אם האורקל שלנו הוא <strong>קוונטי</strong>, אפשר בקריאות - באופן דרסטי! מספיקה קריאה אחת בלבד לאורקל.</p>
+<p>אבל מה זה "אורקל קוונטי"? אורקל רגיל הוא <strong>משהו</strong> שמקבל <span class="math">\(x\)</span> ומחזיר <span class="math">\(f\left(x\right)\)</span>. האורקל הקוונטי שבו נשתמש כאן עושה משהו מוזר יותר: הוא מקבל סופרפוזיציה <span class="math">\(\sum_{x\in\mathbb{Z}_{2}^{n}}a_{x}\left|x\right\rangle \)</span> ומחזיר סופרפוזיציה <span class="math">\(\sum_{x\in\mathbb{Z}_{2}^{n}}a_{x}\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \)</span>. באופן קומפקטי, אם אסמן אותו <span class="math">\(U_{f}\)</span>, הוא אופרטור אוניטרי שמבצע את הפעולה הבאה: <span class="math">\(U_{f}\left|x\right\rangle =\left(-1\right)^{f\left(x\right)}\left|x\right\rangle \)</span>.</p>
+<p>אפשר לטעון שהאורקל הזה הוא מטבעו חזק יותר מאורקל רגיל - אבל העניין הוא שבמימושים מעשיים של אורקל כזה, ה"עבודה" שנדרשת ממנו לא תהיה שונה מהעבודה שנדרשת מאורקל "רגיל" שמחשב את <span class="math">\(f\)</span>. למרבה השמחה אני לא צריך להיכנס לעובי הטיעון הזה בגלל שמה שהמאמר החדש עושה הוא בדיוק <strong>לבטל את השימוש באורקל</strong>; הוא מעין ניסוח מחודש, מתוחכם יותר, של ברנשטיין-וזירני בגרסה שבה הכל נתון במפורש.</p>
+<p>עדיין, איך משתמשים באורקל הקוונטי כדי לפתור את ברנשטיין-וזירני בקריאה אחת בלבד? המעגל שפותר את הבעיה הוא פשוט להחריד:</p>
+<p><span class="math">\(\left|z\right\rangle =H^{\otimes n}U_{f}H^{\otimes n}\left|0\right\rangle \)</span></p>
+<p>המעגל הזה עושה שלושה דברים: מתחילים מהמצב <span class="math">\(\left|0\right\rangle \)</span> ומפעילים עליו <span class="math">\(H^{\otimes n}\)</span>, מה שכפי שכבר ראינו מייצר את הסופרפוזיציה האחידה של כל המצבים הקוונטיים האפשריים על <span class="math">\(n\)</span> קיוביטים. אחר כך מפעילים את <span class="math">\(U_{f}\)</span> על המצב הזה - מחשבים "במקביל" את <span class="math">\(f\)</span> על כל הקלטים האפשריים. לבסוף, "מקפלים חזרה" את הסופרפוזיציה באמצעות עוד הפעלה של <span class="math">\(H^{\otimes n}\)</span> ובאופן פלאי היא תתקפל למצב קוונטי אחד ויחיד - <span class="math">\(\left|z\right\rangle \)</span> - שמקודד בדיוק את הוקטור שחיפשנו. כל מה שנשאר בסיום הוא לבצע מדידה, ומכיוון שאנחנו במצב בסיס אחד ויחיד, המדידה תחזיר את התשובה הנכונה בהסתברות 1: האלגוריתם הוא אפילו לא הסתברותי באופיו, הצלחה תמיד מובטחת. זה יפהפה.</p>
+<p>למה זה עובד? בשביל להבין את זה צריך לחזור לשאלה ששאלתי קודם - מהו באופן כללי <span class="math">\(H^{\otimes n}\left|y\right\rangle \)</span>, עבור <span class="math">\(\left|y\right\rangle \)</span> שהוא לא בהכרח <span class="math">\(\left|0\right\rangle \)</span>? לשם כך בואו נזכיר לעצמנו את ההגדרה של <span class="math">\(H\)</span>:</p>
+<ul>
+    <li><span class="math">\(H\left|0\right\rangle =\left|0\right\rangle +\left|1\right\rangle \)</span></li>
+    <li><span class="math">\(H\left|1\right\rangle =\left|0\right\rangle -\left|1\right\rangle \)</span></li>
+</ul>
+<p>אפשר לחשוב על <span class="math">\(H\)</span> שפועל על וקטור של <span class="math">\(n\)</span> קיוביטים באופן הבא: הוא פועל על קיוביט ספציפי (סימנתי ב-<span class="math">\(H^{i}\)</span> את שער <span class="math">\(H\)</span> שפועל על הקיוביט ה-<span class="math">\(i\)</span>) והוא מייצר שני וקטורים מוקטור הקלט - אחד שבו הקיוביט נותר כמות שהוא, ואחד שבו הקיוביט התהפך. בשלושה מבין ארבעת המקרים הללו הוא לא משנה את הסימן של הוקטור, אבל במקרה אחד הוא מכפיל את הסימן של הוקטור במינוס 1 - במקרה שבו הקיוביט שעליו הוא פועל הוא 1, והוא <strong>הותיר אותו כמות שהוא</strong>.</p>
+<p>כעת, נניח ש-<span class="math">\(\left|y\right\rangle =\left|0110\right\rangle \)</span>. כשאנחנו מפעילים את <span class="math">\(H^{\otimes4}\)</span> על <span class="math">\(\left|y\right\rangle \)</span> נקבל סופרפוזיציה של מצבים. מה יהיה הסימן של המצב <span class="math">\(\left|1100\right\rangle \)</span>? לשם כך, בואו נבין מה ה"מסלול" שבו נוצר המצב הזה. הפעלנו <span class="math">\(H^{1}\)</span> על <span class="math">\(\left|y\right\rangle \)</span> והחלטנו להפוך את הקיוביט הראשון ל-<span class="math">\(1\)</span> - זה לא כופל במינוס 1 כי הקיוביט לא היה 1 קודם. אחר כך הפעלנו את <span class="math">\(H^{2}\)</span> על התוצאה, <span class="math">\(\left|1110\right\rangle \)</span> והחלטנו <strong>לא</strong> להפוך את הקיוביט השני, מה שמשאיר אותנו ב-<span class="math">\(\left|1110\right\rangle \)</span> ומכפיל את המקדם שלנו ב-<span class="math">\(-1\)</span>. את הקיוביט השלישי בחרנו להפוך (<strong>לא</strong> מכפיל במינוס 1) ואת הרביעי בחרנו להותיר כמות שהוא, כך שבסופו של דבר קיבלנו <span class="math">\(-\left|1100\right\rangle \)</span>.</p>
+<p>אם כן, כדי לדעת מה יהיה הסימן של <span class="math">\(\left|x\right\rangle \)</span> שהתקבל מ-<span class="math">\(\left|y\right\rangle \)</span> צריך לעשות שני דברים:</p>
+<ul>
+    <li>לבדוק אילו קיוביטים הם 1 ב-<span class="math">\(\left|y\right\rangle \)</span> ונשארו כאלו גם ב-<span class="math">\(\left|x\right\rangle \)</span>.</li>
+    <li>לספור האם המספר שלהם הוא זוגי (ואז ביצענו מספר זוגי של מכפלות במינוס 1 וכלום לא השתנה) או אי-זוגי.</li>
+</ul>
+<p>לשני אלו יחד יש תיאור פשוט במיוחד: אנחנו מתעניינים ב-<span class="math">\(x\cdot y\)</span> מודולו 2 - וזה, במקרה, בדיוק גם מה שברנשטיין וזירני מתעסק בו. פורמלית:</p>
+<p><span class="math">\(H^{\otimes n}\left|y\right\rangle =\sum_{x\in\mathbb{Z}_{2}^{n}}\left(-1\right)^{x\cdot y}\left|x\right\rangle \)</span></p>
+<p>ועכשיו קל לראות למה המעגל הקוונטי עובד:</p>
+<p><span class="math">\(H^{\otimes n}U_{f}H^{\otimes n}\left|0\right\rangle =H^{\otimes n}U_{f}\sum_{y}\left|y\right\rangle =\)</span></p>
+<p><span class="math">\(=H^{\otimes n}\sum_{y}\left(-1\right)^{z\cdot y}\left|y\right\rangle =\sum_{y}\sum_{x}\left(-1\right)^{z\cdot y}\left(-1\right)^{x\cdot y}\left|x\right\rangle =\sum_{x}\left(\sum_{y}\left(-1\right)^{\left(x+z\right)\cdot y}\right)\left|x\right\rangle \)</span></p>
+<p>כדי להבין מה קורה עכשיו, בואו נקבע את <span class="math">\(x\)</span> להיות משהו, ונבדוק את הערך של המחובר הפנימי, <span class="math">\(\sum_{y}\left(-1\right)^{\left(x+z\right)\cdot y}\)</span>. אולי יהיה יותר קל אם במקום <span class="math">\(x+z\)</span> יופיע שם <span class="math">\(x-z\)</span>, מה ששקול לחלוטין כי אנחנו מעל <span class="math">\(\mathbb{Z}_{2}\)</span> ולכן <span class="math">\(1=-1\)</span>. אז מהו <span class="math">\(\sum_{y}\left(-1\right)^{\left(x-z\right)\cdot y}\)</span>? יש פה שתי אפשרויות. ראשית, אם <span class="math">\(x=z\)</span> אז נקבל את הסכום <span class="math">\(\sum_{y}1=2^{n}\)</span> כי <span class="math">\(y\)</span> רץ על כל <span class="math">\(\left\{ 0,1\right\} ^{n}\)</span>. כעת, אם <span class="math">\(x\ne z\)</span> ולו בקואורדינטה בודדת אז נקבל 0. למה? בואו נניח שההבדל הוא בקואורדינטה הראשונה, כלומר <span class="math">\(x-z=1w^{\prime}\)</span> כך ש-<span class="math">\(w^{\prime}\)</span> היא מחרוזת של <span class="math">\(n-1\)</span> ביטים. עכשיו אפשר לחלק את כל ה-<span class="math">\(y\)</span>-ים לזוגות זוגות של איברים מהצורה <span class="math">\(0y^{\prime}\)</span> ו-<span class="math">\(1y^{\prime}\)</span> כך ש-<span class="math">\(y^{\prime}\)</span> היא מחרוזת של <span class="math">\(n-1\)</span> ביטים; בבירור <span class="math">\(\left(0y^{\prime}\right)\cdot\left(1w^{\prime}\right)\ne\left(1y^{\prime}\right)\cdot\left(1w^{\prime}\right)\)</span> כי באגף שמאל הקואורדינטה הראשונה לא תורמת כלום למכפלה הסקלרית, ובאגף ימין הוא תורמת 1. לכן <span class="math">\(\left(-1\right)^{\left(0y^{\prime}\right)\cdot\left(1w^{\prime}\right)}+\left(-1\right)^{\left(1y^{\prime}\right)\cdot\left(1w^{\prime}\right)}=0\)</span> ולכן כל הסכום <span class="math">\(\sum_{y}\left(-1\right)^{\left(x-z\right)\cdot y}\)</span> יהיה שווה אפס כי הוא סכום של זוגות של איברים שסכומם הוא אפס.</p>
+<p>המסקנה? <span class="math">\(\sum_{x}\left(\sum_{y}\left(-1\right)^{\left(x-z\right)\cdot y}\right)\left|x\right\rangle =2^{n}\left|z\right\rangle \)</span>, אבל הקבוע לא באמת צריך להיות שם. זוכרים שאני מחפף בכתיבת הקבועים? כשאני כותב <span class="math">\(H^{\otimes n}\left|0\right\rangle =\sum_{x}\left|x\right\rangle \)</span> זה שקר; אני באמת צריך לכתוב <span class="math">\(\left(\frac{1}{\sqrt{2}}\right)^{n}\sum_{x}\left|x\right\rangle \)</span>; וגם ההפעלה השניה של <span class="math">\(H^{\otimes n}\)</span> מכפילה בקבוע הזה, כך שבסך הכל הכפלנו בקבוע <span class="math">\(\frac{1}{2^{n}}\)</span> שמתקזז בדיוק עם ה-<span class="math">\(2^{n}\)</span> שהתווסף לנו. המסקנה הסופית היא ש-<span class="math">\(H^{\otimes n}U_{f}H^{\otimes n}\left|0\right\rangle =\left|z\right\rangle \)</span>, כפי שהבטחתי.</p>
+<h2>בעיית הפונקציה הלינארית החבויה</h2>
+<p>עכשיו נעבור אל הבעיה שהמאמר מתאר. נתחיל עם גרסה פשוטה שלה, ואז נסבך אותה עוד טיפה מסיבה שתכף אבהיר. הרעיון הבסיסי זהה לברנשטיין-וזיראני: יש פונקציה לינארית שמוגדרת על ידי כפל סקלרי בוקטור כלשהו - יש למצוא את הוקטור. ההבדל המהותי? הפונקציה <strong>לא נתונה על ידי אורקל</strong> אלא על ידי פונקציה אחרת, מסובכת יותר, ש"מחביאה" בתוך ההגדרה שלה את הפונקציה הפשוטה.</p>
+<p>הפונקציה המורכבת יותר תהיה סוג של <strong>תבנית ריבועית</strong> עם הזזה אפינית. לא אומר לכם כלום? זו פשוט פונקציה <span class="math">\(q\left(x\right):\mathbb{Z}_{2}^{n}\to\mathbb{Z}_{4}\)</span> (שימו לב: הטווח הוא <span class="math">\(\mathbb{Z}_{4}\)</span> ולא <span class="math">\(\mathbb{Z}_{2}\)</span>) שמוגדרת בעזרת מטריצה <span class="math">\(A\in\mathbb{Z}_{2}^{n\times n}\)</span> ווקטור <span class="math">\(b\in\mathbb{Z}_{2}^{n}\)</span> כך ש-</p>
+<p><span class="math">\(q\left(x\right)=2x^{t}Ax+bx=2\sum_{1\le i&lt;j\le n}A_{i,j}x_{i}x_{j}+\sum_{i=1}^{n}b_{i}x_{i}\)</span></p>
+<p>הפונקציה <span class="math">\(q\)</span> נתונה במפורש; אנחנו לא מתעניינים בדיוק בה, אלא בפונקציה לינארית <span class="math">\(f\)</span> שהיא <strong>הצמצום</strong> של <span class="math">\(q\)</span> לתת-מרחב מסויים של <span class="math">\(\mathbb{Z}_{2}^{n}\)</span>. תת-המרחב מוגדר כך:</p>
+<p><span class="math">\(\mathcal{L}_{q}=\left\{ x\in\mathbb{Z}_{2}^{n}\ |\ \forall y\in\mathbb{Z}_{2}^{n}:q\left(x+y\right)=q\left(x\right)+q\left(y\right)\right\} \)</span></p>
+<p>כלומר, <span class="math">\(\mathcal{L}_{q}\)</span> כולל את כל הוקטורים ב-<span class="math">\(\mathbb{Z}_{2}^{n}\)</span> שעבורם <span class="math">\(q\)</span> "נראית לינארית" ביחס ל<strong>כל</strong> הוקטורים ב-<span class="math">\(\mathbb{Z}_{2}^{n}\)</span>. אנחנו רוצים להשתכנע ש-<span class="math">\(\mathcal{L}_{q}\)</span> הוא באמת תת-מרחב לינארי וש-<span class="math">\(q\)</span> מצומצמת אליו היא פונקציה לינארית. מכיוון שאנחנו מעל <span class="math">\(\mathbb{Z}_{2}\)</span>, כלומר הסקלרים היחידים הם 0 ו-1, העבודה שלנו קלה יחסית: כדי להוכיח שקבוצה היא תת-מרחב מספיק להראות שהיא סגורה לחיבור, וכדי להראות שפונקציה היא לינארית מספיק להראות שהיא מקיימת <span class="math">\(q\left(x+y\right)=q\left(x\right)+q\left(y\right)\)</span>, מה שאוטומטית הולך להתקיים עבור אברי <span class="math">\(\mathcal{L}_{q}\)</span> כי כך המרחב הזה מוגדר.</p>
+<p>כדי להראות ש-<span class="math">\(\mathcal{L}_{q}\)</span> הוא מרחב וקטורי צריך להראות שאם <span class="math">\(x,z\in\mathcal{L}_{q}\)</span> אז גם <span class="math">\(x+z\in\mathcal{L}_{q}\)</span>, כלומר שלכל <span class="math">\(y\)</span> מתקיים <span class="math">\(q\left(\left(x+z\right)+y\right)=q\left(x+z\right)+q\left(y\right)\)</span>. כדי לראות את זה, נשים לב לכך ש-<span class="math">\(q\left(\left(x+z\right)+y\right)=q\left(x+\left(z+y\right)\right)\)</span> ומכיוון ש-<span class="math">\(x\in\mathcal{L}_{q}\)</span> נסיק ש</p>
+<p><span class="math">\(q\left(x+\left(z+y\right)\right)=q\left(x\right)+q\left(z+y\right)\)</span></p>
+<p>ומכיוון ש-<span class="math">\(z\in\mathcal{L}_{q}\)</span> אפשר לפתוח גם את המחובר השמאלי ולקבל</p>
+<p><span class="math">\(q\left(x\right)+q\left(z+y\right)=q\left(x\right)+q\left(z\right)+q\left(y\right)\)</span></p>
+<p>ולסיום, <span class="math">\(q\left(x\right)+q\left(z\right)=q\left(x+z\right)\)</span> כמובן שמתקיים בגלל ש-<span class="math">\(x\in\mathcal{L}_{q}\)</span>. זה מסיים את ההוכחה הזו.</p>
+<p>אם נצמצם את <span class="math">\(q\)</span> אל <span class="math">\(\mathcal{L}_{q}\)</span> עדיין קשה יהיה לקרוא למה שנקבל "פונקציה לינארית" כי הטווח של פונקציה לינארית צריך להיות מרחב וקטורי בעצמו מעל השדה שלנו, במקרה הזה <span class="math">\(\mathbb{Z}_{2}\)</span>, אבל <span class="math">\(\mathbb{Z}_{4}\)</span> אינו כזה (כי אם <span class="math">\(V\)</span> מרחב וקטורי מעל <span class="math">\(\mathbb{Z}_{2}\)</span> אז <span class="math">\(v+v=\left(1+1\right)v=0\cdot v=0\)</span>, אבל ב-<span class="math">\(\mathbb{Z}_{4}\)</span> קיים איבר מסדר 4). מה שכן קל לראות הוא שדה-פקטו, <span class="math">\(q\)</span> מחזירה רק 0 או 2 על אברי <span class="math">\(\mathcal{L}_{q}\)</span>, כי <span class="math">\(q\left(x\right)+q\left(x\right)=q\left(x+x\right)=q\left(0\right)=0\)</span>, כלומר <span class="math">\(2q\left(x\right)=0\)</span> מה שקורה רק אם <span class="math">\(q\left(x\right)\in\left\{ 0,2\right\} \)</span>. לכן אפשר להגדיר פונקציה <span class="math">\(f:\mathcal{L}_{q}\to\mathbb{Z}_{2}\)</span> על ידי <span class="math">\(f\left(x\right)=\frac{q\left(x\right)}{2}\)</span> ו<strong>זו</strong> תהיה הפונקציה הלינארית שלנו, כלומר קיים <span class="math">\(z\in\mathbb{Z}_{2}^{n}\)</span> כך ש-<span class="math">\(f\left(x\right)=z\cdot x\)</span>, מה שאומר ש-<span class="math">\(q\left(x\right)=2z\cdot x\)</span> לכל <span class="math">\(x\in\mathcal{L}_{q}\)</span>. הנה האתגר שלנו במפורש - למצוא את ה-<span class="math">\(z\)</span> הזה. לבעיה הזו המאמר קורא Hidden Linear Function Problem, והיא <strong>כמעט</strong> הבעיה ששייכת ל-SQC אבל לא ל-<span class="math">\(\text{NC}^{0}\)</span>; הבעיה פה תהיה שהבעיה לא שייכת ל-SQC ויהיה צורך בהגבלה נוספת עליה כדי להכניס אותה ל-SQC למרות שזה לא יהיה מספיק כדי להכניס אותה ל-<span class="math">\(\text{NC}^{0}\)</span>.</p>
+<p>המעגל הקוונטי שפותר את הבעיה הזו יהיה שוב פשוט עד להפתיע, ובערך מהצורה <span class="math">\(H^{\otimes n}U_{q}H^{\otimes n}\left|0\right\rangle \)</span>. אני אומר "בערך" כי החלק של ה-<span class="math">\(U_{q}\)</span> הוא עכשיו לא אורקל אלא מעגל קונקרטי שמקבל כקלט, בנוסף ל-<span class="math">\(H^{\otimes n}\left|0\right\rangle \)</span>, גם את <span class="math">\(A\)</span> ו-<span class="math">\(b\)</span>. האפקט של <span class="math">\(U_{q}\)</span> על <span class="math">\(\left|x\right\rangle \)</span> מאוד דומה לזה של ברנשטיין וזירני אבל מביא בחשבון את זה שהפעם יש <strong>ארבעה</strong> פלטים אפשריים שונים של <span class="math">\(q\)</span> על קלט כללי, ולכן המקדם שהוא מצמיד ל-<span class="math">\(\left|x\right\rangle \)</span> יהיה בעל אחד מבין ארבעה ערכים מובחנים:</p>
+<p><span class="math">\(U_{q}\left|x\right\rangle =i^{q\left(x\right)}\left|x\right\rangle \)</span></p>
+<p>כאשר <span class="math">\(i\)</span> הוא מספר מדומה שמקיים <span class="math">\(i^{2}=-1\)</span>.</p>
+<p>עוד דבר שהוא קצת שונה הוא שהפעם לא יתקיים <span class="math">\(H^{\otimes n}U_{q}H^{\otimes n}\left|0\right\rangle =\left|z\right\rangle \)</span>; הפלט יהיה סופרפוזיציה של מצבים. רק ש<strong>כל</strong> המצבים הללו יתאימו לערכים אפשריים של <span class="math">\(z\)</span> שפותר את הבעיה; הפעם פשוט יש יותר מערך אחד כזה.</p>
+<p>אז יש לנו שתי שאלות:</p>
+<ol>
+    <li>איך אנחנו מממשים את <span class="math">\(U_{q}\)</span> עם שערים קוונטיים?</li>
+    <li>למה בדיוק כל איבר שכלול ב-<span class="math">\(H^{\otimes n}U_{q}H^{\otimes n}\left|0\right\rangle \)</span> הוא פתרון?</li>
+</ol>
+<p>התשובה ל-1 פשוטה ויפה: <span class="math">\(U_{q}=\bigotimes_{j}S_{j}^{b_{j}}\cdot\prod_{1\le i\le j\le n}CZ_{i,j}^{A_{i,j}}\)</span>, אבל בואו נסביר מה זה אומר.</p>
+<p>שער <span class="math">\(CZ_{i,j}\)</span> מפעיל Controlled-Z על <span class="math">\(i,j\)</span> כש-<span class="math">\(i\)</span> הוא קיוביט ה"בקרה". כשאני מסמן <span class="math">\(CZ_{i,j}^{A_{i,j}}\)</span> פירוש הדבר הוא שאני מוסיף <strong>עוד התניה</strong> על השער הזה - אם <span class="math">\(A_{i,j}=1\)</span> אז הוא יופעל, ואם <span class="math">\(A_{i,j}=0\)</span> הוא לא יופעל; דה פקטו אפשר לקרוא לזה שער <span class="math">\(CCZ\)</span>. הסימון <span class="math">\(\prod\)</span> בא לומר שאני מפעיל את השערים הללו סדרתית ולא "בבת אחת", למרות שאם אפשר למקבל חלק מההפעלות מן הסתם נעשה את זה.</p>
+<p>אחרי שערי ה-<span class="math">\(CZ\)</span> מגיעה הפעלה "בבת אחת" של שערי פאזה: <span class="math">\(S_{j}\)</span> מסמן הפעלה של שער פאזה, כלומר <span class="math">\(\left(\begin{array}{cc} 1 & 0\\ 0 & -i \end{array}\right)\)</span>, על קיוביט מספר <span class="math">\(j\)</span>. רק שכאן גם שערי הפאזה מותנים בכך ש-<span class="math">\(b_{j}=1\)</span> ואחרת הם לא מופעלים; קראתי לשער כזה <span class="math">\(CS\)</span> בהתחלה.</p>
+<p>עכשיו, למה שיתקיים <span class="math">\(U_{q}\left|x\right\rangle =i^{q\left(x\right)}\left|x\right\rangle \)</span>?</p>
+<p>ראשית, <span class="math">\(CZ_{i,j}\left|x\right\rangle =\left(-1\right)^{x_{i}\cdot x_{j}}\left|x\right\rangle \)</span> - זוכרים שאמרתי ש-<span class="math">\(CZ\)</span> הוא סוג של AND? כאן רואים את זה. על כן, <span class="math">\(CZ_{i,j}^{A_{i,j}}\left|x\right\rangle =\left(-1\right)^{A_{i,j}x_{i}\cdot x_{j}}\left|x\right\rangle \)</span>. מכיוון ש-<span class="math">\(i^{2}=-1\)</span> אפשר גם לכתוב <span class="math">\(CZ_{i,j}^{A_{i,j}}\left|x\right\rangle =i^{2A_{i,j}x_{i}\cdot x_{j}}\left|x\right\rangle \)</span></p>
+<p>שנית, <span class="math">\(S_{j}^{b_{j}}\left|x\right\rangle =i^{b_{j}\cdot x_{j}}\left|x\right\rangle \)</span>; גם שער <span class="math">\(CS\)</span> הוא מעין AND, הפעם בין <span class="math">\(b_{i}\)</span> ו-<span class="math">\(x_{i}\)</span>.</p>
+<p>משני אלו נקבל:</p>
+<p><span class="math">\(U_{q}\left|x\right\rangle =i^{q\left(x\right)}\left|x\right\rangle =\prod_{i,j}i^{\left(2A_{i,j}x_{i}\cdot x_{j}\right)}\prod_{j}i^{b_{j}\cdot x_{j}}\left|x\right\rangle \)</span></p>
+<p><span class="math">\(=i^{\left(2\sum_{i,j}A_{i,j}x_{i}x_{j}+\sum_{j}b_{j}x_{j}\right)}\left|x\right\rangle =i^{q\left(x\right)}\left|x\right\rangle \)</span></p>
+<p>שזה בדיוק מה שרצינו. האורקל נעלם; אנחנו רואים איך אפשר לממש את האפקט <span class="math">\(U_{q}\left|x\right\rangle =i^{q\left(x\right)}\left|x\right\rangle \)</span> עם שערים קונקרטיים לחלוטין. הבעיה היחידה היא <strong>עומק</strong> המעגל שמבצע את החישוב, ונדבר על זה עוד מעט.</p>
+<p>עכשיו ננסה להבין איך נראה המצב הקוונטי <span class="math">\(H^{\otimes n}U_{q}H^{\otimes n}\left|0\right\rangle \)</span>. ה-<span class="math">\(H^{\otimes n}\left|0\right\rangle \)</span> שבהתחלה מייצר את הסופרפוזיציה האחידה, <span class="math">\(\sum_{x\in\mathbb{Z}_{2}^{n}}\left|x\right\rangle \)</span>, וה-<span class="math">\(U_{q}\)</span> שאחר כך מייצר לנו את הסופרפוזיציה <span class="math">\(\sum_{y\in\mathbb{Z}_{2}^{n}}i^{q\left(y\right)}\left|y\right\rangle \)</span>. מה עכשיו?</p>
+<p>יותר מוקדם בפוסט ראינו ש-<span class="math">\(H^{\otimes n}\left|y\right\rangle =\sum_{z\in\mathbb{Z}_{2}^{n}}\left(-1\right)^{z\cdot y}\left|z\right\rangle \)</span>. אם נשתמש בזה כאן, נקבל שהסופרפוזיציה שמגיעים אליה בסיום היא</p>
+<p><span class="math">\(\sum_{y\in\mathbb{Z}_{2}^{n}}i^{q\left(y\right)}\left(\sum_{z\in\mathbb{Z}_{2}^{n}}\left(-1\right)^{z\cdot y}\left|z\right\rangle \right)\)</span></p>
+<p>או, אם נחליף את סדר הסכימה:</p>
+<p><span class="math">\(\sum_{z\in\mathbb{Z}_{2}^{n}}\left(\sum_{y\in\mathbb{Z}_{2}^{n}}i^{q\left(y\right)}\left(-1\right)^{z\cdot y}\right)\left|z\right\rangle \)</span></p>
+<p>כלומר, המקדם של <span class="math">\(\left|z\right\rangle \)</span> בסופרפוזיציה שבסיום הוא הביטוי <span class="math">\(\sum_{y\in\mathbb{Z}_{2}^{n}}i^{q\left(y\right)}\left(-1\right)^{z\cdot y}\)</span>. כדי להקל על חישוב הביטוי הזה, המאמר מאמץ את הסימון הבא, עבור כל תת-מרחב לינארי <span class="math">\(\mathcal{L}\)</span> של <span class="math">\(\mathbb{Z}_{2}^{n}\)</span>:</p>
+<p><span class="math">\(\Gamma\left(\mathcal{L},z\right)=\sum_{y\in\mathbb{Z}_{2}^{n}}i^{q\left(y\right)}\left(-1\right)^{z\cdot y}\)</span></p>
+<p>אז המטרה שלנו היא להבין מהו <span class="math">\(\Gamma\left(\mathbb{Z}_{2}^{n},z\right)\)</span>. המאמר נכנס לחישוב בפירוט, אבל לנו מספיק להבין כרגע למה זה אפס אם <span class="math">\(z\)</span> הוא לא פתרון לבעיית הפונקציה הלינארית החבויה ומשהו שונה מאפס אם הוא כן. לשם כך, המאמר נוקט בגישה הבאה: ניקח משלים ישר <span class="math">\(\mathcal{K}\)</span> <strong>כלשהו</strong> של <span class="math">\(\mathcal{L}_{q}\)</span>, כלומר תת-מרחב וקטורי של <span class="math">\(\mathbb{Z}_{2}^{n}\)</span> כך שמתקיים <span class="math">\(\mathbb{Z}_{2}^{n}=\mathcal{L}_{q}\oplus\mathcal{K}\)</span>. כעת ניתן להוכיח שמתקיים</p>
+<p><span class="math">\(\Gamma\left(\mathbb{Z}_{2}^{n},z\right)=\Gamma\left(\mathcal{L}_{q},z\right)\cdot\Gamma\left(\mathcal{K},z\right)\)</span></p>
+<p>האינטואיציה לכך פשוטה: כל <span class="math">\(y\in\mathbb{Z}_{2}^{n}\)</span> אפשר להציג <strong>באופן יחיד </strong>בתור <span class="math">\(y=y_{1}+y_{2}\)</span> כך ש-<span class="math">\(y_{1}\in\mathcal{L}_{q}\)</span> ו-<span class="math">\(y_{2}\in\mathcal{K}\)</span>. כעת קחו את הביטוי <span class="math">\(\Gamma\left(\mathcal{L},z\right)=\sum_{y\in\mathbb{Z}_{2}^{n}}i^{q\left(y\right)}\left(-1\right)^{z\cdot y}\)</span> והציבו <span class="math">\(y_{1}+y_{2}\)</span> במקום <span class="math">\(y\)</span>: שימו לב ש-<span class="math">\(q\left(y_{1}+y_{2}\right)=q\left(y_{1}\right)+q\left(y_{2}\right)\)</span> כי <span class="math">\(y_{1}\in\mathcal{L}_{q}\)</span> וזו בדיוק התכונה המייחדת של <span class="math">\(\mathcal{L}_{q}\)</span>, שהקסם הזה מתקיים בה.</p>
+<p>בואו נשתכנע עכשיו ש-<span class="math">\(\Gamma\left(\mathcal{L}_{q},z\right)\)</span> מתאפס אם ורק אם <span class="math">\(z\)</span> הוא לא פתרון של בעיית הפונקציה הלינארית החבויה. הרעיון הוא כזה: אנחנו רוצים לחשב את <span class="math">\(\sum_{y\in\mathcal{L}_{q}}i^{q\left(y\right)}\left(-1\right)^{z\cdot y}\)</span> ויכולים להיעזר בכך שאנחנו יודעים שמעל <span class="math">\(\mathcal{L}_{q}\)</span>, הפונקציה <span class="math">\(q\left(y\right)\)</span> מתנהגת כמו מכפלה באיבר ספציפי שנקרא לו <span class="math">\(z^{\prime}\)</span>. פורמלית: <span class="math">\(q\left(y\right)=2z^{\prime}\cdot y\)</span>. לכן נקבל:</p>
+<p><span class="math">\(\Gamma\left(\mathcal{L}_{q},z\right)=\sum_{y\in\mathcal{L}_{q}}i^{2z^{\prime}\cdot y}\left(-1\right)^{z\cdot y}=\sum_{y\in\mathcal{L}_{q}}\left(-1\right)^{z^{\prime}\cdot y}\left(-1\right)^{z\cdot y}=\sum_{y\in\mathcal{L}_{q}}\left(-1\right)^{\left(z-z^{\prime}\right)\cdot y}\)</span></p>
+<p>קיבלנו כמעט את אותו הדבר עם ברנשטיין-וזירני, רק ששם הסכום רץ על כל <span class="math">\(\mathbb{Z}_{2}^{n}\)</span> וכאן הוא רץ רק על <span class="math">\(\mathcal{L}_{q}\)</span>. בברנשטיין-וזירני הסכום לא התאפס רק אם המכפלה הפנימית <strong>כן</strong> התאפסה לכל <span class="math">\(y\)</span>; מכיוון ששם <span class="math">\(y\)</span> רץ על כל <span class="math">\(\mathbb{Z}_{2}^{n}\)</span> זה קרה רק אם <span class="math">\(z-z^{\prime}\)</span> היה וקטור האפס, אבל עכשיו <span class="math">\(y\)</span> רץ רק על <span class="math">\(\mathcal{L}_{q}\)</span> ולכן המכפלה הפנימית יכולה להתאפס לעוד איברים; כזכור, משתמשים בסימון <span class="math">\(\mathcal{L}_{q}^{\perp}\)</span> כדי לתאר את קבוצת האיברים הזו - <strong>המרחב האורתוגונלי</strong> של <span class="math">\(\mathcal{L}_{q}\)</span>. אז אם <span class="math">\(z-z^{\prime}\in\mathcal{L}_{q}^{\perp}\)</span>, הסכום לא מתאפס. במקרה שבו <span class="math">\(z-z^{\prime}\in\mathcal{L}_{q}^{\perp}\)</span>, לכל <span class="math">\(y\in\mathcal{L}_{q}\)</span> מתקיים <span class="math">\(\left(z-z^{\prime}\right)y=0\)</span>, כלומר <span class="math">\(zy=z^{\prime}y\)</span>, כלומר <span class="math">\(q\left(y\right)=2z\cdot y\)</span> וקיבלנו שגם <span class="math">\(z\)</span> הוא פתרון לבעיית הפונקציה הלינארית החבויה - כפי שרצינו.</p>
+<p>מה קורה אם <span class="math">\(z-z^{\prime}\notin\mathcal{L}_{q}^{\perp}\)</span>? במקרה הזה, קיים <span class="math">\(a\in\mathcal{L}_{q}\)</span> כך ש-<span class="math">\(\left(z-z^{\prime}\right)a=1\)</span>, ועכשיו אפשר לחלק את אברי <span class="math">\(\mathcal{L}_{q}\)</span> לזוגות-זוגות: לכל <span class="math">\(y\in\mathcal{L}_{q}\)</span>, בן הזוג שלו יהיה <span class="math">\(y+a\)</span> (ובן הזוג של <span class="math">\(y+a\)</span> יהיה, ובכן, <span class="math">\(\left(y+a\right)+a=y+2a=y\)</span> כי אנחנו מעל <span class="math">\(\mathbb{Z}_{2}\)</span>). בבירור <span class="math">\(\left(z-z^{\prime}\right)\left(y+a\right)=\left(z-z^{\prime}\right)y+1\)</span> כך ששני האיברים הללו מחזירים ערך שונה בכפל סקלרי ב-<span class="math">\(z-z^{\prime}\)</span> ולכן <span class="math">\(\left(-1\right)^{\left(z-z^{\prime}\right)y}+\left(-1\right)^{\left(z-z^{\prime}\right)\left(y+a\right)}=0\)</span> וקיבלנו ש-<span class="math">\(\Gamma\left(\mathcal{L}_{q},z\right)=0\)</span> אם <span class="math">\(z-z^{\prime}\notin\mathcal{L}_{q}^{\perp}\)</span>, כלומר במקרה שבו <span class="math">\(z\)</span> <strong>אינו</strong> פתרון של בעיית הפונקציה הלינארית החבויה.</p>
+<h2>סיכום ביניים זריז ופרידה שהיא בריחה מהירה</h2>
+<p>בשלב הזה כיסינו את החלק מהמאמר שקל לתאר ודורש רק קצת אלגברה לינארית נחמדה. ההמשך קצת פחות נחמד והפוסט הזה כבר ארוך דיו, כך שלא אמשיך לתאר את המאמר כאן. עדיין, מה עוד נשאר לעשות?</p>
+<p>ראשית, הבעיה עצמה: מה שקראתי לו "בעיית הפונקציה הלינארית החבויה" היא אמנם בעיה שלא שייכת ל-<span class="math">\(\text{NC}^{0}\)</span> אבל גם ל-<span class="math">\(\text{SQC}\)</span> היא כנראה לא שייכת. כדי לקבל בעיה ששייכת ל-<span class="math">\(\text{SQL}\)</span> צריך להגביל את הסיטואציה קצת יותר. בבעיית הפונקציה הלינארית החבויה יש לנו תבנית ריבועית שנתונה על ידי מטריצה <span class="math">\(A\in\mathbb{Z}_{2}^{n\times n}\)</span> ווקטור <span class="math">\(b\in\mathbb{Z}_{2}^{n}\)</span>. ההגבלה הנוספת היא הדרישה שיתקיים <span class="math">\(A_{i,j}=0\)</span> עבור רוב הכניסות של <span class="math">\(A\)</span>. הנה הפורמליזם: בואו נסתכל על השריג <span class="math">\(\mathbb{Z}_{N}\times\mathbb{Z}_{N}\)</span> עבור <span class="math">\(N\)</span> כלשהו; כל נקודה בשריג היא מהצורה <span class="math">\(\left(i,j\right)\)</span> כך ש-<span class="math">\(0\le i,j\le N-1\)</span> - יש בסך הכל <span class="math">\(N^{2}\)</span> נקודות כאלו. נבחר <span class="math">\(n=N^{2}\)</span> (זה מספר השורות והעמודות של <span class="math">\(A\)</span>) וכעת כל כניסה של <span class="math">\(A\)</span> ניתנת לייצוג בתור נקודה בשריג. כעת, <span class="math">\(A\)</span> מכילה 0 בכל כניסה שמתאימה לזוג נקודות ש<strong>אינן</strong> שכנות בשריג - כלומר, המרחק ביניהן על פי המטריקה <span class="math">\(d\left(\left(i,j\right),\left(x,y\right)\right)=\left|i-x\right|+\left|j-y\right|\)</span> שונה מ-1. עבור כניסות במטריצה שמייצגות נקודות שכנות, הערך יכול להיות 0 או 1. לבעיה <strong>הזו</strong> קורא המאמר "בעיית הפונקציה הלינארית החבויה הדו-ממדית" והיא הבעיה שהיא קלה מספיק כדי להיות ב-<span class="math">\(\text{SQC}\)</span> אבל לא ב-<span class="math">\(\text{NC}^{0}\)</span>.</p>
+<p>נותרו שני דברים לעשות, שהם ה"בשר" האמיתי של המאמר - להראות איך לבנות מעגל קוונטי מעומק קבוע עבור הבעיה (בדיוק בעזרת מימוש ה-<span class="math">\(U_{q}\)</span> שראינו למעלה, רק צריך לראות שזה ניתן למימוש), ולהראות שהבעיה לא ב-<span class="math">\(\text{NC}^{0}\)</span>. לעת עתה אני אמלט באלגנטיות מלהציג את הדברים הללו כאן.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2018/11/10/four_color_theorem_intro/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט ארבעת הצבעים (חלק א&#39;)</span>
+            </a>
+            
+            
+            
+            <a href="/2018/10/23/quantum_advantage_with_shallow_circuits/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">”הוכחה ראשונה לעליונות מחשב קוונטי“ - מה לא (וקצת מה כן)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

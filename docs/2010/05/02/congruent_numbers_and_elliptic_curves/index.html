@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מספרים קונגרואנטים, ואיך זה קשור לעקומים אליפטיים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מספרים קונגרואנטים, ואיך זה קשור לעקומים אליפטיים</h1>
+            <div class="post-meta">
+                <span class="date">2010-05-02</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיות עתיקות ופתרונות מודרניים.html">בעיות עתיקות ופתרונות מודרניים</a>
+                    
+                    <a href="/tags/השערת בירץ&#39; וסווינרטון-דייר.html">השערת בירץ&#39; וסווינרטון-דייר</a>
+                    
+                    <a href="/tags/מספרים קונגרואנטים.html">מספרים קונגרואנטים</a>
+                    
+                    <a href="/tags/עקומים אליפטיים.html">עקומים אליפטיים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://he.wikipedia.org/wiki/%D7%A2%D7%A7%D7%95%D7%9D_%D7%90%D7%9C%D7%99%D7%A4%D7%98%D7%99">עקומים אליפטיים</a> זכו לחשיפה רחבה יחסית בעשורים האחרונים, במיוחד בשל הקשר שלהם להוכחת <a href="http://he.wikipedia.org/wiki/%D7%94%D7%9E%D7%A9%D7%A4%D7%98_%D7%94%D7%90%D7%97%D7%A8%D7%95%D7%9F_%D7%A9%D7%9C_%D7%A4%D7%A8%D7%9E%D7%94">המשפט האחרון של פרמה</a>, ו<a href="http://he.wikipedia.org/wiki/%D7%94%D7%A6%D7%A4%D7%A0%D7%94_%D7%9E%D7%91%D7%95%D7%A1%D7%A1%D7%AA_%D7%A2%D7%A7%D7%95%D7%9E%D7%99%D7%9D_%D7%90%D7%9C%D7%99%D7%A4%D7%98%D7%99%D7%99%D7%9D">הקשר שלהם לקריפטוגרפיה</a>. לטעמי אכן מדובר בתחום מעניין ביותר, אף כי איני מבין בו כמעט שום דבר. למרות זאת אנסה לתאר (כאן ובפוסטים עתידיים) מקצת מהתיאוריה שלהם; בתקווה, אוכל אפילו לתאר באופן כללי ביותר את הרעיון שמאחורי הוכחת המשפט האחרון של פרמה.</p>
+<p>אתחיל מבעיה "קלאסית" בתורת המספרים שהפתרון אליה - שהוא מודרני מאוד, משנות השמונים של המאה ה-20 - עובר דרך עקומים אליפטיים - <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%A7%D7%95%D7%A0%D7%92%D7%A8%D7%95%D7%90%D7%A0%D7%98%D7%99">בעיית המספרים הקונגרואנטיים</a>. שורשיה של הבעיה נמצאים כבר אצל היוונים הקדמונים, אך ניסוח מפורש שלה יש רק אצל המתמטיקאים הערביים בני המאה ה-10. השאלה עוסקת במשולשים ישרי זווית, כלומר משולשים שצלעותיהן מקיימות את משפט פיתגורס המפורסם: <span class="math">\(a^{2}+b^{2}=c^{2}\)</span>. כזכור, היוונים לא אהבו מספרים אי רציונליים, ולכן התעניינו במשולשים ישרי זווית שכל צלעותיהם רציונליות, והשאלה היא מהם ה<strong>שטחים</strong> האפשריים למשולשים שכאלו. בפרט, מהם השטחים שהם <strong>מספר שלם</strong>. אם יש לנו משולש ישר זווית עם שוקיים <span class="math">\(a,b\)</span> אז שטחו הוא <span class="math">\(\frac{ab}{2}\)</span>. לכן אפשר לנסח את הבעיה כבעיה בתורת המספרים: אילו מספרים טבעיים <span class="math">\(n\in\mathbb{N}\)</span> מקיימים <span class="math">\(n=\frac{ab}{2}\)</span> עבור <span class="math">\(a,b\)</span> רציונליים, שבנוסף לכך גם מקיימים ש-<span class="math">\(\sqrt{a^{2}+b^{2}}\)</span> רציונלי? מספרים כאלו נקראים (מסיבה שאינה ברורה לי והיא כנראה היסטורית) "מספרים קונגרואנטים".</p>
+<p>ובכן, קל מאוד לייצר משולשים ישרי זווית שכל צלעותיהם הם מספרים שלמים: אלו הן השלשות הפיתגוריות. אזכיר בחטף ש<a href="http://www.gadial.net/2008/11/04/pythagorean_triplets/">אפשר לייצר שלשות פיתגוריות</a> באופן סדרתי: לוקחים <span class="math">\(x,y\)</span> הזרים זה לזה ואחד מהם לפחות הוא זוגי, ואז מגדירים <span class="math">\(a=x^{2}-y^{2},b=2xy,c=x^{2}+y^{2}\)</span> והופס - קיבלנו שלשה פיתגורית. מכיוון ש-<span class="math">\(b\)</span> הוא זוגי, אז <span class="math">\(\frac{ab}{2}=xy\left(x^{2}-y^{2}\right)\)</span> הוא שלם. לכן קיבלנו דרך פשוטה לייצר המוני מספרים קונגרואנטים. לכן הבעיה איננה עם ייצור של מספרים שכאלו, אלא עם בדיקה, בהינתן מספר טבעי כלשהו, האם הוא קונגרואנטי או לא. כלומר, האם <strong>קיים</strong> משולש ישר זווית עם צלעות רציונליות ששטחו שווה למספר זה.</p>
+<p>למשל, עבור השלשה הפיתגורית <span class="math">\(a=3,b=4,c=5\)</span> נקבל שטח של <span class="math">\(6\)</span>, ולכן <span class="math">\(6\)</span> הוא מספר קונגרואנטי. מה עם מספרים קטנים יותר, למשל 5? ובכן, מסתבר ש-5 הוא כן מספר קונגרואנטי, אבל בבירור המשולש ששטחו הוא 5 אינו יכול להיות בעל צלעות שהן מספרים טבעיים; כי אם <span class="math">\(5=\frac{ab}{2}\)</span> אז <span class="math">\(ab=10\)</span>, אבל אז <span class="math">\(a=5,b=2\)</span> או ש-<span class="math">\(a=1,b=10\)</span>, ובשני המקרים הללו נקבל <span class="math">\(c\)</span> שאינו שלם (ובעצם אינו רציונלי). אז מדוע 5 הוא כן קונגרואנטי? כי אם נתבונן על המשולש שצלעותיו הן <span class="math">\(1\frac{1}{2},6\frac{2}{3},6\frac{5}{6}\)</span>, על ידי חישוב זריז אפשר לראות שזהו אכן משולש "חוקי"(משפט פיתגורס מתקיים) וששטחו הוא 5. אם כן, זה לא מקרי שאנחנו מדברים על צלעות <strong>רציונליות</strong> ולא על צלעות שלמות; אם מרשים צלעות רציונליות, יותר מספרים שלמים יכולים להתקבל בתור שטח.</p>
+<p>ייתכן שאתם תוהים כעת מדוע להגביל את עצמנו ולדרוש שהשטח יהיה שלם ולא לדבר על שטח רציונלי - כלומר, לשאול את השאלה אילו מספרים רציונליים יכול להתקבל כשטח של משולש ישר זווית עם צלעות רציונליות. הסיבה פשוטה: אם <span class="math">\(a,b,c\)</span> הן צלעותיו של משולש כזה ו-<span class="math">\(s\)</span> הוא מספר רציונלי כלשהו, אז גם <span class="math">\(sa,sb,sc\)</span> הן צלעותיו של משולש ישר זווית עם צלעות רציונליות. שטחו של המשולש הזה יהיה <span class="math">\(\frac{\left(sa\right)\left(sb\right)}{2}=s^{2}\frac{ab}{2}\)</span>, כלומר כפל של שטח המשולש המקורי בריבוע. לא קשה להראות שבאמצעות כפל כזה בריבוע, מכל מספר רציונלי אפשר לקבל מספר שלם <strong>שאיננו מתחלק על ידי ריבוע של מספר שלם</strong> (מספר שכזה נקרא "חופשי מריבועים"). למשל, הבה ונתבונן במשולש שצלעותיו הן <span class="math">\(\frac{3}{2},\frac{4}{2},\frac{5}{2}\)</span>; שטחו הוא <span class="math">\(\frac{3}{2}\)</span>. על ידי כפל ב-<span class="math">\(2^{2}\)</span> נקבל 6 - בדיוק השטח של המשולש <span class="math">\(a=3,b=4,c=5\)</span> שעליו דיברנו כבר. למעשה המשולש <span class="math">\(\left(\frac{3}{2},\frac{4}{2},\frac{5}{2}\right)\)</span> אינו שונה מהותית מהמשולש <span class="math">\(\left(3,4,5\right)\)</span>; הזוויות שבתוכו זהות - הוא <strong>דומה</strong> למשולש <span class="math">\(\left(\frac{3}{2},\frac{4}{2},\frac{5}{2}\right)\)</span>. פרט לגודל, הם נראים אותו דבר בדיוק (ולכן <span class="math">\(\left(\frac{3}{2},\frac{4}{2},\frac{5}{2}\right)\)</span> נראה כאילו אנחנו מסתכלים על <span class="math">\(\left(3,4,5\right)\)</span> "יותר מרחוק"). פורמלית, אפשר להגדיר מחלקות שקילות על מספרים רציונליים, כך ששני מספרים הם שקולים אם ורק אם אפשר לקבל אחד מהשני על ידי כפל בריבוע; מה שאמרתי קודם ניתן לניסוח פורמלי כטענה שלכל מחלקת שקילות ניתן לבחור נציג שהוא מספר שלם חופשי מריבועים, וכדי לעסוק בשאלת המספרים הקונגרואנטים, אם כן, די לטפל בנציגים. לאחר מכן, אם יהיה לנו מספר רציונלי <span class="math">\(r\)</span> כלשהו ונרצה לדעת אם הוא שטח של משולש ישר זווית רציונלי או לא, פשוט נכפול אותו ב-<span class="math">\(s^{2}\)</span> מתאים, נקבל מספר טבעי חופשי מריבועים, ונפתור את הבעיה עבורו.</p>
+<p>עכשיו משהבנו מהם מספרים קונגרואנטים, אציג הגדרה שונה ושקולה עבורם: <span class="math">\(n\)</span> הוא קונגרואנטי אם ורק אם קיים <span class="math">\(x\)</span> רציונלי שהוא ריבוע של מספר רציונלי, כך ש-<span class="math">\(x+n,x-n\)</span> שניהם ריבועים של מספרים רציונליים. הגדרה זו, ולא הניסוח המקורי, היה מה שעניין את הערבים.</p>
+<p>במבט ראשון לא ברור מה הקשר בין שתי הבעיות, ולכן אתאר בקצרה את הרעיון: אם <span class="math">\(\left(a,b,c\right)\)</span> הוא משולש ישר זווית רציונלי כך ש-<span class="math">\(n=\frac{ab}{2}\)</span>, אז נגדיר <span class="math">\(x=\left(\frac{c}{2}\right)^{2}\)</span>. במילים אחרות, <span class="math">\(x=\frac{a^{2}+b^{2}}{4}\)</span>, ועל כן <span class="math">\(x+n=\frac{a^{2}+2ab+b^{2}}{4}=\left(\frac{a+b}{2}\right)^{2}\)</span>, ובדומה <span class="math">\(x-n=\left(\frac{a-b}{2}\right)^{2}\)</span>, כך שבמקרה זה <span class="math">\(x+n\)</span> ו-<span class="math">\(x-n\)</span> הם אכן ריבועים של מספרים רציונליים. בכיוון ההפוך, אם יש לנו <span class="math">\(x\)</span> שמקיים את התכונה הנ"ל, אז אפשר לבנות ממנו משולש מתאים עם <span class="math">\(a=\sqrt{x+n}-\sqrt{x-n},b=\sqrt{x+n}+\sqrt{x-n},c=2\sqrt{x}\)</span> (שימו לב כיצד אנו משתמשים כאן בכך ש-<span class="math">\(x,x+n,x-n\)</span> הם כולם ריבועים של משהו רציונלי).</p>
+<p>צורת ההצגה הזו מאפשרת לנו לראות בקלות יחסית עד כמה השאלה "האם המספר <span class="math">\(n\)</span> הוא קונגרואנטי?" יכולה להיות בעייתית גם במקרים של ערכים ספציפיים של <span class="math">\(n\)</span>: בפרט, עבור <span class="math">\(n=1\)</span> השאלה היא האם קיים <span class="math">\(x\)</span> כך ש-<span class="math">\(x,x+1,x-1\)</span> כולם ריבועים של מספרים רציונליים. מכיוון ש-<span class="math">\(x+1\)</span> ריבוע ו-<span class="math">\(x-1\)</span> ריבוע, אז <span class="math">\(\left(x+1\right)\left(x-1\right)\)</span> הוא חזקה רביעית של מספר רציונלי שנסמנה <span class="math">\(a^{4}\)</span>. בדומה, גם <span class="math">\(x^{2}\)</span> הוא חזקה רביעית של מספר רציונלי שנסמנו <span class="math">\(c^{4}\)</span>. אז בעצם ראינו ש-<span class="math">\(a^{4}=\left(x+1\right)\left(x-1\right)=x^{2}-1=c^{4}+1\)</span>, ובמילים אחרות - <span class="math">\(a^{4}+1^{4}=c^{4}\)</span> והופס, על ידי כפל במכנה המשותף של <span class="math">\(a,c\)</span>  - קיבלנו הפרכה למשפט האחרון של פרמה עבור חזקה רביעית. זה מבהיר לנו מייד כי <span class="math">\(n=1\)</span> אינו מספר קונגרואנטי, כי אנחנו יודעים שהמשפט האחרון של פרמה נכון (מדוע זה לא עובד עבור כל <span class="math">\(n\)</span>? כי הסתמכנו על כך ש-<span class="math">\(n^2=m^4\)</span> עבור <span class="math">\(m\)</span> שלם כלשהו, מה שבלתי אפשרי עבור <span class="math">\(n\)</span> חופשי מריבועים הגדול מ-1).</p>
+<p>אם כן, הבעיה של בדיקה האם מספר הוא קונגרואנטי איננה טריוויאלית. מה שאנחנו רוצים למצוא הוא דרך פשוטה כלשהי לאפיין את המספרים הקונגרואנטיים. במילים אחרות, למצוא <strong>אלגוריתם</strong> שמקבל מספר <span class="math">\(n\)</span> ואומר אם הוא קונגרואנטי או לא. ברור שאפשר פשוט לעבור סדרתית על כל המשולשים עם צלעות רציונליות שקיימים (כי אוסף כל השלשות של מספרים רציונליים הוא בן מניה ולכן אפשר לעבור סדרתית על איבריו) אבל זה מבטיח לנו רק שנעצור ונגיד "כן" על מספרים שהם <strong>כן</strong> קונגרואנטיים; זה לא אומר לנו מתי נוכל לעצור אם מספר איננו קונגרואנטי. זהו לב הבעיה - בעיה שנותרה פתוחה אלפי שנים.</p>
+<p>בשנות השמונים פרסם Tunnel פתרון כמעט מלא לבעיה. "כמעט מלא" במובן זה שאחד הכיוונים בו לא הוכח לחלוטין, אלא התבסס על נכונות השערה מפורסמת מאוד בתורת המספרים - <a href="http://he.wikipedia.org/wiki/%D7%94%D7%A9%D7%A2%D7%A8%D7%AA_%D7%91%D7%99%D7%A8%D7%A5%27_%D7%95%D7%A1%D7%95%D7%95%D7%99%D7%A0%D7%A8%D7%98%D7%95%D7%9F-%D7%93%D7%99%D7%99%D7%A8">השערת בירץ' וסווינרטון-דייר</a>. למעשה, המשפט של טאנל לא נזקק למלוא הכוח של ההשערה אלא רק למקרה פרטי מאוד שלה, ומאז כבר הוכיחו מקרה פרטי של המקרה הפרטי הזה - אך למיטב ידיעתי, טרם הוכיחו את המקרה הפרטי המדובר במלואו, כך שהבעיה עוד לא נפתרה סופית, אך כל הסימנים מעידים על כך שזמנה קרב, בדומה לאופן שבו העידו הסימנים על כך שזמנה של בעיית המשפט האחרון של פרמה קרב. נראה לי שהכי פשוט יהיה להציג את הקריטריון שנתן טאנל ורק לאחר מכן להתחיל לדון עליו.</p>
+<p>נניח לרגע ש-<span class="math">\(n\)</span> אי זוגי וחופשי מריבועים. אז על פי טאנל, <span class="math">\(n\)</span> הוא קונגרואנטי אם ורק אם מספר הפתרונות בשלמים של המשוואה <span class="math">\(n=2x^{2}+y^{2}+32z^{2}\)</span> הוא כפול ממספר הפתרונות בשלמים של המשוואה <span class="math">\(n=2x^{2}+y^{2}+8z^{2}\)</span>. עבור <span class="math">\(n\)</span> זוגי יש צמד משוואות דומות. זהו. שימו לב שמכיוון שמדובר על פתרונות בשלמים למשוואה הזו, וכל המשתנים הם בריבוע, יש רק מספר סופי של הצבות שיש לבצע כדי לספור את מספר הפתרונות של המשוואה, והוא אפילו לא גדול מהותית ביחס ל-<span class="math">\(n\)</span>, כלומר הפתרון הוא אפילו יעיל יחסית ("יחסית", כי בדרך כלל כשמדובר על אלגוריתמים במספרים נדרשת יעילות ביחס לגודל הייצוג של המספר ולא ביחס לגודל שלו עצמו - אבל נעזוב את זה).</p>
+<p>אם כן, השאלה המקורית היא פשוטה למדי מבחינת הניסוח שלה. גם הקריטריון הסופי הוא פשוט למדי מבחינת הניסוח שלו. מה שקורה באמצע, לעומת זאת, לחלוטין לא פשוט; המתמטיקה שמובילה מבעיית המספרים הקונגרואנטים אל הפתרון שלה עוברת דרך המתמטיקה המודרנית של המאה ה-20, עמוק אל תוך השטח שפתר גם את המשפט האחרון של פרמה - עקומים אליפטיים ותבניות מודולריות. הייתי שמח לומר שאני מסוגל להסביר את הפתרון בשלמותו, אבל לפחות כרגע אני מאוד, מאוד לא בקיא בפרטיו, ויכול להסביר רק את הרעיון הכללי. נתחיל מהאופן שבו עקומים אליפטיים נכנסים בכלל לסיפור.</p>
+<p>כאמור, אם <span class="math">\(n\)</span> קונגרואנטי אז קיים <span class="math">\(x\)</span> רציונלי כך ש-<span class="math">\(x,x+n,x-n\)</span> הם ריבועים כולם. לכן גם מכפלתם היא ריבוע, שנסמנו <span class="math">\(y^{2}\)</span>, ומכפלה זו שווה ל- <span class="math">\(x\left(x+n\right)\left(x-n\right)=x\left(x^{2}-n^{2}\right)=x^{3}-n^{2}x\)</span>. בקיצור, אם <span class="math">\(n\)</span> קונגרואנטי אז קיים זוג <span class="math">\(\left(x,y\right)\)</span> של נקודות רציונליות כך ש-<span class="math">\(y^{2}=x^{3}-n^{2}x\)</span>. המשוואה הזו היא דוגמה קלאסית ל<strong>עקום אליפטי</strong>.</p>
+<p>קצת קשה לתת את ההגדרה המדוייקת לעקום אליפטי בלי להשתמש במושגים מתקדמים למדי; ההגדרה של ויקיפדיה העברית לעקום אליפטי מעל שדה <span class="math">\(K\)</span> היא "עקום אלגברי פרויקטיבי, לא סינגולרי, מעל <span class="math">\(K\)</span> מגנוס 1, עם נקודה קבועה המוגדרת מעל <span class="math">\(K\)</span>". עקום אלגברי הוא מקרה פרטי של יריעה אלגברית, שם שאולי נשמע מפחיד אבל אינו כל כך נורא בשורה התחתונה: יריעה אלגברית היא פשוט אוסף כל הנקודות שמאפסות פולינום מסויים במספר משתנים (או, כמו שקורה לרוב, <strong>אוסף</strong> של פולינומים שכאלו) מעל שדה נתון. כך למשל הפולינום עבור העקום האליפטי שלנו הוא <span class="math">\(f\left(x,y\right)=y^{2}-x^{3}+n^{2}x\)</span>. התחום העוסק ביריעות אלגבריות נקרא <a href="http://he.wikipedia.org/wiki/%D7%92%D7%90%D7%95%D7%9E%D7%98%D7%A8%D7%99%D7%94_%D7%90%D7%9C%D7%92%D7%91%D7%A8%D7%99%D7%AA">גאומטריה אלגברית</a>; זהו תחום מתקדם ומודרני למדי במתמטיקה, ואין לי שום סיכוי להציג אותו בצורה ראויה בשלב זה. לכן אסתפק בתיאור עקומים אליפטיים בשיטת "Bottom-up'' - אגדיר אותם בצורה צרה יחסית, שמפספסת את התיאוריה הכללית שמסביב, וכאילו שלא די בכך - גם אתעלם ממקרי קצה על ימין ועל שמאל.</p>
+<p>אם כן, לצורך שלנו, עקום אליפטי הוא פשוט אוסף הנקודות שמאפסות משוואה מהצורה <span class="math">\(y^{2}=p\left(x\right)\)</span>, כש-<span class="math">\(p\)</span> הוא פולינום ממעלה שלישית, מעל שדה <span class="math">\(\mathbb{F}\)</span> כלשהו. הן המשוואה שמגדירה את העקום והן השדה שממנו נלקחים הפתרונות משנים באופן מהותי את המבנה שלו ולכן נהוג בדרך כלל לתאר את שניהם גם יחד: למשל <span class="math">\(E/\mathbb{F}\)</span> או <span class="math">\(E\left(\mathbb{F}\right)\)</span> הן צורות סימון מקובלות. על <span class="math">\(p\left(x\right)\)</span> דורשים דרישה נוספת - שכל שלושת שורשיו יהיו שונים (אין ל-<span class="math">\(p\)</span> בהכרח שורשים ב-<span class="math">\(\mathbb{F}\)</span>, אך תמיד יש לו שורשים בהרחבה סופית כלשהי של <span class="math">\(\mathbb{F}\)</span>) - דרישה זו מבטיחה שהעקום יהיה "חלק" - לא אסביר כרגע מה זה אומר או למה זה אומר את זה או למה צריך את זה.</p>
+<p>אם המציין של <span class="math">\(\mathbb{F}\)</span> שונה מ-2 או 3, כלומר אם המשוואות <span class="math">\(1+1=0\)</span> ו-<span class="math">\(1+1+1=0\)</span> אינן נכונות ב-<span class="math">\(\mathbb{F}\)</span> (בשדה <span class="math">\(\mathbb{Z}_{2}\)</span> המשוואה <span class="math">\(1+1=0\)</span> דווקא כן נכונה, למשל) אז אפשר על ידי התחכמויות אלגבריות לכתוב כל עקום אליפטי בעזרת המשוואה הבאה: <span class="math">\(y^{2}=x^{3}+ax+b\)</span>. העקום מאופיין, אם כן, על ידי הפרמטרים <span class="math">\(a,b\)</span>. בעקום שדיברנו עליו למעלה <span class="math">\(a=-n^{2}\)</span> ו-<span class="math">\(b=0\)</span>.</p>
+<p>הנה איך כל זה נראה מעל <span class="math">\(\mathbb{R}\)</span>:</p>
+<p><strong><a href="/img/2010/05/ec.png"><img class="alignnone size-full wp-image-488" title="ec" src="/img/2010/05/ec.png" alt="עקום אליפטי" width="484" height="321" /></a></strong></p>
+<p>התמונה קצת מבלבלת כי יש עקומים שלא נראים כך, ומורכבים רק מחתיכה אחת, אבל זה נותן את הרעיון הכללי. כמו שאפשר לראות מהתמונה, עקומים אליפטיים לא מזכירים בכלל אליפסות. אז למה "אליפטיים"? מסיבות היסטוריות (קשר לאינטגרלים אליפטיים, שנקראים כך כי הם צצו לראשונה בהקשר של חישוב אורך קשת של אליפסה) שלא אציג כרגע.</p>
+<p>בנוסף לכל הצרות, לכל עקום אליפטי יש נקודה נוספת, לא מתוך <span class="math">\(\mathbb{F}\)</span>, שנמצאת "באינסוף". הדרך הפורמלית והמדוייקת לתאר אותה היא להסתכל על <a href="http://en.wikipedia.org/wiki/Projective_space">מרחב פרוייקטיבי</a> מעל <span class="math">\(\mathbb{F}\)</span> (ושם נקודת ה"אינסוף" מתקבלת בתור פתרון חוקי לגמרי למשוואה שמגדירה את העקום) אבל גם זה נושא לפוסט בפני עצמו ולכן לעת עתה נסתפק בהבנה שקיימת כזו נקודה ושהיא חוקית לגמרי מבחינה מתמטית. את הנקודה הזו מסמנים בדרך כלל ב-<span class="math">\(\mathcal{O}\)</span>, מסיבה שתכף תתברר.</p>
+<p>כעת הפאנץ' - כל עקום אליפטי מהווה חבורה אבלית, ביחס לפעולת "חיבור"משונה למדי (משונה, במבט ראשון). מכיוון שהתגובה הראשונית לתיאור הפעולה הזו היא משעשעת למדי, אתאר אותה כאן בזריזות - הסבר אמיתי יגיע בפוסט נפרד. באופן כללי, הרעיון הוא כזה: כדי לחבר שתי נקודות <span class="math">\(P,Q\)</span> על העקום, יש להעביר את הישר שעובר דרך שתיהן. אם הוא לא חתך שוב את העקום, אז סכום הנקודות יהיה <span class="math">\(\mathcal{O}\)</span>; אבל אם הוא כן חתך אותו שוב... ובכן, מתבקש להגדיר את נקודות החיתוך בתור <span class="math">\(P+Q\)</span>, נכון? אבל במקום זה, לוקחים את השיקוף ביחס לציר <span class="math">\(x\)</span> של נקודת החיתוך בתור <span class="math">\(P+Q\)</span>. מה, לא ברור?</p>
+<p><strong><a href="/img/2010/05/elliptic.jpg"><img class="alignnone size-full wp-image-489" title="elliptic" src="/img/2010/05/elliptic.jpg" alt="הפעולה שמוגדרת על עקום אליפטי" width="490" height="499" /></a></strong></p>
+<p>הנקודה באינסוף <span class="math">\(\mathcal{O}\)</span> משמשת בתור היחידה ביחס לחיבור, כלומר <span class="math">\(P+\mathcal{O}=P\)</span> לכל <span class="math">\(P\)</span>. ההופכי של כל נקודה <span class="math">\(P\)</span> הוא פשוט השיקוף שלה ביחס לציר <span class="math">\(x\)</span>, ולכן אפשר לתאר את כלל החיבור גם באופן הבא: אם <span class="math">\(P,Q,R\)</span> הן שלוש נקודות של העקום שנמצאות על אותו ישר, אז <span class="math">\(P+Q+R=\mathcal{O}\)</span> (למה זה באמת שקול למה שתיארתי קודם?). לבסוף צריך להבהיר איך מחברים נקודה עם עצמה - אם רוצים לחשב את <span class="math">\(P+P\)</span> הרי לא ניתן להעביר ישר "דרך <span class="math">\(P\)</span> וגם דרך <span class="math">\(P\)</span>"כי ישנם אינסוף ישרים שכאלו. מה שכן עושים הוא לקחת את הישר ש<strong>משיק</strong> לעקום האליפטי בנקודה <span class="math">\(P\)</span> (כאן נכנסת לתמונה העובדה שהעקום הוא חלק, ולכן ניתן להעביר לו משיק שכזה), ומכאן ממשיכים כרגיל - מוצאים את נקודת החיתוך הנוספת עם העקום (אם אין כזו, <span class="math">\(P+P=\mathcal{O}\)</span>) ולוקחים את השיקוף שלה.</p>
+<p>כל זה נשמע מאוד מוזר, כל עוד לא רואים מהיכן הפעולה הזו מגיעה. לעת עתה תצטרכו לסמוך עלי שיש הסבר הגיוני ואפילו יפה לכל זה, ושארחיב עליו בעתיד; לעת עתה אני רוצה להסביר איך כל זה מתקשר לעניין המספרים הקונגרואנטיים.</p>
+<p>ובכן, מה שראינו עד כה היה שאם <span class="math">\(n\)</span> הוא מספר קונגרואנטי, אז קיימת נקודה <span class="math">\(\left(x,y\right)\)</span> עם קוארדינטות רציונליות כך ש-<span class="math">\(y^{2}=x^{3}-n^{2}x\)</span>. במילים אחרות, קיימת נקודה על העקום האליפטי <span class="math">\(y^{2}=x^{3}-n^{2}x\)</span> מעל השדה <span class="math">\(\mathbb{Q}\)</span> - אסמן אותו כ-<span class="math">\(E_{n}\left(\mathbb{Q}\right)\)</span>. ניתוח יותר זהיר של הסיטואציה מראה שלא כל נקודה על העקום מתקבלת באופן הזה, ושגם אם יש נקודה על העקום, זה עדיין לא מבטיח ש-<span class="math">\(n\)</span> קונגרואנטי. אז איך כל זה עוזר לנו? כי באמצעות הניתוח הזהיר (שלא אציג כרגע) אפשר להראות ש-<span class="math">\(n\)</span> הוא קונגרואנטי אם ורק אם <span class="math">\(E_{n}\left(\mathbb{Q}\right)\)</span> מכיל אינסוף נקודות. בכך הפכה בעיית המספרים הקונגרואנטיים לבעיה על עקומים אליפטיים. רק אעיר שה"ניתוח הזהיר" מתבסס בצורה חזקה מאוד על ניתוח הפעולה שמוגדרת על נקודות העקום - בפרט, הוא מראה שנקודה שמוכיחה ש-<span class="math">\(n\)</span> קונגרואנטי חייבת להיות בעלת התכונה שכשאשר מחברים אותה לעצמה שוב ושוב מקבלים כל הזמן נקודות שונות (ובמתמטית: הסדר שלה אינסופי), כך שלא דיברתי כאן "סתם" על הפעולה.</p>
+<p>השלב הבא הוא מה שכיניתי השערת בירץ' וסווינרטון-דייר. מן הסתם גם כדי לתאר את ההשערה הזו צריך פוסט שלם (והרבה יותר מכך), ולכן אסתפק כרגע בתמצית צנועה של החלק שרלוונטי עבורנו - ההשערה עוסקת בעקומים אליפטיים מעל הרציונליים (ומעל הרחבות סופיות של הרציונליים - שדות מספרים - אבל עזבו את זה) וקובעת בין היתר כי מספר הנקודות על עקום שכזה הוא אינסופי אם ורק אם פונקציה מרוכבת מסויימת שמוגדרת עבור העקום - פונקצית ה-<span class="math">\(L\)</span> של העקום, שהיא מעין הכללה של פונקצית הזטא של רימן - מתאפסת בנקודה <span class="math">\(1\)</span>. זה מעביר את הדיון מעיסוק בעקומים אליפטיים לעיסוק בפונקציות <span class="math">\(L\)</span>, שבסופו של דבר מביא לקריטריון של טאנל שהצגתי למעלה. הבעיה היא שהשערת בירץ' וסווינרטון-דייר היא השערה בלבד, למרות שכל הראיות האמפיריות מצביעות על נכונותה (מה עניין ראיות אמפיריות לכאן? ובכן, בדומה למשפט המספרים הראשוניים או לעניין ה-Monstrous Moonshine ש<a href="http://www.gadial.net/2009/07/14/monster/">הזכרתי כאן בעבר</a>, גם ההשערה הזו גובשה על בסיס נתונים אמפיריים, במקרה זה שנאספו בידי מחשב). ההשערה הוכחה <strong>חלקית</strong>, מה שפתר את העניין עבור מספר רב של <span class="math">\(n\)</span>-ים, אך לא עבור כולם. בפרט, משפט של Coates-Wiles מ-79 (אותו ווילס שהוכיח, חמש עשרה שנים לאחר מכן, את המשפט האחרון של פרמה) מוכיח כיוון אחד מהשניים הנדרשים - שאם ישנן אינסוף נקודות על העקום, אז פונקצית ה-<span class="math">\(L\)</span> שלו מתאפסת. מכאן שאם מספר הוא קונגרואנטי, אנו יודעים בודאות כי הוא מקיים את הקריטריון של טאנל; אבל לא מובטח כי כל מספר שמקיים את הקריטריון הוא אכן קונגרואנטי (ומציאת מספר קונגרואנטי שאינו מקיים את הקריטריון תהיה הפרכה להשערת בירץ' וסווינרטון-דייר!).</p>
+<p>אם כן, זוהי (מאוד בגדול) בעיית המספרים הקונגרואנטיים; אבל סיפורם של העקומים האליפטיים לא נגמר כאן, אלא בקושי מתחיל.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/05/06/bad_math_godel_theorem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט אי השלמות של גדל - מה הוא ממש, ממש לא</span>
+            </a>
+            
+            
+            
+            <a href="/2010/04/21/cantor_set/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">קבוצת קנטור, ואיך לכל הרוחות המימד שלה הוא בערך 0.63?</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

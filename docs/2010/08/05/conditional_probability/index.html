@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בהינתן שאנחנו יודעים הסתברות בסיסית, כמה קל להבין הסתברות מותנית? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>בהינתן שאנחנו יודעים הסתברות בסיסית, כמה קל להבין הסתברות מותנית?</h1>
+            <div class="post-meta">
+                <span class="date">2010-08-05</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/הסתברות.html">הסתברות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מתמטיקה תיכונית.html">מתמטיקה תיכונית</a>
+                    
+                    <a href="/tags/נוסחת בייס.html">נוסחת בייס</a>
+                    
+                    <a href="/tags/תורת ההסתברות.html">תורת ההסתברות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2010/07/29/probability_intro/">בפוסט הקודם</a> התחלתי לדבר על הסתברות בסיסית והצגתי כמה רעיונות בסיסיים. אמרתי שאנחנו ממדלים סיטואציה הסתברותית עם <strong>מרחב הסתברות</strong> שכולל קבוצה <span class="math">\(X\)</span> (<strong>מרחב </strong>המדגם)<strong> של</strong> כל התוצאות האפשריות של הסיטואציה ההסתברותית, כך שלכל <span class="math">\(a\in X\)</span> (לכל תוצאה <span class="math">\(a\)</span> אפשרית ששייכת לקבוצה <span class="math">\(X\)</span>) מותאם גם מספר <span class="math">\(P\left(a\right)\)</span> בין 0 ל-1 שאומר מה ההסתברות של התוצאה הזו, וסכום ההסתברויות של כולם הוא 1. כמו כן אמרתי שמה שמעניין אותנו בדרך כלל הוא <strong>מאורעות</strong>, שהם תת-קבוצות של <span class="math">\(X\)</span> (מסמנים זאת <span class="math">\(A\subseteq X\)</span>) ומהווים אוסף של כמה תוצאות אפשריות בעלות משמעות "דומה". למשל, בהטלת קוביה התוצאות הבסיסיות הן <span class="math">\(1,2,3,4,5,6\)</span> ואילו מאורעות אפשריים הם "הקוביה נפלה על מספר זוגי", "הקוביה נפלה על מספר גדול מ-4", "הקוביה נפלה על 2, או על 3, או על 5"וכדומה. ההסתברות של מאורע, שסימנתי <span class="math">\(P\left(A\right)\)</span>, הייתה פשוט סכום ההסתברויות של איבריו.</p>
+<p>בואו נעבור עכשיו לשאלה יותר מורכבת: "בהינתן שידוע שהקוביה נפלה על מספר זוגי, מה ההסתברות שהיא נפלה על 2?". איך מתמודדים עם שאלה שכזו?</p>
+<p>האינטואיציה היא בערך כך: אם נפלתי על מספר זוגית אז ההסתברות שנפלתי על 1,3,5 היא אפס - הם יצאו מהמשחק. כלומר, נפלתי או על 2, או על 4, או על 6. מכיוון שקודם ההסתברות שלי ליפול על כל אחד מהם הייתה זהה, והמידע החדש לא מסייע לי להבדיל ביניהם, גם עכשיו ההסתברות שלי ליפול על כל אחד מהם היא זהה, ומכיוון שסכומם צריך להיות 1, ההסתברות של כל אחד מהם היא <span class="math">\(\frac{1}{3}\)</span>. לכן ההסתברות של 2 היא <span class="math">\(\frac{1}{3}\)</span> וזו התשובה. אכן, אם תעשו סימולציה ממוחשבת של הטלת קובייה ותבדקו באיזה אחוז מהמקרים מקבלים 2 <strong>אם</strong> בהטלת הקוביה התקבל מספר זוגי (ואחרת פשוט מתעלמים מהטלת הקוביה הזו), תקבלו בערך <span class="math">\(\frac{1}{3}\)</span>. אז איך אפשר להצדיק את הקסם הזה פורמלית ולטפל בסיטואציות יותר מורכבות?</p>
+<p>הרעיון הבסיסי של הסתברות מותנית הוא שינוי מרחב ההסתברות שלנו. אם יש לנו מרחב מדגם <span class="math">\(X\)</span> ומאורע <span class="math">\(B\)</span> ואומרים לנו שהמאורע <span class="math">\(B\)</span> התרחש, זה אומר שאפשר לשכוח מהקבוצה <span class="math">\(X\)</span> המקורית ולהגדיר מרחב הסתברות חדש שבו מרחב המדגם הוא <span class="math">\(B\)</span>. יש "לתקן" את ההסתברויות בהתאם, כדי שסכום ההסתברויות של התוצאות שנמצאות ב-<span class="math">\(B\)</span> יהיה 1; לפעולה הזו קוראים <strong>נורמליזציה</strong> והיא נפוצה למדי במתמטיקה. מה שעושים הוא פשוט לחשב את סכום כל התוצאות שב-<span class="math">\(B\)</span> (שהוא פשוט <span class="math">\(P\left(B\right)\)</span>) ואז לחלק את ההסתברות של כל איבר ב-<span class="math">\(B\)</span> במספר זה. כעת ברור שסכום כל ההסתברויות החדשות של אברי <span class="math">\(B\)</span> יסתכם ל-1. אם נסמן ב-<span class="math">\(P^{\prime}\)</span> את ההסתברות החדשה שנתנו לכל איבר של <span class="math">\(B\)</span> אז <span class="math">\(P^{\prime}\left(a\right)=\frac{P\left(a\right)}{P\left(B\right)}\)</span> לכל <span class="math">\(a\in B\)</span>, ועל כן</p>
+<p><span class="math">\(\sum_{a\in B}P^{\prime}\left(a\right)=\sum_{a\in B}\frac{P\left(a\right)}{P\left(B\right)}=\frac{1}{P\left(B\right)}\sum_{a\in B}P\left(a\right)=\frac{P\left(B\right)}{P\left(B\right)}=1\)</span></p>
+<p>כך שפורמלית השגנו את המטרה שלנו.</p>
+<p>מהדבר הזה נובעת נוסחה פשוטה יחסית: אם <span class="math">\(A,B\subseteq X\)</span> הם מאורעות כלשהם במרחב המדגם המקורי, ואנחנו רוצים לדעת מה ההסתברות ש-<span class="math">\(A\)</span> יתקיים אם ידוע ש-<span class="math">\(B\)</span> התקיים, אז מפתה לכתוב שהסתברות זו היא <span class="math">\(\frac{P\left(A\right)}{P\left(B\right)}\)</span>. לרוע המזל, זה לא נכון כי ייתכן שחלק מאברי <span class="math">\(A\)</span> בכלל לא נמצאים ב-<span class="math">\(B\)</span>. אם <span class="math">\(A=X\)</span> עצמו, אז נקבל את התוצאה הלא הגיונית שההסתברות שהקוביה תיפול על <strong>משהו</strong> (שהיא כמובן 1) הופכת פתאום ל-<span class="math">\(\frac{1}{3}\)</span> כשאנחנו יודעים שהתקבל מספר זוגי. לכן צריך לתקן קצת את הנוסחה - מה שבמונה צריך להתייחס רק לאיברים של <span class="math">\(A\)</span> <strong>שהם גם איברים של</strong> <span class="math">\(B\)</span>. מסמנים את קבוצת האיברים המשותפים של <span class="math">\(A,B\)</span> כ-<span class="math">\(A\cap B\)</span> (ה<strong>חיתוך</strong> של <span class="math">\(A\)</span> ו-<span class="math">\(B\)</span>), ולכן הנוסחה הנכונה היא <span class="math">\(\frac{P\left(A\cap B\right)}{P\left(B\right)}\)</span>. לצורך פשטות נהוג לסמן זאת כ-<span class="math">\(P\left(A|B\right)=\frac{P\left(A\cap B\right)}{P\left(B\right)}\)</span> (כלומר, <span class="math">\(P\left(A|B\right)\)</span> הוא ההסתברות של "<span class="math">\(A\)</span> בהינתן <span class="math">\(B\)</span>"). אגב, שימו לב שאם <span class="math">\(P\left(B\right)=0\)</span> הנוסחה אינה חוקית כי קיבלתי חלוקה באפס; ואכן, אין ממש הגיון בלשאול מה ההסתברות ש-<span class="math">\(A\)</span> יתרחש אם <strong>נתון</strong> שהתרחש <span class="math">\(B\)</span> למרות של-<span class="math">\(B\)</span> אין שום סיכוי לקרות.</p>
+<p>דרך אחרת ונחמדה לכתוב את הנוסחה הזו היא <span class="math">\(P\left(B\right)\cdot P\left(A|B\right)=P\left(A\cap B\right)\)</span>. כלומר, ההסתברות שגם <span class="math">\(A\)</span> וגם <span class="math">\(B\)</span> יתרחשו ניתנת לחישוב כתהליך דו שלבי - קודם מחשבים מה ההסתברות ש-<span class="math">\(B\)</span> יתקיים, ואז מחשבים מה ההסתברות ש-<span class="math">\(A\)</span> יתקיים בהינתן ש-<span class="math">\(B\)</span> מתקיים. לעתים קרובות חישוב מותנה שכזה קל לביצוע באופן ישיר ואז אופן החישוב הזה חוסך לנו עבודה. עוד דבר שנראה בבירור בנוסחה הזו הוא הסימטריה שלה - באותו האופן בדיוק אני יכול לכתוב <span class="math">\(P\left(A\right)\cdot P\left(B|A\right)=P\left(A\cap B\right)\)</span>, ואז לקבל את השוויון <span class="math">\(P\left(B\right)\cdot P\left(A|B\right)=P\left(A\right)\cdot P\left(B|A\right)\)</span>. על ידי העברת אגפים קלה מקבלים את הנוסחה הבאה, שהיא חשובה ביותר:</p>
+<p><span class="math">\(P\left(A|B\right)=\frac{P\left(A\right)}{P\left(B\right)}P\left(B|A\right)\)</span></p>
+<p>הנוסחה הזו מכונה "נוסחת בייס", והיא מאפשרת לנו לחשב הסתברות מותנית שנדמית "הפוכה" בעזרת הכרה של ההסתברות של שני המאורעות בנפרד ושל ההסתברות המותנית "ההגיונית". כאן המקום לזרוק לפח את דוגמת הקוביה ולעבור לתאר סיטואציות יותר מעניינות שבהן ה"מוזרות" שבנוסחת בייס בולטת הרבה יותר. עיקר החוכמה היא בבחירה של מאורעות <span class="math">\(A,B\)</span> כך שכלל לא נראה ש-<span class="math">\(B\)</span> גורר את <span class="math">\(A\)</span> בצורה כלשהי, אלא ההפך. יוסי לוי <a href="http://www.sci-princess.info/archives/885">השתמש בבלוג שלו</a> בדוגמה של בדיקת סמים לספורטאי; אצלו <span class="math">\(A\)</span> היה "השחקן משתמש בסמים" ו-<span class="math">\(B\)</span> היה "בבדיקה התגלו סמים". כאן נראה ש-<span class="math">\(A\)</span> הוא זה שמשפיע על <span class="math">\(B\)</span> ולא להפך - אם יודעים משהו על איכות בדיקת הסמים אפשר לחשוב באופן ישיר מה ההסתברות שהיא תצליח בהינתן שהשחקן באמת משתמש בסמים - אך איך אפשר להסיק מכך את ההפך? בניסוח קצת חרטטני - אם הסתברות מותנית נראית לנו במבט ראשון ככלי שבו אנחנו מסיקים מידע לגבי ההשפעה של העבר על העתיד ("השחקן השתמש בסמים וכתוצאה מכך הוא נכשל בבדיקה"), נוסחת בייס מראה לנו שגם ניתן להסיק מהעתיד על העבר.</p>
+<p>דוגמאות סטנדרטיות לתיאור נוסחת בייס מדברות למשל על בדיקת מחלות וסמים וכדומה. אנסה לתת דוגמה קצת פחות קודרת, שמבוססת על סיפור אמיתי. במקצוע קשה מסויים בטכניון מרבית הסטודנטים כשלו וקיבלו ציונים נמוכים. לכעסם הרב התברר להם שלא היה פקטור בבחינה (הגדלה מלאכותית של הציונים שמיועדת לתקן את הממוצע או לפצות על מבחן קשה). כשהסטודנטים באו להתלונן למרצה הוא לא הבין על מה הם מדברים וטען שהמבחן היה קל - עובדה, היה סטודנט שקיבל 103, ואם הוא הצליח, כל אחד יכול.</p>
+<p>הסטודנטים הזועמים רוצים לדעת מי דפק להם את הפקטור. ליתר דיוק, האם הוא עתודאי או לא (העתודאים הם דופקי פקטורים ידועים לשמצה ובשל כך - בין היתר - נחשבים למעמד התחתון בהיררכיית המזון האוניברסיטאית). איזה חישוב עליהם לעשות? ובכן, <span class="math">\(A\)</span> יהיה המאורע "הסטודנט הוא עתודאי" ו-<span class="math">\(B\)</span> יהיה המאורע "הסטודנט קיבל 103 במבחן הבלתי אפשרי", ואנחנו רוצים לדעת מהו <span class="math">\(P\left(A|B\right)\)</span>. שימו לב שכדי לדעת זאת אנחנו צריכים לדעת שלושה פרטים: <span class="math">\(P\left(A\right)\)</span>, שהוא ההסתברות לכך שסטודנט יהיה עתודאי; <span class="math">\(P\left(B\right)\)</span> שהוא ההסתברות שסטודנט כלשהו יקבל 103 במבחן הבלתי אפשרי; ו-<span class="math">\(P\left(B|A\right)\)</span>, שהיא ההסתברות ש<strong>עתודאי</strong> יקבל 103 במבחן הבלתי אפשרי. מכיוון שלא מדובר בבעיה מתמטית מופשטת ברור שאין לנו דרך אמיתית לקבל את הנתונים הללו, אבל אפשר להעריך אותם סטטיסטית.</p>
+<p>ובכן, נניח שמספר הסטודנטים הכולל בטכניון הוא 10,000 ומתוכם יש 50 עתודאים. אז מה ההסתברות שסטודנט אקראי יהיה עתודאי? <span class="math">\(P\left(A\right)=\frac{50}{10000}=\frac{1}{200}\)</span>.</p>
+<p>הנתון לגבי ההסתברות לקבל 103 במבחן הבלתי אפשרי הוא הרבה יותר קשה לחילוץ, שהרי המבחן הזה ניתן רק פעם אחת, ועל קבוצה יחסית קטנה של סטודנטים. אבל כאמור, אנחנו לא רציניים כאן לגמרי. אז בואו נסתכל על מה שקורה "בדרך כלל" במבחנים קשים ונעשה מיצוע לאורך זמן. נניח שהתוצאה מראה לנו שבדרך כלל סטודנט אחד ממאה מצליח לקבל ציון שכזה - כלומר, ההסתברות לסטודנט גנרי כלשהו לקבל 103 במבחן הבלתי אפשרי היא <span class="math">\(P\left(B\right)=\frac{1}{100}\)</span>.</p>
+<p>ועכשיו, מה ההסתברות של <strong>עתודאי</strong> לקבל 103 במבחן הבלתי אפשרי? מכיוון שעתודאים הם צורת חיים חדשה ומתקדמת אפשר להניח שההסתברות שלהם להצליח היא לא פחות מ-<span class="math">\(P\left(B|A\right)=\frac{99}{100}\)</span>. עכשיו בואו ונדחוף את כל הנתונים לנוסחה ונראה מה נקבל: <span class="math">\(P\left(A|B\right)=\frac{P\left(A\right)}{P\left(B\right)}P\left(B|A\right)=\frac{1/200}{1/100}\frac{99}{100}=\frac{100}{200}\frac{99}{100}=\frac{99}{200}\)</span>. כלומר, קיבלנו הסתברות של כמעט חמישים אחוז. מצד אחד, זה הרבה. מצד שני, אולי זה לא הרבה כפי שציפינו. תחשבו על הפער האדיר הזה: אם ניקח סטודנט מהרחוב, ההסתברות שלו לקבל 103 במבחן היא אפסית - <span class="math">\(\frac{1}{100}\)</span>. מצד שני, לעתודאי ההבטחה כמעט מוצלחת - <span class="math">\(\frac{99}{100}\)</span>. ועם זאת, ההסתברות שמי שקלקל את המבחן היה סתם סטודנט ולא עתודאי היא הגדולה יותר. למה זה קרה? בגלל הנתון (הלא ריאליסטי, המהונדס לצרכי השאלה - אבל כך גם ה-<span class="math">\(\frac{99}{100}\)</span> של העתודאי להצליח במבחן) שרק אחד מכל מאתיים סטודנטים הוא עתודאי.</p>
+<p>ב<a href="http://www.ynet.co.il/articles/1,7340,L-2917313,00.html">מאמר</a> ב-Ynet מראה ישראל בנימיני עד כמה התופעה הזו יכולה להיות מבלבלת, בהקשר העגום של בדיקת מחלות. אציג את מה שהמאמר הציג בצורה קצת מפושטת ובנוסף אשתיל פנימה טעות מזעזעת (שאתייחס אליה אחר כך) ונראה אם תגלו מהי. ובכן, נניח שיש לנו בדיקה מעולה לגילוי מחלה מסויימת, שעל 100 אחוז מהאנשים החולים מחזירה תוצאה חיובית, ורק על אחוז אחד מהאנשים הבריאים מחזירה תוצאה חיובית. כמו כן ידוע לנו ששיעור המחלה באוכלוסיה הוא אחד מאלף אנשים. אם נסמן ב-<span class="math">\(A\)</span> את "האדם חולה" וב-<span class="math">\(B\)</span> את "תוצאת הבדיקה חיובית", הרי ש-<span class="math">\(P\left(B|A\right)=1\)</span>, <span class="math">\(P\left(A\right)=\frac{1}{1000}\)</span> ו-<span class="math">\(P\left(B\right)=\frac{1}{100}\)</span>. נוסחת בייס נותנת לנו כאן מייד ש-<span class="math">\(P\left(A|B\right)=\frac{1}{10}\)</span>, תוצאה שנראית מפתיעה ביותר ממבט ראשון - למרות שהבדיקה כל כך טובה ומדוייקת (לכאורה...), רק עשרה אחוז מהאנשים שמקבלים תשובה חיובית אכן חולים במחלה! זו אחת מהנקודות שחשוב לזכור גם בחיי היום יום שלנו: גם אם מבחן נראה לנו טוב במדד של "ההסתברות שהוא טועה היא נמוכה" זה עדיין לא אומר שהוא טוב גם במובן שחשוב לנו באמת, של "כשמפעילים את המבחן שוב ושוב, כמעט ולא יהיו טעויות". כך הדבר בבדיקת מחלות, או בבדיקה האם הודעות הן דואר זבל, או בבדיקה האם מוצר שיצא מקו ייצור הוא פגום, וכדומה. נוסחת בייס היא השיעור הראשון בסקפטיות שיש ללמוד כשבאים להתייחס לתוצאות סטטיסטיות.</p>
+<p>הבה נביא עוד דוגמה אחת (אולי קצת יותר קשה למי שחסר נסיון במתמטיקה, אז לא להתייאש אם לא מבינים) - <a href="http://www.gadial.net/2009/08/09/miller_rabin/">דיברתי בעבר</a> על מבחן מילר-רבין לבדיקת ראשוניות. זהו מבחן הסתברותי, במובן זה שאם מפעילים אותו על מספר ראשוני הוא תמיד יענה נכון, אבל אם מפעילים אותו על מספר שאינו ראשוני יש סיכוי כלשהו שהוא יטען שהמספר כן ראשוני (מה שעשוי להביא לתוצאות הרסניות). הכוח של מילר-רבין הוא בכך שאפשר לצמצם את גודל השגיאה שלו כרצוננו, במחיר כמה הפעלות נוספות שלו, אבל נשאלת השאלה - כמה זה "מספיק"? המבחן משמש אותנו כשאנחנו רוצים להגריל מספר ראשוני; דרך העבודה הסטנדרטית היא להגריל מספר גדול כלשהו, ואז להפעיל עליו את מילר-רבין. צריך לשפוט את הביטחון שמילר-רבין מספק לנו לאור התהליך הזה, ונוסחת בייס היא בדיוק הכלי שבו צריך להשתמש כאן (רק אעיר שאני משקר - בהגרלת ראשוני "אמיתית"ההגרלה לרוב מבוצעת רק על תת-קבוצה מסויימת של מספרים - למשל, אף פעם לא מגרילים זוגיים - וטרם הפעלת מילר-רבין מפעילים עוד מבחנים יותר פשוטים, כך שאני מציג כאן גרסה מפושטת למדי של המציאות).</p>
+<p>ובכן, נסמן ב-<span class="math">\(A\)</span> את "המספר ראשוני" וב-<span class="math">\(B\)</span> את "המספר עבר בהצלחה את המבחן". ברור כי <span class="math">\(P\left(B|A\right)=1\)</span>. נניח שאנחנו מגרילים מספרים בתחום שבין <span class="math">\(1\)</span> ו-<span class="math">\(n\)</span>, אז <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%A4%D7%98_%D7%94%D7%9E%D7%A1%D7%A4%D7%A8%D7%99%D7%9D_%D7%94%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99%D7%99%D7%9D">משפט המספרים הראשוניים</a> מראה כי ההסתברות שלנו לפגוע בראשוני היא <span class="math">\(\frac{1}{\ln n}\)</span>. במילים אחרות, <span class="math">\(P\left(A\right)=\frac{1}{\ln n}\)</span>. הנעלם בכל הסיפור הזה הוא ההסתברות של מילר-רבין לטעות, ואותה אנחנו מסמנים ב-<span class="math">\(x\)</span>. אם כן, <span class="math">\(P\left(B\right)=x\)</span> ו... רגע, רגע, רגע. אי אפשר לעשות את אותה הטעות פעמיים, חייבים כבר להתייחס אליה במפורש. קודם התחמקתי ממנה כדי לא לסבך את הפשטות של ההצגה עם איזו מהומה טכנית, אבל עכשיו אין מנוס מלהוציא את הפרטים המלוכלכים החוצה. <span class="math">\(P\left(B\right)\)</span> אינו יכול להיות שווה ל-<span class="math">\(x\)</span>, כי <span class="math">\(x\)</span> מייצג את ההסתברות שהמבחן יגיד "כן" רק על קלטים שהם <strong>לא ראשוניים</strong>, בעוד ש-<span class="math">\(P\left(B\right)\)</span> מייצג את ההסתברות שהמבחן יגיד כן על קלט <strong>כלשהו!</strong> אז מה עושים? אין מנוס מלחשב את <span class="math">\(P\left(B\right)\)</span> בצורה קצת יותר רצינית, פשוט על ידי חלוקה למקרים: <strong>אם</strong> המספר הוא ראשוני, אז ההסתברות שהמבחן יגיד "כן" היא 1; ו<strong>אם</strong> המספר הוא פריק, אז ההסתברות שהמבחן יגיד "כן"היא <span class="math">\(x\)</span>. יש לנו כאן סכום של שתי הסתברויות מותנות שונות. אולי תזכרו שבפוסט הקודם אמרתי שאם <span class="math">\(A\)</span> הוא מאורע אז מסמנים ב-<span class="math">\(\overline{A}\)</span> את המאורע ה"משלים" לו וההסתברות שלו היא <span class="math">\(P\left(\overline{A}\right)=1-P\left(A\right)\)</span>? זה בדיוק מה שנשתמש בו כעת. על פי התיאור שנתתי למעלה, <span class="math">\(P\left(B\right)=P\left(A\right)\cdot P\left(B|A\right)+P\left(\overline{A}\right)\cdot P\left(B|\overline{A}\right)\)</span>. הנוסחה הזו היא מקרה פרטי של מה שמכונה "נוסחת ההסתברות השלמה", ואתאר אותה במדוייק עוד מעט.</p>
+<p>כעת נשתמש בנתונים שידועים לנו ונוכל לחשב בקלות את <span class="math">\(P\left(B\right)\)</span>: <span class="math">\(P\left(B\right)=\frac{1}{\ln n}\cdot1+\left(1-\frac{1}{\ln n}\right)\cdot x\)</span>. עכשיו נוכל להציב את הכל בנוסחת בייס ולקבל: <span class="math">\(P\left(A|B\right)=\frac{\frac{1}{\ln n}}{\frac{1}{\ln n}+\left(1-\frac{1}{\ln n}\right)x}=\frac{1}{1+\left(\ln n-1\right)x}\)</span>. באופן בלתי מפתיע גילינו שההסתברות תלויה גם ב-<span class="math">\(n\)</span> וגם ב-<span class="math">\(x\)</span>. אם אנחנו רוצים הסתברות גבוהה להצלחה, אנחנו צריכים ש-<span class="math">\(x\)</span> יהיה קטן דיו כדי לבטל את האפקט של <span class="math">\(\left(\ln n-1\right)\)</span>. למשל, אם אנחנו רוצים הצלחה ב-99 אחוז מהמקרים אנחנו רוצים שיתקיים <span class="math">\(\frac{1}{1+\left(\ln n-1\right)x}=\frac{99}{100}\)</span>, כלומר <span class="math">\(100=99+99\left(\ln n-1\right)x\)</span>, כלומר <span class="math">\(x=\frac{1}{99\left(\ln n-1\right)}\)</span>. באופן כללי כדי להשיג הצלחה ב-<span class="math">\(a\)</span> אחוז מהמקרים צריך שיתקיים <span class="math">\(x=\frac{1}{a}\cdot\frac{1}{\ln n-1}\)</span>; אפשר לראות כאן היטב כיצד <span class="math">\(x\)</span> מורכב משני מרכיבים - גם ה"קבוע"של <span class="math">\(\frac{1}{a}\)</span> שתלוי רק באחוז ההצלחה שאנו שואפים אליו; אבל גם במידע נוסף של גודל התחום שעליו מתבצעת ההגרלה, שבא לידי ביטוי ב-<span class="math">\(\frac{1}{\ln n-1}\)</span>.</p>
+<p>הבה נעבור כעת לדבר על נוסחת ההסתברות השלמה. בתחילת הפוסט אמרתי שלעתים קל יותר לחשב את ההסתברות המותנית של משהו מאשר את ההסתברות ה"אמיתית"שלנו וראינו את הדוגמה כרגע, עם חישוב ההסתברות שהמבחן יחזיר תשובה חיובית. הסיבה לכך הייתה שלעתים קרובות ההסתברות ניתנת לתיאור באופן הפשוט ביותר באמצעות חלוקה למקרים, ואז ניתן לטפל בכל מקרה בנפרד. נוסחת ההסתברות השלמה מאפשרת לנו לעשות זאת. נניח שאנחנו מחלקים את מרחב המדגם <strong>כולו</strong> (את כל <span class="math">\(X\)</span>) לאוסף של מאורעות זרים (זרים פירושו שאין להם תוצאה משותפת) <span class="math">\(B_{1},B_{2},\dots,B_{k}\)</span>. אז ההסתברות של מאורע <span class="math">\(A\)</span> כלשהו היא ההסתברות שהוא יתרחש בהינתן ש-<span class="math">\(B_{1}\)</span> יתרחש, כפול ההסתברות ש-<span class="math">\(B_{1}\)</span> יתרחש; ועוד ההסתברות שהוא יתרחש בהינתן ש-<span class="math">\(B_{2}\)</span> יתרחש, כפול ההסתברות ש-<span class="math">\(B_{2}\)</span> יתרחש; וכן הלאה. מכיוון שה-<span class="math">\(B\)</span>-ים תופסים את כל מרחב המדגם, מובטח לנו שלא נפספס אף מקרה. בסיכומו של דבר הנוסחה היא <span class="math">\(P\left(A\right)=\sum_{i=1}^{k}P\left(A|B_{i}\right)P\left(B_{i}\right)\)</span>. על פניו היא נראית כמו דרך מסובכת יותר לכתוב את <span class="math">\(P\left(A\right)\)</span>, אך כאמור - לעתים קרובות הדרך הנוחה ביותר לחשב את <span class="math">\(P\left(A\right)\)</span> היא על ידי חלוקה למקרים שמיוצגים על ידי ה-<span class="math">\(B_{i}\)</span>.</p>
+<p>מה שאני עשיתי למעלה היה שימוש בנוסחת ההסתברות השלמה עבור חלוקה פשוטה למדי של מרחב המדגם, לשתי קבוצות שונות - <span class="math">\(B\)</span> והמשלימה שלה. אך כמובן שאפשר לחלק גם ליותר. כתרגיל כדי לראות שהכל ברור תוכלו לנסות ולבדוק מה ההסתברות <strong>האמיתית</strong> שמי שקיבל תשובה חיובית בבדיקת המחלה שבדוגמה שלמעלה אכן חולה באמת (תגלו שהיא לא שונה במיוחד מהתוצאה שקיבלתי...).</p>
+<p>מושג ההסתברות המותנית יכול לשמש אותנו גם להגדרת מושג נוסף שמתאים מאוד לתפיסה האינטואיטיבית שלנו - מאורעות בלתי תלויים. שני מאורעות <span class="math">\(A,B\)</span> הם בלתי תלויים, אינטואיטיבית, אם הידיעה על כך שאחד התרחש לא משפיעה על ההערכה שלנו לגבי ההסתברות שהשני יתרחש. למשל, אם אני מטיל שתי קוביות ומקבל 3 בקוביה הראשונה, זה לא משפיע בכלל על ההסתברות שאקבל מספר זוגי בקוביה השניה, כך שהמאורע "בקוביה הראשונה התקבל 3" והמאורע" בקוביה השניה התקבל מספר זוגי" הם בלתי תלויים. פורמלית זה אומר שמתקיים <span class="math">\(P\left(A|B\right)=P\left(A\right)\)</span> (ההסתברות ש-<span class="math">\(A\)</span> יתקיים, בלי ידע נוסף בעניין, זהה להסתברות ש-<span class="math">\(A\)</span> יתקיים אם ידוע לנו ש-<span class="math">\(B\)</span> יתקיים). על פי הנוסחה שלנו של <span class="math">\(P\left(A|B\right)\)</span> אפשר לראות ש-<span class="math">\(A,B\)</span> הם בלתי תלויים אם ורק אם <span class="math">\(P\left(A\cap B\right)=P\left(A\right)P\left(B\right)\)</span>, כלומר אם ההסתברות ששניהם גם יחד יתקיימו היא בדיוק מכפלת ההסתברויות שכל אחד יתקיים בנפרד. למי שזוכר את עקרון הכפל בקומבינטוריקה, זה בדיוק העיקרון הזה, וזה גם ממחיש לנו מתי <strong>אי אפשר</strong> להשתמש בעקרון הכפל - בדיוק כשיש תלות כלשהי בין שני הדברים שאנו "סופרים".</p>
+<p>דוגמה יפה לשימוש במושג זה באה מתחום הקריפטוגרפיה - קלוד שנון, אבי תורת האינפורמציה, עסק גם בשאלה איך ניתן לומר על שיטת הצפנה שהיא "מושלמת". הגדרתו היפה היא פשוטה: נניח שיש התפלגות כלשהי על כל הטקסטים שעשויים להיות מוצפנים באמצעות השיטה (וברור שיש כזו - למשל, התפלגות של כל הטקסטים באנגלית) ונסתכל על התפלגות התוצאות שמקבלים מהצפנות בעזרת השיטה. יהי <span class="math">\(X\)</span> טקסט אפשרי אחד ו-<span class="math">\(Y\)</span> תוצאת הצפנה אפשרית אחת - אז שיטת ההצפנה היא מושלמת אם לכל <span class="math">\(X,Y\)</span> שכאלו מתקיים <span class="math">\(P\left(X|Y\right)=P\left(X\right)\)</span>, כלומר אם אנחנו מסתכלים רק על <span class="math">\(Y\)</span>, זה לא משפר את הידע שלנו שהטקסט המקורי היה <span class="math">\(X\)</span> - ההסתברות שהטקסט המקורי היה <span class="math">\(X\)</span> זהה בעינינו למה שידענו עליו גם קודם.</p>
+<p>בלבול נפוץ אחד הוא בין מאורעות <strong>זרים</strong> ומאורעות בלתי תלויים. מכיוון שמאורעות זרים מקיימים <span class="math">\(A\cap B=\emptyset\)</span> (קבוצה ריקה) אז <span class="math">\(P\left(A\cap B\right)=0\)</span> ומכאן ש-<span class="math">\(P\left(A\right)=0\)</span> או <span class="math">\(P\left(B\right)=0\)</span> אם הם גם מאורעות בלתי תלויים. מכאן עולה ששני מאורעות בעלי הסתברות חיובית <strong>אינם יכולים להיות זרים</strong> אם הם בלתי תלויים. בדוגמת הטלת הקוביות שלי, התוצאה <span class="math">\(\left(3,2\right)\)</span> ("בקוביה הראשונה התקבל 3 ובשניה 2") היא משותפת לשני המאורעות כך שברור שהם אינם זרים.</p>
+<p>אם כן, לסיכום - הוספנו למשחק ההסתברותי מושג פשוט חדש, שהגדרתו המתמטית כמעט טריוויאלית, וקיבלנו כלי רב עוצמה שמשמש אותנו גם בחישובים אמיתיים ושופך אור פורמלי על מושגים אינטואיטיביים. המתמטיקה בשיא יופייה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2010/08/10/breaking_news_p_vs_np_proof/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">הוכחה ש-P שונה מ-NP?</span>
+            </a>
+            
+            
+            
+            <a href="/2010/07/29/probability_intro/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הסתברות בסיסית - אחד חלקי קומבינטוריקה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אנליזה וקטורית - מציאת ערכי קיצון - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אנליזה וקטורית - מציאת ערכי קיצון</h1>
+            <div class="post-meta">
+                <span class="date">2015-10-15</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיות קיצון.html">בעיות קיצון</a>
+                    
+                    <a href="/tags/כופלי לגראנז&#39;.html">כופלי לגראנז&#39;</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>חלק ראשון, שבו אנו מוצאים ערכי קיצון מקומיים</h2>
+<p>אחד מהשימושים הראשונים של החשבון הדיפרנציאלי והאינטגרלי, שאפשר להציג כבר בשלב מוקדם יחסית, כבר אחרי שראינו מהי נגזרת, הוא פתרון <strong>בעיות אופטימיזציה</strong>. למשל, מה הזווית הטובה ביותר שבה כדאי לזרוק כדור אם אנחנו רוצים למקסם את המרחק שהוא יגיע אליו. בבעיות כאלו יש לנו מערכת שההתנהגות שלה תלויה בפרמטר כלשהו ("הזווית שבה זורקים את הכדור"), ועבור ערכים שונים של הפרמטר אנחנו מקבלים "תוצאה" שהיא ערך מספרי כלשהו של המערכת ("המרחק שאליו הכדור מגיע") ואנחנו רוצים למצוא את הערך הטוב ביותר של הפרמטר מבחינתנו. לפעמים זה הערך שעבורו התוצאה היא הגדולה ביותר, ולפעמים זה הערך שעבורו התוצאה היא הקטנה ביותר, תלוי באופי הבעיה (לפעמים הערך הוא ה"מחיר" שאנחנו צריכים לשלם). בעיות אופטימיזציה צצות בתחומים שונים ומשונים במתמטיקה ויש טכניקות שונות ומשונות לטפל בהן. לעתים קרובות מאוד יש לנו <strong>אילוצים</strong> על הפרמטרים שהמערכת יכולה לקבל, ושקלול שלהם פנימה הוא חלק רציני מפתרון הבעיה.</p>
+<p>מה שמתעסקים איתו בחדו"א הוא סיטואציה פשוטה יחסית, שבה המערכת מתוארת על ידי פונקציה <span class="math">\(f:\mathbb{R}\to\mathbb{R}\)</span> שהיא "נחמדה", במובן זה שהיא גזירה. הרעיון הוא שאפשר להשתמש בנגזרת של <span class="math">\(f\)</span> כדי לאתר מייד את כל נקודות המקסימום ומינימום <strong>הנקודתיות</strong> של הפונקציה; ובתקווה, אם אין הרבה כאלו, בדיקה קצרה תעלה מה מהן היא המבוקשת שלנו (שעבורה הערך הוא הטוב ביותר אבסולוטית עבור בחירת פרמטרים חוקית). זה לא עובד תמיד טוב, אבל זה עובד טוב מספיק כדי שזה יהיה שימושי ביותר. הטכניקה עצמה מאוד פשוטה - בכל נקודת קיצון מקומית של הפונקציה, הנגזרת שלה חייבת להתאפס (ההפך לאו דווקא נכון). הסיבה פשוטה: ניקח למשל נקודת מקסימום מקומית. כל עוד הפונקציה "עדיין לא הגיעה" אל נקודת המקסימום אבל היא קרובה אליה, היא <strong>עולה</strong> אליה; ומייד אחרי נקודת המקסימום היא <strong>יורדת</strong> ממנה. זה אומר שממש לפני ההגעה לנקודת הקיצון הנגזרת היא <strong>חיובית</strong> ומייד אחרי היא <strong>שלילית</strong>. זה מכריח את הנגזרת באותה נקודה להיות "בו זמנית חיובית ושלילית", כלומר בהכרח 0.</p>
+<p>בסדרת הפוסטים הנוכחית אנחנו מתעסקים באנליזה וקטורית, כלומר בפונקציות ממשיות מרובות משתנים. אז יש לנו פונקציה <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}\)</span> ואנחנו רוצים לפתור את אותה בעיה - למצוא נקודות קיצון. קל לחשוב על הנקודות הללו בצורה ציורית כאשר <span class="math">\(n=2\)</span> - אפשר לחשוב על <span class="math">\(f\)</span> כאילו היא מתארת <strong>מפה טופוגרפית</strong>, במובן זה שלכל נקודה <span class="math">\(\left(x,y\right)\)</span> במפה הדו-ממדית נתון לנו גם ה<strong>גובה</strong> של אותה נקודה, <span class="math">\(f\left(x,y\right)\)</span>. נקודת מקסימום היא "פסגת הר" ונקודת מינימום היא "תחתית עמק". וזה מה שאנחנו רוצים למצוא.</p>
+<p>הניחוש הנאיבי ביותר הוא שאותה אינדיקציה שעבדה במימד אחד תעבוד גם ב-<span class="math">\(n\)</span> ממדים: אם יש לפונקציה נקודת קיצון ב-<span class="math">\(a\in\mathbb{R}^{n}\)</span>, אז <span class="math">\(Df\left(a\right)=0\)</span> (כאשר כאן <span class="math">\(0\)</span> מציין את <strong>טרנספורמציית האפס</strong>, טרנספורמציה לינארית שמחזירה 0 עבור הכל). למרבה השמחה, הניחוש הנאיבי הזה עובד, ואוכיח זאת עוד רגע; למרבה הצער, בכל זאת יש חלק קשה יותר, והוא ה<strong>סיווג</strong> של נקודות הקיצון הפוטנציאליות, שמטרתו להכריע מי הן נקודות הקיצון האמיתיות ומי הן אנומליות לא קשורות.</p>
+<p>בואו ניתן כמה הגדרות פורמליות. כרגיל, כל מה שאנחנו מניחים על <span class="math">\(f\)</span> הוא שהיא מוגדרת על קבוצה פתוחה <span class="math">\(U\subseteq\mathbb{R}^{n}\)</span>; אין צורך להניח שהיא מוגדרת בכל מקום. עבור <span class="math">\(f\)</span> כזו, אנחנו אומרים ש-<span class="math">\(a\in U\)</span> היא <strong>נקודת מקסימום מקומית</strong> אם קיימת סביבה <span class="math">\(V\)</span> של <span class="math">\(a\)</span> ב-<span class="math">\(U\)</span> ("סביבה" היא קבוצה פתוחה שמכילה את <span class="math">\(a\)</span>) כך ש-<span class="math">\(f\left(a\right)\ge f\left(x\right)\)</span> לכל <span class="math">\(x\in V\)</span>. באופן דומה מגדירים גם נקודות מינימום.</p>
+<p>עכשיו, בואו נגדיר <strong>נקודה קריטית</strong> של <span class="math">\(f\)</span> בתור נקודה <span class="math">\(a\)</span> שבה <span class="math">\(f\)</span> אינה גזירה, או שהיא גזירה אבל <span class="math">\(Df\left(a\right)=0\)</span>. המשפט הראשון שלנו אומר שאם <span class="math">\(a\)</span> היא נקודת קיצון אז היא נקודה קריטית; אבל יכולות להיות נקודות קריטיות שאינן נקודות קיצון, וקוראים להן <strong>נקודות אוכף</strong> (כי נקודה שנמצאת על מושב האוכף היא דוגמה יפה לנקודה שבה הנגזרת מתאפסת אבל היא אינה נקודת קיצון). האתגר יהיה לזהות, בהינתן נקודה קריטית, האם היא נקודת קיצון או לא.</p>
+<p>ההוכחה שנקודת קיצון היא קריטית מתבססת על <strong>רדוקציה</strong> למקרה החד ממדי. אם הפונקציה לא גזירה בנקודה, אז על פי הגדרה הנקודה היא נקודת קיצון; לכן אני מניח ש-<span class="math">\(Df\left(a\right)\)</span> מוגדרת. כדי להראות ש-<span class="math">\(Df\left(a\right)=0\)</span> אני צריך להוכיח שהטרנספורמציה הזו מחזירה 0, לא משנה על איזה וקטור היא מופעלת. ומה זו "הפעלה" של הנגזרת על וקטור <span class="math">\(u\)</span>? אם תזכרו, כי דיברנו על זה מזמן מזמן, זה מה שנותן לנו את <strong>הנגזרת המכוונת</strong> של <span class="math">\(f\)</span> בכיוון <span class="math">\(h\)</span>, שהוגדרה כך: <span class="math">\(\lim_{h\to0}\frac{f\left(a+hu\right)-f\left(a\right)}{h}\)</span>. עכשיו, בואו נגדיר פונקציה <span class="math">\(\phi:\mathbb{R}\to\mathbb{R}\)</span> על ידי <span class="math">\(\phi\left(h\right)=f\left(a+hu\right)\)</span>. אז קיבלנו ש-</p>
+<p><span class="math">\(Df\left(a\right)\cdot u=\lim_{h\to0}\frac{f\left(a+hu\right)-f\left(a\right)}{h}=\lim_{h\to0}\frac{\phi\left(h\right)-\phi\left(0\right)}{h}=\phi^{\prime}\left(0\right)\)</span></p>
+<p>עכשיו, אם <span class="math">\(a\)</span> היא נקודת קיצון של <span class="math">\(f\)</span>, אז <span class="math">\(0\)</span> היא נקודת קיצון של <span class="math">\(\phi\)</span>, ולכן <span class="math">\(\phi^{\prime}\left(0\right)=0\)</span> (מהמשפט על נקודת קיצון במקרה החד ממדי), וסיימנו: ראינו ש-<span class="math">\(Df\left(a\right)\cdot u=0\)</span> לכל <span class="math">\(u\)</span> ולכן <span class="math">\(Df\left(a\right)=0\)</span>. אז זה היה קל, כמובטח. מה הלאה?</p>
+<p>בואו נראה שתי דוגמאות פשוטות כדי לקבל תחושה של נקודת קיצון אל מול נקודת אוכף. נתחיל מ-<span class="math">\(f\left(x,y\right)=x^{2}+y^{2}\)</span> - גרף של הפונקציה הזו נראה כמו מין קערית שכזו. הגרדיאנט קל לחישוב: <span class="math">\(\nabla f=\left(2x,2y\right)\)</span>. הוא מתאפס בדיוק בנקודה אחת: <span class="math">\(x=y=0\)</span>. לכן זו הנקודה היחידה שעשויה להיות נקודת קיצון, וקל לראות במקרה הזה שמדובר על נקודת מינימום. מסקנה: אין נקודות מקסימום בכלל, אחרת היינו מקבלים עוד נקודות קריטיות.</p>
+<p>עכשיו בואו נעבור לדבר על האוכף. נתבונן ב-<span class="math">\(f\left(x,y\right)=x^{2}y+y^{2}x\)</span>. הגרדיאנט שלה הוא <span class="math">\(\nabla f=\left(2xy+y^{2},2yx+x^{2}\right)\)</span>. אז קיבלנו מערכת של שתי משוואות בשני נעלמים עבור <span class="math">\(\nabla f=0\)</span>. אם <span class="math">\(y=0\)</span> אז <span class="math">\(2yx+x^{2}=0\)</span> גורר ש-<span class="math">\(x=0\)</span> ולכן פרט לנקודת הקיצון הברורה ב-<span class="math">\(x=y=0\)</span> אנחנו יכולים להניח בהמשך הניתוח ש-<span class="math">\(x\ne0\)</span> וגם <span class="math">\(y\ne0\)</span> ולכן אפשר לחלק בהם. כעת, אם <span class="math">\(2xy+y^{2}=0\)</span> נחלק ב-<span class="math">\(y\)</span> ונקבל <span class="math">\(y=-2x\)</span>, ובאופן סימטרי <span class="math">\(x=-2y\)</span> מתקבל מהמשוואה השניה. קיבלנו <span class="math">\(x=-2y=4x\)</span>, מה שגורר <span class="math">\(x=0\)</span>, וזו סתירה להנחה שלנו שהוא שונה; לכן הנקודה הקריטית היחידה היא <span class="math">\(x=y=0\)</span>. קל לראות שזו לא נקודת קיצון על ידי הסתכלות בישר <span class="math">\(x=y\)</span>: עליו, הפונקציה היא <span class="math">\(\phi\left(x\right)=f\left(x,x\right)=2x^{3}\)</span> ולכן עבור <span class="math">\(x&gt;0\)</span> נקבל ערך חיובי ועבור <span class="math">\(x&lt;0\)</span> נקבל ערך שלילי, ומכאן ש-<span class="math">\(\left(0,0\right)\)</span> היא לא נקודת קיצון. זו סיטואציה דומה למה שקורה במימד אחד עם, למשל, <span class="math">\(\tan x\)</span>.</p>
+<p>אז איך מבדילים בין נקודת קיצון ובין "סתם" נקודה קריטית? בחדו"א של משתנה יחיד היה מבחן שעבד טוב במקרה שבו הפונקציה היא "נחמדה מספיק" - אם היא הייתה גזירה פעמיים, אז הנגזרת השניה שלה נתנה לנו את המידע הדרוש. אם הנגזרת השניה בנקודה הקריטית הייתה חיובית, הנקודה הייתה נקודת מינימום; אם היא הייתה שלילית, זו הייתה נקודת מקסימום; ואם היא הייתה 0 אז זו הייתה נקודה קריטית שאינה נקודת קיצון.</p>
+<p>האינטואיציה כאן היתה פשוטה. בנקודת מינימום, רגע לפני הנקודה הפונקציה <strong>יורדת</strong>, כלומר בעלת נגזרת שלילית; רגע אחרי הנקודה הפונקציה <strong>עולה</strong>, כלומר בעלת נגזרת חיובית; זה אומר שבסביבות הנקודה, ה<strong>נגזרת</strong> היא פונקציה עולה (בהתחלה שלילית, אחר כך 0, לבסוף חיובית). אם היא פונקציה עולה, אז הנגזרת <strong>שלה</strong> היא חיובית. שיקול דומה מטפל גם בנקודת מקסימום. ומה קרה ב-<span class="math">\(\tan x\)</span>, למשל? הפונקציה היא עולה <strong>כל הזמן</strong>, כלומר הנגזרת היא חיובית כל הזמן (למעט בנקודה הקריטית עצמה, שם היא 0). אבל בהתחלה הנגזרת היא פונקציה יורדת (מתחילה מאוד גדולה ולאט לאט קטנה עד שהיא מגיעה ל-0) ואחרי הנקודה הקריטית היא מתחילה לעלות מחדש. כלומר, בנקודה הקריטית הנגזרת היא חיובית <strong>קודם</strong> וחיובית <strong>אחר כך</strong>, כלומר הנקודה הקריטית היא <strong>נקודת מינימום</strong> של הנגזרת, ולכן הנגזרת השניה היא 0.</p>
+<p>היינו שמחים להכליל את הטיעון הזה ל-<span class="math">\(n\)</span> ממדים, וזה אכן מה שנעשה; אפשר להסיק את הקריטריון החד ממדי מהתוצאה שנראה. אבל למרבה הצער, הקריטריון שלנו יהיה <strong>מסובך</strong> משמעותית יותר מאשר במקרה החד משמעי, ודורש היכרות עם אלגברה לינארית. הקושי הוא בכך שאנחנו צריכים למצוא הכללה כלשהי ל"נגזרת השניה" של מימד אחד. הרי אצלנו "נגזרת" היא כבר לא פונקציה <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}\)</span> כמו הפונקציה שאותה גזרנו; היא אופרטור שלכל נקודה במרחב מתאים <strong>טרנספורמציה לינארית</strong> (או מטריצה, איך שתעדיפו להסתכל על זה), ואי אפשר לגזור את זה. אז אנחנו משתמשים במשהו אחר - מטריצה <span class="math">\(n\times n\)</span> שכוללת את כל <strong>הנגזרות החלקיות המעורבות מסדר שני</strong>. המטריצה הזו נקראת <strong>הסיאן</strong>.</p>
+<p>מה זו נגזרת חלקית אנחנו כבר יודעים - פשוט גוזרים את הפונקציה רק על פי משתנה בודד ומתייחסים ליתר בתור פרמטרים. ראינו כבר שאם <span class="math">\(f\)</span> גזירה אז הנגזרת שלה ניתנת לתיאור בתור וקטור הנגזרות החלקיות של <span class="math">\(f\)</span>. נגזרת חלקית "מסדר שני" היא מה שמתקבל כשגוזרים נגזרת חלקית שוב, ו"מעורבת" אומר שאפשר לגזור שוב על פי כל אחד מהמשתנים. אני מסמן <span class="math">\(\frac{\partial^{2}f}{\partial x\partial y}\)</span> את מה שמתקבל כשאני גוזר את <span class="math">\(f\)</span> קודם כל לפי המשתנה <span class="math">\(x\)</span> ואז לפי המשתנה <span class="math">\(y\)</span>. למשל, עבור פונקציית נקודת האוכף <span class="math">\(f\left(x,y\right)=x^{2}y+y^{2}x\)</span> אנחנו יודעים ש-<span class="math">\(\frac{\partial f}{\partial x}=2xy+y^{2}\)</span>, ולכן אם נגזור שוב לפי <span class="math">\(y\)</span>, נקבל ש-<span class="math">\(\frac{\partial^{2}f}{\partial x\partial y}=2x+2y\)</span>.</p>
+<p>מטריצת הסיאן מתקבלת באופן דומה - הכניסה בשורה ה-<span class="math">\(i\)</span> ובעמודה ה-<span class="math">\(j\)</span> שווה לנגזרת החלקית קודם לפי המשתנה <span class="math">\(x_{i}\)</span> ואחר כך לפי המשתנה <span class="math">\(x_{j}\)</span>, כלומר <span class="math">\(\left[H\right]_{ij}=\frac{\partial^{2}f}{\partial x_{i}\partial x_{j}}\)</span>. אם נכתוב את ההסיאן של <span class="math">\(f\left(x,y\right)=x^{2}+y^{2}\)</span> נקבל <span class="math">\(\left[\begin{array}{cc}2 & 0\\0 & 2\end{array}\right]\)</span>. אם נכתוב את ההסיאן של <span class="math">\(f\)</span> של נקודת האוכף, נקבל <span class="math">\(\left[\begin{array}{cc}2y & 2x+2y\\2x+2y & 2x\end{array}\right]\)</span>. שימו לב שזו מטריצה <strong>סימטרית</strong>, כלומר יוצא שהנגזרת המעורבת קודם לפי <span class="math">\(x\)</span> ואז על פי <span class="math">\(y\)</span> שווה לנגזרת המעורבת קודם על פי <span class="math">\(y\)</span> ואז על פי <span class="math">\(x\)</span>; זה לא מקרי וזה תמיד מתקיים אם שתי הנגזרות המעורבות הללו הן רציפות; אנחנו נניח מעכשיו ש-<span class="math">\(f\)</span> היא ב-<span class="math">\(C^{2}\)</span>, אחרת המשפט שאני מתאר לא יהיה נכון.</p>
+<p>עכשיו אפשר לנסח את הקריטריון שלנו בלשון שאותה יבינו מי שמכירים אלגברה לינארית: אם בנקודה הקריטית ההסיאן הוא <strong>מטריצה חיובית לחלוטין</strong> (Positive Definite Matrix), אז הנקודה הקריטית היא נקודת מינימום; ואם ההסיאן הוא <strong>מטריצה שלילית לחלוטין</strong> (Negative Definite Matrix) אז הנקודה הקריטית היא נקודת מקסימום; ואחרת אין לנו מושג מהי הנקודה הקריטית. מן הסתם המושג המרכזי פה הוא "חיובית/שלילית לחלוטין" שתכף אסביר, אבל למי שרוצים את התכל'ס, תנאי שקול לכך שמטריצה תהיה חיובית לחלוטין הוא שכל הערכים העצמיים שלה יהיו חיוביים, ואילו עבור שלילית לחלוטין, שכולם יהיו שליליים. זה מסביר את התוצאה בשתי הדוגמאות שראינו; במקרה הראשון קיבלנו מטריצה שהערך העצמי היחיד שלה הוא 2 החיובי, ולכן הנקודה הקריטית היא נקודת מינימום; ובמקרה השני ההסיאן ב-<span class="math">\(x=y=0\)</span> הוא מטריצת האפס, שהערך העצמי היחיד שלה הוא 0 שאינו חיובי או שלילי.</p>
+<p>הנה הסבר קצר לגבי מה זה מוגדרת חיובית ולמה זה רלוונטי פה, בלי להיכנס להוכחות עד הסוף. אם אין לכם כוח אליו אתם מוזמנים לדלג להמשך, שבו מדברים על כופלי לגראנז' שהם נושא נפרד ומגניב וחשוב בפני עצמו.</p>
+<p>אנחנו יודעים שכל מטריצה <span class="math">\(A\)</span> מסדר <span class="math">\(n\times n\)</span> מעל שדה <span class="math">\(\mathbb{F}\)</span> מגדירה טרנספורמציה לינארית <span class="math">\(T_{A}:\mathbb{F}^{n}\to\mathbb{F}^{n}\)</span>. אבל יש עוד סוג מעניין של העתקה בערך-לינארית שהמטריצה מגדירה: <strong>תבנית בילינארית</strong>, שהיא פונקציה <span class="math">\(B_{A}:\mathbb{F}^{n}\times\mathbb{F}^{n}\to\mathbb{F}\)</span> שלינארית בכל אחד משני הרכיבים שלה בנפרד, ומוגדרת על ידי <span class="math">\(B\left(v,u\right)=v^{t}Au\)</span> (כלומר, כופלים את המטריצה <span class="math">\(A\)</span> בוקטור העמודה <span class="math">\(u\)</span> כרגיל ומקבלים וקטור ב-<span class="math">\(\mathbb{F}^{n}\)</span>, אבל אחר כך כופלים את התוצאה הזו גם בוקטור השורה <span class="math">\(v^{t}\)</span>, דהיינו מבצעים מכפלה סקלרית של <span class="math">\(v\)</span> ושל <span class="math">\(Au\)</span>). כל תבנית בילינארית מגדירה, בתורה, גם פונקציה <span class="math">\(g:\mathbb{F}^{n}\to\mathbb{F}\)</span> על ידי <span class="math">\(g_{A}\left(v\right)=B_{A}\left(v,v\right)=v^{t}Av\)</span> (במילים, כופלים סקלרית את <span class="math">\(v\)</span> בתמונה של <span class="math">\(v\)</span> על ידי הטרנספורמציה הלינארית שמוגדרת על ידי <span class="math">\(A\)</span>). לפונקציה כזו קוראים <strong>תבנית ריבועית</strong> והיא מה שמעניין אותנו כאן. דוגמה פשוטה לתבנית בילינארית היא <strong>מכפלה פנימית</strong>, ודוגמה פשוטה לתבנית ריבועית שמוגדרת על ידה היא <strong>נורמה</strong> (כמעט; כזכור, נורמה היא השורש של מכפלה פנימית של וקטור עם עצמו). תבניות בילינאריות וריבועיות מופיעות באינספור מקומות במתמטיקה, הגם שהן קצת פחות נפוצות מטרנספורמציות לינאריות, ולרוב מגיעים אליהן רק בקורס שני באלגברה לינארית.</p>
+<p>עכשיו בואו נעזוב את האלגברה הלינארית הכללית ונזכור שאנחנו מדברים על המקרה שבו <span class="math">\(\mathbb{F}=\mathbb{R}\)</span>. בממשיים יש <strong>יחס סדר</strong> - אפשר להגיד "חיובי" ו"שלילי" (אפילו ב-<span class="math">\(\mathbb{C}\)</span> אי אפשר להגיד דברים כאלו). זה מוביל אותנו להגדרה שאנחנו רוצים - <span class="math">\(A\)</span> היא מטריצה חיובית לחלוטין אם התבנית הריבועית שהיא מגדירה מקיימת ש-<span class="math">\(g_{A}\left(x\right)&gt;0\)</span> לכל <span class="math">\(x\ne0\)</span> (עבור <span class="math">\(x=0\)</span> תמיד נקבל <span class="math">\(g_{A}\left(x\right)=0\)</span>, כמובן). בדומה <span class="math">\(A\)</span> היא שלילית לחלוטין אם <span class="math">\(g_{A}\left(x\right)&lt;0\)</span> לכל <span class="math">\(x\ne0\)</span>. עבור מטריצה מסדר <span class="math">\(1\times1\)</span> הקריטריון הזה שקול לכך שהכניסה היחידה של המטריצה תהיה חיובית/שלילית (כי אם <span class="math">\(A=\left[a\right]\)</span> אז נקבל ש-<span class="math">\(g_{A}\left(x\right)=a\cdot x^{2}\)</span>) ולכן קיבלנו פה הכללה של התוצאה עבור <span class="math">\(n=1\)</span>.</p>
+<p>כדי להבין למה זה עובד ומאיפה <span class="math">\(H\)</span> הגיעה בכלל אני צריך לשלוף מהכובע שפן שלפחות לעת עתה בחרתי לא לתת לו פוסט, אבל אולי בעתיד כן - <strong>פולינומי טיילור</strong>. <a href="http://www.gadial.net/2010/03/27/exponent/">תיארתי אותם פעם</a> בבלוג במקרה החד ממדי, וכנראה שכדאי לתאר אותם בפירוט גם במקרה הרב ממדי, אבל לבינתיים אסתפק בהסבר קצר. כזכור, פולינום טיילור "רגיל" מאפשר לנו לקרב פונקציות מסובכות על ידי פולינומים שמחושבים מתוך כל הנגזרות של הפונקציה בנקודה מסויימת ש"סביבה" מפתחים אותה. פורמלית, <span class="math">\(f\left(x_{0}+h\right)=\sum_{k=0}^{n}\frac{f^{\left(k\right)}\left(x_{0}\right)}{k!}h^{k}+R_{n+1}\left(x_{0},h\right)\)</span>, כאשר <span class="math">\(\sum_{k=0}^{n}\frac{f^{\left(k\right)}\left(x_{0}\right)}{k!}h^{k}\)</span> הוא הפולינום, ואילו <span class="math">\(R_{n+1}\left(x_{0},h\right)\)</span> היא פונקציית ה"שארית" שמתארת את הטעות של הפולינום (ומן הסתם לב העניין הוא לחסום את הגודל שלה, מה שיוצא שונה עבור פונקציות שונות ונקודות פיתוח שונות). לפעמים פשוט כותבים טור חזקות אינסופי, <span class="math">\(\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(x_{0}\right)}{n!}h^{n}\)</span>, אבל עם הכתיב הזה צריך להיזהר כי לא בהכרח ברור עבור אילו ערכים של <span class="math">\(h\)</span> הטור הזה מתכנס בכלל (עבור <span class="math">\(h=0\)</span> הוא מתכנס תמיד, אבל פרט לכך? הדיון על <strong>רדיוס ההתכנסות</strong> של טורי חזקות הוא מעניין בפני עצמו וצריך להציג אותו בבלוג מתישהו) וגם לא ברור שאפילו אם הטור מתכנס, אז <span class="math">\(f\left(x_{0}+h\right)\)</span> שווה לסכום שלו.</p>
+<p>פולינומי טיילור של פונקציות <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}\)</span> עובדים בצורה דומה, אבל כפי שאתם מנחשים, צריך לזרוק פנימה את כל הנגזרות החלקיות וזה יוצא מתוסבך למדי לכתיבה בלי שמסכימים מראש על כל מני קיצורים. בכל זאת אני לא יכול להתאפק ואציג את הטור המלא של פיתוח סביב <span class="math">\(\left(a_{1},\dots,a_{n}\right)\)</span>:</p>
+<p><span class="math">\(\sum_{k_{1}=0}^{\infty}\cdots\sum_{k_{n}=0}^{\infty}\frac{\partial^{k_{1}}}{\partial x_{1}^{k_{1}}}\cdots\frac{\partial^{k_{n}}}{\partial x_{n}^{k_{n}}}f\left(a_{1},\dots,a_{n}\right)\frac{h_{1}^{k1}\cdots h_{n}^{k_{n}}}{k_{1}!\cdots k_{n}!}\)</span></p>
+<p>או במילים: כל איבר בטור הזה מתקבל על ידי כך שגוזרים את <span class="math">\(f\)</span> מספר מסויים של פעמים על פי כל משתנה, כופלים את התוצאה בחזקות מתאימות של כניסות <span class="math">\(\left(h_{1},\dots,h_{n}\right)\)</span> ומחלקים בעצרת מתאימה. בואו נראה דוגמה פשוטה עבור פונקציה <span class="math">\(f\left(x,y\right)\)</span> שהיא ב-<span class="math">\(C^{2}\)</span> ולכן <span class="math">\(\frac{\partial^{2}f}{\partial x\partial y}=\frac{\partial^{2}f}{\partial y\partial x}\)</span>; נפתח את הטור עד סדר שני, כלומר עד וכולל ערכי ה-<span class="math">\(k\)</span> שמקיימים <span class="math">\(k_{1}+k_{2}=2\)</span>:</p>
+<p><span class="math">\(f\left(x+h_{1},y+h_{2}\right)=f\left(x,y\right)+\frac{\partial f}{\partial x}\left(x,y\right)h_{1}+\frac{\partial f}{\partial y}\left(x,y\right)h_{2}+\frac{\partial^{2}f}{\partial x^{2}}\left(x,y\right)\frac{h_{1}^{2}}{2}+\frac{\partial^{2}f}{\partial y^{2}}\left(x,y\right)\frac{h_{2}^{2}}{2}+\frac{\partial^{2}f}{\partial x\partial y}\left(x,y\right)h_{1}h_{2}+R_{3}\left(h_{1},h_{2}\right)\)</span></p>
+<p>ואם יש לנו <span class="math">\(n\)</span> משתנים, הכתיב נשאר דומה:</p>
+<p><span class="math">\(f\left(x_{1}+h_{1},\dots,x_{n}+h_{n}\right)=f\left(x_{1},\dots,x_{n}\right)+\sum_{i=1}^{n}\frac{\partial f}{\partial x_{i}}\left(x_{1},\dots,x_{n}\right)h_{i}+\frac{1}{2}\sum_{i,j=1}^{n}\frac{\partial^{2}f}{\partial x_{i}\partial x_{j}}\left(x_{1},\dots,x_{n}\right)h_{i}h_{j}+R_{3}\left(h_{1},\dots,h_{n}\right)\)</span></p>
+<p>כאן אנחנו קצת מרמים בסימון אבל מתקנים את זה בו זמנית: למשל, בסכום מופיעים גם <span class="math">\(\frac{\partial^{2}f}{\partial x_{1}\partial x_{2}}\)</span> וגם <span class="math">\(\frac{\partial^{2}f}{\partial x_{2}\partial x_{1}}\)</span> למרות שהאיבר הזה (אלו שתי הצגות שונות לאותו איבר, כי אמרתי שבמקרה שלנו הנגזרות המעורבות שוות) אמור להופיע רק פעם אחת. אז יש לי ספירה כפולה, אבל זה מתקזז עם הכפל ב-<span class="math">\(\frac{1}{2}\)</span> שהוספתי שם (אם תשימו לב, בנוסחה המקורית אם גזרנו פעמיים לפי אותו משתנה צריך לכפול ב-<span class="math">\(\frac{1}{2!}\)</span> ואם גזרנו לפי שני משתנים שונים לא עושים את זה).</p>
+<p>את כל זה אפשר לכתוב אפילו עוד יותר בקיצור:</p>
+<p><span class="math">\(f\left(x+h\right)=f\left(x\right)+\nabla f\left(x\right)\cdot h+\frac{1}{2}H_{x}\left(h\right)+R_{3}\left(h\right)\)</span></p>
+<p>במילים אחרות, הגרדיאנט של <span class="math">\(f\)</span> הוא "האיבר הראשון" בפיתוח טיילור של <span class="math">\(f\)</span>, וההסיאן <span class="math">\(H\)</span> הוא "האיבר השני". האנלוגיה למקרה החד ממדי (שבו האיבר הראשון בפיתוח הוא הנגזרת הראשונה, והאיבר השני הוא הנגזרת השניה) מובהקת כאן.</p>
+<p>איך כל זה רלוונטי לענייננו? כזכור, אנחנו מניחים שב-<span class="math">\(x\)</span> יש ל-<span class="math">\(f\)</span> נקודה קריטית ורוצים לסווג אותה. נקודה קריטית פירושו של דבר ש-<span class="math">\(\nabla f\left(x\right)=0\)</span>, כך שאפשר לכתוב את פיתוח הטיילור גם בתור</p>
+<p><span class="math">\(f\left(x+h\right)-f\left(x\right)=\frac{1}{2}H_{x}\left(h\right)+R_{3}\left(h\right)\)</span></p>
+<p>נניח שההסיאן ב-<span class="math">\(x\)</span> הוא חיובי לחלוטין, ולכן על פי המשפט אמור לנבוע מכך ש-<span class="math">\(x\)</span> היא נקודת מינימום. אם <span class="math">\(x\)</span> היא נקודת מינימום של <span class="math">\(f\)</span>, אנחנו מצפים שאגף שמאל יהיה חיובי עבור כל ה-<span class="math">\(h\)</span>-ים בסביבה קרובה מספיק של <span class="math">\(x\)</span>. ומה קורה באגף ימין? יש לנו קרב ענקים בין ההסיאן ובין <span class="math">\(R_{3}\left(h\right)\)</span>, השארית. כאן מגיע טיעון אינפי סטנדרטי - אם ניקח <span class="math">\(h\)</span> "מספיק קטן" אז מצד אחד השארית תהיה קטנה מאוד, ומצד שני ההסיאן יחזיר לנו ערך שהוא יחסית גדול <strong>וחיובי</strong>, והערך הזה "ינצח" בתחרות. אני אדלג על המשך ההוכחה כי הוא טכני באופן סטנדרטי ואומר בדיוק את זה; הפואנטה המרכזית היא שבגלל שההסיאן הוא פונקציה "נחמדה" (בילינארית) מקבלים שקיים קבוע <span class="math">\(M\)</span> כלשהי כך ש-<span class="math">\(H\left(h\right)\ge M\|h\|^{2}\)</span> לכל <span class="math">\(h\)</span>, וזה נותן לנו את ה"יחסית גדול וחיובי" שלנו. הפרטים הטכניים פחות קריטיים פה - מה שמעניין בסיפור הזה, לטעמי, הוא מאיפה ההסיאן הזה צץ בכלל; כשברור שזה הרכיב השני בפיתוח הטיילור של הפונקציה, ושהרכיב הראשון איננו עמנו עוד כי אנחנו בנקודה קריטית, העניין נהיה מאוד ברור.</p>
+<h2>חלק שני, שבו כל העסק נהיה מאולץ</h2>
+<p>בתחילת הפוסט אמרתי שבבעיות אופטימיזציה יש לנו לעתים קרובות <strong>אילוצים</strong> על המערכת, כלומר לא כל פרמטר הוא חוקי. זה מגדיל מייד את רמת הקושי של הבעיה שלנו ועל פניו הופך את כל הטכניקה שראינו עד כה לחסרת תועלת. אתן דוגמה פשוטה. נסתכל על הפונקציה <span class="math">\(f:\mathbb{R}^{2}\to\mathbb{R}\)</span> המוגדרת על ידי <span class="math">\(f\left(x,y\right)=x\)</span>. בבירור אין לה לא נקודת מינימום ולא נקודת מקסימום בשום מקום ולכן הטכניקה שראינו קודם לא תסייע לנו עם העיסוק בה בכלל. מצד שני, אם נוסיף למערכת את האילוץ שהקלטים ל-<span class="math">\(f\)</span> חייבים להילקח רק ממעגל היחידה, אז ברור שפתאום יש ל-<span class="math">\(f\)</span> מקסימום ב-<span class="math">\(\left(1,0\right)\)</span> ומינימום ב-<span class="math">\(\left(-1,0\right)\)</span>. אבל איך מוצאים את זה?</p>
+<p>לפני שנפתור את הבעיה הזו, צריך להבין מה המשמעות של "אילוץ". עבורנו זה אומר שנתונה פונקציה <span class="math">\(g:\mathbb{R}^{n}\to\mathbb{R}\)</span> כלשהי ונתון <span class="math">\(c\in\mathbb{R}\)</span>, ואנחנו מגדירים אילוץ על ידי המשוואה <span class="math">\(g\left(x\right)=c\)</span>. כלומר, מותר לחפש את הפתרון רק בקרב ה-<span class="math">\(x\)</span>-ים שמקיימים <span class="math">\(g\left(x\right)=c\)</span>. בדוגמה שלי, <span class="math">\(g\left(x,y\right)=x^{2}+y^{2}\)</span> ואילו <span class="math">\(c=1\)</span>. כפי שבטח כבר ברור לכם, השיטה הזו להבעת אילוצים היא נוחה מאוד ומאפשרת לתאר שלל יצורים גאומטריים (ראינו כרגע מעגל; קו ישר מתואר על ידי <span class="math">\(g\left(x,y\right)=ax-by\)</span> עבור <span class="math">\(a,b\)</span> כלשהם, וכדומה).</p>
+<p>כעת, נניח ש-<span class="math">\(g\)</span> היא פונקציה "נחמדה" - גזירה. נסמן ב-<span class="math">\(S\)</span> את המרחב שמוגדר על ידי <span class="math">\(S=\left\{ x\in\mathbb{R}^{n}\ |\ g\left(x\right)=c\right\} \)</span> (מעכשיו אקרא לו "משטח" כי בתלת מימד משוואות כאלו מגדירות משטחים; שם מדויק יותר למקרה הכללי שבו אני עוסק הוא <strong>יריעה</strong> אבל זה מושג לא טריוויאלי ואני לא רוצה להיכנס להגדרה שלו כרגע), וניקח <span class="math">\(x_{0}\in S\)</span> כלשהו. הנה אבחנה מיידית שבלבלה אותי בצורה יוצאת דופן כשרק למדתי את הנושא הזה: <span class="math">\(\nabla g\left(x_{0}\right)\)</span> הוא <strong>אורתוגונלי</strong> ל-<span class="math">\(S\)</span> בנקודה <span class="math">\(x_{0}\)</span>. הגרדיאנט של הפונקציה שמגדירה את המשטח ניצב למשטח באותה נקודה. למה זה מבלבל? כי לעתים קרובות נהוג להגדיר את הגרדיאנט של פונקציה בנקודה כלשהי בתור הוקטור שמצביע על הכיוון שבו היא "הכי תלולה". אם הגרדיאנט ניצב למשטח, הוא מצביע על כיוון שבו הפונקציה בכלל לא גדלה, וזה נראה הכי לא נכון שרק אפשר. אז למה זה מסתדר?</p>
+<p>זה מסתדר כי עשיתי מיש-מש מכל העסק. הגרדיאנט לא ניצב <strong>לפונקציה</strong>; הוא ניצב <strong>למשטח שהפונקציה מגדירה בצורה מסויימת</strong>. מה שבלבל אותי בשעתו הוא שאפשר להגדיר משטחים בשתי דרכים שונות. דרך אחת, כללית פחות, היא לכתוב <span class="math">\(z=f\left(x,y\right)\)</span> ובכך לתאר את המשטח <span class="math">\(S=\left\{ \left(x,y,f\left(x,y\right)\right)\ |\ x,y\in\mathbb{R}^{2}\right\} \)</span>; הדרך השניה, הכללית יותר, היא לכתוב <span class="math">\(S=\left\{ \left(x,y,z\right)\ |\ F\left(x,y,z\right)=c\right\} \)</span>. שימו לב שבדרך הראשונה אנחנו משתמשים בפונקציה של <strong>שני</strong> משתנים ובשניה בפונקציה של <strong>שלושה</strong> משתנים כדי להגדיר את אותו הדבר - משטח ב-<span class="math">\(\mathbb{R}^{3}\)</span>. אם יש לי פונקציה <span class="math">\(f:\mathbb{R}^{2}\to\mathbb{R}\)</span> ואני רוצה להציג את המשטח שמוגדר על ידה בדרך הראשונה בעזרת דרך ההצגה השניה, אני פשוט אגדיר <span class="math">\(F\left(x,y,z\right)=z-f\left(x,y\right)\)</span> ו-<span class="math">\(c=0\)</span>; לכן דרך ההצגה השניה כללית יותר. היא כללית יותר <strong>ממש</strong> (כלומר, יש דברים שאי אפשר לעשות בדרך הראשונה) כי למשל אני יכול לתאר את כדור היחידה על ידי <span class="math">\(F\left(x,y,z\right)=x^{2}+y^{2}+z^{2}\)</span> ו-<span class="math">\(c=1\)</span>, אבל אין לי דרך לעשות את זה באמצעות הצגת קואורדינטת ה-<span class="math">\(z\)</span> כפונקציה של שתי האחרות (כי עבור אותם <span class="math">\(x,y\)</span> עשויים להיות שני ערכי <span class="math">\(z\)</span> אפשריים שונים על המשטח).</p>
+<p>הנה הוכחה זריזה לכך שהגרדיאנט ניצב למשטח שהפונקציה מגדירה. הרעיון הוא לקחת מסלול כלשהו במשטח שעובר דרך <span class="math">\(x_{0}\)</span> ולהראות שהגרדיאנט ב-<span class="math">\(x_{0}\)</span> ניצב אליו. בלי להיכנס לעובי ההגדרות, מסלול הוא פונקציה גזירה <span class="math">\(c:\left[0,1\right]\to\mathbb{R}^{n}\)</span>, ומסלול במשטח <span class="math">\(S\subseteq\mathbb{R}^{n}\)</span> מקיים את הדרישה ש-<span class="math">\(c\left(\left[0,1\right]\right)\subseteq S\)</span>, ונניח ש-<span class="math">\(c\left(0\right)=x_{0}\)</span>. עכשיו, הרעיון במסלול שעובר דרך <span class="math">\(S\)</span> הוא שכל נקודה בו מקיימת את האילוץ שמגדיר את <span class="math">\(S\)</span>. נניח שהאילוץ הזה הוא <span class="math">\(F\left(x\right)=c\)</span>, אז <span class="math">\(F\left(c\left(t\right)\right)=c\)</span> לכל <span class="math">\(t\in\left[0,1\right]\)</span>. עכשיו אפשר להשתמש בכלל השרשרת, לגזור ולקבל ש-<span class="math">\(DF\left(c\left(0\right)\right)\cdot Dc\left(0\right)=0\)</span>, או בסימון קצת שונה, ש-<span class="math">\(\nabla F\left(x_{0}\right)\cdot c^{\prime}\left(0\right)=0\)</span>. עכשיו, <span class="math">\(c^{\prime}\left(0\right)\)</span> הוא בדיוק שיפוע המשיק ל-<span class="math">\(c\)</span> ב-<span class="math">\(x_{0}\)</span>, ואילו <span class="math">\(\nabla F\left(x_{0}\right)\)</span> הוא הגרדיאנט של <span class="math">\(F\)</span>, וקיבלנו שהמכפלה הפנימית שלהם היא 0 - כלומר, הם ניצבים.</p>
+<p>עכשיו בואו נפתור את הבעיה של אופטימיזציה-עם-אילוצים. הפתרון הוא סוג של הכללה של מה שראינו קודם. קודם בדקנו איפה הגרדיאנט של <span class="math">\(f\)</span> <strong>מתאפס</strong>. ההכללה שלנו תהיה לבדוק איפה הגרדיאנט של <span class="math">\(f\)</span> שווה ל<strong>צירוף לינארי של האילוצים</strong>. המקדמים של האילוצים נקראים "<strong>כופלי לגראנז'</strong>", והשיטה נקראת על שמם - שיטת כופלי לגראנז'.</p>
+<p>הנה הניסוח הפורמלי. נניח שיש לנו פונקציה <span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}\)</span> שהיא מה שאנחנו רוצים לאפטמז, ופונקציות אילוצים <span class="math">\(g_{1},\dots,g_{k}:\mathbb{R}^{n}\to\mathbb{R}\)</span> עם קבועים <span class="math">\(c_{1},\dots,c_{k}\)</span> שמגדירות קבוצה <span class="math">\(S\)</span> (כלומר, האילוץ הוא <span class="math">\(g_{i}\left(x\right)=c_{i}\)</span> עבור <span class="math">\(1\le i\le k\)</span>). נניח ש-<span class="math">\(x_{0}\)</span> היא נקודה שמקיימת את כל האילוצים (<span class="math">\(g_{i}\left(x_{0}\right)=c_{i}\)</span>) וש-<span class="math">\(\nabla g_{i}\left(x_{0}\right)\ne0\)</span>, ושיש ל-<span class="math">\(f|_{S}\)</span> מקסימום או מינימום מקומי ב-<span class="math">\(x_{0}\)</span> (הסימון <span class="math">\(f|_{S}\)</span> פירושו "<span class="math">\(f\)</span> מצומצמת ל-<span class="math">\(S\)</span>"), אז קיימים <span class="math">\(\lambda_{1},\dots,\lambda_{k}\in\mathbb{R}\)</span> כך ש-<span class="math">\(\nabla f\left(x_{0}\right)=\lambda_{1}\nabla g_{1}\left(x_{0}\right)+\dots+\lambda_{k}\nabla g_{k}\left(x_{0}\right)\)</span>. זה אומר שכשאנחנו מחפשים נקודות קיצון, אנחנו מקבלים מערכת של משוואות שנקודות הקיצון חייבות להיכלל בפתרונות שלה.</p>
+<p>בואו נראה איך זה עובד במקרה של דוגמת המעגל שנתתי קודם. מכיוון ש-<span class="math">\(f\left(x,y\right)=x\)</span> אז <span class="math">\(\nabla f=\left(1,0\right)\)</span>, ומכיוון ש-<span class="math">\(g\left(x,y\right)=x^{2}+y^{2}\)</span>, אז <span class="math">\(\nabla g=\left(2x,2y\right)\)</span>. משוואת כופלי לגראנז' נותנת לנו כאן את המשוואה <span class="math">\(\left(1,0\right)=\lambda\left(2x,2y\right)\)</span> שמתורגמת בתורה לשתי משוואות פשוטות:</p>
+<p><span class="math">\(2x\lambda=1\)</span></p>
+<p><span class="math">\(2y\lambda=0\)</span></p>
+<p>מהמשוואה הראשונה ברור ש-<span class="math">\(\lambda\ne0\)</span> ולכן מהשניה קיבלנו ש-<span class="math">\(y=0\)</span> הוא הכרחי. הנקודות היחידות שמקיימות את האילוץ <span class="math">\(g\left(x,y\right)=1\)</span> ומקיימות <span class="math">\(y=0\)</span> הן <span class="math">\(\left(1,0\right)\)</span> ו-<span class="math">\(\left(-1,0\right)\)</span> ועבור כל אחת מהן יש, כמובן, <span class="math">\(\lambda\)</span> שפותר את המשוואה. קיבלנו ששתי אלו הן נקודות הקיצון שלנו, וזה אכן מה שהתחלתי ממנו.</p>
+<p>חסרים לנו עוד שני דברים - אינטואיציה למה כל זה עובד, והוכחה. את ההוכחה המלאה אני לא אביא כאן, ובמקום זה אתן דגש חזק על הרעיונות הכלליים. הדבר הראשון שצריך להבין הוא שנתתי למעלה את הגרסה ה"שימושית" של המשפט - קחו את הגרדיאנט של <span class="math">\(f\)</span>, אז הוא צירוף לינארי של הגרדיאנטים של האילוצים. זה משהו שקל להשתמש בו פרקטית, אבל זו לאו דווקא הדרך הקלה ביותר לחשוב על המשפט. אז הנה ניסוח <strong>כללי יותר</strong> של המשפט: אם <span class="math">\(S\)</span> הוא משטח, <span class="math">\(x_{0}\in S\)</span> היא נקודה על המשטח ו-<span class="math">\(f\)</span> היא פונקציה כך של-<span class="math">\(f|_{S}\)</span> יש נקודת קיצון ב-<span class="math">\(x_{0}\)</span>, אז <strong>המישור המשיק</strong> ל-<span class="math">\(S\)</span> בנקודה <span class="math">\(x_{0}\)</span> מוכל בגרעין של <span class="math">\(\nabla f\left(x_{0}\right)\)</span>. אם אני אסמן את המישור המשיק ל-<span class="math">\(S\)</span> בנקודה <span class="math">\(x_{0}\)</span> בתור <span class="math">\(T_{x_{0}}S\)</span> אז אפשר לכתוב פשוט <span class="math">\(T_{x_{0}}S\subseteq\ker\left(\nabla f\left(x_{0}\right)\right)\)</span> (אתם אמורים להכיר גרעין כי זה מושג בסיסי באלגברה לינארית; אוסף כל הנקודות שמאפסות את הטרנספורמציה הלינארית <span class="math">\(\nabla f\left(x_{0}\right)\)</span>).</p>
+<p>המשפט הזה מכליל את התוצאה שלנו על נקודות קיצון ללא אילוצים: אם אין אילוצים, אז המשטח <span class="math">\(S\)</span> שלנו הוא המרחב כולו, ולכן הדרך היחידה שבה הוא יהיה מוכל בגרעין של טרנספורמציה לינארית כלשהי הוא שזו תהיה טרנספורמציית האפס (עם זאת, כמו שנראה בהמשך, אנחנו משתמשים במשפט ה"בסיסי" כדי להוכיח את המשפט הכללי יותר, כך שאי אפשר להשתמש במשפט הכללי כדי לחסוך לנו עבודה).</p>
+<p>הדרך להגיע מהניסוח הזה לניסוח שהצגתי קודם היא דרך תוצאה לא מרתקת במיוחד באלגברה לינארית: נניח ש-<span class="math">\(f:\mathbb{R}^{n}\to\mathbb{R}\)</span> היא טרנספורמציה לינארית ו-<span class="math">\(G:\mathbb{R}^{n}\to\mathbb{R}^{m}\)</span> היא טרנספורמציה לינארית, אז <span class="math">\(\ker G\subseteq\ker f\)</span> אם ורק אם קיימים <span class="math">\(\lambda_{1},\dots,\lambda_{m}\)</span> כך ש-<span class="math">\(f=\sum\lambda_{i}G_{i}\)</span>, כאשר <span class="math">\(G_{i}\)</span> הוא ההטלה של <span class="math">\(G\)</span> לרכיב ה-<span class="math">\(i\)</span>, כלומר <span class="math">\(G_{i}\left(a\right)=\left[G\left(a\right)\right]_{i}\)</span>.</p>
+<p>מה שמעניין הוא להבין מה האינטואיציה שמאחורי המשפט הכללי. למה שהוא יהיה נכון? הנקודה הקריטית היא שאם <span class="math">\(S\)</span> הוא משטח שמוגדר בצורה "נחמדה מספיק" אז בהינתן נקודה <span class="math">\(x_{0}\in S\)</span> כלשהי, יש סביבה של <span class="math">\(x_{0}\)</span> ש<strong>נראית כמו </strong>תת-מרחב לינארי של <span class="math">\(\mathbb{R}^{n}\)</span>. ההגדרה של "יריעה", שאני חומק ממנה בפוסט הזה, מפרמלת את הרעיון הזה; בואו נראה דוגמה פשוטה. את המעגל שלנו מתחילת הפוסט אפשר לתאר באמצעות <strong>פרמטריזציה</strong>: פונקציה גזירה <span class="math">\(p:\mathbb{R}\to\mathbb{R}^{2}\)</span> שמוגדרת על ידי <span class="math">\(p\left(t\right)=\left(\sin t,\cos t\right)\)</span>. על ה-<span class="math">\(p\)</span> הזו אפשר <strong>להרכיב</strong> את <span class="math">\(f\)</span> שלנו, שהיא הפונקציה שאנחנו מנסים לאפטמז, ולקבל את הפונקציה <span class="math">\(\varphi\left(t\right)=f\left(p\left(t\right)\right)=\sin t\)</span>. קיבלנו פונקציה במשתנה בודד שמוגדרת מעל <span class="math">\(\mathbb{R}\)</span>, כך שאפשר לחפש לה מקסימום ומינימום בדרך הרגילה - גוזרים ומשווים לאפס. תנסו, תראו שזה עובד.</p>
+<p>אז גם באופן כללי, אם יש לנו פרמטריזציה של <span class="math">\(S\)</span> בסביבה של <span class="math">\(x_{0}\)</span> מצבנו טוב. בואו נניח ש-<span class="math">\(p:\mathbb{R}^{n}\to\mathbb{R}^{n}\)</span> היא פרמטריזציה שכזו; פירוש הדבר הוא ש-<span class="math">\(p\left(\mathbb{R}^{n}\right)\)</span> הוא סביבה של <span class="math">\(x_{0}\)</span> ב-<span class="math">\(S\)</span>. אנחנו מניחים שב-<span class="math">\(x_{0}\)</span> יש ל-<span class="math">\(f\)</span> נקודת קיצון מקומית; בואו נסמן ב-<span class="math">\(a\in\mathbb{R}^{n}\)</span> נקודה שמקיימת <span class="math">\(p\left(a\right)=x_{0}\)</span>. אז לפונקציה <span class="math">\(f\left(p\left(t\right)\right)\)</span> יש נקודת קיצון מקומית ב-<span class="math">\(a\)</span>, מה שאומר ש-<span class="math">\(D\left[f\left(p\left(a\right)\right)\right]\)</span> תהיה טרנספורמציית האפס. מכלל השרשרת נובע שזה אומר ש-<span class="math">\(Df\left(p\left(a\right)\right)\cdot Dp\left(a\right)\)</span> היא טרנספורמציית האפס.</p>
+<p>עכשיו, את <span class="math">\(Df\left(p\left(a\right)\right)\)</span> אנחנו מכירים בסימון קצת שונה. ראשית, <span class="math">\(p\left(a\right)=x_{0}\)</span>. שנית, מכיוון ש-<span class="math">\(f\)</span> היא פונקציה שמחזירה סקלר, אני מסמן את <span class="math">\(Df\)</span> ב-<span class="math">\(\nabla f\)</span>. כלומר, <span class="math">\(Df\left(p\left(a\right)\right)=\nabla f\left(x_{0}\right)\)</span> הישן והטוב.</p>
+<p>שנית, מה זה <span class="math">\(Dp\left(a\right)\)</span>? זכרו ש-<span class="math">\(p\)</span> היא פונקציה שמגדירה לנו משטח; לכן <span class="math">\(Dp\left(a\right)\)</span> מתארת את המישור המשיק למשטח בנקודה <span class="math">\(p\left(a\right)=x_{0}\)</span>, מה שסימנתי בתור <span class="math">\(T_{x_{0}}S\)</span> (כן, זה היה נפנוף ידיים). כלומר, לכל קלט שהיא מקבלת, <span class="math">\(Dp\left(a\right)\)</span> מחזירה לנו נקודה ששייכת ל-<span class="math">\(T_{x_{0}}S\)</span>.</p>
+<p>עכשיו, ראינו שההרכבה של <span class="math">\(\nabla f\left(x_{0}\right)\)</span> על <span class="math">\(Dp\left(a\right)\)</span> היא זהותית אפס. זה אומר שלכל קלט ש-<span class="math">\(Dp\left(a\right)\)</span> מקבלת, הפלט שלה (נקודה ב-<span class="math">\(T_{x_{0}}S\)</span>) יגרום ל-<span class="math">\(\nabla f\left(x_{0}\right)\)</span> להחזיר אפס. מכיוון ש-<span class="math">\(Dp\left(a\right)\)</span> היא פונקציה על כל <span class="math">\(T_{x_{0}}S\)</span> נקבל את התוצאה - <span class="math">\(T_{x_{0}}S\subseteq\ker\nabla f\left(x_{0}\right)\)</span>. הפורמליזם פה לא היה מלא אבל אני מקווה שהרעיון ברור עכשיו.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2015/10/29/inverse_and_implicit_function/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט הפונקציה ההפוכה ומשפט הפונקציות הסתומות</span>
+            </a>
+            
+            
+            
+            <a href="/2015/09/21/math_and_school/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אז בנוגע למתמטיקה ובית הספר...</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

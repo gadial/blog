@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הוכחה לא קונסטרוקטיבית לכך שרציונלי זה טרנסצנדנטי (טוב, לא בדיוק...) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>הוכחה לא קונסטרוקטיבית לכך שרציונלי זה טרנסצנדנטי (טוב, לא בדיוק...)</h1>
+            <div class="post-meta">
+                <span class="date">2011-04-12</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/הוכחות לא קונסטרוקטיביות.html">הוכחות לא קונסטרוקטיביות</a>
+                    
+                    <a href="/tags/מספרים טרנסצנדנטיים.html">מספרים טרנסצנדנטיים</a>
+                    
+                    <a href="/tags/משפט גלפונד-שניידר.html">משפט גלפונד-שניידר</a>
+                    
+                    <a href="/tags/פשטות היא תחכום.html">פשטות היא תחכום</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בראשית ימי הבלוג הייתה לי <a href="http://www.gadial.net/2007/06/27/nonconstructive_proofs_intro/">סדרת פוסטים</a> על הוכחות לא קונסטרוקטיביות - הוכחות שמראות שדבר מה קיים מבלי להראות איך למצוא אותו. הוכחות כאלו צצות בכל עבר במתמטיקה ולמרות שמצד אחד הן "מרגיזות" מבחינה פילוסופית, אני מאוד אוהב אותן. יש משהו יפה, אפילו מרשים, ביכולת להוכיח דבר מה מבלי לגעת בו ישירות כלל.</p>
+<p>והנה הפנה מייל את תשומת לבי להוכחה לא קונסטרוקטיבית מקסימה במיוחד ששכחתי. ועוד אחת שלוקחת בערך שורה וחצי ופחות או יותר כל אחד יכול להבין אותה. השאלה היא פשוטה - האם קיים מספר אי רציונלי שכאשר מעלים אותו בחזקת מספר אי רציונלי מקבלים מספר רציונלי? למי מכם שאומר "כמובן שיש, מה הבעיה" (ועוד לא מכירים את מה שאני הולך לעשות) - מהו המספר הזה? חשבו על זה רגע ונסו להוכיח לעצמכם שאתם צודקים - זה ייתן תחושה כלשהי של הקושי שיש בבעיה הזו.</p>
+<p>למי שלא בקיא במושגים - מספר רציונלי הוא מספר שניתן להציג כמנה של שני שלמים - למשל, 3 הוא מספר רציונלי (<span class="math">\(\frac{3}{1}\)</span>), וגם <span class="math">\(\frac{3}{7}\)</span> הוא רציונלי וכן הלאה. לעומתו, <span class="math">\(\sqrt{2}\)</span> איננו רציונלי - לא ניתן להציג אותו כמנת שני שלמים בשום צורה שהיא, ו<a href="http://www.gadial.net/2007/06/11/irrational_numbers/">הוכחתי זאת בעבר בבלוג</a>. ולא, <span class="math">\(\frac{\sqrt{2}}{1}\)</span> אינה הצגה לגיטימית כי <span class="math">\(\sqrt{2}\)</span> אינו שלם. מי שמתחכם בקטע הזה הוא לא מתמטיקאי ואל תתנו ל-<a href="http://www.smbc-comics.com/">SMBC</a> לעבוד עליכם.</p>
+<p><strong><img class="alignnone" title="SMBC" src="http://www.smbc-comics.com/comics/20110408.gif" alt="" width="540" height="595" /><br />
+</strong></p>
+<p>אם כן, הבה נעבור להוכחה שאכן קיים מספר כזה מבלי להשתהות. כמיטב המסורת הלא קונסטרוקטיבית, אוכיח שקיים מספר כזה אך לא אוכל להגיד במפורש מישהו; וכדי לעשות את העניין מרגיז עוד יותר, מה שאעשה הוא להציג שני מספרים שאחד מהם יהיה המספר שאת קיומו אני מבקש להוכיח, אבל לא אגיד כלל איזה משני המספרים הללו הוא הנכון.</p>
+<p>המספר הראשון הוא <span class="math">\(\sqrt{2}^{\sqrt{2}}\)</span>. שורש 2 בחזקת שורש 2. מכיוון ש-<span class="math">\(\sqrt{2}\)</span> הוא אי רציונלי, יש לנו כאן מספר מהצורה "אי רציונלי בחזקת אי רציונלי". אז אם <span class="math">\(\sqrt{2}^{\sqrt{2}}\)</span> הוא מספר רציונלי, סיימנו. אחרת...</p>
+<p>אחרת, בואו נביט שניה על המספר <span class="math">\(\left(\sqrt{2}^{\sqrt{2}}\right)^{\sqrt{2}}\)</span>. כלומר, המספר <span class="math">\(\sqrt{2}^{\sqrt{2}}\)</span> שעליו דיברנו לפני שניה, בחזקת המספר <span class="math">\(\sqrt{2}\)</span>. המספר הזה הוא <strong>רציונלי</strong> בודאות, כי אם נשתעשע איתו על פי חוקי החזקות הרגילים נקבל:</p>
+<p><span class="math">\(\left(\sqrt{2}^{\sqrt{2}}\right)^{\sqrt{2}}=\left(\sqrt{2}\right)^{\sqrt{2}\cdot\sqrt{2}}=\left(\sqrt{2}\right)^{2}=2\)</span></p>
+<p>כלומר, <span class="math">\(\left(\sqrt{2}^{\sqrt{2}}\right)^{\sqrt{2}}\)</span> זו פשוט דרך מפוצצת לרשום את המספר הרציונלי 2. אבל מה יש לנו כאן? אם <span class="math">\(\sqrt{2}^{\sqrt{2}}\)</span> היה אי רציונלי, אז מצאנו זוג מספרים אי רציונליים (<span class="math">\(\sqrt{2}^{\sqrt{2}}\)</span> ו-<span class="math">\(\sqrt{2}\)</span>) שכאשר מעלים את האחד בחזקת השני, מקבלים מספר רציונלי. ואילו אם <span class="math">\(\sqrt{2}^{\sqrt{2}}\)</span> לא היה אי רציונלי, אז כאמור - זה אומר שהוא רציונלי ולכן מצאנו זוג מספרים אי רציונליים (<span class="math">\(\sqrt{2}\)</span> ו-<span class="math">\(\sqrt{2}\)</span>) שכאשר מעלים את האחד בחזקת השני, מקבלים מספר רציונלי. אז הראינו כי בודאות קיים זוג מהסוג שאנו מחפשים, אבל אין לנו מושג איזה משני הזוגות הוא הנכון! סוף ההוכחה.</p>
+<p>בהערת אגב מתמטית אפשר לומר שלמעשה, אנחנו כן יודעים מי משתי האפשרויות נכונה, אבל לשם כך צריך מתמטיקה יותר מתוחכמת מזו שהצגנו כאן. למעשה, יש משפט כללי וחזק למדי שמטפל בסיטואציות של "אי רציונלי בחזקת אי רציונלי". <a href="http://en.wikipedia.org/wiki/Gelfond%E2%80%93Schneider_theorem">משפט גלפונד-שניידר</a> אומר כי אם <span class="math">\(b\)</span> הוא אי רציונלי ו-<span class="math">\(a\)</span> הוא מספר כלשהו שונה מ-0 או 1, ושניהם אלגבריים, אז <span class="math">\(a^{b}\)</span> הוא טרנסצנדנטי. "מספר אלגברי" הוא מספר שהוא פתרון של משוואה כלשהי במקדמים רציונליים (למשל, <span class="math">\(\sqrt{2}\)</span> הוא כזה כי הוא פתרון של <span class="math">\(x^{2}-2=0\)</span>) ואילו <span class="math">\(\pi\)</span> אינו כזה, אם כי ההוכחה לכך אינה פשוטה (וכרגיל, המתחכמים שיגידו ש-<span class="math">\(x-\pi=0\)</span> היא משוואה מתאימה יתעלמו מכך ש-<span class="math">\(\pi\)</span> שאינו רציונלי מופיע במשוואה הזו כמקדם של <span class="math">\(x^{0}\)</span>). "מספר טרנסצנדנטי" הוא פשוט מספר שאינו אלגברי, ו-<span class="math">\(\pi\)</span> הוא דוגמה קלאסית יחסית למספר שכזה (אם כי לא הראשון שהוכיחו עליו שהוא כזה וודאי שלא זה שהכי קל להוכיח זאת עבורו).</p>
+<p>למעשה, משפט גלפונד-שניידר הוא כלי חזק למדי ב"בניה" של מספרים טרנסצנדנטיים מפורשים, ובפרט הוא מראה כי <span class="math">\(\sqrt{2}^{\sqrt{2}}\)</span> מיודענו הוא כזה. לאלו מכם שתוהים האם הוא אינו מהווה דוגמה נגדית למשפט גלפונד-שניידר, שכן אם <span class="math">\(a=\sqrt{2}^{\sqrt{2}}\)</span> ו-<span class="math">\(b=\sqrt{2}\)</span> ראינו כי <span class="math">\(a^{b}=2\)</span> והרי <span class="math">\(2\)</span> איננו טרנסצנדנטי - שימו לב שדורשים ש-<span class="math">\(a\)</span> יהיה אלגברי, ו-<span class="math">\(\sqrt{2}^{\sqrt{2}}\)</span> איננו כזה. במילים אחרות, כדי שיתרחש הפלא של "אי רציונלי בחזקת אי רציונלי שווה לרציונלי" צריך שהבסיס (המספר שאותו מעלים בחזקה) יהיה "ממש ממש אי רציונלי", כלומר טרנסצנדנטי.</p>
+<p>לסיום, בקשה לקהל - אם שכחתי עוד הוכחות לא קונסטרוקטיביות יפות, אנא הזכירו לי! תודה.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/04/21/against_penrose_emperor_1/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">המותר האדם מן האלגוריתם?</span>
+            </a>
+            
+            
+            
+            <a href="/2011/04/07/bad_math_mystery_arithmetic_phenomenon/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">התופעה החשבונית המסתורית של שנת 2011 (היא שהטמטום של חדשות 2 הוא אינסופי)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

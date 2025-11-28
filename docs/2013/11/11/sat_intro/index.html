@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מה זו בעיית SAT ולמה חשוב לפתור אותה? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מה זו בעיית SAT ולמה חשוב לפתור אותה?</h1>
+            <div class="post-meta">
+                <span class="date">2013-11-11</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/לוגיקה.html">לוגיקה</a>
+                    
+                    <a href="/categories/מבני נתונים ואלגוריתמים.html">מבני נתונים ואלגוריתמים</a>
+                    
+                    <a href="/categories/תורת הסיבוכיות.html">תורת הסיבוכיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיית SAT.html">בעיית SAT</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אני רוצה לדבר על בעיה לא פתירה, ואיך שפותרים אותה.</p>
+<p>הבעיה נקראת SAT, קיצור של Satisfiability. הזכרתי אותה לא מעט בבלוג בעבר, אבל בואו נציג אותה מחדש, בלי הנחות מוקדמות. לפני שנגיע להגדרות הפורמליות, הנה הרעיון: נותנים לנו אוסף של <strong>אילוצים</strong> ושואלים אותנו אם אפשר לספק את כל האילוצים הללו <strong>בו זמנית</strong>. האילוצים הללו מקודדים בצורה שהיא פשוטה מאוד, כמעט טריוויאלית לקידוד, ולכן זו נראית בעיה יחסית פשוטה ממבט ראשון; אבל בפועל זו בעיה קשה - מה שנקרא "בעייה NP-שלמה". זה אומר שלא ידוע כיום אלגוריתם שמצליח לפתור את הבעיה בפרק זמן סביר, ויש סיבות לא רעות להניח שפשוט לא קיים אלגוריתם כזה בכלל. ועם זאת הבעיה נפתרת מדי יום ביומו ברחבי העולם. הכיצד?</p>
+
+<p>בואו נעבור להגדרות. כאמור, ב-SAT אנחנו מנסים לקודד אילוצים בצורה מאוד מאוד פשוטה. כל אילוץ שכזה מקודד באמצעות משהו שנקרא <strong>פסוקית</strong>, כאשר כל פסוקית מורכבת מכמה תנאים שמספיק שאחד מהם "יצליח" כדי שכל הפסוקית "תצליח". תנאי כזה נקרא <strong>ליטרל</strong>. העוקץ הוא שיכול להיות קשר בין ליטרלים בפסוקיות שונות, כך שאם ליטרל כלשהו מצליח בפסוקית אחת, בפסוקית אחרת יהיה ליטרל שנכשל.</p>
+
+<p>פורמלית, אנחנו מתחילים מ<strong>משתנים</strong>. משתנה <span class="math">\(x\)</span> הוא משהו שיכול לקבל שני ערכים - "אמת" ו"שקר", שאעדיף לסמן ב-1 ו-0 לצורך פשטות. עכשיו, <strong>ליטרל</strong> (שאני מסמן לרוב ב-<span class="math">\(l\)</span>) הוא או משתנה או <strong>שלילה</strong> של משתנה, שאני מסמן ב-<span class="math">\(\neg x\)</span>. שלילה פירושה שאם <span class="math">\(x\)</span> קיבל 0, אז <span class="math">\(\neg x\)</span> קיבל 1, ואם <span class="math">\(x\)</span> קיבל 1 אז <span class="math">\(\neg x\)</span> מקבל 0.</p>
+
+<p>עכשיו, מליטרלים בונים <strong>פסוקיות</strong> CNF על ידי שילוב קבוצה של ליטרלים עם קשר "או" - זה מסומן בתור <span class="math">\(C=\left(l_{1}\vee l_{2}\vee\dots\vee l_{k}\right)\)</span>. אם יש לנו השמה כלשהי של ערכים לכל המשתנים שמופיעים בפסוקית, אז הפסוקית מקבלת ערך 1 על ידי ההשמה הזו אם לפחות ליטרל אחד קיבל את הערך 1, ו-0 אם כולם קיבלו 0. לדוגמה, הביטו בפסוקית <span class="math">\(C=\left(x\vee\neg y\vee z\right)\)</span>: היא מקבלת 0 בהשמה שנותנת 0 ל-<span class="math">\(x,z\)</span> ו-<span class="math">\(1\)</span> ל-<span class="math">\(y\)</span>, והיא מקבלת 1 בכל יתר ההשמות. אם פסוקית מקבלת 1 על ידי השמה כלשהי, אומרים שהיא <strong>מסתפקת</strong> על ידי ההשמה.</p>
+
+<p>לבסוף, <strong>פסוק</strong> CNF מורכב מאוסף פסוקיות שמחוברות עם קשר "וגם": <span class="math">\(\varphi=C_{1}\wedge C_{2}\wedge\dots\wedge C_{n}\)</span>. פסוק <strong>מסתפק</strong> על ידי השמה רק אם ההשמה מספקת את כל הפסוקיות שלו <strong>בו זמנית</strong>. ה-CNF שבשם מגיע מ-Conjunctive Normal Form - זה מרמז שיש דרכים אחרות לכתוב בהן פסוקים, ועוד נדון על כך בהמשך, אבל בבעיית SAT מתעסקים רק עם פסוקית בצורת CNF.</p>
+
+<p>השאלה המרכזית בנוגע ל-SAT היא השאלה הבאה: האם קיים אלגוריתם שבהינתן פסוק CNF כלשהו, מסוגל לקבוע בזמן <strong>יעיל</strong> האם קיימת השמה שמספקת אותה. "יעיל" כאן פירושו "מספר הצעדים שדורשת הבדיקה הוא פולינומי בגודל של הפסוק" - אם זה נשמע כמו ג'יבריש, תתעלמו מזה בינתיים, בהמשך אני אסביר את זה. עם זאת, כשאני מדבר על "לפתור את SAT'' אני לא מתכוון ל"למצוא מענה לשאלה האם קיים או לא קיים אלגוריתם יעיל" אלא למשהו צנוע ביותר - לקבוע עבור פסוק CNF ספציפי אם הוא ספיק או לא. פורמלית היה יותר תקין להגיד שאני מדבר על פתרון של <strong>מופע</strong> של בעיית SAT (כל פסוק CNF הוא מופע שכזה), אבל אני מרשה לעצמי להתפרע.</p>
+
+<p>אוקיי, תשאלו עכשיו, בשביל מה כל זה טוב? את מי הבעיה הזו מעניינת בכלל? הרי לא יכול לקרות שנלך ברחוב ופתאום יפול עלינו פסוק כזה שצריך לבדוק אם הוא ספיק או לא. אז בשביל מה זה טוב?</p>
+
+<p>התשובה, כמובן, היא שאפשר <strong>למדל</strong> בעיות רבות ושונות בעזרת פסוקי CNF שכאלו. לכן תיארתי מלכתחילה את הבעיה בתור "נתון לנו אוסף של אילוצים" בלי בכלל לדבר על CNF. הנה דוגמה פשוטה לאופן שבו זה עובד: אנחנו רוצים לבנות מערכת שעות. יש לנו רשימה של קורסים שאנחנו צריכים לקחת; לכל קורס יש מספר קבוצות הרצאה שונות שאליהן ניתן ללכת. אנחנו רוצים לבנות מערכת ללא התנגשויות - כלומר, כך שאנחנו לא הולכים לשתי קבוצות הרצאה של קורסים שונים שהם באותה שעה. זו בעיה קלאסית עבור תרגום ל-CNF: לכל קורס יהיו לנו משתנים שמתארים "האם אני הולך לקבוצה שמספרה כך וכך של הקורס". כלומר, יהיו לנו משתנים <span class="math">\(x_{1},\dots,x_{n}\)</span> עבור קורס בעל <span class="math">\(n\)</span> קבוצות הרצאה שונות, כך שאם המשתנה <span class="math">\(x_{i}\)</span> מקבל 1 המשמעות היא "אני הולך לקבוצה <span class="math">\(i\)</span> של הקורס" ואם המשתנה <span class="math">\(x_{i}\)</span> מקבל 0 המשמעות היא "אני לא הולך לקבוצה <span class="math">\(i\)</span> של הקורס". אנחנו רוצים להוסיף ל-CNF את האילוץ "אנחנו הולכים לפחות לאחת מקבוצות ההרצאה"; לשם כך נוסיף לו את הפסוקית <span class="math">\(\left(x_{1}\vee x_{2}\vee\dots\vee x_{n}\right)\)</span>. כמו כן, אנחנו רוצים להוסיף לו את האילוץ "אנחנו לא הולכים לשתי קבוצות הרצאה שונות של אותו מקצוע (זה יהיה פשוט מטופש!). את זה אפשר לקודד על ידי אוסף פסוקיות: לכל <span class="math">\(i\ne j\)</span>, נוסיף את הפסוקית <span class="math">\(\left(\neg x_{i}\vee\neg x_{j}\right)\)</span> שאפשר לקרוא בתור "או שאני לא הולך לקבוצה <span class="math">\(i\)</span> או שאני לא הולך לקבוצה <span class="math">\(j\)</span>, או שניהם" - שמבטיח שאני לא הולך לפחות לאחת מהקבוצות הללו (כך שאם אני הולך לשתי קבוצות, הפסוקית עם המשתנים עבור שתיהן לא תסתפק). למי שעדיין לא רואה את זה, אפשר לחשוב על <span class="math">\(\left(\neg x_{i}\vee\neg x_{j}\right)\)</span> כשקול לוגית לפסוק (שאינו פסוקית CNF) הבא: <span class="math">\(x_{i}\to\neg x_{j}\)</span>, שאומר "אם אני הולך לקבוצה <span class="math">\(i\)</span>, אז אני לא הולך לקבוצה <span class="math">\(j\)</span>", וגם לפסוק <span class="math">\(x_{j}\to\neg x_{i}\)</span>.</p>
+
+<p>כעת, כל השמה למשתנים שמספקת את כל פסוקיות ה-CNF שתיארתי עד כה ניתנת ל<strong>פירוש</strong> בתור בחירה של קבוצת הרצאה אחת עבור כל קורס. כמובן, הפירוש הזה תלוי במידע חיצוני שאני שומר אצלי, לגבי ה<strong>משמעות</strong> של כל משתנה; השמה למשתנים היא פשוט סדרה של 0 ו-1-ים.</p>
+
+<p>מה עוד חסר? עוד אין לי ב-CNF שום אילוץ שמבטיח ששתי קבוצות הרצאה של קורסים שונים אינן מתנגשות. לשם כך אני צריך, כשאני בונה את ה-CNF, לעבור ידנית על כל שעות ההרצאה של כל הקורסים ולבדוק אם יש התנגשות. אם אני מוצא התנגשות בין הקבוצה שמתוארת על ידי המשתנה <span class="math">\(x_{i}\)</span> והקבוצה שמתוארת על ידי המשתנה <span class="math">\(y_{j}\)</span> (האות השונה מרמזת שמדובר על קורס שונה), אז אני מוסיף ל-CNF שלנו את הפסוקית <span class="math">\(\left(\neg x_{i}\vee\neg y_{j}\right)\)</span>, שמבטיחה שאני לא הולך לשתי קבוצות ההרצאה הללו בו זמנית. עכשיו הפסוק שבניתי הוא ספיק אם ורק אם קיימת מערכת שעות ללא התנגשויות, וכל השמה מספקת שלו ניתנת לתרגום למערכת שעות שכזו. זו המשמעות של <strong>מידול</strong>.</p>
+
+<p>אפשר למדל עם פסוקי CNF עוד שלל בעיות רבות ושונות. אחד מהמשפטים המרכזיים בתורת החישוביות, משפט קוק-לוין, קובע שבעצם כל בעיה ב-NP ניתן למדל בעזרת פסוקי CNF באופן שבו הפסוק המתקבל הוא מסדר גודל "סביר" לעומת הבעיה המקורית (פולינומי). למקרה שאתם תוהים מה זה NP - אלו בעיות שעבורן ניתן <strong>לבדוק</strong> ביעילות האם פתרון מוצע הוא נכון. למשל, מערכת שעות (נותנים לכם מערכת שעות? פשוט תסתכלו עליה ותוודאו שאין התנגשויות, לא ייקח יותר מדי זמן). עם זאת, משפט קוק-לוין הוא תוצאה <strong>תיאורטית</strong>, במובן זה ששיטת הקידוד שהוא מציע היא מאוד מסורבלת. אם ניקח את משפט קוק-לוין ונפעיל אותו על בעיית מערכת השעות, לא נקבל קידוד אלגנטי כמו שתיארתי לעיל; נקבל קידוד מסובך פי כמה וכמה. וזה בעייתי מאוד, בהתחשב בכך שאנחנו רוצים גם <strong>לפתור</strong> את בעיית ה-SAT שמתקבלת מהקידוד. לכן חלק מהאומנות שבעבודה עם SAT היא לבצע את הקידוד המדובר בצורה חכמה. כדאי להעיר שלא תמיד כדאי לקודד את הבעיה דווקא עם SAT; תחום שלם במדעי המחשב מתעסק עם מה שנקרא CSP, שזה בעברית פשוט Constraint Satisfaction Problems - "בעיות סיפוק אילוצים" - שהן מעין הכללה של SAT בשלל דרכים שונות. לא אכנס לנושא הזה בכלל כרגע, למרות שהוא מרתק בפני עצמו; המטרה העיקרית שלי היא לדבר על איך פותרים את SAT, לא איך פותרים בעיות אחרות בעזרת SAT.</p>
+
+<p>אז איך פותרים את SAT? הגישה הנאיבית אומרת - בואו פשוט ננסה את כל ההשמות האפשריות של ערכים למשתנים ונראה אם אחת מהן מספקת את הפסוק. הבעיה היא שאם יש בפסוק <span class="math">\(n\)</span> משתנים, אז יש <span class="math">\(2^{n}\)</span> השמות אפשריות למשתנים הללו. מה שאומר שכבר עבור מספר קטן יחסית של משתנים, מספר ההשמות הוא עצום, ואף מחשב לא יוכל לעבור על כולן, אף פעם. אז צריך גישה אחרת. בפוסטים בהמשך אציג את הגישה האחרת שבה משתמשים בימינו אלגוריתמים שפותרים את SAT - מה שנקרא, SAT Solvers - אבל הדבר הראשון שאני רוצה לדבר עליו הוא הבעיה ה"הפוכה" - מה קורה אם יש לנו פסוק CNF שאינו ספיק? איך אפשר להשתכנע בכך שהוא אינו ספיק מבלי לבדוק את כל ההשמות האפשריות?</p>
+
+<p>שימו לב לחוסר הסימטריה בין הבעיה הזו ובין הבעיה של פסוק CNF ספיק: במקרה של פסוק ספיק, גם אם כל מה שאנחנו יודעים לעשות הוא לבדוק את כל ההשמות, אם "במזל" ההשמה הראשונה שנבדוק תספק את הפסוק, סיימנו. במקרה של פסוק לא ספיק, מה שנראה במבט ראשון הוא שאין מנוס מבדיקה של כל ההשמות. אלא שכמובן שיש דרך חכמה יותר לעשות את זה, ועליה אני ארצה לדבר בפוסט הבא. </p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/11/14/resolution_proof_system/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">רזולוציה - איך אפשר להוכיח שאי אפשר?</span>
+            </a>
+            
+            
+            
+            <a href="/2013/10/18/kruskal_algorithm/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">האלגוריתם של קרוסקל ומבנה הנתונים Union/Find</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -19,6 +19,7 @@ class MathPreprocessor(Preprocessor):
     def __init__(self, md):
         super().__init__(md)
         self.math_blocks = []
+        self.warnings = []
     
     def run(self, lines):
         """Process lines to protect math expressions."""
@@ -32,8 +33,9 @@ class MathPreprocessor(Preprocessor):
         
         # Protect inline math ($...$)
         def replace_inline_math(match):
+            math_content = match.group(1)
             placeholder = f'~~~MATHBLOCK{len(self.math_blocks)}~~~'
-            self.math_blocks.append(('inline', match.group(1)))
+            self.math_blocks.append(('inline', math_content))
             return placeholder
         
         # Process display math first ($$...$$)
@@ -66,6 +68,7 @@ class MarkdownProcessor:
                 }
             }
         )
+        self.warnings = []
     
     def process(self, content: str) -> str:
         """Convert markdown to HTML with math support.
@@ -82,9 +85,16 @@ class MarkdownProcessor:
         # Convert markdown to HTML
         html = self.md.convert(content)
         
-        # Restore math blocks
+        # Restore math blocks and collect warnings
         if hasattr(self.md.preprocessors['math'], 'math_blocks'):
             math_blocks = self.md.preprocessors['math'].math_blocks
+            preprocessor_warnings = self.md.preprocessors['math'].warnings
+            
+            # Collect warnings
+            if preprocessor_warnings:
+                self.warnings.extend(preprocessor_warnings)
+                preprocessor_warnings.clear()
+            
             for i, (math_type, math_content) in enumerate(math_blocks):
                 placeholder = f'~~~MATHBLOCK{i}~~~'
                 if math_type == 'display':
@@ -98,3 +108,9 @@ class MarkdownProcessor:
             math_blocks.clear()
         
         return html
+    
+    def get_warnings(self):
+        """Get and clear accumulated warnings."""
+        warnings = self.warnings.copy()
+        self.warnings.clear()
+        return warnings

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי בגישה מתמטית, חלק ב&#39; - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי בגישה מתמטית, חלק ב&#39;</h1>
+            <div class="post-meta">
+                <span class="date">2022-07-31</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מה קורה כשיש לנו שני קיוביטים ביחד?</h2>
+
+<p><a href="https://gadial.net/2022/07/28/quantum_computing_math/">הפוסט הקודם</a> שלי על חישוב קוונטי הציג מתמטית את המושג של <strong>קיוביט</strong>: מערכת פיזיקלית כלשהי שאפשר לתאר את המצב הכללי שלה בתור <strong>סופרפוזיציה</strong>, שהיא וקטור ב-<span class="math">\(\mathbb{C}^{2}\)</span> מנורמה 1 שאהבתי לסמן ב-<span class="math">\(\alpha\left|0\right\rangle +\beta\left|1\right\rangle \)</span>. הראיתי איך מבצעים חישובים עם קיוביט בודד שכזה, והאמת היא שזה לא היה מרשים בכלל כי את הכל אפשר לסמלץ בנוחות במחשב רגיל; לא צריך מחשב קוונטי בשביל חישוב עם קיוביט יחיד ולא משנה עד כמה סופרפוזיציה היא תופעה מופלאה.</p>
+<p>אז בפוסט הזה אנחנו הולכים לדבר על מערכות שכוללות יותר מקיוביט יחיד. במערכות הללו קורה קסם קוונטי שנקרא <strong>שזירה</strong>: אני אגדיר אותו פורמלית בהמשך, אבל הרעיון בשזירה הוא ששתי מערכות קוונטיות הן מחוברות זו לזו בצורה כזו שלא ניתן לחשוב עליהן בתור שתי מערכות נפרדות; השלם גדול מסך חלקיו.כדי לראות למה זה מעניין, תחשבו על שעון - כשפותחים אותו רואים המון גלגלי שיניים מתרוצצים להם וזה נראה כמו מערכת גדולה ומורכבת, אבל אם נסתכל על גלגל שיניים בודד נוכל להבין בדיוק מה הוא עושה. הוא כמובן משפיע על מערכות אחרות שצמודות אליו, אבל אפשר להסתכל עליו באופן מבודד. בשזירה אי אפשר. אותו הדבר עם חישוב רגיל: הערך של כל ביט בחישוב רגיל הוא או 0 או 1, וזהו; הערך של הביט לא תלוי בערכים של ביטים אחרים. כמובן, אם אנחנו מבצעים פעולה חישובית כלשהי, היא תיקח את הערך של הרבה ביטים ותשנה אותו, בהתאם לכל הקלטים שקיבלה; הערכים של הביטים השונים יכולים להשפיע אחד על השני . אבל כשמסתכלים על מצב נתון של מערכת, אנחנו יכולים להסתכל על כל ביט בנפרד.</p>
+<p>נשמע לא ברור? בהחלט! זו הבעיה עם חישוב קוונטי, שדברים נהיים ברורים, ואפילו קלים ממש להבנה, רק כשמערבים מתמטיקה. למרבה המזל זו המטרה שלנו פה, לערב מתמטיקה. אז בואו נעבור לשאלה מתמטית כללית לרגע: נניח שיש לנו שני מרחבים וקטוריים, <span class="math">\(U,W\)</span> (אצלנו המרחבים יהיו קיוביטים, אבל נחזור לזה בהמשך) - איך אני יכול לבנות משני המרחבים הללו מרחב וקטורי חדש?</p>
+<p>התשובה הנפוצה, שרואים מהר מאוד בכל קורס אלגברה לינארית, היא באמצעות פעולה שנקראת <strong>סכום ישר</strong> (או <strong>סכום ישר חיצוני</strong> עבור מה שאציג כאן, או <strong>מכפלה ישרה</strong>, שהיא מושג שונה אבל עם משמעות זהה כשיש רק שני מרחבים): אני בונה מרחב וקטורי <span class="math">\(V=U\oplus W\)</span> שכל איבר בו הוא מהצורה <span class="math">\(\left(u,w\right)\)</span> כך ש-<span class="math">\(u\in U,w\in W\)</span>, ופעולות החיבור והכפל בסקלר הן "נקודתיות", כלומר <span class="math">\(\left(u_{1},w_{1}\right)+\left(u_{2},w_{2}\right)=\left(u_{1}+u_{2},w_{1}+w_{2}\right)\)</span> ו-<span class="math">\(\lambda\left(u,w\right)=\left(\lambda u,\lambda w\right)\)</span>. בגישה הזו, אפשר לחשוב על כל איבר ב-<span class="math">\(V\)</span> כאילו הוא מיוצג על ידי <strong>זוג איברים</strong>, אחד מ-<span class="math">\(u\)</span> ואחד מ-<span class="math">\(w\)</span>. למשל, כשאני מסתכל על <span class="math">\(\mathbb{R}^{2}\)</span> האיברים שלו הם קווים במישור, אבל אפשר גם לחשוב עליו בתור <span class="math">\(\mathbb{R}\oplus\mathbb{R}\)</span>: מרחב שבו כל איבר מיוצג על ידי קו בציר <span class="math">\(x\)</span> וקו בציר <span class="math">\(y\)</span> - <strong>ההיטלים</strong> של הקו ב-<span class="math">\(\mathbb{R}^{2}\)</span>. אם יש לנו בסיס <span class="math">\(e_{1},\ldots,e_{n}\)</span> ל-<span class="math">\(U\)</span> ובסיס <span class="math">\(f_{1},\ldots,f_{m}\)</span> ל-<span class="math">\(W\)</span>, אז בסיס ל-<span class="math">\(V=U\oplus W\)</span> יהיה <span class="math">\(\left(e_{1},0\right),\ldots,\left(e_{n},0\right),\left(0,f_{1}\right),\ldots,\left(0,f_{m}\right)\)</span>, כלומר <span class="math">\(V\)</span> יהיה ממימד <span class="math">\(n+m\)</span> ואפשר יהיה לחשוב על כל איבר בו כאילו הוא נוצר מתוך איברי הבסיסים של <span class="math">\(U,W\)</span>. זו כאמור בניה סטנדרטית ומועילה ביותר והיא <strong>לחלוטין לא</strong> מה שאנחנו הולכים לעשות הפעם. הקסם של חישוב קוונטי - הקסם של <strong>שזירה קוונטית</strong>, הוא בכך שהמרחב <span class="math">\(V\)</span> שמתקבל משילוב של שתי מערכות קוונטיות <span class="math">\(U,W\)</span> הוא לא סכום ישר אלא מה שנקרא <strong>מכפלה טנזורית</strong>, <span class="math">\(V=U\otimes W\)</span>.</p>
+<p><a href="https://gadial.net/2014/06/10/vector_space_tensor_product/">יש לי פוסט</a> על מכפלות טנזוריות אבל אני לא הולך להסתמך עליו כאן. בכללי, מכפלות טנזוריות זה תחום מורכב ועשיר עם שלל דרכים להציג אותו; אני אנסה להציג אותו בדרך הכי קונקרטית ובסיסית שאני יכול, כדי שיהיה קל להבין איך זה עובד במקרה של קיוביטים. הדרך הפשוטה ביותר לתאר את <span class="math">\(V=U\otimes W\)</span> היא זו: כבר ראינו בסיס <span class="math">\(e_{1},\ldots,e_{n}\)</span> של <span class="math">\(U\)</span> ובסיס <span class="math">\(f_{1},\ldots,f_{m}\)</span> של <span class="math">\(W\)</span>, אז עכשיו ניצור מרחב חדש לגמרי "מלמטה למעלה". ראשית, נגדיר איברים חדשים שאסמן <span class="math">\(e_{i}\otimes f_{j}\)</span> לכל <span class="math">\(1\le i\le n\)</span> ו-<span class="math">\(1\le j\le m\)</span>. כלומר, קיבלתי <span class="math">\(n\times m\)</span> איברים חדשים שכאלו, שכל אחד מהם בנוי מאיבר בסיס של <span class="math">\(U\)</span>, איבר בסיס של <span class="math">\(W\)</span> ואיזה סימן <span class="math">\(\otimes\)</span> מוזר בין שניהם שלא אומר לנו כלום כרגע. עכשיו אני מגדיר את <span class="math">\(V\)</span> בתור</p>
+<p><span class="math">\(V=\text{span}\left\{ e_{i}\otimes f_{j}\ |\ 1\le i\le n,1\le j\le m\right\} \)</span></p>
+<p>מה זה אומר? בעיקרון, זה אומר שאיבר כללי של <span class="math">\(V\)</span> הוא מהצורה <span class="math">\(\sum\lambda_{ij}\left(e_{i}\otimes f_{j}\right)\)</span> - קיבלנו מרחב שמתקבל מ"סכום פורמלי" של כל האיברים <span class="math">\(e_{i}\otimes f_{j}\)</span>. זה קצת מזכיר את האופן שבו אפשר לחשוב על המרחב הוקטורי של הפולינומים בתור המרחב הוקטורי שמורכב מכל הסכומים הסופיים של האיברים מהצורה <span class="math">\(x^{0},x^{1},x^{2},\ldots\)</span>. במרחב כזה, פעולות החיבור והכפל בסקלר מוגדרות בצורה הטבעית שאפשר לצפות לה:</p>
+<p><span class="math">\(\sum\lambda_{ij}\left(e_{i}\otimes f_{j}\right)+\sum\mu_{ij}\left(e_{i}\otimes f_{j}\right)=\sum\left(\lambda_{ij}+\mu_{ij}\right)\left(e_{i}\otimes f_{j}\right)\)</span></p>
+<p><span class="math">\(\mu\cdot\sum\lambda_{ij}\left(e_{i}\otimes f_{j}\right)=\sum\left(\mu\lambda_{ij}\right)\left(e_{i}\otimes f_{j}\right)\)</span></p>
+<p>זה אבסטרקטי מאוד, אז בואו נראה מה קורה עם קיוביטים. אצלנו <span class="math">\(U=W=\mathbb{C}^{2}\)</span> וכזכור, סימנתי ב-<span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span> את אברי הבסיס הסטנדרטי. אז עבור שני קיוביטים אני הולך לקבל את המרחב <span class="math">\(\mathbb{C}^{2}\otimes\mathbb{C}^{2}\)</span> שנפרש על ידי ארבעת האיברים הבאים:</p>
+<p><span class="math">\(\left|0\right\rangle \otimes\left|0\right\rangle \)</span></p>
+<p><span class="math">\(\left|0\right\rangle \otimes\left|1\right\rangle \)</span></p>
+<p><span class="math">\(\left|1\right\rangle \otimes\left|0\right\rangle \)</span></p>
+<p><span class="math">\(\left|1\right\rangle \otimes\left|1\right\rangle \)</span></p>
+<p>מכיוון שמעייף מאוד לכתוב את ה-<span class="math">\(\otimes\)</span> הזה בכל פעם, לרוב משמיטים אותו; במקום לכתוב <span class="math">\(\left|0\right\rangle \otimes\left|0\right\rangle \)</span> כותבים <span class="math">\(\left|0\right\rangle \left|0\right\rangle \)</span> או אפילו עוד יותר בקיצור, <span class="math">\(\left|00\right\rangle \)</span>. אם כן, איבר כללי שמתאר את המצב של שני קיוביטים הוא</p>
+<p><span class="math">\(\alpha\left|00\right\rangle +\beta\left|01\right\rangle +\gamma\left|10\right\rangle +\delta\left|11\right\rangle \)</span></p>
+<p>יש בעיה עקרונית עם מרחב של שני קיוביטים: הוא ממימד 4, בדיוק כמו הסכום הישר <span class="math">\(\mathbb{C}^{2}\oplus\mathbb{C}^{2}\)</span>, כך שלא ברור מה ההבדל. לכן אני אקפוץ לרגע אל מרחב בן שלושה קיוביטים. מרחב כזה נפרש על ידי האיברים</p>
+<p><span class="math">\(\left|000\right\rangle ,\left|001\right\rangle ,\left|010\right\rangle ,\left|011\right\rangle ,\left|100\right\rangle ,\left|101\right\rangle ,\left|110\right\rangle ,\left|111\right\rangle \)</span></p>
+<p>זה כבר שונה מסכום ישר של שלושה מרחבים <span class="math">\(\mathbb{C}^{2}\oplus\mathbb{C}^{2}\oplus\mathbb{C}^{2}\)</span>, שנפרש על ידי <strong>שישה</strong> איברים:</p>
+<p><span class="math">\(\left(\left|0\right\rangle ,0,0\right),\left(\left|1\right\rangle ,0,0\right),\left(0,\left|0\right\rangle ,0\right),\left(0,\left|1\right\rangle ,0\right),\left(0,0,\left|0\right\rangle \right),\left(0,0,\left|1\right\rangle \right)\)</span></p>
+<p>הסימון הזה די מבלבל: <span class="math">\(\left|0\right\rangle \)</span> הוא הסימון שלי לוקטור <span class="math">\(\left(\begin{array}{c} 1\\ 0 \end{array}\right)\)</span> בזמן ש-0 הוא הסימון שלי לוקטור האפס, <span class="math">\(\left(\begin{array}{c} 0\\ 0 \end{array}\right)\)</span>; זכרו ש-<span class="math">\(\left|0\right\rangle \)</span> זה סימון שרירותי והייתי יכול גם להשתמש ב-<span class="math">\(\left|42\right\rangle \)</span> אם היה מתחשק לי (להבדיל מ-0 שמתאים לתפיסה הרגילה שלנו של מה זה "אפס"). למרבה המזל, אני לא אדרש כמעט לשימוש ב-0 או בסכומים ישרים, אז עכשיו שראינו שזה משהו שונה ממכפלה טנזורית, אפשר לשכוח מהם.</p>
+<p>ראינו קיוביט אחד, שני קיוביטים ושלושה קיוביטים, אז באינדוקציה אפשר להראות עכשיו <span class="math">\(n\)</span> קיוביטים. מרחב של <span class="math">\(n\)</span> קיוביטים נפרש על ידי <span class="math">\(2^{n}\)</span> איברים בסיס: לכל מחרוזת בינארית <span class="math">\(x\in\left\{ 0,1\right\} ^{n}\)</span> יש לנו איבר בסיס <span class="math">\(\left|x\right\rangle \)</span>, ואפשר לסמן איבר כללי בתור</p>
+<p><span class="math">\(\sum_{x\in\left\{ 0,1\right\} ^{n}}\alpha_{x}\left|x\right\rangle \)</span></p>
+<p>כלומר, ה"אינפורמציה" שיש במצב כללי של מערכת של <span class="math">\(n\)</span> קיוביטים מקודדת על ידי <span class="math">\(2^{n}\)</span> מספרים מרוכבים. זה הבדל <strong>עצום</strong> מהאינפורמציה שמקודדת במצב כללי של מערכת של <span class="math">\(n\)</span> ביטים קלאסיים, שהיא... <span class="math">\(n\)</span> ספרות של 0 ו-1. שימו לב - אני מדבר כאן על כמות המידע שנדרש כדי לייצג את המצב, לא על מספר המצבים הפוטנציאליים שבו הוא יכול להיות (שהוא <span class="math">\(2^{n}\)</span> למצב קלאסי, אבל גם אם נצמצמם את המקדמים של המצב הקוונטי להיות 0 ו-1 אחרי נרמול, מספר המצבים הפוטנציאליים של המצב הקוונטי יהיה <span class="math">\(2^{2^{n}}\)</span>).</p>
+<p>אז זהו, סיימנו את ההגדרה? לגמרי לא, בואו נסבך את העניין עוד קצת לפני שהעניינים יירגעו.</p>
+<h2>מה זו בעצם מכפלה טנזורית?</h2>
+
+<p>עבורי ההגדרה שנתנו למעלה נראית סבבה ומוצלחת ואני מרוצה ממנה - עד שפתאום צריך לעשות איתה דברים, ואז צצות השאלות המוזרות. הנה משהו שאפשר לעשות איתה: ראינו את האיבר <span class="math">\(\left|00\right\rangle \)</span> בלי להסביר יותר מדי מה הוא; קונספטואלית, הוא בא לייצג מצב של מערכת של שני קיוביטים שבהם הקיוביט הראשון במצב <span class="math">\(\left|0\right\rangle \)</span> וגם הקיוביט השני במצב <span class="math">\(\left|0\right\rangle \)</span>. כזכור, זה היה קיצור של <span class="math">\(\left|0\right\rangle \otimes\left|0\right\rangle \)</span>. עכשיו, ראינו בפוסט הקודם מצב שקראתי לו <span class="math">\(\left|+\right\rangle \triangleq\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\)</span> - זה מצב שמייצג במובן כלשהו סופרפוזיציה "אחידה" של <span class="math">\(\left|0\right\rangle ,\left|1\right\rangle \)</span>. בואו נניח שיש לנו מערכת קוונטית של שני קיוביטים שכל אחד מהם נמצא במצב <span class="math">\(\left|+\right\rangle \)</span> הזה, אז מה התיאור המתמטי של המערכת הקוונטית הזו?</p>
+<p>האינטואיציה שלי אומרת שמצב המערכת יהיה <span class="math">\(\left|+\right\rangle \otimes\left|+\right\rangle \)</span> (או בקיצור, <span class="math">\(\left|++\right\rangle \)</span>) ותכף נראה שזו אינטואיציה נכונה ופורמלית לגמרי, אבל כרגע ההגדרה המתמטית שנתתי פשוט לא תומכת באינטואיציה הזו: לא הגדרתי בשום צורה ביטוי כמו <span class="math">\(\left|+\right\rangle \otimes\left|+\right\rangle \)</span>; הדבר היחיד שהגדרתי הוא את <span class="math">\(\left|0\right\rangle \otimes\left|0\right\rangle ,\left|1\right\rangle \otimes\left|0\right\rangle ,\left|0\right\rangle \otimes\left|1\right\rangle ,\left|1\right\rangle \otimes\left|1\right\rangle \)</span>: ארבעה איברים ספציפיים שמתקבלים ממכפלה טנזורית של <strong>שני איברי בסיס</strong>. כך זה היה גם בהגדרה הכללית שלי:</p>
+<p><span class="math">\(V=\text{span}\left\{ e_{i}\otimes f_{j}\ |\ 1\le i\le n,1\le j\le m\right\} \)</span></p>
+<p>ההגדרה שלי למכפלה טנזורית <strong>תלויה בבחירת בסיס</strong>, ואנחנו במתמטיקה לא אוהבים הגדרות כאלו; היינו מעדיפים שהגדרות יהיו כמה שיותר חופשיות מבחירות שרירותיות. זה לא תמיד אפשרי, והדוגמא המפורסמת בהקשר של אלגברה לינארית היא האיזומורפיזם בין מרחב וקטורי ומרחב הפונקציונלים שלו ("המרחב הדואלי"), איזומורפיזם שתלוי בבחירת בסיס. אז מה אפשר לעשות? האם אפשר לתת הגדרה חופשיה מבחירת בסיס למכפלה טנזורית, שתתלכד עם ההגדרה שכבר נתתי? כמובן שכן, אבל לפני שאציג אותה פורמלית, בואו נקבל קצת אינטואיציה למה היא אמורה להיות.</p>
+<p>כשלומדים על מספרים מרוכבים, אפשר להתחיל מ"להמציא" מספר <span class="math">\(i\)</span> שמקיים <span class="math">\(i^{2}=-1\)</span>, ואז לקחת שני איברים כלליים, <span class="math">\(a+bi\)</span> ו-<span class="math">\(c+di\)</span>, לכפול אותם, לפתוח על פי כללי החשבון הרגילים ולקבל <span class="math">\(\left(a+bi\right)\left(c+di\right)=\left(ac-bd\right)+\left(ad+bc\right)i\)</span>. זו משוואה שהגענו אליה בצורה מאוד אינטואיטיבית אבל יש לה בעיה פורמלית כי "המצאנו" את <span class="math">\(i^{2}=-1\)</span>. אז אפשר להפוך את הקערה על פיה: <strong>להגדיר</strong> מספרים מרוכבים בתור זוגות <span class="math">\(\left(a,b\right)\)</span> של מספרים ממשיים - זה אובייקט מתמטי שאין לנו ספק לגבי קיומו - ואז לתת לזוגות הללו <strong>מבנה אלגברי</strong> חדש על ידי חיבור "איבר-איבר" וכפל ש<strong>מוגדר</strong> בתור <span class="math">\(\left(a,b\right)\times\left(c,d\right)=\left(ac-bd,ad+bc\right)\)</span>. אחר כך אפשר לבדוק את תכונות הכפל והחיבור ולראות שקיבלנו שדה ולשמוח, אבל אם היינו מתחילים מההגדרה הזו, היא הייתה נראית שרירותית לגמרי כי לא היה ברור מה אנחנו מנסים להשיג. זה בדיוק מה שאעשה כאן - בנוגע למכפלה טנזורית וההגדרה הכללית שלה: אעשה חשבון לפי מה שנראה לי אינטואיטיבי, ואז אגיע מתוכו אל ההגדרה הכללית.</p>
+<p>מה שאני רוצה להבין זה מה <span class="math">\(\left|+\right\rangle \otimes\left|+\right\rangle \)</span> אמור להיות במונחים של המכפלה הטנזורית שכבר הגדרתי, זו שכל איבר בה נפרש על ידי <span class="math">\(\left|00\right\rangle ,\left|01\right\rangle ,\left|10\right\rangle ,\left|11\right\rangle \)</span>. אז אני ארשה לעצמי לדמיין ש-<span class="math">\(\otimes\)</span> מתנהג כמו כפל נחמד ו"אפתח" את הביטוי:</p>
+<p><span class="math">\(\left|+\right\rangle \otimes\left|+\right\rangle =\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)\otimes\left(\frac{\left|0\right\rangle +\left|1\right\rangle }{\sqrt{2}}\right)=\frac{\left(\left|0\right\rangle +\left|1\right\rangle \right)\otimes\left(\left|0\right\rangle +\left|1\right\rangle \right)}{\sqrt{2}\cdot\sqrt{2}}=\)</span></p>
+<p><span class="math">\(=\frac{\left|0\right\rangle \otimes\left|0\right\rangle +\left|0\right\rangle \otimes\left|1\right\rangle +\left|1\right\rangle \otimes\left|0\right\rangle +\left|1\right\rangle \otimes\left|1\right\rangle }{2}=\frac{1}{2}\left|00\right\rangle +\frac{1}{2}\left|01\right\rangle +\frac{1}{2}\left|10\right\rangle +\frac{1}{2}\left|11\right\rangle \)</span></p>
+<p>קיבלתי ייצוג של <span class="math">\(\left|+\right\rangle \otimes\left|+\right\rangle \)</span> שנראה הגיוני: הוא באמת איבר של <span class="math">\(\mathbb{C}^{2}\otimes\mathbb{C}^{2}\)</span> על פי ההגדרה שכבר הראיתי, הנורמה שלו שווה 1 (<span class="math">\(4\cdot\left(\frac{1}{2}\right)^{2}=1\)</span>) והוא סימטרי בצורה שאנחנו מצפים לה בהתחשב בסימטריה של <span class="math">\(\left|+\right\rangle \)</span>. השאלה היחידה היא אילו פעולות ביצעתי כדי להגיע לייצוג הזה. אם נסתכל על החשבון שעשיתי, אפשר לראות שני דברים שקרו: ראשית, ה-<span class="math">\(\sqrt{2}\)</span> שבמכנה הוכפלו בצורה "רגילה", כלומר מכפלה טנזורית של סקלרים מתפרשת איכשהו בתור מכפלה רגילה. שנית, "פתחתי" את הביטוי <span class="math">\(\left(\left|0\right\rangle +\left|1\right\rangle \right)\otimes\left(\left|0\right\rangle +\left|1\right\rangle \right)\)</span> בעזרת חוק הפילוג הרגיל, כלומר מכפלה טנזורית מכבדת את חוק הפילוג. מתברר ששני אלו מספיקים בשביל ההגדרה הכללית של מכפלה טנזורית. בואו נכתוב את הכללים הללו רגע בצורה פורמלית:</p>
+<ul> <li><span class="math">\(\left(\lambda u\right)\otimes w=\lambda\left(u\otimes w\right)\)</span></li>
+
+
+<li><span class="math">\(u\otimes\left(\lambda w\right)=\lambda\left(u\otimes w\right)\)</span></li>
+
+
+<li><span class="math">\(\left(u_{1}+u_{2}\right)\otimes w=u_{1}\otimes w+u_{2}\otimes w\)</span></li>
+
+
+<li><span class="math">\(u\otimes\left(w_{1}+w_{2}\right)=u\otimes w_{1}+u\otimes w_{2}\)</span></li>
+
+</ul>
+
+<p>כל אחד משני הכללים הופיע כאן בעצם פעמיים - פעם אחת כשהוא עובד עבור הרכיב השמאלי, ופעם אחת עבור הרכיב הימני, אבל בשני המקרים זה אותו הכלל. אם אתם רוצים, קחו לעצמכם רגע כדי להשתכנע שבחישוב שלי עבור <span class="math">\(\left|+\right\rangle \otimes\left|+\right\rangle \)</span> אכן השתמשתי בכללים הללו.</p>
+<p>כשאנחנו מצוידים בכללים הללו, אנחנו מוכנים לתת את ההגדרה הפורמלית הכללית של מכפלה טנזורית, שמסתמכת על המושג שנקרא <strong>מרחב מנה</strong>. זה מושג נפוץ מאוד באלגברה מופשטת, אבל באלגברה לינארית רואים אותו הרבה פחות, ולכן יותר קשה לי להניח שהוא מוכר. לכן אתחיל מהגדרה אינטואיטיבית ואעבור משם לפורמליזם (שהוא ממש לא קריטי לנו).</p>
+<p>הבניה שלנו של המכפלה <span class="math">\(U\otimes W\)</span> מתחילה עם הקבוצה <span class="math">\(U\times W\)</span>, קבוצת כל הזוגות <span class="math">\(\left(u,w\right)\)</span>. הזכרתי אותה בתחילת הפוסט: זו הקבוצה שממנה אנחנו מקבלים את <span class="math">\(U\oplus W\)</span>, כשאנחנו מגדירים חיבור וכפל בסקלר "איבר-איבר". אלא שעכשיו אני עושה עם הקבוצה הזו משהו שונה לחלוטין - במקום להסתכל רק על האיברים <span class="math">\(\left(u,w\right)\)</span>, אני מסתכל על קבוצת <strong>הסכומים הפורמליים</strong> שלהם. כלומר על כל הביטויים שאפשר לכתוב בתור <span class="math">\(\sum\lambda_{u,w}\left(u,w\right)\)</span> כאשר <span class="math">\(\lambda_{u,w}\)</span> הם סקלרים, כשהמגבלה היחידה שלי היא שכל סכום פורמלי כזה חייב להכיל <strong>מספר סופי</strong> של מחוברים. האנלוג המיידי הוא פולינומים, שהם בסך הכל סכומים פורמליים שנבנים מאינסוף האיברים <span class="math">\(\left\{ x^{0},x^{1},x^{2},\ldots\right\} \)</span>. למרות שזה מושג פורמלי ותקין לגמרי, אם הוא מפריע לכם אפשר לתת לו בניה יותר פורמלית: מסתכלים על מרחב הפונקציות <span class="math">\(f:U\times W\to\mathbb{C}\)</span> עם תומך סופי (כלומר, שמחזירות משהו שונה מאפס על מספר סופי של קלטים) וזה מרחב שאין לנו ספק שקיים; הסכום הפורמלי <span class="math">\(\sum\lambda_{u,w}\left(u,w\right)\)</span> מיוצג על ידי הפונקציה <span class="math">\(f\left(u,w\right)=\lambda_{u,w}\)</span>.</p>
+<p>קבוצת הסכומים הפורמליים היא מרחב וקטורי עם החיבור והכפל בסקלר הרגילים, כלומר <span class="math">\(\sum\lambda_{u,w}\left(u,w\right)+\sum\rho_{u,w}\left(u,w\right)=\sum\left(\lambda_{u,w}+\rho_{u,w}\right)\left(u,w\right)\)</span> ו-<span class="math">\(\rho\sum\lambda_{u,w}\left(u,w\right)=\sum\left(\rho\lambda_{u,w}\right)\left(u,w\right)\)</span> - רק צריך לוודא שהסכום והכפל הזה משמרים את תכונת ה"יש רק מספר סופי של מחוברים", מה שכמובן קורה. זה מרחב וקטורי גדול מאוד - הרבה יותר גדול מ-<span class="math">\(U\times W\)</span>, וגם יותר גדול ממה שאנחנו רוצים שיהיה <span class="math">\(U\otimes W\)</span>, אז מה שנעשה יהיה להקטין את הקבוצה הזו על ידי <strong>זיהוי איברים</strong>. למשל, אנחנו יודעים ש-<span class="math">\(\left|++\right\rangle \)</span> ו-<span class="math">\(\frac{1}{2}\left|00\right\rangle +\frac{1}{2}\left|01\right\rangle +\frac{1}{2}\left|10\right\rangle +\frac{1}{2}\left|11\right\rangle \)</span> "אמורים" להיות שווים, אז נגדיר שהם שווים.</p>
+<p>קצת יותר פורמלית, מה שעושים הוא לקחת את ארבעת השוויונות שהראיתי קודם ולהחיל אותם על כל האיברים במרחב:</p>
+<ul> <li><span class="math">\(\left(\lambda u\right)\otimes w=\lambda\left(u\otimes w\right)\)</span></li>
+
+
+<li><span class="math">\(u\otimes\left(\lambda w\right)=\lambda\left(u\otimes w\right)\)</span></li>
+
+
+<li><span class="math">\(\left(u_{1}+u_{2}\right)\otimes w=u_{1}\otimes w+u_{2}\otimes w\)</span></li>
+
+
+<li><span class="math">\(u\otimes\left(w_{1}+w_{2}\right)=u\otimes w_{1}+u\otimes w_{2}\)</span></li>
+
+</ul>
+
+<p>ואז להסתמך על כך ששוויון הוא טרנזיטיבי, כלומר שכל שני איברים שאפשר לעבור מהראשון לשני דרך סדרת שוויונות הם שווים. זו לא בדיוק ההגדרה הפורמלית של מרחב מנה, אבל זה העיקרון הטכני שבו נשתמש בפועל.</p>
+<p>כדי לתת את ההגדרה הפורמלית ממש, הנה בזריזות האופן שבו מרחב מנה מוגדר עבור מרחבים וקטוריים, בהינתן שכבר מכירים יחסי שקילות (<a href="https://gadial.net/2020/01/06/equivalence_relations/">הנה פוסט</a> שלי עליהם): אם <span class="math">\(V\)</span> הוא מרחב וקטורי ו-<span class="math">\(N\)</span> הוא תת-מרחב שלו, מגדירים על <span class="math">\(V\)</span> <strong>יחס שקילות</strong> על ידי <span class="math">\(v\sim u\)</span> אם ורק אם <span class="math">\(v-u\in N\)</span> (תרגיל: להראות שזה יחס שקילות). עכשיו מסתכלים על קבוצת המנה <span class="math">\(V/N=\left\{ \left[v\right]\ |\ v\in V\right\} \)</span> שמתקבלת מיחס השקילות הזה ומגדירים עליה חיבור וכפל בסקלר באמצעות נציגים: <span class="math">\(\left[v\right]+\left[w\right]=\left[v+w\right]\)</span> ו-<span class="math">\(\lambda\left[v\right]=\left[\lambda v\right]\)</span> (צריך להוכיח שזה מוגדר היטב; זה נובע מכך ש-<span class="math">\(N\)</span> הוא מרחב וקטורי ולא סתם קבוצה). לבסוף צריך לבדוק ש-<span class="math">\(V/N\)</span> עם הפעולות הללו הוא מרחב וקטורי.</p>
+<p>במקרה הפרטי שלנו, <span class="math">\(V=U\times W\)</span>. יותר מעניין מהי הקבוצה <span class="math">\(N\)</span>, שאיכשהו אמורה לייצג את ארבעת השוויונות שלמעלה. נסתכל למשל על השוויון <span class="math">\(\left(\lambda u\right)\otimes w=\lambda\left(u\otimes w\right)\)</span>: אם אנחנו רוצים שהוא יתקיים <strong>במנה</strong> אז צריך ששני האגפים יהיו שקולים על פי יחס השקילות, כלומר שיתקיים <span class="math">\(\left(\lambda u\right)\otimes w\sim\lambda\left(u\otimes w\right)\)</span>, או במילים אחרות - <span class="math">\(\left(\lambda u\right)\otimes w-\lambda\left(u\otimes w\right)\in N\)</span>. גיליתי איבר שחייב להיות ב-<span class="math">\(N\)</span>; עכשיו אני פשוט אקח את כל האיברים מהצורה הזו, ומשלוש הצורות האחרות, ואסתכל על המרחב שנפרש על ידי כולם. זה מה שנחמד במרחבים וקטוריים - כדי לקבל מרחב וקטורי אני לוקח קבוצה שרירותית של איברים, "פורש" אותה והופס, קיבלתי מרחב וקטורי חדש שמתנהג נחמד גם הוא.</p>
+<p>זה מסיים עם השאלה של בניית מכפלה טנזורית - קיבלנו הגדרה פורמלית שלא תלויה בבסיס כלשהו, שאני מקווה שגם מבהירה יותר טוב מאיפה המרחבים הללו באים ולאן הם הולכים (ולא השתמשתי בכלל בביטוי "פונקציה בילינארית"! אני לא בטוח אם זה טוב או רע, רוב התיאורים של מכפלות טנזוריות כוללים את זה).</p>
+<h2>מה זה מצבים שזורים?</h2>
+
+<p>השוויון <span class="math">\(\left|++\right\rangle =\frac{1}{2}\left|00\right\rangle +\frac{1}{2}\left|01\right\rangle +\frac{1}{2}\left|10\right\rangle +\frac{1}{2}\left|11\right\rangle \)</span> מלמד אותנו דבר חשוב: בהחלט ייתכן שלאיבר כלשהו של המכפלה הטנזורית יהיו <strong>כמה ייצוגים שונים</strong>, כלומר זה שיש לי איבר <span class="math">\(u\otimes w\)</span> לא אומר שאי אפשר לכתוב אותו גם בדרכים שונות, למשל כסכום של איברים אחרים. כדי לקבל ייצוג יחיד צריך לעשות את מה שעשיתי בהתחלה - לקחת בסיסים לשני המרחבים שכופלים, ולהסתכל על הקבוצה <span class="math">\(\left\{ e_{i}\otimes f_{j}\ |\ 1\le i\le n,1\le j\le m\right\} \)</span> - הקבוצה הזו תהיה בסיס (כלומר, כל איבר של המכפלה הטנזורית יהיה ניתן לכתיבה כצירוף לינארי <strong>יחיד</strong> של איברי הבסיס). זה פותח פתח לשאלה הבאה: נניח שנתון לי איבר של <span class="math">\(U\otimes W\)</span> בתור סכום כלשהו; האם בהכרח קיים לו ייצוג בתור <span class="math">\(u\otimes w\)</span>? התשובה היא <strong>לחלוטין לא</strong>. ב-<span class="math">\(U\otimes W\)</span> קיימים הרבה איברים ש<strong>אינם</strong> מהצורה <span class="math">\(u\otimes w\)</span>, וזו חלק מהסיבה שבגללה <span class="math">\(U\otimes W\)</span> הוא כזה מרחב עשיר.</p>
+<p>בואו נראה דוגמא קוונטית לזה, במקרה של מרחב של שני קיוביטים: המצב <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span>. זה מצב תקין - הוא צירוף לינארי של אברי הבסיס <span class="math">\(\left|00\right\rangle ,\left|11\right\rangle \)</span> והוא מנורמה 1. בפוסט הבא אני גם אראה איך אפשר לייצר אותו בפועל במהלך חישוב קוונטי וזה די פשוט. אבל אי אפשר לכתוב את המצב הזה בתור מכפלה טנזורית של שני מצבים בודדים של קיוביט יחיד. כדי לראות את זה נלכלך טיפה ידיים. נכתוב שני מצבים כלליים:</p>
+<p><span class="math">\(\alpha_{1}\left|0\right\rangle +\beta_{1}\left|1\right\rangle \)</span></p>
+<p><span class="math">\(\alpha_{2}\left|0\right\rangle +\beta_{2}\left|1\right\rangle \)</span></p>
+<p>נכפול את שניהם טנזורית, נפתח בעזרת הכללים שראינו, ונקבל:</p>
+<p><span class="math">\(\left(\alpha_{1}\left|0\right\rangle +\beta_{1}\left|1\right\rangle \right)\left(\alpha_{2}\left|0\right\rangle +\beta_{2}\left|1\right\rangle \right)=\alpha_{1}\alpha_{2}\left|00\right\rangle +\alpha_{1}\beta_{2}\left|01\right\rangle +\beta_{1}\alpha_{2}\left|10\right\rangle +\beta_{1}\beta_{2}\left|11\right\rangle \)</span></p>
+<p>זה ייצוג עם אברי הבסיס הסטנדרטי, אז אם אני משווה אותו אל <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> אני חייב לקבל שוויון במקדמים עצמם, כלומר</p>
+<p><span class="math">\(\alpha_{1}\alpha_{2}=\frac{1}{\sqrt{2}}\)</span></p>
+<p><span class="math">\(\alpha_{1}\beta_{2}=0\)</span></p>
+<p><span class="math">\(\beta_{1}\alpha_{2}=0\)</span></p>
+<p><span class="math">\(\beta_{1}\beta_{2}=\frac{1}{\sqrt{2}}\)</span></p>
+<p>מהמשוואה הראשונה אנחנו לומדים ש-<span class="math">\(\alpha_{1}\ne0\)</span> וגם <span class="math">\(\alpha_{2}\ne0\)</span>, אז מהמשוואה השניה אנחנו מסיקים ש-<span class="math">\(\beta_{1}=0\)</span>, וזה סותר לנו את המשוואה הרביעית, <span class="math">\(\beta_{1}\beta_{2}=\frac{1}{\sqrt{2}}\)</span>, מה שמסיים את העניין: לא ניתן לכתוב את <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> בתור <span class="math">\(u\otimes w\)</span>, ולא משנה איזה <span class="math">\(u,w\)</span> נבחר.</p>
+<p>במתמטיקה קוראים לאיבר כמו <span class="math">\(u\otimes w\)</span> "טנזור טהור" וזאת להבדיל מטנזור שתמיד נכתב בתור סכום, שנקרא "טנזור מעורב". חייבים להודות שהשמות הללו הם לא להיט גדול... יותר מעניין לחשוב על זה מבחינה פיזיקלית. על <span class="math">\(u\otimes w\)</span> אפשר לחשוב בתור "שני קיוביטים שיושבים זה לצד זה וכל אחד מתעסק בעניינו": האחד נמצא במצב <span class="math">\(u\)</span>, השני נמצא במצב <span class="math">\(w\)</span>, וחישוב שאני מפעיל על אחד מהם לא ישפיע על השני, אלא אם זה חישוב שמערב במפורש את שני הקיוביטים.</p>
+<p>עם המצב <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> זה לא קורה. זה מצב שמתאר את המערכת של שני הקיוביטים בצורה כזו שאני לא יכול לפרק אותו קונספטואלית למה שקורה אצל כל קיוביט בנפרד. וזו לא שאלה של הבסיס שבו אני עובד. ראינו ש-<span class="math">\(\left|++\right\rangle \)</span> הוא מצב שכשכותבים אותו בבסיס הסטנדרטי הוא סכום, אבל אפשר לכתוב אותו בתור מכפלה טנזורית של שני איברים. עם המצב <span class="math">\(\frac{\left|00\right\rangle +\left|11\right\rangle }{\sqrt{2}}\)</span> לא משנה איזה בסיס נבחר לשני הקיוביטים, אפילו אם זה בסיס "מעורבב" שהאיברים בו הם מהצורה <span class="math">\(\left|+0\right\rangle \)</span> וכאלה, עדיין לא יהיה לנו כתיב של המצב בתור מכפלה של שני קיוביטים נפרדים; זה משהו אינהרטי למצב. השם שיש לדבר הזה בפיזיקה הוא <strong>מצב שזור</strong>.</p>
+<p>מצבים שזורים הם הסיבה שבגללה חישוב קוונטי עם <span class="math">\(n\)</span> קיוביטים דורש וקטור עם <span class="math">\(2^{n}\)</span> כניסות כדי לתאר אותו במקום שנוכל להסתפק בייצוג קומפקטי יותר. למעשה, יש טכניקות לסימולציה קלאסית של מחשבים קוונטיים שגודל האתגר שהן מתמודדות איתו הוא פרופורציוני לכמה המצב שמסמלצים הוא שזור (ככל שהשזירה גבוהה יותר - ככל ש"קשה יותר", במובן טכני מסוים, לייצג את המצב עם כמות מחוברים קטנה - כך החישוב קשה יותר לסימולציה). אם הצלחנו להבין את הפורמליזם של מכפלה טנזורית ואת הרעיון של מצבים שזורים, שום דבר לא עוצר אותנו מלהבין עד הסוף איך חישובים קוונטיים עובדים. אל הפרטים הטכניים נגיע בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2022/08/01/quantum_computing_math_3/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">חישוב קוונטי בגישה מתמטית, חלק ג&#39;</span>
+            </a>
+            
+            
+            
+            <a href="/2022/07/28/quantum_computing_math/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי בגישה מתמטית, חלק א&#39;</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

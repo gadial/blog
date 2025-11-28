@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טרנספורמציות אוניטריות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>טרנספורמציות אוניטריות</h1>
+            <div class="post-meta">
+                <span class="date">2013-04-18</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/טרנספורמציות אוניטריות.html">טרנספורמציות אוניטריות</a>
+                    
+                    <a href="/tags/מרחבי מכפלה פנימית.html">מרחבי מכפלה פנימית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אני חוזר לסדרת הפוסטים שלי על אלגברה לינארית, ש<a href="http://www.gadial.net/2012/04/29/inner_product_space_adjoint/">נעצרה</a> במרחבי מכפלה פנימית ובסוג מעניין אחד של אופרטורים לינאריים עליהם - אופרטורים צמודים לעצמם ("הרמיטיים"). הפעם אני רוצה לדבר על סוג מעניין אחר של אופרטורים, שנקראים <strong>אופרטורים אוניטריים</strong>; בהמשך נראה איך הכל מתחבר.</p>
+<p>בואו ניזכר מה זו בכלל טרנספורמציה לינארית. אם יש לנו שני מרחבים וקטוריים <span class="math">\(V,W\)</span> אז טרנספורמציה לינארית היא פונקציה <span class="math">\(T:V\to W\)</span> ש<strong>משמרת את המבנה</strong> של המרחבים הלינאריים. מבנה של מרחב לינארי מתבטא ב<strong>פעולות חשבוניות</strong> שמוגדרות עליו - חיבור של שני איברים, וכפל בסקלר של איבר. <span class="math">\(T\left(v+u\right)=T\left(v\right)+T\left(u\right)\)</span> פירושו שבהינתן שני וקטורים <span class="math">\(v,u\)</span> זה לא משנה אם קודם נחבר אותם ואז נפעיל עליהם את <span class="math">\(T\)</span> או אם קודם נפעיל עליהם את <span class="math">\(T\)</span> ואז נחבר אותם - בכל מקרה נקבל את אותה התוצאה בסוף (את הרעיון הזה מתארים לפעמים בעזרת <strong>דיאגרמה קומוטטיבית</strong> והוא חזק למדי, אבל אלו דברים שיחכו לפוסט אחר). אותו הדבר עם כפל בסקלר: <span class="math">\(T\left(\lambda v\right)=\lambda T\left(v\right)\)</span> פירושו שלא משנה אם קודם נכפול את <span class="math">\(v\)</span> בסקלר <span class="math">\(\lambda\)</span> ואז נפעיל עליו את <span class="math">\(T\)</span> או שקודם נפעיל עליו את <span class="math">\(T\)</span> ואז נכפול ב-<span class="math">\(\lambda\)</span> - בכל מקרה נקבל את אותה התוצאה.</p>
+<p>עכשיו, מהו מרחב מכפלה פנימית? הוא מרחב וקטורי שהוספנו לו עוד <strong>מבנה</strong>, שמתבטא בפונקציה של <strong>מכפלה פנימית</strong>, שהיא פונקציה שמקבלת שני וקטורים ומחזירה סקלר, <span class="math">\(\left\langle v,u\right\rangle :V\times V\to\mathbb{C}\)</span>. אם נמשיך את קו המחשבה של שתי הדוגמאות הקודמות, אנחנו רואים שמחלקה מעניינת של טרנספורמציות לינאריות תהיה המחלקה של הטרנספורמציות ש<strong>משמרות את המכפלה הפנימית</strong>. כלומר, אם <span class="math">\(V,W\)</span> הם שני מרחבי מכפלה פנימית ו-<span class="math">\(T:V\to W\)</span>, מעניין אותנו אם אפשר קודם להפעיל את <span class="math">\(T\)</span> על זוג וקטורים ואז לכפול אותם, או קודם לכפול אותם ואז להפעיל עליהם את <span class="math">\(T\)</span>... רגע, רגע, רגע, משהו לא מסתדר פה!</p>
+<p>הנקודה שצריך לתת עליה את הדעת היא שמכפלה פנימית "מוציאה" אותנו מהמרחב <span class="math">\(V\)</span>. בניגוד לחיבור, שקיבל זוג וקטורים ב-<span class="math">\(V\)</span> והחזיר וקטור ב-<span class="math">\(V\)</span>, מכפלה פנימית מעבירה אותנו מ-<span class="math">\(V\)</span> אל <span class="math">\(\mathbb{C}\)</span> ולכן כל עניין ה"התחלפות" שתיארתי לא עובד. עדיין, זו אינטואיציה טובה לדרישה שאני כן הולך לדרוש: שהמכפלה הפנימית של זוג וקטורים <strong>לא תשתנה</strong> אם נפעיל עליהם את <span class="math">\(T\)</span>, ובאופן פורמלי, <span class="math">\(\left\langle v,u\right\rangle =\left\langle T\left(v\right),T\left(u\right)\right\rangle \)</span>. שימו לב שהמכפלה הפנימית באגף שמאל היא המכפלה הפנימית של <span class="math">\(V\)</span> ואילו זו באגף ימין היא המכפלה הפנימית של <span class="math">\(W\)</span>. לטרנספורמציה לינארית שמקיימת את התכונה הזו אקרא <strong>אוניטרית</strong>. דוגמאות מיידיות לטרנספורמציות כאלו הן גאומטריות באופיין: חשבו על <span class="math">\(\mathbb{R}^{2}\)</span> עם המכפלה הפנימית הרגילה ועל הפעולות של סיבוב בזווית כלשהי סביב הראשית או של שיקוף ביחס לציר העובר דרך הראשית. אינטואיטיבית ברור למדי שאם מסובבים שני וקטורים באותה זווית גם האורכים שלהם והזווית ביניהם נשמרת, וב-<span class="math">\(\mathbb{R}^{2}\)</span> עם המכפלה הפנימית הרגילה, המכפלה הפנימית של זוג וקטורים היא מכפלת האורכים שלהם בקוסינוס הזווית ביניהם, כך שברור שהיא תשתמר. יש עוד הרבה דוגמאות אך לא אציג אותן כרגע. תחת זאת, בואו ננסה להבין אילו עוד תכונות טרנספורמציות אוניטריות מקיימות.</p>
+<p>ראשית כל, מכפלה פנימית הייתה קשורה בקשר הדוק לפונקציה דומה שנקראה <strong>נורמה</strong>: <span class="math">\(\|v\|=\left\langle v,v\right\rangle \)</span>. בבירור אם <span class="math">\(T\)</span> אוניטרית אז <span class="math">\(\|T\left(v\right)\|=\left\langle T\left(v\right),T\left(v\right)\right\rangle =\left\langle v,v\right\rangle =\|v\|\)</span>, כלומר <span class="math">\(T\)</span> משמרת גם את הנורמה של איברים (פורמלית: את הנורמה הספציפית שמושרית על המרחבים מהמכפלה הפנימית שביחס אליהם <span class="math">\(T\)</span> אוניטרית). גם ההפך נכון - אם <span class="math">\(T\)</span> משמרת נורמה, אז היא אוניטרית; זה נובע מכך שאם נורמה מושרית ממכפלה פנימית כלשהי, אז אפשר לכתוב את המכפלה הפנימית בתור נוסחה כלשהי שמערבת את הנורמה - <strong>זהות הפולריזציה</strong> שהראיתי <a href="http://www.gadial.net/2012/03/01/inner_product_spaces_geometry/">בפוסט קודם</a>. מכאן שכדי להראות שטרנספורמציה היא אוניטרית יספיק לי לפעמים להראות שהיא משמרת נורמה.</p>
+<p>עכשיו קופץ משהו אחר לעיניים: כזכור, <span class="math">\(\|v\|=0\)</span> אם ורק אם <span class="math">\(v=0\)</span> (וקטור האפס), ולכן אם <span class="math">\(T\left(v\right)=0\)</span> עבור <span class="math">\(v\)</span> כלשהו, הרי ש-<span class="math">\(\|v\|=\|T\left(v\right)\|=\|0\|=0\)</span> ומכאן נובע שגם <span class="math">\(v=0\)</span>. במילים אחרות, <span class="math">\(T\)</span> מעבירה לוקטור האפס רק את וקטור האפס; מכך נובע ש-<span class="math">\(T\)</span> <strong>הפיכה </strong>("לא סינגולרית"). אם כן, כל טרנספורמציה אוניטרית היא גם הפיכה; אם <span class="math">\(T:V\to W\)</span> היא אוניטרית ו-<span class="math">\(V,W\)</span> הם מאותו מימד סופי (כרגיל, מכאן ואילך נדבר רק על מרחבים ממימד סופי) אז נובע מכך ש-<span class="math">\(T\)</span> היא <strong>איזומורפיזם</strong> של <span class="math">\(V,W\)</span> שגם משמרת את המכפלה הפנימית שלהם. בלשון פחות פורמלית זה אומר ש-<span class="math">\(V,W\)</span> "הם אותו מרחב עד כדי שינוי שמות האיברים" וש-<span class="math">\(T\)</span> היא בדיוק מה שמבצע את השינוי של שמות האיברים הללו.</p>
+<p>דבר אחד ש<a href="http://www.gadial.net/2012/02/06/inner_products_intro/">הוכחנו בעבר</a> הוא שאם <span class="math">\(V\)</span> הוא מרחב מכפלה פנימית ממימד סופי, אז קיים לו בסיס אורתונורמלי <span class="math">\(\left\{ b_{1},\dots,b_{n}\right\} \)</span>. עכשיו, אם <span class="math">\(W\)</span> הוא מרחב מאותו מימד כמו <span class="math">\(V\)</span>, מה נקבל כשנפעיל טרנספורמציה אוניטרית <span class="math">\(T:V\to W\)</span> על אברי הבסיס? נקבל קבוצה <span class="math">\(\left\{ T\left(b_{1}\right),\dots,T\left(b_{n}\right)\right\} \)</span> שהיא בבירור בסיס ל-<span class="math">\(W\)</span> כי היא קבוצה בלתי תלויה לינארית ב-<span class="math">\(W\)</span> עם מספר וקטורים ששווה למימד של <span class="math">\(W\)</span> (למה היא בלתי תלויה? כי <span class="math">\(T\)</span> הפיכה - נסו להוכיח!). כפי שאתם ודאי מנחשים, הבסיס שקיבלנו לא יהיה "סתם" בסיס, אלא בסיס אורתונורמלי, ובכך צצה לה תכונה נוספת של טרנספורמציות אוניטריות: הן מעבירות בסיסים אורתונורמליים לבסיסים אורתונורמליים.</p>
+<p>העובדה שהבסיס החדש אורתונורמלי די מיידית. בסיס הוא אורתונורמלי אם לכל זוג איברים בו מתקיים <span class="math">\(\left\langle b_{i},b_{j}\right\rangle =\delta_{ij}\)</span> (כאשר <span class="math">\(\delta_{ij}=\begin{cases}1 & i=j\\0 & i\ne j\end{cases}\)</span> נקראת <strong>הדלתא של קרונקר</strong>), ובבירור <span class="math">\(\left\langle T\left(b_{i}\right),T\left(b_{j}\right)\right\rangle =\left\langle b_{i},b_{j}\right\rangle =\delta_{ij}\)</span> כי <span class="math">\(T\)</span> אוניטרית וה-<span class="math">\(b\)</span>-ים שייכים לבסיס אורתונורמלי. מה שיותר מעניין הוא שהטענה הזו עובדת גם בכיוון השני, ואפילו בגרסה יותר חזקה: אם <span class="math">\(T:V\to W\)</span> היא טרנספורמציה לינארית כלשהי כך שקיים בסיס אורתונורמלי <strong>אחד</strong> <span class="math">\(\left\{ b_{1},\dots,b_{n}\right\} \)</span> של <span class="math">\(V\)</span> בעל התכונה ש-<span class="math">\(\left\{ T\left(b_{1}\right),\dots,T\left(b_{n}\right)\right\} \)</span> הוא בסיס אורתונורמלי של <span class="math">\(T\)</span>, אז <span class="math">\(T\)</span> אוניטרית. ההוכחה, כרגיל במרחבי מכפלה פנימית, תעבור דרך העובדה שאנו בדיוק איך להציג כל איבר במרחב כצירוף לינארי של איברי הבסיס האורתונורמלי: אם <span class="math">\(v\in V\)</span> אז <span class="math">\(v=\sum\left\langle v,b_{i}\right\rangle b_{i}\)</span>. זה גם מאפשר לנו לדעת איך <span class="math">\(T\left(v\right)\)</span> ייראה: <span class="math">\(T\left(v\right)=\sum\left\langle v,b_{i}\right\rangle T\left(b_{i}\right)\)</span>.</p>
+<p>בואו ניקח שני וקטורים <span class="math">\(v,u\in V\)</span>. אנו רוצים להראות ש-<span class="math">\(\left\langle v,u\right\rangle =\left\langle T\left(v\right),T\left(u\right)\right\rangle \)</span>. את החישוב של <span class="math">\(\left\langle v,u\right\rangle \)</span> כבר עשיתי <a href="http://www.gadial.net/2012/04/29/inner_product_space_adjoint/">בפוסט קודם</a>: מקבלים <span class="math">\(\left\langle v,u\right\rangle =\sum\left\langle v,b_{i}\right\rangle \overline{\left\langle u,b_{i}\right\rangle }\)</span>. עכשיו, אם נציב ב-<span class="math">\(\left\langle T\left(v\right),T\left(u\right)\right\rangle \)</span> את הביטוי ל-<span class="math">\(T\left(v\right)\)</span> ו-<span class="math">\(T\left(u\right)\)</span> שמצאנו קודם, נקבל:</p>
+<p><span class="math">\(\left\langle T\left(v\right),T\left(u\right)\right\rangle =\left\langle \sum_{i}\left\langle v,b_{i}\right\rangle T\left(b_{i}\right),\sum_{j}\left\langle u,b_{j}\right\rangle T\left(b_{j}\right)\right\rangle =\sum_{i,j}\left\langle v,b_{i}\right\rangle \overline{\left\langle u,b_{j}\right\rangle }\left\langle T\left(b_{i}\right),T\left(b_{j}\right)\right\rangle \)</span></p>
+<p><span class="math">\(=\sum_{i,j}\left\langle v,b_{i}\right\rangle \overline{\left\langle u,b_{j}\right\rangle }\delta_{ij}=\sum_{i}\left\langle v,b_{i}\right\rangle \overline{\left\langle u,b_{i}\right\rangle }=\left\langle v,u\right\rangle \)</span></p>
+<p>מה שמסיים את ההוכחה. עכשיו יש לנו שלושה קריטריונים שקולים לכך שטרנספורמציה היא אוניטרית: היא משמרת מכפלה פנימית, היא משמרת נורמה, והיא מעבירה בסיס אורתונורמלי לבסיס אורתונורמלי.</p>
+<p>הבנו איך טרנספורמציה אוניטרית מתנהגת "ברמת הוקטורים". עכשיו בואו ננסה להבין מה המבנה של אוסף כל הטרנספורמציות האוניטריות. נניח ש-<span class="math">\(T,S\)</span> הן שתי טרנספורמציות אוניטריות, מה בדבר ההרכבה, <span class="math">\(TS\)</span>? די בבירור גם היא אוניטרית, כי <span class="math">\(\|TS\left(v\right)\|=\|T\left(S\left(v\right)\right)\|=\|S\left(v\right)\|=\|v\|\)</span>. כמו כן, אם <span class="math">\(T\)</span> היא אוניטרית ראינו שהיא הפיכה; אני טוען שגם <span class="math">\(T^{-1}\)</span> אוניטרית, כי <span class="math">\(\|T^{-1}\left(v\right)\|=\|T\left(T^{-1}\left(v\right)\right)\|=\|v\|\)</span> (למי שלא ברור לו מה הלך פה, סמנו <span class="math">\(u=T^{-1}\left(v\right)\)</span> ושימו לב לכך ש-<span class="math">\(\|u\|=\|T\left(u\right)\|\)</span> כי <span class="math">\(T\)</span> אוניטרית).</p>
+<ul>
+<li>בואו ננסה עכשיו להבין אותה לאור מה שדיברנו עליו <a href="http://www.gadial.net/2012/04/29/inner_product_space_adjoint/">בפוסט הקודם</a> על טרנספורמציות מעל מרחבי מכפלה פנימית - פעולת ההצמדה. כזכור, אם <span class="math">\(T:V\to V\)</span> הייתה אופרטור לינארי (המילה "אופרטור" כאן באה לתאר טרנספורמציות ממרחב כלשהו אל עצמו, להבדיל מ"סתם" טרנספורמציה שיכולה להיות בין שני מרחבים שונים), הוכחנו שקיים ויחיד אופרטור <span class="math">\(T^{*}\)</span> - ה<strong>צמוד</strong> של <span class="math">\(T\)</span>, כך שמתקיים <span class="math">\(\left\langle T\left(v\right),u\right\rangle =\left\langle v,T^{*}\left(u\right)\right\rangle \)</span> לכל זוג וקטורים <span class="math">\(v,u\in V\)</span>. אם <span class="math">\(T\)</span> אוניטרית, האם יש לצמוד עוד תכונות מעניינות?</li>
+</ul>
+<p>ובכן, זכרו שכבר ראינו כי <span class="math">\(T\)</span> הפיך, כלומר קיים אופרטור שהוא בעצמו אוניטרי <span class="math">\(T^{-1}\)</span> כך ש-<span class="math">\(TT^{-1}=T^{-1}T=I\)</span>. אני טוען שההופכי הוא גם הצמוד של <span class="math">\(T\)</span>; בואו ונראה למה:</p>
+<p><span class="math">\(\left\langle T\left(v\right),u\right\rangle =\left\langle T^{-1}T\left(v\right),T^{-1}\left(u\right)\right\rangle =\left\langle v,T^{-1}\left(u\right)\right\rangle \)</span></p>
+<p>זה היה פשוט, לא? (איפה השתמשתי בכך ש-<span class="math">\(T^{-1}\)</span> אוניטרי?)</p>
+<p>סיימתי להגיד את כל מה שאני רוצה להגיד כרגע על טרנספורמציות אוניטריות לבדן. העניין הוא שבאלגברה לינארית יש לטרנספורמציות לינאריות בנות זוג הדוקות - מטריצות. בפוסט הבא ננסה להבין איך מטריצות נכנסות לכל עניין הטרנספורמציות צמודות-צמודות לעצמן-אוניטריות.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/04/27/adjoint_unitary_hermitian_matrices/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">מטריצות צמודות, הרמיטיות, אוניטריות</span>
+            </a>
+            
+            
+            
+            <a href="/2013/04/01/interactive_nim/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">המשחק נים - הגרסה האינטראקטיבית!</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

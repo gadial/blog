@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טורי טיילור - ההוכחות הפורמליות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>טורי טיילור - ההוכחות הפורמליות</h1>
+            <div class="post-meta">
+                <span class="date">2024-05-18</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/טורי טיילור.html">טורי טיילור</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="https://gadial.net/2024/05/03/taylor_series/">בפוסט הקודם</a> הצגתי טורי טיילור והראיתי שלל דוגמאות, תוך הבטחה שנראה את ההוכחות הפורמליות הנדרשות בהמשך. בואו נעשה את זה עכשיו. ראשית, אני אזכיר את ההגדרה: אם <span class="math">\(f\)</span> היא פונקציה שגזירה אינסוף פעמים בנקודה <span class="math">\(a\)</span>, אז <strong>טור הטיילור</strong> של <span class="math">\(f\)</span> סביב הנקודה <span class="math">\(a\)</span> הוא טור החזקות <span class="math">\(\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(a\right)}{n!}\left(z-a\right)^{n}\)</span>. כמה נקודות שצריך לשים לב אליהן בהגדרה הזו:</p>
+<ol> <li>משום מה אני משתמש ב-<span class="math">\(z\)</span> במקום ב-<span class="math">\(x\)</span> לציון המשתנה של הפונקציה. זה מכיוון שיותר מקובל להשתמש ב-<span class="math">\(z\)</span> לתיאור המשתנה של פונקציה <strong>מרוכבת</strong>, מה שמביא אותי לנקודה השניה:</li>
+
+
+<li>לא אמרתי מה התחום והטווח של <span class="math">\(f\)</span>. זה כי אני בעצם רוצה לדבר בו זמנית על שני מקרים: המקרה של פונקציה <span class="math">\(f:D\to\mathbb{R}\)</span> כאשר <span class="math">\(D\subseteq\mathbb{R}\)</span> אבל גם המקרה של פונקציה <span class="math">\(f:D\to\mathbb{C}\)</span> כאשר <span class="math">\(D\subseteq\mathbb{C}\)</span> שהוא המקרה המעניין יותר עבורי כי אני רוצה להתקדם מפה לדיון על פונקציות מרוכבות, וטורי טיילור זו נקודת פתיחה חשובה של דיון כזה. אז אני מסמן את <span class="math">\(f\)</span> בתור <span class="math">\(f\left(z\right)\)</span> אבל בפוסט הזה ההוכחות שלי עובדות גם ל-<span class="math">\(\mathbb{R}\)</span> וגם ל-<span class="math">\(\mathbb{C}\)</span> באותה מידה.</li>
+
+
+<li>זה שהגדרתי טור חזקות לא אומר שהוא מתכנס ל-<span class="math">\(f\)</span> בכל נקודה שבה <span class="math">\(f\)</span> מוגדרת (כלומר, בכל <span class="math">\(z\in D\)</span>) או אפילו שהוא מתכנס בכלל ב-<span class="math">\(D\)</span>. המקום היחיד שעבורו זה מובטח הוא <span class="math">\(z=a\)</span>, כי כשמציבים אותו בטור כל האיברים מתאפסים למעט הראשון, שהוא על פי הגדרה <span class="math">\(f\left(a\right)\)</span>. בפוסט הקודם ראינו דוגמא לפונקציה <strong>ממשית</strong> שגזירה אינסוף פעמים ב-0 אבל טור הטיילור שלה סביב 0 שונה ממנה בכל נקודה שונה מ-0: הפונקציה <span class="math">\(f\left(x\right)=\begin{cases} e^{-\frac{1}{x^{2}}} & x\ne0\\ 0 & x=0\end{cases}\)</span>
+
+
+. בפוסט הזה ננסה להבין מתי כן מובטחת לנו התכנסות כזו. </li></ol>
+
+<p>השאלה הראשונה שאני שואל את עצמי היא - התחלנו מהדרישה ש-<span class="math">\(f\)</span> תהיה גזירה אינסוף פעמים. האם זה <strong>הכרחי</strong>, כדי ש-<span class="math">\(f\)</span> תיוצג על ידי טור חזקות? ובכן, אני יכול לקחת פונקציה מממשית כמו <span class="math">\(f\left(x\right)=\left|x\right|\)</span> שלא גזירה ב-<span class="math">\(x=0\)</span> ועדיין "לייצג" אותה עם טור החזקות <span class="math">\(\sum_{n=0}^{\infty}x^{n}\)</span> במובן זה שהיא תהיה שווה ל-<span class="math">\(f\)</span> ב-<span class="math">\(x=0\)</span> ושונה מ-<span class="math">\(f\)</span> בכל <span class="math">\(x\)</span> אחר. זו דוגמא לכמה מעצבנות וקטנוניות יכולות להיות דוגמאות נגדיות בחדו"א אם לא מנסים את הדרישה שלנו בזהירות. מה שלרוב גורם לעניינים להתנהג נחמד הוא לא לדרוש משהו <strong>נקודתי</strong> אלא משהו שיתקיים ב<strong>סביבה</strong> של נקודה, עבור כל האיברים שלה. כלומר, אנחנו מניחים שקיימת קבוצה פתוחה <span class="math">\(D\)</span> כך ש-<span class="math">\(f\)</span> מוגדרת על כל <span class="math">\(D\)</span> ושואלים את עצמנו מה אפשר לדעת על <span class="math">\(f\)</span> מכך ש-<span class="math">\(f\)</span> מיוצגת על ידי טור חזקות שמתכנס אליה <strong>לכל</strong> <span class="math">\(z\in D\)</span>.</p>
+<p>מכיוון ש"קבוצה פתוחה" היא מושג קריטי, בפרט באנליזה מרוכבת, הנה תזכורת מה זה: זו פשוט קבוצה כך שכל נקודה בה היא נקודת פנים שלה, כש"נקודת פנים" פירושו שקיימת סביבה של הנקודה שמוכלת בקבוצה. פורמלית, <span class="math">\(D\)</span> פתוחה אם לכל <span class="math">\(a\in D\)</span> קיים <span class="math">\(\varepsilon>0\)</span> כך שאם <span class="math">\(\left|z-a\right|<\varepsilon\)</span> אז <span class="math">\(z\in D\)</span>. אפשר וכדאי לחשוב על קבוצות פתוחות בתור "תת-יקום זעיר" של <span class="math">\(\mathbb{R}\)</span> או <span class="math">\(\mathbb{C}\)</span>, שמתנהג מאוד דומה לקבוצות הללו - יש בו אינסוף איברים ואין בו נקודות קצה ברורות. זו אנלוגיה שעשוי להישבר לפעמים (מה אם יש לנו קבוצה פתוחה "עם חור" באמצע, כמו בייגלה? לא ניכנס לזה כרגע) אבל זו התחלה טובה. אני לפעמים משתמש במילה <strong>תחום</strong> (Domain) כדי לתאר קבוצה פתוחה - זה קצת מבלבל עם המושג של <strong>תחום ההגדרה</strong> של פונקציה, אבל יהיה טוב.</p>
+<p>אם כן, נניח שיש לנו טור חזקות <strong>כלשהו</strong> <span class="math">\(\sum_{n=0}^{\infty}a_{n}\left(z-a\right)^{n}\)</span> עם רדיוס התכנסות <span class="math">\(R>0\)</span>. נסמן <span class="math">\(f\left(z\right)=\sum_{n=0}^{\infty}a_{n}\left(z-a\right)^{n}\)</span>. נתחיל עם הוכחה ש-<span class="math">\(f^{\prime}\left(z\right)\)</span> קיימת. מה היינו <strong>מצפים</strong> שהנגזרת הזו תהיה? ובכן, הנה תזכורת כללית. גם עבור פונקציה ממשית וגם עבור פונקציה מרוכבת, הנגזרת של פונקציה <span class="math">\(g\)</span> כלשהי היא</p>
+<p><span class="math">\(\lim_{h\to0}\frac{g\left(z+h\right)-g\left(z\right)}{h}\)</span></p>
+<p>לא קשה להראות, בעזרת הבינום של ניוטון, שאם <span class="math">\(g\left(z\right)=z^{n}\)</span> אז <span class="math">\(g^{\prime}\left(z\right)=nz^{n-1}\)</span>, ולא קשה להראות שנגזרת היא לינארית, מה שאומר שעבור כל סכום <strong>סופי</strong> של איברים מהצורה <span class="math">\(a_{n}\left(z-a\right)^{n}\)</span>, אם נגזור את הסכום נקבל סכום של איברים מהצורה <span class="math">\(na_{n}\left(z-a\right)^{n-1}\)</span>. לכן האינטואיציה שלנו היא שאמור להתקיים</p>
+<p><span class="math">\(f^{\prime}\left(z\right)=\sum_{n=1}^{\infty}na_{n}\left(z-a\right)^{n-1}\)</span></p>
+<p>אבל בשלב הזה מדובר על אינטואיציה בלבד, כי הטענה על סכומים <strong>סופיים</strong> לא עובדת עבור סכומים <strong>אינסופיים</strong> תמיד; היא כן עובדת במקרה הזה, הפשוט יחסית, שבו הסכום האינסופי נותן לנו טור חזקות.</p>
+<p>אם כן, בואו נסתכל על טור החזקות <span class="math">\(\sum_{n=1}^{\infty}na_{n}\left(z-a\right)^{n-1}\)</span>. אמרתי שלטור המקורי היה רדיוס התכנסות <span class="math">\(R\)</span>? קודם כל אני רוצה להוכיח שגם לטור הזה יש רדיוס התכנסות <span class="math">\(R\)</span>. כזכור מ<a href="https://gadial.net/2024/04/27/power_series/">הפוסט על טורי חזקות</a>, יש לנו למרבה השמחה נוסחה מדויקת לרדיוס ההתכנסות של כל טור חזקות:</p>
+<p><span class="math">\(\frac{1}{R}=\lim\sup\sqrt[n]{\left|a_{n}\right|}\)</span></p>
+<p>אז כל מה שאנחנו צריכים לעשות הוא להוכיח שעבור הטור החדש מתקיים גם כן</p>
+<p><span class="math">\(\lim\sup\sqrt[n-1]{\left|na_{n}\right|}=\frac{1}{R}\)</span></p>
+<p>(למי שה-<span class="math">\(n-1\)</span> בחזקה מציק לו, היה אפשר לעשות גם <span class="math">\(\sqrt[n]{\left(n+1\right)a_{n+1}}\)</span>, אבל זה יותר מסורבל).</p>
+<p>את <span class="math">\(\lim\sup\sqrt[n-1]{\left|na_{n}\right|}\)</span> אפשר לחשב על ידי פירוק של הגבול העליון הזה למכפלה:</p>
+<p><span class="math">\(\lim\sup\sqrt[n-1]{\left|na_{n}\right|}=\lim\sup\left(\sqrt[n-1]{\left|n\right|}\right)\cdot\lim\sup\sqrt[n-1]{\left|a_{n}\right|}\)</span></p>
+<p>את המעבר הזה <strong>אי אפשר לבצע באופן כללי</strong> אבל אפשר לבצע כמעט באופן כללי: אם <span class="math">\(b_{n},c_{n}\)</span> הן שתי סדרות כלשהן של מספרים חיוביים וממשיים ואם <span class="math">\(b=\lim_{n\to\infty}b_{n},c=\lim\sup c_{n}\)</span> אז </p>
+<p><span class="math">\(\lim\sup\left(b_{n}c_{n}\right)=bc\)</span></p>
+<p>שימו לב לחוסר הסימטריה: עבור <span class="math">\(b_{n}\)</span> אני דורש את הדרישה הקשוחה יותר <span class="math">\(b=\lim_{n\to\infty}b_{n}\)</span> (אם סדרה היא מתכנסת אז הגבול שלה הוא גם ה-<span class="math">\(\lim\sup\)</span> שלה), פשוט כי אם הייתי דורש רק <span class="math">\(b=\lim\sup b_{n}\)</span> המשפט לא היה נכון (תסתכלו על הסדרות <span class="math">\(2,\frac{1}{2},2,\frac{1}{2},\ldots\)</span> ו-<span class="math">\(\frac{1}{2},2,\frac{1}{2},2,\ldots\)</span>).</p>
+<p>אני לא אוכיח כאן את טענת העזר הזו; היא מה שנקרא "תרגיל טוב" (כלומר, זה יהיה טכני מדי עבורי להתחיל להוכיח אותה באמצע משהו אחר). במקום זה בואו ונראה מה אני הולך להראות כדי שאוכל להשתמש בה:</p>
+<ul> <li><span class="math">\(\lim\sup\left(\sqrt[n-1]{\left|n\right|}\right)=\lim_{n\to\infty}\left(\sqrt[n-1]{\left|n\right|}\right)=1\)</span></li>
+
+
+<li><span class="math">\(\lim\sup\sqrt[n-1]{\left|a_{n}\right|}=\frac{1}{R}\)</span></li>
+
+</ul>
+
+<p>בשביל <span class="math">\(\lim_{n\to\infty}\left(\sqrt[n-1]{\left|n\right|}\right)=1\)</span>, בואו קודם כל נכתוב בצורה קצת יותר ברורה את הביטוי הזה: <span class="math">\(\lim_{n\to\infty}n^{\frac{1}{n-1}}\)</span>. טריק נפוץ כדי להתמודד עם ביטויים עם חזקה מעצבנת הוא לקחת לוגריתם של הביטוי, מה שמוריד את החזקה למטה: <span class="math">\(\ln n^{\frac{1}{n-1}}=\frac{\ln n}{n-1}\)</span>. עכשיו, אם נוכיח <span class="math">\(\lim_{n\to\infty}\ln n^{\frac{1}{n-1}}=0\)</span> ינבע מכך <span class="math">\(\lim_{n\to\infty}n^{\frac{1}{n-1}}=1\)</span> בזכות הרציפות של <span class="math">\(\ln\)</span> (הנה עוד תרגיל טוב). את <span class="math">\(\lim_{n\to\infty}\frac{\ln n}{n-1}=0\)</span> קל להוכיח אם מוכיחים את הטענה המקבילה לפונקציות, <span class="math">\(\lim_{x\to\infty}\frac{\ln x}{x-1}=0\)</span> (הנה עוד תרגיל טוב) על ידי שימוש בכלל לופיטל (אני מניח שאנחנו מכירים את כלל לופיטל), שנותן את הגבול <span class="math">\(\lim_{x\to\infty}\frac{1/x}{1}=0\)</span>. זה מסיים את הטענה הראשונה.</p>
+<p>הטענה השניה, <span class="math">\(\lim\sup\sqrt[n-1]{\left|a_{n}\right|}=\frac{1}{R}\)</span>, נראית קלה באופן מתעתע: הרי מה ההבדל הגדול כל כך בין <span class="math">\(\sqrt[n-1]{\left|a_{n}\right|}\)</span> ובין <span class="math">\(\sqrt[n]{\left|a_{n}\right|}\)</span> כשמשאיפים את <span class="math">\(n\)</span> לאינסוף? אבל כמובן, יכול להיות הבדל כזה, הכל תלוי באיך <span class="math">\(a_{n}\)</span> מתנהגת. הנקודה שבה הדמיון בין שני הביטויים כן עוזר לנו היא בכך שאפשר לחשוב גם על <span class="math">\(\lim\sup\sqrt[n-1]{\left|a_{n}\right|}\)</span> בתור משהו שנותן רדיוס התכנסות של טור חזקות: הטור <span class="math">\(\sum_{n=0}^{\infty}a_{n+1}z^{n}\)</span>. </p>
+<p>הטור <span class="math">\(\sum_{n=0}^{\infty}a_{n+1}z^{n}\)</span> דומה מאוד לטור <span class="math">\(\sum_{n=0}^{\infty}a_{n}z^{n}\)</span> המקורי; אפשר לקבל אותו מהטור המקורי על ידי פירוק שלו לאיבר הראשון וכל היתר, והוצאת <span class="math">\(z\)</span> החוצה (אם יצא לכן להתעסק עם פונקציות יוצרות, הטריקים הללו עשויים להיות מוכרים):</p>
+<p><span class="math">\(\sum_{n=0}^{\infty}a_{n}z^{n}=a_{0}+\sum_{n=1}^{\infty}a_{n}z^{n}=a_{0}+z\sum_{n=1}^{\infty}a_{n}z^{n-1}=a_{0}+z\sum_{n=0}^{\infty}a_{n+1}z^{n}\)</span></p>
+<p>עבור <span class="math">\(z\)</span> קבוע, ההתכנסות של <span class="math">\(a_{0}+z\sum_{n=0}^{\infty}a_{n+1}z^{n}\)</span> לא מושפעת מה-<span class="math">\(a_{0}\)</span> בחוץ או מה-<span class="math">\(z\)</span> שבו הכל מוכפל, ולכן אם <span class="math">\(\sum_{n=0}^{\infty}a_{n+1}z^{n}\)</span> מתכנס נובע מכך שגם <span class="math">\(\sum_{n=0}^{\infty}a_{n}z^{n}\)</span> מתכנס. בדומה, אם <span class="math">\(\sum_{n=0}^{\infty}a_{n}z^{n}\)</span> מתכנס נובע מכך ש-<span class="math">\(\sum_{n=0}^{\infty}a_{n+1}z^{n}=\frac{\sum_{n=0}^{\infty}a_{n}z^{n}-a_{0}}{z}\)</span> מתכנס (אם <span class="math">\(z=0\)</span> הוא בוודאי מתכנס גם בלי לחלק שום דבר ב-<span class="math">\(z\)</span>), לכן רדיוסי ההתכנסות של הטורים הללו זהים, מה שמשלים את ההוכחה.</p>
+<p>בואו ניזכר מה היה היעד שלנו. הגדרנו <span class="math">\(f\left(z\right)=\sum_{n=0}^{\infty}a_{n}\left(z-a\right)^{n}\)</span> ורצינו להראות ש-<span class="math">\(f^{\prime}\left(z\right)=\sum_{n=1}^{\infty}na_{n}\left(z-a\right)^{n-1}\)</span>. עוד לא הראינו את זה; הראינו רק שהטור <span class="math">\(\sum_{n=1}^{\infty}na_{n}\left(z-a\right)^{n-1}\)</span> הוא בעל רדיוס ההתכנסות <span class="math">\(R\)</span> של הטור המקורי, ולכן הוא מגדיר פונקציה על אותו תחום כמו זה של <span class="math">\(f\)</span>. אבל עדיין צריך להראות שהוא שווה אל <span class="math">\(f^{\prime}\left(z\right)\)</span>. עכשיו, איך מגדירים את <span class="math">\(f^{\prime}\left(z\right)\)</span>? ההגדרה עבור פונקציות מרוכבות זהה להגדרה עבור פונקציות ממשיות:</p>
+<p><span class="math">\(f^{\prime}\left(z\right)=\lim_{w\to z}\frac{f\left(w\right)-f\left(z\right)}{w-z}\)</span></p>
+<p>רק שכאן <span class="math">\(w\)</span> הוא מספר מרוכב כלשהו והשאיפה <span class="math">\(w\to z\)</span> היא שאיפה במובן של מספרים מרוכבים, כלומר ש-<span class="math">\(\left|w-z\right|\)</span> שואף לאפס עבור פונקציית הערך המוחלט של מספרים מרוכבים. מי שזוכרים חדו"א של מספרים ממשיים אולי מכירים את הגדרת הנגזרת עם <span class="math">\(\lim_{h\to0}\frac{f\left(x+h\right)-f\left(x\right)}{h}\)</span>; זה אותו רעיון, פשוט <span class="math">\(w=x+h\)</span> ולכן אם <span class="math">\(h\to0\)</span> אז <span class="math">\(w\to x\)</span>.</p>
+<p>כרגיל, יהיה נוח להניח בלי הגבלת הכלליות שהטורים שלנו מוגדרים סביב 0 - זו אותה הוכחה עבור כשהם מוגדרים סביב <span class="math">\(a\)</span> כלשהו, פשוט עם סימונים יותר מסורבלים.</p>
+<p>אוקיי, אז הנה הסימונים והמטרות שלנו:</p>
+<p><span class="math">\(f\left(z\right)=\sum_{n=0}^{\infty}a_{n}z^{n}\)</span></p>
+<p><span class="math">\(g\left(z\right)=\sum_{n=1}^{\infty}na_{n}z^{n-1}\)</span> </p>
+<p>רדיוס ההתכנסות של שני הטורים הללו הוא <span class="math">\(R\)</span>. ניקח <span class="math">\(z\)</span> כך ש-<span class="math">\(\left|z\right|<R\)</span> ונרצה להראות ש-<span class="math">\(f^{\prime}\left(z\right)=g\left(z\right)\)</span>. כלומר, אני ארצה להראות שהביטוי <span class="math">\(\frac{f\left(w\right)-f\left(z\right)}{w-z}\)</span> הולך ומתקרב אל <span class="math">\(g\left(z\right)\)</span> כאשר <span class="math">\(w\)</span> מתקרב אל <span class="math">\(z\)</span>. זו הוכחת אפסילון-דלתא רגילה: אני לוקח <span class="math">\(\varepsilon>0\)</span> שרירותי כלשהו וצריך למצוא ערך טוב של <span class="math">\(\delta>0\)</span> כך שאם <span class="math">\(0<\left|w-z\right|<\delta\)</span> אז <span class="math">\(\left|\frac{f\left(w\right)-f\left(z\right)}{w-z}-g\left(z\right)\right|<\varepsilon\)</span>.</p>
+<p>הביטוי <span class="math">\(f\left(w\right)-f\left(z\right)\)</span> שבמונה הוא הפרש בין שני טורים אינסופיים וקצת קשה לעבוד עם זה, אז מה שנרצה לעשות הוא לפרק את הטור האינסופי<span class="math">\(f\left(z\right)=\sum_{n=0}^{\infty}a_{n}z^{n}\)</span> לשני טורים - "ראש" סופי ו"זנב" אינסופי. הנקודה שבה הפיצול הזה יתבצע תהיה <span class="math">\(n\)</span>, כש-<span class="math">\(n\)</span> הוא כרגע שרירותי ובהמשך נבחר אותו להיות מה שמתאים לנו. אני אכתוב</p>
+<p><span class="math">\(f\left(z\right)=\sum_{k=0}^{\infty}a_{k}z^{k}=\sum_{k=0}^{n}a_{k}z^{k}+\sum_{k=n+1}^{\infty}a_{k}z^{k}=S_{n}\left(z\right)+R_{n}\left(z\right)\)</span></p>
+<p>כש-<span class="math">\(S_{n}\left(z\right)\)</span> היא הפונקציה שמתאימה לסכום החלקי עד <span class="math">\(n\)</span> ו-<span class="math">\(R_{n}\left(z\right)\)</span> היא הפונקציה שמתארת את השארית (אלו סימונים סטנדרטיים אז תסלחו לי על השימוש ב-<span class="math">\(R\)</span> גם לרדיוס ההתכנסות וגם לפונקציית השארית).</p>
+<p>עכשיו בואו נעבור לחלק הכיפי ביותר בחדו"א - האלגברה:</p>
+<p><span class="math">\(\frac{f\left(w\right)-f\left(z\right)}{w-z}-g\left(z\right)=\left[\frac{S_{n}\left(w\right)-S_{n}\left(z\right)}{w-z}-S_{n}^{\prime}\left(z\right)\right]+\left[S_{n}^{\prime}\left(z\right)-g\left(z\right)\right]+\left[\frac{R_{n}\left(w\right)-R_{n}\left(z\right)}{w-z}\right]\)</span></p>
+<p>פיצלתי כאן את הביטוי המקורי לסכום של שלושה ביטויים, תוך שאני גם מחבר ומחסר <span class="math">\(S_{n}^{\prime}\left(z\right)\)</span>, מתוך ראייה קדימה שאני אוכל לחסום את הגודל של כל אחד מהביטויים הללו על ידי בחירה נכונה של <span class="math">\(n,\delta\)</span>. אני אמצא ערכים מתאימים כדי שכל אחד מהם בערכו המוחלט יהיה קטן מ-<span class="math">\(\frac{\varepsilon}{3}\)</span>, כך שהסכום של שלושתם לא יעלה על <span class="math">\(\varepsilon\)</span>.</p>
+<p>שימו לב שאין בעיה להשתמש ב-<span class="math">\(S_{n}^{\prime}\left(z\right)\)</span> כאן: מכיוון ש-<span class="math">\(S_{n}\left(z\right)=\sum_{k=0}^{n}a_{k}z^{k}\)</span> היא פונקציה שמוגדרת על ידי סכום <strong>סופי</strong> הנגזרת שלה קיימת ופשוטה מאוד לחישוב על ידי גזירה "איבר-איבר" של אברי הטור. מה שאנחנו בעצם עושים בהוכחה הזו הוא לקחת את הפשטות הסופית הזו ולגרור אותה מעלה, אל המקרה האינסופי. שימו לב עד כמה הגרירה הזו קשה! המתח הזה שבין "סופי-קל, אינסופי-קשה" חוזר על עצמו בכל מקום במתמטיקה.</p>
+<p>את שניים מהביטויים קל לחסום. ראשית, <span class="math">\(\frac{S_{n}\left(w\right)-S_{n}\left(z\right)}{w-z}-S_{n}^{\prime}\left(z\right)\)</span> הוא פשוט כי צד שמאל של החיסור הוא בדיוק מה שמופיע בהגדרת הנגזרת של צד ימין: <span class="math">\(S_{n}^{\prime}\left(z\right)=\lim_{w\to z}\frac{S_{n}\left(w\right)-S_{n}\left(z\right)}{w-z}\)</span>. זה אומר שאפשר למצוא <span class="math">\(\delta>0\)</span> כך שלכל <span class="math">\(0<\left|w-z\right|<\delta\)</span> מתקיים <span class="math">\(\left|\frac{S_{n}\left(w\right)-S_{n}\left(z\right)}{w-z}-S_{n}^{\prime}\left(z\right)\right|<\frac{\varepsilon}{3}\)</span>.</p>
+<p>שנית, <span class="math">\(S_{n}^{\prime}\left(z\right)-g\left(z\right)\)</span> הוא פשוט למדי כי <span class="math">\(S_{n}^{\prime}\left(z\right)\)</span> הוא בסך הכל הרישא של הטור <span class="math">\(g\left(z\right)=\sum_{n=1}^{\infty}na_{n}z^{n-1}\)</span>, ולכן <span class="math">\(\lim_{n\to\infty}S_{n}^{\prime}\left(z\right)=g\left(z\right)\)</span>, כך שעל פי הגדרת הגבול - קיים <span class="math">\(N_{1}\)</span> כך שלכל <span class="math">\(n>N_{1}\)</span> מתקיים <span class="math">\(\left|S_{n}^{\prime}\left(z\right)-g\left(z\right)\right|<\frac{\varepsilon}{3}\)</span>.</p>
+<p>לבסוף, הביטוי שיהיה לי הכי קשה לטפל בו הוא השארית, <span class="math">\(\frac{R_{n}\left(w\right)-R_{n}\left(z\right)}{w-z}\)</span>. אני צריך למצוא עבורה <span class="math">\(N_{2}\)</span> כך שאם <span class="math">\(n>N_{2}\)</span> אז <span class="math">\(\left|\frac{R_{n}\left(w\right)-R_{n}\left(z\right)}{w-z}\right|<\frac{\varepsilon}{3}\)</span>. הבעיה עם השארית הזו היא שיש לנו פה טור אינסופי, אבל די בקלות נוכל לבצע רדוקציה שלו אל הטור <span class="math">\(g\left(z\right)\)</span> שכבר טיפלנו בו קודם.</p>
+<p>ראשית, על פי ההגדרה של <span class="math">\(R_{n}\)</span>, נקבל<span class="math">\(\frac{R_{n}\left(w\right)-R_{n}\left(z\right)}{w-z}=\sum_{k=n+1}^{\infty}a_{k}\frac{w^{k}-z^{k}}{w-z}\)</span> לכן אם ניקח להכל ערך מוחלט, נקבל</p>
+<p><span class="math">\(\left|\frac{R_{n}\left(w\right)-R_{n}\left(z\right)}{w-z}\right|\le\sum_{k=n+1}^{\infty}\left|a_{k}\right|\left|\frac{w^{k}-z^{k}}{w-z}\right|\)</span></p>
+<p>ביטוי כמו <span class="math">\(\frac{w^{k}-z^{k}}{w-z}\)</span> אפשר לפשט אלגברית:</p>
+<p><span class="math">\(\frac{w^{k}-z^{k}}{w-z}=w^{k-1}+w^{k-2}z+\ldots+wz^{k-2}+z^{k-1}\)</span></p>
+<p>כדי לראות שזה עובד, פשוט כופלים את שני האגפים ב-<span class="math">\(w-z\)</span> ורואים איך באגף ימין כל איבר מתקבל פעמיים עם סימנים שונים, חוץ מ-<span class="math">\(w^{k}\)</span> ו-<span class="math">\(z^{k}\)</span>. עכשיו, בואו ניזכר בכך ש-<span class="math">\(z\)</span> נבחר מלכתחילה כך ש-<span class="math">\(\left|z\right|<R\)</span> ועל <span class="math">\(w\)</span> יש לנו אילוץ ש-<span class="math">\(\left|z-w\right|<\delta\)</span>. אז אפשר למצוא <span class="math">\(r<R\)</span> כך ש-<span class="math">\(\left|z\right|<r\)</span> ולבחור את <span class="math">\(\delta\)</span> כך ש-<span class="math">\(\left|z-w\right|\)</span> קטן מהמרחק מ-<span class="math">\(z\)</span> אל <span class="math">\(r\)</span> כך ש-<span class="math">\(\left|w\right|<r\)</span> גם כן, ואז אפשר למצוא חסם בערך מוחלט על הביטוי שמצאנו קודם:</p>
+<p><span class="math">\(\left|\frac{w^{k}-z^{k}}{w-z}\right|\le\left|w^{k-1}\right|+\ldots+\left|z^{k-1}\right|\le kr^{k-1}\)</span></p>
+<p>כי בסכום הזה יש <span class="math">\(k\)</span> איברים שכל אחד מהם הוא מכפלה של שני מונומים (<span class="math">\(w\)</span> ו-<span class="math">\(z\)</span>) שסכום המעריכים שלהם הוא <span class="math">\(k-1\)</span>.</p>
+<p>קיבלנו:</p>
+<p><span class="math">\(\left|\frac{R_{n}\left(w\right)-R_{n}\left(z\right)}{w-z}\right|\le\sum_{k=n+1}^{\infty}\left|a_{k}\right|kr^{k-1}\)</span></p>
+<p>מה שיש באגף ימין דומה מאוד לטור של <span class="math">\(g\left(z\right)\)</span>:</p>
+<p><span class="math">\(g\left(z\right)=\sum_{n=1}^{\infty}na_{n}z^{n-1}\)</span></p>
+<p>כבר הוכחנו ש-<span class="math">\(g\left(z\right)\)</span> מתכנס לכל <span class="math">\(\left|z\right|<R\)</span>, ולכן הוא בפרט יתכנס עבור <span class="math">\(z=r\)</span> (כי <span class="math">\(r<R\)</span>) ולכן הוא גם יתכנס בערך מוחלט, מה שאומר שזנב הטור יתכנס לאפס. כלומר אפשר למצוא <span class="math">\(N_{2}\)</span> כך שאם <span class="math">\(n>N_{2}\)</span> אז <span class="math">\(\sum_{k=n+1}^{\infty}\left|a_{k}\right|kr^{k-1}<\frac{\varepsilon}{3}\)</span>.</p>
+<p>זה בעצם מסיים את ההוכחה! ניקח <span class="math">\(n=\max\left\{ N_{1},N_{2}\right\} +1\)</span> ואת ה-<span class="math">\(\delta\)</span> שבחרנו קודם על בסיס שני האילוצים שצצו לנו בהוכחה, ונקבל <span class="math">\(\left|\frac{f\left(w\right)-f\left(z\right)}{w-z}-g\left(z\right)\right|<\frac{\varepsilon}{3}+\frac{\varepsilon}{3}+\frac{\varepsilon}{3}=\varepsilon\)</span>.</p>
+<p>מה יצא לנו מכל זה? ובכן, הוכחה פורמלית למה שנראה על פניו די מובן מאליו: שאם <span class="math">\(f\left(z\right)=\sum_{n=0}^{\infty}a_{n}\left(z-a\right)^{n}\)</span> עם רדיוס התכנסות <span class="math">\(R\)</span> סביב <span class="math">\(a\)</span>, אז <span class="math">\(f\)</span> גזירה בכל התחום הזה (הכדור הפתוח ברדיוס <span class="math">\(R\)</span> סביב <span class="math">\(a\)</span>) והנגזרת שלה היא <span class="math">\(f^{\prime}\left(z\right)=\sum_{n=1}^{\infty}na_{n}\left(z-a\right)^{n-1}\)</span> והיא בעלת אותו רדיוס התכנסות. ואם אפשר לעשות את זה פעם אחת, אפשר לעשות את זה שוב, ולקבל שגם הנגזרת גזירה שוב, והנגזרת שלה היא בעלת אותו רדיוס התכנסות, וכן הלאה עד אינסוף.</p>
+<p>זו תוצאה די חזקה, אז בואו נגיד אותה שוב. אני אומר שפונקציה <span class="math">\(f\)</span> היא <strong>אנליטית</strong> בתחום <span class="math">\(D\)</span> אם לכל <span class="math">\(a\in D\)</span>, קיים ל-<span class="math">\(f\)</span> ייצוג באמצעות טור חזקות סביב <span class="math">\(a\)</span> עם רדיוס התכנסות גדול מ-0. צריך את התנאי הזה של "גדול מ-0" כי אנחנו כבר יודעים שאם מרשים רדיוס התכנסות 0, אז כל טור חזקות שהאיבר החופשי שלו הוא <span class="math">\(f\left(a\right)\)</span> יעבוד.</p>
+<p>מה שהוכחנו כרגע הוא שאם <span class="math">\(f\)</span> היא אנליטית, אז היא גזירה <strong>אינסוף פעמים</strong> בכל נקודה של <span class="math">\(D\)</span>. זו תוצאה חזקה מאוד, אבל בתורת הפונקציות המרוכבות היא מתגלה כחזקה עוד יותר בזכות העובדה שאם פונקציה <span class="math">\(f\)</span> גזירה בכל נקודה של הקבוצה הפתוחה <span class="math">\(D\)</span>, אז היא אנליטית ב-<span class="math">\(D\)</span>. כלומר, כשאנחנו עוסקים בפונקציות מרוכבות, להיות גזיר פעם אחת גורר את להיות גזיר <strong>אינסוף פעמים</strong>, כל עוד הגזירות היא לא "נקודתית" אלא בתחום שלם <span class="math">\(D\)</span>. אין שום מקבילה לתוצאה הזו בתורת הפונקציות הממשיות, וזו בעצם נקודת התחלה לא רעה כדי לראות כמה קסמים מתרחשים באנליזה מרוכבת.</p>
+<p>עכשיו בואו נראה עוד משהו. נניח של-<span class="math">\(f\)</span> יש ייצוג בתור <span class="math">\(f\left(z\right)=\sum_{n=0}^{\infty}a_{n}\left(z-a\right)^{n}\)</span> כשלטור יש רדיוס התכנסות גדול מאפס. נציב <span class="math">\(z=a\)</span> ונקבל</p>
+<p><span class="math">\(f\left(a\right)=a_{0}\)</span></p>
+<p>כי שאר האיברים התאפסו. עכשיו נגזור ונקבל</p>
+<p><span class="math">\(f^{\prime}\left(z\right)=\sum_{n=1}^{\infty}na_{n}\left(z-a\right)^{n-1}\)</span></p>
+<p>ולכן אם נציב <span class="math">\(z=a\)</span> נקבל</p>
+<p><span class="math">\(f^{\prime}\left(a\right)=1\cdot a_{1}\)</span></p>
+<p>ואם נגזור שוב, נקבל</p>
+<p><span class="math">\(f^{\prime\prime}\left(z\right)=\sum_{n=2}^{\infty}n\left(n-1\right)a_{n}\left(z-a\right)^{n-2}\)</span></p>
+<p>ולכן</p>
+<p><span class="math">\(f^{\prime\prime}\left(a\right)=1\cdot2\cdot a_{2}\)</span></p>
+<p>ובאופן כללי:</p>
+<p><span class="math">\(f^{\left(k\right)}\left(a\right)=1\cdot2\cdots k\cdot a_{k}\)</span></p>
+<p>או במילים אחרות:</p>
+<p><span class="math">\(a_{k}=\frac{f^{\left(k\right)}\left(a\right)}{k!}\)</span></p>
+<p>וזה נותן לנו את כל אינסוף המקדמים של טור החזקות - מה שמראה שטור החזקות הזה <strong>שווה</strong> למה שקראתי לו טור הטיילור של <span class="math">\(f\)</span>:</p>
+<p><span class="math">\(f\left(z\right)=\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(a\right)}{n!}\left(z-a\right)^{n}\)</span></p>
+<p>עשינו את אותו החשבון גם בפוסט הקודם, אבל עכשיו יש לנו <strong>הצדקה</strong> לעשות אותו. עכשיו גם יש לנו תשובה לשאלה מתחילת הפוסט: התחלנו מהדרישה ש-<span class="math">\(f\)</span> תהיה גזירה אינסוף פעמים. האם זה <strong>הכרחי</strong>, כדי ש-<span class="math">\(f\)</span> תיוצג על ידי טור חזקות? כפי שראינו, התשובה היא <strong>כן</strong>: אם <span class="math">\(f\)</span> מיוצגת על ידי טור חזקות (במובן לא טריוויאלי של טורים עם רדיוס התכנסות 0) אז היא אוטומטית גזירה אינסוף פעמים, ולכן זה אכן הכרחי. זמן טוב לעצור בו.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2024/06/15/curves_and_line_integrals/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">על עקומות ואינטגרלים</span>
+            </a>
+            
+            
+            
+            <a href="/2024/05/03/taylor_series/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">טורי טיילור</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

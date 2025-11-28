@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת הוכחה ללוגיקה מסדר ראשון - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>מערכת הוכחה ללוגיקה מסדר ראשון</h1>
+            <div class="post-meta">
+                <span class="date">2013-02-23</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/לוגיקה.html">לוגיקה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/לוגיקה מסדר ראשון.html">לוגיקה מסדר ראשון</a>
+                    
+                    <a href="/tags/לוגיקה מתמטית.html">לוגיקה מתמטית</a>
+                    
+                    <a href="/tags/מערכות הוכחה.html">מערכות הוכחה</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>סדרת הפוסטים שלי על לוגיקה הגיעה עד לתיאור של הסינטקס והסמנטיקה של <a href="http://www.gadial.net/2012/06/17/first_order_logic/">לוגיקה מסדר ראשון</a> ושם עצרתי, כי השלב הבא, שעליו אני רוצה לדבר עכשיו, הוא לא פשוט. בתחשיב הפסוקים, שהצגתי בתור "חימום" ללוגיקה מסדר ראשון, היעד שלנו היה הצגת <strong>מערכת הוכחה: </strong>אוסף של אקסיומות וכללי גזירה שמאפשרים, בהינתן קבוצת פסוקים כלשהי ("הנחות"), לגזור את כל המסקנות הסמנטיות מאותה קבוצת פסוקים באופן סינטקטי לגמרי: לכל מסקנה שכזו תהיה הוכחה, שהיא בסך הכל סדרה סופית של פסוקים שכל אחד מהם הוא אקסיומה, הנחה או נובעת מפסוקים קודמים על ידי כללי הגזירה. אחרי ש<a href="http://www.gadial.net/2012/04/04/propositional_caclulus_proofs/">הצגתי</a> את מערכת ההוכחה <a href="http://www.gadial.net/2012/04/08/propositional_calculus_completeness/">הראיתי</a> שהיא <strong>נאותה</strong> ו<strong>שלמה</strong>, כאשר נאותות פירושה היה "כל מה שיכיח, נכון" ואילו שלמות הייתה "כל מה שנכון, יכיח". ההוכחה של משפט השלמות הייתה מורכבת יחסית; בלוגיקה מסדר ראשון יש לנו רמת סיבוך נוספת.</p>
+<p>נתחיל עם הצגה של מערכת ההוכחה שלי עבור לוגיקה מסדר ראשון. כדאי להעיר שאין קונצנזוס בנקודה הזו: יש מערכות הוכחה רבות ושונות בספרות, למרות שבשורה התחתונה ההוכחות של משפט השלמות והנאותות שלהן דומות באופיין. אני בוחר להציג כאן את זו שבעיני אישית היא הפשוטה ביותר. אני מניח שהקוראים זוכרים בערך איך מוגדרים הסינטקס והסמנטיקה של לוגיקה מסדר ראשון, כמו גם מה בערך הולך במערכת ההוכחה של תחשיב הפסוקים; לא אחזור על זה שוב כאן.</p>
+<p>מכיוון שלוגיקה מסדר ראשון היא מעין הכללה של תחשיב הפסוקים, די ברור שמערכת ההוכחה שלנו תהיה הכללה של זו של תחשיב הפסוקים. כזכור, במערכת ההוכחה הזו השתמשתי בשלוש "תבניות אקסיומה":</p>
+<ol>
+    <li><span class="math">\(\alpha\to\left(\beta\to\alpha\right)\)</span></li>
+    <li><span class="math">\(\left[\alpha\to\left(\gamma\to\beta\right)\right]\to\left[\left(\alpha\to\gamma\right)\to\left(\alpha\to\beta\right)\right]\)</span></li>
+    <li><span class="math">\(\left(\neg\alpha\to\neg\beta\right)\to\left(\beta\to\alpha\right)\)</span></li>
+</ol>
+<p>אלו "תבניות" כי במקום <span class="math">\(\alpha,\beta,\gamma\)</span> אפשר להציב פסוקים כלשהם. באותו האופן התבניות הללו יהיו שייכות גם למערכת ההוכחה של לוגיקה מסדר ראשון, כאשר במקום <span class="math">\(\alpha,\beta,\gamma\)</span> מציבים נוסחאות כלשהן בלוגיקה מסדר ראשון. תבנית כזו היא בעלת התכונה הסמנטית שלא חשוב מה נציב בה - בכל מבנה ובכל השמה, הפסוק שמתקבל מההצבות הללו יהיה בעל ערך אמת, ואפילו אם הנוסחאות שמציבים הן מורכבות וכללות כמתים ופונקציות ואקשן. הסיבה פשוטה: אם מחשבים את ערך האמת של הפסוק שמתקבל מההשמות, בסופו של דבר נקבל שכל מה שהצבנו במקום <span class="math">\(\alpha\)</span> מתורגם לאחד משניים: או <span class="math">\(\mbox{T}\)</span> או <span class="math">\(\mbox{F}\)</span>, וכך גם עבור <span class="math">\(\beta,\gamma\)</span>, מה שאומר שלא משנה איזו נוסחה מורכבת אפשר להציב במקום <span class="math">\(\alpha,\beta,\gamma\)</span>, עדיין תחת מבנה והשמה נתונים הם מתנהגים כמו משתנים בתחשיב הפסוקים, ולכן תבנית אקסיומה שהייתה טאוטולוגיה בתחשיב הפסוקים נותרת כזו גם כעת.</p>
+<p>כלל ההיסק שלנו בתחשיב הפסוקים היה מודוס פוננס, <span class="math">\(\mbox{MP}\)</span>, שמתוך <span class="math">\(\alpha\)</span> ו-<span class="math">\(\alpha\to\beta\)</span> גזר את <span class="math">\(\beta\)</span>. נשתמש בו גם כעת. כפי שראינו, זה מספיק כדי לגזור כל טאוטולוגיה בתחשיב הפסוקים. הבעיה היא שבלוגיקה מסדר ראשון יש עוד דברים. מן הסתם יהיו אלה דברים שקשורים לכמתי ה"קיים" ו"לכל" שאין משהו דומה להם בתחשיב הפסוקים. בואו ניתן דוגמה:</p>
+<p><span class="math">\(\forall x\left(R\left(x\right)\right)\to R\left(y\right)\)</span></p>
+<p>זו נוסחה שמשתמשת בסימן יחס חד-מקומי <span class="math">\(R\)</span>, ויש בה משתנה קשור אחד <span class="math">\(x\)</span> ומשתנה חופשי אחד <span class="math">\(y\)</span>. בכל מבנה <span class="math">\(\mathcal{M}\)</span> ערך האמת של הרישא של הפסוק - <span class="math">\(\forall x\left(R\left(x\right)\right)\)</span> - נקבע באופן יחיד, והוא יהיה <span class="math">\(\mbox{T}\)</span> אם ורק אם <span class="math">\(R^{\mathcal{M}}=D^{\mathcal{M}}\)</span>, כלומר אם היחס <span class="math">\(R\)</span> מתפרש ב-<span class="math">\(\mathcal{M}\)</span> בתור "כל העולם". כעת, אם הערך של <span class="math">\(\forall x\left(R\left(x\right)\right)\)</span> הוא <span class="math">\(\mbox{F}\)</span> אז הנוסחה כולה היא תמיד בעל ערך אמת <span class="math">\(\mbox{T}\)</span>; ואילו אם ערך האמת שלו הוא <span class="math">\(\mbox{T}\)</span> אז <span class="math">\(R^{\mathcal{M}}=D^{\mathcal{M}}\)</span> ולכן לכל השמה אפשרית, לא משנה איזה ערך היא נותנת ל-<span class="math">\(y\)</span>, יתקיים ש-<span class="math">\(R\left(y\right)\)</span> הוא <span class="math">\(\mbox{T}\)</span> ולכן שוב הנוסחה כולה תהיה <span class="math">\(\mbox{T}\)</span>. במילים אחרות, הנוסחה <span class="math">\(\forall x\left(R\left(x\right)\right)\to R\left(y\right)\)</span>היא בעלת ערך האמת <span class="math">\(\mbox{T}\)</span> בכל מבנה ובכל השמה אפשריים. לנוסחה בעלת התכונה הזו אני קורא <strong>אמת לוגית</strong>, ובכוונה אני לא קורא לה "טאוטולוגיה" כמו בתחשיב הפסוקים. במילה "טאוטולוגיה" בלוגיקה מסדר ראשון אני משתמש כדי לתאר את מה שמתקבל מלקיחת טאוטולוגיה בתחשיב הפסוקים ואז הצבת נוסחאות בתור המשתנים, ואילו <span class="math">\(\forall x\left(R\left(x\right)\right)\to R\left(y\right)\)</span> בבירור לא יכול להתקבל בצורה הזו. הדרך היחידה שבה הוא יכול להתקבל היא על ידי הצבה בפסוק <span class="math">\(X\to Y\)</span>, אבל הפסוק הזה כלל אינו טאוטולוגיה.</p>
+<p>זה מראה לנו שהסיבות לכך ש-<span class="math">\(\forall x\left(R\left(x\right)\right)\to R\left(y\right)\)</span> היא אמת לוגית הן עמוקות יותר מאשר הסיבות לכך שנוסחה כמו <span class="math">\(\forall x\left(R\left(x\right)\right)\to\left(R\left(y\right)\to\forall x\left(R\left(x\right)\right)\right)\)</span> היא אמת לוגית; השניה מתקבלת מהצבה בפסוק <span class="math">\(X\to\left(Y\to X\right)\)</span> שהוא כן טאוטולוגיה של תחשיב הפסוקים, ולכן ערך האמת שלה נובע במובן מסויים רק מתכונות ה<strong>קשרים</strong> (<span class="math">\(\to\)</span> במקרה הזה), בעוד שערך האמת הלוגית של <span class="math">\(\forall x\left(R\left(x\right)\right)\to R\left(y\right)\)</span> נובע גם מתכונות ה<strong>כמתים</strong> (שימו לב: אם נחליף את <span class="math">\(\forall\)</span> ב-<span class="math">\(\exists\)</span> נקבל משהו שאינו אמת לוגית). אני מקווה שזה עוזר להבין למה מה שעשינו בתחשיב הפסוקים רחוק מלהיות מספיק גם בתחשיב היחסים.</p>
+<p>הנוסחה שלעיל מרמזת על סוג חדש של תבנית אקסיומה שנזדקק לו. אבל איך אפשר לפרמל אותה? בואו נראה עוד כמה דוגמאות לפני שנציג את המקרה הכללי. ראשית, הביטו בנוסחה הזו:</p>
+<p><span class="math">\(\forall x\left(\exists y\left(x+y&gt;c\right)\right)\to \left(\exists y\left(z+y&gt;c\right)\right)\)</span></p>
+<p>כאן המשתנים <span class="math">\(x,y\)</span> הם קשורים ואילו <span class="math">\(z\)</span> הוא המשתנה החופשי; <span class="math">\(c\)</span> הוא סימן קבוע, <span class="math">\(+\)</span>הוא סימן פונקציה ו-<span class="math">\(&gt;\)</span> הוא סימן יחס. לא קשה לראות שגם הנוסחה הזו היא אמת לוגית. מה הדמיון בינה ובין הנוסחה הקודמת שהצגתי? בשתיהן יש "לכל <span class="math">\(x\)</span> <strong>משהו </strong>עבור<strong> <span class="math">\(x\)</span></strong> גורר <strong>משהו</strong> עבור <span class="math">\(y\)</span>". שם ה"משהו" היה <span class="math">\(R\left(x\right)\)</span> וכאן ה"משהו" הוא <span class="math">\(\exists y\left(x+y&gt;c\right)\)</span> . באופן כללי "משהו" כזה יכול להיות כל נוסחה, אפילו נוסחאות שבהן <span class="math">\(x\)</span> בכלל לא מופיע. אז לכאורה הצורה של האקסיומה צריכה להיות <span class="math">\(\forall x\varphi\to\varphi\)</span>, אבל הצורה הזו <strong>לא כללית מספיק</strong>. היא מסוגלת ליצור משהו כמו <span class="math">\(\forall x\left(R\left(x\right)\right)\to R\left(x\right)\)</span>, אבל הוא לא מסוגלת ליצור משהו כמו <span class="math">\(\forall x\left(R\left(x\right)\right)\to R\left(y\right)\)</span>.</p>
+<p>אם כן, אולי אפשר לומר שהצורה של האקסיומה תהיה <span class="math">\(\forall x\varphi\to\psi\)</span>, כאשר <span class="math">\(\psi\)</span> מתקבל מ-<span class="math">\(\varphi\)</span> על ידי <strong>שינוי השם</strong> של המשתנה <span class="math">\(x\)</span>. זה כבר יותר בכיוון, אבל הנה נוסחה שהיא אמת לוגית ולא יכולה להתקבל כך:</p>
+<p><span class="math">\(\forall x\left(x\ge0\right)\to\left(1\ge0\right)\)</span></p>
+<p>כאן <span class="math">\(0,1\)</span> הם סימני קבועים של השפה ו-<span class="math">\(\ge\)</span> הוא סימן יחס. כאן כבר לא סתם שינינו את השם של <span class="math">\(x\)</span> אלא ממש החלפנו אותו בקבוע. ואפשר היה לעשות גם משהו כזה:</p>
+<p><span class="math">\(\forall x\left(x\ge0\right)\to\left(\left(1+z\right)^{2}\ge0\right)\)</span></p>
+<p>כאשר כאן העלאה בריבוע היא סימן פונקציה, וגם חיבור הוא סימן פונקציה. מה שקרה הוא שהחלפנו את <span class="math">\(x\)</span> ב<strong>שם עצם</strong>: <span class="math">\(\left(1+z\right)^{2}\)</span>. אם כן, אפשר לומר שהצורה של האקסיומה תהיה <span class="math">\(\forall x\varphi\to\psi\)</span> כאשר <span class="math">\(\psi\)</span> מתקבל מ-<span class="math">\(\varphi\)</span> על ידי החלפת כל מופע של <span class="math">\(x\)</span> בשם עצם ספציפי כלשהו <span class="math">\(t\)</span>. זה בהחלט בכיוון, אבל זה כבר <strong>כללי יותר מדי</strong>. אם נעשה את זה, אנחנו עלולים לקבל נוסחאות שאינן אמיתות לוגיות. הנה דוגמה. ניקח את <span class="math">\(\varphi\)</span> להיות <span class="math">\(\exists y\left(y&gt;x\right)\)</span> ואת <span class="math">\(t\)</span> להיות <span class="math">\(y\)</span> ונקבל:</p>
+<p><span class="math">\(\forall x\left(\exists y\left(y&gt;x\right)\right)\to\exists y\left(y&gt;y\right)\)</span></p>
+<p>וזה בבירור לא פסוק שהוא אמת לוגית, כי קחו בתור מודל את המספרים הטבעיים - לכל מספר טבעי <span class="math">\(x\)</span> קיים מספר גדול ממנו <span class="math">\(y\)</span>, אבל אין אף מספר טבעי שגדול מעצמו. מה השתבש? הבעיה היא שאנחנו משתמשים ב-<span class="math">\(y\)</span> בתפקיד כפול: בתוך <span class="math">\(\varphi\)</span> הוא משתנה <strong>מכומת</strong>, בעוד ש-<span class="math">\(x\)</span> הוא משתנה <strong>חופשי</strong> בתוך <span class="math">\(\varphi\)</span>. בכך שאנחנו מציבים את <span class="math">\(y\)</span> במקום <span class="math">\(x\)</span> אנחנו הופכים משהו שלפני שניה היה חופשי (ולכן לא מושפע מהכמת <span class="math">\(\exists y\)</span>) למשהו קשור (שכן מושפע מהכמת הזה). זה סוג שינוי שאנחנו חייבים למנוע. זה מוביל אותנו להגדרה שהיא קצת קשה לעיכול אם לא רואים לה קודם מוטיבציה: שם עצם <span class="math">\(t\)</span> הוא <strong>חופשי להצבה</strong> במקום <span class="math">\(x\)</span> בפסוק <span class="math">\(\varphi\)</span> אם <span class="math">\(t\)</span> לא מכיל אף משתנה <span class="math">\(y\)</span> כך שיש מופע חופשי של <span class="math">\(x\)</span> ב-<span class="math">\(\varphi\)</span> שנופל תחת כמת עבור <span class="math">\(y\)</span>. זו הגדרה מסובכת מבחינה מילולית, אבל העיקרון ברור - אנחנו לא רוצים להחליף את <span class="math">\(x\)</span> במשהו, ואז לגלות שבתוך המשהו היה משתנה שפתאום הופך להיות מכומת.</p>
+<p>עוד נקודה שצריך לשים לב אליה היא ש-<span class="math">\(\varphi\)</span> עשוי להכיל גם מופעים לא חופשיים של <span class="math">\(x\)</span>, ובהם אסור להציב. זה מקרה קצה מוזר למדי אבל עדיין יש להתחשב בו. הנה דוגמה: ניקח בתור <span class="math">\(\varphi\)</span> את <span class="math">\(\exists x\left(x&gt;0\right)\)</span> ובתור <span class="math">\(t\)</span> את הקבוע <span class="math">\(0\)</span>, ונקבל:</p>
+<p><span class="math">\(\forall x\left(\exists x\left(x&gt;0\right)\right)\to\left(\exists x\left(0&gt;0\right)\right)\)</span></p>
+<p>שהוא כמובן לא נכון. הבעיה כאן היא הפוכה ביחס לבעיה הקודמת: קודם הפכנו מישהו לא מכומת למכומת, ואילו כאן אנחנו משתמשים בהצבה לתוך <span class="math">\(x\)</span> כדי "להימלט" מהכמת <span class="math">\(\exists x\)</span>. הפתרון הוא פשוט למדי: לא מציבים את <span class="math">\(t\)</span> בתוך מופעים מכומתים של <span class="math">\(x\)</span> ב-<span class="math">\(\varphi\)</span> אלא רק במופעים החופשיים שלו.</p>
+<p>עכשיו אפשר סוף סוף לנסח את תבנית האקסיומה במפורש. התבנית היא:</p>
+<ol start="4">
+    <li><span class="math">\(\forall x\varphi\to\psi\)</span></li>
+</ol>
+<p>כאשר <span class="math">\(\psi\)</span> מתקבל מ-<span class="math">\(\varphi\)</span> על ידי הצבה בכל מופע חופשי של <span class="math">\(x\)</span> ב-<span class="math">\(\varphi\)</span> שם עצם <span class="math">\(t\)</span> כלשהו שהוא חופשי להצבה במקום <span class="math">\(x\)</span> ב-<span class="math">\(\varphi\)</span>.</p>
+<p>צריך כמובן להוכיח שכל נוסחה כזו היא אכן אמת לוגית, מה שניתן לעשות באופן ישיר למדי הישר מהגדרות הסמנטיקה של לוגיקה מסדר ראשון ואוותר על כך כאן (ההוכחה דומה למה שעשיתי לעיל עבור <span class="math">\(\varphi=R\left(x\right)\)</span>).</p>
+<p>בואו נעבור להתבונן על נוסחה אחרת שעדיין אין לנו יכולת להוכיח במערכת שלנו:</p>
+<p><span class="math">\(\forall x\left(R\left(y\right)\to S\left(x\right)\right)\to\left(R\left(y\right)\to\forall xS\left(x\right)\right)\)</span></p>
+<p>כאן <span class="math">\(R,S\)</span> הם סימני יחס כלשהם שנמצאים פה בעיקר לצורך הדוגמה. מה הולך פה? הנוסחה הזו היא פשוט דרך אחרת להגיד שאם יש לנו כמת על שני דברים (במקרה שלנו <span class="math">\(R,S\)</span>) כך שהכמת בכלל לא רלוונטי לראשון מביניהם, אפשר להעביר אותו אל השני בלבד וחסל. נסו להוכיח שהנוסחה הזו היא אמת לוגית; אין כאן הרבה יותר ממשחק בהגדרות.</p>
+<p>הפורמליזציה של תבנית האקסיומה הזו פשוטה:</p>
+<ol start="5">
+    <li><span class="math">\(\forall x\left(\varphi\to\psi\right)\to\left(\varphi\to\forall x\psi\right)\)</span></li>
+</ol>
+<p>כאשר הדרישה היא ש-<span class="math">\(x\)</span> איננו משתנה חופשי ב-<span class="math">\(\varphi\)</span>. קל לראות שהדרישה הזו הכרחית כדי שהתבנית תגדיר נוסחאות אמיתיות לוגיות; בואו נביט על <span class="math">\(\forall x\left(x&gt;0\to x&gt;0\right)\to\left(x&gt;0\to\forall x\left(x&gt;0\right)\right)\)</span> שהוא בבירור לא אמת לוגית - אגף ימין שלו בבירור מתקיים אבל אגף שמאל אומר שאם <span class="math">\(x\)</span> <strong>ספציפי</strong> הוא גדול מאפס אז נובע מכך ש<strong>כל <span class="math">\(x\)</span></strong> הוא גדול מאפס וזה בוודאי לא נכון.</p>
+<p>האם באמת היה צריך להוסיף את תבנית האקסיומה החדשה הזו? האם אי אפשר לקבל אותה מהדברים הקיימים? לא ממש. התבנית הקודמת שהצגתי יודעת <strong>להסיר</strong> <span class="math">\(\forall\)</span>; היא לא יודעת <strong>להזיז</strong> אותו. זה מרמז גם על מה שעדיין חסר לנו - דרך <strong>לייצר</strong> <span class="math">\(\forall\)</span>. לצורך כך אוסיף <strong>כלל היסק</strong> חדש שנקרא <span class="math">\(\mbox{Gen}\)</span> (מלשון Generalization - הכללה). הכלל מקבל פסוק <span class="math">\(\varphi\)</span> ומייצר ממנו את <span class="math">\(\forall x\varphi\)</span> עבור משתנה כלשהו <span class="math">\(x\)</span>, וניתן להשתמש בו גם כאשר <span class="math">\(x\)</span> כן מופיע חופשי ב-<span class="math">\(\alpha\)</span>. עם זאת, יש עליו סייג קטן: אם <span class="math">\(\Phi\)</span> היא קבוצת ההנחות שבה אנחנו משתמשים בהוכחה שלנו, אסור להשתש ב-Gen עבור אף משתנה <span class="math">\(x\)</span> שמופיע חופשי בהנחה כלשהי ב-<span class="math">\(\Phi\)</span>. אצלנו ממילא אנחנו הולכים לדבר רק על קבוצת הנחות שהן <strong>פסוקים</strong>, כלומר נוסחאות בלי משתנים חופשיים, כך שהסייג הזה לא יהיה רלוונטי לנו ונוכל להשתמש ב-Gen בחופשיות.</p>
+<p>תחת הסייג הזה פשוט למדי להוכיח ש-Gen עובד: נניח ש-<span class="math">\(\Phi\models\varphi\)</span>, כלומר כל מבנה <span class="math">\(\mathcal{M}\)</span> והשמה <span class="math">\(z\)</span> מקיימים שאם <span class="math">\(\mathcal{M}\models_{z}\Phi\)</span> אז <span class="math">\(\mathcal{M}\models_{z}\varphi\)</span>. כדי להראות ש-<span class="math">\(\mathcal{M}\models_{z}\forall x\varphi\)</span> צריך להראות שמתקיים <span class="math">\(\mathcal{M}\models_{z\left[x\leftarrow a\right]}\varphi\)</span> לכל <span class="math">\(a\in D^{\mathcal{M}}\)</span>. כעת, מכיוון ש-<span class="math">\(x\)</span> לא מופיע חופשי באף הנחה ב-<span class="math">\(\Phi\)</span> הרי ש-<span class="math">\(\mathcal{M}\models_{z\left[x\leftarrow a\right]}\Phi\)</span> (השינוי של הערך ש-<span class="math">\(x\)</span> מקבל בהשמה <span class="math">\(z\)</span> לא משפיע על ערך האמת ש-<span class="math">\(z\)</span> נתנה לפסוקי <span class="math">\(\Phi\)</span>) ולכן <span class="math">\(\mathcal{M}\models_{z\left[x\leftarrow a\right]}\varphi\)</span>.</p>
+<p>האם סיימנו להציג את מערכת ההוכחה? תלוי. בהגדרות מסויימות של לוגיקה מסדר ראשון, כן; אבל אני הגדרתי לוגיקה מסדר ראשון כשהיא כוללת את סימן השוויון, והוא זקוק לטיפול מיוחד, מכיוון שהסמנטיקה שלו מיוחדת. הדרך הפשוטה ביותר להבין זאת היא להיות מודעים לכך שכרגע אין למערכת ההוכחה שלנו שום דרך להוכיח את הנוסחה הבאה:</p>
+<p><span class="math">\(x=x\)</span></p>
+<p>די ברור שאפשר להוסיף אותה כתבנית אקסיומה, אבל זה עדיין לא מספיק. צריך עוד תבנית אקסיומה שתגיד לנו שאם שני משתנים הם שווים בערכם, אז כל שני שמות עצם שזהים פרט לאותם משתנים גם כן שווים בערכם, וכל שתי נוסחאות שזהות פרט לאותם משתנים הן שקולות. פורמלית, אז אלו האקסיומות שקשורות לשוויון (<span class="math">\(x,y\)</span> מייצגים משתנים, <span class="math">\(t,s\)</span> מייצגים שמות עצם, <span class="math">\(\varphi,\psi\)</span> מייצגים נוסחאות):</p>
+<ol>
+    <li><span class="math">\(x=x\)</span></li>
+    <li><span class="math">\(x=y\to t=s\)</span> כאשר <span class="math">\(s\)</span> מתקבל מ-<span class="math">\(t\)</span> על ידי החלפת מופע אחד או יותר של <span class="math">\(x\)</span> ב-<span class="math">\(y\)</span>.</li>
+    <li><span class="math">\(x=y\to\left[\varphi\to\psi\right]\)</span> כאשר <span class="math">\(\psi\)</span> מתקבל מ-<span class="math">\(\varphi\)</span> על ידי החלפת מופע אחד או יותר של <span class="math">\(x\)</span> ב-<span class="math">\(y\)</span>.</li>
+</ol>
+<p>האם סיימנו? באופן מפתיע למדי, התשובה היא כן! מסתבר שדי באקסיומות וכללי ההיסק שהראיתי כדי להוכיח כל פסוק בלוגיקה מסדר ראשון שנובע לוגית מקבוצת פסוקים של הנחות. כלומר, כעת אני יכול להוכיח את משפט השלמות והנאותות הבא: אם <span class="math">\(\Phi\)</span> היא קבוצת פסוקים בלוגיקה מסדר ראשון ו-<span class="math">\(\varphi\)</span> הוא פסוק כלשהו, אז <span class="math">\(\Phi\vdash\varphi\iff\Phi\models\varphi\)</span>. את ההוכחה אתחיל להציג בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2013/02/25/godel_completeness_proof_1/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">משפט השלמות של גדל, ההוכחה (חלק א&#39;)</span>
+            </a>
+            
+            
+            
+            <a href="/2013/02/02/hilbert_tenth_universal_quantifier/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">הבעיה העשירית של הילברט - לכל דבר טוב (חסום) יש סוף</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נגזרת - בשביל מה זה טוב? (בעיות קיצון, חלק א&#39;) - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>נגזרת - בשביל מה זה טוב? (בעיות קיצון, חלק א&#39;)</h1>
+            <div class="post-meta">
+                <span class="date">2011-01-15</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/חשבון אינפיניטסימלי.html">חשבון אינפיניטסימלי</a>
+                    
+                    <a href="/tags/משוואות דיפרנציאליות.html">משוואות דיפרנציאליות</a>
+                    
+                    <a href="/tags/מתמטיקה תיכונית.html">מתמטיקה תיכונית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>כשהייתי קטן תהיתי (יש מישהו שלא תהה על זה?) מה הדרך האופטימלית לזרוק כדור כך שהוא יפול במרחק הגדול ביותר האפשרי ממני. ברור שצריך לזרוק בשיא הכוח שלך, אבל באיזו זווית ביחס לאדמה? אם זורקים יותר מדי לגובה, הכדור אמנם יתעופף לגובה אבל לא יתרחק ממני כמעט; ואם זורקים יותר מדי לאורך הכדור אמנם יבלה את חלק הארי של התנועה שלו בהתרחקות ממני אבל ייפול לאדמה חיש קל. הניחוש היה שהפשרה הטבעית בין קדימה ולמעלה, כלומר זווית של 45 מעלות, היא האופטימלית - אבל איך אפשר להשתכנע בכך שזה נכון? כאן נכנסת המתמטיקה לעזרתנו, ובפרט החשבון הדיפרנציאלי.</p>
+<p>השלב הראשון הוא לבנות מודל מתמטי שמתאר את התנועה. כלומר, פונקציה שאומרת לי איפה נמצא הכדור בכל שניה החל מרגע הזריקה. פונקציה כזו תהיה תלויה ב<strong>פרמטרים</strong>: גודל הכוח שהשקעתי בזריקה, והזווית שבה זרקתי. בנוסף לכך, הפונקציה קצת מחוכמת - גם הגובה וגם המרחק של הכדור משתנים בכל עת, כך שבפועל אני צריך <strong>שתי</strong> פונקציות שונות; ואני צריך "לעצור" את המודל ברגע שבו הפונקציה שמתארת את הגובה מקבלת את הערך 0, ולמדוד כמה מרחק הכדור עבר עד אז. בנייה של מודלים כאלו, לטעמי, היא ממש כיף. אין חוקים - אף אחד לא אומר לך מה לעשות, או באיזה אלגוריתם להשתמש; אתה פשוט מגשש ומנסה להמציא דברים בעצמך כדי לתאר את הסיטואציה באופן הטוב ביותר האפשרי. לכן אני ממליץ לכם לנסות ולפתור את הבעיה בעצמכם ואז לחזור ושנשווה תשובות.</p>
+<p>טוב, אז מה אני עושה? ראשית, צריך להבין אילו כוחות משפיעים על הכדור במהלך התנועה שלו. יש את הכוח שלי שבא לידי ביטוי בזריקה עצמה, אבל זה לא כוח שפועל לאורך זמן - בשנייה 0, שבה המודל יתחיל, הזריקה כבר בוצעה ואין צורך להכניס אותה באופן ישיר למודל. היא תיכנס באופן עקיף באמצעות המהירות ההתחלתית של הכדור. הכוח היחיד שפועל על הכדור במהלך התנועה שלו, והוא מה שגורם לו ליפול בסופו של דבר, הוא כוח המשיכה. גם לכוח המשיכה אין צורך להתייחס באופן ישיר במודל - כל שצריך להניח הוא שכוח המשיכה גורם לכדור לתאוצה (שינוי במהירות) קבועה כלפי מטה. פיזיקלית, ההנחה הזו אינה נכונה - ככל שהכדור גבוה יותר, כך תאוצת הכובד שלו קטנה יותר - אבל בפועל היא מתארת את הסיטואציה מספיק טוב לצרכים שלי כי הכדור לא צפוי להגיע לגובה כזה שבו ההבדלים יהיו מורגשים (אבל, ישאלו המתמטיקאים שבחבורה, האין זה אומר ש-45 מעלות הן <strong>לא</strong> הדבר הנכון בהינתן התכונה הזו של כוח הכובד? ובכן, כן, אתם צודקים, הנה לכם תרגיל בונוס לבית).</p>
+<p>הבה ונסמן ב-<span class="math">\(v_{0}\)</span> את המהירות ההתחלתית של הכדור. מכיוון שהכדור נזרק בזווית כלשהי, שנסמן אותה ב-<span class="math">\(\theta\)</span>, המהירות הזו מתפרקת לשני רכיבים - אחד בציר <span class="math">\(x\)</span> (אופקי) ואחד בציר <span class="math">\(y\)</span> (אנכי). אופן הפירוק הזה ניתן לתיאור כמשולש ישר זווית שהיתר שלו הוא וקטור המהירות <span class="math">\(v_{0}\)</span>, והניצבים הם הרכיבים של <span class="math">\(v_{0}\)</span> בצירי <span class="math">\(x,y\)</span>: נסמן אותם <span class="math">\(v_{0}^{x},v_{0}^{y}\)</span> בהתאמה. הגודל שלהם נקבע על פי הגודל של <span class="math">\(v_{0}\)</span> ו-<span class="math">\(\theta\)</span> - זהו אחד מהשימושים הבסיסיים של הפונקציות הטריגונומטריות. מקבלים ש-<span class="math">\(v_{0}^{x}=v_{0}\cos\theta\)</span> ו-<span class="math">\(v_{0}^{y}=v_{0}\sin\theta\)</span>.</p>
+<p>בציר <span class="math">\(x\)</span> אין תאוצה כלל במשך כל תנועת הכדור, ולכן המהירות של הכדור בציר <span class="math">\(x\)</span> היא פונקציה קבועה שאינה תלויה בזמן <span class="math">\(t\)</span>: <span class="math">\(v^{x}\left(t\right)=v_{0}^{x}\)</span>. מהפונקציה הזו ניתן לקבל חיש קל את פונקצית ה<strong>מיקום</strong> בציר <span class="math">\(x\)</span> ביחס לזמן: אנחנו יודעים שהמהירות היא נגזרת המיקום (זוכרים? מהירות הייתה הדוגמה ה"קלאסית" שלנו לנגזרת), ולכן אם נמצא פונקציה קדומה של <span class="math">\(v^{x}\left(t\right)\)</span>, מצאנו את פונקצית המיקום. פונקציה קדומה של קבוע קל למצוא: <span class="math">\(x\left(t\right)=t\cdot v_{0}^{x}\)</span> היא דוגמה לפונקציה שכזו. אל תתנו לסימונים שלי לבלבל אתכם - המשתנה של הפונקציה הוא <span class="math">\(t\)</span>, ולפונקציה עצמה קוראים <span class="math">\(x\)</span>, כי היא מתארת את המיקום בציר <span class="math">\(x\)</span>. אלו סימונים שמאוד מבלבלים למי שרגיל כל היום לגזור פונקציות שנראות כמו <span class="math">\(f\left(x\right)\)</span> אבל בדיוק בגלל זה חשוב לראות דרכי סימון אחרות - כך אפשר לראות שבאמת מבינים מה הולך בתרגיל ואת מה גוזרים ואיך ומה, ולא רק שפועלים אלגוריתמית ובכל פעם שרואים <span class="math">\(x\)</span> איפה שהוא רצים לגזור אותו.</p>
+<p>זוכרים שאמרנו שלכל פונקציה יש אינסוף פונקציות קדומות, שנבדלות זו מזו בקבוע? אז איך אנחנו יודעים ש-<span class="math">\(x\left(t\right)\)</span> שהצעתי היא ה"נכונה" למודל שלי? התשובה היא שלא יודעים מייד, אלא צריכים להשתמש ב<strong>תנאי התחלה</strong>. אני יודע שבזמן <span class="math">\(t=0\)</span> אני עומד בראשית הצירים - למה? כי ככה נוח לי לסמן את ראשית הצירים, בתור המקום שבו אני עומד. לכן צריך להתקיים <span class="math">\(x\left(0\right)=0\)</span>, וזה אכן מה שקורה עבור הפונקציה שלי (אבל עבור כל פונקציה מהצורה <span class="math">\(t\cdot v_{0}^{x}+C\)</span> עם <span class="math">\(C\ne0\)</span> זה לא היה קורה, ולכן הבחירה ב-<span class="math">\(C=0\)</span> הייתה בחירת הקבוע הנכונה). אם כן, <span class="math">\(x\left(t\right)=t\cdot v_{0}^{x}\)</span> היא פונקציה שמתארת נכונה את מסלול הכדור שלי בציר <span class="math">\(x\)</span> <strong>כל עוד</strong> הכדור לא פגע באדמה. עכשיו כבר מותר לגלות שמה שעשינו כשחיפשנו את <span class="math">\(x\left(t\right)\)</span> היה לפתור <strong>משוואה דיפרנציאלית</strong>: הייתה נתונה לנו משוואה שמערבת נגזרת של פונקציה כלשהי, וממנה מצאנו את הפונקציה עצמה. כמובן שהמשוואה שלנו הייתה פשוטה מאוד, אבל זו התחלה.</p>
+<p>השלב הבא הוא למצוא את <span class="math">\(y\left(t\right)\)</span> - הפונקציה שמתארת את הגובה כפונקציה של הזמן. כאן הסיטואציה יותר מורכבת בגלל שהמהירות של הכדור <strong>משתנה עם הזמן</strong>, בגלל שפועל עליה כוח הכובד. גם כאן אנו עומדים לפתור משוואה דיפרנציאלית אבל מעט יותר מסובכת, ובהתאם נציג בצורה קצת יותר מדויקת את מה שאנחנו עושים. מה כבר ידוע לנו על הפונקציה <span class="math">\(y\left(t\right)\)</span>? ידוע לנו תנאי ההתחלה <span class="math">\(y\left(0\right)=0\)</span> (בחרתי לסמן את הגובה שלי בזמן 0 בתור 0; אם אני אשאל את אותה שאלה על זריקת כדור מבניין, למשל, אצטרך לבחור כאן תנאי התחלה שונה שיוביל לפתרון שונה). ידוע לנו גם כי <span class="math">\(y^{\prime}\left(0\right)=v_{0}^{y}\)</span> - המהירות בזמן 0 היא בדיוק זו שנתתי לכדור בעצמי. בנוסף, ידוע לנו ש-<span class="math">\(y^{\prime\prime}\left(t\right)=-g\)</span> כאשר <span class="math">\(g\)</span> הוא קבוע תאוצת הכובד, והוא שלילי בגלל שהתאוצה מגדילה את מהירות הכדור בכיוון השלילי - "למטה". מכל פיסות המידע הללו צריך להרכיב את <span class="math">\(y\left(t\right)\)</span> איכשהו.</p>
+<p>השלב הראשון הוא זה: אם <span class="math">\(y^{\prime\prime}\left(t\right)=-g\)</span> אז אחרי אינטגרציה מקבלים ש-<span class="math">\(y^{\prime}\left(t\right)=-gt+C\)</span> עבור <span class="math">\(C\)</span> כלשהו. כדי למצוא את <span class="math">\(C\)</span>, יש להשוות לאפס: <span class="math">\(v_{0}^{y}=y^{\prime}\left(0\right)=-g\cdot0+C=C\)</span>. כלומר, קיבלנו ש-<span class="math">\(C=v_{0}^{y}\)</span> ולכן <span class="math">\(y^{\prime}\left(t\right)=-gt+v_{0}^{y}\)</span>. כעת צריך לבצע עוד אינטגרציה; איך עושים אינטגרציה לפונקציה שאינה קבוע? מכיוון שהפונקציה היא פולינום גם זה לא קשה במיוחד לביצוע ומקבלים <span class="math">\(y\left(t\right)=-g\frac{t^{2}}{2}+v_{0}^{y}t+C\)</span> וכל שנותר הוא למצוא את ה-<span class="math">\(C\)</span>. השוואה ל-<span class="math">\(y\left(0\right)=0\)</span> מראה לנו ש-<span class="math">\(C=0\)</span> ולכן <span class="math">\(y\left(t\right)=-\frac{g}{2}t^{2}+v_{0}^{y}t\)</span>.</p>
+<p>הגורם הריבועי בפונקציה <span class="math">\(y\left(t\right)\)</span> הוא שגורם לכך שאם נצייר את מסלול התנועה של הכדור, הוא לא יהיה קו ישר אלא צורה שנקראת <strong>פרבולה</strong>. מכיוון שהסימן של המקדם של <span class="math">\(t^{2}\)</span> הוא שלילי, זוהי פרבולה "בוכה", מה שמתאים לאופן האינטואיטיבי שבו אנו חושבים על מסלול תנועתו של כדור שנזרק. אני משער שלרובכם הרעיון הזה כבר טבעי עד שאתם לא שמים אליו לב בכלל, אבל לדעתי זה פשוט נפלא מה שהלך פה - על ידי חישוב מתמטי בלבד, במודל מופשט למדי, קיבלנו תיאור <strong>גרפי</strong> של האופן שבו הכדור צריך להתעופף. לא לקחנו את צורת התעופפות הכדור כאקסיומה או כגורם הבסיסי במודל; בתור גורמים בסיסיים לקחנו הנחות בסיסיות יותר (המרכזית - פעולת כוח הכובד) ומהן הסקנו את צורתו של מסלול הכדור. הכוח הנבואי הזה שנותנת לנו המתמטיקה הוא לדעתי דבר מרשים ביותר.</p>
+<p>טוב, הבה ונמשיך. כעת אנו יודעים בדיוק איך מסלול תנועתו של הכדור נראה, והדבר הבא שאנו רוצים לדעת הוא מתי הכדור יפגע באדמה - עבור איזה <span class="math">\(t\)</span> זה מתקיים. במילים אחרות, לפתור את המשוואה <span class="math">\(-\frac{g}{2}t^{2}+v_{0}^{y}t=0\)</span>. פתרון אחד הוא <span class="math">\(t=0\)</span> אבל הוא מנוון ולא מעניין - אנחנו רוצים לדעת מתי הכדור נופל <strong>שוב</strong> לאדמה, לא מתי הוא היה <strong>בהתחלה</strong> בגובה אפס. אז אם אנחנו מניחים ש-<span class="math">\(t\ne0\)</span> אפשר לחלק בו, להעביר אגפים ולקבל <span class="math">\(\frac{g}{2}t=v_{0}^{y}\)</span>, כלומר <span class="math">\(t=\frac{2v_{0}^{y}}{g}\)</span>. באופן לחלוטין בלתי מפתיע אנו רואים שככל שהמהירות ההתחלתית גבוהה יותר, כך הזמן גדול יותר, וככל שתאוצת הכובד גדולה יותר, כך הזמן קטן יותר. זה אולי נראה אידיוטי לציין זאת, אבל בחינה "איכותית" כזו של המשואוות שמקבלים היא דרך טובה לוודא שלא עשינו טעויות חישוב בדרך (כמובן, לפעמים צצות תוצאות מפתיעות ואז אנחנו שוברים את הראש בחיפוש אחר טעות שלא קיימת).</p>
+<p>כעת, המרחק שהכדור עבר בציר <span class="math">\(x\)</span> עד פגיעתו באדמה הוא בדיוק <span class="math">\(x\left(\frac{2v_{0}^{y}}{g}\right)=\frac{2v_{0}^{y}v_{0}^{x}}{g}\)</span>. משוואה סימטרית ויפה, ועכשיו סיימנו ואפשר... אה, רגע. מה בכלל רצינו לעשות, שוב?</p>
+<p>המטרה שלנו, כזכור, הייתה למצוא את <span class="math">\(\theta\)</span> האופטימלי עבור הזריקה, כלומר זה שעבורו המרחק בציר <span class="math">\(x\)</span> שנעבור יהיה הגדול ביותר. עשינו המון חישובים וקיבלנו ביטוי שבו <span class="math">\(\theta\)</span> בכלל לא מופיעה - איך כל זה עזר לנו בכלל?</p>
+<p>טוב, אני משקר פה - ברור ש-<span class="math">\(\theta\)</span> מופיע בתוצאה שלנו, פשוט באופן סמוי - הרי <span class="math">\(v_{0}^{y}=v_{0}\sin\theta\)</span> ו-<span class="math">\(v_{0}^{x}=v_{0}\cos\theta\)</span>. אם נציב את זה לתוצאה, נקבל <span class="math">\(\frac{2v_{0}^{2}\sin\theta\cos\theta}{g}\)</span>. ייתכן שלחלקכם קופצת כרגע לעיניים זהות טריגונומטרית - <span class="math">\(\sin2\theta=2\sin\theta\cos\theta\)</span>. זו אחת מהזהויות הללו שכדאי לזכור בעל פה, עד כמה שזה מבאס לגלות שבכלל יש במתמטיקה משהו שצריך לזכור בעל פה (וטענה כמו "זה בדף נוסחאות אז לא צריך" היא קצת בעייתית בהתחשב בכך שצריך לזהות את הדברים הללו כשהם קופצים לנו לעיניים מהדף, ואת זה אפשר לעשות רק אם זוכרים את הנוסחה). אם כן, את מה שקיבלנו אפשר לתאר בתור <span class="math">\(\frac{v_{0}^{2}}{g}\sin2\theta\)</span>. וכעת נשאלת השאלה - עבור איזה ערך של <span class="math">\(\theta\)</span> התוצאה שנקבל תהיה מקסימלית?</p>
+<p>בואו נתאר עוד בעיה שבה אנחנו מחפשים ערך קיצוני כלשהו, הפעם מינימום - בעיית החתונה. חתונות הן עסק יקר, אך יש כאלו שסבורים שניהול נכון של כמות האורחים יכול לצמצם את הנזקים, עד כדי <a href="http://www.lee-kal.co.il/article.php?rid=55">מאמרים שלמים</a> העוסקים בכך. השורה התחתונה: לכל חתונה יש שורה של הוצאות קבועות שלא תלויות בכלל באורחים (החל בדי-ג'יי ותמיכה כספית ברב, וכלה בדגיגי פיראנה כמו "עיצוב השולחנות" ו"סידורי הפרחים"). בואו נסמן את המחיר הזה ב-<span class="math">\(A\)</span>. כמו כן, כל אורח עולה סכום כסף מסויים (מחיר המנה שלו וכדומה) - הבה ונסמן סכום זה ב-<span class="math">\(b\)</span>. לסיום, כל אורח גם מביא איתו צ'ק נחמד - הבה ונסמן ב-<span class="math">\(c\)</span> את הסכום הממוצע שכל אורח מביא, וב-<span class="math">\(x\)</span> נסמן את מספר האורחים. אז יש לנו את הנוסחה הבאה שמתארת את מחיר החתונה עבורנו: <span class="math">\(f\left(x\right)=A+\left(b-c\right)x\)</span>. אם <span class="math">\(c\)</span> גדול מ-<span class="math">\(b\)</span> (וזו הנחת יסוד של המאמר) אז די בבירור ככל שיהיו יותר אורחים כך הנזק יקטן, ובשלב מסויים ההפסד שלנו יהפוך להיות שלילי - נרוויח! זה יקרה כאשר <span class="math">\(A+\left(b-c\right)x&lt;0\)</span>, כלומר כאשר <span class="math">\(x&gt;\frac{A}{c-b}\)</span> - אתם מוזמנים לחשב בעצמכם כמה זה יוצא.</p>
+<p>בעולם האמיתי זה לא עובד משתי סיבות. ראשית, יש גבול לכמות האורחים שאולמות מוכנים לסבול, וקרוב לודאי שאולמות גדולים יותר ידרשו יותר כסף. אבל בואו נעזוב את זה ונתמקד במשהו מעניין שנאמר במאמר עצמו - יותר אורחים פירושו הזמנה של אנשים פחות קרובים, ולכן כאלו שמשלמים פחות. כלומר, אפשר לחשוב על <span class="math">\(c\)</span> לא כעל קבוע, אלא כעל משהו שהוא בעצמו פונקציה של <span class="math">\(x\)</span>, ופונקציה שיורדת עם הזמן (ה"רווח" הממוצע שלנו מהאורחים יורד ככל שאנו מזמינים אורחים יותר מרוחקים. כלומר, <span class="math">\(f\left(x\right)=A+\left(b-c\left(x\right)\right)x\)</span>. מה שאנחנו רוצים לעשות הוא למצוא את <span class="math">\(x\)</span> האופטימלי עבורנו - כזה שמבטיח שההפסד שלנו הוא הקטן ביותר האפשרי (כפי שראינו, לא תמיד קיים כזה - אם <span class="math">\(c\left(x\right)\)</span> קבוע הגדול מ-<span class="math">\(b\)</span> זה לא קורה). איך עושים את זה?</p>
+<p>בפוסט הבא נתאר איך מטפלים בשתי הבעיות הללו, ואיך באופן כללי מוצאים נקודות מינימום ומקסימום של פונקציה (ועוד דברים). הפתרון, כמובן, עובר דרך הנגזרת.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2011/01/16/derivative_and_extremal_problems_1-2/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">נגזרת - בשביל מה זה טוב? (בעיות קיצון, חלק ב&#39;)</span>
+            </a>
+            
+            
+            
+            <a href="/2011/01/09/surprising_results_in_complexity_prologue/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">פרוייקט &#34;תוצאות מפתיעות בסיבוכיות&#34; יוצא לדרך!</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

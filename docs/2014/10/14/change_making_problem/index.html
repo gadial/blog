@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בעיית המטבעות - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>בעיית המטבעות</h1>
+            <div class="post-meta">
+                <span class="date">2014-10-14</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה לינארית.html">אלגברה לינארית</a>
+                    
+                    <a href="/categories/משחקים וחידות מתמטיות.html">משחקים וחידות מתמטיות</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיית המטבעות.html">בעיית המטבעות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>אני רוצה להציג הפעם בעיה שמתאימה בול לבלוג: היא קלה לניסוח, מעניינת ו<a href="http://graal.ens-lyon.fr/~abenoit/algo09/coins2.pdf">בעלת פתרון</a> שלא דורש מתמטיקה עמוקה בכלל, כך שהוא ניתן להבנה על ידי קוראים חסרי רקע במתמטיקה (אבל שכן מוכנים להשקיע מאמץ בנסיון להבין); מצד שני, ההצגה והפתרון שלה נותנים לנו הזדמנות להרגיש בדיוק מה קורה במתמטיקה - ברמת הניסוחים הפורמליים שמקלים עלינו, ושיטות ההוכחה. בקיצור, אם מעולם לא נתקלתם במתמטיקה, נסו לקרוא את הפוסט הזה!</p>
+<p>אנחנו רוצים לפתור בעיה שקשורה ל<strong>מערכת מטבעות</strong>. נתון לנו סכום כסף מסויים ויש מספר סוגי מטבעות שאנחנו יכולים להשתמש בהם - איך אנחנו מייצגים את הסכום בעזרת המטבעות?</p>
+<p>נתחיל מדוגמאות קונקרטיות. בישראל כיום יש לנו מטבעות עבור 10 אגורות, 50 אגורות, 1 שקל, 2 שקלים, 5 שקלים, 10 שקלים, 20 שקלים, 50 שקלים, 100 שקלים ו-200 שקלים. המילה "מטבעות" קצת מטעה, כמובן, כי 20,50,100,200 הם סכומים שבאים בשטרות, לא במטבעות; אבל אני משתמש במילה "מטבעות" כדי לתאר כל סוג של כסף מזומן. כמו כן, אין לי כוח לאגורות אז בואו נשכח מקיומן ונדבר רק על סכומים שהם מספר שלם של שקלים. עכשיו, איך אפשר לייצג 12 ש"ח? הנה כמה דרכים: אפשר להשתמש ב-12 מטבעות של 1 ש"ח; אפשר להשתמש ב-6 מטבעות של 2 ש"ח; אפשר להשתמש ב-5 מטבעות של 2 ש"ח ובשני מטבעות של 1 ש"ח; אפשר להשתמש במטבע אחד של 10 ש"ח ומטבע אחד של 2 ש"ח, ועוד ועוד. אנחנו רואים שגם עבור סכום כסף קטן יחסית יש לו המון ייצוגים שונים. השאלה היא - מה הייצוג ה<strong>אופטימלי</strong>?</p>
+<p>אופטימליות יכולה להימדד בכמה דרכים, אבל הדרך הכי מתבקשת היא פשוט כמה שפחות מטבעות (אני מתעלם כאן מעניינים של משקל וגודל המטבעות שאולי משפיעים על מה שאנחנו נתפוס כ"אופטימלי"). לכן ההצגה של 12 בתור 10 ועוד 2 היא האופטימלית, כי היא משתמשת בשני מטבעות בלבד.</p>
+<p>עכשיו, נניח שאני רוצה לייצג את 31 בצורה אופטימלית. איך עושים את זה? עצרו רגע, וחשבו - ראשית כל, חשבו מה הצורה שבה אתם תחלקו את הסכום הזה למטבעות; ושנית, חשבו האם זו דרך החלוקה האופטימלית.</p>
+<p>חשבתם? קרוב לודאי שהחלוקה שחשבתם עליה היא 20 ועוד 10 ועוד 1. זו חלוקה מאוד <strong>טבעית</strong>, שנובעת משיטת חלוקה שאוהבים לקרוא לה "חמדנית". בשיטה החמדנית, בכל רגע נתון בוחרים בדבר "הכי טוב" שנראה שאפשר לעשות כרגע. ספציפית אצלנו זה אומר שאנחנו בוחרים את המטבע בעל הערך הגבוה ביותר שעדיין לא עובר את הסכום שאנחנו רוצים לייצג כרגע, ואז מנסים לייצג את מה שנשאר. במקרה של 31 התחלנו מ-20 כי המטבע הבא (50) כבר גדול מדי. נותר לנו לייצג את 11, ולכן המטבע הבא היה 10, וזה שאחריו היה 1. בדומה, עבור 76 נקבל בשיטה החמדנית את 50 ואז 20 ואז 5 ואז 1.</p>
+<p>האם החלוקות החמדניות הללו אופטימליות? התשובה היא חיובית, וזאת בשל תכונה נחמדה שיש למערכת המטבעות בישראל - <strong>החלוקה החמדנית היא תמיד אופטימלית</strong> במערכת הזו. זה מעלה מייד שאלה אחרת - האם קיימת מערכת מטבעות שבה החלוקה החמדנית היא לא תמיד אופטימלית?</p>
+<p>למרבה המזל, בבריטניה הייתה נהוגה בעבר שיטת מטבעות הזויה לחלוטין, שבה התכונה הנחמדה הזו לא התקיימה. במערכת המטבעות הזו ערכי המטבעות היו 1,3,6,12,24,30,60,240 (יחידת המטבע הבסיסית היא פני). מה האלגוריתם החמדני יתן עבור 48 במערכת המטבעות הזו? קל לראות שאת החלוקה 30+12+6, שכוללת 3 מטבעות. לעומת זאת, החלוקה 24+24 כוללת רק 2 מטבעות ולכן עדיפה. מסקנה: קיימות מערכות של מטבעות שבהן החלוקה החמדנית אינה אופטימלית.</p>
+<p>מכאן נובעות שתי שאלות הכרעה אלגוריתמיות:</p>
+<ol>
+    <li>נתונה מערכת מטבעות ונתון סכום כלשהו. האם החלוקה החמדנית של הסכום הזה במערכת המטבעות הנתונה היא אופטימלית?</li>
+    <li>נתונה מערכת מטבעות. האם החלוקה החמדנית במערכת המטבעות הנתונה <strong>תמיד</strong> נותנת את החלוקה האופטימלית?</li>
+</ol>
+<p>הבעיה הראשונה נראית קלה יותר מן השניה - בראשונה אנחנו רק צריכים לבדוק סכום אחד, בעוד שבשאלה השניה אנחנו צריכים איכשהו לומר משהו על <strong>כל</strong> הסכומים האפשריים. לכן הטוויסט הבא כל כך נחמד: הבעיה הראשונה היא <strong>קשה</strong> אלגוריתמית, במובן מאוד קונקרטי שניתן להוכיח; ואילו הבעיה השניה היא משמעותית יותר <strong>קלה</strong> אלגוריתמית. פורמלית, למי שמכיר, הבעיה הראשונה היא NP-שלמה בעוד שהבעיה השניה היא ב-P.</p>
+<p>איך זה הגיוני בכלל? פשוט מאוד: כדי לדעת אם מערכת מטבעות אינה מקיימת את תכונת ה"חמדני הוא אופטימלי" מספיק למצוא דוגמה נגדית <strong>אחת</strong>. באופן ממוזל, בזכות המבנה של הבעיה, מובטח לנו תמיד שאם קיימת דוגמה נגדית אז תהיה קיימת דוגמה נגדית <strong>פשוטה</strong> שיהיה קל למצוא ולבדוק. לעומת זאת, אם שואלים אותנו על סכום שרירותי כלשהו, בכלל לא מובטח לנו שיהיה קל לבדוק אותו.</p>
+<p>מה שנכון הוא שאפשר לנסות לתקוף את בעיה 1 בעזרת בעיה 2: ראשית כל נבדוק אם מערכת המטבעות שלנו היא כזו שבה חלוקה חמדנית היא תמיד אופטימלית. אם זה אכן המצב, אז התשובה לשאלה ב-1 היא תמיד "כן" בלי קשר לשאלה מה הסכום שלנו; כלומר, במקרה כזה גם שאלה 1 היא קלה. אבל אם התשובה ל-2 הייתה "לא" אז אין לנו מושג איך לענות ל-1; ייתכן שהחלוקה החמדנית לא עובדת עבור הסכום שלנו וייתכן שהיא כן. כלומר, זה שאנחנו יודעים איך לפתור את 2 ביעילות לא עזר לנו לפתור את 1.</p>
+<p>מה שאני רוצה לעשות בפוסט הזה הוא שלושה דברים: ראשית, להראות איך מפרמלים מתמטית את הבעיות הללו; שנית, להסביר מה האלגוריתם היעיל שפותר את 2; ולבסוף, לומר משהו על איך מראים ש-1 קשה. רק עבור ה"לבסוף" אצטרך לדרוש ידע מוקדם כלשהו, למרות שתוכלו פשוט להאמין לכמה הצהרות שאזרוק שם ולוותר על הידע המוקדם הזה.</p>
+<p>בואו נעבור לניסוחים פורמליים. את מערכת המטבעות נסמן באות <span class="math">\(C\)</span>. מערכת כזו מאופיינת על ידי סדרה של מספרים טבעיים - ערכי המטבעות האפשריים. נסדר אותם מהגדול לקטן, כלומר <span class="math">\(C=\left(c_{1},c_{2},\dots,c_{n}\right)\)</span> כאשר <span class="math">\(c_{1}&gt;c_{2}&gt;\dots&gt;c_{n}\)</span>. כמו כן נניח ש-<span class="math">\(c_{n}=1\)</span>, כי אחרת מערכת המטבעות שלנו לא שלמה ולא יכולה לייצג חלק מהסכומים (לפחות את 1). אז למשל, במערכת הישראלית יש לנו <span class="math">\(C=\left(200,100,50,20,10,5,2,1\right)\)</span> (ו-<span class="math">\(n=8\)</span>). למי שלא מכיר - סדרה כזו של איברים נקראת לעתים קרובות <strong>וקטור</strong> והאיברים האינדיבידואלים בוקטור מכונים <strong>כניסות</strong>.</p>
+<p>עכשיו, <strong>ייצוג</strong> של סכום כלשהו במערכת <span class="math">\(C\)</span> הוא בעצם סדרה של <span class="math">\(n\)</span> מספרים טבעיים, שאומרים "כמה מכל סוג מטבע אנחנו לוקחים". כך למשל <span class="math">\(V=\left(0,0,1,0,1,0,1,0\right)\)</span> הוא ייצוג של 50+10+2, כלומר של 62. עכשיו נכניס לתמונה הוקוס-פוקוס של סימון מתמטי סטנדרטי: אם <span class="math">\(\left(a_{1},\dots,a_{n}\right)\)</span> ו-<span class="math">\(\left(b_{1},\dots,b_{n}\right)\)</span> הם שני וקטורים, אז <strong>המכפלה הסקלרית</strong> שלהם מתקבלת מכפל של איברים באותו מקום בשני הוקטורים וחיבור של כולם. נכון שבכלל לא הבנתם מה אמרתי כרגע? זה כי ניסוחים טקסטואליים הם מסורבלים ונוסחאות קלות יותר להבנה:</p>
+<p><span class="math">\(\left(a_{1},\dots,a_{n}\right)\cdot\left(b_{1},\dots,b_{n}\right)=\sum_{i=1}^{n}a_{i}b_{i}=a_{1}b_{1}+a_{2}b_{2}+\dots+a_{n}b_{n}\)</span></p>
+<p>סימן ה-<span class="math">\(\sum\)</span> הוא סימון מקוצר לסכימה שמקובל במתמטיקה; עבור מי שלא מכיר אותו כתבתי את הסכום יותר במפורש מימינו.</p>
+<p>כעת, חמושים בסימן המכפלה הסקלרית, קל לנו להמשיך: אם <span class="math">\(C\)</span> היא מערכת המטבעות שלנו ו-<span class="math">\(V\)</span> הוא וקטור של טבעיים, אז המספר ש-<span class="math">\(V\)</span> מייצג במערכת <span class="math">\(C\)</span> הוא פשוט <span class="math">\(C\cdot V\)</span>. כמו כן, אם נסתכל על <span class="math">\(V\cdot\left(1,1,\dots,1\right)\)</span> נקבל את מספר המטבעות שבהן <span class="math">\(V\)</span> משתמש (זה בעצם סכום כל הכניסות של <span class="math">\(V\)</span>). נשתמש בסימון המקוצר <span class="math">\(\left|V\right|=V\cdot\left(1,1,\dots,1\right)\)</span> ונאמר ש-<span class="math">\(\left|V\right|\)</span> הוא <strong>המשקל</strong> של <span class="math">\(V\)</span>.</p>
+<p>כעת אנחנו רוצים לתאר את הוקטור שהוא הייצוג הטוב ביותר של מספר <span class="math">\(x\)</span> כלשהו במערכת המטבעות <span class="math">\(C\)</span>. ברור שזה צריך להיות וקטור <span class="math">\(V\)</span> שמקיים <span class="math">\(C\cdot V=x\)</span>, אבל אי אפשר סתם לומר "בואו ניקח מבין כל ה-<span class="math">\(V\)</span> האפשריים את זה בעל המשקל המינימלי", כי אולי יש כמה וקטורים שונים בעלי משקל מינימלי שכזה. למשל, במערכת המוזרה של הבריטים אפשר לייצג את 36 בתור 30+6 או בתור 24+12 - שני ייצוגים מגודל 2, ואין ייצוג מגודל 1 כי אין מטבע של 36. אז צריך לבחור בצורה כלשהי מי מבין שני הייצוגים הללו הוא "טוב יותר", והבחירה שלנו היא להעיף כמה שיותר מטבעות גדולים. כמקודם, גם כאן הפורמליזם יאפשר לי להסביר את הכוונה שלי יותר טוב מאשר מילים.</p>
+<p>למי שמכיר, מה שאנחנו עושים הוא קובעים סדר לקסיקוגרפי על הוקטורים <span class="math">\(V\)</span> האפשריים באופן הטבעי. למי שלא מכיר, הנה מה שזה אומר. ראשית, בואו ניזכר איך מילים מסודרות במילון (בהנחה שמישהו עדיין זוכר איך מילים מסודרות במילון...): ראשית כל מופיעות כל המילים שמתחילות באות א', אחריהן אלו שמתחילות באות ב' וכדומה. כלומר, משווים מילים על פי האות הראשונה שלהן. אם היא שונה, אז באה קודם מי שהאות הראשונה שלה באה קודם. ומה עם מילים שבהן האות הראשונה שווה? עוברים לאות השניה, וכדומה.</p>
+<p>ניקח את אותו רעיון עבור וקטורים. נסמן <span class="math">\(U&lt;V\)</span> אם קיים <span class="math">\(1\le i\le n\)</span> כך ש-<span class="math">\(u_{j}=v_{j}\)</span> לכל <span class="math">\(j&lt;i\)</span> וכמו כן <span class="math">\(u_{i}&lt;v_{i}\)</span>. למשל, <span class="math">\(\left(1,100,500\right)&lt;\left(2,0,3\right)\)</span>. כעת אפשר לומר על וקטור כלשהו <span class="math">\(V\)</span> שהוא <strong>מקסימלי</strong> בקבוצת וקטורים אם לכל וקטור <span class="math">\(U\)</span> שונה ממנו בקבוצה מתקיים <span class="math">\(U&lt;V\)</span>.</p>
+<p>עכשיו אפשר לומר בדיוק מה אנחנו רוצים: בהינתן מערכת מטבעות <span class="math">\(C\)</span> וערך <span class="math">\(x\)</span> כלשהו, אני מסמן ב-<span class="math">\(M\left(x\right)\)</span> (<span class="math">\(M\)</span> מלשון Minimal) וקטור <span class="math">\(V\)</span> שנבחר כך: ראשית אני מסתכל על כל הוקטורים <span class="math">\(U\)</span> המקיימים <span class="math">\(C\cdot U=x\)</span>. שנית, מביניהם אני מסתכל על כל אלו שעבורם <span class="math">\(\left|U\right|\)</span> הוא מינימלי; ולבסוף, מבין מי שנשארו אני לוקח את זה שהוא מקסימלי בסדר הלקסיקוגרפי להיות ה-<span class="math">\(V\)</span> שלי. אפשר לכתוב את זה פורמלית באופן הבא:</p>
+<p><span class="math">\(V=\max\left(\arg\min_{\left|U\right|}\left\{ U\ |\ C\cdot U=x\right\} \right)\)</span>.</p>
+<p>הכתיב הפורמלי כאן הוא לטעמי מסובך מדי ואין ממש הכרח להשתמש בו - ברור מה אני רוצה גם מהניסוח המילולי. עם זאת, יש כאן מוקש נפוץ למדי במתמטיקה שצריך להיזהר איתו. אני מגדיר כאן אובייקט כלשהו, אבל בכלל לא מובטח לי שהוא קיים. הסכנה במקרה הספציפי שלנו היא שאף אחד לא מבטיח לי אוטומטית שקבוצת "כל הוקטורים <span class="math">\(U\)</span> המקיימים <span class="math">\(C\cdot U=x\)</span>" אינה ריקה. במקרה שלנו, מכיוון שאמרנו שהמטבע 1 תמיד יהיה במערכת המטבעות שלנו, תמיד יש וקטור כזה - <span class="math">\(U=\left(0,0,\dots,0,x\right)\)</span>, ולכן ההגדרה שלי טובה (שימו לב שהוקטור הזה הוא <strong>הקטן ביותר</strong> בסדר הלקסיקוגרפי, וש-<span class="math">\(\left|U\right|\)</span> יהיה <strong>הגדול ביותר</strong> מבין כל המשקלים של וקטורים שמייצגים את <span class="math">\(w\)</span>).</p>
+<p>אם כן, <span class="math">\(M\left(x\right)\)</span> הוא הייצוג האופטימלי של <span class="math">\(x\)</span>. עדיין נותר להגדיר את הייצוג החמדני, אבל זה קל - אנחנו פשוט מוותרים על דרישת המינימום של המשקל. דהיינו, אגדיר <span class="math">\(G\left(x\right)=\max\left\{ U\ |\ C\cdot U=x\right\} \)</span> (כאן <span class="math">\(G\)</span> הוא מלשון Greedy - חמדני). למה האיבר המקסימלי לקסיקוגרפית מבין אלו שמייצגים את <span class="math">\(x\)</span> מתאים לייצוג החמדני? כי מה זה אומר, שהוא ראשון לקסיקוגרפית? ראשית, שהכניסה הראשונה (שמייצגת את המטבע הכי גדול) היא הכי גדולה שרק אפשר כך שעדיין נייצג את <span class="math">\(x\)</span>; ואחר כך הכניסה השניה היא הגדולה ביותר שרק אפשר, בהינתן הערך של הכניסה הראשונה, וכן הלאה. זה זמן טוב לעצור ולוודא שאתם מבינים אותי (ואת כל הסימונים שהיו עד כה). אם איבדתם אותי, נסו לקרוא שוב, או לנסות ולהמציא את ההגדרות מחדש בעצמכם; אין טעם להמשיך לקרוא בלי להרגיש בנוח עם מה שהלך עד כה.</p>
+<p>כעת אפשר לנסח מתמטית את מה שאנחנו רוצים. נאמר שמערכת המטבעות <span class="math">\(C\)</span> היא <strong>קנונית</strong> אם <span class="math">\(M\left(x\right)=G\left(x\right)\)</span> לכל <span class="math">\(x\)</span> טבעי. שתי הבעיות שלנו, אם כן, הן הבעיות הבאות:</p>
+<ol>
+    <li>בהינתן <span class="math">\(C,x\)</span>, האם <span class="math">\(M_{C}\left(x\right)=G_{C}\left(x\right)\)</span>?</li>
+    <li>בהינתן <span class="math">\(C\)</span>, האם <span class="math">\(M_{C}\left(x\right)=G_{C}\left(x\right)\)</span> לכל <span class="math">\(x\)</span>?</li>
+</ol>
+<p>הוספתי את <span class="math">\(C\)</span> ל-<span class="math">\(M,G\)</span> למטה כדי לציין שהפונקציות הללו תלויות במערכת המטבעות <span class="math">\(C\)</span> שלנו. בדרך כלל זה מובן מאליו ולכן אני לא טורח לכתוב את זה במפורש, אבל בניסוח הפורמלי של הבעיות שאנחנו רוצים לפתור זה נראה לי מתאים.</p>
+<p>עכשיו בואו נעבור לפתרון הבעיה שאנחנו יודעים לפתור - בעיה 2. הרעיון הוא שבהינתן מערכת המטבעות <span class="math">\(C\)</span>, אם היא לא קנונית אז יש <strong>דוגמאות נגדיות</strong> לקנוניות שלה - כל מני <span class="math">\(x\)</span>-ים שמקיימים <span class="math">\(M\left(x\right)\ne G\left(x\right)\)</span>. מביניהם, נסמן ב-<span class="math">\(w\)</span> את הדוגמה הנגדית הקטנה ביותר. הפתרון שלנו יתבסס על כך ש-<span class="math">\(w\)</span> יכול להיות רק אחד מבין לכל היותר מספר לא גדול של ערכים שונים שאפשר לחשב מתוך <span class="math">\(C\)</span> - מספר שלא אתן במדויק אבל הוא לא גדול מ-<span class="math">\(n^{2}\)</span> (כאשר <span class="math">\(n\)</span>, כזכור, הוא מספר המטבעות ב-<span class="math">\(C\)</span> - ה"אורך" של הוקטור <span class="math">\(C\)</span>). יותר מכך - עבור כל ה-<span class="math">\(w\)</span>-ים הפוטנציאליים הללו, אנחנו יודעים בדיוק מהו <span class="math">\(,M\left(w\right)\)</span> ולכן כל מה שנותר לנו לעשות הוא לחשב עבורם את <span class="math">\(G\left(w\right)\)</span> (זה מהיר) ולבדוק אם <span class="math">\(G\left(w\right)\ne M\left(w\right)\)</span>. אם כן - סיימנו; הוכחנו ש-<span class="math">\(C\)</span> אינה קנונית. אם לכל <span class="math">\(n^{2}\)</span> המועמדים שבדקנו התקיים <span class="math">\(G\left(w\right)=M\left(w\right)\)</span> אנחנו יכולים לעצור ובלב שקט לומר ש-<span class="math">\(C\)</span> קנונית.</p>
+<p>אבל איך נראים המועמדים? ובכן, אני אתן עכשיו את הניסוח המדויק של המשפט שנותן לנו אותם. בהתחלה ממש לא יהיה ברור למה שהמשפט הזה יהיה נכון - מן הסתם מה שאעשה בהמשך יהיה להוכיח אותו. המשפט הוא כזה: נניח ש-<span class="math">\(w\)</span> היא הדוגמה הנגדית המינימלית. נסמן ב-<span class="math">\(i\)</span> את האינדקס של הכניסה הראשונה ב-<span class="math">\(M\left(w\right)\)</span> שאינה אפס וב-<span class="math">\(j\)</span> את האינדקס של הכניסה האחרונה ב-<span class="math">\(M\left(w\right)\)</span> שאינה אפס (למשל, אם <span class="math">\(M\left(w\right)=\left(0,0,1,2,1,0\right)\)</span> אז <span class="math">\(i=3\)</span> ו-<span class="math">\(j=5\)</span>). כעת הטענה היא ש-<span class="math">\(M\left(w\right)\)</span> הוא בדיוק מהצורה הבאה: בכניסות <span class="math">\(1,2,\dots,j-1\)</span> הוא זהה לגמרי ל-<span class="math">\(G\left(c_{i-1}-1\right)\)</span>; בכניסה ה-<span class="math">\(j\)</span>-ית הוא גדול מהכניסה ה-<span class="math">\(j\)</span>-ית של <span class="math">\(G\left(c_{i-1}-1\right)\)</span> ב-1; ובשאר הכניסות הוא 0.</p>
+<p>שימו לב שכשאנחנו באים להשתמש במשפט הזה, אנחנו לא יודעים מהו <span class="math">\(w\)</span> ולא מהו <span class="math">\(M\left(w\right)\)</span> ולכן <strong>לא יודעים</strong> מהם <span class="math">\(i,j\)</span>; אבל אנחנו יכולים לעבור סדרתית על כולם. לכל <span class="math">\(i,j\)</span> נתונים אנחנו יכולים לשחק במשחק ה"נניח ש-<span class="math">\(i,j\)</span> הללו הם הערכים הנכונים, נחשב את <span class="math">\(M\left(w\right)\)</span> ונראה אם הוא שווה ל-<span class="math">\(G\left(w\right)\)</span>".</p>
+<p>זה מבלבל, אז בואו נראה דוגמה. יש לנו את המערכת הבריטית, עם המטבעות <span class="math">\(1,3,6,12,24,30,60,240\)</span>, כלומר <span class="math">\(C=\left(240,60,30,24,12,6,3,1\right)\)</span>. אנחנו יודעים ש-<span class="math">\(w=48\)</span> הוא דוגמה נגדית, ואגלה לכם שזו אכן הדוגמה הנגדית המינימלית. עכשיו, <span class="math">\(M\left(w\right)=\left(0,0,0,2,0,0,0,0\right)\)</span> ולכן <span class="math">\(i=j=4\)</span>. כעת, מהו <span class="math">\(c_{i-1}-1\)</span>? המטבע <span class="math">\(c_{i-1}=c_{3}\)</span> הוא המטבע 30 (זכרו שאנחנו הולכים מהגדול לקטן), ולכן <span class="math">\(c_{i-1}-1=29\)</span>. מהו <span class="math">\(G\left(29\right)\)</span>? הפעלה של האלגוריתם החמדני נותנת לנו <span class="math">\(G\left(29\right)=\left(0,0,0,1,0,0,1,2\right)\)</span>. כעת, הכניסות <span class="math">\(1,\dots,j-1\)</span> של <span class="math">\(G\left(29\right)\)</span> הן <span class="math">\(\left(0,0,0\right)\)</span> והכניסה ה-<span class="math">\(j\)</span> כשמוסיפים לה 1 היא 2, ואם משם והלאה יש לנו אפסים קיבלנו על פי המשפט ש-<span class="math">\(M\left(w\right)=\left(0,0,0,2,0,0,0,0\right)\)</span>, וזה אכן המצב בפועל. קסם!</p>
+<p>למה הקסם נכון? או, בואו נתחיל לעשות מתמטיקה.</p>
+<p>נתחיל עם עוד הגדרה מתבקשת: נאמר שוקטור <span class="math">\(U\)</span> הוא <strong>חמדני</strong> אם <span class="math">\(U=G\left(C\cdot U\right)\)</span> (ובמילים - אם הפעלת האלגוריתם החמדני על המספר ש-<span class="math">\(U\)</span> מייצג מחזירה את <span class="math">\(U\)</span>) ונאמר ש-<span class="math">\(U\)</span> <strong>מינימלי</strong> אם <span class="math">\(U=M\left(C\cdot U\right)\)</span> (במילים - אם הייצוג הטוב ביותר למספר ש-<span class="math">\(U\)</span> מייצג זה הוא עצמו). הטענה שלי היא שוקטורים חמדניים ומינימליים נשארים כאלו גם אם מחסרים להם משהו מהכניסות. בואו נכתוב את זה קצת יותר פורמלית: נשתמש בסימון <span class="math">\(U\subseteq V\)</span> במקרה שבו קיים וקטור <span class="math">\(D\)</span> כך ש-<span class="math">\(U+D=V\)</span> (במתמטיקה יש ל-<span class="math">\(\subseteq\)</span> לרוב שימוש שונה אבל לא נזדקק לשימוש השונה הזה כאן). למשל, אם <span class="math">\(U=\left(1,2,3\right)\)</span> ו-<span class="math">\(D=\left(4,0,3\right)\)</span> אז נקבל <span class="math">\(U+D=\left(5,2,6\right)\)</span>.</p>
+<p>שימו לב שהגדרנו על וקטורים פעולות "חיבור" ו"כפל" וגם יחס סדר <span class="math">\(\le\)</span> שהן שונות למדי מהפעולות והיחסים שאנחנו מכירים על מספרים; היופי בעניין הוא שה<strong>תכונות </strong>שאנחנו רגילים להן ממספרים משתמרות ברובן גם עבור הפעולות החדשות. למשל, <span class="math">\(\left(A+B\right)\cdot C=A\cdot C+B\cdot C\)</span>. ולמשל <span class="math">\(A\le B\)</span> אם ורק אם <span class="math">\(A+D\le B+D\)</span> (בדקו זאת!). זה מאפשר לנו לתת הוכחה אלגנטית לטענה שלנו. בואו נניח אם כן ש-<span class="math">\(U\le V\)</span> וש-<span class="math">\(V\)</span> חמדני, ונוכיח ש-<span class="math">\(G\)</span> חמדני. לשם כך ניקח <span class="math">\(U^{\prime}\)</span> כלשהו שמייצג את אותו מספר כמו <span class="math">\(U\)</span>, דהיינו <span class="math">\(C\cdot U=C\cdot U^{\prime}\)</span>, ונראה ש-<span class="math">\(U^{\prime}\le U\)</span> (כלומר, <span class="math">\(U\)</span> הוא הגדול ביותר מבין כל הייצוגים למספר שהוא מייצג, ולכן מה שהאלגוריתם החמדני יחזיר).</p>
+<p>כל מה שנצטרך הוא מניפולציות אלגבריות. אם <span class="math">\(U^{\prime}\cdot C=U\cdot C\)</span> אז נקבל ש:</p>
+<p><span class="math">\(\left(V-U+U^{\prime}\right)\cdot C=V\cdot C-U\cdot C+U^{\prime}\cdot C=V\cdot C\)</span></p>
+<p>מה שאומר שהוקטור <span class="math">\(V\)</span> מייצג את אותו המספר כמו <span class="math">\(V-U+U^{\prime}\)</span>. מכיוון ש-<span class="math">\(V\)</span> חמדני הוא גדול מכל וקטור אחר שמייצג את אותו מספר, ומכיוון ש-<span class="math">\(V-U+U^{\prime}\)</span> הוא וקטור שכל הכניסות בו חיוביות הוא אכן מייצג מספר. והן כולן חיוביות כי <span class="math">\(U\subseteq V\)</span> - זה המקום שבו אנחנו משתמשים בנתון הזה. ולכן:</p>
+<p><span class="math">\(V-U+U^{\prime}\le V\)</span></p>
+<p>וכעת ניתן לבצע "העברת אגפים" ממש כמו באי-שוויונות במספרים רגילים, ולקבל <span class="math">\(U^{\prime}\le U\)</span>, כמבוקש.</p>
+<p>הוכחה דומה עובדת גם עבור הטענה שאם <span class="math">\(V\)</span> מינימלי ו-<span class="math">\(U\subseteq V\)</span> אז <span class="math">\(U\)</span> מינימלי. רק צריך לשנות קצת את המשמעות של <span class="math">\(\le\)</span> כך שאם <span class="math">\(\left|A\right|\ge\left|B\right|\)</span> אז <span class="math">\(A\le B\)</span> (קצת מבלבל, אבל זכרו את הרעיון - וקטור מינימלי הוא וקטור <strong>בעל משקל מינימלי</strong> שהוא <strong>הגדול ביותר לקסיקוגרפית</strong>; כלומר, הסינון הראשוני הוא על פי המשקל, ומשקל קטן יותר הוא טוב יותר). צריך להוכיח שהמשמעות החדשה עדיין מקיימת את התכונות האלגבריות הנחמדות, אבל אין כאן משהו קשה.</p>
+<p>בואו נבין איך אני הולך להשתמש במה שהוכחתי. בהמשך אני הולך לקחת כל מני וקטורים שמהוויים ייצוג מינימלי או חמדני לערך כלשהו, ואז לשנות אותם על ידי הקטנה של כניסות בהם - ואני אשתמש בכך שגם אחרי ההקטנה הזו עדיין קיבלתי וקטורים שהם ייצוג מינימלי או חמדני (עבור הערך שהם מייצגים, שהוא שונה מהערך שהוקטור לפני ההקטנה ייצג).</p>
+<p>עוד תכונה שאשתמש בה בהמשך היא שהפונקציה <span class="math">\(G\)</span> שלוקחת מספר ומתאימה לו את הפתרון החמדני שלו היא <strong>משמרת סדר</strong> במובן הבא: אם <span class="math">\(x&lt;y\)</span> אז <span class="math">\(G\left(x\right)&lt;G\left(y\right)\)</span>. כדי לראות את זה, שימו לב לכך ש-<span class="math">\(U=G\left(x\right)+\left(0,0,\dots,y-x\right)\)</span> הוא ייצוג כלשהו עבור <span class="math">\(y\)</span> ולכן <span class="math">\(U\le G\left(y\right)\)</span>. כמו כן בבירור <span class="math">\(G\left(x\right)&lt;U\)</span>, כי לקחנו את <span class="math">\(G\left(x\right)\)</span> והוספנו לו עוד משהו. משני אלו קיבלנו ש-<span class="math">\(G\left(x\right)&lt;G\left(y\right)\)</span> - המעבר האחרון הוא שימוש בתכונת ה<strong>טרנזיטיביות</strong> של יחס הסדר <span class="math">\(\le\)</span> ואם זה נראה לכם חשוד, נסו להוכיח שזה עובד.</p>
+<p>עכשיו בואו נתחיל את ההוכחה המרכזית שלנו. נניח ש-<span class="math">\(C\)</span> היא מערכת מטבעות לא קנונית, ויהא <span class="math">\(w\)</span> הדוגמה הנגדית הקטנה ביותר לכך. כלומר, <span class="math">\(G\left(w\right)\ne M\left(w\right)\)</span> אבל לכל <span class="math">\(x&lt;w\)</span> מתקיים <span class="math">\(G\left(x\right)=M\left(x\right)\)</span> (הגישה הזו של "בואו ניקח את המינימלי" היא מאוד נפוצה במתמטיקה - היא אוטומטית נותנת לנו כלי נשק חדש ומועיל במהלך ההוכחה שסתם לקחת דוגמה נגדית כלשהי לא היה נותן לנו). בואו נתחיל להבין את התכונות של <span class="math">\(w\)</span> הזה. ראשית כל, אני טוען שאין ל-<span class="math">\(G\left(w\right),M\left(w\right)\)</span> כניסות משותפות ששונות מאפס. בואו נזכר ב-<span class="math">\(w=48\)</span> של הבריטים: שם <span class="math">\(M\left(w\right)=\left(0,0,0,2,0,0,0,0\right)\)</span> ואילו <span class="math">\(G\left(w\right)=\left(0,0,1,0,1,1,0,0\right)\)</span>. ב-<span class="math">\(M\left(w\right)\)</span> הכניסה היחידה שאינה 0 היא הרביעית, ואילו ב-<span class="math">\(G\left(w\right)\)</span> הכניסות שאינן אפס הן 3,5,6. כלומר, אין כניסה ששונה מאפס אצל שניהם, ואני טוען שזה לא מקרי. למה? ובכן, נניח שהכניסה ה-<span class="math">\(k\)</span>-ית בשניהם לא הייתה 0. אז הייתי יכול לחסר ממנה 1 ולקבל מ-<span class="math">\(M\left(w\right)\)</span> ומ-<span class="math">\(G\left(w\right)\)</span> שני וקטורים חדשים<strong> שעדיין מייצגים את אותו מספר</strong> (המספר <span class="math">\(w-c_{k}\)</span> אם אנחנו רוצים להיות מדוייקים), ועל פי הטענה שהוכחתי לפני רגע על <span class="math">\(U\le V\)</span>, הוקטור שנקבל מ-<span class="math">\(M\left(w\right)\)</span> על ידי החיסור יהיה הפתרון המינימלי עבור המספר הזה והוקטור שנקבל מ-<span class="math">\(G\left(w\right)\)</span> יהיה הפתרון החמדני עבור המספר הזה. עכשיו, בגלל ש-<span class="math">\(w\)</span> הוא הדוגמה הנגדית המינימלית לסיטואציה שבה הוקטור החמדני והמינימלי שונים, ינבע ששני הוקטורים שקיבלתי הם <strong>זהים</strong>, אבל אם כך גם הוקטורים המקוריים שהתחלתי מהם היו צריכים להיות זהים כי כל מה ששיניתי היה לחסר משניהם 1 באותו מקום.</p>
+<p>עכשיו בואו נסמן <span class="math">\(M\left(w\right)=\left(m_{1},m_{2},\dots,m_{n}\right)\)</span> וכפי שהבטחתי, נסמן ב-<span class="math">\(i\)</span> את אינדקס הכניסה הראשונה שאינה 0 וב-<span class="math">\(j\)</span> את אינדקס הכניסה האחרונה שאינה 0. אבחנה ראשונה היא ש-<span class="math">\(M\left(w\right)&lt;G\left(w\right)\)</span> על פי הגדרה (כי כל וקטור שמייצג את <span class="math">\(w\)</span> קטן לקסיקוגרפית מ-<span class="math">\(G\left(w\right)\)</span>, ואנו מניחים ש-<span class="math">\(M\left(w\right)\ne G\left(w\right)\)</span>). מכיוון ש-<span class="math">\(M\left(w\right),G\left(w\right)\)</span> אינם חולקים כניסות שונות מ-0, הכניסה הראשונה של <span class="math">\(M\left(w\right)\)</span> שאינה אפס חייבת להיות כזו שהיא כן אפס אצל <span class="math">\(G\left(w\right)\)</span>; וכדי שעדיין יתקיים <span class="math">\(M\left(w\right)&lt;G\left(w\right)\)</span> נובע שבהכרח יש ל-<span class="math">\(G\left(w\right)\)</span> כניסה <strong>מוקדמת יותר</strong> ששונה מאפס (למה?) ולכן <span class="math">\(1&lt;i\)</span>. זו לא הסקה טריוויאלית - שוב, אני ממליץ לכם לוודא שאתם מבינים מה הלך פה.</p>
+<p>המטרה שלי היא להראות ש-<span class="math">\(M\left(w\right)\)</span> דומה למדי ל-<span class="math">\(G\left(c_{i-1}\right)\)</span>, אז בואו ננסה להבין קצת את <span class="math">\(c_{i-1}\)</span> הזה.</p>
+<p>מכיוון ש-<span class="math">\(i&gt;1\)</span> אפשר לדבר על <span class="math">\(c_{i-1}\)</span> (אם <span class="math">\(i=1\)</span> ואני כותב <span class="math">\(c_{i-1}\)</span> אז כתבתי משהו חסר משמעות כי ה-<span class="math">\(c\)</span>-ים מתחילים מ-1). עכשיו, <span class="math">\(G\left(w\right)\)</span> כולל 1 בכניסה מוקדמת יותר מ-<span class="math">\(i\)</span>, כלומר <span class="math">\(w\)</span> מורכב לפחות ממטבע אחד שגדול או שווה ל-<span class="math">\(c_{i-1}\)</span> ומכאן ש-<span class="math">\(w\ge c_{i-1}\)</span>. מצאנו <strong>חסם מלעיל</strong> (מלמעלה) על <span class="math">\(c_{i-1}\)</span>. עכשיו בואו נמצא <strong>חסם מלרע</strong> (מלמטה) עליו: אנחנו יודעים שאם ניקח את <span class="math">\(M\left(w\right)\)</span> אז הכניסה ה-<span class="math">\(j\)</span> תהיה גדולה מאפס. לכן ניתן לחסר ממנה 1, והוקטור שיתקבל יהיה ייצוג של <span class="math">\(w-c_{j}\)</span> (למה?). הוקטור הזה הוא ייצוג מינימלי של <span class="math">\(w-c_{j}\)</span> ומכיוון ש-<span class="math">\(w-c_{j}\)</span> קטן מ-<span class="math">\(w\)</span> ו-<span class="math">\(w\)</span> הוא הערך המינימלי שהייצוג המינימלי שלו אינו חמדני, קיבלנו שהוקטור שלנו (שהוא <span class="math">\(M\left(w\right)\)</span> שבו הכניסה ה-<span class="math">\(j\)</span> הוקטנה ב-1) הוא הייצוג החמדני של <span class="math">\(w-c_{j}\)</span>. עכשיו, הייצוג הזה כולל רק את המטבעות שמשתתפים ב-<span class="math">\(M\left(w\right)\)</span>, כלומר המטבע בעל הערך הגדול ביותר שמשתתף בו הוא <span class="math">\(c_{i}\)</span>. מסקנה: <span class="math">\(w-c_{j}&lt;c_{i-1}\)</span>. קחו שניה ותסבירו לעצמכם למה זה נכון, כי עשיתי פה קפיצה קטנה.</p>
+<p>ההסבר: אם <span class="math">\(w-c_{j}\ge c_{i-1}\)</span> אז על פי הגדרתו, האלגוריתם החמדני ייקח לפחות את אחת המטבעות <span class="math">\(c_{1},\dots,c_{i-1}\)</span>. אנחנו יודעים שהוא לא עשה את זה (אמרתי את זה לפני רגע), ולכן.</p>
+<p>אם כן, קיבלנו חסם מלרע עבור <span class="math">\(c_{i-1}\)</span>. אם נרכז את מה שכבר מצאנו:</p>
+<p><span class="math">\(w-c_{j}&lt;c_{i-1}\le w\)</span></p>
+<p>זה מראה לנו ש-<span class="math">\(c_{i-1}\)</span> <strong>קרוב מאוד</strong> ל-<span class="math">\(w\)</span>. כמה קרוב? הוא נמצא בטווח קטן יחסית שגודלו <span class="math">\(c_{j}\)</span> וקצהו האחד ב-<span class="math">\(w\)</span> עצמו. בואו נשתמש בזה עכשיו.</p>
+<p>נסמן <span class="math">\(V=\left(v_{1},v_{2},\dots,v_{n}\right)=G\left(c_{i-1}-1\right)\)</span>. מה שבעצם נותר לנו להוכיח הוא ש-<span class="math">\(v_{k}=m_{k}\)</span> לכל <span class="math">\(1\le k&lt;j\)</span> וש-<span class="math">\(v_{j}=m_{j}-1\)</span>. הדרך שבה נעשה את זה תהיה לחסום את <span class="math">\(V\)</span> בין שני וקטורים: נראה שהוא קטן מ-<span class="math">\(M\left(w\right)\)</span> אבל שהוא גדול מוקטור אחר שנראה כמעט כמו <span class="math">\(M\left(w\right)\)</span>, מה שלא יאפשר ל-<span class="math">\(V\)</span> להיות שונה במיוחד מ-<span class="math">\(M\left(w\right)\)</span> בכל הכניסות עד ה-<span class="math">\(j\)</span>-ית.</p>
+<p>נתחיל בלהראות ש-<span class="math">\(V&lt;M\left(w\right)\)</span>. מן הסתם <span class="math">\(c_{i-1}-1\)</span> קטן מ-<span class="math">\(c_{i-1}\)</span> ולכן המטבע <span class="math">\(c_{i-1}\)</span> והגדולות ממנה לא יכולות להיות חלק מהפתרון החמדני עבור <span class="math">\(c_{i-1}\)</span>. אבל המטבע <span class="math">\(c_{i}\)</span> בוודאי יהיה, כי הוא המטבע הגדול ביותר שעדיין קטן או שווה ל-<span class="math">\(c_{i-1}-1\)</span>. מכאן ש-<span class="math">\(v_{i}\ne0\)</span>. לכן אפשר להשתמש בתעלול שכבר הפך לשגור אצלנו - להפחית 1 מהכניסה ה-<span class="math">\(i\)</span> הן ב-<span class="math">\(V\)</span> והן ב-<span class="math">\(M\left(w\right)\)</span> ולקבל את <span class="math">\(G\left(c_{i-1}-1-c_{i}\right)\)</span> ואת <span class="math">\(M\left(w-c_{i}\right)=G\left(w-c_{i}\right)\)</span>, בהתאמה. כעת, אי השוויון שיש לנו על <span class="math">\(c_{i-1}\)</span> מראה ש-<span class="math">\(c_{i-1}-1-c_{i}&lt;w-c_{i}\)</span>, ולכן <span class="math">\(G\left(c_{i-1}-1-c_{i}\right)&lt;G\left(w-c_{i}\right)\)</span>, כשהמעבר האחרון נובע מתכונת "שימור הסדר" של פתרונות חמדניים שראינו קודם.</p>
+<p>קיבלנו שוקטור א' יותר קטן מוקטור ב'. אם נחבר לשניהם 1 בכניסה ה-<span class="math">\(i\)</span>-ית זה לא ישנה את הסדר היחסי בין הוקטורים שנקבל, שהם בדיוק <span class="math">\(V,M\left(w\right)\)</span> בהתאמה, ולכן קיבלנו ש-<span class="math">\(V&lt;M\left(w\right)\)</span>.</p>
+<p>עכשיו בואו נחסום את <span class="math">\(V\)</span> מלרע. לשם כך, בואו ניקח את <span class="math">\(M\left(w\right)\)</span> ונקטין את <span class="math">\(m_{j}\)</span> (הכניסה האחרונה שאינה 0) ב-1. נקבל את הוקטור <span class="math">\(G\left(w-c_{j}\right)\)</span>, ומכיוון שכבר ראינו ש-<span class="math">\(w-c_{j}&lt;c_{i-1}\)</span>, כלומר ש-<span class="math">\(w-c_{j}\le c_{i-1}-1\)</span>, נקבל ש-<span class="math">\(G\left(w-c_{j}\right)\le G\left(c_{i-1}-1\right)=V\)</span>.</p>
+<p>מכאן שהצלחנו לחסום את <span class="math">\(V\)</span> כך: <span class="math">\(G\left(w-c_{j}\right)\le V&lt;M\left(w\right)\)</span>. זה מעניין, כי <span class="math">\(G\left(w-c_{j}\right)\)</span> ו-<span class="math">\(M\left(w\right)\)</span> הם כמעט אותו וקטור - הם נבדלים רק בכניסה <span class="math">\(m_{j}\)</span> שב-<span class="math">\(M\left(w\right)\)</span> גדולה ב-1. מכאן שעד לכניסה הזו גם <span class="math">\(V\)</span> חייב להיות שווה אליהם (אחרת הוא היה גדול משניהם או קטן משניהם). כעת, מה קורה בכניסה <span class="math">\(m_{j}\)</span>? אנחנו יודעים שקורה אחד משניים: <span class="math">\(v_{j}=m_{j}\)</span> או <span class="math">\(v_{j}=m_{j}-1\)</span> (אחרת, שוב, <span class="math">\(V\)</span> היה גדול או קטן משני הוקטורים). האם יכול להיות ש-<span class="math">\(v_{j}=m_{j}\)</span>? ובכן, לא: זאת מכיוון שכל הכניסות של <span class="math">\(M\left(w\right)\)</span> שאחרי ה-<span class="math">\(j\)</span>-ית הן אפסים. לכן, אם <span class="math">\(v_{j}=m_{j}\)</span> זה אומר ש-<span class="math">\(V\)</span> זהה ל-<span class="math">\(M\left(w\right)\)</span> ב-<span class="math">\(j\)</span> הכניסות הראשונות וביתר הכניסות הוא שווה או גדול ממנו, ומכאן נובע ש-<span class="math">\(M\left(w\right)\le V\)</span> בסתירה לכך שכבר ראינו ש-<span class="math">\(V&lt;M\left(w\right)\)</span>. מכאן ש-<span class="math">\(v_{j}=m_{j}-1\)</span>. ומה על יתר הכניסות של <span class="math">\(V\)</span>? ובכן, הן פשוט לא מעניינות אותנו; השגנו בדיוק את מה שרצינו להשיג. זה מסיים את המשפט ומסיים את כל הטיפול בבעיית "נתונה מערכת מטבעות - האם היא קנונית?"</p>
+<p>ההוכחה עשויה להיראות כמו ערב-רב של פרטים כרגע, אבל נסו לקרוא אותה שוב - יש כמה רעיונות בסיסיים ויפים שחוזרים בה שוב ושוב והם בעצם העיקר.</p>
+<p>נעבור עכשיו לדבר על הבעיה השניה - בהינתן <span class="math">\(C,x\)</span> לקבוע האם <span class="math">\(G_{C}\left(x\right)=M_{C}\left(x\right)\)</span>. מכיוון שלחשב את <span class="math">\(G_{C}\left(x\right)\)</span> זה קל, ברור שה"קושי" של הבעיה מסתמך על כך שבאופן כללי חישוב של <span class="math">\(M_{C}\left(x\right)\)</span> הוא קשה. מה זה אומר, "קשה"? איך מודדים את זה? נתחיל מהשקר שקל יחסית לעכל ונעבור לאמת המסובכת והעגומה יותר. השקר הוא זה: אין לנו דרך "חכמה" לחשב את <span class="math">\(M_{C}\left(x\right)\)</span> ולכן אנחנו פשוט עוברים על <strong>כל</strong> האפשרויות לייצג את <span class="math">\(x\)</span> בעזרת <span class="math">\(C\)</span> ובודקים מי מהן הכי חסכונית במטבעות. הבעיה היא שיש מספר גדול של אפשרויות: נניח שיש לנו <span class="math">\(n\)</span> סוגי מטבעות ואנחנו תוהים אם אפשר לייצג משהו שגודלו גדול מסכום כל המטבעות. אז יש לנו <span class="math">\(2^{n}\)</span> אפשרויות לחלוקה שכוללת כל מטבע רק פעם אחת או אפס פעמים, ובפועל יש הרבה יותר חלוקות מזה - מספר החלוקות הוא <strong>אקספוננציאלי</strong>. לעבור על כולן לוקח המון זמן. זה לא יעיל באופן שבו מודדים "יעילות" במדעי המחשב.</p>
+<p>זה סוף השקר, וזה שקר יחסית משביע רצון שמעביר את האינטואיציה. אבל מהי האמת?</p>
+<p>האמת היא שאנחנו לא יודעים אם זו בעיה קשה או לא. זה נכון שלחשב את <span class="math">\(M\left(x\right)\)</span> על ידי האלגוריתם "עבור על כל האפשרויות ובדוק" זה לא יעיל, אבל מי אומר לנו שאין אלגוריתם יותר מתוחכם? אנחנו לא מכירים כזה בהכרח, אבל מי אומר שאין? למעשה, בפועל <strong>יש</strong> אלגוריתמים יותר מתוחכמים, שאני לא מכניס לפוסט הזה כי גם ככה הוא עמוס, אבל גם הם סובלים מאי-יעילות (דהיינו, הם טובים הרבה יותר מהאלגוריתם הנאיבי שהצגתי, אבל זמן הריצה שלהם עדיין איטי למדי). כדי להגיד שהבעיה קשה, אני צריך <strong>להוכיח</strong> איכשהו טענה כללית: ש<strong>כל</strong> האלגוריתמים שפותרים את הבעיה הם לא יעילים. איך אפשר להקיף את <strong>כל</strong> האלגוריתמים? זה בוודאי לא משהו טריוויאלי. ולמען האמת, זה אפילו לא נגמר כאן. הבעיה שאני הצגתי היא הבעיה הבאה: בהינתן <span class="math">\(C,x\)</span> האם <span class="math">\(G_{C}\left(x\right)=M_{C}\left(x\right)\)</span>? זו בעיה שהתשובה לה היא "כן/לא". ייתכן, תיאורטית, שאפשר לענות עליה <strong>בלי</strong> שנצטרך בכלל לחשב את <span class="math">\(M_{C}\left(x\right)\)</span>, כלומר זו עשויה להיות בעיה <strong>קלה</strong> יותר מאשר חישוב של <span class="math">\(M_{C}\left(x\right)\)</span>, ולכן כל הטיעון האינטואיטיבי שנתתי למעלה היה רמאות מובהקת - הוא הסביר למה בעיה <strong>אחרת</strong> היא קשה. אמנם, אין לי מושג איך לפתור את הבעיה שלי מבלי לפתור את הבעיה האחרת, אבל זה שאני לא חושב על משהו לא אומר שאין.</p>
+<p>ברוכים הבאים לעולם של מדעי המחשב התיאורטיים ולתחושה על קצה המזלג של "למה להוכיח חסמים תחתונים זה קשה". ועדיין, במובן מסויים שהוא פורמלי לגמרי במדעי המחשב התיאורטיים הבעיה נחשבת קשה. באיזה מובן? במובן זה שאם אנחנו מוצאים פתרון יעיל עבורה, הדבר יגרור פתרון יעיל עבור אלפי (עשרות אלפי?) בעיות אחרות במדעי המחשב ש<strong>לאף אחת מהן</strong> לא נמצא עד היום פתרון יעיל שכזה. הבעיות הללו נקראות הבעיות ה-NP-שלמות, ולא אסביר כרגע מהיכן מגיע השם. רק אעיר שמדובר על בעיות שמגיעות משלל תחומים שונים ומנוסחות לעתים בצורות שונות ביותר - ועדיין, באף תחום לא הצליחו לפתור ביעילות אף אחת מהבעיות הללו, מה שמוביל אותנו לאמץ את הנחת העבודה שכנראה אין פתרון יעיל עבורן. אבל הוכחה לכך? אין. הבעיה הזו - כיצד לפתור בעיה NP-שלמה ביעילות או להוכיח שאין פתרון יעיל לאף אחת מהן - נקראת בעיית P=NP והיא הבעיה התיאורטית הפתוחה המרכזית במדעי המחשב.</p>
+<p>הערה קטנה למתקדמים, שמי שלא בקיא בתחום יכול לוותר עליה: שימו לב שבניסוח שנתתי, הבעיה אינה ב-NP אלא ב-coNP, מכיוון שלא קיים "עד" ברור לכך ש-<span class="math">\(G_{C}\left(x\right)=M_{C}\left(x\right)\)</span> אבל כן קיים "עד" ברור לכך שהם שונים (בהינתן הפתרון האופטימלי קל לבדוק שהוא שונה מהחמדני). כשאני אומר "הבעיה" אני מתכוון בעצם למשלימה של הבעיה שלנו, וכך גם אפעל בהמשך; הדקות הזו לא קריטית למי שלא מצוי בנבכי ההגדרות הפורמליות.</p>
+<p>איך מראים שבעיה היא NP-שלמה? הדרך המקובלת היא באמצעות מעין רקורסיה: לוקחים בעיה שכבר יודעים שהיא NP-שלמה, ומוכיחים שאם אנחנו יודעים לפתור ביעילות את הבעיה החדשה, אז אנחנו יודעים לפתור ביעילות את הבעיה ה-NP-שלמה הישנה (לדבר כזה קוראים <strong>רדוקציה</strong>). כמובן, רקורסיה צריכה להתחיל מהיכן שהוא, ונקודת ההתחלה הסטנדרטית - השפה ה-NP-שלמה ה"ראשונה", היא בדרך כלל שפה שנקראת SAT שלא אתאר במפורש כאן.</p>
+<p>אז כדי להוכיח שבעיית המטבעות היא NP-שלמה אני צריך לקחת בעיה NP-שלמה קיימת ולעשות רדוקציה שלה אל בעיית המטבעות. מה שאומר שאני קצת מרמה: אני יכול לבחור איזו בעיה NP-שלמה שנוח לי לעבוד איתה בתור "נקודת התחלה", ומן הסתם בפוסט הזה לא אוכיח שגם היא NP-שלמה. בפועל יש כמה בעיות "סטנדרטיות" שכולם מכירים ונהוג להשתמש בהן או בוריאציות עליהן, ואני הולך להשתמש בוריאציה על בעיה שנקראת Subset Sum. הבעיה המקורית היא כזו: נתונה קבוצה <span class="math">\(S=\left\{ x_{1},x_{2},\dots,x_{n}\right\} \)</span> של מספרים ועוד מספר אחד <span class="math">\(c\)</span>. השאלה היא אם קיימת תת-קבוצה של <span class="math">\(S\)</span>, שאסמן <span class="math">\(S^{\prime}\)</span>, שסכום האיברים בה שווה בדיוק ל-<span class="math">\(c\)</span>, כלומר <span class="math">\(\sum_{x\in S^{\prime}}x=c\)</span>.</p>
+<p>את הבעיה הזו אפשר לנסח בצורה שונה אבל שקולה לגמרי: נתון הוקטור <span class="math">\(X=\left(x_{1},\dots,x_{n}\right)\)</span> של מספרים (אפשר לדרוש במפורש שמספר לא מופיע פעמיים בוקטור אבל זה לא חשוב). האם קיים וקטור <strong>בינארי </strong><span class="math">\(A=\left(a_{1},\dots,a_{n}\right)\)</span> כך ש-<span class="math">\(X\cdot A=c\)</span>? כאן "וקטור בינארי" אומר שכל כניסה בוקטור היא 0 או 1.</p>
+<p>הוריאציה שאני אשתמש בה מרשה ל-<span class="math">\(A\)</span> להכיל מספרים טבעיים כלשהם, לא רק 0 ו-1 (אבל לא מספרים שליליים). לא אוכיח כאן שהיא NP-שלמה אבל זה תרגיל טוב. בניסוח הזה, הבעיה נראית כמעט לגמרי כמו בעיית המטבעות, בהבדל אחד - אנחנו לא מדברים על <strong>אופטימיזציה</strong> אלא על היתכנות. חשבו על <span class="math">\(X\)</span> בתור מערכת המטבעות שלנו, אבל ללא דרישה ש-1 יהיה שייך אליה, ואז השאלה היא אם אפשר בכלל לייצג ערך <span class="math">\(c\)</span> נתון במערכת הזו.</p>
+<p>אם כן, אני מקבל <span class="math">\(X=\left(x_{1},\dots,x_{n}\right)\)</span> ו-<span class="math">\(c\)</span> ורוצה לייצר שני דברים: מערכת מטבעות <span class="math">\(C\)</span>, וערך <span class="math">\(y\)</span> כלשהו, כך שמתקיים ש-<span class="math">\(G_{C}\left(y\right)\ne M_{C}\left(y\right)\)</span> אם ורק אם קיים <span class="math">\(A\)</span> כך ש-<span class="math">\(X\cdot A=c\)</span>. זו המהות של רדוקציה - המרה של מקרה לבדיקה של בעיה אחת למקרה לבדיקה של בעיה אחרת.</p>
+<p>לכאורה יש לי מגבלה די מהותית - ה"נשק" היחיד שיש לי הוא הפער שיכול להיות קיים בין הפתרון החמדני והאופטימלי. איכשהו אני צריך לנצל אותו כדי לדעת אם בכלל אפשר לייצג ערך כלשהו בעזרת <span class="math">\(X\)</span>. אבל אם חושבים קצת על האופן שבו אפשר ליצור מערכות של מטבעות שבהן הפתרון החמדני והאופטימלי לאו דווקא מזדהים, זה לא קשה. מה קרה במערכת הבריטית? היה לנו ערך - 48 - שמיוצג בקלות על ידי מספר קטן כלשהו - 24. אלא שיש מעל 24 מספר גדול יותר, 30, ש"מכריח" את הפתרון החמדני לפספס את 24 ולעבור להתעסק עם מספרים קטנים יותר. על זה אני אבנה את הפתרון שלי, וכדי שיהיה קל להבין אותו אני אסביר מה אני עושה במקרה פרטי.</p>
+<p>המקרה הפרטי יהיה <span class="math">\(X=\left(10,20,30,40\right)\)</span> ונראה מה אני עושה עבור <span class="math">\(c\)</span>-ים שונים. יש ב-<span class="math">\(X\)</span> ארבעה איברים, ולכן אני רוצה לבנות מערכת מטבעות <span class="math">\(C\)</span> וערך <span class="math">\(y\)</span> כך שאם <span class="math">\(c\)</span> ניתן לייצוג בידי <span class="math">\(X\)</span>, אפשר יהיה לייצג את <span class="math">\(y\)</span> ב-<span class="math">\(C\)</span> באותה הצורה, עם לכל היותר ארבעה איברים; אבל אם אי אפשר, אז כדי לייצג את <span class="math">\(y\)</span> אני אצטרך לפחות חמישה איברים. למעשה, די קל לעשות את זה - נגדיר את <span class="math">\(C\)</span> להיות <span class="math">\(X\)</span> ועוד שני איברים: <span class="math">\(1\)</span> (שחייב תמיד להיות ב-<span class="math">\(C\)</span>) ו-<span class="math">\(c-4\)</span>.</p>
+<p>בואו נראה איך זה עובד. קודם כל, ניקח <span class="math">\(c=60\)</span> שאנחנו יודעים שאפשר לייצג ב-<span class="math">\(X\)</span>. אז <span class="math">\(C=\left(56,40,30,20,10,1\right)\)</span> ו-<span class="math">\(y=60\)</span>. הפתרון המינימלי במקרה זה הוא <span class="math">\(60=40+20\)</span>. הפתרון החמדני, לעומת זאת, קודם כל ייקח את <span class="math">\(56\)</span>, יישאר עם 4, ואז יקח את 1 עוד 4 פעמים - כלומר, גודלו 5.</p>
+<p>לעומת זאת, אם ניקח <span class="math">\(c=64\)</span>, שלא ניתן לייצוג על ידי <span class="math">\(X\)</span>, אז נקבל <span class="math">\(C=\left(60,40,30,20,10,1\right)\)</span> ו-<span class="math">\(y=64\)</span>. במקרה זה, בבירור הפתרון האופטימלי הוא <span class="math">\(64=60+1+1+1+1\)</span> וזהו גם הפתרון החמדני.</p>
+<p>ומה קורה אם <span class="math">\(c\)</span> קטן יותר מחלק מהאיברים ב-<span class="math">\(X\)</span>, למשל <span class="math">\(c=24\)</span>? ובכן, בדוגמה הזו אין שום שינוי מהותי - הפתרון החמדני עדיין ייקח את <span class="math">\(c-4\)</span> בתור האיבר הראשון. מתי כן עשויה להתעורר בעיה? כאשר <span class="math">\(c-4\)</span> אינו האיבר הגדול ביותר שעדיין קטן מ-<span class="math">\(y\)</span>. למשל, אם ניקח <span class="math">\(y=32\)</span> אז נקבל <span class="math">\(C=\left(40,30,28,20,10,1\right)\)</span>, ואז הפתרון החמדני יהיה <span class="math">\(30+1+1\)</span>, שהוא גם הפתרון האופטימלי. עוד בעיה שיכולה להתעורר היא במקרה שבו <span class="math">\(c\)</span> ממש קטן - למשל, 2.</p>
+<p>במקרה הזה אני אבחר את <span class="math">\(y\)</span> להיות גדול מאוד, עם שתי דרכים שונות להקטין אותו - אחת שתכריח אותנו להשתמש ב-1 מכאן ואילך, ואחת שתאפשר לנו להשתמש ב-<span class="math">\(X\)</span>. פורמלית, <span class="math">\(y=c+T\)</span> כאשר <span class="math">\(T\)</span> הוא מספר שגדול מהסכום של כל אברי <span class="math">\(X\)</span>, ונוסיף למערכת שלנו את <span class="math">\(y-5\)</span> ואת <span class="math">\(T\)</span> עצמו. במקרה שלנו <span class="math">\(40+30+20+10=100\)</span> אז בואו נבחר <span class="math">\(T=200\)</span> כי אפשר, ואז עבור <span class="math">\(c=32\)</span> נקבל <span class="math">\(y=232\)</span> ואת המערכת <span class="math">\(\left(227,200,40,30,20,10,1\right)\)</span>. הפתרון החמדני הוא <span class="math">\(227+1+1+1+1\)</span> וקל לראות שהוא אופטימלי.</p>
+<p>עוד מקרה קצה אחד שבו צריך לטפל הוא זה שבו <span class="math">\(c-4\)</span> גדול מאחד מאברי <span class="math">\(X\)</span>. פתרון פשוט? לכפול את כל אברי <span class="math">\(X\)</span> ב-10 ואת <span class="math">\(c\)</span> ב-10 ולהמשיך משם. אני אשאיר לכם לטפל בפרטים.</p>
+<p>זו הייתה רדוקציה במקרה של <span class="math">\(X\)</span> ספציפית, אבל תחליפו את <span class="math">\(4\)</span> ב-<span class="math">\(n\)</span> ותקבלו את הרדוקציה עבור <span class="math">\(X\)</span> כללי - שוב, אני ממליץ לאלו מכם שמעוניינים לשבת ולכתוב אותה פורמלית ולהוכיח שהיא עובדת.</p>
+<p>סיימנו! זה היה פוסט ארוך למדי בגלל שהסברתי כל צעד ושעל; אני מקווה שכמות האנשים שנשברו בגלל זה הייתה קטנה מכמות האנשים שהצליחו ללמוד משהו חדש בזכות זה. במילים אחרות, העדפתי את הפתרון האופטימלי על החמדני. או את החמדני על האופטימלי?</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2014/11/11/automata_intro/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">אוטומטים ושפות רגולריות - מבוא</span>
+            </a>
+            
+            
+            
+            <a href="/2014/09/22/quantum_computing_final/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי - דברי סיום ופרידה</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

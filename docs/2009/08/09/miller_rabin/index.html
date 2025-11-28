@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז איך באמת בודקים ראשוניות (בעזרת אלגוריתם מילר-רבין)? - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אז איך באמת בודקים ראשוניות (בעזרת אלגוריתם מילר-רבין)?</h1>
+            <div class="post-meta">
+                <span class="date">2009-08-09</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/מבני נתונים ואלגוריתמים.html">מבני נתונים ואלגוריתמים</a>
+                    
+                    <a href="/categories/קריפטולוגיה.html">קריפטולוגיה</a>
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אלגוריתמים הסתברותיים.html">אלגוריתמים הסתברותיים</a>
+                    
+                    <a href="/tags/המשפט הקטן של פרמה.html">המשפט הקטן של פרמה</a>
+                    
+                    <a href="/tags/מספרים ראשוניים.html">מספרים ראשוניים</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p><a href="http://www.gadial.net/2009/07/22/bad_math_rsa/">בפוסט הקודם</a> הזכרתי את אלגוריתם מילר-רבין ההסתברותי לבדיקת <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99">ראשוניות</a>, ובפוסט הזה אני רוצה להרחיב קצת על הנושא - למה בכלל צריך לבדוק ראשוניות, ואיך אפשר לבדוק דבר כזה באופן הסתברותי, ומה זה בכלל אומר. כמובן שאציג גם את האלגוריתם עצמו, אבל לא אכנס לפרטי ההוכחה שהוא אכן עובד אלא אסתפק ברעיונות המרכזיים. למעשה, דרך ההצגה שלי תהיה קצת שקרית ואסביר זאת בהמשך.</p>
+<p>נתחיל מהצורך הכללי במבחנים שכאלו. מבחן לבדיקת ראשוניות נדרש לרוב כשאנחנו רוצים למצוא מספר ראשוני "אקראי". מכיוון שלא מוכרות דרכים טובות במיוחד (עדיין...) לייצר מספר ראשוני אקראית, פשוט מגרילים מספר כלשהו בתחום שממנו רוצים לדגום את הראשוני, ואז בודקים שהוא ראשוני (כפי שהסברתי בפוסט הקודם, משפט המספרים הראשוניים מבטיח שלא נצטרך יותר מדי הגרלות). להגריל מספר זה קל גם כשמדובר במספרים גדולים יחסית; זו בדיקת הראשוניות שלו שעושה לנו צרות (השאלה "אבל למה בכלל צריך ראשוניים גדולים?" היא שאלה אחרת שרוב התשובות המוכרות לי אליה קשורות לקריפטוגרפיה).</p>
+<p>הדרך הפשוטה לבדוק ראשוניות של מספר <span class="math">\(n\)</span> היא לעבור אחד אחד על כל המספרים הקטנים מ-<span class="math">\(n\)</span> אבל גדולים מ-1 ולבדוק אם הם מחלקים אותו ללא שארית. אם נמצא כזה, המספר אינו ראשוני (זו ההגדרה של ראשוני - מספר המתחלק רק בעצמו וב-1). לתעלול הזה יש אופטימיזציה פשוטה - אם <span class="math">\(a\)</span> מחלק את <span class="math">\(n\)</span>, כך גם <span class="math">\(n/a\)</span> (כי מה זה אומר ש-<span class="math">\(a\)</span> מחלק את <span class="math">\(n\)</span>? שקיים <span class="math">\(b\)</span> כך ש-<span class="math">\(n=ab\)</span>, כלומר גם <span class="math">\(b=n/a\)</span> מחלק את <span class="math">\(n\)</span> ללא שארית), ואם <span class="math">\(a\)</span> גדול מהשורש של <span class="math">\(n\)</span>, אז <span class="math">\(b\)</span> יהיה קטן ממנו (כי אם <span class="math">\(a,b&gt;\sqrt{n}\)</span> אז <span class="math">\(n=a\cdot b&gt;\sqrt{n}\cdot\sqrt{n}=n\)</span> - סתירה). לכן מספיק לבדוק את המספרים הקטנים מ-<span class="math">\(n\)</span> "עד השורש" של <span class="math">\(n\)</span>. זמן הריצה של האלגוריתם הזה יהיה <span class="math">\(O\left(\sqrt{n}\right)\)</span>, זמן ריצה שנחשב טוב מאוד כשמתעסקים באלגוריתמים (להשוואה, זמן הריצה של אלגוריתמי המיון הכלליים הוא <span class="math">\(O\left(n\log n\right)\)</span>). אם כן, מה הבעיה?</p>
+<p>הבעיה היא שבכל הנוגע למספרים, מה שחשוב הוא לא גודל המספר עצמו אלא גודל הייצוג שלו - מספר הביטים שדרושים כדי לאחסן אותו בזכרון. כדי לאחסן את <span class="math">\(n\)</span>, צריך <span class="math">\(\lg n\)</span> ביטים (<span class="math">\(\lg\)</span> הוא <a href="http://he.wikipedia.org/wiki/%D7%9C%D7%95%D7%92%D7%A8%D7%99%D7%AA%D7%9D">לוגריתם</a> על בסיס 2 - אם <span class="math">\(\lg n=k\)</span> זה אומר ש-<span class="math">\(n=2^{k}\)</span>; כמובן ש-<span class="math">\(k\)</span> עשוי שלא להיות מספר שלם, אז נעגל למעלה כשנצטרך להתייחס אליו כשלם). הסיבה שגודל הייצוג הוא מה שחשוב היא שהזמן שלוקח לבצע פעולות חשבון בסיסיות על מספרים - חיבור, חיסור, כפל, חילוק, השוואה בין שני מספרים - נמדד ביחס ל-<span class="math">\(\lg n\)</span>, לא ל-<span class="math">\(n\)</span>. למשל, השוואה של שני מספרים דורשת <span class="math">\(\lg n\)</span> פעולות (חשבו על הצורה שבה אתם משווים שני מספרים שנתונים בבסיס עשרוני - אתם פשוט משווים ספרה ספרה), חיבור שלהם דורש <span class="math">\(\lg n\)</span> פעולות (מחברים "ספרה ספרה" ולכל היותר זוכרים בע"פ שצריך להוסיף 1 לתוצאת החיבור הבאה), כפל דורש (במימוש נאיבי, כמו זה שתלמידים בבית הספר לומדים לבצע) <span class="math">\(\lg^{3}n\)</span> פעולות, וכדומה. זה אומר שקל לנו לבצע פעולות על מספרים ענקיים, בני 500 ספרות ויותר (וגם מספרים בני מיליון ספרות הם עדיין משהו שאפשר להתמודד איתו), בזמן שלעבור על כל המספרים בני 500 ספרות, אפילו "עד השורש", זה לחלוטין לא פרקטי. זו הייתה גם הנקודה המרכזית בפוסט הקודם שלי.</p>
+<p>אם כן, אלגוריתם טוב לבדיקת ראשוניות צריך להיות בעל זמן ריצה שהוא לכל היותר חזקה כלשהי ב-<span class="math">\(\lg n\)</span>. כזה הוא מילר רבין, שזמן ריצתו חסום על ידי <span class="math">\(O\left(\lg^{3}n\right)\)</span> (זמן ריצה מעולה עבור אלגוריתם שמבצע בדיקה של דבר מה "מסובך" כראשוניות). <a href="http://en.wikipedia.org/wiki/AKS_primality_test">אלגוריתם AKS </a>המפורסם לבדיקת ראשוניות - היחיד שידוע כיום שעובד באופן דטרמיניסטי ובזמן "סביר" לכל הראשוניים - דורש זמן ריצה של מעט יותר מ-<span class="math">\(O\left(\lg^{6}n\right)\)</span>, כלומר הוא פחות יעיל בכמה סדרי ממילר-רבין, ולכן עדיין מעדיפים את מילר-רבין בשימושים פרקטיים (דוגמת זה של הספריה OpenSSL שקישרתי אליה בפוסט הקודם). זה לא אומר שאין יישומים של AKS או שאי אפשר להשתמש בו אם רוצים לוודא ב-100 אחוזים סופר-דופר שמספר הוא ראשוני; אבל כמו שאסביר בהמשך (בפוסט נפרד), האקראיות של מילר-רבין נותנת 99 אחוזים (למעשה, אפילו יותר - אבל על כך בפוסט הבא) שלרוב הוא די והותר בשבילנו (ופרט ל-AKS יש עוד מבחנים שמוכיחים בודאות שמספר הוא ראשוני, אך לא מובטח שהם תמיד יעבדו בזמן פולינומי למרות שלעתים קרובות הם מהירים למדי, וגם על זה אפרט בעתיד).</p>
+<p>איך ניגשים בכלל לבניית אלגוריתמים לבדיקת ראשוניות? האינסטינקט הראשון שלי אומר שצריך למצוא דרך מתוחכמת יותר לעבור על מספרים שהם "בעלי פוטנציאל" לחלק את <span class="math">\(n\)</span> ולבדוק אותם. למשל, אם בדקתי את 2 והוא לא חילק את <span class="math">\(n\)</span>, ברור שגם 4 וגם 8 (וגם כל מספר אחר שמתחלק ב-2) לא יחלקו אותו אז לא צריך לבדוק אותם. אולי אפשר להסתפק בתת-קבוצה קטנה כלשהי?</p>
+<p>אלא שהגישה הזו היא ללכת עם הראש בקיר, בראש ובראשונה כי היא לא מנסה לפתור את בעיית בדיקת הראשוניות אלא בעיה אחרת, קשה ממנה - בעית הפירוק לגורמים: בהינתן <span class="math">\(n\)</span>, למצוא מחלק לא טריוויאלי של <span class="math">\(n\)</span> (ה"טריוויאליים" הם 1 ו-<span class="math">\(n\)</span> עצמו). בעיית הפירוק לגורמים היא בעלת היסטוריה מרתקת משל עצמה ואלגוריתמים מחוכמים משל עצמה שפותרים אותה; אבל אף אחד מהם עדיין לא נחשב "יעיל" במובן זה שהוא פולינומי ב-<span class="math">\(\lg n\)</span>, וגם הם פועלים בצורה שונה מסתם בדיקה של מספרים שהם בעלי פוטנציאל לחלק את <span class="math">\(n\)</span> (בתור התחלה, הם מסתמכים על כך שדי למצוא מספר <span class="math">\(m\)</span> שאינו זר ל-<span class="math">\(n\)</span> ואינו מתחלק על ידו, כלומר שיש להם מחלק משותף לא טריוויאלי שהוא גם מחלק לא טריוויאלי של <span class="math">\(n\)</span>; אם נמצא <span class="math">\(m\)</span> כזה, קל למצוא את המחלק המשותף המדובר באמצעות <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%97%D7%9C%D7%A7_%D7%9E%D7%A9%D7%95%D7%AA%D7%A3_%D7%9E%D7%A7%D7%A1%D7%99%D7%9E%D7%9C%D7%99">האלגוריתם האוקלידי</a>. על כל זה אפשר וכדאי להרחיב בפעם אחרת).</p>
+<p>בקיצור, את בעיית הראשוניות כדאי לתקוף מכיוון שונה לגמרי, מה שמבחינה "פילוסופית" נראה מסקרן - איך אפשר לבדוק האם מספר הוא ראשוני מבלי לבדוק כלל מספרים שאולי מחלקים אותו ואולי לא? וכאן נכנס לתמונה אספקט יפה של המתמטיקה, שאכנה אותו כאן (בצורה שהיא כנראה לא מדוייקת במיוחד) "לוקלי מול גלובלי". בדיקה נאיבית מהסוג שהצעתי היא "לוקלית" - היא מסתמכת על התכונה "המספר שאני בודק כרגע מחלק את <span class="math">\(n\)</span>", כשהבעייתיות נעוצה בעובדה שיכולים להיות מעט מאוד מספרים שמקיימים את התכונה הלוקלית הזו וקשה למצוא אותם. במקום בדיקות לוקליות שכאלו אפשר לבצע בדיקה "גלובלית" שבודקת תכונה של אובייקט מתמטי כללי יותר שמוגדר באמצעות <span class="math">\(n\)</span> - החבורה הכפלית מודולו <span class="math">\(n\)</span>, תכף אסביר בפירוט - ומקיים את התכונה אם <span class="math">\(n\)</span> ראשוני, ואחרת לא מקיים אותה. בדיקת התכונה הזו תתבסס גם היא על דגימה אקראית של איברים מתוך האובייקט; אבל מכיוון שהתכונה היא "גלובלית" (שוב, קחו את המילים הללו בצורה הכי לא פורמלית שאפשר), כמות האיברים שמעידים על כך שהתכונה "נכשלת" תהיה גדולה - נניח, יותר מחצי מהאיברים במרחב המדגם שלנו.</p>
+<p>האתגר הוא כמובן למצוא תכונות "גלובליות" שכאלו, ומה שמילר-רבין עושה למעשה הוא להשתמש בשתי תכונות גלובליות שונות; כשהאחת נכשלת (במובן זה של "לא מספקת עדות טובה לכך שהמספר לא ראשוני"), מובטח שהשניה תעבוד לעתים קרובות; ומה שנחמד הוא שאפשר לבדוק את שתיהן גם יחד. נתחיל מהתכונה הראשונה - היא מתבססת על מה שמכונה "<a href="http://he.wikipedia.org/wiki/%D7%94%D7%9E%D7%A9%D7%A4%D7%98_%D7%94%D7%A7%D7%98%D7%9F_%D7%A9%D7%9C_%D7%A4%D7%A8%D7%9E%D7%94">המשפט הקטן של פרמה</a>" שהוא האבחנה שעבור כל מספר ראשוני <span class="math">\(p\)</span> וכל מספר אחר <span class="math">\(a\)</span> שאינו מתחלק בידי <span class="math">\(p\)</span>, מתקיים ש-<span class="math">\(a^{p-1}-1\)</span> מתחלק על ידי <span class="math">\(p\)</span>. למשל, אם ניקח <span class="math">\(p=5\)</span>, נקבל שכל מספר <span class="math">\(a\)</span> שאינו מתחלק ב-5 מקיים ש-5 מחלק את <span class="math">\(a^{4}-1\)</span> (קחו <span class="math">\(a=2\)</span>; <span class="math">\(2^{4}-1=16-1=15\)</span> שמתחלק ב-5, וכו' וכו'). בניסוח מודרני מסמנים זאת כ-<span class="math">\(a^{p-1}\equiv_{p}1\)</span> (קראו את השוויון שבאמצע כ"שקול מודולו <span class="math">\(p\)</span>" - המשמעות הפורמלית היא בדיוק שהפרש שני האגפים מתחלק ב-<span class="math">\(p\)</span>, או אם תרצו, שחלוקת כל אחד מהאגפים ב-<span class="math">\(p\)</span> נותן את אותה שארית).</p>
+<p>פרמה גילה את המשפט מתוך משחקים במספרים והעלאת השערות; אוילר הוכיח לאחר מכן גרסה כללית יותר שלו, התקפה לכל מספר <span class="math">\(n\)</span> ולא רק לראשוניים; בגרסה זו, החזקה שבה מעלים את <span class="math">\(a\)</span> היא שונה (היא <span class="math">\(\phi\left(n\right)\)</span> - פונקצית אוילר של <span class="math">\(n\)</span>, למי שמכיר) והיא תהיה <span class="math">\(n-1\)</span> אך ורק אם <span class="math">\(n\)</span> ראשוני. אם כן, יש לנו קריטריון כלשהו לראשוניות: <span class="math">\(n\)</span> אינו ראשוני אם <span class="math">\(a^{n-1}-1\)</span> לא מתחלק על ידי <span class="math">\(n\)</span>. לכן אלגוריתם לבדיקת ראשוניות <span class="math">\(n\)</span> (אלגוריתם אמיתי, שנקרא על שם פרמה) יעבוד כך: בהינתן <span class="math">\(n\)</span>, הגרל <span class="math">\(a\)</span> שאינו מתחלק על ידי <span class="math">\(n\)</span>, חשב את <span class="math">\(a^{n-1}-1\)</span> ובדוק אם הוא מתחלק ב-<span class="math">\(n\)</span>. אם לא, מובטח ש-<span class="math">\(n\)</span> לא ראשוני. אם כן, בסבירות לא רעה <span class="math">\(n\)</span> ראשוני (על עניין הסבירויות ארחיב בהמשך). מצאנו את האלגוריתם שרצינו.</p>
+<p>האמנם?</p>
+<p>צריך להיות זהירים פה. אמנם, המשפט של אוילר לא עובד עבור החזקה <span class="math">\(n-1\)</span> אם <span class="math">\(n\)</span> אינו ראשוני, אבל זה רק אומר ש<strong>לא מובטח</strong> לנו שמתקיים <span class="math">\(a^{n-1}\equiv_{n}1\)</span>; זה בכל זאת עשוי לקרות לפעמים (למשל, אם <span class="math">\(a=1\)</span> זה יקרה תמיד). מה שהיינו רוצים שיקרה הוא שתתקיים תוצאה כמו "אם <span class="math">\(n\)</span> אינו ראשוני, אז יש המון ערכים של <span class="math">\(a\)</span> שעבורם <span class="math">\(a^{n-1}-1\)</span> אינו מתחלק ב-<span class="math">\(n\)</span>" כי כל מספר <span class="math">\(a\)</span> כזה "מוכיח" לנו ש-<span class="math">\(n\)</span> אינו ראשוני. זה נכון לעתים קרובות; אלא שלרוע המזל, זה לא נכון תמיד. למעשה, יש מספרים פריקים שעבורם <strong>לכל</strong> <span class="math">\(a\)</span> (שאין לו ול-n מחלקים משותפים, אבל הסיכוי להגריל <span class="math">\(a\)</span> כזה הוא כמו הסיכוי לפרק לגורמים את <span class="math">\(n\)</span> "במזל") מתקיים <span class="math">\(a^{n-1}\equiv_{n}1\)</span>, כלומר מספרים פריקים ש"בכל זאת" מקיימים את המשפט הקטן של פרמה ככתבו וכלשונו. למספרים הללו קוראים <strong><a href="http://en.wikipedia.org/wiki/Carmichael_number">מספרי קרמייקל</a></strong>; הקטן ביותר שבהם הוא 561. התכונות שלהם ידועות לא רע - למשל, ניתן להוכיח די בקלות שכל מספר קרמייקל חייב להיות מכפלה של ראשוניים אי זוגיים שונים זה מזה (כלומר, מספר כמו <span class="math">\(3\cdot3\)</span> או <span class="math">\(2\cdot3\)</span> הוא מחוץ למשחק מראש); לא ניכנס לזה עכשיו. הנקודה היא שיש קבוצה ספציפית של מספרים "מרגיזים", עם אפיונים ספציפיים משל עצמה, שעבורם השיטה של משפט פרמה <strong>נכשלת לחלוטין</strong>.</p>
+<p>אז מה עושים? מחפשים עוד קריטריון ש"מתקלקל" כש-<span class="math">\(n\)</span> אינו ראשוני. לכאורה חזרנו לנקודת ההתחלה, אבל למעשה מצבנו טוב יותר מאשר קודם, כי המבחן של הקריטריון הנוכחי נותן לנו מוטיבציה לקריטריון הבא. לשם כך עלינו להסביר קודם כל איך בדיוק אפשר לבדוק את הקריטריון של פרמה. אמרתי קודם שהבדיקה פשוטה - מגרילים <span class="math">\(a\)</span> ומחשבים את <span class="math">\(a^{n-1}-1\)</span>, אבל איך עושים את זה אם <span class="math">\(n\)</span> עצום? יש כאן שתי בעיות מהותיות - ראשית, אם <span class="math">\(n\)</span> עצום, גם <span class="math">\(a^{n-1}-1\)</span> יהיה עצום - אבל עצום ברמה גדולה פי כמה, כך שלא יהיה שום סיכוי לשמור אותו במחשב; ושנית, זמן החישוב של <span class="math">\(a^{n-1}-1\)</span> יהיה גם הוא עצום אם ננקוט בשיטה הנאיבית - לכפול את <span class="math">\(a\)</span> בעצמו <span class="math">\(n-1\)</span> פעמים. כבר עדיף לעבור על כל המספרים שקטנים מ-<span class="math">\(n\)</span> וחסל. אם כן, מה עושים?</p>
+<p>הפתרון לבעיה הראשונה פשוט. לא חייבים לחשב את <span class="math">\(a^{n-1}\)</span> עצמו; אפשר להסתפק בחישוב השארית של <span class="math">\(a^{n-1}\)</span> כשהוא מחולק ב-<span class="math">\(n\)</span>. הצורה שבה עושים זאת פשוטה - במהלך החישובים שלנו, בכל פעם שבה מתקבל מספר גדול מ-<span class="math">\(n\)</span>, פשוט מחלקים אותו ב-<span class="math">\(n\)</span> ומשאירים רק את השארית. לא קשה לראות שזה עובד. בפועל מה שאנחנו עושים כאן הוא להפסיק לעבוד עם שלמים ולהתחיל לעבוד עם מה שנקרא "חוג השלמים מודולו <span class="math">\(n\)</span>". לצורך העניין מספיק לחשוב עליהם בתור אוסף כל המספרים הטבעיים הקטנים מ-<span class="math">\(n\)</span> עם פעולות החיבור והכפל הרגילות, פרט לכך שאחרי שהן מבוצעות מחלקים ב-<span class="math">\(n\)</span> ולוקחים את השארית. מעכשיו בכל פעם שבה אכתוב משהו כמו <span class="math">\(a^{n-1}\)</span> הכוונה יהיה לאיבר שמקבלים באותה חבורה אחרי ש-<span class="math">\(a\)</span> מועלה בחזקת <span class="math">\(n-1\)</span>; ואם אכתוב <span class="math">\(-1\)</span>, הכוונה יהיה לאיבר המקביל לו בחבורה הזו, שהוא <span class="math">\(n-1\)</span> (הם מייצגים את אותו האיבר שכן ההפרש שלהם מתחלק ב-<span class="math">\(n\)</span>). מכיוון שכל המספרים שעובדים איתם הם קטנים מ-<span class="math">\(n\)</span> (שהוא מספר "סביר" מבחינת זה שפעולות החשבון הרגילות קלות לביצוע עבורו), נפטרנו מהבעיה הראשונה.</p>
+<p>כעת לבעיה השניה. האבחנה המרכזית כאן היא שלא חייבים לכפול את <span class="math">\(a\)</span> בעצמו <span class="math">\(n-1\)</span> פעמים כדי לחשב את <span class="math">\(a^{n-1}\)</span>. הנה דוגמה פשוטה לדרך שבה אפשר לבצע קיצורים: נניח שאני רוצה לחשב את <span class="math">\(a^{16}\)</span> במעט פעולות כפל. מה שאעשה יהיה ראשית לכפול את <span class="math">\(a\)</span> בעצמו ולקבל <span class="math">\(a^{2}\)</span>. כעת, במקום לכפול את התוצאה שוב ב-<span class="math">\(a\)</span>, אכפול את התוצאה בעצמה, כלומר אבצע את החישוב <span class="math">\(a^{2}\cdot a^{2}=a^{4}\)</span>. את התוצאה שוב אכפול בעצמה ואקבל <span class="math">\(a^{8}\)</span>, ואת זה שוב אכפול בעצמו ואקבל <span class="math">\(a^{16}\)</span>. סיימנו, וביצענו רק ארבע פעולות כפל במקום שש עשרה.</p>
+<p>בואו ננסה משהו יותר מתוחכם. נניח שאנחנו רוצים לחשב את <span class="math">\(a^{13}\)</span> עכשיו. מה עושים? פתרון פשוט הוא זה: כבר חישבנו לפני רגע את <span class="math">\(a^{4}\)</span> ואת <span class="math">\(a^{8}\)</span>, אז פשוט נכפול אותם זה בזה וב-<span class="math">\(a\)</span> ונקבל <span class="math">\(a\cdot a^{4}\cdot a^{8}=a^{13}\)</span>. כאן הסתמכנו על כך שניתן לכתוב את 13 כסכום של חזקות של 2: <span class="math">\(13=1+4+8\)</span>. מכיוון שאפשר לכתוב כל מספר באמצעות סכום של חזקות של 2 (זוהי פשוט ההצגה של המספר בבסיס בינארי), התעלול הזה עובד תמיד. הפאנץ' הוא שאם אנחנו רוצים להעלות בחזקת <span class="math">\(n\)</span> מספר כלשהו, אנחנו צריכים לחשב רק <span class="math">\(\lg n\)</span> איברים של <span class="math">\(a\)</span> בחזקת חזקות של 2 (למה? כי אנחנו צריכים את כל החזקות מהצורה <span class="math">\(2^{i}\)</span> עבורן <span class="math">\(2^{i}\le n\)</span>, כלומר <span class="math">\(i\le\lg n\)</span>) ולכפול את החזקות הרלוונטיות.</p>
+<p>מה שאלגוריתם מילר-רבין עושה הוא לחשב את <span class="math">\(a^{n-1}\)</span> בצורה דומה מאוד אבל לא זהה לגמרי - יש עוד טוויסט אחד, שהוא זה שעושה את כל ההבדל. הנה עוד דוגמה - נניח שאנחנו רוצים לחשב את <span class="math">\(a^{24}\)</span>. אפשר לעשות זאת בשתי דרכים: או לחשב את <span class="math">\(a^{8}\)</span> ו-<span class="math">\(a^{16}\)</span> ולכפול אותם, כפי שכבר ראינו; אבל אפשר גם לחשב את <span class="math">\(a^{3}\)</span> ואז להעלות אותו שוב ושוב בריבוע, עד שמגיעים ל-<span class="math">\(a^{24}\)</span>. כדי להבין למה זה עובד, נשים לב לכך ש-<span class="math">\(24=3\cdot2^{3}\)</span>. כלומר, אפשר לכתוב את המספר הזה בתור מכפלה של מספר אי זוגי וחזקה כלשהי של 2, ואז <span class="math">\(a^{24}=\left(a^{3}\right)^{2^{3}}\)</span>, כלומר ניתן לכתוב את <span class="math">\(a^{24}\)</span> בתור העלאה בריבוע שלוש פעמים ברצף של <span class="math">\(a^{3}\)</span>. זה עובד גם באופן כללי, כמובן: כדי לחשב את <span class="math">\(a^{n-1}\)</span> אפשר לכתוב <span class="math">\(n-1=m\cdot2^{k}\)</span> כאשר <span class="math">\(m\)</span> אי זוגי, ואז לחשב את <span class="math">\(a^{m}\)</span>, ואותו להעלות בריבוע <span class="math">\(k\)</span> פעמים. כשמסיימים, בודקים אם קיבלנו 1 או לא.</p>
+<p>אבל למעשה, אפשר לקצר את התהליך. נניח שחישבנו את <span class="math">\(a^{m}\)</span> וקיבלנו 1; אז גם כשנעלה אותו בריבוע, ולא משנה כמה פעמים, נקבל 1. לכן אפשר לעצור כבר כאן ולהגיד שהמבחן הצליח (כלומר, נתן לנו תחושה טובה בבטן ש-<span class="math">\(n\)</span> הוא ראשוני). באופן דומה, אם חישבנו את <span class="math">\(a^{m}\)</span> וקיבלנו <span class="math">\(-1\)</span> אפשר לעצור - אחרי העלאה אחת בריבוע נקבל 1, ומכאן ואילך נמשיך לקבל 1. באותו אופן, אם <span class="math">\(a^{m}\)</span> לא היה לא <span class="math">\(1\)</span> ולא <span class="math">\(-1\)</span>, היינו מצפים שמתישהו במהלך ההעלאות בריבוע שלו נקבל 1, וכאן נמצא לב לבו של מילר-רבין, והקריטריון הנכסף שלנו - איך מספר <span class="math">\(x\)</span> שקודם לכן לא היה 1 הופך ל-1 אחרי שמעלים אותו בריבוע (מודולו <span class="math">\(n\)</span>)? מה <span class="math">\(x\)</span> יכול להיות?</p>
+<p>תשובת המחץ היא זו: אם <span class="math">\(n\)</span> הוא ראשוני, <span class="math">\(x\)</span> יכול להיות רק <span class="math">\(1\)</span> (אבל אמרנו שהוא לא) או <span class="math">\(-1\)</span> (שכזכור, מסמן את <span class="math">\(n-1\)</span>). לעומת זאת, אם <span class="math">\(n\)</span> אינו ראשוני, יכולים להיות ערכים נוספים שמקיימים זאת - "שורשים לא טריוויאליים של 1". לדוגמה, אם <span class="math">\(n=8\)</span> אז מתקיים די בבירור <span class="math">\(7^{2}=49\equiv_{8}1\)</span> (ו-<span class="math">\(7\)</span> הוא בעצם מה שאנחנו מסמנים כ-<span class="math">\(-1\)</span>) אבל מתקיים גם <span class="math">\(5^{2}=25\equiv_{8}1\)</span>, ולכן <span class="math">\(5\)</span> הוא שורש לא טריוויאלי של 1. מכאן שבמהלך החישוב של מילר-רבין, עבור ערך "מוצלח" של <span class="math">\(a\)</span>, ה-1 המובטח בסוף הדרך יתקבל דרך שורש לא טריוויאלי של 1, ואז נדע <strong>בודאות</strong> ש-<span class="math">\(n\)</span> אינו ראשוני.</p>
+<p>נסכם: האלגוריתם של מילר-רבין בוחר באקראי <span class="math">\(a\)</span> קטן מ-<span class="math">\(n\)</span> וזר לו (אם הוא אינו זר לו, קל לגלות זאת בעזרת האלגוריתם האוקלידי, וזה גם יוכיח ש-<span class="math">\(n\)</span> אינו ראשוני). הוא מחשב את <span class="math">\(a^{n-1}\)</span> על ידי כך שהוא מפרק את <span class="math">\(n-1\)</span> למכפלה <span class="math">\(n-1=m\cdot2^{k}\)</span> (איך עושים זאת? מחלקים את <span class="math">\(n-1\)</span> שוב ושוב ב-2 עד שמתקבל מספר אי זוגי), מחשב את <span class="math">\(a^{m}\)</span> בצורה מהירה בשיטת קיבוץ החזקות של 2 שהראיתי (או בשיטות אחרות - יש כאלו), ואז מעלה אותו בריבוע <span class="math">\(k\)</span> פעמים תוך שהוא בודק אם במהלך החישוב צץ לו שורש לא טריוויאלי של 1 (מספר שהיה שונה מ-1 ומ-<span class="math">\(-1\)</span> אבל הפך ל-1 אחרי העלאתו בריבוע). אם צץ כזה שורש, או אם בסוף החישוב, כשהתקבל <span class="math">\(a^{n-1}\)</span>, התוצאה עדיין שונה מ-1, האלגוריתם דוחה; אחרת הוא אומר "סביר להניח ש-<span class="math">\(a\)</span> ראשוני, אם כי אני לא בטוח".</p>
+<p>וכאן נכנסת לתמונה השאלה האחרונה - כמה בטוחים אנחנו יכולים להיות? מה שרבין הוכיח (בהוכחה לא מסובכת אבל מעט טכנית שאני מעדיף לא להיכנס אליה) הוא שלכל <span class="math">\(n\)</span> פריק שרק נרצה - בין אם הוא קרמייקל ובין אם לאו - לכל היותר רבע מה-<span class="math">\(a\)</span>-ים שאנחנו עשויים לבחור יכולים להטעות אותנו; כל היתר אכן יגרמו לדחייה באחת מהדרכים המתוארות (או שבמהלך ריצת האלגוריתם עליהם יצוץ שורש לא טריוויאלי של 1, או ש-<span class="math">\(a^{n-1}\)</span> לא יהיה 1). מבחינה היסטורית מילר קדם לרבין עם האלגוריתם (ואף לפניו הרעיון הכללי היה מוכר); ההבדל הוא בניתוחים שלהם - מילר הציג את האלגוריתם שלו כאלגוריתם דטרמיניסטי, שבודק <span class="math">\(a\)</span>-ים בצורה סדרתית, והסתמך על <a href="http://he.wikipedia.org/wiki/%D7%94%D7%A9%D7%A2%D7%A8%D7%AA_%D7%A8%D7%99%D7%9E%D7%9F">השערת רימן המוכללת</a> כדי לטעון שמספיק לבדוק תחום קטן יחסית של <span class="math">\(a\)</span>-ים כדי שיובטח לנו שאחד מ-<span class="math">\(a\)</span>-ים שנבדקו הוא כזה שהיה מפריך את היות <span class="math">\(n\)</span> ראשוני במקרה שהוא פריק; לרוע המזל, השערת רימן המוכללת טרם הוכחה. מה שרבין עשה היה הפיכה של האלגוריתם להסתברותי, תוך הסתמכות על טענת ה"רבע" שהוא הוכיח.</p>
+<p>אם כן, זהו מילר-רבין: אלגוריתם קל מאוד לתכנות ובעל זמן ריצה מהיר מאוד. אני אישית משתמש בו, כמו גם ספריות מתמטיות רבות אחרות; עם זאת, קרוב לודאי שחלקכם עדיין סקפטיים ביחס לכך שהוא עשוי לטעות, ובאופן כללי לא מבינים מה הרעיון באלגוריתמים הסתברותיים; אפרט על כך בפוסט הבא.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2009/08/18/probablistic_algorithms/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">דיון מקרי על אלגוריתמים הסתברותיים</span>
+            </a>
+            
+            
+            
+            <a href="/2009/07/22/bad_math_rsa/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">למה RSA טרם נפרץ? (בגלל החשיבה המתמטית הלא פרקטית)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

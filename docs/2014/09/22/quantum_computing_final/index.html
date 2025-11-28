@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישוב קוונטי - דברי סיום ופרידה - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>חישוב קוונטי - דברי סיום ופרידה</h1>
+            <div class="post-meta">
+                <span class="date">2014-09-22</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/בעיית תת-החבורה החבויה.html">בעיית תת-החבורה החבויה</a>
+                    
+                    <a href="/tags/חישוב קוונטי.html">חישוב קוונטי</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>הפוסט הקודם שלי על האלגוריתם של שור היה המטרה המרכזית של סדרת הפוסטים שלי על חישוב קוונטי; הוא מייצג את השיא מבחינת הרמה הטכנית שאני רוצה להיכנס אליה, והוא תוצאה כל כך חשובה ומרכזית לכשעצמו שהוא מהווה מקום טוב לעצור בו. ועם זאת, אני רוצה לכתוב פוסט סיכום קצרצר שיבהיר על אילו דברים עוד לא דיברתי, ויחזור קצת על מה שכן דיברתי עליו.</p>
+<p>כרגיל עם פוסטים על נושאים שזוכים יחסית לתהודה תקשורתית היה חשוב לי להסביר מה חישוב קוונטי הוא <strong>לא</strong> לא פחות מאשר היה חשוב להסביר מה הוא <strong>כן</strong>. גם מי שלא הבין (או לא ניסה בכלל להבין) את נבכי הפרטים של האלגוריתם של שור יכול לקבל התרשמות לגבי הפער שבין דרכי ההצגה הפופולריות ובין מה שקורה שם בפועל.</p>
+<p>בשורה התחתונה, מה שראינו הוא שחישוב קוונטי זה כמו מגיד עתידות מספר או סרט הפנטזיה החביב עליכם: מצד אחד הוא מאוד חכם ויודע המון, ומצד שני לכו תוציאו ממנו מידע לא סתום. חישוב קוונטי מאפשר לנו לבצע המון חישובים במקביל שמניבים המון מידע, אבל אין לנו <strong>שום דרך</strong> לקבל את המידע הזה. כל מה שאנחנו יכולים לעשות הוא לבצע מדידה שתניב לנו פרומיל מהמידע הזה, ועם קצת מזל והרבה תכנון מראש נוכל להסיק ממנה דברים מעניינים. בשל כך, לרוב החישוב המקבילי שאנחנו מבצעים הוא <strong>לא</strong> הדבר הנאיבי שנצפה לעשות, אלא חישוב מתוחכם כלשהו שמטרתו להגדיל את הסיכוי שהפרומיל שנקבל עם המדידה יהיה בעל משמעות עבורנו.</p>
+<p>באלגוריתם של גרובר, התעלול היה לחשב ערך של פונקציה על כל הערכים האפשריים שלה בו זמנית, ואז לחזור שוב ושוב על מניפולציה ש"מושכת" את המצב הקוונטי שקיבלנו אל עבר הקלט היחיד שהניב תוצאה "מוצלחת" מבחינתנו, כדי שאחרי מדידה יהיה סיכוי טוב שנקבל את הקלט הזה. זה היה תהליך ארוך ואיטי, מין משיכת חבל מאומצת שכזו, שבה בכל פעם מתקרבים עוד טיפה אל עבר פוטנציאל הצלחה טוב. באלגוריתמים של סימון ושל שור, חישבנו את כל הערכים של פונקציה שחיפשנו את ה<strong>מחזור</strong> שלה ואז ביצענו מעין "מריחה" של הערכים הללו שהגדילה את הסיכוי שאחרי מדידה נקבל פיסת מידע שממנה נוכל להפיק, בצורה מחוכמת ולא טריוויאלית, את המחזור עצמו. מכירים את הקטע הזה שנופל לכם משהו מתחת למיטה ואתם מוצאים את עצמכם שוכבים מעוקמים עליה, יד אחת דחוסה במקום שבכלל לא היה ברור שאפשר להגיע אליו, בזווית מאוד מוזרה, ואתם מותחים ומותחים ונאנקים והאצבעות שלכם מתקרבות אט אט אל החפץ ואתם מתפללים שהוא נפל בזווית כזו שבה תוכלו לתפוס אותו ולמשוך טיפה החוצה? אז חישוב קוונטי.</p>
+<p>בעיני זה נפלא; זה אומר שחישוב קוונטי אינו סתם מודל חישובי חדש וקסום שבו הכל פתאום קל; זה אומר שזה מודל חישובי מורכב ומעניין שבניית אלגוריתמים טובים עבורו היא אתגר של ממש שדורש יצירתיות וחשיבה שונה באופן מהותי מזו של חישוב "קלאסי". אי לכך גם אם לעולם לא נוכל לבנות מחשבים קוונטיים חזקים, התחום התיאורטי הוא לטעמי ראוי ביותר.</p>
+<p>על אילו דברים עוד לא יצא לי לדבר אבל כל סדרת פוסטים חייבת להזכיר אותם? ראשית, עוד לא סיימנו עם האלגוריתם של שור. הצגתי את האלגוריתם בתור אלגוריתם לפירוק מספרים לגורמים - מה שיחסל, למשל, את מערכת ההצפנה RSA; אבל בפועל האלגוריתם היה שיטה כללית למציאת <strong>מחזור</strong> של פונקציה, שבו השתמשנו כדי למצא את <strong>הסדר</strong> של איבר בחבורה <span class="math">\(\mathbb{Z}_{N}^{*}\)</span>. זה מביא אותנו קרוב מאוד אל בעיה דומה, שגם לה יש חשיבות גדולה בהצפנה (אולי אף יותר מאשר פירוק לגורמים): לוגריתם דיסקרטי. לוגריתם "רגיל" מוגדר כך: אם <span class="math">\(a^{x}=y\)</span> אז <span class="math">\(\log_{a}y=x\)</span>. כלומר, <span class="math">\(\log_{a}y\)</span> הוא הערך שעונה על השאלה "באיזו חזקה צריך להעלות את <span class="math">\(a\)</span> כדי לקבל את <span class="math">\(y\)</span>?" כשהשאלה הזו נשאלת על מספרים ממשיים (שהם עולם "רציף", במובן שלא אכנס אליו כאן).</p>
+<p>לוגריתם דיסקרטי שואל את אותה השאלה, אבל על העולם ה"בדיד" של <span class="math">\(\mathbb{Z}_{N}^{*}\)</span>. נניח שנתונים לנו <span class="math">\(a,b\in\mathbb{Z}_{N}^{*}\)</span>; אז בעיית הלוגריתם הדיסקרטי היא למצוא <span class="math">\(x\)</span> כך ש-<span class="math">\(a^{x}=b\)</span> בחבורה <span class="math">\(\mathbb{Z}_{N}^{*}\)</span> (אם קיים כזה). לרוב ההסתמכות על קושי הבעיה במערכות הצפנה נובעת מכך ששולחים את המידע הסודי <span class="math">\(x\)</span> בתור <span class="math">\(a^{x}\)</span> (<span class="math">\(a\)</span> ידוע לשני הצדדים), כאשר לצד השני יש מידע נוסף שמאפשר "לחלץ" את <span class="math">\(x\)</span> מתוך החזקה (ולפעמים, כמו במערכת דיפי-הלמן, לא צריך לחלץ כלום). מיותר לציין שפתרון יעיל לבעיית הלוגריתם הדיסקרטי יפיל עוד מערכות הצפנה קיימות. הפאנץ' הוא שוריאציה על האלגוריתם של שור תפתור גם את בעיית הלוגריתם הדיסקרטי.</p>
+<p>אינטואיטיבית, גם לוגריתם דיסקרטי הוא בעיה של מציאת מחזור של פונקציה, רק שהפעם המחזור מחוכם קצת יותר. נניח שנתונים לנו <span class="math">\(a,b\)</span> כך ש-<span class="math">\(a^{t}=b\)</span>, אז נגדיר פונקציה בשני משתנים <span class="math">\(f\left(x,y\right)=a^{x}b^{y}\)</span>. תוך שימוש בכך שידוע לנו ש-<span class="math">\(b=a^{t}\)</span> אפשר לכתוב את הפונקציה מחדש כך:</p>
+<p><span class="math">\(f\left(x,y\right)=a^{x}a^{ty}=a^{x+ty}\)</span></p>
+<p>עכשיו, קחו מספר שלם כלשהו <span class="math">\(k\)</span>, ושימו לב לכך שמתקיים:</p>
+<p><span class="math">\(f\left(x-kt,y+k\right)=a^{\left(x-kt\right)+t\left(y+k\right)}=a^{x+ty}=f\left(x,y\right)\)</span></p>
+<p>כלומר, ל-<span class="math">\(f\)</span> יש "מחזור" בדמות זוג מספרים שמוסיפים לשני הפרמטרים של <span class="math">\(f\)</span> ומקבלים את אותה התוצאה - הזוג <span class="math">\(\left(-kt,k\right)\)</span> (לכל <span class="math">\(k\)</span> שלם). אם נצליח למצוא מחזור כזה, נוכל לחלץ מתוכו את <span class="math">\(t\)</span> (אם ידוע ש-<span class="math">\(\left(\alpha,\beta\right)\)</span> הוא מחזור כזה עם <span class="math">\(\beta\ne0\)</span> אז <span class="math">\(t=-\frac{\alpha}{\beta}\)</span>). האלגוריתם למציאת מחזור כזה מזכיר את האלגוריתם של שור, עם קצת התחכמויות נוספות, ולא אכנס אליו.</p>
+<p>גם בעיית מציאת הסדר ששור פותר, וגם בעיית הלוגריתם הדיסקרטי (בהצגה שנתתי כאן) הפכו בסופו של דבר לבעיה של "מציאת מחזור". האם יש הכללה טובה יותר למה שאנחנו בעצם עושים כאן? ובכן, כן. וההכללה משתמשת במושג מתמטי פשוט יחסית אבל חזק - חבורות. אפשר לחשוב על מציאת הסדר ועל הלוגריתם הדיסקרטי בתור מקרים פרטיים של בעיה שנקראת <strong>בעיית תת-החבורה החבויה</strong> (באנגלית זה נשמע יותר טוב: Hidden subgroup problem). הניסוח של הבעיה הזו, כאמור, מתבסס על תורת החבורות, אז אני מתנצל מראש בפני מי שלא יבין אותו. אבל תלמדו חבורות. זה קל. וכיף.</p>
+<p>הבעיה באופן כללי היא זו: נתונה לנו חבורה <span class="math">\(G\)</span> ותת-חבורה <span class="math">\(H\)</span>. אין לנו מושג מהי <span class="math">\(H\)</span>, ואנחנו מעוניינים למצוא אותה; הנשק שנתון לנו לשם כך היא פונקציה <span class="math">\(f:G\to X\)</span> כאשר <span class="math">\(X\)</span> היא קבוצה כלשהי, ואנחנו יודעים ש-<span class="math">\(f\)</span> היא <strong>קבועה בדיוק על הקוסטים של </strong><span class="math">\(H\)</span>. כלומר, <span class="math">\(f\left(x\right)=f\left(y\right)\)</span> אם ורק אם <span class="math">\(xH=yH\)</span> (או במילים אחרות, אם תרצו טרמינולוגיה מיותרת כאן - <span class="math">\(f\)</span> היא הרמה ל-<span class="math">\(G\)</span> של פונקציה חח"ע שמוגדרת על <span class="math">\(G/H\)</span>).</p>
+<p>באופן כללי לא לגמרי ברור מה זה אומר "נתונה חבורה" ו"למצוא תת-חבורה", כי יש חבורות שיכולות להיות מסובכות למדי בדרך ההצגה שלהן. לרוב מדברים על חבורה נוצרת סופית <span class="math">\(G\)</span> ומציאת <span class="math">\(H\)</span> פירושה מציאת קבוצת יוצרים מתאימה.</p>
+<p>איך זה נראה עבור הבעיות שכבר הכרנו? נתחיל מהבעיה של מציאת סדר. נתון <span class="math">\(N\)</span> ואיבר <span class="math">\(g\)</span>, ואנו מחפשים את <span class="math">\(r\)</span> עבורו <span class="math">\(g^{r}=1\)</span> מודולו <span class="math">\(N\)</span>. אנחנו יודעים שמתקיים <span class="math">\(g^{x}=g^{y}\)</span> אם ורק אם <span class="math">\(x-y\)</span> מתחלק ב-<span class="math">\(r\)</span>, כלומר אם ורק אם <span class="math">\(x,y\)</span> שקולים מודולו <span class="math">\(r\)</span>. כעת, אנחנו יודעים שמתקיים <span class="math">\(a^{\varphi\left(N\right)}=1\)</span> לכל <span class="math">\(a\in\mathbb{Z}_{N}^{*}\)</span> (זה מה שנקרא משפט אוילר) ולכן מספיק להסתכל על החזקות רק עד ל-<span class="math">\(\varphi\left(N\right)\)</span>. זה אומר שיש לנו מקרה של בעיית תת-החבורה החבוייה עבור החבורה <span class="math">\(G=\mathbb{Z}_{\varphi\left(N\right)}\)</span> עם תת-החבורה <span class="math">\(H=r\mathbb{Z}_{\varphi\left(N\right)}\)</span>, הקבוצה <span class="math">\(X=\mathbb{Z}_{N}^{*}\)</span> והפונקציה <span class="math">\(f:G\to X\)</span> המוגדרת על ידי <span class="math">\(f\left(x\right)=g^{x}\mbox{ mod }N\)</span>.</p>
+<p>נעבור לבעיית הלוגריתם הדיסקרטי. כאן <span class="math">\(G=\mathbb{Z}_{\varphi\left(N\right)}\times\mathbb{Z}_{\varphi\left(N\right)}\)</span> והפונקציה היא <span class="math">\(f:G\to\mathbb{Z}_{N}^{*}\)</span> ומוגדרת על ידי <span class="math">\(f\left(x,y\right)=a^{x}b^{y}\mbox{ mod }N\)</span>. בואו נראה שבמקרה הזה, <span class="math">\(H=\left\{ \left(-t\alpha,\alpha\right)\ |\ \alpha\in\mathbb{Z}_{\varphi\left(N\right)}\right\} \)</span>: אם <span class="math">\(f\left(x_{1},y_{1}\right)=f\left(x_{2},y_{2}\right)\)</span> אז <span class="math">\(a^{x_{1}+ty_{1}}=a^{x_{2}+ty_{2}}\)</span>, כלומר <span class="math">\(x_{1}+ty_{1}=x_{2}+ty_{2}\)</span> מודולו <span class="math">\(\varphi\left(N\right)\)</span>, ולכן <span class="math">\(x_{1}-x_{2}=-t\left(y_{1}-y_{2}\right)\)</span> מודולו <span class="math">\(\varphi\left(N\right)\)</span>. אם נסמן <span class="math">\(\alpha=y_{1}-y_{2}\)</span> נקבל ש-<span class="math">\(\left(x_{1},y_{1}\right)-\left(x_{2},y_{2}\right)=\left(x_{1}-x_{2},y_{1}-y_{2}\right)=\left(-t\alpha,\alpha\right)\in H\)</span>, כלומר <span class="math">\(\left(x_{1},y_{1}\right)\)</span> ו-<span class="math">\(\left(x_{2},y_{2}\right)\)</span> אכן שייכים לאותו קוסט (להוכחה הזו יש גם כיוון שני, קל יותר, שאתם יכולים להוכיח לעצמכם).</p>
+<p>בשני המקרים החבורה <span class="math">\(G\)</span> שלנו הייתה <strong>אבלית</strong>, כלומר התקיים בה ש-<span class="math">\(ab=ba\)</span>. זה חשוב, מכיוון שאת השיטות שראינו באלגוריתם של שור אפשר להכליל כדי לפתור את בעיית תת-החבורה החבויה לכל חבורה אבלית סופית. ומה על חבורות סופיות לא אבליות? או, שאלה מצויינת - כרגע לא ידוע על אלגוריתם קוונטי יעיל עבורן באופן כללי, וגם לא עבור המקרים הפרטיים המעניינים.</p>
+<p>ואילו מקרים פרטיים מעניינים יש? הנה דוגמה אחת. בעיה מפורסמת מאוד במדעי המחשב היא <strong>בעיית איזומורפיזם הגרפים</strong>. נתונים שני גרפים, <span class="math">\(G_{1}=\left(V_{1},E_{1}\right),G_{2}=\left(V_{2},E_{2}\right)\)</span>. הם <strong>איזומורפיים</strong> אם הם בעצם אותו גרף, רק בסימונים שונים - אם אפשר לצייר את <span class="math">\(G_{1}\)</span> כך שייראה כמו <span class="math">\(G_{2}\)</span>. פורמלית, אם קיימת פונקציה חח"ע ועל <span class="math">\(f:V_{1}\to V_{2}\)</span> המקיימת <span class="math">\(\left(u,v\right)\in E_{1}\iff\left(f\left(u\right),f\left(v\right)\right)\in E_{2}\)</span>.</p>
+<p>בעיית איזומורפיזם הגרפים היא הבעיה הפשוטה הבאה: נתון זוג גרפים סופיים <span class="math">\(\left(G_{1},G_{2}\right)\)</span> - האם הם איזומורפיים? מן הסתם, אם הם איזומורפיים ומישהו נותן לנו את האיזומורפיזם אז קל לבדוק שהוא מקיים את הקריטריון שלעיל; זה מראה שהבעיה היא ב-NP. אבל יותר מזה - לא ידוע. לא ידוע אם הבעיה ב-P (לפני כמה שנים הייתה מהומה סביב פתרון שנראה מאוד מבטיח, אבל בסופו של דבר כשל), ולא ידוע אם הבעיה NP-שלמה. היא נראית כמו עוד מועמד מעניין להיות בעיית "ביניים" שכזו, כמו פירוק לגורמים - אבל להבדיל מפירוק לגורמים, ולמרות שעל פניו יותר סביר שיתגלה שהיא ב-P מאשר שזה יתגלה עבור פירוק לגורמים, לא ידוע אלגוריתם קוונטי עבור הבעיה הזו.</p>
+<p>איך זה קשור לענייננו? מכיוון שאפשר לחשוב על הבעיה הזו בתור מקרה פרטי של בעיית תת-החבורה החבוייה, הפעם עבור חבורה לא אבלית - החבורה הסימטרית (חבורת התמורות של קבוצה מסויימת - במקרה שלנו, <span class="math">\(S_{2n}\)</span> אם מספר צמתי הגרפים הוא <span class="math">\(n\)</span>). לא אכנס הפעם להסבר איך כי הוא לא טריוויאלי לגמרי.</p>
+<p>לסיום אני רוצה להזכיר תחום שלם בחישוב קוונטי שלא נגעתי בו עד כה ולו ברמז למרות שהוא חשוב ביותר (בין היתר כי אני לא מבין בו כלום) - <strong>תיקון שגיאות קוונטי</strong>. התחום הקלאסי של תיקון שגיאות נוצר מסיבות פרקטיות לגמרי - ערוצי תקשורת הם רועשים ומלוכלכים ולא מעבירים ביטים בצורה נחמדה כפי שהיינו רוצים - מדי פעם חלק מהביטים "מתקלקלים" ומתהפכים ("ערוץ תקשורת" הוא רעיון כללי למדי; חשבו על דיסק מוזיקה שקניתם זה עתה, ואותו דיסק מוזיקה חמש שנים ושלל שריטות אחרי כן - גם המידע שעל הדיסק הזה עבר בסוג של ערוץ תקשורת רועש ואנחנו רוצים שהוא עדיין ירוץ ללא שגיאות). התוצאה היא תחום מרתק ועמוק במדעי המחשב הקלאסיים. מן הסתם, בחישוב קוונטי החשיבות של תיקון שגיאות היא גדולה פי כמה וכמה בגלל הרגישות של המערכות שבהן מדובר, ובלי תיקון שגיאות קוונטי אין שום סיכוי לחישוב קוונטי; מצד שני, בעיות כמו משפט ה-No cloning גורמות לכך שלא נוכל להשתמש בפתרונות הטריוויאליים שיש בעולם הקלאסי (למשל, סתם לשכפל את הביט ששולחים הרבה פעמים). אז מה עושים? או, מצוין, דברים מרתקים לגמרי! כאמור, אני לא מבין בזה כלום ולא אוכל לכתוב על זה פוסטים כרגע.</p>
+<p>אם כן, סדרת הפוסטים על חישוב קוונטי תמה ולא נשלמה. הצגתי רק את קצה הקרחון של תחום מרתק שאני מבין בו מעט מאוד - אני מקווה שהצלחתי לעניין אתכם ולנפץ כמה מיתוסים שגויים. אם <span class="math">\(\left|0\right\rangle \)</span> הוא חוסר הבנה ו-<span class="math">\(\left|1\right\rangle \)</span> הוא הבנה, אני מקווה שעברנו לפחות אל <span class="math">\(\left|0\right\rangle +\left|1\right\rangle \)</span> (מישהו רוצה לנצל את ההזדמנות האחרונה ולהעיר משהו על קבועי נורמליזציה?)</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2014/10/14/change_making_problem/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">בעיית המטבעות</span>
+            </a>
+            
+            
+            
+            <a href="/2014/08/24/shor_algorithm/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">חישוב קוונטי - האלגוריתם של שור</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

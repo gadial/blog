@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אל R מ-RE: מניה רקורסיבית באינסוף צעדים - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>אל R מ-RE: מניה רקורסיבית באינסוף צעדים</h1>
+            <div class="post-meta">
+                <span class="date">2007-09-18</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/חישוביות.html">חישוביות</a>
+                    
+                </span>
+                
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסט הקודם הבטחתי לתאר מהי "<a href="http://he.wikipedia.org/wiki/%D7%9E%D7%9B%D7%95%D7%A0%D7%AA_%D7%98%D7%99%D7%95%D7%A8%D7%99%D7%A0%D7%92">מכונת טיורינג</a>". אז הבטחתי. עם נסיון התיאור גיליתי שחסרים לי מספר מושגים, שאנסה להשלים כעת - מושגים שנוגעים לשאלה "מה אפשר לחשב".</p>
+<p>ובכן, בפוסט הקודם ניסיתי לשכנע אתכם (ואת עצמי?) שבכל הנוגע לחישובים, אנחנו מתעניינים בחישוב של פונקציות מהמספרים הטבעיים למספרים הטבעיים. לפעמים דווקא מעדיפים לדבר על פונקציות מסדרות סופיות של טבעיים לסדרות סופיות של טבעיים. כך למשל קיים פורמליזם של כל הפונקציות הניתנות לחישוב, שמכונות "<a href="http://he.wikipedia.org/wiki/%D7%A4%D7%95%D7%A0%D7%A7%D7%A6%D7%99%D7%94_%D7%A4%D7%A8%D7%99%D7%9E%D7%99%D7%98%D7%99%D7%91%D7%99%D7%AA_%D7%A8%D7%A7%D7%95%D7%A8%D7%A1%D7%99%D7%91%D7%99%D7%AA">פונקציות פרימיטיבות רקורסיביות</a>", ובו עוסקים בסדרות סופיות. לא ניכנס אליו (לפחות כרגע).</p>
+<p>אני דווקא ארצה ללכת בכיוון השני - לפשט עוד יותר את העניניים, ולדבר רק על <a href="http://he.wikipedia.org/wiki/%D7%91%D7%A2%D7%99%D7%99%D7%AA_%D7%94%D7%9B%D7%A8%D7%A2%D7%94"><strong>בעיות הכרעה</strong></a>. באופן כללי, בעיית הכרעה חישובית היא זו: נתונה לנו קבוצה S של מספרים טבעיים ("כל <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A1%D7%A4%D7%A8_%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99">המספרים הראשוניים</a>", "כל המספרים שמפריכים את <a href="http://he.wikipedia.org/wiki/%D7%94%D7%A9%D7%A2%D7%A8%D7%AA_%D7%92%D7%95%D7%9C%D7%93%D7%91%D7%9A">השערת גולדבך</a>", "כל המספרים שיוגרלו בלוטו בשבוע הבא"). אנחנו רוצים <a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%92%D7%95%D7%A8%D7%99%D7%AA%D7%9D">אלגוריתם</a> שבהינתן מספר טבעי כלשהו, רץ עליו, מסיים את הריצה, ועונה (נכון!) האם המספר שייך לקבוצה או לא. דרך אחרת לחשוב על כך היא זו: הקבוצה S מגדירה פונקציה, <span class="math">\(f_S\)</span>, מהטבעיים לטבעיים, בצורה הבאה:</p>
+<p><span class="math">\(f_S(x)=\{\begin{matrix} 0 &amp; x\notin S \\ 1 &amp; x\in S \end{matrix}\)</span></p>
+<p>ואנו רוצים אלגוריתם שמחשב את הפונקציה הזו.</p>
+<p>על פניו, המעבר לבעיות הכרעה מגביל אותנו. בפועל, אין זה כך, במובן שלפיו בכל בעיה של "האם אפשר לחשב את הפונקציה הזו והזו" אפשר לדון גם במסגרת של בעיית הכרעה: אם יש לנו פונקציה f, אפשר להגדיר קבוצה S של <strong>זוגות</strong> של מספרים טבעיים באופן הבא: <span class="math">\(S=\{(x,y)|y=f(x)\}\)</span>. כל זוג של מספרים טבעיים אפשר לקודד בתור מספר טבעי באופן חד חד ערכי ועל (רק אתמול גיליתי שהפונקציה שעושה זאת היא קלה להפתיע: <span class="math">\((x,y)\mapsto \frac{1}{2}((x+y)^2-x-3y+2)\)</span> - נסו להוכיח זאת בעצמכם!) ולכן אין בשימוש בזוגות בעייה של ממש. כעת, אם אנחנו מסוגלים להכריע את הקבוצה S, אנחנו מסוגלים גם לחשב את f: בהינתן x, פשוט נעבור על כל המספרים הטבעיים y על פי הסדר, ונבדוק האם <span class="math">\((x,y)\in S\)</span>. אם כן, הרי ש-<span class="math">\(f(x)=y\)</span>. אם לא, ממשיכים למספר הטבעי הבא, ובסופו של דבר נגיע ל-y הנכון.</p>
+<p>אם כן,  הצטמצמנו לדיון בשאלת שייכות של מספרים טבעיים לקבוצה מסויימת - ואכן, את רוב הבעיות החישוביות אכן ניתן להציג כך (למרות שלעתים מעדיפים בכל זאת לדון בפונקציות, מסיבות אלו ואחרות - בעיקר כאלו שנוגעות כבר לכמות המשאבים שהאלגוריתם דורש, ולא רק לשאלה האם הוא קיים או לא).</p>
+<p>כעת, כל פורמליזם סביר של "אלגוריתם" לא יאפשר קיום של יותר ממספר בן מניה של אלגוריתמים - זאת מכיוון שאנו דורשים שהאלגוריתם יהיה ניתן לתיאור סופי. מכאן שאנחנו נתקלים באותה סיטואציה כמו <a href="http://www.gadial.net/2007/08/29/cantor_diagonal/">זו שבה היינו</a> כאשר דיברנו על חישוב מספרים ממשיים: יש <a href="http://he.wikipedia.org/wiki/%D7%A7%D7%91%D7%95%D7%A6%D7%94_%D7%91%D7%AA_%D7%9E%D7%A0%D7%99%D7%94">מספר בן מניה</a> של אלגוריתמים, אבל מספר לא בן מניה של קבוצות של טבעיים (ושל פונקציות מהטבעיים לטבעיים), ולכן קיימות קבוצות שלא ניתן להכריע. יותר מכך - את <strong>מרביתן המוחצת</strong> של הקבוצות לא ניתן להכריע. לכן הקבוצות שניתן להכריע הן מעניינות, במובן מסויים. עיקר התקווה שלנו היא שרוב הקבוצות המעניינות יהיו אכן ניתנות להכרעה (לא כולן; נראה בפוסטים הבאים כמה דוגמאות לקבוצות מעניינות שאי אפשר להכריע).</p>
+<p>קרוב לודאי שאצל חלקכם התעוררה כבר השאלה הבאה: אם יש קבוצות שאינן כריעות, איך בדיוק אפשר לתאר אותן? את מי מעניינת קבוצה S שאין דרך לתאר מה תוכנה?</p>
+<p>כמובן שכאן בולט ההבדל בין הקבוצות שניתן <strong>להגדיר</strong> ובין הקבוצות שניתן <strong>להכריע</strong>. כאשר אנו עוסקים בקבוצות סופיות אפשר להגדיר אותן על ידי כתיבת כל אבריהן, ואז אלגוריתם הכרעה עבור הקבוצה הוא פשוט ביותר (קיבלת מספר? בדוק אם הוא ברשימת האיברים). לכן העניין מתחיל רק בקבוצות אינסופיות. עבור קבוצות כאלו, אי אפשר לרשום את כל אבריהן, ולכן אנו זקוקים לקריטריון כלשהו שיקבע שייכות או אי שייכות לקבוצה. לעתים קרובות, הקריטריון הזה יהיה ניתן לבדיקה. למשל, "קבוצת המספרים הראשוניים" רומז על הבדיקה האם מספר שייך לקבוצה או לא - מנסים לחלק אותו בכל המספרים שגדולים מ-1 וקטנים ממנו ורואים אם מקבלים שארית (שיטה בזבזית, אבל למי אכפת, כאן אנו עוסקים בחישוביות, לא בסיבוכיות). בדרך דומה ניתן לבצע בדיקה עבור קבוצת המספרים שמפריכים את השערת גולדבך (איך?)</p>
+<p>בואו נעבור לדוגמה מורכבת יותר - S תהיה הקבוצה של כל <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A9%D7%95%D7%95%D7%90%D7%94_%D7%93%D7%99%D7%95%D7%A4%D7%A0%D7%98%D7%99%D7%AA">המשוואות הדיופנטיות</a> במקדמים שלמים שיש להן פתרון. כאן קפצתי מקבוצה של מספרים טבעיים לקבוצה של משוואות דיופנטיות, אך אין בכך שום בעיה של ממש: כל משוואה דיופנטית בשלמים ניתנת לקידוד באופן חד חד ערכי באמצעות מספר טבעי, ולכן בצורה פורמלית אפשר להגדיר את S בתור "אוסף כל המספרים שמהווים קידוד למשוואה דיופנטית בשלמים עם פתרון". מעתה והלאה לא אתעכב על הפרט הטכני הזה - S תוכל להיות קבוצה של כל מה שלא יהיה שניתן לקודד באמצעות טבעיים (במילים אחרות, תת קבוצה של כל קבוצה בן מניה שרק תרצו).</p>
+<p>מה קורה עם המשוואות הדיופנטיות? בהיעדר דרך מחוכמת יותר, הבדיקה האם למשוואה דיופנטית יש פתרון או לא היא פשוט ניסוי וטעיה: מנסים את כל המספרים הטבעיים, ומקווים שאחד מהם יפתור את המשוואה. אם התגלה פתרון, מצויין; האלגוריתם עוצר את ריצתו ומדווח על שייכות המשוואה ל-S. לעומת זאת, אם לא נמצא פתרון...</p>
+<p>אם לא נמצא פתרון, נתקענו. האלגוריתם הנאיבי שלנו ימשיך לנסות מספרים מכאן ועד להודעה חדשה, ולעולם לא יעצור. בקיצור, האלגוריתם שלנו רק "חצי" מוצלח: הוא מחזיר תשובה נכונה על איברים ששייכים לקבוצה, אבל "נתקע" על איברים שלא שייכים אליה (המילה "נתקע" נשמעת קצת מוזרה בהקשר של אלגוריתם שרץ לנצח - אבל הכוונה היא לדברים כפי שהם נראים מנקודת המבט של מריץ האלגוריתם, שיושב ומחכה ומחכה ומחכה, ומבחוץ האלגוריתם נראה לו "תקוע" - גם בעתיד כנראה אשתמש במילה הלא מדוייקת הזו). למעשה, כפי שהוכח רק בשנת 1970, לא קיים אלגוריתם שמכריע את קבוצת המשוואות הדיופנטיות שקיים להן פתרון, ולכן האלגוריתם הנאיבי שלנו, מבחינה חישובית (כלומר, מבחינת היכולות שלו, לא מבחינת זמני הריצה שלו) הוא הכי טוב שיש.</p>
+<p>מכאן שיש עניין תיאורטי גם בקבוצות שהן רק "כריעות למחצה" שכאלו, ואפילו יש להן שם. בעוד שלקבוצות כריעות "ממש" קוראים בצורה פורמלית "<a href="http://he.wikipedia.org/wiki/%D7%A7%D7%91%D7%95%D7%A6%D7%94_%D7%A8%D7%A7%D7%95%D7%A8%D7%A1%D7%99%D7%91%D7%99%D7%AA">קבוצות רקורסיביות</a>" - "Recursive sets" (מאותה הסיבה שלפונקציות שהזכרתי בתחילת הפוסט קוראים "רקורסיביות" - כאן המילה "רקורסיבית" היא פשוט שם אחר ל"ניתן לחישוב"), הרי שלקבוצות כריעות למחצה קוראים בצורה פורמלית "<a href="http://he.wikipedia.org/wiki/%D7%A7%D7%91%D7%95%D7%A6%D7%94_%D7%A0%D7%99%D7%AA%D7%A0%D7%AA_%D7%9C%D7%9E%D7%A0%D7%99%D7%99%D7%94_%D7%A8%D7%A7%D7%95%D7%A8%D7%A1%D7%99%D7%91%D7%99%D7%AA">קבוצות ניתנות למניה רקורסיבית</a>" - "Recursively enumerable sets".</p>
+<p>הסיבה לשם המוזר הזה היא שאף שלא ניתן להכריע את כל הקבוצות הניתנות למניה רקורסיבית (כפי שמראה דוגמת המשוואות הדיופנטיות), אפשר לכתוב אלגוריתם (כלומר, משהו "רקורסיבי" - ניתן לחישוב) שיוציא כפלט (אינסופי) רשימה שתכיל את כל האיברים השייכים לקבוצה (כלומר, "ימנה" אותם). הנקודה החשובה ב"אינסופי" היא זו: <strong>כל</strong> איבר ששייך לקבוצה יוצא כפלט על ידי האלגוריתם אחרי פרק זמן סופי כלשהו. די ברור שכל קבוצה שמקיימת את התכונה הזו היא אכן "כריעה למחצה" במובן שתיארנו (למה?). הכיוון ההפוך הוא על פניו פשוט פחות, כי לא ברור איך אפשר לייצר כזו רשימה גם אם יש לנו אלגוריתם שמסיים לרוץ על איברים שכן שייכים לקבוצה.</p>
+<p>הגישה הנאיבית אומרת "בדוק האם 1 בקבוצה. אם כן, הוצא אותו כפלט. אם לא, לא. המשך ל-2, וכן הלאה וכן הלאה". הבעיה היא שכבר בריצה על 1 האלגוריתם עשוי להיתקע, ואז לא נגיע אף פעם לשלב של בדיקת 2.</p>
+<p>הדרך להתמודד עם הבעיה הזו היא "הרצה מבוקרת" של האלגוריתם שמבצע את הבדיקה, שמתנהלת כך: ראשית הוא מריץ את אלגוריתם הבדיקה על 1 במשך צעד בודד. אם סיים, מצויין, הוצא את 1 כפלט אם הוא שייך לקבוצה. אחרי זה הוא מריץ אותו על 1 במשך שני צעדים, ועל 2 במשך שני צעדים. אם סיים באחד מהמקרים, מצויין. אחרי זה הוא מריץ אותו על 1 במשך שלושה צעדים, על 2 במשך שלושה צעדים, על 3 במשך שלושה צעדים... וכן הלאה.  כך מובטח שעל כל מספר הוא יריץ את הבדיקה למשך כל מספר של צעדים - ומכיוון שכל מספר ששיך לקבוצה יתגלה ככזה לאחר שהבדיקה תרוץ עליו במשך מספר סופי מסויים של צעדים, כל המספרים ששייכים לקבוצה יתגלו בשלב זה או אחר ויוצאו כפלט.</p>
+<p>הטכניקה שתוארה לעיל אינה פשוטה כל כך להבנה; כל מי שהתקשה, מוזמן לשאול שאלות המשך. אחד הדברים הבעייתיים ביותר במה שכתבתי הוא ההתייחסות שלי לאלגוריתם כמעין "תוכנית מחשב" שניתן להריץ למשך מספר צעדים ואז לעצור. אני מרשה לעצמי את הרמאות הזו מכיוון שאני כבר מזהה אלגוריתם עם המודל של מכונת טיורינג, שאכן מזכירה מעין מחשב פרימטיבי. מכאן שחזרנו אל נקודת ההתחלה - שוב אני מתחייב להסביר מהי, לעזאזל, מכונת טיורינג. אני מקווה שבפוסט הבא כבר אבהיר את הדברים.</p>
+<p>רק הערה אחרונה לסיום: מקובל לסמן את אוסף כל הקבוצות הרקורסיביות על ידי R, ואת כל הקבוצות הניתנות למניה רקורסיבית על ידי RE, וגם אני מתעתד לנהוג כך בהמשך.</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2007/09/20/hilbert_program_overview/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">על תורה העומדת על כריעות תרנגולת</span>
+            </a>
+            
+            
+            
+            <a href="/2007/09/15/what_is_algorithm/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">אלגוריתם סופי דטרמיניסטי (או: מה זה בכלל?)</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

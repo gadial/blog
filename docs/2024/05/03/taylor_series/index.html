@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טורי טיילור - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>טורי טיילור</h1>
+            <div class="post-meta">
+                <span class="date">2024-05-03</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אנליזה מתמטית.html">אנליזה מתמטית</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/טורי טיילור.html">טורי טיילור</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+
+<p>אני יכול לשים אצבע מדויקת על אחד מהרגעים שבהם התחלתי להתלהב ממתמטיקה. זה היה בכיתה י"ב. המתמטיקה עבורי הייתה שלל דברים טכניים לא מעניינים במיוחד, שאליהם הצטרף לאחרונה מושג ה<strong>נגזרת</strong> שגם הוא לא הלהיב אותי במיוחד כי לא הבנתי מה בעצם הוא אומר. הספר אמר על גבולות ש"לא נוכל להציג את מושג הגבול במדויק" ואז נתן הסבר שלא הבנתי ממנו כלום. בקיצור, המתמטיקה עבורי הייתה חור שחור.</p>
+<p>חור שחור גדול במיוחד היוו פונקציות כמו סינוס וקוסינוס. הבנתי איך מגדירים אותן, אבל לא הבנתי איך <strong>מחשבים</strong> אותן. מה הקסם שהמחשבון עושה כדי לקבל אותן. ואז, במהלך שיעור פיזיקה כלשהו (אהבתי אז פיזיקה הרבה יותר ממתמטיקה) השאלה הזו עלתה והמורה אמר שיסביר את זה לי ולחבר שלי אחרי השיעור. ואז נשארנו ובשתי דקות הוא הראה לי משהו שפוצץ לי את המוח וגרם לי להתחיל לשרבט נגזרות על נייר בהתלהבות ולא להאמין שזה עובד ולהרגיש, אולי בפעם הראשונה, שבאמת יש הגיון עמוק מאחורי כל זה ויש סיבה למה אנחנו עושים את כל הדברים הטכניים הללו.</p>
+<p>מה שהמורה הראה לנו הוא מה שנקרא <strong>טור טיילור</strong>. הרעיון בטור טיילור הוא שזה <strong>טור חזקות</strong> (מה שדיברתי עליו <a href="https://gadial.net/2024/04/27/power_series/">בפוסט הקודם</a>) שניתן לחשב מתוך פונקציה <span class="math">\(f\)</span>, ועם קצת מזל הולך להיות שווה ל-<span class="math">\(f\)</span> בתחום שמעניין אותנו. אני אומר "עם קצת מזל" כי למרבה הצער זה לא תמיד עובד, ונראה דוגמאות, אבל כשזה עובד, זה עובד ממש יפה בזכות העובדה שטור חזקות הוא אובייקט פשוט למדי, ולכן ייצוג של פונקציה בעזרת טור חזקות הוא ייצוג מאוד נוח שלה. אני כן רוצה להזהיר שלמרות ההקדמה שלי, טור טיילור של פונקציה הוא <strong>לא בהכרח</strong> הדרך הכי טובה לחשב אותה - לפעמים יש שיטות אפקטיביות עוד יותר. אבל זו שיטה לא רעה.</p>
+<h2>מה זה טור טיילור בכלל?</h2>
+
+<p>בואו נתחיל מלהסביר מה זה טור טיילור בכלל. לצורך כך בואו <strong>נניח</strong> שיש לנו פונקציה <span class="math">\(f\left(x\right):\mathbb{R}\to\mathbb{R}\)</span> (כרגע אני מניח שזו פונקציה מהממשיים לעצמם, בהמשך נכניס לתמונה גם מספרים מרוכבים) ו<strong>נניח</strong> שהפונקציה הזו מיוצגת על ידי טור חזקות בעל רדיוס התכנסות <span class="math">\(R=\infty\)</span>, כלומר מתקיים <span class="math">\(f\left(x\right)=\sum_{n=0}^{\infty}a_{n}x^{n}\)</span> לכל <span class="math">\(x\in\mathbb{R}\)</span> <strong>ונניח</strong> שמותר לנו לגזור את טור החזקות הזה (עוד לא הוכחתי שאפשר לעשות את זה), אז אני אקבל:</p>
+<p><span class="math">\(f^{\prime}\left(x\right)=\sum_{n=1}^{\infty}na_{n}x^{n-1}\)</span></p>
+<p>ועכשיו <strong>נניח</strong> שגם את הטור שקיבלתי עכשיו אפשר לגזור שוב, אז נקבל</p>
+<p><span class="math">\(f^{\prime\prime}\left(x\right)=\sum_{n=2}^{\infty}n\left(n-1\right)a_{n}x^{n-2}\)</span></p>
+<p>וככה באופן כללי נקבל</p>
+<p><span class="math">\(f^{\left(k\right)}\left(x\right)=\sum_{n=k}^{\infty}n\left(n-1\right)\cdots\left(n-k+1\right)a_{n}x^{n-k}\)</span></p>
+<p>עכשיו, מה קורה כשאני מציב <span class="math">\(x=0\)</span> בפונקציה ובכל הנגזרות שלה? אני הולך לאפס כל מקדם מלבד המקדם של <span class="math">\(x^{0}\)</span>, כלומר אני אקבל:</p>
+<p><span class="math">\(f\left(0\right)=a_{0}\)</span></p>
+<p><span class="math">\(f^{\prime}\left(0\right)=1\cdot a_{1}\)</span></p>
+<p><span class="math">\(f^{\prime\prime}\left(0\right)=2\cdot1\cdot a_{2}\)</span></p>
+<p>ובאופן כללי:</p>
+<p><span class="math">\(f^{\left(k\right)}\left(0\right)=k\cdot\left(k-1\right)\cdots1\cdot a_{k}=k!\cdot a_{k}\)</span></p>
+<p>כלומר, קיבלתי ייצוג מפורש של מקדמי טור החזקות עבור <span class="math">\(f\)</span> בעזרת הנגזרות של <span class="math">\(f\)</span>:</p>
+<p><span class="math">\(a_{k}=\frac{f^{\left(k\right)}\left(0\right)}{k!}\)</span></p>
+<p>ולכן אפשר לכתוב</p>
+<p><span class="math">\(f\left(x\right)=\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}\)</span></p>
+<p>הטור <span class="math">\(\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}\)</span> הוא מה שנקרא <strong>טור הטיילור</strong> של <span class="math">\(f\)</span>. שימו לב שהוא מוגדר היטב לכל <span class="math">\(f\)</span> שגזירה אינסוף פעמים ב-<span class="math">\(x=0\)</span>, ואם <span class="math">\(f\)</span> לא גזירה אינסוף פעמים ב-<span class="math">\(x=0\)</span> אז אפשר לקחת טור חזקות סביב נקודה אחרת, <span class="math">\(a\)</span>, כלומר להסתכל על הטור <span class="math">\(\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(a\right)}{n!}\left(x-a\right)^{n}\)</span> - על הטור הזה אומרים שזה טור הטיילור של <span class="math">\(f\)</span> שמפותח סביב <span class="math">\(x=a\)</span>. ההגדרה הזו עובדת לכל <span class="math">\(f\)</span> שגזירה אינסוף פעמים, אבל אני מזהיר ש<strong>לא נכון</strong> שמתקיים השוויון <span class="math">\(f\left(x\right)=\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(a\right)}{n!}\left(x-a\right)^{n}\)</span> אפילו אם <span class="math">\(f\)</span> באמת גזירה אינסוף פעמים ב-<span class="math">\(a\)</span>. ייתכן שטור החזקות הזה בכלל לא יתכנס, וייתכן שאפילו אם הוא מתכנס, הוא לא מתכנס לערך של <span class="math">\(f\left(x\right)\)</span>, ואנחנו נראה דוגמאות גם לזה. אבל קודם בואו נראה דוגמאות לסיטואציות שבהן זה עובד יפה יחסית.</p>
+<h2>טור טיילור של אקספוננט ופונקציות טריגונומטריות</h2>
+
+<p>הדוגמא הראשונה והקלה ביותר היא הפונקציה <span class="math">\(f\left(x\right)=e^{x}\)</span>, אקספוננט. לא ניכנס כרגע לשאלה מאיפה היא באה ולמה אוהבים אותה (<a href="https://gadial.net/2010/03/27/exponent/">יש לי פוסט עליה</a>), אלא רק נזכיר את התכונה הבסיסית שלה: <span class="math">\(\left(e^{x}\right)^{\prime}=e^{x}\)</span>, היא הנגזרת שלה עצמה. לכן יש לה אינסוף נגזרות ב-<span class="math">\(x=0\)</span> וכשמציבים בהן <span class="math">\(x=0\)</span> מקבלים 1, כלומר <span class="math">\(f^{\left(n\right)}\left(0\right)=1\)</span> לכל <span class="math">\(n\)</span>, מה שנותן את טור הטיילור <span class="math">\(\sum_{n=0}^{\infty}\frac{x^{n}}{n!}\)</span>. לשמחתנו, הטור הזה באמת מתכנס ושווה ל-<span class="math">\(e^{x}\)</span> בכל <span class="math">\(\mathbb{R}\)</span> ולכן אפשר לכתוב</p>
+<p><span class="math">\(e^{x}=\sum_{n=0}^{\infty}\frac{x^{n}}{n!}=1+x+\frac{x^{2}}{2}+\frac{x^{3}}{6}+\ldots\)</span></p>
+<p>זה טור מצויין כדי לחשב את <span class="math">\(e^{x}\)</span> (למרות ששוב, זו לא הדרך <strong>הכי טובה</strong> לחשב את <span class="math">\(e^{x}\)</span>).</p>
+<p>בואו נעבור עכשיו לפונקציות הטריגונומטריות - סינוסים וקוסינוסים. גם עליהן <a href="https://gadial.net/2010/03/31/sine_and_cosine_via_ode/">יש לי פוסט</a> שמנסה להסביר את אחת מהדרכים שבהן הן צצות - בתור פתרונות של המשוואה הדיפרנציאלית <span class="math">\(f^{\prime\prime}=-f\)</span>, מה שאומר שלנגזרות שלהן יש "מחזור מאורך 4" - אחרי שגוזרים אותן 4 פעמים חוזרים לפונקציה המקורית. זה נובע מכך ש:</p>
+<p><span class="math">\(\left(\sin x\right)^{\prime}=\cos x\)</span></p>
+<p><span class="math">\(\left(\cos x\right)^{\prime}=-\sin x\)</span></p>
+<p>בנוסף, <span class="math">\(\sin0=0\)</span> ו-<span class="math">\(\cos0=1\)</span>. אלו מספיקים לנו כדי למצוא את טורי טיילור של הפונקציות הללו - ולמרבה השמחה, גם הפעם הטורים הללו שווים לפונקציות בכל <span class="math">\(\mathbb{R}\)</span> (נקודה שצריך להזכיר היא שכאן <span class="math">\(\sin,\cos\)</span> הן פונקציות שמניחות שהקלט שלהן נתון <a href="https://gadial.net/2008/01/11/radians/">ברדיאנים</a>, לא במעלות; אם היה נתון במעלות הנוסחאות לא היו יפות כל כך). נקבל:</p>
+<p><span class="math">\(\sin x=\sin\left(0\right)x^{0}+\cos\left(0\right)x^{1}-\frac{\sin\left(0\right)}{2}x^{2}-\frac{\cos\left(0\right)}{6}x^{3}+\ldots\)</span></p>
+<p>כל פעם שכתוב <span class="math">\(\sin\left(0\right)\)</span> זה הולך להתאפס, ולכן נישאר רק עם האיברים במקומות <strong>האי-זוגיים</strong>. עבורם, <span class="math">\(\cos\left(0\right)=1\)</span> ולכן ההשפעה של המקדם תהיה רק בכך שפעם מחברים ופעם מחסרים; ואסור לשכוח את ה-<span class="math">\(n!\)</span> שבמכנה. כלומר, אני אקבל:</p>
+<p><span class="math">\(\sin x=x-\frac{x^{3}}{3!}+\frac{x^{5}}{5!}-\frac{x^{7}}{7!}+\ldots\)</span></p>
+<p>ובכתיב קומפקטי:</p>
+<p><span class="math">\(\sin x=\sum_{n=0}^{\infty}\left(-1\right)^{n}\frac{x^{2n+1}}{\left(2n+1\right)!}\)</span></p>
+<p>עבור קוסינוס נקבל</p>
+<p><span class="math">\(\cos x=\cos\left(0\right)x^{0}-\sin\left(0\right)x^{1}-\frac{\cos\left(0\right)}{2}x^{2}+\frac{\sin\left(0\right)}{6}x^{3}+\ldots\)</span></p>
+<p>כלומר הפעם נשארים רק האיברים במקומות <strong>הזוגיים</strong>, וגם הם מזפזפים בין פלוס למינוס:</p>
+<p><span class="math">\(\cos x=1-\frac{x^{2}}{2!}+\frac{x^{4}}{4!}-\frac{x^{6}}{6!}+\ldots\)</span></p>
+<p>ובכתיב קומפקטי:</p>
+<p><span class="math">\(\cos x=\sum_{n=0}^{\infty}\left(-1\right)^{n}\frac{x^{2n}}{\left(2n\right)!}\)</span></p>
+<p>שימו לב למשהו נחמד שקורה כאן: הטורים של <span class="math">\(\sin x,\cos x\)</span> נראים כאילו לקחנו את הטור של <span class="math">\(e^{x}\)</span> ופירקנו אותו לשני טורים - אחד עם האיברים במקומות הזוגיים והשני עם האיברים במקומות האי זוגיים. רק שאז גם כפלנו חלק מהאיברים הללו במינוס 1, וזה קצת פחות ברור, עד שחושבים על הרעיון הגאוני של להכניס לתמונה <strong>מספרים מרוכבים</strong>. את כל מה שאני עושה כאן צריך כמובן להצדיק מתמטית, אבל בואו בינתיים נזרום עם ההנחה שזה חוקי, ניקח את הטור של <span class="math">\(e^{x}\)</span>, ונציב בתוכו <span class="math">\(ix\)</span> במקום סתם <span class="math">\(x\)</span>. נקבל:</p>
+<p><span class="math">\(e^{ix}=1+ix+\frac{\left(ix\right)^{2}}{2!}+\frac{\left(ix\right)^{3}}{3!}+\frac{\left(ix\right)^{4}}{4!}+\ldots=\)</span></p>
+<p><span class="math">\(=1+ix-\frac{x^{2}}{2!}-i\frac{x^{3}}{3!}+\frac{x^{4}}{4!}+i\frac{x^{5}}{5!}-\frac{x^{6}}{6!}-\ldots=\)</span></p>
+<p><span class="math">\(=\left(1-\frac{x^{2}}{2!}+\frac{x^{4}}{4!}-\ldots\right)+i\left(x-\frac{x^{3}}{3!}+\frac{x^{5}}{5!}-\ldots\right)=\)</span></p>
+<p><span class="math">\(=\cos x+i\sin x\)</span></p>
+<p>כלומר, קיבלנו את הנוסחה <span class="math">\(e^{ix}=\cos x+i\sin x\)</span> שנקראת <strong>נוסחת אוילר</strong> ומפורסמת במיוחד כשמציבים בתוכה <span class="math">\(x=\pi\)</span> כי מכיוון ש-<span class="math">\(\cos\pi=-1\)</span> ו-<span class="math">\(\sin\pi=0\)</span>, מקבלים</p>
+<p><span class="math">\(e^{i\pi}=-1\)</span></p>
+<p>ואחרי העברת אגפים:</p>
+<p><span class="math">\(e^{i\pi}+1=0\)</span></p>
+<p>וזו באמת נוסחה מבדרת ביותר כי היא מחברת ביחד חמישה מהסלבריטיז של המתמטיקה: <span class="math">\(0,1,e,i,\pi\)</span>. אבל האם כדי לקבל אותה היה לי מותר לעשות את המעברים שביצעתי? ובכן, אני אדבר על זה בפוסט נפרד, כשאתחיל לדבר ברצינות על פונקציות מרוכבות (כן, השורה התחתונה היא "כן").</p>
+<h2>טור טיילור של הטור ההנדסי המתכנס ואיך זה קשור לקומבינטוריקה</h2>
+
+<p>בואו עכשיו נסתכל לרגע על הסיפור מהכיוון ההפוך - נתחיל מטור טיילור ונעבור לפונקציה שנותנת אותו: הטור ההנדסי המתכנס, <span class="math">\(1+x+x^{2}+\ldots\)</span> שמתכנס ל-<span class="math">\(\left|x\right|<1\)</span> וראינו כבר שנותן <span class="math">\(\frac{1}{1-x}=\sum_{n=0}^{\infty}x^{n}\)</span>. כמובן, גם בהכרזה שלי שזה טור הטיילור של הפונקציה מסתתר משפט: שאין לפונקציה ייצוג באמצעות שני טורי פונקציות שונים. אבל לא צריך להאמין למשפט כאן, אפשר פשוט לגזור את <span class="math">\(\frac{1}{1-x}\)</span>. נכתוב <span class="math">\(\left(\frac{1}{1-x}\right)=\left(1-x\right)^{-1}\)</span> ונגזור על פי כלל השרשרת:</p>
+<p><span class="math">\(\left[\left(1-x\right)^{-1}\right]^{\prime}=-\left(1-x\right)^{-2}\cdot\left(1-x\right)^{\prime}=\frac{1}{\left(1-x\right)^{2}}\)</span></p>
+<p>באופן דומה אפשר לגזור את <span class="math">\(\frac{1}{\left(1-x\right)^{n}}\)</span>:</p>
+<p><span class="math">\(\left[\left(1-x\right)^{-n}\right]^{\prime}=-n\left(1-x\right)^{-\left(n+1\right)}\cdot\left(1-x\right)^{\prime}=\frac{n}{\left(1-x\right)^{n+1}}\)</span></p>
+<p>כלומר, בכל פעם שבה גוזרים משהו מהצורה <span class="math">\(\frac{1}{\left(1-x\right)^{n}}\)</span> התוצאה היא גם כפל ב-<span class="math">\(n\)</span> וגם הגדלת מעריך החזקה שבמכנה. זה מאפשר לנו לקבל באינדוקציה את הנגזרת ה-<span class="math">\(n\)</span>-ית של <span class="math">\(\frac{1}{1-x}\)</span>: <span class="math">\(\left(\frac{1}{1-x}\right)^{\left(n\right)}=\frac{n!}{\left(1-x\right)^{n+1}}\)</span>, ולכן כשנציב את זה בנוסחה לטור טיילור באמת נקבל</p>
+<p><span class="math">\(\frac{1}{1-x}=\sum_{n=0}^{\infty}\frac{n!}{\left(1-0\right)^{n+1}}\cdot\frac{x^{n}}{n!}=\sum_{n=0}^{\infty}x^{n}\)</span></p>
+<p>כלומר, כאן ה-<span class="math">\(n!\)</span> שתמיד מופיע בנוסחה של טור טיילור מצומצם עם מה שצץ לנו בסדרת הנגזרות.</p>
+<p>עוד משהו חמוד שאפשר לעשות עם הטור <span class="math">\(\frac{1}{1-x}=\sum_{n=0}^{\infty}x^{n}\)</span>, עכשיו כשאנחנו יודעים מה הנגזרת של <span class="math">\(\frac{1}{1-x}\)</span>, הוא לגזור את שני האגפים יחד ולקבל</p>
+<p><span class="math">\(\frac{1}{\left(1-x\right)^{2}}=\sum_{n=1}^{\infty}nx^{n-1}=1+2x+3x^{2}+4x^{3}+\ldots\)</span></p>
+<p>בשוויון הזה השתמשתי <a href="https://gadial.net/2019/02/13/coupon_collector_problem/">בפוסט על בעיית איסוף הקופונים</a>, כשחישוב תוחלת נתן לי באופן טבעי את הטור, והיה לי נוח לעבור ממנו לייצוג הקומפקטי <span class="math">\(\frac{1}{\left(1-x\right)^{2}}\)</span>, וזו כמובן רק דוגמא אחת - השוויונות הללו הם כלי עבודה בסיסי במתמטיקה.</p>
+<p>אפשר כמובן להמשיך עם זה הלאה ולגזור עוד את הפונקציה והטור, על פי החישובים שכבר ראינו, ולקבל</p>
+<p><span class="math">\(\frac{2}{\left(1-x\right)^{3}}=\sum_{n=2}^{\infty}n\left(n-1\right)x^{n-2}\)</span></p>
+<p>או, בייצוג היותר מקובל,</p>
+<p><span class="math">\(\frac{1}{\left(1-x\right)^{3}}=\sum_{n=2}^{\infty}\frac{n\left(n-1\right)}{2}x^{n-2}\)</span></p>
+<p>ובאופן כללי:</p>
+<p><span class="math">\(\frac{1}{\left(1-x\right)^{k}}=\sum_{n=k}^{\infty}\frac{n\left(n-1\right)\cdots\left(n-k+1\right)}{k!}x^{n-k}\)</span></p>
+<p>הביטוי <span class="math">\(\frac{n\left(n-1\right)\cdots\left(n-k+1\right)}{k!}\)</span> מזכיר קומבינטוריקה, ולא במקרה. אפשר לכתוב <span class="math">\(n\left(n-1\right)\cdots\left(n-k+1\right)=\frac{n!}{\left(n-k\right)!}\)</span>, ולכן לקבל</p>
+<p><span class="math">\(\frac{n\left(n-1\right)\cdots\left(n-k+1\right)}{k!}=\frac{n!}{k!\left(n-k\right)!}={n \choose k}\)</span></p>
+<p>ולכן קיבלנו</p>
+<p><span class="math">\(\frac{1}{\left(1-x\right)^{k}}=\sum_{n=k}^{\infty}{n \choose k}x^{n-k}\)</span></p>
+<p>וזה ביטוי שימושי מאוד כשמנסים למצוא <strong>פונקציות יוצרות</strong> לבעיות קומבינטוריות - אבל זה נושא לפעם אחרת.</p>
+<h2>טור טיילור של לוגריתם</h2>
+
+<p>שמחים וטובי לב מההצלחות שלנו עד עכשיו, אנחנו רוצים לרוץ ולטפל בפונקציה המסובכת הבאה שכולנו מכירים: <span class="math">\(\ln x\)</span>, הפונקציה ההופכית של <span class="math">\(e^{x}\)</span>. כזכור, <span class="math">\(\ln x=y\)</span> אם <span class="math">\(e^{y}=x\)</span>. זה בפרט אומר ש-<span class="math">\(\ln0\)</span> זה ביטוי <strong>לא מוגדר</strong> כי אין <span class="math">\(y\)</span> כך ש-<span class="math">\(e^{y}=0\)</span>. בכלל, הפונקציה לא מוגדרת לשום <span class="math">\(x\le0\)</span>, כך שאפשר לשכוח מטור טיילור שעובד בכל <span class="math">\(\mathbb{R}\)</span>. מצד שני אנחנו עדיין רוצים <strong>משהו</strong>. אז כאן אפשר טיפה להתחכם. במקום לדבר על הפונקציה <span class="math">\(\ln x\)</span>, נדבר על הפונקציה <span class="math">\(\ln\left(1-x\right)\)</span>, שכן מוגדרת ב-<span class="math">\(x=0\)</span> ואפילו מאוד פשוטה שם: <span class="math">\(\ln\left(1-0\right)=\ln1=0\)</span>, ואני הולך למצוא עבורה טור טיילור שעובד לכל <span class="math">\(\left|x\right|<1\)</span>. לכאורה לדבר על הפונקציה הזו ממש מגביל אותנו כי נראה שאני יכול לחשב את <span class="math">\(\ln\)</span> רק עבור ערכים בתחום שמ-0 עד 2, אבל בפועל אפשר לחשב באמצעות הפונקציה הזו את <span class="math">\(\ln\)</span> המקורית לכל ערך שנרצה: נניח שאנחנו רוצים לחשב את <span class="math">\(\ln t\)</span> עבור <span class="math">\(t>0\)</span>, אז נגדיר <span class="math">\(x=1-\frac{1}{t}\)</span> ועכשיו נשים לב לשני דברים:</p>
+<ol> <li>מכיוון ש-<span class="math">\(t>0\)</span> אז <span class="math">\(0<\frac{1}{t}<1\)</span> ולכן <span class="math">\(0<x<1\)</span> ובפרט אנחנו בתחום שבו טור הטיילור של <span class="math">\(\ln\left(1-x\right)\)</span> מתכנס;</li>
+
+
+<li>על ידי העברת אגפים נקבל <span class="math">\(\frac{1}{t}=1-x\)</span>, כלומר <span class="math">\(t=\frac{1}{1-x}\)</span>, וכעת אפשר להשתמש בתכונה של לוגריתמים: <span class="math">\(\ln\left(t\right)=\ln\left(\frac{1}{1-x}\right)=-\ln\left(1-x\right)\)</span></li>
+
+</ol>
+
+<p>כלומר, על ידי חישוב <span class="math">\(\ln\left(1-x\right)\)</span> וכפל במינוס אחד, מקבלים את <span class="math">\(\ln t\)</span> וזה לכל ערך של <span class="math">\(t\)</span> שנרצה (ושוב אני מזהיר - זו לא הדרך הכי יעילה לחשב את <span class="math">\(\ln\)</span>! אבל זה עובד).</p>
+<p>אוקיי, אז בואו נמצא את טור הטיילור של <span class="math">\(\ln\left(1-x\right)\)</span>. </p>
+<p>מה הנגזרת של <span class="math">\(\ln x\)</span>? מחדו"א אנחנו יודעים ש-<span class="math">\(\left(\ln x\right)^{\prime}=\frac{1}{x}\)</span>. לכן עם כלל השרשרת נקבל</p>
+<p><span class="math">\(\left[\ln\left(1-x\right)\right]^{\prime}=-\frac{1}{1-x}\)</span></p>
+<p>הופה! פגשנו את ידידנו הותיק <span class="math">\(\frac{1}{1-x}\)</span>, ש<strong>לגמרי במקרה</strong> לפני רגע בחלק הקודם של הפוסט חישבנו את כל הנגזרות שלו מכאן ועד אינסוף. אבל אנחנו לא באמת חייבים לעבור שוב דרך הנוסחה הכללית של טור טיילור, אלא אפשר לקחת את טור הטיילור של <span class="math">\(\frac{1}{1-x}\)</span> ולבצע עליו <strong>אינטגרציה איבר איבר</strong>. במילים אחרות, אנחנו מתחילים מהשוויון</p>
+<p><span class="math">\(\frac{1}{1-x}=\sum_{n=0}^{\infty}x^{n}\)</span></p>
+<p>שאנחנו כבר מכירים, כופלים ב-<span class="math">\(-1\)</span> ואז לוקחים אינטגרל ומקבלים:</p>
+<p><span class="math">\(\ln\left(1-x\right)=-\int_{0}^{x}\frac{1}{1-t}dt=-\int_{0}^{x}\sum_{n=0}^{\infty}t^{n}dt=\)</span></p>
+<p><span class="math">\(=-\sum_{n=0}^{\infty}\int_{0}^{x}t^{n}dt=-\sum_{n=0}^{\infty}\frac{x^{n+1}}{n+1}\)</span></p>
+<p>כאן השתמשתי באחד המשפטים <a href="https://gadial.net/2024/02/24/sequences_and_series_of_functions/">שהראיתי על טורי פונקציות</a>: אם טור מתכנס במ"ש, אז אפשר לבצע עליו אינטגרציה איבר-איבר (שימו לב שחישבתי אינטגרל <strong>מסוים</strong> בתור דרך לקבל אינטגרל לא מסוים ספציפי). כמובן שצריך להצדיק את זה שהטור מתכנס במ"ש במקרה הזה, אבל אנחנו אפילו לא צריכים משפטים כלליים על טורי טיילור: אנחנו כבר יודעים לחשב את רדיוס ההתכנסות של <span class="math">\(\sum_{n=0}^{\infty}x^{n}\)</span> ולדעת שהוא <span class="math">\(R=1\)</span>, ולכן הטור מתכנס במ"ש בכל תחום <span class="math">\(\left|x\right|<r<R\)</span> שנרצה.</p>
+<p>לסיכום, קיבלנו את הנוסחה</p>
+<p><span class="math">\(\ln\left(1-x\right)=-\sum_{n=1}^{\infty}\frac{x^{n}}{n}=-x-\frac{x^{2}}{2}-\frac{x^{3}}{3}-\ldots\)</span></p>
+<p>כדי לחשב ערכים קטנים של <span class="math">\(\ln\)</span>, בין <span class="math">\(0\)</span> ל-2, נוח יותר לקחת את הנוסחה הזו ולהציב בה <span class="math">\(y=-x\)</span> ולקבל</p>
+<p><span class="math">\(\ln\left(1+y\right)=y-\frac{y^{2}}{2}+\frac{y^{3}}{3}-\ldots\)</span></p>
+<p>ואז להשתמש בנוסחה הזו תוך שאנחנו מציבים בה ישירות ערכים של <span class="math">\(-1<y<1\)</span>.</p>
+<p>עבור ערכי <span class="math">\(y\)</span> שמקיימים <span class="math">\(\left|y\right|>1\)</span> הטור יתבדר בודאות (ראינו את זה כשהוכחנו שזה מה שרדיוס התכנסות עושה) ועבור <span class="math">\(y=-1\)</span> ברור לנו שהוא יתפוצץ כי <span class="math">\(\ln0\)</span> מתפוצץ, אבל מה עם <span class="math">\(y=1\)</span>? באופן כללי, על מספר שיושב "על" רדיוס ההתכנסות הטור עדיין יכול להתכנס - ואם הוא מתכנס, אז הנוסחה של טור טיילור עדיין עובדת (גם אם זה צריך להוכיח). במקרה של <span class="math">\(y=1\)</span>, הטור שאנחנו מקבלים הוא טור מוכר ואהוב במתמטיקה - <strong>הטור ההרמוני המתחלף</strong>:</p>
+<p><span class="math">\(1-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\ldots\)</span></p>
+<p>הטור הזה הוא הדוגמא הראשונה שנותנים כשמציגים את מבחן ההתכנסות לטורים של לייבניץ, שאומר שאם <span class="math">\(a_{n}\)</span> היא סדרה חיובית ששואפת לאפס, אז הטור <span class="math">\(\sum_{n=0}^{\infty}\left(-1\right)^{n}a_{n}\)</span> מתכנס. מכאן שהטור ההרמוני המתחלף מתכנס, ועל פי הנוסחה שראינו, כשמציבים בה <span class="math">\(y=1\)</span>:</p>
+<p><span class="math">\(1-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\ldots=\ln2\)</span></p>
+<h2>מתי העניינים לא כל כך נחמדים?</h2>
+
+<p>מה שעשיתי עד עכשיו כלל תיאור של שלל טורי טיילור עם מעט מאוד הצדקה למה שעשיתי. זה חשוב בשביל שיהיה לנו כיף, אבל מאוד מסוכן באופן כללי, ולכן בפוסט הבא אני הולך לתת את המשפטים הפורמליים שמצדיקים את הדברים שעשיתי עד כה. לפני שנגיע לזה, אני רוצה בפוסט הזה לראות איך דברים יכולים להישבר: הדוגמא הקלאסית היא פונקציה <span class="math">\(f\left(x\right)\)</span> שגזירה אינסוף פעמים ב-<span class="math">\(x=0\)</span> ולכן אפשר להגדיר את הטור <span class="math">\(\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}\)</span>; ויותר מזה, הטור הזה גם יתכנס לכל <span class="math">\(x\in\mathbb{R}\)</span>, אבל <strong>לא יתקיים</strong> ש-<span class="math">\(f\left(x\right)=\sum_{n=0}^{\infty}\frac{f^{\left(n\right)}\left(0\right)}{n!}x^{n}\)</span> עבור <span class="math">\(x\ne0\)</span>.</p>
+<p>הפונקציה הרלוונטית היא</p>
+<p><span class="math">\(f\left(x\right)=\begin{cases} e^{-\frac{1}{x^{2}}} & x\ne0\\ 0 & x=0 \end{cases}\)</span></p>
+<p>מה הנגזרת שלה? עבור <span class="math">\(x\ne0\)</span> אפשר לקחת סביבה של <span class="math">\(x\)</span> שבה <span class="math">\(f\left(y\right)=e^{-\frac{1}{y^{2}}}\)</span> לכל <span class="math">\(y\)</span> בסביבה, ולכן אפשר לחשב את הנגזרת ב-<span class="math">\(x\)</span> על פי כלל השרשרת:</p>
+<p><span class="math">\(\left(e^{-\frac{1}{x^{2}}}\right)^{\prime}=e^{-\frac{1}{x^{2}}}\cdot\left[-\frac{1}{x^{2}}\right]^{\prime}=\frac{2}{x^{3}}e^{-\frac{1}{x^{2}}}\cdot\)</span></p>
+<p>החלק המעניין הוא הנגזרת ב-<span class="math">\(x=0\)</span>, שאותה נצטרך לחשב ישירות על פי הנוסחה:</p>
+<p><span class="math">\(f^{\prime}\left(0\right)=\lim_{h\to0}\frac{f\left(h\right)-f\left(0\right)}{h}=\lim_{h\to0}\frac{e^{-\frac{1}{h^{2}}}}{h}\)</span></p>
+<p>זה גבול קצת טריקי: בדרך כלל בגבולות כאלו קל להשתמש ב<strong>כלל לופיטל</strong> אבל כאן הגזירה של המונה רק תסבך אותנו עוד יותר. גישה אחרת היא להשתמש בכלל הסנדוויץ': אם אני אוכיח ש-<span class="math">\(0\le e^{-\frac{1}{h^{2}}}\le h^{2}\)</span> אז מכך ש-</p>
+<p><span class="math">\(0=\lim_{h\to0}\frac{0}{h}\le\lim_{h\to0}\frac{e^{-\frac{1}{h^{2}}}}{h}\le\lim_{h\to0}\frac{h^{2}}{h}=\lim_{h\to0}h=0\)</span> </p>
+<p>אני אקבל ש-<span class="math">\(\lim_{h\to0}\frac{e^{-\frac{1}{h^{2}}}}{h}=0\)</span>. אי השוויון <span class="math">\(0\le e^{-\frac{1}{h^{2}}}\)</span> הוא מובן מאליו כי <span class="math">\(e\)</span> בחזקת משהו זה תמיד חיובי; בשביל <span class="math">\(e^{-\frac{1}{h^{2}}}\le h^{2}\)</span> אני אלך, איך לא, לטור הטיילור של <span class="math">\(e^{x}\)</span>:</p>
+<p><span class="math">\(e^{x}=1+x+\frac{x^{2}}{^{2!}}+\frac{x^{3}}{3!}+\ldots\)</span></p>
+<p>בפרט, לכל <span class="math">\(x\)</span> <strong>חיובי</strong>, כל איברי הטור חיוביים ולכן לכל <span class="math">\(n\)</span> מתקיים <span class="math">\(e^{x}\ge\frac{x^{n}}{n!}\)</span>, כלומר <span class="math">\(\frac{1}{e^{x}}\le\frac{n!}{x^{n}}\)</span>, כלומר <span class="math">\(e^{-x}\le\frac{n!}{x^{n}}\)</span>. במקרה שלנו נציב <span class="math">\(x=\frac{1}{h^{2}}\)</span> (שימו לב ש-<span class="math">\(x\)</span> חיובי תמיד כי <span class="math">\(h^{2}\)</span> חיובי תמיד), ונציב <span class="math">\(n=1\)</span> ונקבל <span class="math">\(e^{-\frac{1}{h^{2}}}=e^{-x}\le\frac{1!}{x}=h^{2}\)</span>. זה מסיים את ההוכחה שהנגזרת של <span class="math">\(f\)</span> היא</p>
+<p><span class="math">\(f^{\prime}\left(x\right)=\begin{cases} \frac{2}{x^{3}}e^{-\frac{1}{x^{2}}} & x\ne0\\ 0 & x=0 \end{cases}\)</span></p>
+<p>אבל לא גמרנו פה! אנחנו רוצים ש-<span class="math">\(f\)</span> תהיה גזירה <strong>אינסוף</strong> פעמים באפס, בשביל זה צריך לחשב גם את הנגזרת של <span class="math">\(f^{\prime}\)</span> וכן הלאה, ואת הנגזרת של <span class="math">\(\frac{2}{x^{3}}e^{-\frac{1}{x^{2}}}\)</span> כבר יותר קשה לחשב, אבל אני לא צריך כי אני יכול לנפנף בידיים: כשאני גוזר את הפונקציה הזו, אני אקבל <span class="math">\(e^{-\frac{1}{x^{2}}}\)</span> כפול כל מני גורמים שמתקבלים מכפל וחילוק של <span class="math">\(e^{-\frac{1}{x^{2}}}\)</span> בחזקות של <span class="math">\(x\)</span>. מספיק אם כך להראות שלא משנה כמה החזקה של האיקס שבה כופלים גבוהה, עדיין הגבול יוצא אפס - כלומר, להראות ש-<span class="math">\(\lim_{h\to0}\frac{e^{-\frac{1}{h^{2}}}}{h^{k}}=0\)</span> לכל <span class="math">\(k\)</span>. בשביל לראות את זה נשתמש בסנדוויץ' כמו קודם. כזכור, ראינו ש-<span class="math">\(e^{-x}\le\frac{n!}{x^{n}}\)</span> לכל <span class="math">\(n\)</span>; ה"לכל <span class="math">\(n\)</span>" הזה הוא הכוח שלי. אני פשוט אציב <span class="math">\(n=k\)</span> ו-<span class="math">\(x=\frac{1}{h^{2}}\)</span> ואקבל </p>
+<p><span class="math">\(e^{-\frac{1}{h^{2}}}\le k!h^{2k}\)</span>, ואז</p>
+<p><span class="math">\(\lim_{h\to0}\frac{e^{-\frac{1}{h^{2}}}}{h^{k}}\le\lim_{h\to0}\frac{k!h^{2k}}{h^{k}}=\lim_{h\to0}k!h^{k}=0\)</span></p>
+<p>מה שמסיים את ההוכחה גם במקרה הזה: לכל <span class="math">\(k\)</span>, קיבלנו ש-<span class="math">\(f^{\left(k\right)}\left(0\right)=0\)</span>. זה אומר שבפרט, טור הטיילור של הפונקציה הזו הוא פשוט 0, אבל כמובן שהפונקציה איננה זהותית אפס. זו האנומליה שרצינו.</p>
+<p>יפה, אז כאן סיימנו עם הכיף והמשחקים ובפוסט הבא יגיעו הסבל והטרחנות של המשפטים הפורמליים. יהיה כיף!</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2024/05/18/taylor_series_proofs/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">טורי טיילור - ההוכחות הפורמליות</span>
+            </a>
+            
+            
+            
+            <a href="/2024/04/27/power_series/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">טורי חזקות ורדיוס התכנסות</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

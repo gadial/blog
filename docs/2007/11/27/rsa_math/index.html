@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המתמטיקה של RSA - לא מדויק</title>
+    
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        
+        body {
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
+        }
+        
+        .post-meta .categories,
+        .post-meta .tags {
+            display: inline;
+        }
+        
+        .post-meta .categories a,
+        .post-meta .tags a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .post-meta .categories a:hover,
+        .post-meta .tags a:hover {
+            text-decoration: underline;
+        }
+        
+        article {
+            font-size: 1.1em;
+        }
+        
+        article h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+        
+        article h3 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-size: 1.4em;
+        }
+        
+        article p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        article ul, article ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+        
+        article li {
+            margin-bottom: 8px;
+        }
+        
+        article code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        article pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        article pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Image styles - responsive and contained */
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Math rendering styles */
+        .math {
+            direction: ltr;
+        }
+        
+        span.math {
+            direction: ltr;
+        }
+        
+        /* Override RTL for KaTeX */
+        .katex {
+            direction: ltr;
+            unicode-bidi: embed;
+        }
+        
+        div.math {
+            display: block;
+            text-align: center;
+            padding: 15px 0;
+            direction: ltr;
+        }
+        
+        /* RTL adjustments for code blocks */
+        .highlight {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            article {
+                font-size: 1em;
+            }
+        }
+        
+        /* Post navigation */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            gap: 20px;
+        }
+        
+        .post-navigation .nav-link {
+            flex: 1;
+            text-decoration: none;
+            color: #2c3e50;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .post-navigation .nav-link:hover {
+            background: #e9ecef;
+        }
+        
+        .post-navigation .nav-prev {
+            text-align: right;
+        }
+        
+        .post-navigation .nav-next {
+            text-align: left;
+        }
+        
+        .post-navigation .nav-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .post-navigation .nav-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">לא מדויק</a>
+            <div class="nav-links">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <header>
+            <h1>המתמטיקה של RSA</h1>
+            <div class="post-meta">
+                <span class="date">2007-11-27</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/קריפטולוגיה.html">קריפטולוגיה</a>
+                    
+                    <a href="/categories/תורת המספרים.html">תורת המספרים</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/RSA.html">RSA</a>
+                    
+                    <a href="/tags/הוכחות.html">הוכחות</a>
+                    
+                    <a href="/tags/טכני.html">טכני</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>בפוסט קודם אמרתי מילה או שתיים על שיטת ההצפנה RSA, אבל לא נכנסתי לעובי הקורה המתמטי. מכיוון שהמתמטיקה שמאחורי השיטה אינה מסובכת כל כך, אנסה להציג אותה בשלמותה כאן. כמו דברים רבים אחרים במתמטיקה, המורכבות של השיטה לא נובעת מרוחב אלא מעומק - כלומר, היא מתבססת על כמה מושגים ספציפיים מתורת המספרים, שנכונותם, בתורה, נובעת מדברים יותר בסיסיים, שנובעים מדברים יותר בסיסיים, וכדומה. בסופו של דבר, אפשר לחשוב עליה כעל "שרשרת לא טריוויאלית של אמירות טריוויאליות", כפי שאוהבים לקרוא לפעמים להוכחות מתמטיות באופן כללי.</p>
+<p>על כן, אנסה להציג את השרשרת הזו מהסוף; בכל פעם אשאיר איזו הנחה או טענה בלתי מוכחת, אסיים את ההוכחה בעזרתה, ובשלב הבא אעבור לשלב הבא בשרשרת ואנסה לחסל את הטענה הלא מוכחת. לטעמי, יש יתרונות לשיטה הזו: ראשית, גם מי שלא יצליח לעקוב אחרי ההוכחה עד הסוף יוכל להבין איך RSA עובדת, ופשוט לא יהיה בטוח בנכונות של איזה שהוא פרט מסויים (שאני יכול להבטיח לו בכל מקרה שהוא נכון). שנית, עדיף להתחיל מה"תכל'ס" ולא ממושגים כלליים שלא ברור איך הם מתקשרים לנושא שלפנינו (עם זאת, בלימודים "אמיתיים" עדיף להתחיל מהבסיס, מהטעם הפשוט שאחר כך מיישמים אותו לאלף ואחד דברים שונים, ולא כדאי להתקבע על יישום אחד).</p>
+<h1>שלב א' - השיטה באופן כללי</h1>
+<p>אם כן, נתחיל. שדה המשחק הבסיסי שלנו הוא החבורה הכפלית <span class="math">\(\mathbb{Z}^*_n\)</span>. לא אגיד בינתיים מה המשמעות המדוייקת של הדבר הזה - מה זו "חבורה", למה כפלית, ומה זה הסימון המופרע הזה. לצרכנו מספיק לדעת שזוהי קבוצת המספרים בתחום <span class="math">\(0\dots n-1\)</span> (ואפילו לא כולם, אבל גם לזה לא ניכנס עכשיו), ושאנו מדברים על פעולת כפל "מודולרית" שלהם. כפל מודולרי פירושו שבהינתן <span class="math">\(a,b\)</span> ששייכים לקבוצה, אנו כופלים אותם, אבל אז מחלקים את התוצאה ב-<span class="math">\(n\)</span> ומתעניינים רק בשארית. למשל, אם <span class="math">\(a=3,b=5,n=9\)</span> אז תוצאת הכפל המודולרי היא 6. שימו לב שחלוקה ב-<span class="math">\(n\)</span> ולקיחת השארית תחזיר תמיד מספר שהוא בתחום <span class="math">\(0\dots n-1\)</span> (מדוע?)</p>
+<p>מערכת ההצפנה נבנית כך (נניח, בידי אליס): ראשית אליס בוחרת את <span class="math">\(n\)</span> על ידי כך שהיא מגרילה שני מספרים ראשוניים <span class="math">\(p,q\)</span> שהם בערך מאותו סדר גודל (של מאות ספרות, בימינו), וכופלת אותם: <span class="math">\(n=pq\)</span>. בניה שכזו מבטיחה שיהיה קשה למדי לפרק את <span class="math">\(n\)</span> לגורמים ראשוניים (דרך נאיבית לראות את זה: שניים הוא המספר המינימלי האפשרי של גורמים למספר פריק). היתרון של אליס על פני כל שאר העולם הוא שהיא יודעת בדיוק מה הפירוק, פשוט כי כך היא בנתה את המספר.</p>
+<p>כעת אליס מגרילה את ה"מנעול" שלה - מספר <span class="math">\(e\)</span> כלשהו. יש עליו מגבלות והוא נבחר מתוך תחום מסויים (גדול מאוד) של מספרים, אבל על זה ארחיב בהמשך. כעת היא משתמשת בידע שלה על הפירוק של <span class="math">\(n\)</span> כדי למצוא מספר נוסף <span class="math">\(d\)</span>, כך שמתקיימת התכונה הנאה הבאה:</p>
+<p>לכל <span class="math">\(x\in\mathbb{Z}^*_n \)</span> מתקיים <span class="math">\((x^e)^d=x\)</span>, כאשר החזקה מבוצעת מודולו <span class="math">\(n\)</span> (זה בסך הכל כפל של <span class="math">\(x\)</span> בעצמו מספר כלשהו של פעמים ולקיחת השארית כל הזמן). כלומר, העלאה בחזקת <span class="math">\(e\)</span> והעלאה בחזקת <span class="math">\(d\)</span> הן פעולות הופכיות זו לזו - האחת מבטלת את השנייה.</p>
+<p>כעת אליס מפרסמת את <span class="math">\(e,n\)</span> ושומרת את <span class="math">\(d\)</span> סודי. כשבוב רוצה לשלוח לה הודעה, הוא מקודד אותה כמספר ב-<span class="math">\(\mathbb{Z}^*_n \)</span>, מעלה בחזקת <span class="math">\(e\)</span>, ושולח לאליס. מי שאינו יודע את <span class="math">\(d\)</span> כנראה יתקשה לבטל את פעולת ההעלאה בחזקה הזו - אליס עושה זאת בקלות, באמצעות <span class="math">\(d\)</span>. זה הכל.</p>
+<p>שתי הערות "פרקטיות" - ראשית, למרות שלכאורה מבצעים בהצפנה פעולות מטורפות - למשל, מחשבים את <span class="math">\(5345345345^{345341235785}\)</span> מודולו <span class="math">\(89824342423\)</span> וכולי (מספרים מומצאים ואולי לא תקינים!), הרי שיש שיטות לא מסובכות כל כך לעשות זאת מהר. חשוב לזכור שאולי מדובר על מספרים גדולים ומפחידים, אבל בפועל הם מיוצגים על ידי מספר לא גדול של ספרות (כדי לייצג מפתח טיפוסי בימינו נדרשות 2048 סיביות - פחות מ-300 בתים) וסיבוכיות הזמן שנדרשת לבצע פעולות כמו כפל או העלאה בחזקה (כשעושים אותן נכון) היא ביחס ישר למספר הספרות, לא לגודל המספר. אם מכפילים את מספר הספרות פי 2, כל מה שקורה הוא שמכפילים פי 2 את הזמן שלוקח לבצע פעולות חשבון עליהן (אבל מבחינת הגדלת טווח המספרים, זו הגדלה אסטרונומית - מעלים בריבוע בערך את המספר שמיייצג את הטווח הנוכחי).</p>
+<p>ההערה השנייה היא שלא הכי ברור איזה הודעות כבר אפשר לקודד בתור מספרים ב-<span class="math">\(\mathbb{Z}^*_n\)</span>. בסופו של דבר, למרות שהטווח נראה גדול, הרי שאפשר בסך הכל לקודד רק מספר קטן של בתים (כאמור, פחות מ-300) לפני שנסתכן ב"התנגשויות". התשובה לכך היא שבדרך כלל משתמשים במפתח ציבורי כדי להצפין מפתח קטן שמשמש להצפנה סימטרית (בימינו גם הפרנואידים משתמשים רק במפתח של 32 בתים), ואת התקשורת האמיתית להצפין בצורה סימטרית (שהיא מהירה יותר וכנראה גם בטוחה יותר). בעזרת שיטות ההצפנה הסימטרית של ימינו, אפילו הודעות עצומות של מאות מגה בייט ניתנות להצפנה סבירה בעזרת מפתחות קטנים - כלומר, הצפנת המפתח הציבורי לא באה להחליף את הצפנת המפתח הסימטרי, אלא להשלים אותה.</p>
+<p>יאללה, עכשיו למתמטיקה.</p>
+<h1>שלב ב' - איך בדיוק בוחרים את הערכים?</h1>
+<p>אמרתי שב-<span class="math">\(\mathbb{Z}^*_n\)</span> אין את כל המספרים בטווח <span class="math">\(0\dots n-1\)</span>. לא אכנס כרגע לנימוק למה (כמובן, חוץ מהנימוק הטריוויאלי של: "על המספרים שמעיפים השיטה לא עובדת"), אבל כן אגיד את מי מעיפים: את כל מי שלא זר ל-<span class="math">\(n\)</span>. כלומר, כל מספר <span class="math">\(a\)</span> כך שקיים איזה שהוא <span class="math">\(t&gt;1\)</span> שמחלק גם את <span class="math">\(a\)</span> וגם את <span class="math">\(n\)</span>. דוגמה: 18 ו-16 אינם זרים, שכן 2 מחלק את שניהם גם יחד.</p>
+<p>בחירת <span class="math">\(e\)</span> מסובכת יותר. אנחנו בוחרים אותו כך שיהיה זר ל-<span class="math">\((p-1)(q-1)\)</span>. למה? כי זה הוא מספר האיברים שזרים ל-<span class="math">\(n\)</span>, ולכן הגודל של <span class="math">\(\mathbb{Z}^*_n\)</span>. למה צריך ש-<span class="math">\(e\)</span> יהיה זר לגודל הזה? שוב, כי אחרת כל העסק לא היה עובד. שימו לב, אגב, ש-<span class="math">\(e=2\)</span> אף פעם לא יהיה זר ל-<span class="math">\((p-1)(q-1)\)</span>, ולכן מה שמכונה "שיטת רבין" מתפצל ברגע זה מ-RSA.</p>
+<p>דרך אחרת לכתוב את ה-<span class="math">\((p-1)(q-1)\)</span> היא לכתוב <span class="math">\(\varphi(n)\)</span>. קרי: "פונקצית אוילר של <span class="math">\(n\)</span>". הפונקציה מוגדרת בצורה פשוטה: עבור <span class="math">\(n\)</span>, היא שווה למספר המספרים הטבעיים שקטנים מ-<span class="math">\(n\)</span> וזרים לו. תכונה חשובה שלה היא שהיא כפלית עבור מספרים זרים - כלומר, ש-<span class="math">\(\varphi(x)\varphi(y)=\varphi(xy)\)</span> אם <span class="math">\(x,y\)</span> זרים זה לזה. עוד דבר שקל להוכיח (נסו!) הוא שעבור ראשוני <span class="math">\(p\)</span> מתקיים <span class="math">\(\varphi(p)=p-1\)</span>. מכאן ברור למה אכן <span class="math">\(\varphi(n)=(p-1)(q-1)\)</span>.</p>
+<p>ואיך בוחרים את <span class="math">\(d\)</span>? מחפשים ומוצאים מספר כך שיתקיים <span class="math">\(e\cdot d=1(\text{mod} \varphi(n))\)</span>. איך עושים זאת? בעזרת מה שמכונה "האלגוריתם האוקלידי המורחב". עוד - בהמשך.</p>
+<h1>שלב ג' - למה הערכים הללו טובים לנו?</h1>
+<p>כאן מגיע המשפט ה"עמוק" הראשון. "עמוק" במרכאות, כי זה משפט פשוט למדי - אך הוא זה שהצדקתו הולכת הכי הרבה אחורה.</p>
+<p>המשפט אומר כך: אם <span class="math">\(G\)</span> חבורה עם <span class="math">\(k\)</span> איברים, אז <span class="math">\(x^a=x^b\)</span> אם <span class="math">\(a\equiv b(\text{mod}k)\)</span>. אין צורך כרגע להיכנס לשאלה "מהי חבורה" - מספיק להזכיר ש-<span class="math">\(\mathbb{Z}^*_n\)</span> היא חבורה.</p>
+<p>אם כן, מה יש לנו? יש לנו חבורה עם <span class="math">\(k=\varphi(n)\)</span> איברים. יש לנו <span class="math">\(e,d\)</span> שמקיימים <span class="math">\(ed\equiv 1(\text{mod}k)\)</span>, ולכן יש לנו ש- <span class="math">\((x^e)^d=x^{ed}=x^1=x\)</span>. גמרנו.</p>
+<h1>שלב ד' - אז איך מוצאים את d?</h1>
+<p>האלגוריתם האוקלידי מתבסס על העובדה הבאה: המחלק המשותף הגדול ביותר של <span class="math">\(x,y\)</span> הוא גם המחלק המשותף המקסימלי של <span class="math">\(y,r\)</span>, כאשר <span class="math">\(r\)</span> היא השארית שמקבלים כשמחלקים את <span class="math">\(x\)</span> ב-<span class="math">\(y\)</span>. תרגיל - להוכיח שזה נכון (רמז: מתקיים <span class="math">\(x=qy+r\)</span> עבור <span class="math">\(q\)</span> שלם כלשהו).</p>
+<p>אם כן, האלגוריתם האוקלידי פשוט פועל כך (תוך הנחה ש-<span class="math">\(x\ge y\)</span>):</p>
+<ol>
+    <li>אם <span class="math">\(y\)</span> מחלק את <span class="math">\(x\)</span>, החזר את <span class="math">\(y\)</span>.</li>
+    <li>אחרת, חשב את <span class="math">\(r=x \% y\)</span> (% הוא אופרטור נפוץ בשפות תכנות לציון שארית של חלוקה).</li>
+    <li>הצב <span class="math">\(x:=y, y:=r\)</span>.</li>
+    <li>חזור לשלב 1.</li>
+</ol>
+<p>זה האלגוריתם האוקלידי הפשוט. האלגוריתם המורחב לא סתם מוצא את המחלק המשותף המקסימלי; הוא גם מוצא <span class="math">\(a,b\)</span> כך ש-<span class="math">\(ax+by=d\)</span> (כש-<span class="math">\(d\)</span> הוא המחלק המדובר - זהירות, לא להתבלבל עם <span class="math">\(d\)</span> שלנו, שעליו נדבר אחר כך).</p>
+<p>הרעיון הוא כזה: נניח שגילינו ש-<span class="math">\(x=qy+r\)</span>, אז בפרט <span class="math">\(r=x-qy\)</span>. כלומר, אפשר להציג את <span class="math">\(r\)</span> בתור צירוף לינארי של <span class="math">\(x,y\)</span>. זה כך גם בהמשך הדרך: אם <span class="math">\(x\prime=a_1x+b_1y\)</span> ו-<span class="math">\(y\prime=a_2x+b_2y\)</span> הם המשתנים של האיטרציה הנוכחית שלנו, אז:</p>
+<p><span class="math">\(r\prime=x\prime-qy\prime=(a_1x+b_1y)-(qa_2x+qb_2y)=(a_1-qa_2)x+(b_1-qb_2)y\)</span></p>
+<p>ברור לי שזה ממש לא ברור - הדרך הטובה ביותר להבין היא לעשות את זה על כמה דוגמאות עם נייר ועפרון, או לתכנת את זה.</p>
+<p>בסיכומו של דבר, מה שיקרה הוא הדבר הבא: מכיוון ש-<span class="math">\(e\)</span> נבחר במפורש כך שיהיה זר ל-<span class="math">\(\varphi(n)\)</span>, אז המחלק המשותף המקסימלי שלהם הוא 1, כלומר קיימים <span class="math">\(a,b\)</span> כך ש-<span class="math">\(ae+b\varphi(n)=1\)</span> - ואנחנו יודעים למצוא אותם די מהר. למה זה טוב? כי אם נסתכל על המשוואה הזו מודולו <span class="math">\(\varphi(n)\)</span>, אנחנו נקבל <span class="math">\(ae\equiv 1(\text{mod}\varphi(n))\)</span> (למה?) ולכן <span class="math">\(d\)</span> שרצינו הוא בעצם המקדם <span class="math">\(a\)</span>.</p>
+<h1>שלב ה' - אז למה המשפט ה"עמוק" נכון?</h1>
+<p>את המשפט ה"עמוק" מוכיחים בעזרת משפט (חשוב למדי) שנקרא "משפט לגראנז'" ועוסק בחבורות סופיות, ולכן אין מנוס מלומר אחת ולתמיד מהי חבורה. חבורה היא פשוט קבוצה <span class="math">\(G\)</span> של איברים שמוגדרת עליהם פעולה בינארית כלשהי ("כפל") שמקיימת את התכונות הבאות:</p>
+<ol>
+    <li>סגירות: אם <span class="math">\(x,y\in G\)</span> אז גם <span class="math">\(x\cdot y\in G\)</span></li>
+    <li>אסוציאטיביות: <span class="math">\(x\cdot(y\cdot z)=(x\cdot y)\cdot z\)</span></li>
+    <li>קיום איבר יחידה: קיים איבר <span class="math">\(1\in G\)</span> כך ש-<span class="math">\(x\cdot 1=1\cdot x=x\)</span>.</li>
+    <li>קיום איבר הופכי: לכל <span class="math">\(x\in G\)</span> קיים <span class="math">\(x^{-1}\in G\)</span> כך ש-<span class="math">\(x\cdot x^{-1}=x^{-1}\cdot x=1\)</span>.</li>
+</ol>
+<p>זה הכל.</p>
+<p>דוגמאות לחבורות: המספרים הרציונליים בלי 0, המספרים השלמים כשפעולת ה"כפל" היא בעצם חיבור, וגם <span class="math">\(\mathbb{Z}^*_n\)</span>. הוכחה שאלו אכן חבורות - עזבו. לא עכשיו.</p>
+<p>ועכשיו, מה אומר משפט לגראנז'? שבחבורה עם <span class="math">\(n\)</span> איברים, כל תת קבוצה של החבורה שבעצמה מקיימת את ארבע האקסיומות של החבורה (לדבר כזה קוראים "תת-חבורה") מכילה מספר איברים שמחלק את <span class="math">\(n\)</span>. למשל, אם יש לנו חבורה מסדר 6 ("סדר" של חבורה הוא מילה אחת ל"מספר האיברים שבחבורה"), תת החבורות היחידות האפשריות הן מסדר 1 (תת החבורה שמכילה רק את היחידה), 2, 3 ו-6 ("תת" החבורה שהיא בעצם החבורה עצמה). במילים אחרות - לא ייתכן שיש תת חבורות מסדר 4 או 5.</p>
+<p>זה משפט די חזק, אם חושבים על כך: הוא מצליח ללמד אותנו משהו לא טריוויאלי על המבנים האפשריים של חבורות, ובפרט מה <strong>לא</strong> יכול להיות בתוכן. היינו רוצים שמשפט הפוך יהיה קיים - שלכל מספר שמחלק את הסדר של חבורה, קיימת לה תת חבורה מאותו הסדר, אלא שהמשפט אינו נכון (הוא נכון כשהמספר ראשוני; המשפט הזה מכונה "משפט קושי"). העיסוק בתת החבורות שכן אפשר לומר בביטחון שקיימות עבור חבורות סופיות הוא סבוך למדי ולא אכנס אליו עכשיו.</p>
+<p>איך משפט לגראנז' מתקשר למה שאנחנו עוסקים בו? בצורה הבאה. אם יש לנו איבר <span class="math">\(x\in G\)</span> בחבורה מסדר <span class="math">\(n\)</span>, נתחיל להסתכל על האיברים <span class="math">\(x,x^2,x^3\)</span> וכן הלאה. מכיוון שיש אינסוף חזקות אפשריות של <span class="math">\(x\)</span> ורק מספר סופי של איברים בחבורה, עולה מכך (בגלל עיקרון שובך היונים) שחייב להתקיים <span class="math">\(x^a=x^b\)</span> עבור איזה שהם <span class="math">\(a,b\)</span> טבעיים. מזה נובע שמתקיים <span class="math">\(x^a\cdot x^{-b}=1\)</span>, או בסימון אחר: <span class="math">\(x^{a-b}=1\)</span> (צריך להוכיח שכל מה שאני עושה כאן נכון - כמובן שלא אעשה זאת כאן). במילים אחרות - קיימת חזקה של <span class="math">\(x\)</span> שמעבירה אותו ל-1. לחזקה הטבעית הקטנה ביותר שמקיימת זאת קוראים ה<strong>סדר</strong> של <span class="math">\(x\)</span>. הקשר ל"סדר של חבורה" אינו מקרי, כמובן; הסדר של <span class="math">\(x\)</span> הוא בדיוק הסדר של תת החבורה שמקבלים על ידי לקיחת כל החזקות שלו (למה? ולמה בעצם כל החזקות הן חבורה?)</p>
+<p>אם כן, על פי לגראנז', הסדר של <span class="math">\(x\)</span> מחלק את סדר החבורה, <span class="math">\(n\)</span>. על כן, <span class="math">\(x^n=1\)</span> (למה?) וזה כבר מביא אותנו ממש אל מה שרצינו להוכיח. בואו ניזכר מה זה היה: אם <span class="math">\(G\)</span> חבורה עם <span class="math">\(n\)</span> איברים, אז <span class="math">\(x^a=x^b\)</span> אם <span class="math">\(a\equiv b(\text{mod}n)\)</span></p>
+<p>אם כן, נניח כי <span class="math">\(a\equiv b(\text{mod}n)\)</span>. מה זה אומר? זה אומר שקיים <span class="math">\(t\)</span> כלשהו כך ש-<span class="math">\(a-b=t\cdot n\)</span>. על כן, <span class="math">\(x^{a-b}=x^{tn}=(x^n)^t=1^t=1\)</span>. על ידי העברת אגף מקבלים <span class="math">\(x^a=x^b\)</span>, וזהו זה.</p>
+<h1>שלב ו' - אז למה משפט לגראנז' נכון?</h1>
+<p>עלה בידי מישהו/מישהי לשרוד עד עכשיו?</p>
+<p>ההוכחה של משפט לגראנז' אינה מסובכת, אך גם היא דורשת קצת עבודה מוקדמת. הדרך הנכונה ללמוד אותה היא באמצעות ספר, ואני סתם אתן רמז: בהינתן חבורה <span class="math">\(G\)</span> מסדר <span class="math">\(n\)</span> ותת חבורה <span class="math">\(H\)</span> שלה, הביטו ביחס השקילות המוגדר על ידי "<span class="math">\(x\)</span> שקול ל-<span class="math">\(y\)</span> אם ורק אם <span class="math">\(xy^{-1}\in H\)</span>. הוכיחו שזה אכן יחס שקילות, ולכן משרה חלוקה של <span class="math">\(G\)</span>, ושכל מחלקת שקילות מכילה אותו מספר של איברים (מחלקת שקילות שכזו מכונה "קוסט"). למה זה מסיים את ההוכחה?</p>
+        </article>
+        
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2007/11/30/gematria_is_evil/" class="nav-link nav-next">
+                <span class="nav-label">→ פוסט חדש יותר</span>
+                <span class="nav-title">גימטרעה</span>
+            </a>
+            
+            
+            
+            <a href="/2007/11/24/hash_functions/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר ←</span>
+                <span class="nav-title">זמן לחתום (בתמצות) את סאגת אליס ובוב</span>
+            </a>
+            
+        </nav>
+        
+        
+        <footer>
+            <p>בלוג מתמטיקה בעברית</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>
