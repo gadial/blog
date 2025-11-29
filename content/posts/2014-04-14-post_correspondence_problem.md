@@ -221,3 +221,4 @@ social_media_share: true
 	<li>יהיה לנו הזוג {% equation %}\left(q_{f}\#\#,\#\right){% endequation %}.</li>
 </ul>
 וזו הבניה כולה! קלה, אחרי שמבינים את הרעיון. האם הצלחתי להסביר את הרעיון?
+

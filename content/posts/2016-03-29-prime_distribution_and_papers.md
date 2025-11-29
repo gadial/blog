@@ -56,3 +56,4 @@ tags:
 בעצם כן, אני כן חושב שאני מבין. זה מרגיש לי בדיוק כמו סוג הדברים שכותבים על משהו כשברור לנו שאין לנו מה לכתוב אבל אנחנו <strong>חייבים</strong> לכתוב משהו. וכשזה על מתמטיקה התוצאה תהיה דברים שמייד רואים שאינם נכונים, אבל מי יודע, אולי יש תחומים שבהם אפשר לכתוב ולכתוב ולכתוב...?
 
 [caption id="attachment_3327" align="aligncenter" width="740"]<a href="{{site.baseurl}}{{site.post_images}}/2016/03/impostor.png" rel="attachment wp-att-3327"><img class="size-full wp-image-3327" src="{{site.baseurl}}{{site.post_images}}/2016/03/impostor.png" alt="https://xkcd.com/451/" width="740" height="312" /></a> <a href="https://xkcd.com/451/">https://xkcd.com/451</a>[/caption]
+

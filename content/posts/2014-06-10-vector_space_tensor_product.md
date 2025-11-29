@@ -36,11 +36,11 @@ tags:
 
 ובכן, אתם לא תאהבו את התשובה הזו, אבל היא פשוטה מאוד: אברי המרחב יהיו פשוט כל הצירופים הלינאריים הפורמליים של אברי הבסיס. הרי זה הרעיון בבסיס - ש<strong>כל</strong> איבר במרחב יהיה ניתן לייצוג <strong>יחיד</strong> כצירוף לינארי של אברי הבסיס.
 
-זה מוביל אותנו להגדרה הפורמלית הבאה של מכפלה טנזורית: {% equation %}V\otimes W\triangleq\mbox{span}\left\{ e_{i}\otimes f_{j}\ |\ 1\le i\le n,1\le j\le m\right\} {% endequation %}. הסימן {% equation %}\otimes{% endequation %} הוא סימן מיוחד שבא להבהיר לנו ש-{% equation %}V\otimes W{% endequation %} היא מכפלה טנזורית ולא כפל רגיל; וכאשר אני כותב {% equation %}e\otimes f{% endequation %} זה ביטוי פורמלי נטו; הייתי יכול לכתוב גם {% equation %}\left(e,f\right){% endequation %} או {% equation %}e\diamondsuit f{% endequation %} או כל סימן אחר שעדיין היה מאפשר לי לדעת מי הם {% equation %}e,f{% endequation %} ש"תורמים" לאיבר הזה. השימוש בסימן {% equation %}\otimes{% endequation %} כאן הוא פשוט מוסכמה.
+זה מוביל אותנו להגדרה הפורמלית הבאה של מכפלה טנזורית: {% equation %}V\otimes W\triangleq\text{span}\left\{ e_{i}\otimes f_{j}\ |\ 1\le i\le n,1\le j\le m\right\} {% endequation %}. הסימן {% equation %}\otimes{% endequation %} הוא סימן מיוחד שבא להבהיר לנו ש-{% equation %}V\otimes W{% endequation %} היא מכפלה טנזורית ולא כפל רגיל; וכאשר אני כותב {% equation %}e\otimes f{% endequation %} זה ביטוי פורמלי נטו; הייתי יכול לכתוב גם {% equation %}\left(e,f\right){% endequation %} או {% equation %}e\diamondsuit f{% endequation %} או כל סימן אחר שעדיין היה מאפשר לי לדעת מי הם {% equation %}e,f{% endequation %} ש"תורמים" לאיבר הזה. השימוש בסימן {% equation %}\otimes{% endequation %} כאן הוא פשוט מוסכמה.
 
 ההגדרה די פשוטה. אבל יש מרחק בין להבין אותה ובין "להרגיש" מה קורה פה, אז הכרחי לתת דוגמה קונקרטית עם שני מרחבים פשוטים אבל שיהיו שונים זה מזה. אז ניקח {% equation %}V=\mathbb{R}^{2}{% endequation %} ו-{% equation %}W=\mathbb{R}_{3}\left[x\right]{% endequation %}. כלומר, איבר ב-{% equation %}V{% endequation %} הוא זוג מספרים ממשיים {% equation %}\left(a,b\right){% endequation %} ואילו איבר ב-{% equation %}W{% endequation %} הוא פולינום ממעלה לכל היותר 2, {% equation %}p\left(x\right){% endequation %}. בסיס פשוט של {% equation %}V{% endequation %} הוא {% equation %}\left\{ \left(1,0\right),\left(0,1\right)\right\} {% endequation %} ובסיס פשוט של {% equation %}W{% endequation %} הוא {% equation %}\left\{ 1,x,x^{2}\right\} {% endequation %}. המכפלה הטנזורית של שני המרחבים הללו תהיה מרחק ממימד 6 שנפרש על ידי האיברים הבאים:
 
-{% equation %}V\otimes W=\mbox{span}\left\{ \left(1,0\right)\otimes1,\left(1,0\right)\otimes x,\left(1,0\right)\otimes x^{2},\left(0,1\right)\otimes1,\left(0,1\right)\otimes x,\left(0,1\right)\otimes x^{2}\right\} {% endequation %}
+{% equation %}V\otimes W=\text{span}\left\{ \left(1,0\right)\otimes1,\left(1,0\right)\otimes x,\left(1,0\right)\otimes x^{2},\left(0,1\right)\otimes1,\left(0,1\right)\otimes x,\left(0,1\right)\otimes x^{2}\right\} {% endequation %}
 
 כלומר, איבר לדוגמה במכפלה הטנזורית הוא {% equation %}\pi\left(\left(0,1\right)\otimes x^{2}\right)+17\left(\left(1,0\right)\otimes1\right){% endequation %} (כאן המקדם של אחד מאברי הבסיס הוא {% equation %}\pi{% endequation %}, מקדם של איבר בסיס אחר הוא 17 וכל היתר הם 0).
 
@@ -173,3 +173,4 @@ tags:
     TeX: {extensions: ["http://www.gadial.net/libs/xyjax/extensions/TeX/xypic.js"]}
   });
 </script>
+

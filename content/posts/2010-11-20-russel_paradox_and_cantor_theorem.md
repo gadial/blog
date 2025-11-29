@@ -47,3 +47,4 @@ social_media_share: true
 {% equation %}x{% endequation %} הוא בדיוק הספר שאינו מספר את עצמו. אם {% equation %}x\in X{% endequation %} אז על פי הגדרת הקבוצה {% equation %}X{% endequation %}, מתקיים {% equation %}x\notin f\left(x\right)=X{% endequation %} וזו סתירה. אבל אם {% equation %}x\notin X{% endequation %} אז על פי הגדרת {% equation %}X{% endequation %} מתקיים {% equation %}x\in f\left(x\right)=X{% endequation %} וזו שוב סתירה. בקיצור, ההנחה שקיימת {% equation %}f{% endequation %} כזו הייתה שגויה, ולכן הגודל של {% equation %}P\left(A\right){% endequation %} (אם בכלל ניתן לייחס לה גודל - זו לא הנחה טריוויאלית!) הוא גדול מזה של {% equation %}A{% endequation %}.
 
 אפשר לחשוב על הפרדוקס של ראסל בתור מה שקורה כשמפעילים את ההוכחה הזו על קבוצת כל הקבוצות, כשהפונקציה שתוקפים היא זו שמעבירה כל קבוצה לעצמה. גם בלי זה, לטעמי זו אחת ההוכחות היפות במתמטיקה - אני מקווה שלא הצלחתי להרוס אותה לחלוטין עבור הקוראים.
+

@@ -71,17 +71,17 @@ tags:
 
 עכשיו, הטענה שלי היא שהביטוי הזה הוא <strong>תמיד</strong> או 2 או {% equation %}-2{% endequation %}. למה? ובכן, בואו נניח ש-{% equation %}A,B,X,Y{% endequation %} קיבלו ערכים קונקרטיים (פורמלית הייתי צריך לכתוב {% equation %}A=a{% endequation %} וכאלה, אבל אתם מבינים גם ככה). תזכרו שכל הערכים הללו הם או 1 או {% equation %}-1{% endequation %}. אם {% equation %}A,B{% endequation %} קיבלו ערכים שונים אז {% equation %}B+A=0{% endequation %} בהכרח, בעוד ש-{% equation %}B-A{% endequation %} הוא או 2 או {% equation %}-2{% endequation %}. הביטוי {% equation %}\left(B+A\right)X{% endequation %} ייעלם, אם כן, ואילו {% equation %}\left(B-A\right)Y{% endequation %} שווה ל-2 או מינוס 2 שמוכפל ב-1 או במינוס 1 - כלומר, נקבל {% equation %}2{% endequation %} או {% equation %}-2{% endequation %}. באופן דומה, אם {% equation %}A=B{% endequation %} אז {% equation %}B+A{% endequation %} הוא 2 או {% equation %}-2{% endequation %}, בזמן ש-{% equation %}B-A=0{% endequation %} ושוב נקבל שערך הביטוי כולו הוא 2 או {% equation %}-2{% endequation %}.
 
-זה אומר שה<strong>תוחלת</strong> של הביטוי כולו חסומה על ידי 2: {% equation %}\mbox{E}\left[AX+BX+BY-AY\right]\le2{% endequation %}. למי שרוצה לראות את זה פורמלית, פשוט צריך להיזכר בהגדרת התוחלת: {% equation %}\mbox{E}\left[Z\right]=\sum z\cdot\mbox{P}\left(Z=z\right){% endequation %} - כלומר, תוחלת של משתנה מקרי היא סכום של הערכים שהוא יכול לקבל כפול הההסתברות שהוא יקבל אותם. כאן {% equation %}Z=AX+BX+BY-AY{% endequation %} והוא יכול לקבל רק שני ערכים. כלומר, {% equation %}\mbox{E}\left[Z\right]=2\mbox{P}\left(Z=2\right)-2\mbox{P}\left(Z=-2\right)\le2{% endequation %}.
+זה אומר שה<strong>תוחלת</strong> של הביטוי כולו חסומה על ידי 2: {% equation %}\text{E}\left[AX+BX+BY-AY\right]\le2{% endequation %}. למי שרוצה לראות את זה פורמלית, פשוט צריך להיזכר בהגדרת התוחלת: {% equation %}\text{E}\left[Z\right]=\sum z\cdot\text{P}\left(Z=z\right){% endequation %} - כלומר, תוחלת של משתנה מקרי היא סכום של הערכים שהוא יכול לקבל כפול הההסתברות שהוא יקבל אותם. כאן {% equation %}Z=AX+BX+BY-AY{% endequation %} והוא יכול לקבל רק שני ערכים. כלומר, {% equation %}\text{E}\left[Z\right]=2\text{P}\left(Z=2\right)-2\text{P}\left(Z=-2\right)\le2{% endequation %}.
 
 עכשיו, תוחלת מקיימת תכונה נפלאה שנקראת <strong>לינאריות</strong>. במקרה שלנו זה אומר שמתקיים:
 
-{% equation %}\mbox{E}\left[AX+BX+BY-AY\right]=\mbox{E}\left[AX\right]+\mbox{E}\left[BX\right]+\mbox{E}\left[BY\right]-\mbox{E}\left[AY\right]{% endequation %}
+{% equation %}\text{E}\left[AX+BX+BY-AY\right]=\text{E}\left[AX\right]+\text{E}\left[BX\right]+\text{E}\left[BY\right]-\text{E}\left[AY\right]{% endequation %}
 
 למה זה נפלא? כי את אגף ימין של הביטוי אנחנו יכולים <strong>לחשב בניסוי</strong>. את {% equation %}AX+BX+BY-AY{% endequation %} אנחנו לא יכולים לחשב בניסוי, כי בשביל לחשב את הביטוי כולו נצטרך לדעת, למשל, גם את {% equation %}A{% endequation %} וגם את {% equation %}B{% endequation %}, אבל אנחנו יכולים לחשב רק אחד מהם - לא מובטח לנו שאחרי מדידה של אחד מהם לא נקלקל את המערכת והערך של {% equation %}B{% endequation %} שנקבל לא יהיה הערך שמחושב מ-{% equation %}\lambda{% endequation %} אלא ערך שמושפע מהמדידה של {% equation %}A{% endequation %}.
 
-אבל בביטוי באגף ימין אנחנו יכולים לטפל זוג-זוג בנפרד. איך? פשוט מאוד. למשל, כדי לחשב את {% equation %}\mbox{E}\left[AX\right]{% endequation %} אליס ובוב ישוו תוצאות מכל הניסויים שבהם הם מדדו את {% equation %}A{% endequation %} ואת {% equation %}X{% endequation %} (רבע מהם). הם יכפילו את הערכים של {% equation %}A,X{% endequation %}, יספרו כמה פעמים קיבלו 1 וכמה פעמים קיבלו {% equation %}-1{% endequation %}, יעריכו מזה את ההסתברות לקבלת הערכים הללו ויחשבו את התוחלת לפי הנוסחה. שמתם לב להנחה שלנו פה, שבכלל אפשר לחשב תוחלת על ידי מדידה בפועל? מעין הנחה שחוק המספרים הגדולים "עובד"? זו <strong>לא</strong> הנחה טריוויאלית כלל, ואחת הדרכים להיפטר מהתוצאה של בל היא להגיד שדווקא ההנחה הזו שגויה; אבל מבין כל האפשרויות, זו נראית הכי פחות סבירה, בהתבסס על הנסיון שלנו עם תורת ההסתברות ויכולת התיאור שלה את המציאות.
+אבל בביטוי באגף ימין אנחנו יכולים לטפל זוג-זוג בנפרד. איך? פשוט מאוד. למשל, כדי לחשב את {% equation %}\text{E}\left[AX\right]{% endequation %} אליס ובוב ישוו תוצאות מכל הניסויים שבהם הם מדדו את {% equation %}A{% endequation %} ואת {% equation %}X{% endequation %} (רבע מהם). הם יכפילו את הערכים של {% equation %}A,X{% endequation %}, יספרו כמה פעמים קיבלו 1 וכמה פעמים קיבלו {% equation %}-1{% endequation %}, יעריכו מזה את ההסתברות לקבלת הערכים הללו ויחשבו את התוחלת לפי הנוסחה. שמתם לב להנחה שלנו פה, שבכלל אפשר לחשב תוחלת על ידי מדידה בפועל? מעין הנחה שחוק המספרים הגדולים "עובד"? זו <strong>לא</strong> הנחה טריוויאלית כלל, ואחת הדרכים להיפטר מהתוצאה של בל היא להגיד שדווקא ההנחה הזו שגויה; אבל מבין כל האפשרויות, זו נראית הכי פחות סבירה, בהתבסס על הנסיון שלנו עם תורת ההסתברות ויכולת התיאור שלה את המציאות.
 
-אם כן, אפשר לבצע את החישוב בפועל. וכשמבצעים את החישוב בפועל עבור מערכת ספציפית שתכף אתאר מגלים, למרבה ההפתעה, ש-{% equation %}\mbox{E}\left[AX\right]+\mbox{E}\left[BX\right]+\mbox{E}\left[BY\right]-\mbox{E}\left[AY\right]{% endequation %} יוצא {% equation %}2\sqrt{2}{% endequation %}, כלומר מפר את החסם המתמטי שהוא אמור לקיים. מה קורה פה? קיבלנו סתירה במתמטיקה? מה השתבש?
+אם כן, אפשר לבצע את החישוב בפועל. וכשמבצעים את החישוב בפועל עבור מערכת ספציפית שתכף אתאר מגלים, למרבה ההפתעה, ש-{% equation %}\text{E}\left[AX\right]+\text{E}\left[BX\right]+\text{E}\left[BY\right]-\text{E}\left[AY\right]{% endequation %} יוצא {% equation %}2\sqrt{2}{% endequation %}, כלומר מפר את החסם המתמטי שהוא אמור לקיים. מה קורה פה? קיבלנו סתירה במתמטיקה? מה השתבש?
 
 ובכן, לא, לא קיבלנו סתירה במתמטיקה - המודל המתמטי של תורת הקוונטים דווקא חוזה את תוצאת ה-{% equation %}2\sqrt{2}{% endequation %} עבור המערכת הספציפית המדוברת. בואו נבין איך, ולמה החישוב שביצעתי קודם והניב את החסם של 2 לא רלוונטי עבור המערכת הזו.
 
@@ -117,7 +117,7 @@ tags:
 
 {% equation %}\frac{1}{2}\left(\frac{1}{4-2\sqrt{2}}+\frac{\left(1+\sqrt{2}\right)^{2}}{4+2\sqrt{2}}-\frac{1}{4+2\sqrt{2}}-\frac{\left(1-\sqrt{2}\right)^{2}}{4-2\sqrt{2}}\right)=\frac{1}{\sqrt{2}}{% endequation %}
 
-עשיתי את כל החישוב המזעזע הזה ידנית כדי שנראה שזה לא כזה נורא, אבל אני לא מתכנן לחזור עליו שוב, לכן אני יכול להסתפק בלהסביר עכשיו מה בדיוק עושים בניסוי בל. כזכור, בל אומר להגדיר ארבעה אופרטורים {% equation %}A,B,X,Y{% endequation %} ולחשב את {% equation %}\mbox{E}\left[AX\right]+\mbox{E}\left[BX\right]+\mbox{E}\left[BY\right]-\mbox{E}\left[AY\right]{% endequation %}. אצלנו האופרטורים הללו יהיו:
+עשיתי את כל החישוב המזעזע הזה ידנית כדי שנראה שזה לא כזה נורא, אבל אני לא מתכנן לחזור עליו שוב, לכן אני יכול להסתפק בלהסביר עכשיו מה בדיוק עושים בניסוי בל. כזכור, בל אומר להגדיר ארבעה אופרטורים {% equation %}A,B,X,Y{% endequation %} ולחשב את {% equation %}\text{E}\left[AX\right]+\text{E}\left[BX\right]+\text{E}\left[BY\right]-\text{E}\left[AY\right]{% endequation %}. אצלנו האופרטורים הללו יהיו:
 
 {% equation %}A=\sigma_{z}{% endequation %}
 
@@ -127,7 +127,7 @@ tags:
 
 {% equation %}Y=\frac{\sigma_{z}-\sigma_{x}}{\sqrt{2}}{% endequation %}
 
-מה שהוכחנו עד כה היה בעצם ש-{% equation %}\mbox{E}\left[AX\right]=\frac{1}{\sqrt{2}}{% endequation %}. עכשיו, סימון מקובל בתורת הקוונטים לתוחלת הוא {% equation %}\left\langle AX\right\rangle {% endequation %} ולכן זה הסימון שבו אשתמש. מבלי לבצע את יתר החישובים אני אטען שמתקיים:
+מה שהוכחנו עד כה היה בעצם ש-{% equation %}\text{E}\left[AX\right]=\frac{1}{\sqrt{2}}{% endequation %}. עכשיו, סימון מקובל בתורת הקוונטים לתוחלת הוא {% equation %}\left\langle AX\right\rangle {% endequation %} ולכן זה הסימון שבו אשתמש. מבלי לבצע את יתר החישובים אני אטען שמתקיים:
 
 {% equation %}\left\langle AX\right\rangle =\frac{1}{\sqrt{2}}{% endequation %}
 
@@ -146,3 +146,4 @@ tags:
 אם אנחנו מוותרים על המשתנים החבויים לגמרי, אז כבר לא ניתן לדבר על הביטוי {% equation %}AX+BX+BY-AY{% endequation %} בכלל כי הוא לא מוגדר היטב - הוא מניח שלניסוי {% equation %}A{% endequation %} ולניסוי {% equation %}B{% endequation %} יש <strong>בו זמנית</strong> ערכים, ואליס פשוט לא יודעת את שניהם בו זמנית כי היא מודדת רק אחד מהם. על פי המודל הרגיל של תורת הקוונטים שאיתו אנו עובדים, זה פשוט לא נכון - ייתכן מאוד שהמצב הקוונטי של המערכת שלנו הוא כזה שבו יש ערך מוחלט לאחד הניסויים, אבל לא לניסוי השני.
 
 עם זאת, במקום לוותר על משתנים חבויים לגמרי אפשר לוותר רק על דרישת המקומיות - כלומר, שמערכות נפרדות לא ישפיעו זו על זו; ובניסוי שלנו, שהמדידה שאליס מבצעת לא תשפיע על המדידה שבוב מבצע. אם המדידה של אליס כן משפיעה, אז הביטוי {% equation %}AX+BX+BY-AY{% endequation %} שחסמנו לא באמת מתאר את הערכים שיתקבלו בתהליך המדידה - למשל, יש שם {% equation %}AX{% endequation %} אבל מה שצריך להיות שם הוא {% equation %}AX^{\prime}{% endequation %} כאשר {% equation %}X^{\prime}{% endequation %} הוא "הערך של המדידה {% equation %}X{% endequation %} שבוב מבצע אחרי שהוא השתנה כתוצאה מהמדידה של אליס". גם זה מפיל את אי-שוויון בל ו"מציל" אותנו מסתירה. כפי שכבר אמרתי קודם, קיימות תיאוריות של משתנים חבויים לא מקומיים, אבל אני לא מבין בהן כלום ולא אתאר אותן יותר בפירוט.
+

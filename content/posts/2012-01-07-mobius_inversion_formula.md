@@ -115,3 +115,4 @@ social_media_share: true
 {% equation %}f\left(x\right)=\sum_{y\le x}g\left(y\right)\mu\left(y,x\right){% endequation %}
 
 בניסוח הזה אנחנו חייבים שב-{% equation %}X{% endequation %} כל אידאל סדר ראשי יהיה סופי פשוט כי אחרת הסכום {% equation %}\sum_{y\le x}{% endequation %} (כאשר {% equation %}x{% endequation %} קבוע - כלומר, הסכום הוא בדיוק על איברי אידאל הסדר שנוצר על ידי {% equation %}x{% endequation %}) איננו סופי. למעשה, יש כאן נקודה עדינה למדי - אותן {% equation %}f,g{% endequation %} שאני מדבר עליהן כאן מוגדרות על איברים של {% equation %}X{% endequation %}, לא על קטעים. אין בעיה של ממש לטפל בעניין הזה אבל אני חושב שהתעללתי בקוראים מספיק ואסיים כאן.
+

@@ -93,13 +93,13 @@ tags:
 
 זו הסיבה שבגללה אני לא אוהב את השימוש הכפול בסימבול {% equation %}\varepsilon{% endequation %} כדי לתאר גם את המילה הריקה, וגם את המעברים שאינם קוראים אות. אבל אין מה לעשות - זה הסימון המקובל בספרות ובפרט בספרי הלימוד הרלוונטיים לטעמי (זה של הופקרופט ואולמן; זה של סיפסר; וזה של האוניברסיטה הפתוחה בישראל). לכן גם אני אשתמש בו, אבל בזהירות.
 
-אז איך נגדיר את {% equation %}\hat{\delta}\left(q,\varepsilon\right){% endequation %}? ובכן, אנחנו צריכים כתיב פורמלי עבור "כל המצבים שישיגים מ-{% equation %}q{% endequation %} על ידי 0 או יותר מסעי-{% equation %}\varepsilon{% endequation %}". נסמן את הקבוצה הזו ב-{% equation %}\mbox{Cl}^{\varepsilon}\left(q\right){% endequation %} - <strong>סגור-{% equation %}\varepsilon{% endequation %}</strong> של {% equation %}q{% endequation %} (Cl הוא קיצור של Closure - סגור, שמבוטא בחולם). לטעמי הדרך הנחמדה ביותר להגדיר את הקבוצה הזו היא בתור הקבוצה הקטנה ביותר של מצבים שמכילה את {% equation %}q{% endequation %} וסגורה ביחס למעברי {% equation %}\varepsilon{% endequation %}. פורמלית, {% equation %}q\in\mbox{Cl}^{\varepsilon}\left(q\right){% endequation %} וכמו כן אם {% equation %}p\in\mbox{Cl}^{\varepsilon}\left(q\right){% endequation %} ו-{% equation %}p^{\prime}\in\delta\left(p,\varepsilon\right){% endequation %} אז גם {% equation %}p^{\prime}\in\mbox{Cl}^{\varepsilon}\left(q\right){% endequation %}.
+אז איך נגדיר את {% equation %}\hat{\delta}\left(q,\varepsilon\right){% endequation %}? ובכן, אנחנו צריכים כתיב פורמלי עבור "כל המצבים שישיגים מ-{% equation %}q{% endequation %} על ידי 0 או יותר מסעי-{% equation %}\varepsilon{% endequation %}". נסמן את הקבוצה הזו ב-{% equation %}\text{Cl}^{\varepsilon}\left(q\right){% endequation %} - <strong>סגור-{% equation %}\varepsilon{% endequation %}</strong> של {% equation %}q{% endequation %} (Cl הוא קיצור של Closure - סגור, שמבוטא בחולם). לטעמי הדרך הנחמדה ביותר להגדיר את הקבוצה הזו היא בתור הקבוצה הקטנה ביותר של מצבים שמכילה את {% equation %}q{% endequation %} וסגורה ביחס למעברי {% equation %}\varepsilon{% endequation %}. פורמלית, {% equation %}q\in\text{Cl}^{\varepsilon}\left(q\right){% endequation %} וכמו כן אם {% equation %}p\in\text{Cl}^{\varepsilon}\left(q\right){% endequation %} ו-{% equation %}p^{\prime}\in\delta\left(p,\varepsilon\right){% endequation %} אז גם {% equation %}p^{\prime}\in\text{Cl}^{\varepsilon}\left(q\right){% endequation %}.
 
 כעת נגדיר:
 
-{% equation %}\hat{\delta}\left(q,\varepsilon\right)=\mbox{Cl}^{\varepsilon}\left(q\right){% endequation %}
+{% equation %}\hat{\delta}\left(q,\varepsilon\right)=\text{Cl}^{\varepsilon}\left(q\right){% endequation %}
 
-{% equation %}\hat{\delta}\left(q,w\sigma\right)=\mbox{Cl}^{\varepsilon}\left(\delta\left(\hat{\delta}\left(q,w\right),\sigma\right)\right){% endequation %}
+{% equation %}\hat{\delta}\left(q,w\sigma\right)=\text{Cl}^{\varepsilon}\left(\delta\left(\hat{\delta}\left(q,w\right),\sigma\right)\right){% endequation %}
 
 גם כאן אני מניח באופן מובלע ש-{% equation %}\delta{% endequation %} מוגדרת על קבוצות של מצבים ולא רק על מצבים בודדים.
 
@@ -113,7 +113,7 @@ tags:
 
 {% equation %}\delta_{ND}\left(q,\sigma\right)=\hat{\delta}_{EM}\left(q,\sigma\right){% endequation %}
 
-נשאר רק לטפל במצבים המקבלים. מן הסתם נרצה שכל מצב מקבל של {% equation %}A_{EM}{% endequation %} יהיה מצב מקבל של {% equation %}A_{ND}{% endequation %}, אבל למרבה הצער - זה לא מספיק. יש לנו מקרה קצה מעצבן שצריך לטפל בו - המילה הריקה. כי מה קורה? הבניה שלנו של פונקציית המעברים מבטיחה שהאוטומטים יתנהגו בצורה מאוד דומה - שיתקיים {% equation %}\hat{\delta}_{ND}\left(q,w\right)=\hat{\delta}_{EM}\left(q,w\right){% endequation %} כמעט לכל מילה. אבל עבור {% equation %}w=\varepsilon{% endequation %} השוויון הזה פשוט לא נכון. למה? כי באוטומט עם מסעי-{% equation %}\varepsilon{% endequation %}, אפשר להגיע לקבוצה לא קטנה של מצבים תוך קריאת המילה הריקה - {% equation %}\mbox{Cl}^{\varepsilon}\left(q_{0}\right){% endequation %}, אם להיות פורמליים - אבל באוטומט בלי מסעי {% equation %}\varepsilon{% endequation %} המצב <strong>היחיד</strong> שאפשר להגיע אליו בלי לקרוא אף אות הוא {% equation %}q_{0}{% endequation %}.
+נשאר רק לטפל במצבים המקבלים. מן הסתם נרצה שכל מצב מקבל של {% equation %}A_{EM}{% endequation %} יהיה מצב מקבל של {% equation %}A_{ND}{% endequation %}, אבל למרבה הצער - זה לא מספיק. יש לנו מקרה קצה מעצבן שצריך לטפל בו - המילה הריקה. כי מה קורה? הבניה שלנו של פונקציית המעברים מבטיחה שהאוטומטים יתנהגו בצורה מאוד דומה - שיתקיים {% equation %}\hat{\delta}_{ND}\left(q,w\right)=\hat{\delta}_{EM}\left(q,w\right){% endequation %} כמעט לכל מילה. אבל עבור {% equation %}w=\varepsilon{% endequation %} השוויון הזה פשוט לא נכון. למה? כי באוטומט עם מסעי-{% equation %}\varepsilon{% endequation %}, אפשר להגיע לקבוצה לא קטנה של מצבים תוך קריאת המילה הריקה - {% equation %}\text{Cl}^{\varepsilon}\left(q_{0}\right){% endequation %}, אם להיות פורמליים - אבל באוטומט בלי מסעי {% equation %}\varepsilon{% endequation %} המצב <strong>היחיד</strong> שאפשר להגיע אליו בלי לקרוא אף אות הוא {% equation %}q_{0}{% endequation %}.
 
 אם {% equation %}\varepsilon\notin L\left(A_{EM}\right){% endequation %} כל זה לא רלוונטי. אבל אם {% equation %}\varepsilon\in L\left(A_{EM}\right){% endequation %} אז אין לנו ברירה; אנחנו <strong>חייבים</strong> שיתקיים {% equation %}q_{0}\in F_{ND}{% endequation %} אחרת פשוט לא יתקיים {% equation %}\varepsilon\in L\left(A_{ND}\right){% endequation %}. מכאן אנחנו מקבלים את ההגדרה הבאה:
 
@@ -126,3 +126,4 @@ tags:
 זה מסיים את ההוכחה, והחל מהפוסט הבא נוכל להשתמש בחופשיות באוטומטים אי-דטרמיניסטיים עם מסעי-{% equation %}\varepsilon{% endequation %} כדי לעשות דברים. רק תרגול אחד לסיום - נסו לקחת את האוטומט שמצויר לעיל ולסלק לו את מסעי ה-{% equation %}\varepsilon{% endequation %}. הנה מה שאמור להתקבל:
 
 <a href="{{site.baseurl}}{{site.post_images}}/2014/11/diagram003.png"><img class="aligncenter size-full wp-image-3195" alt="diagram003" src="{{site.baseurl}}{{site.post_images}}/2014/11/diagram003.png" width="460" height="192" /></a>
+

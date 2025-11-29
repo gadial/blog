@@ -226,3 +226,4 @@ social_media_share: true
 עכשיו, הוכחנו קודם כי על פי משפט הערך הממוצע, קיים {% equation %}c{% endequation %} כך ש-{% equation %}c\in\left(a,x\right){% endequation %} (או {% equation %}c\in\left(x,a\right){% endequation %} אם {% equation %}x&lt;a{% endequation %}) כך ש-{% equation %}\frac{f\left(x\right)}{g\left(x\right)}=\frac{f^{\prime}\left(c\right)}{g^{\prime}\left(c\right)}{% endequation %}. מכיוון ש-{% equation %}a&lt;c&lt;x{% endequation %} ו-{% equation %}\left|x-a\right|&lt;\delta{% endequation %} אז גם {% equation %}\left|c-a\right|&lt;\delta{% endequation %} ולכן {% equation %}\left|\frac{f^{\prime}\left(c\right)}{g^{\prime}\left(c\right)}-L\right|&lt;\varepsilon{% endequation %} ולכן {% equation %}\left|\frac{f\left(x\right)}{g\left(x\right)}-L\right|&lt;\varepsilon{% endequation %} כמבוקש, מה שמסיים את ההוכחה.
 
 זה זמן טוב לסיים בו את הפוסט, אבל כרגיל - זה רק קצה הקרחון של השימושים במשפט הערך הממוצע, וזה פשוט ששולי הבלוג הזה צרים מלהכילם.
+

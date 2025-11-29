@@ -11,3 +11,4 @@ categories:
 ה<a href="http://projecteuler.net/index.php?section=problems&id=69">חידה</a> עוסקת ב<a href="http://he.wikipedia.org/wiki/%D7%A4%D7%95%D7%A0%D7%A7%D7%A6%D7%99%D7%99%D7%AA_%D7%90%D7%95%D7%99%D7%9C%D7%A8">פונקצית אוילר</a> (כמה מתאים) {% equation %}\varphi(n){% endequation %} - הפונקציה מחזירה, לכל מספר טבעי, את מספרם של המספרים שקטנים ממנו וזרים לו. שני מספרים הם זרים אם לא קיים מספר שלישי, גדול מאחד, שמחלק את שניהם גם יחד - כלומר, ה<a href="http://he.wikipedia.org/wiki/%D7%9E%D7%97%D7%9C%D7%A7_%D7%9E%D7%A9%D7%95%D7%AA%D7%A3_%D7%9E%D7%A7%D7%A1%D7%99%D7%9E%D7%9C%D7%99">מחלק המשותף הגדול ביותר</a> שלהם הוא 1.
 
 השאלה היא פשוטה: מבין כל המספרים מ-2 עד מיליון, מהו המספר {% equation %}n{% endequation %} שעבורו היחס {% equation %}\frac{n}{\varphi(n)}{% endequation %} הוא הגדול ביותר?
+

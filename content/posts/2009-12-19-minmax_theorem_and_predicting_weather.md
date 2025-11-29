@@ -52,3 +52,4 @@ tags:
 אבל עכשיו נכנס משפט המינימקס לתמונה... אם לכל {% equation %}y{% endequation %} קיים {% equation %}x{% endequation %} כך ש-{% equation %}\pi\left(x,y\right)\ge1{% endequation %}, אז נובע מכך שקיים {% equation %}x{% endequation %} כך שלכל {% equation %}y{% endequation %} מתקיים {% equation %}\pi\left(x,y\right)\ge1{% endequation %}. כלומר - יש לחזאי אסטרטגיה {% equation %}x{% endequation %} שמבטיחה לו נצחון במשחק, <strong>בלי תלות במעשיו של מוריד הגשם!</strong> כל מה שהחזאי צריך לעשות הוא לדווח על התחזיות על פי {% equation %}x{% endequation %}, ואין זה משנה בכלל איך מוריד הגשם יתנהג, החזאי ינצח!
 
 המסקנה היא, כמובן, ששיטת המדידה שהצעתי בתחילת הפוסט אינה טובה. המסקנה הנוספת היא (אני מקווה) שמשפט המינימקס הוא דבר מגניב הרבה יותר ממה שנראה במבט ראשון.
+

@@ -56,3 +56,4 @@ tags:
 {% equation %}\ln\lambda\left(n\right)&lt;\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}}+2\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}^{2}}{% endequation %}. מה קורה כאשר משאיפים את {% equation %}n{% endequation %} לאינסוף? ובכן, הטור {% equation %}\sum_{k=1}^{\infty}\frac{1}{p_{k}^{2}}{% endequation %} הוא טור <strong>מתכנס</strong> (כי {% equation %}\sum\frac{1}{n^{2}}{% endequation %} מתכנס). ומצד שני, כבר אמרנו כי {% equation %}\ln\lambda\left(n\right){% endequation %} שואף לאינסוף ולכן אגף ימין של אי השוויון חייב לשאוף לאינסוף בעצמו; מכאן ש-{% equation %}\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}}{% endequation %} חייב לשאוף לאינסוף, דהיינו {% equation %}\sum_{k=1}^{\infty}\frac{1}{p_{k}}{% endequation %} מתבדר, וזה מה שהיה צריך להוכיח.
 
 האם טרחן ישתכנע מההוכחה הזו? ספק גדול. אני מקווה שלפחות אלו מכם שעקבו עד הסוף נהנו.
+

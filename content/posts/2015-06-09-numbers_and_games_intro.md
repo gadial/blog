@@ -113,3 +113,4 @@ social_media_share: true
 {% equation %}xy\triangleq\left\{ x^{L}y+xy^{L}-x^{L}y^{L},x^{R}y+xy^{R}-x^{R}y^{R}|x^{L}y+xy^{R}-x^{L}y^{R},x^{R}y+xy^{L}-x^{R}y^{L}\right\} {% endequation %}
 
 עכשיו יש לנו את כל ההגדרות הבסיסיות ואת האינטואיציה הראשונית, ואפשר להתחיל להתקדם אל היעד הנכסף הבא שלנו: המספר {% equation %}\frac{1}{3}{% endequation %}! זאת, בפוסט הבא.
+

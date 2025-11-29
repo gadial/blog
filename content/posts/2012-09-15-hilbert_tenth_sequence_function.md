@@ -46,9 +46,9 @@ tags:
 </ol>
 זה משלים את החלק הראשון של הבניה שלנו: הראנו שמספור (והיפוך המספור) של זוגות של טבעיים הוא פונקציה דיופנטית. כעת - להגדרת הפונקציה {% equation %}S\left(i,u\right){% endequation %}, שהיא כבר ממש בהישג ידינו!
 
-נגדיר {% equation %}S\left(i,u\right)=L\left(u\right)\mbox{ mod }\left(1+iR\left(u\right)\right){% endequation %}, וזו הפונקציה המבוקשת. רגע, מה?
+נגדיר {% equation %}S\left(i,u\right)=L\left(u\right)\text{ mod }\left(1+iR\left(u\right)\right){% endequation %}, וזו הפונקציה המבוקשת. רגע, מה?
 
-ראשית, צריך טיפה להיזהר פה עם ההגדרה שלנו. אני מגדיר את {% equation %}a\mbox{ mod }b{% endequation %} להיות כאן המספר החיובי שמתקבל כשמחלקים {% equation %}a{% endequation %} ב-{% equation %}b{% endequation %} ולוקחים שארית, אלא אם {% equation %}a{% endequation %} מתחלק ממש ב-{% equation %}b{% endequation %} ואז במקום 0 הפונקציה מחזירה את {% equation %}b{% endequation %} (אני עושה את זה כדי לחמוק מהחזרה של 0).
+ראשית, צריך טיפה להיזהר פה עם ההגדרה שלנו. אני מגדיר את {% equation %}a\text{ mod }b{% endequation %} להיות כאן המספר החיובי שמתקבל כשמחלקים {% equation %}a{% endequation %} ב-{% equation %}b{% endequation %} ולוקחים שארית, אלא אם {% equation %}a{% endequation %} מתחלק ממש ב-{% equation %}b{% endequation %} ואז במקום 0 הפונקציה מחזירה את {% equation %}b{% endequation %} (אני עושה את זה כדי לחמוק מהחזרה של 0).
 
 כעת, בואו ננסה להבין איך הפונקציה "עובדת". כל סדרה מקודדת על ידי מספר {% equation %}u{% endequation %}, שבעצם אנחנו חושבים עליו כאילו הוא מקודד זוג מספרים טבעיים, {% equation %}\left(a,b\right){% endequation %}. עכשיו לוקחים את {% equation %}a{% endequation %} ומתחילים "לגרד" ממנו את אברי הסדרה: מחלקים אותו ב-{% equation %}1+b{% endequation %}, ב-{% equation %}1+2b{% endequation %}, ב-{% equation %}1+3b{% endequation %} וכן הלאה... בכל פעם לוקחים את השארית ומוסיפים אותה לסדרה. מתישהו {% equation %}1+ib{% endequation %} הולך להיות גדול יותר מ-{% equation %}a{% endequation %} ואז הסדרה "תתקע" על להחזיר {% equation %}a,a,a,\dots{% endequation %} כל הזמן, אבל זה לא מפריע לנו - אנחנו רוצים רק לקודד סדרות סופיות ולא מעניין אותנו מה קורה עבור {% equation %}i{% endequation %}-ים שגדולים מאורך הסדרה.
 
@@ -83,3 +83,4 @@ tags:
 שתי המשוואות הראשונות נתונות בצורה לא מפורשת על ידי {% equation %}x=L\left(u\right)\wedge y=R\left(u\right){% endequation %} שכבר ראינו. זו בעצם דרך "לפרק" את{% equation %}u{% endequation %} לתוך המשתנים {% equation %}x,y{% endequation %} של המשוואה הדיופנטית. השורה הבאה אומרת לנו ש-{% equation %}w{% endequation %} התקבל מ-{% equation %}x{% endequation %} על ידי חלוקה ב-{% equation %}\left(1+iy\right){% endequation %} ולקיחת שארית ({% equation %}z{% endequation %} הוא המנה של החלוקה). השורה האחרונה אומרת לנו במפורש ש-{% equation %}w\le1+iy{% endequation %} (העדפתי לכתוב זאת במפורש מאשר לכתוב את הנוסחה עם סימן האי-שוויון, כי מי זוכר כבר איך הראינו שהיחס הזה דיופנטי). בקיצור, ההוכחה היא פשוטה למדי, בהינתן מה שכבר למדנו על פונקציות דיופנטיות!
 
 סיימנו עם קידוד לכל הסדרות הסופיות, ועוד נשתמש בו בעתיד. בפוסט הבא על הבעיה העשירית של הילברט נעבור לבנות את הכלי הכבד המרכזי שלנו - הוכחה שהפונקציה האקספוננציאלית היא דיופנטית. יהיה אקשן.
+

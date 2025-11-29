@@ -59,3 +59,4 @@ tags:
 ובכן, התשובה לכך פשוטה מאוד: אם {% equation %}\neg z{% endequation %} ישיג מ-{% equation %}y{% endequation %}, אז זה אומר ש-{% equation %}\neg y{% endequation %} ישיג מ-{% equation %}z{% endequation %} (למה?) ולכן אם {% equation %}\neg z{% endequation %} היה ישיג מ-{% equation %}x{% endequation %}, אז {% equation %}\neg y{% endequation %} היה ישיג מ-{% equation %}x{% endequation %}, מה שאומר שכבר בשלב הקודם של {% equation %}x{% endequation %} היינו אמורים להציב ערך ב-{% equation %}y{% endequation %} ולא ייתכן שהוא שרד עד לשלב הזה. זה מסיים עם החששות שלנו; מי שעדיין מודאג מוזמן להוכיח פורמלית לעצמו שזה עובד.
 
 אם כן, ראינו אלגוריתמים שעובדים טוב מאוד על מקרים פרטיים של SAT. מה עושים במקרה הכללי? על כך נדבר בפוסט הבא.
+

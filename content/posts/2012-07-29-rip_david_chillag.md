@@ -21,3 +21,4 @@ tags:
 יהי זכרו ברוך.
 
 <a href="{{site.baseurl}}{{site.post_images}}/2012/07/0.jpg"><img class="alignnone size-full wp-image-2129" title="0" src="{{site.baseurl}}{{site.post_images}}/2012/07/0.jpg" alt="" width="480" height="360" /></a>
+

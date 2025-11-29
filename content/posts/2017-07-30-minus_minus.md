@@ -78,3 +78,4 @@ social_media_share: true
 {% equation %}=-\left(-\left(a\times\left(-\left(-b\right)\right)\right)\right)=-\left(-\left(a\times b\right)\right)=a\times b{% endequation %}
 
 וזה מסיים את ההוכחה הפורמלית. במילים אחרות, אם האינטואיציה שלכם מקבלת את ההגדרה של שלילי ואת חוק הפילוג, אני לא רואה למה לא להמשיך עם הלוגיקה הזו ולהסכים לכך ששלילי כפול שלילי הוא חיובי.
+

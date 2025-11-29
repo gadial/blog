@@ -138,7 +138,7 @@ tags:
 
 בואו נניח ש-{% equation %}z=k{% endequation %}, כאשר {% equation %}1\le k\le y{% endequation %}. אנחנו רוצים למצוא {% equation %}y_{1}^{\left(k\right)},\dots,y_{m}^{\left(k\right)}{% endequation %} כך ש-{% equation %}P\left(x_{1},\dots,x_{n},y,k,y_{1}^{\left(k\right)},\dots,y_{m}^{\left(k\right)}\right)=0{% endequation %}. אנחנו יודעים שהביטוי הדיופנטי המפלצתי פתיר. אז בואו ניקח את הצבת הערכים לתוכו ונשתמש בה. בפרט, הצבת הערכים הזו נותנת לנו {% equation %}a_{1},\dots,a_{m}{% endequation %} ו-{% equation %}t{% endequation %}. בואו נסמן ב-{% equation %}p_{k}{% endequation %} גורם ראשוני כלשהו של {% equation %}1+kt{% endequation %}, וכעת נגדיר:
 
-{% equation %}y_{i}^{\left(k\right)}=a_{i}\mbox{ mod }p_{k}{% endequation %}
+{% equation %}y_{i}^{\left(k\right)}=a_{i}\text{ mod }p_{k}{% endequation %}
 
 דהיינו, {% equation %}y_{i}^{\left(k\right)}{% endequation %} מתקבל מחלוקת {% equation %}a_{i}{% endequation %} ב-{% equation %}p_{k}{% endequation %} ולקיחת השארית. אני טוען שהערכים הללו אכן מספקים את {% equation %}P{% endequation %}, ושהם לא גדולים מ-{% equation %}u{% endequation %}, כלומר {% equation %}1\le y_{i}^{\left(k\right)}\le u{% endequation %}. מדוע?
 
@@ -231,3 +231,4 @@ tags:
 את {% equation %}t_{r}{% endequation %} אפשר להפריד לשלושה חלקים. הראשון הוא {% equation %}\left|c\right|x_{1}^{q_{1}}\cdots x_{n}^{q_{n}}{% endequation %} שקיים כמו שהוא גם ב-{% equation %}u_{r}{% endequation %}; השני הוא {% equation %}k^{a}y^{b}{% endequation %} שמכוסה על ידי {% equation %}y^{a+b}{% endequation %} של {% equation %}u_{r}{% endequation %} בתנאי ש-{% equation %}k\le y{% endequation %}; והשלישי הוא {% equation %}y_{1}^{s_{1}}\cdots y_{m}^{s_{m}}{% endequation %} שמכוסה על ידי {% equation %}u^{s_{1}+\dots s_{m}}{% endequation %} בתנאי ש-{% equation %}y_{i}\le u{% endequation %}. זה מסיים את הבניה של {% equation %}Q{% endequation %}, ולכן מסיים את ההוכחה של הטענה לפיה אפשר לבנות ביטויים דיופנטיים עם הכמת האוניברסלי החסום, ולכן מסיים את ההוכחה שהבעיה העשירית של הילברט לא כריעה!
 
 לא ברור לי כמה מכם הצליחו לשרוד איתי עד לשלב הזה; אכתוב עוד פוסט סיכום (קצר) כדי לחזור על מה שהלך פה ממעוף הציפור ולסיים עם בונוס קטן שקשור למספרים הראשוניים.
+

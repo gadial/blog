@@ -149,3 +149,4 @@ tags:
 אני חושב שאפשר לסכם שהמשחק הזה היה כיף חיים. נקווה שיוסיפו שלבים בהמשך.
 
 <a href="{{site.baseurl}}{{site.post_images}}/2014/06/cons20.png"><img class="aligncenter size-full wp-image-3134" src="{{site.baseurl}}{{site.post_images}}/2014/06/cons20.png" alt="cons20" width="661" height="559" /></a>
+

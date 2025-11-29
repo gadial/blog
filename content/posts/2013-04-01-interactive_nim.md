@@ -54,3 +54,4 @@ padding:3px 0 1px 2px;
 </div>
 
 <input id="new_game" style="display: none;" onclick="GAME.restart_game()" type="button" value="למשחק נוסף" />
+

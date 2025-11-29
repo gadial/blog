@@ -41,3 +41,4 @@ tags:
 Erdős asks us to imagine an alien force, vastly more powerful than us, landing on Earth and demanding the value of R(5,5) or they will destroy our planet. In that case, he claims, we should marshal all our computers and all our mathematicians and attempt to find the value. But suppose, instead, that they ask for R(6,6). In that case, he believes, we should attempt to destroy the aliens.</p>
 </blockquote>
 הציטוט הנפלא הזה לבדו שווה את כל הפוסט.
+

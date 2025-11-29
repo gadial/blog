@@ -49,3 +49,4 @@ categories:
 {% equation %}\left(\frac{-3}{p}\right) = \left(\frac{-1}{p}\right)\left(\frac{3}{p}\right)=\left(-1\right)^{\frac{p-1}{2}}\left(\frac{p}{3}\right)\left(-1\right)^{\frac{p-1}{2}}=\left(\frac{p}{3}\right){% endequation %}
 
 כלומר, משפט ההדדיות הריבועית לימד אותנו ש-{% equation %}\left(\frac{-3}{p}\right){% endequation %} הוא <strong>בדיוק</strong> {% equation %}\left(\frac{p}{3}\right){% endequation %}, ולכן הוא 1 אם ורק אם {% equation %}p\equiv1\left(3\right){% endequation %}, בדיוק כפי שציפינו שנקבל. כמובן שהשתמשתי כאן בתותח כבד; אבל מכיוון שמטרת הפוסט העיקרית הייתה להציג את התותח הזה, אין לי חרטות.
+

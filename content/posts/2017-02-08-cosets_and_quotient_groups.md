@@ -114,3 +114,4 @@ tags:
 נשאר רק הכיוון השני, לפיו אם {% equation %}aHa^{-1}=H{% endequation %} לכל {% equation %}a{% endequation %} אז {% equation %}aH=Ha{% endequation %} לכל {% equation %}a{% endequation %}. אפשר אפילו להסתפק בהנחה ש-{% equation %}aHa^{-1}\subseteq H{% endequation %} כי כבר ראינו שהיא גוררת את השוויון. ניקח איבר של {% equation %}aH{% endequation %}, נאמר {% equation %}ah{% endequation %}. אז אנחנו יודעים ש-{% equation %}ah\cdot a^{-1}\in H{% endequation %}, כלומר {% equation %}ah\cdot a^{-1}=h^{\prime}{% endequation %}, כלמר {% equation %}ah=h^{\prime}a\in Ha{% endequation %} וזה מה שרצינו. זה מסיים את האפיון הזה של תת-חבורות נורמליות, שלעתים קרובות הוא נוח יותר לעבודה מאפיון ה"קוסט שמאלי הוא קוסט ימני".
 
 בפוסט הבא - סוף סוף נתחיל לפרמל את נפנוף הידיים שלי של "היי תראו! החבורות הללו הן בדיוק אותו דבר בערך!"
+

@@ -54,7 +54,7 @@ description: "רציתם לדעת למה תמיד המספרים הראשוני�
 
 עכשיו מגיע החלק המוזר למראה. כזכור, אנחנו מסתכלים על הסדרה {% equation %}U_{k}{% endequation %} שמוגדרת על ידי הפרמטרים {% equation %}a,b{% endequation %}. זה אומר שמתקיים {% equation %}U_{k+2}=aU_{k+1}-bU_{k}{% endequation %}. בואו נשחק לרגע משחק: במקום {% equation %}U_{k+i}{% endequation %} נכתוב {% equation %}x^{i}{% endequation %}. כלומר, {% equation %}x^{2}=ax^{1}-bx^{0}{% endequation %} או בקיצור {% equation %}x^{2}=ax-b{% endequation %}. נעביר אגפים ונקבל {% equation %}x^{2}-ax+b=0{% endequation %}. בואו נקרא לפולינום שבצד שמאל {% equation %}f\left(x\right){% endequation %}, כלומר {% equation %}f\left(x\right)=x^{2}-ax+b{% endequation %}. הפולינום הזה מאפשר לנו להגדיר את הסדרה {% equation %}U_{k}{% endequation %} בתור <strong>סדרה של פולינומים</strong> באופן הבא, שייראה לכם מאוד מוזר במבט ראשון ולכן אני מבטיח שהוא מאוד שימושי:
 
-{% equation %}U_{k}\triangleq\frac{x^{k}-\left(a-x\right)^{k}}{x-\left(a-x\right)}\left(\mbox{mod }f\left(x\right)\right){% endequation %}
+{% equation %}U_{k}\triangleq\frac{x^{k}-\left(a-x\right)^{k}}{x-\left(a-x\right)}\left(\text{mod }f\left(x\right)\right){% endequation %}
 
 מה טוב בהגדרה המוזרה הזו? שזו <strong>לא הגדרה רקורסיבית</strong>. מצד שני, קל לראות שהיא מגדירה את הסדרה {% equation %}U_{k}{% endequation %} שתיארתי קודם. בפרט, זו נראית כמו סדרה של פולינומים, אבל בפועל נקבל סדרה של מספרים שלמים. כדי לראות את זה, בואו קודם כל נציב {% equation %}k=0{% endequation %} ונקבל
 
@@ -188,3 +188,4 @@ description: "רציתם לדעת למה תמיד המספרים הראשוני�
 וזו סתירה, כי גם מודולו {% equation %}f\left(x\right){% endequation %} ומודולו {% equation %}n{% endequation %}, עדיין {% equation %}1\ne-1{% endequation %}, מה שמסיים את ההוכחה.
 
 סוף דבר - התחלנו עם מבחן פשוט בצורה קיצונית ויעיל בצורה קיצונית. גילינו שההוכחה לא פשוטה בצורה קיצונית, אבל גם אין בה שום דבר מתוחכם במיוחד, ובדרך ראינו כל מני מבחנים למציאת פסואדוראשוניים והוכחת ראשוניות. עבורי מי שהיה נחמד פה במיוחד הוא לראות איך דברים כמו שדות סופיים, אוטומורפיזם פרובניוס ושאריות ריבועיות צצים כמעט מאליהם כשמתעסקים בנושאים הללו; כשרק לומדים אותם המושגים הללו נראים די מנותקים ולא כמו כלי העבודה המאוד בסיסי שהם.
+

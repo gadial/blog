@@ -141,3 +141,4 @@ tags:
 המעבר האחרון נובע מכך ש-{% equation %}e^{i\left(n-m\right)\pi}=\cos\left(\pi\left(n-m\right)\right){% endequation %} (מנוסחת אוילר) ו-{% equation %}e^{-i\left(n-m\right)\pi}=\cos\left(\pi\left(m-n\right)\right)=\cos\left(\pi\left(n-m\right)\right){% endequation %} (מכך שקוסינוס היא פונקציה זוגית - סימטרית ביחס לציר {% equation %}x=0{% endequation %}).
 
 מה נשאר? להראות שזו סדרה אורתונורמלית שלמה. כלומר, אם להשתמש בטריק שראינו, להוכיח שאם {% equation %}\left\langle \varphi_{n},f\right\rangle =0{% endequation %} לכל {% equation %}n{% endequation %}, אז {% equation %}f=0{% endequation %}. אבל עם ההוכחה הזו נחכה קצת לפוסט ייעודי שידבר על טורי פורייה.
+

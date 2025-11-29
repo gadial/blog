@@ -110,3 +110,4 @@ Towering mathematical geniuses were frustrated for 2000+ years because they coul
 <p dir="ltr">Therefore Atheism violates the laws mathematics.</p>
 </blockquote>
 לא פחות. משפט גדל מראה שהאתאיזם מפר את חוקי המתמטיקה. אני חושב שאפסיק כאן.
+

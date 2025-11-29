@@ -57,3 +57,4 @@ categories:
 כעת לפואנטה. ניקח מספר ממשי כלשהו, {% equation %}\alpha{% endequation %}. אז אפשר להסתכל על ההרחבה {% equation %}\mathbb{Q}(\alpha){% endequation %} ולשאול מה המימד שלה מעל {% equation %}\mathbb{Q}{% endequation %}. אם {% equation %}\alpha{% endequation %} ניתן לבנייה, אז קיים איזה שהוא שדה הרחבה E של הרציונליים ש-{% equation %}\alpha{% endequation %} שייך אליו, והתקבל באמצעות שרשרת של הוצאות שורשים. כלומר, {% equation %}[E:\mathbb{Q}]=2^k{% endequation %} עבור איזה שהוא {% equation %}k{% endequation %}. מכאן שעל פי משפט המכפלה, {% equation %}[E:\mathbb{Q}(\alpha)][\mathbb{Q}(\alpha):\mathbb{Q}]=2^k{% endequation %}. מכיוון שאם מכפלת שני מספרים היא חזקה של 2, כל אחד מהמספרים בנפרד הוא חזקה של 2 (מדוע?) אנו מסיקים ש-{% equation %}[\mathbb{Q}(\alpha):\mathbb{Q}]{% endequation %} הוא חזקה של 2. זוהי אבחנת המפתח כאן, ומה שפותר בעיות שהיו פתוחות במשך 2,000 שנים.
 
 איך? בפוסט הבא.
+

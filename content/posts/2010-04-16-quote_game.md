@@ -35,3 +35,4 @@ tags:
 <p dir="ltr">No formal language capable of expressing non-trivial mathematical problems can be consistent and complete. Therefore, no consistent and complete definition of the set NP is possible.</p>
 </blockquote>
 שלקוחה מ<a href="http://www.win.tue.nl/~gwoegi/P-versus-NP/argall.txt">כאן</a>.
+

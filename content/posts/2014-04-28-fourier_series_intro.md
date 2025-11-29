@@ -87,11 +87,11 @@ social_media_share: true
 
 {% equation %}\left\langle f,\cos nx\right\rangle =\frac{1}{\pi}\int_{-\pi}^{\pi}f\left(x\right)\cos nx=\frac{1}{\pi}\left[\int_{-\pi}^{0}-\cos nxdx+\int_{0}^{\pi}\cos nxdx\right]{% endequation %}
 
-{% equation %}=\frac{2}{\pi}\int_{0}^{\pi}\mbox{cos}nxdx=0{% endequation %}
+{% equation %}=\frac{2}{\pi}\int_{0}^{\pi}\text{cos}nxdx=0{% endequation %}
 
-קיבלנו 0 כי, כזכור, {% equation %}\mbox{cos}nx{% endequation %} הוא אנטיסימטרי סביב {% equation %}\frac{\pi}{2}{% endequation %} וכל זה. ומה יקרה עם סינוס?
+קיבלנו 0 כי, כזכור, {% equation %}\text{cos}nx{% endequation %} הוא אנטיסימטרי סביב {% equation %}\frac{\pi}{2}{% endequation %} וכל זה. ומה יקרה עם סינוס?
 
-{% equation %}\left\langle f,\sin nx\right\rangle =\frac{2}{\pi}\int_{0}^{\pi}\mbox{sin}nxdx=\frac{2}{\pi}\left[-\frac{\cos nx}{n}\right]_{0}^{\pi}=\frac{2}{\pi}\left[\frac{-\cos n\pi+1}{n}\right]{% endequation %}
+{% equation %}\left\langle f,\sin nx\right\rangle =\frac{2}{\pi}\int_{0}^{\pi}\text{sin}nxdx=\frac{2}{\pi}\left[-\frac{\cos nx}{n}\right]_{0}^{\pi}=\frac{2}{\pi}\left[\frac{-\cos n\pi+1}{n}\right]{% endequation %}
 
 עכשיו הכל תלוי בשאלה מהו {% equation %}\cos n\pi{% endequation %}. אם {% equation %}n{% endequation %} זוגי, אז {% equation %}\cos n\pi=1{% endequation %}; לעומת זאת, אם {% equation %}n{% endequation %} אי זוגי אז {% equation %}\cos n\pi=-1{% endequation %}. במקרה שבו {% equation %}n{% endequation %} זוגי המונה יתאפס ונקבל מקדם 0; במקרה השני נקבל {% equation %}\frac{4}{\pi n}{% endequation %}. אם לסכם:
 

@@ -90,3 +90,4 @@ tags:
 כדי להראות ש-{% equation %}a_{2}\in\varphi\left(N\right){% endequation %} כמעט ולא צריך להתאמץ: {% equation %}\varphi\left(a_{2}y_{2}\right)=a_{2}{% endequation %} מצד אחד, ומצד שני {% equation %}a_{2}y_{2}\in N{% endequation %} (כי הוא אחד מאברי הבסיס של {% equation %}N{% endequation %}) ולכן {% equation %}\varphi\left(a_{2}y_{2}\right)\in\varphi\left(N\right){% endequation %}. זה גורר ש-{% equation %}a_{2}\in\varphi\left(N\right){% endequation %} ולכן מתחלק על ידי {% equation %}a_{1}{% endequation %} וסיימנו.
 
 האם ההוכחה הזו שיפרה את ההבנה שלנו לגבי מה קורה פה, או סתם הרגיעה אותנו שאין כאן רמאויות? אתם תגידו. 
+

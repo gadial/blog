@@ -28,13 +28,13 @@ tags:
 
 {% equation %}\|x+y\|^{2}=\left\langle x+y,x+y\right\rangle =\left\langle x,x\right\rangle +\left\langle x,y\right\rangle +\left\langle y,x\right\rangle +\left\langle y,y\right\rangle {% endequation %}
 
-{% equation %}=\|x\|^{2}+\left\langle x,y\right\rangle +\overline{\left\langle x,y\right\rangle }+\|y\|^{2}=\|x\|^{2}+2\mbox{Re}\left\langle x,y\right\rangle +\|y\|^{2}{% endequation %}
+{% equation %}=\|x\|^{2}+\left\langle x,y\right\rangle +\overline{\left\langle x,y\right\rangle }+\|y\|^{2}=\|x\|^{2}+2\text{Re}\left\langle x,y\right\rangle +\|y\|^{2}{% endequation %}
 
-המממפף. כאן אנחנו נתקעים, כי לא ברור לנו מה לעשות עם ה-{% equation %}2\mbox{Re}\left\langle x,y\right\rangle {% endequation %} שתקוע לנו כאן. אנחנו רוצים להבין משהו על טיב הקשר שבין {% equation %}\left\langle x,y\right\rangle {% endequation %} ו-{% equation %}\|x\|,\|y\|{% endequation %}. לצורך כך, בואו ניזכר במכפלות סקלריות: הגדרנו מכפלה סקלרית ב-{% equation %}\mathbb{R}^{2}{% endequation %} בתור מכפלת ה<strong>אורכים</strong> של וקטורים בקוסינוס הזווית ביניהם. במילים אחרות, המכפלה הסקלרית הייתה <strong>לכל היותר</strong> מכפלת האורכים של הוקטורים; לרוב היא "התקזזה" קצת בגלל שהוקטורים לא הצביעו לאותו הכיוון. את התחושה האינטואיטיבית הזו אפשר לתרגם לאי-שוויון קונקרטי:
+המממפף. כאן אנחנו נתקעים, כי לא ברור לנו מה לעשות עם ה-{% equation %}2\text{Re}\left\langle x,y\right\rangle {% endequation %} שתקוע לנו כאן. אנחנו רוצים להבין משהו על טיב הקשר שבין {% equation %}\left\langle x,y\right\rangle {% endequation %} ו-{% equation %}\|x\|,\|y\|{% endequation %}. לצורך כך, בואו ניזכר במכפלות סקלריות: הגדרנו מכפלה סקלרית ב-{% equation %}\mathbb{R}^{2}{% endequation %} בתור מכפלת ה<strong>אורכים</strong> של וקטורים בקוסינוס הזווית ביניהם. במילים אחרות, המכפלה הסקלרית הייתה <strong>לכל היותר</strong> מכפלת האורכים של הוקטורים; לרוב היא "התקזזה" קצת בגלל שהוקטורים לא הצביעו לאותו הכיוון. את התחושה האינטואיטיבית הזו אפשר לתרגם לאי-שוויון קונקרטי:
 
 {% equation %}\left|\left\langle x,y\right\rangle \right|\le\|x\|\|y\|{% endequation %}
 
-לאי השוויון הזה קוראים <strong>אי שוויון קושי-שוורץ</strong>, והוא אחד מאותם משפטים מתמטיים שבהם אני נתקל <strong>בכל מקום</strong> (לעתים קרובות בניסוח למקרה פרטי עבור מכפלה פנימית ספציפית, ואז הוא נראה מסורבל <strong>יותר</strong> וקשה יותר להבנה). קשה להפריז בחשיבות שלו, אבל למרבה המזל ההוכחה שלו אינו קשה במיוחד. לפני שנוכיח אותו בואו נראה איך הוא מסיים עם אי-שוויון המשולש: {% equation %}2\mbox{Re}\left\langle x,y\right\rangle \le2\left|\left\langle x,y\right\rangle \right|\le2\|x\|\|y\|{% endequation %} ולכן:
+לאי השוויון הזה קוראים <strong>אי שוויון קושי-שוורץ</strong>, והוא אחד מאותם משפטים מתמטיים שבהם אני נתקל <strong>בכל מקום</strong> (לעתים קרובות בניסוח למקרה פרטי עבור מכפלה פנימית ספציפית, ואז הוא נראה מסורבל <strong>יותר</strong> וקשה יותר להבנה). קשה להפריז בחשיבות שלו, אבל למרבה המזל ההוכחה שלו אינו קשה במיוחד. לפני שנוכיח אותו בואו נראה איך הוא מסיים עם אי-שוויון המשולש: {% equation %}2\text{Re}\left\langle x,y\right\rangle \le2\left|\left\langle x,y\right\rangle \right|\le2\|x\|\|y\|{% endequation %} ולכן:
 
 {% equation %}\|x+y\|^{2}\le\|x\|^{2}+2\|x\|\|y\|+\|y\|^{2}=\left(\|x\|+\|y\|\right)^{2}{% endequation %}
 
@@ -54,13 +54,13 @@ tags:
 
 העברת אגפים, כפל, הוצאת שורש וקיבלנו {% equation %}\left|\left\langle x,y\right\rangle \right|\le\|x\|\|y\|{% endequation %}. החישוב שלמעלה נראה טיפה טכני אבל הוא מיידי למדי, והעיקר פה הוא הרעיון שהצגתי קודם.
 
-בואו ננצל את ההזדמנות הזו ונציג רעיון שלא אשתמש בו בהמשך אבל שווה לשים אליו לב: מכיוון ש-{% equation %}\left|\left\langle x,y\right\rangle \right|\le\|x\|\|y\|{% endequation %} הרי ש-{% equation %}0\le\frac{\left|\left\langle x,y\right\rangle \right|}{\|x\|\|y\|}\le1{% endequation %} תמיד ולכן אפשר לדבר על {% equation %}\mbox{arccos}\left(\frac{\left|\left\langle x,y\right\rangle \right|}{\|x\|\|y\|}\right){% endequation %} - הביטוי הזה ייתן לנו לנו זווית בין 0 ל-90 מעלות, שבמובן מסויים ניתן לחשוב עליה בתור הזווית בין {% equation %}x{% endequation %} ו-{% equation %}y{% endequation %}. בפרט, אם {% equation %}\left\langle x,y\right\rangle =0{% endequation %} אז הזווית היא בת 90 מעלות, בהתאם לרעיון שלנו של "וקטורים אורתוגונליים הם מאונכים". אבל כאמור, אני לא הולך להגיד על זה יותר שום דבר.
+בואו ננצל את ההזדמנות הזו ונציג רעיון שלא אשתמש בו בהמשך אבל שווה לשים אליו לב: מכיוון ש-{% equation %}\left|\left\langle x,y\right\rangle \right|\le\|x\|\|y\|{% endequation %} הרי ש-{% equation %}0\le\frac{\left|\left\langle x,y\right\rangle \right|}{\|x\|\|y\|}\le1{% endequation %} תמיד ולכן אפשר לדבר על {% equation %}\text{arccos}\left(\frac{\left|\left\langle x,y\right\rangle \right|}{\|x\|\|y\|}\right){% endequation %} - הביטוי הזה ייתן לנו לנו זווית בין 0 ל-90 מעלות, שבמובן מסויים ניתן לחשוב עליה בתור הזווית בין {% equation %}x{% endequation %} ו-{% equation %}y{% endequation %}. בפרט, אם {% equation %}\left\langle x,y\right\rangle =0{% endequation %} אז הזווית היא בת 90 מעלות, בהתאם לרעיון שלנו של "וקטורים אורתוגונליים הם מאונכים". אבל כאמור, אני לא הולך להגיד על זה יותר שום דבר.
 
 כעת, צריך להיזהר ולא לתת את הרושם השגוי שנורמות צצות רק בהקשרים של מכפלה פנימית. כל פונקציה {% equation %}V\to\mathbb{R}{% endequation %} עבור מרחב וקטורי {% equation %}V{% endequation %} שמקיימת את תכונות 1-3 היא נורמה (אפשר לדבר על נורמות גם בהקשרים שאינם של מרחבים וקטוריים, אבל צריך לתקן את התכונות בהתאם - בפרט תכונה 2), ו<strong>לא כל נורמה מתקבלת ממכפלה פנימית</strong>. כלומר, ייתכן שנגדיר נורמה על מרחב {% equation %}V{% endequation %} כך שפשוט אין מכפלה פנימית על {% equation %}V{% endequation %} שנותנת את הנורמה הזו. איך אפשר להוכיח דבר כזה? או, טוב ששאלתם. בואו נראה שלוש נורמות שונות על {% equation %}\mathbb{R}^{2}{% endequation %} - שלוש מה"פופולריות" ביותר:
 <ol>
 	<li> הנורמה האוקלידית הרגילה: {% equation %}\|\left(x,y\right)\|_{2}=\sqrt{x^{2}+y^{2}}{% endequation %}</li>
 	<li> נורמת "נהגי המוניות": {% equation %}\|\left(x,y\right)\|_{1}=\left|x\right|+\left|y\right|{% endequation %}</li>
-	<li> נורמת הסופרמום: {% equation %}\|\left(x,y\right)\|_{\infty}=\mbox{max}\left\{ \left|x\right|,\left|y\right|\right\} {% endequation %}</li>
+	<li> נורמת הסופרמום: {% equation %}\|\left(x,y\right)\|_{\infty}=\text{max}\left\{ \left|x\right|,\left|y\right|\right\} {% endequation %}</li>
 </ol>
 לא אוכיח שאלו נורמות אבל די קל לראות את זה (בפרט שתי התכונות הראשונות הן מיידיות). הסימונים הדומים עבור הנורמות הללו אינם מקריים: באופן כללי, לכל מספר ממשי {% equation %}p\ge1{% endequation %} אפשר להגדיר נורמה על ידי {% equation %}\|\left(x,y\right)\|_{p}=\left(\left|x\right|^{p}+\left|y\right|^{p}\right)^{\frac{1}{p}}{% endequation %} מה שמכליל לנו את שתי הנורמות הראשונות, והשלישית מתקבלת כאשר {% equation %}p\to\infty{% endequation %} (במובן שלא אכנס אליו כרגע).
 
@@ -133,7 +133,7 @@ tags:
 
 מה שהולך לקרות עכשיו תקף גם במרחבים שאינם סוף-ממדיים, בעצם: אני הולך להראות שאם {% equation %}u-w_{0}{% endequation %}אורתוגונלי לכל {% equation %}W{% endequation %} (כאשר {% equation %}w_{0}{% endequation %} וקטור כלשהו ב-{% equation %}W{% endequation %} ולא משנה איך הגעתי אליו - העיקר שתתקיים תכונת האורתוגונליות) אז {% equation %}\|u-w_{0}\|{% endequation %} אכן מינימלי. לצורך כך בואו ניקח {% equation %}w\in W{% endequation %} כלשהו השונה מ-{% equation %}w_{0}{% endequation %}, וננסה להעריך את {% equation %}\|u-w\|{% endequation %} תוך שימוש באחד התעלולים הכי סטנדרטיים באנליזה (וברגע שהתחלנו לדבר על נורמות, בין אם נרצה ובין אם לאו, אנחנו מתחילים להתעסק באנליזה) - להוסיף ולהחסיר את אותו איבר:
 
-{% equation %}\|u-w\|^{2}=\|u-w_{0}+w_{0}-w\|^{2}=\|u-w_{0}\|^{2}+2\mbox{Re}\left\langle u-w_{0},w_{0}-w\right\rangle +\|w_{0}-w\|^{2}{% endequation %}
+{% equation %}\|u-w\|^{2}=\|u-w_{0}+w_{0}-w\|^{2}=\|u-w_{0}\|^{2}+2\text{Re}\left\langle u-w_{0},w_{0}-w\right\rangle +\|w_{0}-w\|^{2}{% endequation %}
 
 רק מה, {% equation %}w_{0}-w\in W{% endequation %} כי אנו מחסירים זה מזה שני איברים ב-{% equation %}W{% endequation %}, ולכן המכפלה הפנימית באמצע היא 0, ולכן קיבלנו ש-{% equation %}\|u-w\|^{2}{% endequation %} שווה ל-{% equation %}\|u-w_{0}\|^{2}{% endequation %} ועוד משהו חיובי, שהרי {% equation %}w_{0}\ne w{% endequation %} ולכן {% equation %}\|w_{0}-w\|^{2}{% endequation %} חייב להיות חיובי. סוף הסיפור - הראינו שאם {% equation %}u-w_{0}{% endequation %} אורתוגונלי ל-{% equation %}W{% endequation %} אז {% equation %}w_{0}{% endequation %} הוא "הקירוב הטוב ביותר" ל-{% equation %}u{% endequation %} ב-{% equation %}W{% endequation %}. אפשר להראות גם ההפך - שאם {% equation %}w_{0}{% endequation %} הוא הקירוב הטוב ביותר אז {% equation %}u-w_{0}{% endequation %} אורתוגונלי ל-{% equation %}W{% endequation %}; ההוכחה קצת יותר טכנית ולכן אתחמק ממנה.
 
@@ -148,3 +148,4 @@ tags:
 מה שאתם צריכים עכשיו להעלות בדמיון שלכם זה את {% equation %}\mathbb{R}^{2}{% endequation %} עם מערכת הצירים הרגילה - ציר {% equation %}x{% endequation %} וציר {% equation %}y{% endequation %} הם התת-מרחבים האורתוגונליים שנפרשים על ידי הוקטורים האורתונורמליים {% equation %}\left(1,0\right),\left(0,1\right){% endequation %} וההטלות על הצירים הללו הן ההטלות ה"רגילות" שאנו מכירים. הנה שוב קיבלנו הכללה של הגאומטריה המוכרת לנו.
 
 טוב, מספיק להשתעשע, בפוסט הבא בנושא נעבור לאקשן האמיתי - מה קורה במפגש הענקים בין הטרנספורמציות הלינאריות והמכפלות הפנימיות.
+

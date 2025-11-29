@@ -36,3 +36,4 @@ tags:
 כל המוסיף גורע ולכן אסיים את הפוסט כאן ואתן לכם ליהנות בשקט מהפתרון.
 
 <a href="{{site.baseurl}}{{site.post_images}}/2010/12/solution.png"><img class="alignnone size-full wp-image-887" title="solution" src="{{site.baseurl}}{{site.post_images}}/2010/12/solution.png" alt="" width="285" height="288" /></a>
+

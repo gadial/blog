@@ -186,3 +186,4 @@ tags:
 ראינו כבר ש-{% equation %}b_{0}=0{% endequation %}. זה הופך את המשוואה השניה ל-{% equation %}b_{1}c_{0}=0{% endequation %}, ומכיוון ש-{% equation %}c_{0}\ne0{% endequation %} אז {% equation %}b_{1}=0{% endequation %}. עכשיו המשוואה השלישית, שלא כתבתי, תהפוך ל-{% equation %}b_{2}c_{0}=0{% endequation %}, וכן הלאה וכן הלאה. מתישהו נגיע אל {% equation %}b_{m}c_{0}=0{% endequation %} (במשוואה של המקדם {% equation %}x^{m}{% endequation %}, שהוא {% equation %}\sum_{i=0}^{m}b_{i}c_{m-i}=0{% endequation %} כי {% equation %}m&lt;n{% endequation %}) ונסיק ש-{% equation %}b_{m}=0{% endequation %}; אבל עכשיו המשוואה {% equation %}b_{m}c_{k}=1{% endequation %} לא יכולה להתקיים, והגענו לסתירה עם ההנחה ש-{% equation %}a\left(x\right){% endequation %} היה פריק.
 
 זה מסיים את ההוכחה של קריטריון אייזנשטיין וגם את הפוסט; כמובן שזה לא סוף הסיפור של הפולינומים אלא בקושי ההתחלה.
+

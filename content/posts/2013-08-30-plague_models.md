@@ -198,3 +198,4 @@ display:none;
 <script language="javascript" type="text/javascript" src="\assets\js\plague\jquery.flot.time.js"></script>
 <script language="javascript" type="text/javascript" src="\assets\js\plague\jquery.flot.canvas.js"></script>
 <script language="javascript" type="text/javascript" src="\assets\js\plague\plot.js"></script>
+

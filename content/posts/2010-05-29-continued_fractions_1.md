@@ -117,3 +117,4 @@ social_media_share: true
 {% equation %}\left|\alpha-\frac{A_{n}}{B_{n}}\right|&lt;\frac{1}{B_{n}B_{n+1}}{% endequation %} (מאיפה ה-{% equation %}B_{n+1}{% endequation %} צץ פתאום? הוא קטן יותר מהגורם שבתוך הסוגריים במכנה - מדוע?).
 
 ושוב, מכיוון ש-{% equation %}B_{n}{% endequation %} היא סדרה עולה, נובע מכך ש-{% equation %}\frac{A_{n}}{B_{n}}{% endequation %} מתכנסת ל-{% equation %}\alpha{% endequation %}, בדיוק כפי שרצינו. לא רק זה - קצב ההתכנסות הוא ריבועי; אך על כך ארחיב בפוסט הבא.
+

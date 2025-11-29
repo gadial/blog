@@ -37,3 +37,4 @@ That we have to diminish it with the invention
 Of cheap, man-made Myths and Monsters?</em></p>
 </blockquote>
 כך גם העולם המתמטי. האם המתמטיקה אינה מדהימה ומלהיבה דיה, ובגלל זה אנשים פונים לעיסוק כה פתטי וחסר משמעות במספרים? לא, אל תענו, אני יודע את התשובה.
+

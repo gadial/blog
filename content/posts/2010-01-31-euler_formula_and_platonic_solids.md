@@ -68,3 +68,4 @@ social_media_share: true
 
 <strong><a href="{{site.baseurl}}{{site.post_images}}/2010/01/Trunc-icosa.jpg"><img class="alignnone size-full wp-image-329" title="Trunc-icosa" src="{{site.baseurl}}{{site.post_images}}/2010/01/Trunc-icosa.jpg" alt="כדורגל והפאון הקמור המתאים לו" width="595" height="394" /></a>
 </strong>
+

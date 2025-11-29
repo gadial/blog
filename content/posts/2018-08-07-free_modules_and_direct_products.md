@@ -83,3 +83,4 @@ tags:
 עדיין לא לגמרי סיימנו, כי אותם {% equation %}\lambda_{i}\in F{% endequation %} הם לא בהכרח איברים של {% equation %}R{% endequation %}. כאן נכנסת לתמונה באופן חזק העובדה ש-{% equation %}F{% endequation %} הוא שדה השברים של {% equation %}R{% endequation %}; מתקיים {% equation %}\lambda_{i}=\frac{r_{i}}{s_{i}}{% endequation %} עבור {% equation %}r_{i},s_{i}\in R{% endequation %}. אם נגדיר {% equation %}s=\prod s_{i}{% endequation %}, אז {% equation %}s\lambda_{i}\in R{% endequation %} לכל {% equation %}\lambda_{i}{% endequation %}, כך שנקבל {% equation %}\sum\left(s\lambda_{i}\right)a_{i}=0{% endequation %} ב-{% equation %}M{% endequation %} כאשר כאן המקדמים הם איברים של {% equation %}R{% endequation %} - וזה מה שרצינו.
 
 זהו, הצלחנו להציל את כל האלגברה הלינארית שנזדקק לה בהמשך; השלב הבא הוא לדבר קצת על מה זה אומר שמודול הוא <strong>נוצר סופית</strong> ואחר כך נגיע הישר אל המשפט המרכזי שאנחנו רוצים להוכיח. 
+

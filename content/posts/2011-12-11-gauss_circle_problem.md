@@ -51,3 +51,4 @@ print [N(n) for n in range(10)]</code></p>
 {% equation %}\pi\left(n+\sqrt{2}\right)^{2}-\pi\left(n-\sqrt{2}\right)^{2}=4\pi\sqrt{2}n{% endequation %}
 
 וזהו ההפרש המקסימלי בין שטח העיגול ({% equation %}\pi n^{2}{% endequation %}) ובין מספר הנקודות השלמות שבו ({% equation %}N\left(n\right){% endequation %}), מה שמסיים את ההוכחה וסוגר את עניין ה"כפפה".
+
