@@ -35,6 +35,7 @@ class SiteGenerator:
         self.static_dir = Path(static_dir)
         self.use_date_folders = use_date_folders
         self.site_config = site_config or {}
+        self.baseurl = self.site_config.get('baseurl', '')
         
         # Initialize Jinja2 environment
         self.jinja_env = Environment(
@@ -130,20 +131,21 @@ class SiteGenerator:
         if prev_post:
             prev_data = {
                 'title': prev_post.title,
-                'url': f"/{prev_post.date.strftime('%Y/%m/%d')}/{prev_post.slug}/"
+                'url': f"{self.baseurl}/{prev_post.date.strftime('%Y/%m/%d')}/{prev_post.slug}/"
             }
         
         next_data = None
         if next_post:
             next_data = {
                 'title': next_post.title,
-                'url': f"/{next_post.date.strftime('%Y/%m/%d')}/{next_post.slug}/"
+                'url': f"{self.baseurl}/{next_post.date.strftime('%Y/%m/%d')}/{next_post.slug}/"
             }
         
         return template.render(
             post=post.to_dict(),
             prev_post=prev_data,
-            next_post=next_data
+            next_post=next_data,
+            baseurl=self.baseurl
         )
     
     def get_output_path(self, post: Post) -> Path:
@@ -209,7 +211,7 @@ class SiteGenerator:
         # Prepare post data for template
         all_posts_data = []
         for post in sorted_posts:
-            url = f"/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+            url = f"{self.baseurl}/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
             all_posts_data.append({
                 'title': post.title,
                 'date': post.date.strftime('%Y-%m-%d'),
@@ -223,7 +225,7 @@ class SiteGenerator:
         
         # Render index template with both latest posts and all posts (for random selection)
         template = self.jinja_env.get_template('index.html')
-        html = template.render(latest_posts=latest_posts, all_posts=all_posts_data)
+        html = template.render(latest_posts=latest_posts, all_posts=all_posts_data, baseurl=self.baseurl)
         
         # Save index.html to root of output directory
         index_file = self.output_dir / 'index.html'
@@ -244,7 +246,7 @@ class SiteGenerator:
         # Prepare post data
         posts_data = []
         for post in sorted_posts:
-            url = f"/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+            url = f"{self.baseurl}/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
             posts_data.append({
                 'title': post.title,
                 'date': post.date.strftime('%Y-%m-%d'),
@@ -254,7 +256,7 @@ class SiteGenerator:
         
         # Render template
         template = self.jinja_env.get_template('post_list.html')
-        html = template.render(posts=posts_data)
+        html = template.render(posts=posts_data, baseurl=self.baseurl)
         
         # Save
         output_file = self.output_dir / 'post_list.html'
@@ -273,14 +275,14 @@ class SiteGenerator:
         import json
         posts_data = []
         for post in posts:
-            url = f"/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+            url = f"{self.baseurl}/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
             posts_data.append({'url': url})
         
         posts_json = json.dumps(posts_data)
         
         # Render template
         template = self.jinja_env.get_template('random.html')
-        html = template.render(posts_json=posts_json)
+        html = template.render(posts_json=posts_json, baseurl=self.baseurl)
         
         # Save
         output_file = self.output_dir / 'random.html'
