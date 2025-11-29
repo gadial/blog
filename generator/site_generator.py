@@ -207,10 +207,10 @@ class SiteGenerator:
         sorted_posts = sorted(posts, key=lambda p: p.date, reverse=True)
         
         # Prepare post data for template
-        posts_data = []
+        all_posts_data = []
         for post in sorted_posts:
             url = f"/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
-            posts_data.append({
+            all_posts_data.append({
                 'title': post.title,
                 'date': post.date.strftime('%Y-%m-%d'),
                 'categories': post.categories,
@@ -218,9 +218,12 @@ class SiteGenerator:
                 'summary': post.metadata.get('description', '')  # Use description from frontmatter
             })
         
-        # Render index template
+        # Get only the 5 latest posts for display
+        latest_posts = all_posts_data[:5]
+        
+        # Render index template with both latest posts and all posts (for random selection)
         template = self.jinja_env.get_template('index.html')
-        html = template.render(posts=posts_data)
+        html = template.render(latest_posts=latest_posts, all_posts=all_posts_data)
         
         # Save index.html to root of output directory
         index_file = self.output_dir / 'index.html'

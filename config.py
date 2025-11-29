@@ -3,7 +3,7 @@
 
 SITE_CONFIG = {
     'title': 'בלוג מתמטיקה',
-    'description': 'בלוג מתמטיקה בעברית',
+    'description': "© כל הזכויות שמורות לגדי אלכסנדרוביץ'",
     'language': 'he',
     'direction': 'rtl',
     'author': '',

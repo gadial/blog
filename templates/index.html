@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}לא מדויק - בלוג מתמטיקה בעברית{% endblock %}
+{% block title %}לא מדויק{% endblock %}
 
 {% block extra_styles %}
         .container {
@@ -119,6 +119,26 @@
             text-decoration: underline;
         }
         
+        .view-all-link {
+            display: block;
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .view-all-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .view-all-link a:hover {
+            text-decoration: underline;
+        }
+        
         footer {
             margin-top: 40px;
             padding: 20px;
@@ -146,7 +166,7 @@
     <div class="container">
         <header>
             <h1>לא מדויק</h1>
-            <p>בלוג מתמטיקה בעברית</p>
+            <p>"There's no sense in being precise when you don't even know what you're talking about." (John von Neumann)</p>
         </header>
         
         <div class="intro">
@@ -158,7 +178,7 @@
         <div class="posts-section">
             <h2>פוסטים אחרונים</h2>
             
-            {% for post in posts %}
+            {% for post in latest_posts %}
             <div class="post-item">
                 <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
                 <div class="post-meta">
@@ -175,13 +195,74 @@
                 {% if post.summary %}
                 <p class="post-excerpt">{{ post.summary }}</p>
                 {% endif %}
-                <a href="{{ post.url }}" class="read-more">קרא עוד ←</a>
+                <a href="{{ post.url }}" class="read-more">קראו עוד ←</a>
             </div>
             {% endfor %}
+            
+            <div class="view-all-link">
+                <a href="/post_list.html">כל הפוסטים »</a>
+            </div>
+        </div>
+        
+        <div class="posts-section" style="margin-top: 30px;">
+            <h2>פוסטים אקראיים</h2>
+            <div id="randomPosts">
+                <!-- Random posts will be inserted here by JavaScript -->
+            </div>
         </div>
         
         <footer>
-            <p>© 2025 לא מדויק - בלוג מתמטיקה בעברית</p>
+            <p>© כל הזכויות שמורות לגדי אלכסנדרוביץ'</p>
         </footer>
     </div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        // All posts data
+        const allPosts = {{ all_posts | tojson }};
+        
+        // Shuffle array function
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        // Display random posts
+        function displayRandomPosts() {
+            const randomPosts = shuffleArray(allPosts).slice(0, 5);
+            const container = document.getElementById('randomPosts');
+            
+            let html = '';
+            randomPosts.forEach(post => {
+                html += '<div class="post-item">';
+                html += '<h3><a href="' + post.url + '">' + post.title + '</a></h3>';
+                html += '<div class="post-meta">';
+                html += '<span class="date">' + post.date + '</span>';
+                if (post.categories && post.categories.length > 0) {
+                    html += '<span class="categories"> | ';
+                    post.categories.forEach((cat, index) => {
+                        html += '<a href="/categories/' + cat + '.html">' + cat + '</a>';
+                        if (index < post.categories.length - 1) html += ' ';
+                    });
+                    html += '</span>';
+                }
+                html += '</div>';
+                if (post.summary) {
+                    html += '<p class="post-excerpt">' + post.summary + '</p>';
+                }
+                html += '<a href="' + post.url + '" class="read-more">קראו עוד ←</a>';
+                html += '</div>';
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Display random posts on page load
+        displayRandomPosts();
+    </script>
 {% endblock %}
