@@ -2,6 +2,8 @@
 
 A lightweight Python-based static site generator designed to replace Jekyll for a Hebrew mathematics blog. Built with support for RTL text, LaTeX math rendering, and YAML frontmatter.
 
+**Live Site**: https://gadial.net/new_site (GitHub Pages deployment)
+
 ## Features
 
 - ✅ **YAML Frontmatter**: Parse Jekyll-style metadata (title, date, categories, tags)
@@ -187,15 +189,83 @@ The generator is modular:
 - **PyYAML**: YAML parsing
 - **python-markdown-math**: Math extension support
 
+## GitHub Pages Deployment
+
+This site is configured to be deployed at https://gadial.net/new_site
+
+### Initial Setup
+
+1. **Create a new GitHub repository** (e.g., `new_blog`):
+   ```bash
+   # On GitHub.com, create a new repository
+   ```
+
+2. **Add remote and push**:
+   ```powershell
+   git remote add origin https://github.com/YOUR_USERNAME/new_blog.git
+   git branch -M master
+   git push -u origin master
+   ```
+
+3. **Configure GitHub Pages**:
+   - Go to repository **Settings** → **Pages**
+   - **Source**: Deploy from a branch
+   - **Branch**: `master` (or `main`)
+   - **Folder**: `/docs`
+   - Click **Save**
+
+4. **Wait** a few minutes for GitHub Pages to build and deploy
+
+Your site will be available at: `https://YOUR_USERNAME.github.io/new_blog/`
+
+### Custom Domain Setup (for gadial.net/new_site)
+
+Since you want the new blog at https://gadial.net/new_site while keeping the old blog at https://gadial.net:
+
+**Option 1: Subdirectory on same domain (Recommended)**
+- Keep your old `blog` repository serving https://gadial.net
+- Create this `new_blog` repository
+- Configure it with `baseurl: '/new_site'` (already done in `config.py`)
+- In your web hosting/DNS, set up a redirect or proxy from `/new_site` to the GitHub Pages URL
+
+**Option 2: Use GitHub organization**
+- Create a GitHub organization named after your domain
+- This allows multiple repos to serve different paths
+- More complex setup but cleaner URL structure
+
+### Configuration
+
+The site is already configured with:
+- `baseurl: '/new_site'` in `config.py`
+- All links use `{{ baseurl }}` prefix in templates
+- `.nojekyll` file to prevent Jekyll processing
+
+### Updating Content
+
+After making changes:
+
+```powershell
+python build.py           # Rebuild the site
+git add -A                # Stage all changes
+git commit -m "Update content"
+git push                  # Deploy to GitHub Pages
+```
+
+GitHub Pages will automatically update your site within a few minutes.
+
 ## License
 
-This generator is provided as-is for personal use.
+© All rights reserved to Gadi Aleksandrowicz
 
 ## Next Steps
 
-- [ ] Add index page generation
-- [ ] Add category/tag pages
-- [ ] Add RSS feed generation
-- [ ] Add asset copying (images, CSS, JS)
-- [ ] Add watch mode for development
+- [x] Index page generation
+- [x] Post list with search
+- [x] Random post page
+- [x] Asset copying (images, CSS, JS)
+- [x] Navigation (prev/next, top bar)
+- [x] Math rendering (KaTeX)
+- [ ] Category/tag pages
+- [ ] RSS feed generation
+- [ ] Watch mode for development
 - [ ] Add pagination support
