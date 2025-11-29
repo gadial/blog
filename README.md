@@ -53,18 +53,28 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Generate All Posts
+### Local Development Build
 
-To generate HTML for all posts in the `content/` directory:
+For local testing (without baseurl prefix):
+
+```powershell
+python build_local.py
+python serve.py
+# Visit: http://localhost:8000/
+```
+
+### Production Build (for GitHub Pages)
+
+To generate HTML with `/new_blog` baseurl:
 
 ```powershell
 python build.py
 ```
 
 This will:
-- Clean the `output/` directory
+- Clean the `docs/` directory
 - Process all `.md` files in `content/`
-- Generate corresponding `.html` files in `output/`
+- Generate HTML with baseurl prefix for GitHub Pages
 
 ### Generate a Single Post
 
