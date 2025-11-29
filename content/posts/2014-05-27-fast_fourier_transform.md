@@ -13,7 +13,7 @@ tags:
 
 אבל ראשית, בואו ניזכר מהי התמרת פורייה הבדידה. אני הולך להשתמש בפוסט הזה בסימונים קצת שונים מאלו שהשתמשתי בהם בפוסט הקודם, כי הסימונים הישנים יהיו פחות נוחים לי. על כן אני ממליץ לאלו מכם שקראו את הפוסט הקודם לשכוח מהכל ולהתחיל מחדש. בכל הנוגע לסימונים, זאת אומרת.
 
-אנחנו מסמנים את <strong>שורש היחידה הפרמיטיבי ה-{% equation %}n{% endequation %}-י</strong> בסימון {% equation %}\omega_{n}=e^{\frac{2\pi i}{n}}{% endequation %}, והחזקות שלו {% equation %}\left(\omega_{n}^{0},\omega_{n}^{1},\dots,\omega_{n}^{n-1}\right){% endequation %} הן כל {% equation %}n{% endequation %} שורשי היחידה מסדר {% equation %}n{% endequation %}. הקלט להתמרת פורייה הבדידה היא סדרה {% equation %}\left(a_{0},a_{1},\dots,a_{n-1}\right){% endequation %} של {% equation %}n{% endequation %} מספרים מרוכבים (האינדקס מתחיל מ-0 כי אנחנו במדעי המחשב, כמובן) והפלט הוא סדרה {% equation %}\left(b_{0},b_{1},\dots,b_{n-1}\right){% endequation %} של סדרה של מספרים מרוכבים, כך שמתקיים הקשר הבא בין הסדרות, לכל {% equation %}0\le k&lt;n{% endequation %}:
+אנחנו מסמנים את <strong>שורש היחידה הפרמיטיבי ה-{% equation %}n{% endequation %}-י</strong> בסימון {% equation %}\omega_{n}=e^{\frac{2\pi i}{n}}{% endequation %}, והחזקות שלו {% equation %}\left(\omega_{n}^{0},\omega_{n}^{1},\dots,\omega_{n}^{n-1}\right){% endequation %} הן כל {% equation %}n{% endequation %} שורשי היחידה מסדר {% equation %}n{% endequation %}. הקלט להתמרת פורייה הבדידה היא סדרה {% equation %}\left(a_{0},a_{1},\dots,a_{n-1}\right){% endequation %} של {% equation %}n{% endequation %} מספרים מרוכבים (האינדקס מתחיל מ-0 כי אנחנו במדעי המחשב, כמובן) והפלט הוא סדרה {% equation %}\left(b_{0},b_{1},\dots,b_{n-1}\right){% endequation %} של סדרה של מספרים מרוכבים, כך שמתקיים הקשר הבא בין הסדרות, לכל {% equation %}0\le k<n{% endequation %}:
 
 {% equation %}b_{k}=\sum_{t=0}^{n-1}a_{t}\omega_{n}^{-kt}{% endequation %} (<strong>משוואת אנליזה</strong>)
 
@@ -39,11 +39,11 @@ tags:
 
 בואו נוכיח את זה פורמלית. האבחנה הכללית היא ש-{% equation %}\omega_{dn}^{dk}=\omega_{n}^{k}{% endequation %}, וזה נובע ישירות מההגדרה: {% equation %}\omega_{dn}^{dk}=e^{\frac{2\pi idk}{dn}}=e^{\frac{2\pi ik}{n}}=\omega_{n}^{k}{% endequation %}. כמו כן, {% equation %}\omega_{n}^{k+n}=\omega_{n}^{k}\cdot\omega_{n}^{n}=\omega_{n}^{k}{% endequation %} (כי {% equation %}\omega_{n}^{n}=1{% endequation %} שהרי {% equation %}\omega_{n}{% endequation %} הוא שורש יחידה מסדר {% equation %}n{% endequation %}). לכן:
 
-מכאן נקבל לכל {% equation %}0\le k&lt;\frac{n}{2}{% endequation %}:
+מכאן נקבל לכל {% equation %}0\le k<\frac{n}{2}{% endequation %}:
 
 {% equation %}\left(\omega_{n}^{k+\frac{n}{2}}\right)^{2}=\omega_{n}^{2k+n}=\omega_{n/2}^{k+n/2}=\omega_{n/2}^{k}=\omega_{n}^{2k}=\left(\omega_{n}^{k}\right)^{2}{% endequation %}
 
-ראינו שהריבועים של {% equation %}\omega_{n}^{k}{% endequation %} ושל {% equation %}\omega_{n}^{k+\frac{n}{2}}{% endequation %} זהים, אבל למה הם שורש יחידה מסדר {% equation %}\frac{n}{2}{% endequation %}? אה, זה קל: כי {% equation %}\left[\left(\omega_{n}^{k}\right)^{2}\right]^{\frac{n}{2}}=\left(\omega_{n}^{k}\right)^{n}=1{% endequation %}. כעת, האם אנחנו באמת תופסים את <strong>כל</strong> שורשי היחידה מסדר {% equation %}\frac{n}{2}{% endequation %} כך? שוב, די בבירור כן, כי {% equation %}\omega_{n/2}^{k}=\omega_{n}^{2k}=\left(\omega_{n}^{k}\right)^{2}{% endequation %} (כאשר {% equation %}0\le k&lt;\frac{n}{2}{% endequation %}).
+ראינו שהריבועים של {% equation %}\omega_{n}^{k}{% endequation %} ושל {% equation %}\omega_{n}^{k+\frac{n}{2}}{% endequation %} זהים, אבל למה הם שורש יחידה מסדר {% equation %}\frac{n}{2}{% endequation %}? אה, זה קל: כי {% equation %}\left[\left(\omega_{n}^{k}\right)^{2}\right]^{\frac{n}{2}}=\left(\omega_{n}^{k}\right)^{n}=1{% endequation %}. כעת, האם אנחנו באמת תופסים את <strong>כל</strong> שורשי היחידה מסדר {% equation %}\frac{n}{2}{% endequation %} כך? שוב, די בבירור כן, כי {% equation %}\omega_{n/2}^{k}=\omega_{n}^{2k}=\left(\omega_{n}^{k}\right)^{2}{% endequation %} (כאשר {% equation %}0\le k<\frac{n}{2}{% endequation %}).
 
 אז אם לסכם: הריבועים של {% equation %}\omega_{n}^{0},\omega_{n}^{1},\omega_{n}^{2},\dots,\omega_{n}^{\frac{n}{2}-1}{% endequation %} נותנים בדיוק את כל שורשי היחידה מסדר {% equation %}\frac{n}{2}{% endequation %}, והם זהים (גם בסדר שלהם) לריבועים של {% equation %}\omega_{n}^{\frac{n}{2}},\omega_{n}^{\frac{n}{2}+1},\dots,\omega_{n}^{n-1}{% endequation %}. עכשיו אפשר לעבור לאלגוריתם עצמו.
 
@@ -105,9 +105,9 @@ def fft(a):
 
 זה נותן לי את השוויונות הבאים:
 
-{% equation %}a_{n-t}=\frac{1}{n}c_{t}{% endequation %} כאשר {% equation %}0\le t&lt;n{% endequation %}
+{% equation %}a_{n-t}=\frac{1}{n}c_{t}{% endequation %} כאשר {% equation %}0\le t<n{% endequation %}
 
-כלומר, {% equation %}a_{t}=\frac{1}{n}c_{n-t}{% endequation %} כאשר {% equation %}0&lt;t\le n{% endequation %}. עבור {% equation %}a_{0}{% endequation %} כזכור מתקיים {% equation %}a_{0}=a_{n}{% endequation %}.
+כלומר, {% equation %}a_{t}=\frac{1}{n}c_{n-t}{% endequation %} כאשר {% equation %}0<t\le n{% endequation %}. עבור {% equation %}a_{0}{% endequation %} כזכור מתקיים {% equation %}a_{0}=a_{n}{% endequation %}.
 
 אם לסכם את מה שעשינו כאן, ה-{% equation %}a{% endequation %}-ים שלנו מתקבלים מה-{% equation %}c{% endequation %}-ים בצורה הבאה: את כל ה-{% equation %}c{% endequation %}-ים כופלים ב-{% equation %}\frac{1}{n}{% endequation %}; את האיבר הראשון שלהם משאירים ללא שינוי; את הסדר של היתר הופכים. במילים אחרות, אם {% equation %}c=\left(1,2,3,4\right){% endequation %} אז נקבל {% equation %}a=\left(\frac{1}{4},1,\frac{3}{4},\frac{1}{2}\right){% endequation %}. זה יוצא מאוד פשוט בקוד פייתון, שבו יש קונבנציה שאינדקסים שליליים ברשימה עוברים עליה מהסוף להתחלה:
 

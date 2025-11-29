@@ -96,7 +96,7 @@ social_media_share: true
 
 {% equation %}x\equiv_{m_{k}}a_{k}{% endequation %}
 
-יש פתרון בתחום {% equation %}0\le x&lt;m{% endequation %} והפתרון הזה הוא <strong>יחיד</strong> בתחום הזה (ולכן קבוצת כל הפתרונות למשוואה היא הקבוצה {% equation %}\left\{ x+tm\ |\ t\in\mathbb{Z}\right\} {% endequation %}, אבל זה פחות חשוב).
+יש פתרון בתחום {% equation %}0\le x<m{% endequation %} והפתרון הזה הוא <strong>יחיד</strong> בתחום הזה (ולכן קבוצת כל הפתרונות למשוואה היא הקבוצה {% equation %}\left\{ x+tm\ |\ t\in\mathbb{Z}\right\} {% endequation %}, אבל זה פחות חשוב).
 
 ההוכחה של המשפט הכללי דומה לפתרון של המקרה הפרטי. קודם כל נוכיח שבכלל יש פתרון, כי זה העיקר. לכל {% equation %}i{% endequation %}, נגדיר {% equation %}n_{i}=\frac{m}{m_{i}}{% endequation %}, כלומר המכפלה של כל המודולוסים חוץ מ-{% equation %}m_{i}{% endequation %}. כעת, {% equation %}m_{i}{% endequation %} ו-{% equation %}n_{i}{% endequation %} הם זרים (כי {% equation %}m_{i}{% endequation %} זר לכל הגורמים של {% equation %}n_{i}{% endequation %}). מכאן נובע (לזה אתייחס בהמשך) שקיים מספר {% equation %}d_{i}{% endequation %} כך ש-{% equation %}n_{i}d_{i}\equiv_{m_{i}}1{% endequation %}. בואו לצורך נוחות בלבד נסמן {% equation %}e_{i}=n_{i}d_{i}{% endequation %}. שימו לב ש-{% equation %}e_{i}{% endequation %} מקיים את התכונה הבאה:
 

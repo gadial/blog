@@ -25,7 +25,7 @@ tags:
 
 עכשיו, תרגיל - מה השתנה כאן?
 
-{% equation %}x&lt;y\iff\exists z\left(x+z=y\right){% endequation %}
+{% equation %}x<y\iff\exists z\left(x+z=y\right){% endequation %}
 
 ולמה?
 
@@ -121,7 +121,7 @@ tags:
 
 {% equation %}y=h\left(x_{1},\dots,x_{n}\right)\iff f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right)\wedge{% endequation %}
 
-{% equation %}\wedge\forall t\left(t&lt;y\to f\left(x_{1},\dots,x_{n},y\right)\ne g\left(x_{1},\dots,x_{n},y\right)\right){% endequation %}
+{% equation %}\wedge\forall t\left(t<y\to f\left(x_{1},\dots,x_{n},y\right)\ne g\left(x_{1},\dots,x_{n},y\right)\right){% endequation %}
 
 אבל שימו לב לשימוש ב-{% equation %}\forall{% endequation %} ("לכל") כאן. אני כבר יכול לומר ש<strong>אין שום סיכוי</strong> שבשפה שלנו נוכל להשתמש ב-{% equation %}\forall{% endequation %} בצורה חופשית ועדיין לקוות שאפשר יהיה לתרגם את הסיפור חזרה לפונקציה דיופנטית. מה שכן נוכל לעשות - וזה לב ליבה של המטרה הטכנית שלנו - הוא להשתמש ב-{% equation %}\forall{% endequation %} <strong>חסום</strong>, כלומר במקום לומר "לכל {% equation %}t{% endequation %}", לומר "לכל {% equation %}t{% endequation %} שקטן מ-{% equation %}y{% endequation %}", שזה בדיוק מה שאנחנו צריכים כאן, בעצם.
 

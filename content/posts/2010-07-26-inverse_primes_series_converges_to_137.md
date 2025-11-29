@@ -23,7 +23,7 @@ tags:
 
 אם כן, יהיה {% equation %}n{% endequation %} מספר טבעי כלשהו, ויהיו {% equation %}p_{1},p_{2},\dots,p_{\pi\left(n\right)}{% endequation %} כל הראשוניים הקטנים מ-{% equation %}n{% endequation %} ({% equation %}\pi\left(n\right){% endequation %} הוא מספרם; זהו סימון סטנדרטי). הפאנץ' המרכזי הוא שכל מספר טבעי עד וכולל {% equation %}n{% endequation %} הוא מכפלה של חזקות של הראשוניים הללו <strong>בלבד</strong>; ראשוניים גדולים יותר מן הסתם אינם רלוונטיים כי לא ניתן להגיע על ידי מכפלה שלהם אלו באלו למספר שקטן יותר מהם. כאן מגיע התעלול ודומני שהכי פשוט להציג אותו. נתבונן במכפלה {% equation %}\lambda\left(n\right)=\frac{1}{1-\frac{1}{p_{1}}}\cdot\frac{1}{1-\frac{1}{p_{2}}}\cdots\frac{1}{1-\frac{1}{p_{\pi\left(n\right)}}}{% endequation %}. מה יש לנו כאן?
 
-מצד אחד, זוהי מכפלה סופית של מספרים רציונליים, כך שברור שאין כאן שום בעייתיות מבחינת התכנסות וכדומה. מהצד השני אני הולך לעשות להטוט. הבה ונתבונן באיבר הכללי של המכפלה הזו: {% equation %}\frac{1}{1-\frac{1}{p_{k}}}{% endequation %}. חלקכם ודאי שמים לב שהיצור הזה דומה לסכום של סדרה הנדסית <strong>אינסופית</strong>: {% equation %}1+q+q^{2}+\dots=\frac{1}{1-q}{% endequation %} כאשר {% equation %}\left|q\right|&lt;1{% endequation %}. ובכן, כאן {% equation %}\left|\frac{1}{p_{k}}\right|&lt;1{% endequation %} בבירור, שכן {% equation %}p_{k}\ge2{% endequation %}; ולכן {% equation %}\frac{1}{1-\frac{1}{p_{k}}}=1+p_{k}^{-1}+p_{k}^{-2}+\dots{% endequation %}. במילים אחרות, את המכפלה שלעיל אפשר לכתוב גם כ:
+מצד אחד, זוהי מכפלה סופית של מספרים רציונליים, כך שברור שאין כאן שום בעייתיות מבחינת התכנסות וכדומה. מהצד השני אני הולך לעשות להטוט. הבה ונתבונן באיבר הכללי של המכפלה הזו: {% equation %}\frac{1}{1-\frac{1}{p_{k}}}{% endequation %}. חלקכם ודאי שמים לב שהיצור הזה דומה לסכום של סדרה הנדסית <strong>אינסופית</strong>: {% equation %}1+q+q^{2}+\dots=\frac{1}{1-q}{% endequation %} כאשר {% equation %}\left|q\right|<1{% endequation %}. ובכן, כאן {% equation %}\left|\frac{1}{p_{k}}\right|&lt;1{% endequation %} בבירור, שכן {% equation %}p_{k}\ge2{% endequation %}; ולכן {% equation %}\frac{1}{1-\frac{1}{p_{k}}}=1+p_{k}^{-1}+p_{k}^{-2}+\dots{% endequation %}. במילים אחרות, את המכפלה שלעיל אפשר לכתוב גם כ:
 
 {% equation %}\left(1+p_{1}^{-1}+p_{1}^{-2}+\dots\right)\cdots\left(1+p_{\pi\left(n\right)}^{-1}+p_{\pi\left(n\right)}^{-2}+\dots\right){% endequation %}
 
@@ -37,7 +37,7 @@ tags:
 
 הלוגריתם עשה את מלאכתו והעביר לנו את המכפלה לסכום. אבל מה שכרגע יש בסכום הוא לא להיט גדול במיוחד - איך מתקדמים מכאן? הרי לוגריתם לא יודע "לטפל" בסכומים שנמצאים בתוכו.
 
-כאן נכנס לתמונה להטוט מתמטי אחר - טור טיילור. לא אוכיח זאת כרגע, אבל באופן כללי ידוע כי {% equation %}\ln\left(1-x\right)=-\sum_{m=1}^{\infty}\frac{x^{m}}{m}{% endequation %} כאשר {% equation %}\left|x\right|&lt;1{% endequation %}. כאן {% equation %}x=p_{k}^{-1}{% endequation %} ולכן ניתן להשתמש בתוצאה הזו. מקבלים:
+כאן נכנס לתמונה להטוט מתמטי אחר - טור טיילור. לא אוכיח זאת כרגע, אבל באופן כללי ידוע כי {% equation %}\ln\left(1-x\right)=-\sum_{m=1}^{\infty}\frac{x^{m}}{m}{% endequation %} כאשר {% equation %}\left|x\right|<1{% endequation %}. כאן {% equation %}x=p_{k}^{-1}{% endequation %} ולכן ניתן להשתמש בתוצאה הזו. מקבלים:
 
 {% equation %}-\sum_{k=1}^{\pi\left(n\right)}\ln\left(1-p_{k}^{-1}\right)=\sum_{k=1}^{\pi\left(n\right)}\sum_{m=1}^{\infty}\frac{p_{k}^{-m}}{m}{% endequation %}
 
@@ -53,7 +53,7 @@ tags:
 
 במילים אחרות, מה שהצלחנו להראות הוא את התוצאה הבאה:
 
-{% equation %}\ln\lambda\left(n\right)&lt;\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}}+2\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}^{2}}{% endequation %}. מה קורה כאשר משאיפים את {% equation %}n{% endequation %} לאינסוף? ובכן, הטור {% equation %}\sum_{k=1}^{\infty}\frac{1}{p_{k}^{2}}{% endequation %} הוא טור <strong>מתכנס</strong> (כי {% equation %}\sum\frac{1}{n^{2}}{% endequation %} מתכנס). ומצד שני, כבר אמרנו כי {% equation %}\ln\lambda\left(n\right){% endequation %} שואף לאינסוף ולכן אגף ימין של אי השוויון חייב לשאוף לאינסוף בעצמו; מכאן ש-{% equation %}\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}}{% endequation %} חייב לשאוף לאינסוף, דהיינו {% equation %}\sum_{k=1}^{\infty}\frac{1}{p_{k}}{% endequation %} מתבדר, וזה מה שהיה צריך להוכיח.
+{% equation %}\ln\lambda\left(n\right)<\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}}+2\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}^{2}}{% endequation %}. מה קורה כאשר משאיפים את {% equation %}n{% endequation %} לאינסוף? ובכן, הטור {% equation %}\sum_{k=1}^{\infty}\frac{1}{p_{k}^{2}}{% endequation %} הוא טור <strong>מתכנס</strong> (כי {% equation %}\sum\frac{1}{n^{2}}{% endequation %} מתכנס). ומצד שני, כבר אמרנו כי {% equation %}\ln\lambda\left(n\right){% endequation %} שואף לאינסוף ולכן אגף ימין של אי השוויון חייב לשאוף לאינסוף בעצמו; מכאן ש-{% equation %}\sum_{k=1}^{\pi\left(n\right)}\frac{1}{p_{k}}{% endequation %} חייב לשאוף לאינסוף, דהיינו {% equation %}\sum_{k=1}^{\infty}\frac{1}{p_{k}}{% endequation %} מתבדר, וזה מה שהיה צריך להוכיח.
 
 האם טרחן ישתכנע מההוכחה הזו? ספק גדול. אני מקווה שלפחות אלו מכם שעקבו עד הסוף נהנו.
 

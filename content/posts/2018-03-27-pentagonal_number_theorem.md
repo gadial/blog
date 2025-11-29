@@ -64,7 +64,7 @@ tags:
 
 הגדרה פורמלית יותר של {% equation %}s{% endequation %} היא זו: אורך הסדרה של המחוברים בסכום שמתחילה במחובר הגדול ביותר, עוברת עליהם מהגדול לקטן, ומסתיימת לפני האיבר הראשון ששונה מקודמו לפחות ב-2. והנה ניסוח עוד יותר פורמלי: אם נסמן חלוקה {% equation %}\lambda{% endequation %} בתור {% equation %}\lambda=\left(\lambda_{1},\lambda_{2},\dots,\lambda_{k}\right){% endequation %} כך ש-{% equation %}\lambda_{1}&gt;\lambda_{2}&gt;\dots&gt;\lambda_{k}{% endequation %} אז {% equation %}r=\lambda_{k}{% endequation %} ו-{% equation %}s{% endequation %} הוא המספר הגדול ביותר עבורו מתקיים {% equation %}\left(\lambda_{1},\dots,\lambda_{s}\right)=\left(\lambda_{1},\lambda_{1}-1,\dots,\lambda_{1}-\left(s-1\right)\right){% endequation %}.
 
-ומה האינבולוציה עושה? אם {% equation %}r&gt;s{% endequation %} אז אנחנו מפרקים את האלכסון ובונים ממנו שורה חדשה מעל השורה העליונה; בגלל ש-{% equation %}r&gt;s{% endequation %} מובטח לנו שהשורה הזו תהיה קצרה מזו שמתחתיה, כדרוש. אם לעומת זאת {% equation %}r&lt;s{% endequation %} אנחנו מפרקים את השורה העליונה ובונים ממנה אלכסון חדש, כלומר מוסיפים קוביה אחת לכל {% equation %}r{% endequation %} השורות הראשונות; מכיוון ש-{% equation %}r&lt;s{% endequation %} אנחנו יודעים שיש מספיק שורות כאלו.
+ומה האינבולוציה עושה? אם {% equation %}r>s{% endequation %} אז אנחנו מפרקים את האלכסון ובונים ממנו שורה חדשה מעל השורה העליונה; בגלל ש-{% equation %}r>s{% endequation %} מובטח לנו שהשורה הזו תהיה קצרה מזו שמתחתיה, כדרוש. אם לעומת זאת {% equation %}r<s{% endequation %} אנחנו מפרקים את השורה העליונה ובונים ממנה אלכסון חדש, כלומר מוסיפים קוביה אחת לכל {% equation %}r{% endequation %} השורות הראשונות; מכיוון ש-{% equation %}r<s{% endequation %} אנחנו יודעים שיש מספיק שורות כאלו.
 
 <strong><img class="alignnone size-medium wp-image-3578" src="{{site.baseurl}}{{site.post_images}}/2018/03/young5.png" alt="" width="300" height="200" /></strong>
 
@@ -82,7 +82,7 @@ tags:
 
 <strong><img class="alignnone wp-image-3582 size-medium" src="{{site.baseurl}}{{site.post_images}}/2018/03/young8.png" alt="" width="300" height="300" /></strong>
 
-אבל כאן, כמובן, אין בעיה, כי {% equation %}r&lt;s{% endequation %} ולכן אפשר לפרק את השורה העליונה. לכן המקרה <strong>היחיד</strong> שבו יכולה להיות בעיה הוא זה שבו {% equation %}s=r=k{% endequation %}. למשל, הטבלה הזו:
+אבל כאן, כמובן, אין בעיה, כי {% equation %}r<s{% endequation %} ולכן אפשר לפרק את השורה העליונה. לכן המקרה <strong>היחיד</strong> שבו יכולה להיות בעיה הוא זה שבו {% equation %}s=r=k{% endequation %}. למשל, הטבלה הזו:
 
 <strong><img class="alignnone size-medium wp-image-3584" src="{{site.baseurl}}{{site.post_images}}/2018/03/young9-1.png" alt="" width="300" height="180" /></strong>
 
@@ -90,7 +90,7 @@ tags:
 
 אם {% equation %}s=r=k{% endequation %} אז החלוקה שלנו היא בהכרח מהצורה הבאה: {% equation %}\left(k,k+1,k+2,\dots,k+\left(k-1\right)\right){% endequation %}. זה טור חשבוני פשוט במיוחד שאפשר לסכום "בשיטה של גאוס" - לשים לב שהסכום של המחובר הראשון והאחרון הוא {% equation %}3k-1{% endequation %}, וגם הסכום של המחובר השני והלפני אחרון, וכן הלאה, ויש בסך הכל {% equation %}k{% endequation %} מחוברים ולכן {% equation %}\frac{k}{2}{% endequation %} זוגות של מחוברים, ולכן הסכום הכולל הוא {% equation %}\frac{k\left(3k-1\right)}{2}{% endequation %} - והופס, קיבלנו מספר מחומש! אבל שימו לב, רק עבור המקרה שבו {% equation %}k{% endequation %} הוא חיובי, בינתיים. עכשיו גם ברור למה כאשר {% equation %}k{% endequation %} אי-זוגי אז יש יותר חלוקות אי זוגיות מזוגיות, ואחרת ההפך; כי {% equation %}k{% endequation %} הוא מספר השורות בטבלה, כלומר הזוגיות של {% equation %}k{% endequation %} קובעת האם החלוקה שאין לה בת זוג היא זוגית או אי זוגית.
 
-אז רגע, מה פספסנו? איך ערכים שליליים של {% equation %}k{% endequation %} נכנסים לתמונה? ובכן, רימיתי אתכם קודם והשמטתי עוד מקרה קצה אחד. האם עליתם על הרמאות שלי? הבעיה היא במקרה שבו {% equation %}r&gt;s{% endequation %}. במקרה הזה, כזכור, הרעיון הוא לפרק את האלכסון ולדחוף את האיברים שלו בשורה מעל העליונה; אבל כאן עלולה להיווצר בעיה אם <strong>גם השורה העליונה השתתפה באלכסון</strong>, כי אז כשאני מפרק את האלכסון אני מסיר ממנה איבר אחד. הנה מקרה שבו זה קורה:
+אז רגע, מה פספסנו? איך ערכים שליליים של {% equation %}k{% endequation %} נכנסים לתמונה? ובכן, רימיתי אתכם קודם והשמטתי עוד מקרה קצה אחד. האם עליתם על הרמאות שלי? הבעיה היא במקרה שבו {% equation %}r>s{% endequation %}. במקרה הזה, כזכור, הרעיון הוא לפרק את האלכסון ולדחוף את האיברים שלו בשורה מעל העליונה; אבל כאן עלולה להיווצר בעיה אם <strong>גם השורה העליונה השתתפה באלכסון</strong>, כי אז כשאני מפרק את האלכסון אני מסיר ממנה איבר אחד. הנה מקרה שבו זה קורה:
 
 <strong><img class="alignnone wp-image-3587 size-medium" src="{{site.baseurl}}{{site.post_images}}/2018/03/young10.png" alt="" width="300" height="151" /></strong>
 

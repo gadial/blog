@@ -62,7 +62,7 @@ tags:
 
 ואו נשלים את הבניה של אוסף הביטויים הדיופנטיים על ידי הוספה של המרכיב האחרון: כמת "לכל". בלוגיקה מסדר ראשון, הכמת {% equation %}\forall x{% endequation %} אומר "לכל {% equation %}x{% endequation %}". אפשר להכניס דבר כזה לביטויים הדיופנטיים שלנו, אבל אז עולה השאלה - איך לתרגם את זה לפולינום? יש כאן איזו שהיא סתירה מובנית - הרי הרעיון הוא שאם הביטוי מקבל ערך אמת אז כל מה שצריך הוא שיהיה <strong>קיים</strong> ערך שאפשר להציב למשתנה {% equation %}x{% endequation %} כחלק מהצבה שמאפסת את הפולינום; ומצד שני, אנחנו רוצים לטפל איכשהו ב<strong>כל</strong> הערכים האפשריים של {% equation %}x{% endequation %}. זו אינטואיציה; אם אתם רוצים לקבל אינטואיציה חזקה יותר נסו לחשוב איך לממש פולינום עבור {% equation %}\forall{% endequation %} ותראו איפה אתם נתקעים. בקיצור, תשכחו מזה אין לנו דרך לעשות משהו כזה.
 
-מה שכן אפשר לעשות, עם זאת, הוא טוב כמעט באותה מידה: כמת {% equation %}\forall{% endequation %} <strong>חסום</strong>. אם {% equation %}z{% endequation %} הוא משתנה שקיבל ערך כלשהו, אנחנו <strong>יכולים</strong> להשתמש בכמת מהצורה {% equation %}\forall x&lt;z{% endequation %}, שפירושו "לכל ערך של {% equation %}x{% endequation %} שקטן מ-{% equation %}z{% endequation %}". איך לממש את הכמת הזה - זה עניין מסובך שידרוש מאיתנו להשתמש בפונקציה האקספוננציאלית, ואני דוחה אותו לפוסט הבא (שיהיה האחרון!). לעת עתה אני רוצה להראות איך בעזרת הכמת הזה אנחנו מסוגלים להתגבר על שני כללי הבניה שעוד נותרו לנו.
+מה שכן אפשר לעשות, עם זאת, הוא טוב כמעט באותה מידה: כמת {% equation %}\forall{% endequation %} <strong>חסום</strong>. אם {% equation %}z{% endequation %} הוא משתנה שקיבל ערך כלשהו, אנחנו <strong>יכולים</strong> להשתמש בכמת מהצורה {% equation %}\forall x<z{% endequation %}, שפירושו "לכל ערך של {% equation %}x{% endequation %} שקטן מ-{% equation %}z{% endequation %}". איך לממש את הכמת הזה - זה עניין מסובך שידרוש מאיתנו להשתמש בפונקציה האקספוננציאלית, ואני דוחה אותו לפוסט הבא (שיהיה האחרון!). לעת עתה אני רוצה להראות איך בעזרת הכמת הזה אנחנו מסוגלים להתגבר על שני כללי הבניה שעוד נותרו לנו.
 
 כלל הבניה הבא בתור הוא מה שקראתי לו <strong>רקורסיה פרימיטיבית</strong>. בואו נזכיר אותו, כי הוא די קשה לעיכול. בניסוח לא פורמלי, אנחנו חושבים על קלט כלשהו למשתנים {% equation %}x_{1},\dots,x_{n}{% endequation %} כאילו הוא מגדיר סדרה אינסופית {% equation %}a_{1},a_{2},a_{3},a_{4},\dots{% endequation %} שמוגדרת באופן רקורסיבי. האיבר הראשון בסדרה מחושב בדרך כלשהי מתוך {% equation %}x_{1},\dots,x_{n}{% endequation %}; בואו נקרא לדרך הזו {% equation %}f{% endequation %}, כלומר {% equation %}a_{1}=f\left(x_{1},\dots,x_{n}\right){% endequation %}. כעת, האיבר ה-{% equation %}k+1{% endequation %} בסדרה מחושב מתוך שלושה סוגי קלטים שונים: ראשית, הפרמטרים {% equation %}x_{1},\dots,x_{n}{% endequation %} שאנו לא שוכחים מהם אף פעם; שנית, האיבר הקודם בסדרה, {% equation %}a_{k}{% endequation %}; שלישית, האינדקס של האיבר הקודם בסדרה, כלומר המספר הטבעי {% equation %}k{% endequation %}. נסמן ב-{% equation %}g{% endequation %} את הפונקציה שמקבלת את שלושת הקלטים הללו: {% equation %}a_{k+1}=g\left(k,a_{k},x_{1},\dots,x_{n}\right){% endequation %}. כעת אפשר להגדיר פונקציה {% equation %}h\left(x_{1},\dots,x_{n},k\right)=a_{k}{% endequation %}.
 
@@ -110,7 +110,7 @@ tags:
 
 {% equation %}S\left(1,u\right)=f\left(x_{1},\dots,x_{k}\right)\wedge{% endequation %}
 
-{% equation %}\forall i&lt;k\left(S\left(i+1,u\right)=g\left(i,S\left(i,u\right),x_{1},\dots,x_{n}\right)\right)\wedge{% endequation %}
+{% equation %}\forall i<k\left(S\left(i+1,u\right)=g\left(i,S\left(i,u\right),x_{1},\dots,x_{n}\right)\right)\wedge{% endequation %}
 
 {% equation %}y=S\left(k,u\right){% endequation %}
 
@@ -124,13 +124,13 @@ tags:
 
 כלומר, {% equation %}h{% endequation %} מחזירה את הערך המינימלי של {% equation %}y{% endequation %} שכאשר מזינים אותו (יחד עם שאר הפרמטרים {% equation %}x_{1},\dots,x_{N}{% endequation %}) הן ל-{% equation %}f{% endequation %} והן ל-{% equation %}g{% endequation %} מקבלים את אותה התוצאה. אם אין {% equation %}y{% endequation %} שעבורו זה קורה, {% equation %}h{% endequation %} פשוט לא מוגדרת על {% equation %}x_{1},\dots,x_{n}{% endequation %}.
 
-לתרגם את הפונקציה הזו לביטוי יהיה קל יותר מאשר רקורסיה. נתחיל מכך ש-{% equation %}f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right){% endequation %} הוא ביטוי לגיטימי למהדרין. כל מה שנשאר לעשות הוא לקודד איכשהו את תכונת המינימליות. כלומר, אנחנו רוצים להגיד שאין איזה {% equation %}t&lt;y{% endequation %} כך ש-{% equation %}f\left(x_{1},\dots,x_{n},t\right)=g\left(x_{1},\dots,x_{n},t\right){% endequation %}. הכמת החסום בנוי בדיוק עבור זה:
+לתרגם את הפונקציה הזו לביטוי יהיה קל יותר מאשר רקורסיה. נתחיל מכך ש-{% equation %}f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right){% endequation %} הוא ביטוי לגיטימי למהדרין. כל מה שנשאר לעשות הוא לקודד איכשהו את תכונת המינימליות. כלומר, אנחנו רוצים להגיד שאין איזה {% equation %}t<y{% endequation %} כך ש-{% equation %}f\left(x_{1},\dots,x_{n},t\right)=g\left(x_{1},\dots,x_{n},t\right){% endequation %}. הכמת החסום בנוי בדיוק עבור זה:
 
 {% equation %}y=h\left(x_{1},\dots,x_{n}\right)\iff f\left(x_{1},\dots,x_{n},y\right)=g\left(x_{1},\dots,x_{n},y\right)\wedge{% endequation %}
 
-{% equation %}\wedge\forall t&lt;y\left(f\left(x_{1},\dots,x_{n},t\right)\ne g\left(x_{1},\dots,x_{n},t\right)\right){% endequation %}
+{% equation %}\wedge\forall t<y\left(f\left(x_{1},\dots,x_{n},t\right)\ne g\left(x_{1},\dots,x_{n},t\right)\right){% endequation %}
 
-דבר אחד שעדיין צריך להסביר הוא איך לתאר את {% equation %}f\ne g{% endequation %}. זה פשוט קיצור של {% equation %}\left(f&gt;g\right)\vee\left(f&lt;g\right){% endequation %}, ולכן כל מה שנותר לעשות הוא להשתכנע שאפשר להשתמש ב-{% equation %}&lt;{% endequation %}, אבל זה אחד מהדברים הראשונים שהראיתי: כדי לתאר את {% equation %}x&lt;y{% endequation %} משתמשים במשוואה הדיופנטית {% equation %}x+z=y{% endequation %}. וזהו! סיימנו את ההוכחה של אי-כריעות הבעיה העשירית של הילברט!
+דבר אחד שעדיין צריך להסביר הוא איך לתאר את {% equation %}f\ne g{% endequation %}. זה פשוט קיצור של {% equation %}\left(f>g\right)\vee\left(f<g\right){% endequation %}, ולכן כל מה שנותר לעשות הוא להשתכנע שאפשר להשתמש ב-{% equation %}<{% endequation %}, אבל זה אחד מהדברים הראשונים שהראיתי: כדי לתאר את {% equation %}x<y{% endequation %} משתמשים במשוואה הדיופנטית {% equation %}x+z=y{% endequation %}. וזהו! סיימנו את ההוכחה של אי-כריעות הבעיה העשירית של הילברט!
 
 ...פרט לכך שעדיין לא הוכחנו שאפשר לקודד את הכמת "לכל" החסום. זה יהיה תוכן הפוסט הבא, האחרון בסדרה.
 

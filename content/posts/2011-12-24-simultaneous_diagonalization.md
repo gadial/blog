@@ -73,7 +73,7 @@ tags:
 
 {% equation %}x=\sum\lambda_{i}p_{i}{% endequation %}
 
-(אני מניח כאן באופן סמוי ש-{% equation %}k&gt;1{% endequation %} אבל זה בסדר כי {% equation %}k=1{% endequation %} אומר ש-{% equation %}T-\lambda I=0{% endequation %} (פשוט הצבתי את {% equation %}T{% endequation %} בפולינום המינימלי) ולכן {% equation %}T{% endequation %} בבירור לכסינה).
+(אני מניח כאן באופן סמוי ש-{% equation %}k>1{% endequation %} אבל זה בסדר כי {% equation %}k=1{% endequation %} אומר ש-{% equation %}T-\lambda I=0{% endequation %} (פשוט הצבתי את {% equation %}T{% endequation %} בפולינום המינימלי) ולכן {% equation %}T{% endequation %} בבירור לכסינה).
 
 עכשיו הטוויסט הסופי מגיע: נגדיר את {% equation %}E_{i}=p_{i}\left(T\right){% endequation %}. הצבנו את {% equation %}T{% endequation %} בפולינומי האינטרפולציה, וקיבלנו מייד שמתקיים:
 

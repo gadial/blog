@@ -76,7 +76,7 @@ social_media_share: true
 
 {% equation %}y+a\ge180{% endequation %}
 
-חיבור שתי המשוואות הראשונות נותן לנו {% equation %}x+y+a+b=360{% endequation %}. מצד שני, אם {% equation %}x+y&gt;180{% endequation %} או אם {% equation %}y+a&gt;180{% endequation %}, אז מחיבור שתי המשוואות נקבל {% equation %}x+y+a+b&gt;360{% endequation %} וזו סתירה. לכן בהכרח קיבלנו {% equation %}x+b=180{% endequation %} ו-{% equation %}y+a=180{% endequation %}. על כן, {% equation %}a=180-y=x{% endequation %} ו-{% equation %}b=180-x=y{% endequation %}:
+חיבור שתי המשוואות הראשונות נותן לנו {% equation %}x+y+a+b=360{% endequation %}. מצד שני, אם {% equation %}x+y>180{% endequation %} או אם {% equation %}y+a>180{% endequation %}, אז מחיבור שתי המשוואות נקבל {% equation %}x+y+a+b>360{% endequation %} וזו סתירה. לכן בהכרח קיבלנו {% equation %}x+b=180{% endequation %} ו-{% equation %}y+a=180{% endequation %}. על כן, {% equation %}a=180-y=x{% endequation %} ו-{% equation %}b=180-x=y{% endequation %}:
 
 <a href="{{site.baseurl}}{{site.post_images}}/2016/07/par4.png" rel="attachment wp-att-3365"><img class="aligncenter size-full wp-image-3365" src="{{site.baseurl}}{{site.post_images}}/2016/07/par4.png" alt="par4" width="717" height="985" /></a>
 

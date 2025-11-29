@@ -86,7 +86,7 @@ print(total / tries)
 
 {% equation %}\sum_{n=1}^{\infty}x^{n}=\frac{x}{1-x}{% endequation %}
 
-הנוסחה הזו עובדת רק עבור {% equation %}\left|x\right|&lt;1{% endequation %}, אבל מכיוון שנציב {% equation %}x=1-p{% endequation %} ואנחנו מניחים ש-{% equation %}p&gt;0{% endequation %} זו לא בעיה.
+הנוסחה הזו עובדת רק עבור {% equation %}\left|x\right|<1{% endequation %}, אבל מכיוון שנציב {% equation %}x=1-p{% endequation %} ואנחנו מניחים ש-{% equation %}p>0{% endequation %} זו לא בעיה.
 
 לבסוף, צריך עדיין <strong>לגזור</strong> את {% equation %}\frac{x}{1-x}{% endequation %}. הנגזרת יוצאת {% equation %}\frac{\left(1-x\right)+x}{\left(1-x\right)^{2}}=\frac{1}{\left(1-x\right)^{2}}{% endequation %}, וכשנציב {% equation %}x=1-p{% endequation %} חזרה נקבל
 

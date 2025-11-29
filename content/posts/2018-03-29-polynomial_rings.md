@@ -61,11 +61,11 @@ tags:
 
 {% equation %}a\left(x\right)=b\left(x\right)q\left(x\right)+r\left(x\right){% endequation %}
 
-עם התכונה הנוספת לפיה {% equation %}\deg\left(r\right)&lt;\deg b{% endequation %} או ש-{% equation %}r=0{% endequation %}. שימו לב שזה חייב להיות מעל שדה: למשל, ב-{% equation %}\mathbb{Z}\left[x\right]{% endequation %} הפולינום {% equation %}x{% endequation %} פשוט לא מתחלק עם שארית על ידי {% equation %}2{% endequation %}. זה טיפה שובר אינטואיציה כי הרי אנחנו רגילים לחשוב על "חלוקה עם שארית" בדיוק בהקשר של {% equation %}\mathbb{Z}{% endequation %}.
+עם התכונה הנוספת לפיה {% equation %}\deg\left(r\right)<\deg b{% endequation %} או ש-{% equation %}r=0{% endequation %}. שימו לב שזה חייב להיות מעל שדה: למשל, ב-{% equation %}\mathbb{Z}\left[x\right]{% endequation %} הפולינום {% equation %}x{% endequation %} פשוט לא מתחלק עם שארית על ידי {% equation %}2{% endequation %}. זה טיפה שובר אינטואיציה כי הרי אנחנו רגילים לחשוב על "חלוקה עם שארית" בדיוק בהקשר של {% equation %}\mathbb{Z}{% endequation %}.
 
 בואו נוכיח את הטענה על החלוקה עם שארית פורמלית, באינדוקציה על המעלה של {% equation %}a\left(x\right){% endequation %}. אם לחדד - אנחנו קובעים מראש פולינום {% equation %}b\left(x\right){% endequation %} כלשהו ומוכיחים שלכל {% equation %}a\left(x\right){% endequation %} ניתן לחלק עם שארית את {% equation %}a\left(x\right){% endequation %} ב-{% equation %}b\left(x\right){% endequation %}.
 
-בסיס האינדוקציה הוא כל המקרים שבהם {% equation %}\deg\left(a\right)&lt;\deg\left(b\right){% endequation %}. במקרים הללו אפשר פשוט "לרמות" ולהגדיר {% equation %}q\left(x\right)=0{% endequation %} ו-{% equation %}r\left(x\right)=a\left(x\right){% endequation %} ומקבלים {% equation %}a\left(x\right)=b\left(x\right)q\left(x\right)+r\left(x\right){% endequation %} תוך עמידה בקריטריון {% equation %}\deg\left(r\right)&lt;\deg\left(b\right){% endequation %} (זה כמו האופן שבו מחלקים את 6 ב-17 עם שארית - המנה היא 0 והשארית היא 6).
+בסיס האינדוקציה הוא כל המקרים שבהם {% equation %}\deg\left(a\right)<\deg\left(b\right){% endequation %}. במקרים הללו אפשר פשוט "לרמות" ולהגדיר {% equation %}q\left(x\right)=0{% endequation %} ו-{% equation %}r\left(x\right)=a\left(x\right){% endequation %} ומקבלים {% equation %}a\left(x\right)=b\left(x\right)q\left(x\right)+r\left(x\right){% endequation %} תוך עמידה בקריטריון {% equation %}\deg\left(r\right)<\deg\left(b\right){% endequation %} (זה כמו האופן שבו מחלקים את 6 ב-17 עם שארית - המנה היא 0 והשארית היא 6).
 
 כעת נעבור לצעד האינדוקציה: נניח ש-{% equation %}\deg\left(a\right)=n\ge\deg\left(b\right){% endequation %} ושהוכחנו כבר את הטענה לכל מעלה קטנה מ-{% equation %}n{% endequation %}. הרעיון הוא להעלים את המקדם המוביל של {% equation %}a\left(x\right){% endequation %} כדי לקבל פולינום ממעלה נמוכה יותר שאנחנו כבר יודעים איך לחלק - זה למעשה גם הרעיון מאחורי השיטות הפרקטיות שבהן אנחנו מבצעים חילוק ארוך (של שלמים/פולינומים) ביד.
 
@@ -97,7 +97,7 @@ tags:
 
 {% equation %}p\left(x\right)=q\left(x\right)\left(x-a\right)+r\left(x\right){% endequation %}
 
-עכשיו, {% equation %}\deg\left(r\right)&lt;\deg\left(x-a\right)=1{% endequation %} ולכן בהכרח {% equation %}\deg\left(r\right)=0{% endequation %} כך ש-{% equation %}r{% endequation %} הוא קבוע. אם נציב {% equation %}a{% endequation %} בשני אגפי המשוואה, נקבל
+עכשיו, {% equation %}\deg\left(r\right)<\deg\left(x-a\right)=1{% endequation %} ולכן בהכרח {% equation %}\deg\left(r\right)=0{% endequation %} כך ש-{% equation %}r{% endequation %} הוא קבוע. אם נציב {% equation %}a{% endequation %} בשני אגפי המשוואה, נקבל
 
 {% equation %}p\left(a\right)=0=q\left(a\right)\cdot0+r=r{% endequation %}
 
@@ -169,7 +169,7 @@ tags:
 
 {% equation %}c\left(x\right)=c_{k}x^{k}+\dots+c_{1}x+c_{0}{% endequation %}
 
-כאשר {% equation %}m,k&lt;n{% endequation %} ו-{% equation %}m+k=n{% endequation %}. מכך ש-{% equation %}b\left(x\right)c\left(x\right)=x^{n}{% endequation %} אני מקבל {% equation %}n+1{% endequation %} משוואות שמתארות את הקונבולוציה של המקדמים של {% equation %}b\left(x\right),c\left(x\right){% endequation %}:
+כאשר {% equation %}m,k<n{% endequation %} ו-{% equation %}m+k=n{% endequation %}. מכך ש-{% equation %}b\left(x\right)c\left(x\right)=x^{n}{% endequation %} אני מקבל {% equation %}n+1{% endequation %} משוואות שמתארות את הקונבולוציה של המקדמים של {% equation %}b\left(x\right),c\left(x\right){% endequation %}:
 
 {% equation %}b_{0}c_{0}=0{% endequation %}
 
@@ -183,7 +183,7 @@ tags:
 
 בואו נתחיל מהמשוואה הראשונה, {% equation %}b_{0}c_{0}=0{% endequation %}. אנחנו בתחום שלמות {% equation %}R/P{% endequation %} ולכן או {% equation %}b_{0}{% endequation %} או {% equation %}c_{0}{% endequation %} הם 0; נניח בלי הגבלת הכלליות ש-{% equation %}b_{0}=0{% endequation %}. עכשיו נכנס לפעולה הנתון לפיו {% equation %}a_{0}\notin P^{2}{% endequation %}; אם ב-{% equation %}R/P{% endequation %} היה מתקיים ש-{% equation %}b_{0}=c_{0}=0{% endequation %} זה היה אומר שבחוג {% equation %}R{% endequation %} מתקיים {% equation %}b_{0}\in P{% endequation %} <strong>וגם</strong> {% equation %}c_{0}\in P{% endequation %} ולכן {% equation %}a_{0}=b_{0}c_{0}\in P^{2}{% endequation %}. זה בלתי אפשרי, ולכן בחוג {% equation %}R/P{% endequation %} מתקיים {% equation %}c_{0}\ne0{% endequation %}. אני טוען שאי השוויון הקטן הזה יגרום לתגובת שרשרת בקרב כל משוואות הקונבולוציה שלעיל שתכריח את כל המקדמים של {% equation %}b\left(x\right){% endequation %} להיות אפס, עד אשר נקבל סתירה במשוואה האחרונה, {% equation %}b_{m}c_{k}=1{% endequation %}.
 
-ראינו כבר ש-{% equation %}b_{0}=0{% endequation %}. זה הופך את המשוואה השניה ל-{% equation %}b_{1}c_{0}=0{% endequation %}, ומכיוון ש-{% equation %}c_{0}\ne0{% endequation %} אז {% equation %}b_{1}=0{% endequation %}. עכשיו המשוואה השלישית, שלא כתבתי, תהפוך ל-{% equation %}b_{2}c_{0}=0{% endequation %}, וכן הלאה וכן הלאה. מתישהו נגיע אל {% equation %}b_{m}c_{0}=0{% endequation %} (במשוואה של המקדם {% equation %}x^{m}{% endequation %}, שהוא {% equation %}\sum_{i=0}^{m}b_{i}c_{m-i}=0{% endequation %} כי {% equation %}m&lt;n{% endequation %}) ונסיק ש-{% equation %}b_{m}=0{% endequation %}; אבל עכשיו המשוואה {% equation %}b_{m}c_{k}=1{% endequation %} לא יכולה להתקיים, והגענו לסתירה עם ההנחה ש-{% equation %}a\left(x\right){% endequation %} היה פריק.
+ראינו כבר ש-{% equation %}b_{0}=0{% endequation %}. זה הופך את המשוואה השניה ל-{% equation %}b_{1}c_{0}=0{% endequation %}, ומכיוון ש-{% equation %}c_{0}\ne0{% endequation %} אז {% equation %}b_{1}=0{% endequation %}. עכשיו המשוואה השלישית, שלא כתבתי, תהפוך ל-{% equation %}b_{2}c_{0}=0{% endequation %}, וכן הלאה וכן הלאה. מתישהו נגיע אל {% equation %}b_{m}c_{0}=0{% endequation %} (במשוואה של המקדם {% equation %}x^{m}{% endequation %}, שהוא {% equation %}\sum_{i=0}^{m}b_{i}c_{m-i}=0{% endequation %} כי {% equation %}m<n{% endequation %}) ונסיק ש-{% equation %}b_{m}=0{% endequation %}; אבל עכשיו המשוואה {% equation %}b_{m}c_{k}=1{% endequation %} לא יכולה להתקיים, והגענו לסתירה עם ההנחה ש-{% equation %}a\left(x\right){% endequation %} היה פריק.
 
 זה מסיים את ההוכחה של קריטריון אייזנשטיין וגם את הפוסט; כמובן שזה לא סוף הסיפור של הפולינומים אלא בקושי ההתחלה.
 
