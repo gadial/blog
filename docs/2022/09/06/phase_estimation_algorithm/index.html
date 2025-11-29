@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>חישוב קוונטי: אלגוריתם הערכת פאזה - לא מדויק</title>
-    <link rel="icon" type="image/x-icon" href="/new_blog/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     
     
     <!-- KaTeX for math rendering -->
@@ -96,6 +96,44 @@
         
         .top-nav .search-box button:hover {
             background: #2980b9;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .top-nav .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .top-nav .site-title {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+            .top-nav .nav-links {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .top-nav .nav-links a {
+                text-align: center;
+                padding: 8px;
+            }
+            
+            .top-nav .search-box {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .top-nav .search-box input {
+                width: 100%;
+                margin-bottom: 5px;
+                min-width: 0;
+            }
+            
+            .top-nav .search-box button {
+                width: 100%;
+            }
         }
         
         /* Blockquote styling */
@@ -345,11 +383,11 @@
 <body>
     <nav class="top-nav">
         <div class="nav-container">
-            <a href="/new_blog/" class="site-title">לא מדויק</a>
+            <a href="/" class="site-title">לא מדויק</a>
             <div class="nav-links">
-                <a href="/new_blog/">דף הבית</a>
-                <a href="/new_blog/random.html">פוסט אקראי</a>
-                <a href="/new_blog/post_list.html">כל הפוסטים</a>
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="חיפוש...">
                     <button onclick="searchPosts()">חפש</button>
@@ -364,14 +402,14 @@
         
         <nav class="post-navigation">
             
-            <a href="/new_blog/2022/09/01/quantum_fourier_transform/" class="nav-link nav-prev">
+            <a href="/2022/09/01/quantum_fourier_transform/" class="nav-link nav-prev">
                 <span class="nav-label">פוסט ישן יותר →</span>
                 <span class="nav-title">התמרת פורייה הקוונטית</span>
             </a>
             
 
             
-            <a href="/new_blog/2022/09/30/shor_algorithm_revisit/" class="nav-link nav-next">
+            <a href="/2022/09/30/shor_algorithm_revisit/" class="nav-link nav-next">
                 <span class="nav-label">← פוסט חדש יותר</span>
                 <span class="nav-title">חישוב קוונטי: האלגוריתם של שור</span>
             </a>
@@ -426,7 +464,7 @@
 </ul>
 
 <p>בתור מין מעגל סכמטי, זה נראה כך:</p>
-<p><img src="/new_blog/img/2022/phase_estimation_overview.png" alt=""/></p>
+<p><img src="/img/2022/phase_estimation_overview.png" alt=""/></p>
 <p>אבל כרגע רב הנסתר על המרובה. להפעיל <span class="math">\(H\)</span> על אברי הרגיסטר הראשון - את זה אנחנו כבר מבינים, וגם יודעים שזה מייצר לנו את המצב <span class="math">\(\left|+^{n}\right\rangle \)</span>. אבל איך מבצעים את הטרנספורמציה <span class="math">\(\left|k\right\rangle \left|u\right\rangle \mapsto\left|k\right\rangle U^{k}\left|u\right\rangle \)</span> ומה זה <span class="math">\(\text{QFT}_{N}^{\dagger}\)</span>? נתחיל מהשני. בפוסט הקודם על התמרת פורייה תיארנו מעגל שמחשב את <span class="math">\(\text{QFT}_{N}\)</span>. הסימון <span class="math">\(\text{QFT}_{N}^{\dagger}\)</span> פשוט מייצג את הטרנספורמציה <strong>ההופכית</strong>. קל לחשב אותה, כי חישוב קוונטי שלא מערב מדידות הוא <strong>הפיך</strong> - פשוט לוקחים את המעגל של <span class="math">\(\text{QFT}_{N}\)</span> ושמים את כל השערים שלו בסדר הפוך. פורמלית, מה שמשתמשים בו בהערכת פאזה הוא לא "התמרת פורייה הקוונטית" אלא "התמרת פורייה הקוונטית ההפוכה", ועוד מעט ייפול לנו גם האסימון למה.</p>
 <p>השאלה השניה היא איך מחשבים את <span class="math">\(\left|k\right\rangle \left|u\right\rangle \mapsto\left|k\right\rangle U^{k}\left|u\right\rangle \)</span>, וכאן זה הולך להיות דומה <strong>מאוד</strong> למה שקרה בהתמרת פורייה הקוונטית. כל כך דומה, שאני ממליץ בחום לחזור ולקרוא את הפוסט ההוא למי שדילגו עליו (מצד שני, אולי זה פשוט יותר כאן, ויקל על מי שנתקעו בפוסט ההוא?)</p>
 <p>כזכור, אנחנו אוהבים ייצוג <strong>בינארי</strong> של מספרים. הייצוג הבינארי של מספר <span class="math">\(k\)</span> הוא ייצוג בתור <span class="math">\(k=\sum_{t=1}^{n}2^{n-t}k_{t}\)</span> כך ש-<span class="math">\(k_{t}\in\left\{ 0,1\right\} \)</span>. עכשיו, אפשר לפרק העלאה כללית בחזקת <span class="math">\(k\)</span> למכפלה של העלאות בחזקות של 2:</p>
@@ -449,7 +487,7 @@
 </ul>
 
 <p>אז אני הולך להפעיל שער <span class="math">\(U^{2^{n-t}}\)</span> שמותנה בקיוביט ה-<span class="math">\(t\)</span>-י. ככה זה הולך להיראות:</p>
-<p><img src="/new_blog/img/2022/phase_estimation.png" alt=""/></p>
+<p><img src="/img/2022/phase_estimation.png" alt=""/></p>
 <p>אפשר כמובן לשאול איך בונים שערי <span class="math">\(U^{2^{t}}\)</span> מותנים בפועל - זו שאלה שאלגוריתם הערכת הפאזה עצמו לא מתעסק בה; הוא אומר "אם <span class="math">\(U\)</span> הוא נחמד ואתם יכולים לבנות את השערים הללו עבורו, אז אפשר להפעיל הערכת פאזה" אבל בשימוש ספציפי, כמו אלגוריתם שור, אכן נצטרך להסביר איך לעשות את זה.</p>
 <p>שימו לב שעל פניו, קורה כאן משהו מוזר <strong>מאוד</strong>: אחרי שערי ה-<span class="math">\(H\)</span> בהתחלה, לכאורה על שערי הרגיסטר הראשון לא מופעל שום דבר שמשנה אותם - רק שערים שמותנים בהם. והרגיסטר השני? מופעלים עליו <span class="math">\(U^{j}\)</span>-ים, אבל בגלל ש-<span class="math">\(\left|u\right\rangle \)</span> הוא וקטור עצמי של <span class="math">\(U\)</span> זה לא משנה את <span class="math">\(\left|u\right\rangle \)</span> - רק מכפיל אותו בסקלר כלשהו, ואחר כך אנחנו בכל מקרה לא מודדים את <span class="math">\(\left|u\right\rangle \)</span> אז לכאורה הסקלר אמור "להיעלם". מה הולך כאן? זה נראה כמו קסם - מעגל שלא עושה כלום ומחשב בדיוק את מה שהוא אמור.</p>
 <p>כמובן שאין פה קסם - הסקלר של <span class="math">\(\left|u\right\rangle \)</span> לא הולך להיעלם אלא להצטבר בצורה חכמה בתוך הסופרפוזיציה שמהווים אברי הרגיסטר הראשון. איך זה ייתכן, אם אנחנו לא פועלים עליהם? ובכן, אין דבר כזה בחישוב קוונטי, לומר בנחרצות כזו שאנחנו לא פועלים על משהו; שערים מותנים הם לא משהו שפועל על כל קיוביט בנפרד אלא על זוג קיוביטים ביחד, וצריך לחשוב על ההשפעה שלהם בתור משהו שמשפיע על שני הקיוביטים הללו יחד. כבר ראינו איך זה בא לידי ביטוי פורמלי.</p>
@@ -598,7 +636,7 @@
         function searchPosts() {
             const searchTerm = document.getElementById('searchInput').value;
             if (searchTerm.trim()) {
-                window.location.href = '/new_blog/post_list.html?search=' + encodeURIComponent(searchTerm);
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
             }
         }
         

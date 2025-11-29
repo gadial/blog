@@ -3,45 +3,60 @@
 {% block title %}רשימת הפוסטים - לא מדויק{% endblock %}
 
 {% block extra_styles %}
-        body {
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
             padding: 20px;
         }
         
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        header {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            color: #2c3e50;
+            margin-bottom: 0;
+        }
+        
+        .posts-section {
             background: white;
             padding: 40px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             border-radius: 8px;
         }
         
-        h1 {
-            font-size: 2.5em;
+        .search-section {
+            background: white;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        .search-section h2 {
+            font-size: 1.5em;
             color: #2c3e50;
-            margin-bottom: 30px;
-            text-align: center;
+            margin-bottom: 15px;
         }
         
-        .search-box {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 5px;
-        }
-        
-        .search-box label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .search-box input {
+        .search-section input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
             border-radius: 4px;
             font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .search-section input:focus {
+            outline: none;
+            border-color: #3498db;
         }
         
         .post-list {
@@ -49,7 +64,8 @@
         }
         
         .post-item {
-            padding: 20px 0;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
             border-bottom: 1px solid #e0e0e0;
         }
         
@@ -58,12 +74,14 @@
         }
         
         .post-item h3 {
-            margin-bottom: 5px;
+            font-size: 1.8em;
+            margin-bottom: 10px;
         }
         
         .post-item h3 a {
             color: #2c3e50;
             text-decoration: none;
+            transition: color 0.3s;
         }
         
         .post-item h3 a:hover {
@@ -73,11 +91,16 @@
         .post-meta {
             color: #7f8c8d;
             font-size: 0.9em;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .post-meta .date {
+            margin-left: 15px;
         }
         
         .post-categories {
             font-size: 0.9em;
+            color: #7f8c8d;
         }
         
         .post-categories a {
@@ -86,45 +109,91 @@
             margin-left: 5px;
         }
         
+        .post-categories a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
         .back-link {
             display: inline-block;
-            margin-top: 30px;
-            color: #3498db;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
             text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
         }
         
         .back-link:hover {
-            text-decoration: underline;
+            background: #2980b9;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            header, .search-section, .posts-section {
+                padding: 20px;
+            }
+            
+            .post-item h3 {
+                font-size: 1.4em;
+            }
         }
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <h1>רשימת הפוסטים</h1>
+        <header>
+            <h1>כל הפוסטים</h1>
+        </header>
         
-        <div class="search-box">
-            <label for="search">חיפוש לפי כותרת:</label>
-            <input type="text" id="search" placeholder="הקלד כותרת...">
+        <div class="search-section">
+            <h2>חיפוש</h2>
+            <input type="text" id="search" placeholder="חפש לפי כותרת פוסט...">
         </div>
         
-        <ul class="post-list" id="postList">
-            {% for post in posts %}
-            <li class="post-item" data-title="{{ post.title }}">
-                <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-                <p class="post-meta">{{ post.date }}</p>
-                {% if post.categories %}
-                <div class="post-categories">
-                    קטגוריות:
-                    {% for cat in post.categories %}
-                    <a href="/categories/{{ cat }}.html">{{ cat }}</a>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="posts-section">
+            <ul class="post-list" id="postList">
+                {% for post in posts %}
+                <li class="post-item" data-title="{{ post.title }}">
+                    <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+                    <div class="post-meta">
+                        <span class="date">{{ post.date }}</span>
+                        {% if post.categories %}
+                        <span class="post-categories">
+                            |
+                            {% for cat in post.categories %}
+                            <a href="{{ baseurl }}/categories/{{ cat }}.html">{{ cat }}</a>
+                            {% endfor %}
+                        </span>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <div style="text-align: center;">
+                <a href="{{ baseurl }}/" class="back-link">← חזרה לדף הבית</a>
+            </div>
+        </div>
         
-        <a href="/" class="back-link">← חזרה לדף הבית</a>
+        <footer>
+            <p>© כל הזכויות שמורות לגדי אלכסנדרוביץ'</p>
+        </footer>
     </div>
 {% endblock %}
 
