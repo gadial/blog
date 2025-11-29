@@ -22,8 +22,20 @@ if __name__ == '__main__':
     # Change to docs directory
     docs_path = Path(__file__).parent / DIRECTORY
     if not docs_path.exists():
-        print(f"Error: {DIRECTORY}/ directory not found. Run 'python build.py' first.")
+        print(f"Error: {DIRECTORY}/ directory not found. Run 'python build_local.py' first.")
         sys.exit(1)
+    
+    # Check if site was built for local (check index.html for baseurl)
+    index_file = docs_path / 'index.html'
+    if index_file.exists():
+        with open(index_file, 'r', encoding='utf-8') as f:
+            content = f.read(1000)  # Read first 1000 chars
+            if '/new_blog/' in content:
+                print("=" * 60)
+                print("WARNING: Site built for production (has /new_blog/ prefix)")
+                print("For local testing, rebuild with: python build_local.py")
+                print("=" * 60)
+                print()
     
     # Create handler
     Handler = http.server.SimpleHTTPRequestHandler
