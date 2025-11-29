@@ -409,11 +409,17 @@ class SiteGenerator:
 def main():
     """Main entry point for the generator."""
     import sys
+    import os
     
-    # Load configuration
+    # Load configuration (use local config if USE_LOCAL_CONFIG env var is set)
     try:
-        from config import SITE_CONFIG
-        site_config = SITE_CONFIG
+        if os.environ.get('USE_LOCAL_CONFIG'):
+            from config_local import LOCAL_CONFIG
+            site_config = LOCAL_CONFIG
+            print("Using local development configuration (baseurl='')...")
+        else:
+            from config import SITE_CONFIG
+            site_config = SITE_CONFIG
     except ImportError:
         site_config = {}
     
