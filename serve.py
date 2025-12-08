@@ -30,9 +30,9 @@ if __name__ == '__main__':
     if index_file.exists():
         with open(index_file, 'r', encoding='utf-8') as f:
             content = f.read(1000)  # Read first 1000 chars
-            if '/new_blog/' in content:
+            if '/blog/' in content:
                 print("=" * 60)
-                print("WARNING: Site built for production (has /new_blog/ prefix)")
+                print("WARNING: Site built for production (has /blog/ prefix)")
                 print("For local testing, rebuild with: python build_local.py")
                 print("=" * 60)
                 print()

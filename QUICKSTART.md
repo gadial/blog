@@ -76,7 +76,7 @@ def factorial(n):
 ## Project Structure at a Glance
 
 ```
-new_blog/
+blog/
 ├── build.py              ← Run this to generate
 ├── content/posts/        ← Put your .md files here
 ├── templates/post.html   ← Customize layout here

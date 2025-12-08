@@ -16,7 +16,7 @@ A lightweight Python-based static site generator designed to replace Jekyll for 
 ## Project Structure
 
 ```
-new_blog/
+blog/
 ├── generator/              # Core generator code
 │   ├── __init__.py
 │   ├── post.py            # Post parser and frontmatter handler
@@ -65,7 +65,7 @@ python serve.py
 
 ### Production Build (for GitHub Pages)
 
-To generate HTML with `/new_blog` baseurl:
+To generate HTML with `/blog` baseurl:
 
 ```powershell
 python build.py
@@ -205,14 +205,14 @@ This site is configured to be deployed at https://gadial.net/new_site
 
 ### Initial Setup
 
-1. **Create a new GitHub repository** (e.g., `new_blog`):
+1. **Create a new GitHub repository** (e.g., `blog`):
    ```bash
    # On GitHub.com, create a new repository
    ```
 
 2. **Add remote and push**:
    ```powershell
-   git remote add origin https://github.com/YOUR_USERNAME/new_blog.git
+   git remote add origin https://github.com/YOUR_USERNAME/blog.git
    git branch -M master
    git push -u origin master
    ```
@@ -226,7 +226,7 @@ This site is configured to be deployed at https://gadial.net/new_site
 
 4. **Wait** a few minutes for GitHub Pages to build and deploy
 
-Your site will be available at: `https://YOUR_USERNAME.github.io/new_blog/`
+Your site will be available at: `https://YOUR_USERNAME.github.io/blog/`
 
 ### Custom Domain Setup (for gadial.net/new_site)
 
@@ -234,7 +234,7 @@ Since you want the new blog at https://gadial.net/new_site while keeping the old
 
 **Option 1: Subdirectory on same domain (Recommended)**
 - Keep your old `blog` repository serving https://gadial.net
-- Create this `new_blog` repository
+- Create this `blog` repository
 - Configure it with `baseurl: '/new_site'` (already done in `config.py`)
 - In your web hosting/DNS, set up a redirect or proxy from `/new_site` to the GitHub Pages URL
 

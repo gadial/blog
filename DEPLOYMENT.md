@@ -7,7 +7,7 @@ Your site is ready to deploy! Here's what to do:
 ### 1. Create GitHub Repository
 
 1. Go to https://github.com/new
-2. Repository name: `new_blog` (or any name you prefer)
+2. Repository name: `blog` (or any name you prefer)
 3. Description: "Hebrew Mathematics Blog - Static Site"
 4. **Public** repository (required for free GitHub Pages)
 5. **Do NOT** initialize with README, .gitignore, or license
@@ -19,7 +19,7 @@ Run these commands in PowerShell:
 
 ```powershell
 # Add the remote (replace YOUR_USERNAME with your GitHub username)
-git remote add origin https://github.com/YOUR_USERNAME/new_blog.git
+git remote add origin https://github.com/YOUR_USERNAME/blog.git
 
 # Push your code
 git push -u origin master
@@ -40,12 +40,12 @@ git push -u origin master
 
 - GitHub will build your site (takes 1-3 minutes)
 - Look for a green checkmark in the "Actions" tab
-- Your site will be available at: `https://YOUR_USERNAME.github.io/new_blog/`
+- Your site will be available at: `https://YOUR_USERNAME.github.io/blog/`
 
 ### 5. Access Your Site
 
 Once deployed, your site will be at:
-- Full URL: `https://YOUR_USERNAME.github.io/new_blog/`
+- Full URL: `https://YOUR_USERNAME.github.io/blog/`
 - All pages work because of the `/new_site` baseurl configuration
 
 ## Setting Up gadial.net/new_site
@@ -87,13 +87,13 @@ If you control the web server for gadial.net, set up a reverse proxy or redirect
 **Apache (.htaccess)**:
 ```apache
 RewriteEngine On
-RewriteRule ^new_site/(.*)$ https://YOUR_USERNAME.github.io/new_blog/$1 [P,L]
+RewriteRule ^new_site/(.*)$ https://YOUR_USERNAME.github.io/blog/$1 [P,L]
 ```
 
 **Nginx**:
 ```nginx
 location /new_site/ {
-    proxy_pass https://YOUR_USERNAME.github.io/new_blog/;
+    proxy_pass https://YOUR_USERNAME.github.io/blog/;
     proxy_set_header Host YOUR_USERNAME.github.io;
 }
 ```
