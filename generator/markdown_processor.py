@@ -99,10 +99,11 @@ class MarkdownProcessor:
                 placeholder = f'~~~MATHBLOCK{i}~~~'
                 # Escape HTML entities in math content to prevent browser parsing issues
                 # Replace & with &amp;, < with &lt;, > with &gt;
-                escaped_content = (math_content
-                                   .replace('&', '&amp;')
-                                   .replace('<', '&lt;')
-                                   .replace('>', '&gt;'))
+                escaped_content = math_content
+                # escaped_content = (math_content
+                #                    .replace('&', '&amp;')
+                #                    .replace('<', '&lt;')
+                #                    .replace('>', '&gt;'))
                 if math_type == 'display':
                     # Wrap display math for rendering
                     replacement = f'<div class="math">\\[{escaped_content}\\]</div>'
