@@ -8,7 +8,7 @@ SITE_CONFIG = {
     'direction': 'rtl',
     'author': '',
     'base_url': '',
-    'baseurl': '/blog',  # For GitHub Pages deployment - must match repository name
+    'baseurl': '',  # For GitHub Pages deployment - must match repository name
     
     # Paths
     'content_dir': 'content',
