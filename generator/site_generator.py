@@ -99,6 +99,9 @@ class SiteGenerator:
         # Parse the post
         post = Post(post_file)
         
+        # Set the post URL
+        post.url = f"{self.baseurl}/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+        
         # Process Jekyll-specific syntax
         processed_content = self.jekyll_processor.process(post.content)
         

@@ -18,6 +18,7 @@ class Post:
         self.metadata: Dict[str, Any] = {}
         self.content: str = ""
         self.html_content: str = ""
+        self.url: str = ""  # Will be set by site generator
         self._parse()
     
     def _parse(self):
@@ -89,6 +90,24 @@ class Post:
         slug = re.sub(r'^\d{4}-\d{2}-\d{2}-', '', stem)
         return slug if slug else stem
     
+    @property
+    def excerpt(self) -> str:
+        """Get post excerpt for social media previews.
+        
+        Returns first 200 characters of content or explicit excerpt from metadata.
+        """
+        # Check if explicit excerpt in metadata
+        if 'excerpt' in self.metadata:
+            return self.metadata['excerpt']
+        return "לא מדויק - בלוג על מתמטיקה ומדעי המחשב"
+        # Strip HTML tags and get first 200 chars
+        import re
+        text = re.sub(r'<[^>]+>', '', self.html_content if self.html_content else self.content)
+        text = text.strip()
+        if len(text) > 200:
+            return text[:197] + '...'
+        return text
+    
     def to_dict(self) -> Dict[str, Any]:
         """Convert post to dictionary for template rendering."""
         return {
@@ -99,5 +118,7 @@ class Post:
             'categories': self.categories,
             'tags': self.tags,
             'slug': self.slug,
+            'excerpt': self.excerpt,
+            'url': self.url,
             'metadata': self.metadata
         }
