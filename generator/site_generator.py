@@ -294,6 +294,44 @@ class SiteGenerator:
         
         self.generation_log.append("Generated: random.html")
     
+    def generate_rss(self, posts: list, max_items: int = 20):
+        """Generate RSS feed.
+        
+        Args:
+            posts: List of Post objects
+            max_items: Maximum number of items to include in feed
+        """
+        from email.utils import formatdate
+        
+        # Sort posts by date (newest first) and limit
+        sorted_posts = sorted(posts, key=lambda p: p.date, reverse=True)[:max_items]
+        
+        # Prepare post data for RSS
+        posts_data = []
+        for post in sorted_posts:
+            url = f"https://gadial.net/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+            posts_data.append({
+                'title': post.title,
+                'url': url,
+                'pub_date': formatdate(post.date.timestamp(), localtime=False, usegmt=True),
+                'excerpt': post.excerpt,
+                'categories': post.categories
+            })
+        
+        # Current date for lastBuildDate
+        build_date = formatdate(datetime.now().timestamp(), localtime=False, usegmt=True)
+        
+        # Render template
+        template = self.jinja_env.get_template('rss.xml')
+        xml = template.render(posts=posts_data, build_date=build_date)
+        
+        # Save
+        output_file = self.output_dir / 'feed.xml'
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(xml)
+        
+        self.generation_log.append("Generated: feed.xml")
+    
     def generate_all(self):
         """Generate HTML for all posts in content directory."""
         start_time = datetime.now()
@@ -372,6 +410,7 @@ class SiteGenerator:
             self.generate_index(processed_posts)
             self.generate_post_list(processed_posts)
             self.generate_random(processed_posts)
+            self.generate_rss(processed_posts)
         
         print()
         
