@@ -332,6 +332,70 @@ class SiteGenerator:
         
         self.generation_log.append("Generated: feed.xml")
     
+    def generate_categories(self, posts: list):
+        """Generate category pages.
+        
+        Args:
+            posts: List of Post objects
+        """
+        from collections import defaultdict
+        from urllib.parse import quote
+        
+        # Build category index
+        categories = defaultdict(list)
+        for post in posts:
+            for category in post.categories:
+                url = f"{self.baseurl}/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+                categories[category].append({
+                    'title': post.title,
+                    'date': post.date.strftime('%Y-%m-%d'),
+                    'url': url,
+                    'summary': post.metadata.get('summary', '')
+                })
+        
+        # Sort posts within each category by date (newest first)
+        for category in categories:
+            categories[category].sort(key=lambda p: p['date'], reverse=True)
+        
+        # Create categories directory in output
+        categories_dir = self.output_dir / 'categories'
+        categories_dir.mkdir(exist_ok=True)
+        
+        # Generate individual category pages
+        template = self.jinja_env.get_template('category.html')
+        for category, category_posts in categories.items():
+            # URL encode the category name for the filename
+            category_filename = f"{category}.html"
+            
+            html = template.render(
+                category_name=category,
+                posts=category_posts,
+                post_count=len(category_posts),
+                baseurl=self.baseurl
+            )
+            
+            # Save category page
+            output_file = categories_dir / category_filename
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(html)
+            
+            self.generation_log.append(f"Generated: categories/{category_filename}")
+        
+        # Generate categories index page
+        categories_list = [
+            {'name': cat, 'count': len(posts_list), 'url': f"{self.baseurl}/categories/{cat}.html"}
+            for cat, posts_list in sorted(categories.items())
+        ]
+        
+        template = self.jinja_env.get_template('categories.html')
+        html = template.render(categories=categories_list, baseurl=self.baseurl)
+        
+        output_file = categories_dir / 'index.html'
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(html)
+        
+        self.generation_log.append("Generated: categories/index.html")
+    
     def generate_all(self):
         """Generate HTML for all posts in content directory."""
         start_time = datetime.now()
@@ -411,6 +475,11 @@ class SiteGenerator:
             self.generate_post_list(processed_posts)
             self.generate_random(processed_posts)
             self.generate_rss(processed_posts)
+            
+            # Generate categories if enabled
+            if self.site_config.get('generate_categories', False):
+                print("Generating category pages...")
+                self.generate_categories(processed_posts)
         
         print()
         

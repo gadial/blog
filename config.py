@@ -24,7 +24,7 @@ SITE_CONFIG = {
     'math_renderer': 'katex',  # or 'mathjax'
     'syntax_highlighting': True,
     'generate_index': False,  # Future feature
-    'generate_categories': False,  # Future feature
+    'generate_categories': True,  # Generate category pages
     'generate_tags': False,  # Future feature
     'generate_rss': False,  # Future feature
 }
