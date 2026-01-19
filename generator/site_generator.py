@@ -497,6 +497,69 @@ class SiteGenerator:
         if self.warning_log:
             print(f"\nSee warnings.log for details")
     
+    def generate_latest(self):
+        """Generate only the latest post and update index page.
+        
+        This is useful for quick checks when working on the newest post.
+        """
+        start_time = datetime.now()
+        
+        # Find all post files
+        post_files = sorted(self.content_dir.glob('posts/*.md'), reverse=True)
+        
+        if not post_files:
+            print("No posts found.")
+            return
+        
+        print("Quick build mode: Processing latest post only...")
+        print()
+        
+        # Get the latest post file
+        latest_file = post_files[0]
+        
+        # Process the latest post
+        print(f"Processing: {latest_file.name}")
+        latest_post = self.process_post(latest_file)
+        
+        # For navigation links, we need at least the previous post
+        prev_post = None
+        if len(post_files) > 1:
+            prev_post = self.process_post(post_files[1])
+        
+        # Render and save the latest post
+        html = self.render_post(latest_post, prev_post, None)
+        self.save_post(latest_post, html)
+        print(f"Generated: {latest_post.date.strftime('%Y/%m/%d')}/{latest_post.slug}/")
+        print()
+        
+        # Process all posts for index (but don't render them all)
+        print("Processing all posts for index...")
+        all_posts = []
+        for post_file in post_files:
+            try:
+                post = self.process_post(post_file)
+                all_posts.append(post)
+            except Exception as e:
+                self.warning_log.append(f"Error processing {post_file.name} for index: {e}")
+        
+        # Generate index page
+        print("Regenerating index page...")
+        self.generate_index(all_posts)
+        print()
+        
+        # Write logs
+        self._write_logs()
+        
+        # Calculate duration
+        duration = datetime.now() - start_time
+        
+        print(f"Quick build complete!")
+        print(f"  Latest post: {latest_post.title}")
+        print(f"  Duration: {duration.total_seconds():.1f}s")
+        
+        if self.warning_log:
+            print(f"  Warnings: {len(self.warning_log)} (see warnings.log)")
+    
     def _write_logs(self):
         """Write generation and warning logs to files."""
         # Write generation log
@@ -521,6 +584,15 @@ def main():
     """Main entry point for the generator."""
     import sys
     import os
+    import argparse
+    
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Generate static site from markdown posts')
+    parser.add_argument('--latest', action='store_true',
+                        help='Build only the latest post and regenerate index (fast)')
+    parser.add_argument('file', nargs='?',
+                        help='Build a specific post file')
+    args = parser.parse_args()
     
     # Load configuration (use local config if USE_LOCAL_CONFIG env var is set)
     try:
@@ -544,9 +616,13 @@ def main():
         site_config=site_config
     )
     
-    # Check if a specific file was provided
-    if len(sys.argv) > 1:
-        post_file = Path(sys.argv[1])
+    # Handle different build modes
+    if args.latest:
+        # Quick build: only latest post + index
+        generator.generate_latest()
+    elif args.file:
+        # Build specific file
+        post_file = Path(args.file)
         if post_file.exists():
             generator.generate_post(post_file)
         else:

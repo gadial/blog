@@ -38,13 +38,22 @@ tags:
 ```
 
 3. Generate the HTML:
+
+**Quick build (recommended for working on latest post):**
+```powershell
+python build.py --latest
+```
+This only builds the newest post and updates the index page (~26 seconds).
+
+**Full build (all posts):**
 ```powershell
 python build.py
 ```
+Builds all posts and special pages (~2-3 minutes).
 
 4. Preview in browser:
 ```powershell
-Start-Process "output\$(Get-Date -Format 'yyyy-MM-dd')-my-post.html"
+Start-Process "docs\2026\01\19\counting_mazes\index.html"
 ```
 
 ### Regenerating All Posts
