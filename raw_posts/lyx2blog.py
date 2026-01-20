@@ -92,8 +92,7 @@ def emit(node: TexNode) -> str:
     if node.name in SKIP_TAGS:
         return f'{"".join(map(emit, node))}'
     if node.name in {"section", "section*"}:
-        # return f'<h2>{node.string}</h2>'
-        return f'## {node.string}'
+        return f'\n\n## {"".join(map(emit, node))}\n\n'
     if node.name in {"subsection", "subsection*"}:
         return f'\n\n### {"".join(map(emit, node))}\n\n'
     if node.name in {"paragraph", "paragraph*"}:
@@ -109,21 +108,57 @@ def emit(node: TexNode) -> str:
         url = node.args[0].string
         text = node.args[1].string
         return f'[{text}]({url})'
+    if node.name == "includegraphics":
+        # Extract the path from the arguments
+        # Format: \includegraphics[scale=0.5]{path/to/image}
+        img_path = str(node.args[-1]).strip('{}')  # Get the last arg (the path)
+        # Extract year and filename from path
+        # Path format: C:/Users/gadia/Dropbox/Websites/new_blog/static/img/2026/maze
+        # We want: {{site.baseurl}}{{site.post_images}}/2026/maze.png
+        parts = img_path.replace('\\', '/').split('/')
+        # Find the year (4 digits) and filename after it
+        for i, part in enumerate(parts):
+            if part.isdigit() and len(part) == 4:
+                year = part
+                if i + 1 < len(parts):
+                    filename = parts[i + 1]
+                    # Add .png if no extension
+                    if '.' not in filename:
+                        filename += '.png'
+                    return f'<img src="{{{{site.baseurl}}}}{{{{site.post_images}}}}/{year}/{filename}" alt=""/>\n\n'
+        # Fallback if pattern doesn't match
+        return f'<!-- Could not parse image path: {img_path} -->\n'
     if node.name == "itemize":
         items = [f"- {''.join(map(emit, it))}" for it in node.children if it.name == "item"]
         return "\n".join(items) + "\n"
     if node.name == "enumerate":
         items = [f"1. {''.join(map(emit, it))}" for it in node.children if it.name == "item"]
         return "\n".join(items) + "\n"
-    # 4. verbatim* or minted
+    # 4. verbatim* or minted or lstlisting
     if node.name in {"verbatim*", "minted"}:
         lang = "python"
         body = node_inner_text(node)
         return f"{{% highlight {lang} %}}{body}{{% endhighlight %}}\n"
+    if node.name == "lstlisting":
+        # For lstlisting, we need to preserve all braces, so use str() instead of node_inner_text()
+        lang = "python"
+        # Get the string representation and extract content between \begin{lstlisting} and \end{lstlisting}
+        body_str = str(node)
+        # Remove the \begin{lstlisting} and \end{lstlisting} markers
+        body = re.sub(r'^\\begin\{lstlisting\}', '', body_str)
+        body = re.sub(r'\\end\{lstlisting\}$', '', body)
+        body = body.strip()
+        return f"{{% highlight {lang} %}}\n{body}\n{{% endhighlight %}}\n"
     # 5. math – keep delimiters
     if node.name in {"$", "$$"}:
         body = str(node).replace(node.name, '').strip()
-        return f"{{% equation %}}{body}{{% endequation %}}"
+        # Replace < and > with \lt and \gt to avoid HTML parsing issues
+        body = body.replace('<', r'\lt ').replace('>', r'\gt ')
+        # Add newlines around display equations ($$) but space after inline ($)
+        if node.name == "$$":
+            return f"\n\n{{% equation %}}{body}{{% endequation %}}\n\n"
+        else:
+            return f"{{% equation %}}{body}{{% endequation %}} "
     if node.name == "quote":
         body = ''.join(map(emit, node))
         if is_mostly_hebrew(body):
@@ -180,61 +215,41 @@ def convert(path: Path, out_dir: Path | None = None) -> Path:
     content = re.sub(r'^\\addto[^\n]*\n', '', content, flags=re.MULTILINE)  # Remove \addto lines
     content = re.sub(r'^\\renewcommand[^\n]*\n', '', content, flags=re.MULTILINE)  # Remove \renewcommand lines
     
+    # Remove stray encoding/group commands that appear around code blocks
+    content = re.sub(r'%?\\bgroup\\inputencoding\{[^}]+\}', '', content)
+    content = re.sub(r'\\leavevmode\\egroup%?', '', content)
+    
     # Normalize multiple blank lines to double newlines
     content = re.sub(r'\n\n+', '\n\n', content)
     
-    # Replace single newlines with space (but not around headings or special blocks)
-    # We need to be careful to preserve structure around:
-    # - Headings (lines starting with #)
-    # - Lists (lines starting with - or 1.)
-    # - Code blocks
-    # - Blank lines
+    # Ensure equations that are on separate lines in the source stay on separate lines
+    # If we have endequation followed by whitespace and then equation, normalize to double newline
+    content = re.sub(r'(\{%\s*endequation\s*%\})\s*(\{%\s*equation\s*%\})', r'\1\n\n\2', content)
     
-    lines = content.split('\n')
-    result_lines = []
-    i = 0
+    # TeX has linebreaks in the middle of paragraphs for no reason
+    # Only double linebreaks (blank lines) are actual paragraph breaks
+    # But we need to preserve linebreaks inside code blocks and protect equation blocks
     
-    while i < len(lines):
-        line = lines[i]
-        
-        # Check if this is a structural element that should be on its own line
-        is_structural = (
-            line.strip().startswith('#') or  # Heading
-            line.strip().startswith('- ') or  # List
-            line.strip().startswith('1. ') or  # Numbered list
-            line.strip().startswith('{%') or  # Liquid tag
-            line.strip().startswith('\\') or  # LaTeX command (like \includegraphics)
-            line.strip() == ''  # Blank line
-        )
-        
-        if is_structural or i == 0:
-            result_lines.append(line)
-            i += 1
-        else:
-            # This is a regular text line - check if the next line should be joined
-            if i + 1 < len(lines):
-                next_line = lines[i + 1]
-                next_is_structural = (
-                    next_line.strip().startswith('#') or
-                    next_line.strip().startswith('- ') or
-                    next_line.strip().startswith('1. ') or
-                    next_line.strip().startswith('{%') or
-                    next_line.strip().startswith('\\') or
-                    next_line.strip() == ''
-                )
-                
-                if next_is_structural:
-                    result_lines.append(line)
-                else:
-                    # Join with next line
-                    result_lines.append(line + ' ' + next_line.strip())
-                    i += 1  # Skip the next line since we just joined it
-            else:
-                result_lines.append(line)
-            
-            i += 1
+    # First, extract code blocks and equation blocks, replacing them with placeholders
+    protected_blocks = []
+    def save_protected_block(match):
+        protected_blocks.append(match.group(0))
+        return f'___PROTECTED_BLOCK_{len(protected_blocks)-1}___'
     
-    content = '\n'.join(result_lines)
+    # Protect code blocks
+    content = re.sub(r'\{%\s*highlight\s+\w+\s*%\}.*?\{%\s*endhighlight\s*%\}', 
+                     save_protected_block, content, flags=re.DOTALL)
+    
+    # Protect equation blocks (to preserve any formatting/line breaks around them)
+    content = re.sub(r'\{%\s*equation\s*%\}.*?\{%\s*endequation\s*%\}\s*', 
+                     save_protected_block, content, flags=re.DOTALL)
+    
+    # Now replace single newlines with spaces while preserving double newlines
+    content = re.sub(r'(?<!\n)\n(?!\n)', ' ', content)
+    
+    # Restore protected blocks
+    for i, block in enumerate(protected_blocks):
+        content = content.replace(f'___PROTECTED_BLOCK_{i}___', block)
     
     # Clean up multiple spaces
     content = re.sub(r' +', ' ', content)
