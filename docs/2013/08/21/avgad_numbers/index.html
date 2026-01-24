@@ -542,8 +542,8 @@
 <p>לב העבודה הטכנית שנדרשת כאן היא לעשות שני דברים: בהינתן מילה בעברית, לחשב את הערך הגימטרי שלה; ובהינתן מספר טבעי, לכתוב אותו בעברית. אולי המכשול הראשון שהיה עומד בפני בעבר הוא יכולת ההתמודדות הלא מרשימה של רובי עם עברית, בפרט עברית שמשולבת בתוך קובץ קוד המקור שלה עצמו; אך לא עוד. החל מגרסה 1.9 שלה (שהיא הגרסה הנפוצה כיום), רובי תומכת בדבר הנפלא שנקרא "יוניקוד" ולא אכנס אל משמעותו כרגע אלא רק אעיר שזה מאפשר לנו לכתוב עברית בחופשיות בתור מחרוזות בתוך הקוד של רובי. רק צריך בתחילת הקובץ להוסיף הערה שתבהיר לרובי שאנחנו משתמשים ביוניקוד:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="c1"># encoding: UTF-8</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby"># encoding: UTF-8
+</code></pre>
 
 
 </div>
@@ -551,12 +551,12 @@
 <p>עכשיו אפשר לכתוב את הקוד של הפונקציה שמקבלת מחרוזת ומחזירה את הערך הגימטרי שלה (סכום הערכים הגימטריים של האותיות העבריות שבתוך המחרוזת). עשיתי את זה בשיטה המקובלת ברובי - הרחבתי את המחלקה של מחרוזת כדי שתכיל מתודה חדשה. לא באמת חייבים להבין את הרעיון הזה כדי להבין את הקוד:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">String</span>
-<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">gematric_value</span>
-<span class="w">    </span><span class="nb">self</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="o">|</span><span class="w"> </span><span class="no">LETTER_VALUES</span><span class="o">[</span><span class="n">a</span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="mi">0</span><span class="p">){</span><span class="o">|</span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">}</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">class String
+  def gematric_value
+    self.split(&quot;&quot;).collect{|a| LETTER_VALUES[a] || 0}.inject(0){|sum, x| sum + x}
+  end
+end
+</code></pre>
 
 
 </div>
@@ -564,36 +564,36 @@
 <p>זו פונקציה פשוטה מאוד לבקיאים ברובי - לוקחים את המחרוזת, מפצלים אותה לאותיות, כל אות מחליפים בערך הגימטרי שלה, ואז סוכמים. רק דבר אחד חסר - הגדרה של LETTER_VALUES. מה זה? ובכן, זה מה שנקרא ברובי Hash ובעברית אני מעדיף לקרוא לו <strong>מילון</strong>: אפשר לחשוב על זה בתור רשימה עם אינדקסים, כאשר במקרה שלנו האינדקסים הם אותיות בעברית, והערך שנמצא ב-LETTER_VALUES עבור כל אות הוא הערך הגימטרי שלה. ומאיפה המילון הזה הגיע? אני כתבתי אותו:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="no">LETTER_VALUES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="s2">&quot;א&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ב&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ג&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ד&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ה&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ו&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ז&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ח&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ט&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;י&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;כ&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ך&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ל&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;מ&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ם&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;נ&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ן&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ס&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ע&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">70</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;פ&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ף&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;צ&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ץ&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ק&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ר&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ש&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;ת&quot;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">400</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">LETTER_VALUES = {
+      &quot;א&quot; =&gt; 1,
+      &quot;ב&quot; =&gt; 2,
+      &quot;ג&quot; =&gt; 3,
+      &quot;ד&quot; =&gt; 4,
+      &quot;ה&quot; =&gt; 5,
+      &quot;ו&quot; =&gt; 6,
+      &quot;ז&quot; =&gt; 7,
+      &quot;ח&quot; =&gt; 8,
+      &quot;ט&quot; =&gt; 9,
+      &quot;י&quot; =&gt; 10,
+      &quot;כ&quot; =&gt; 20,
+      &quot;ך&quot; =&gt; 20,
+      &quot;ל&quot; =&gt; 30,
+      &quot;מ&quot; =&gt; 40,
+      &quot;ם&quot; =&gt; 40,
+      &quot;נ&quot; =&gt; 50,
+      &quot;ן&quot; =&gt; 50,
+      &quot;ס&quot; =&gt; 60,
+      &quot;ע&quot; =&gt; 70,
+      &quot;פ&quot; =&gt; 80,
+      &quot;ף&quot; =&gt; 80,
+      &quot;צ&quot; =&gt; 90,
+      &quot;ץ&quot; =&gt; 90,
+      &quot;ק&quot; =&gt; 100,
+      &quot;ר&quot; =&gt; 200,
+      &quot;ש&quot; =&gt; 300,
+      &quot;ת&quot; =&gt; 400
+}
+</code></pre>
 
 
 </div>
@@ -604,55 +604,55 @@
 <p>ראשית, המילון - שוב, עבודה של דקה בערך והוא היה כתוב:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="no">HEBREW_NUMBER_NAMES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="mi">1</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;אחת&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">2</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שתיים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">3</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שלוש&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">4</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;ארבע&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">5</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;חמש&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">6</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שש&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">7</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שבע&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">8</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שמונה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">9</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;תשע&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">10</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;עשר&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">11</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;אחת עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">12</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שתים עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">13</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שלוש עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">14</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;ארבע עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">15</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;חמש עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">16</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שש עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">17</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שבע עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">18</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שמונה עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">19</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;תשע עשרה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">20</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;עשרים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">30</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שלושים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">40</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;ארבעים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">50</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;חמישים&quot;</span><span class="p">,</span>
-<span class="w">   </span><span class="mi">60</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שישים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">70</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שבעים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">80</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שמונים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">90</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;תשעים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">100</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;מאה&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">200</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;מאתיים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">300</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שלוש מאות&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">400</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;ארבע מאות&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">500</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;חמש מאות&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">600</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שש מאות&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">700</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שבע מאות&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">800</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שמונה מאות&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">900</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;תשע מאות&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">1000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;אלף&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">2000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;אלפיים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">3000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שלושת אלפים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">4000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;ארבעת אלפים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">5000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;חמשת אלפים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">6000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;ששת אלפים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">7000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שבעת אלפים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">8000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;שמונת אלפים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">9000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;תשעת אלפים&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="mi">10000</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">&quot;עשרת אלפים&quot;</span>
-<span class="w">  </span><span class="p">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">HEBREW_NUMBER_NAMES = {
+  1 =&gt; &quot;אחת&quot;,
+  2 =&gt; &quot;שתיים&quot;,
+  3 =&gt; &quot;שלוש&quot;,
+  4 =&gt; &quot;ארבע&quot;,
+  5 =&gt; &quot;חמש&quot;,
+  6 =&gt; &quot;שש&quot;,
+  7 =&gt; &quot;שבע&quot;,
+  8 =&gt; &quot;שמונה&quot;,
+  9 =&gt; &quot;תשע&quot;,
+  10 =&gt; &quot;עשר&quot;,
+  11 =&gt; &quot;אחת עשרה&quot;,
+  12 =&gt; &quot;שתים עשרה&quot;,
+  13 =&gt; &quot;שלוש עשרה&quot;,
+  14 =&gt; &quot;ארבע עשרה&quot;,
+  15 =&gt; &quot;חמש עשרה&quot;,
+  16 =&gt; &quot;שש עשרה&quot;,
+  17 =&gt; &quot;שבע עשרה&quot;,
+  18 =&gt; &quot;שמונה עשרה&quot;,
+  19 =&gt; &quot;תשע עשרה&quot;,
+  20 =&gt; &quot;עשרים&quot;,
+  30 =&gt; &quot;שלושים&quot;,
+  40 =&gt; &quot;ארבעים&quot;,
+  50 =&gt; &quot;חמישים&quot;,
+   60 =&gt; &quot;שישים&quot;,
+  70 =&gt; &quot;שבעים&quot;,
+  80 =&gt; &quot;שמונים&quot;,
+  90 =&gt; &quot;תשעים&quot;,
+  100 =&gt; &quot;מאה&quot;,
+  200 =&gt; &quot;מאתיים&quot;,
+  300 =&gt; &quot;שלוש מאות&quot;,
+  400 =&gt; &quot;ארבע מאות&quot;,
+  500 =&gt; &quot;חמש מאות&quot;,
+  600 =&gt; &quot;שש מאות&quot;,
+  700 =&gt; &quot;שבע מאות&quot;,
+  800 =&gt; &quot;שמונה מאות&quot;,
+  900 =&gt; &quot;תשע מאות&quot;,
+  1000 =&gt; &quot;אלף&quot;,
+  2000 =&gt; &quot;אלפיים&quot;,
+  3000 =&gt; &quot;שלושת אלפים&quot;,
+  4000 =&gt; &quot;ארבעת אלפים&quot;,
+  5000 =&gt; &quot;חמשת אלפים&quot;,
+  6000 =&gt; &quot;ששת אלפים&quot;,
+  7000 =&gt; &quot;שבעת אלפים&quot;,
+  8000 =&gt; &quot;שמונת אלפים&quot;,
+  9000 =&gt; &quot;תשעת אלפים&quot;,
+  10000 =&gt; &quot;עשרת אלפים&quot;
+  }
+</code></pre>
 
 
 </div>
@@ -660,22 +660,22 @@
 <p>וכעת לפונקציה עצמה, שהיא הרחבה של המחלקה של מספרים שלמים:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Integer</span>
-<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">to_hebrew_name</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="no">HEBREW_NUMBER_NAMES</span><span class="o">[</span><span class="nb">self</span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="no">HEBREW_NUMBER_NAMES</span><span class="o">[</span><span class="nb">self</span><span class="o">]</span>
-<span class="w">    </span><span class="n">name_parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span>
-<span class="w">    </span><span class="n">digits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reverse</span><span class="o">.</span><span class="n">collect_with_index</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="p">,</span><span class="n">i</span><span class="o">|</span><span class="w"> </span><span class="n">x</span><span class="o">.</span><span class="n">to_i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">10</span><span class="o">**</span><span class="n">i</span><span class="p">}</span><span class="o">.</span><span class="n">reverse</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">digits</span><span class="o">[-</span><span class="mi">2</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">digits</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">      </span><span class="n">digits</span><span class="o">[-</span><span class="mi">2</span><span class="o">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">digits</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span>
-<span class="w">      </span><span class="n">digits</span><span class="o">.</span><span class="n">pop</span>
-<span class="w">    </span><span class="k">end</span>
-<span class="w">    </span><span class="n">digit_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digits</span><span class="o">.</span><span class="n">reject</span><span class="p">{</span><span class="o">|</span><span class="n">d</span><span class="o">|</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">d</span><span class="o">|</span><span class="w"> </span><span class="n">d</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="p">}</span>
-<span class="w">    </span><span class="n">digit_names</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ו&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">digit_names</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span>
-<span class="w">    </span><span class="nb">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digit_names</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">name</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">class Integer
+  def to_hebrew_name
+    return HEBREW_NUMBER_NAMES[self] if HEBREW_NUMBER_NAMES[self]
+    name_parts = []
+    digits = self.to_s.split(&quot;&quot;).reverse.collect_with_index{|x,i| x.to_i * 10**i}.reverse
+    if digits[-2] == 10 and digits[-1] != 0
+      digits[-2] += digits[-1]
+      digits.pop
+    end
+    digit_names = digits.reject{|d| d == 0}.collect{|d| d.to_hebrew_name}
+    digit_names[-1] = &quot;ו&quot; + digit_names[-1]
+    name = digit_names.join(&quot; &quot;)
+    name
+  end
+end
+</code></pre>
 
 
 </div>
@@ -684,14 +684,14 @@
 <p>יש לי רמאות קטנה בקוד - אני משתמש בפונקציה בשם collect_with_index שממש מתבקש שתהיה חלק מהספריה הסטנדרטית של רובי, אבל היא לא (ב-rails, שהוא תשתית לאתרי אינטרנט שמבוססת על רובי, דווקא יש כזו). אז מימשתי אותה בעצמי:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Array</span>
-<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">collect_with_index</span>
-<span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span>
-<span class="w">    </span><span class="nb">self</span><span class="o">.</span><span class="n">each_index</span><span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">yield</span><span class="p">(</span><span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">)}</span>
-<span class="w">    </span><span class="n">result</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">class Array
+  def collect_with_index
+    result = []
+    self.each_index{|i| result &lt;&lt; yield(self[i], i)}
+    result
+  end
+end
+</code></pre>
 
 
 </div>
@@ -699,10 +699,10 @@
 <p>נהדר. מה עושים עכשיו? עכשיו מגיע השלב ה"מחקרי". פיתחתי את הכלים, עכשיו אפשר לנסות ולקפוץ לתוך הנתונים. דבר ראשון, במתח, בחיל וברעדה כותבים את הקוד שמחפש מספרי עבגד ומדפיס אותם:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">8000</span><span class="p">)</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">n</span><span class="o">|</span>
-<span class="w">     </span><span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">n</span><span class="si">}</span><span class="s2"> =&gt; </span><span class="si">#{</span><span class="n">n</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="si">}</span><span class="s2"> =&gt; </span><span class="si">#{</span><span class="n">n</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="o">.</span><span class="n">gematric_value</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">n</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="o">.</span><span class="n">gematric_value</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">(1..8000).each do |n|
+     puts &quot;#{n} =&gt; #{n.to_hebrew_name} =&gt; #{n.to_hebrew_name.gematric_value}&quot; if (n == n.to_hebrew_name.gematric_value)
+end
+</code></pre>
 
 
 </div>
@@ -712,8 +712,8 @@
 <p>אז מה עכשיו? קודם כל, בואו ננסה לקבל רושם כללי לגבי מה המספרים שבכלל עשויים להתקבל כפלט של <span class="math">\(f\)</span> עבור קלטים שהם עד 10,000:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="nb">puts</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">...</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span><span class="w"> </span><span class="n">n</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="o">.</span><span class="n">gematric_value</span><span class="p">}</span><span class="o">.</span><span class="n">max</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">puts (1...10000).collect{|n| n.to_hebrew_name.gematric_value}.max
+</code></pre>
 
 
 </div>
@@ -724,33 +724,33 @@
 <p>אז מה עושים הלאה? עבגד ביקש למצוא את המעגלים שהפונקציה יוצרת. מעגל כזה, נזכיר, הוא סדרה של מספרים (שחוזרת על עצמה בסופו של דבר) שכל מספר בה מתקבל מקודמו על ידי הפעלת הפונקציה. מה שקורה עבור כל מספר הוא שאנחנו מפעילים את הפונקציה עליו שוב ושוב עד אשר לבסוף אנחנו פוגעים במספר שנמצא על מעגל, ואז אנחנו מתקדמים במעגל עד שאנחנו חוזרים אל המספר הראשון מתוך המעגל שפגענו בו (כך שאם נצייר את המסלול שעשינו הוא נראה כמו מעין "לאסו"). לכן הדרך הפשוטה למצוא מעגלים היא לבחור מספר, להפעיל את הפונקציה עליו שוב ושוב עד שאנחנו מגיעים למספר שכבר ראינו בעבר. אם זה מספר שנמצא על המסלול הנוכחי, אנחנו במעגל ונוסיף אותו לרשימת המעגלים שלנו; אם זה מספר שנמצא במסלול שמצאנו בעבר, אז התחברנו למעגל קיים. בכל מקרה נעבור כעת למספר אחר ונתחיל להפעיל עליו את הפונקציה. אחרי שסיימנו יש לנו רשימה של "לאסו"-אים; כדי לקבל מהם מעגלים "טהורים" אני פשוט חוזר על התהליך שוב, אבל מתחיל מהאיבר האחרון בכל לאסו, שמובטח לי שהוא אכן על המעגל עצמו (למה?). הקוד שעושה את זה אצלי הוא קצת מכוער כי בעיקר רציתי לגרום לו לרוץ מהר (מה שנקרא quick and dirty בעגה תכנותית), אבל הוא עובד לא רע:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_cycles</span>
-<span class="w">  </span><span class="n">nums</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5000</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
-<span class="w">  </span><span class="n">cycles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">nums</span><span class="o">.</span><span class="n">empty?</span>
-<span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nums</span><span class="o">.</span><span class="n">shift</span>
-<span class="w">    </span><span class="n">cycle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">n</span><span class="o">]</span>
-<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="kp">true</span>
-<span class="w">      </span><span class="n">next_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cycle</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="o">.</span><span class="n">gematric_value</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">nums</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">next_n</span><span class="p">)</span>
-<span class="w">    </span><span class="n">cycles</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cycle</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">cycle</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">next_n</span><span class="p">)</span>
-<span class="w">    </span><span class="k">break</span>
-<span class="w">      </span><span class="k">end</span>
-<span class="w">      </span><span class="n">cycle</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">next_n</span>
-<span class="w">      </span><span class="n">nums</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">next_n</span><span class="p">)</span>
-<span class="w">    </span><span class="k">end</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="w">  </span><span class="n">new_cycles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">cycles</span><span class="w"> </span><span class="k">do</span>
-<span class="w">    </span><span class="n">new_c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">c</span><span class="o">.</span><span class="n">last</span><span class="o">]</span>
-<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">new_c</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="o">.</span><span class="n">gematric_value</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">new_c</span><span class="o">.</span><span class="n">first</span>
-<span class="w">      </span><span class="n">new_c</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">new_c</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="o">.</span><span class="n">gematric_value</span>
-<span class="w">    </span><span class="k">end</span>
-<span class="w">  </span><span class="n">new_cycles</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">new_c</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="w">  </span><span class="n">new_cycles</span>
-<span class="k">end</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">def find_cycles
+  nums = (1..5000).to_a
+  cycles = []
+  while not nums.empty?
+    n = nums.shift
+    cycle = [n]
+    while true
+      next_n = cycle.last.to_hebrew_name.gematric_value
+      if not nums.include?(next_n)
+    cycles &lt;&lt; cycle if cycle.include?(next_n)
+    break
+      end
+      cycle &lt;&lt; next_n
+      nums.delete(next_n)
+    end
+  end
+  new_cycles = []
+  for c in cycles do
+    new_c = [c.last]
+    while new_c.last.to_hebrew_name.gematric_value != new_c.first
+      new_c &lt;&lt; new_c.last.to_hebrew_name.gematric_value
+    end
+  new_cycles &lt;&lt; new_c
+  end
+  new_cycles
+end
+</code></pre>
 
 
 </div>
@@ -765,18 +765,18 @@
 <p>אז מה, שנתייאש? חלילה. אם לא הצלחנו למצוא מספר עבגד בצורה ישרה, נתחיל לרמות ולשנות את חוקי המשחק! למשל, אבינעם יגור מצא ש-"אלף מאה חמש ושש" הוא 1111 בגימטריה. זו לא צורת כתיבה חוקית; אז מה, למה שזה יהיה פחות מגניב? למה הדיקטטורה הזו של צורת הכתיבה החוקית של מילים בעברית? עבגד גם הציע לקרוא בשם "מספרי אבגד" למספרים ששווים לגימטריה של צורת כתיבה לא תקנית של עצמם. התחושה שלי, שתכף אסביר אותה, הייתה שכל צורת כתיבה שבה מערבים <strong>שני</strong> מספרים תיתן לנו שלל תוצאות אפשריות, ואכן לא התבדיתי. כך מצאתי חיש קל את "המספר שאם מוסיפים לו מאה מקבלים אלפיים ושש מאות" (הניסוח המסורבל הוא מכוון לצורך השעשוע) וגם המון זוגות אחרים שעבורם זה עובד (מה עובד? הערך הגימטרי של המשפט הזה הוא 2500, וזה גם בדיוק המספר שאם מוסיפים לו 100 מקבלים 2600...). אפשר כמובן גם דברים פשוטים יותר, למשל "ארבע מאות ועוד אלף שבע מאות וחמישים" שיוצא גם בגימטרית וגם חשבונית 2150. הנה למשל הקוד ששימש אותי במציאת הזוג האחרון:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_for_pair</span>
-<span class="w">  </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2100</span>
-<span class="w">  </span><span class="n">nums</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="n">max</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span><span class="w"> </span><span class="n">n</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="o">.</span><span class="n">gematric_value</span><span class="p">}</span>
-<span class="w">  </span><span class="n">nums</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="kp">nil</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nums</span>
+<pre class="highlight"><code class="language-ruby">def find_for_pair
+  max = 2100
+  nums = (1..max).collect{|n| n.to_hebrew_name.gematric_value}
+  nums = [nil] + nums
 
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="n">max</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">...</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
-<span class="w">      </span><span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">y</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">nums</span><span class="o">[</span><span class="n">x</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nums</span><span class="o">[</span><span class="n">y</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">86</span><span class="p">)</span>
-<span class="w">    </span><span class="k">end</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div>
+  for x in (1..max) do
+    for y in (1...x) do
+      puts &quot;#{x}, #{y}&quot; if (x+y == nums[x] + nums[y] + 86)
+    end
+  end
+end
+</code></pre>
 
 
 </div>
@@ -785,20 +785,20 @@
 <p>ייתכן שכל זה עדיין לא מפיס את דעתכם. אל דאגה! הלל גרשוני הגיע לדיון והסביר שהדרך התקנית, התנ"כית, לכתוב מספרים היא בכלל כן לשים "ו" לפני כל מספר פרט לראשון. למשל, "מאה ועשרים ואחת". זה מוביל לפונקציה הבאה:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">to_hebrew_name_bible_style</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="no">HEBREW_NUMBER_NAMES</span><span class="o">[</span><span class="nb">self</span><span class="o">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="no">HEBREW_NUMBER_NAMES</span><span class="o">[</span><span class="nb">self</span><span class="o">]</span>
-<span class="w">    </span><span class="n">name_parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span>
-<span class="w">    </span><span class="n">digits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reverse</span><span class="o">.</span><span class="n">collect_with_index</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="p">,</span><span class="n">i</span><span class="o">|</span><span class="w"> </span><span class="n">x</span><span class="o">.</span><span class="n">to_i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">10</span><span class="o">**</span><span class="n">i</span><span class="p">}</span><span class="o">.</span><span class="n">reverse</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">digits</span><span class="o">[-</span><span class="mi">2</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">digits</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">      </span><span class="n">digits</span><span class="o">[-</span><span class="mi">2</span><span class="o">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">digits</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span>
-<span class="w">      </span><span class="n">digits</span><span class="o">.</span><span class="n">pop</span>
-<span class="w">    </span><span class="k">end</span>
-<span class="w">    </span><span class="n">digit_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digits</span><span class="o">.</span><span class="n">reject</span><span class="p">{</span><span class="o">|</span><span class="n">d</span><span class="o">|</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">d</span><span class="o">|</span><span class="w"> </span><span class="n">d</span><span class="o">.</span><span class="n">to_hebrew_name</span><span class="p">}</span>
-<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="o">...</span><span class="n">digit_names</span><span class="o">.</span><span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">each</span><span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span><span class="w"> </span><span class="n">digit_names</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ו&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">digit_names</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">}</span>
-<span class="w">    </span><span class="nb">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digit_names</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nb">name</span>
-<span class="w">  </span><span class="k">end</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">  def to_hebrew_name_bible_style
+    return HEBREW_NUMBER_NAMES[self] if HEBREW_NUMBER_NAMES[self]
+    name_parts = []
+    digits = self.to_s.split(&quot;&quot;).reverse.collect_with_index{|x,i| x.to_i * 10**i}.reverse
+    if digits[-2] == 10 and digits[-1] != 0
+      digits[-2] += digits[-1]
+      digits.pop
+    end
+    digit_names = digits.reject{|d| d == 0}.collect{|d| d.to_hebrew_name}
+    (1...digit_names.length).each{|i| digit_names[i] = &quot;ו&quot; + digit_names[i]}
+    name = digit_names.join(&quot; &quot;)
+    name
+  end
+</code></pre>
 
 
 </div>

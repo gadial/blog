@@ -544,32 +544,32 @@
 <p>הדטרמיננטה הזו נקראת <strong>דטרמיננטת קיילי-מנגר</strong> והיא ראויה לפוסט בפני עצמה (היא עושה יותר מאשר לחשב נפח של טטרהדרון) והאמת העצובה היא שהדרך הכי פשוטה לחשב אותה היא פשוט להשתמש בנוסחה הרקורסיבית - זו בסך הכל מטריצת <span class="math">\(5\times5\)</span>, הרקורסיה תסתיים כמעט מייד, ואין צורך באלגוריתם שאני הולך להציג - אבל את זה נזכרתי לנסות רק אחרי שכבר מימשתי את האלגוריתם (כי על מי אני עובד, כל כך התלהבתי מהאלגוריתם שהייתי חייב לממש אותו בכל מקרה). אבל למה היא גרמה לי להגיע אל אלגוריתם בריס מלכתחילה? ובכן, כי עשיתי את הטעות של לחשב אותה באמצעות numpy. מבלי להיכנס לפרטים, המטרה שלי הייתה למצוא אורכי צלעות שעבורם הדטרמיננטה תהיה שווה בדיוק ל-256. עכשיו, בואו נניח שיש לנו מספר שלם <span class="math">\(n\)</span> כלשהו ואנחנו מסתכלים על הדטרמיננטה</p>
 <p><span class="math">\(\left|\begin{array}{ccccc} 0 & 1 & 1 & 1 & 1\\ 1 & 0 & 1 & n^{2} & n^{2}\\ 1 & 1 & 0 & \left(n-1\right)^{2} & \left(n-1\right)^{2}\\ 1 & n^{2} & \left(n-1\right)^{2} & 0 & 4\\ 1 & n^{2} & \left(n-1\right)^{2} & 4 & 0 \end{array}\right|\)</span></p>
 <p>שהיא מקרה פרטי של הדטרמיננטה לעיל עבור סדרת האורכים <span class="math">\(1,n,n,n-1,n-1,2\)</span>. אם מחשבים את הדטרמיננטה בצורה סימבולית (כלומר, פשוט פותחים את הביטוי, מקבלים פולינום ב-<span class="math">\(n\)</span> ומפשטים אותו) מקבלים <span class="math">\(-32\)</span>, כלומר הערך של הדטרמיננטה הזו לא תלוי ב-<span class="math">\(n\)</span>. למי שתוהים איך עושים את זה במחשב בלי לעבור את התהליך המהנה של לחשב ידנית דטרמיננטה <span class="math">\(5\times5\)</span>, אפשר לעשות את זה עם ספריית הפייתון sympy:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+<pre class="highlight"><code class="language-python">import sympy as sp
 
-<span class="n">n</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span>
-<span class="n">matrix</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-<span class="p">])</span>
-<span class="n">determinant</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">det</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">determinant</span><span class="p">))</span>
-</code></pre></div>
+n = sp.symbols('n')
+matrix = sp.Matrix([
+    [0, 1, 1, 1, 1],
+    [1, 0, 1, n**2, n**2],
+    [1, 1, 0, (n-1)**2, (n-1)**2],
+    [1, n**2, (n-1)**2, 0, 4],
+    [1, n**2, (n-1)**2, 4, 0]
+])
+determinant = matrix.det()
+print(sp.simplify(determinant))
+</code></pre>
 
 <p>טוב ויפה, אלא שאני לא השתמשתי ב-sympy כי בדקתי שלל דטרמיננטות משלל סוגים ולא רק מהמבנה הספציפי הזה שאותו מצאתי אחר כך. ספציפית, אני בדקתי את הדטרמיננטה שמתקבלת עבור הערך <span class="math">\(n=524,283\)</span> וחישבתי אותו בעזרת הספריה הסטנדרטית לחישובים נומריים בפייתון - numpy. ומה ש-numpy נתנה הוא את התוצאה <span class="math">\(255.99999991524982\)</span>.</p>
 <p>במבט ראשון, התוצאה הזו היא "זה 256, פשוט numpy משתמשת בייצוג שברים עם נקודה צפה ולכן יש אי דיוקים קטנים". אבל לא! זו דרך טובה לעבוד על עצמנו! כי אם אני מכניס <span class="math">\(n=524,283\)</span> ואז עוד מעלה דברים בריבוע, אני עובד עם מספרי ענק ולכן יש לי שגיאות דיוק גדולות, וחישובים שקשורים במטריצות יכולים להיות מאוד רגישים לשגיאות דיוק, וזה מתנפח ומתנפח. התוצאה, כאמור, הייתה אמורה להיות <span class="math">\(-32\)</span>; זה שהגענו אל כמעט 256 זה סתם מקרה (על ידי ערכים שונים של <span class="math">\(n\)</span> אפשר להגיע קרוב לשלל מספרים שלמים לא קשורים, פשוט 256 היה מה שחיפשנו). הנה קוד פייתון שמשתמש ב-numpy ומאפשר לראות מה הולך פה. עבור <span class="math">\(n=1\)</span> החישוב מדויק כמעט לחלוטין, וכך גם עבור <span class="math">\(n=10,000\)</span>; אבל כשהוא נשבר, הוא נשבר <strong>חזק</strong>.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">524283</span><span class="p">]:</span>
-    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>    <span class="mi">1</span><span class="p">,</span>        <span class="mi">1</span><span class="p">,</span>        <span class="mi">1</span><span class="p">],</span>
-                  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>    <span class="mi">1</span><span class="p">,</span>        <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>     <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
-                  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>        <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
-                  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>         <span class="mi">4</span><span class="p">],</span>
-                  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>         <span class="mi">0</span><span class="p">]]</span>
-                  <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">import numpy as np
+for n in [1, 10000, 524283]:
+    A = np.array([[0, 1,    1,        1,        1],
+                  [1, 0,    1,        n**2,     n**2],
+                  [1, 1,    0,        (n-1)**2, (n-1)**2],
+                  [1, n**2, (n-1)**2, 0,         4],
+                  [1, n**2, (n-1)**2, 4,         0]]
+                  )
+    print(np.linalg.det(A))
+</code></pre>
 
 <p>הבעיה פה היא כאמור ש-numpy מייצג שברים בשיטת הנקודה הצפה, ולכן יש לו רמת דיוק מוגבלת, בעוד שבפייתון יש רמת דיוק בלתי מוגבלת לעבודה עם מספרים שלמים. אז מכיוון שחשדתי ש-numpy מרמה אותי החלטתי שאני לא צריך להתעצל ולהסתמך עליו או אפילו לחפש ספריה אחרת שמבצעת את החישוב (כי אולי גם היא תרמה אותי?) אלא פשוט לממש את זה בעצמי. עכשיו, <strong>הייתי יכול</strong> להשתמש באלגוריתם הרקורסיבי הנאיבי; וגם <strong>הייתי יכול</strong> להשתמש בשיטה מבוססת השברים שראינו, ופשוט להשתמש בספריה frac בפייתון שמאפשרת ייצוג של שברים עם דיוק לא מוגבל. אבל באותו הרגע הדבר הראשון שעלה לי לראש היה לחפש "אלגוריתם לחישוב דטרמיננטה שלא משתמש בשברים" ואני שמח שזה קרה כי אלגוריתם בריס הוא די מגניב גם אם הייתי יכול להסתדר בלעדיו.</p>
 <p>אז בואו נדבר עליו סוף סוף.</p>
@@ -692,26 +692,26 @@
 
 <p>בפועל כשכותבים קוד לא כזה כיף להוסיף משתנה <span class="math">\(A_{00}\)</span> כי צריך קוד מיוחד לטפל בו ולא במטריצה <span class="math">\(A\)</span>, ולכן הרבה יותר פשוט לבדוק אם <span class="math">\(k=1\)</span> ואם כן - פשוט לוותר על פעולת החילוק באיטרציה הזו של האלגוריתם. בקוד שאצרף עוד רגע אפשר יהיה לראות את זה.</p>
 <p>יש רק דבר אחד שטרם התייחסתי אליו - מה קורה אם אחד מהמינורים העיקריים הוא עם דטרמיננטה 0? במקרה הזה, החישוב יניב בשלב כלשהו <span class="math">\(A_{kk}=0\)</span> ואי אפשר יהיה לחלק בו. בסיטואציה הזו עושים דבר דומה למה שהיה באלגוריתם ה"רגיל" לדטרמיננטה - מחפשים בעמודה ה-<span class="math">\(k\)</span>-ית החל מהשורה ה-<span class="math">\(k+1\)</span> כניסה ששונה מאפס, ואם נמצאה כזו - מחליפים את השורות ומכפילים את הסימן של הדטרמיננטה ב-<span class="math">\(-1\)</span>. זה האלגוריתם המלא (שימו לב שבפייתון // מייצג חילוק בשלמים - כלומר, חילוק שמתעלם מהשארית, אם יש כזו, ומחזיר רק את המנה השלמה):</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">bareiss_det</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-                    <span class="n">sign</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-                    <span class="k">break</span>
-            <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-                <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                     <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">//</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
-    <span class="k">return</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">def bareiss_det(A):
+    sign = 1
+    n = len(A)
+    for k in range(n-1):
+        if A[k][k] == 0:
+            for i in range(k+1,n):
+                if A[i][k] != 0:
+                    A[k], A[i] = A[i], A[k]
+                    sign *= -1
+                    break
+            if A[k][k] == 0:
+                return 0
+        for i in range(k+1, n):
+            for j in range(k+1, n):
+                A[i][j] = (A[i][j] * A[k][k] - A[i][k] * A[k][j])
+                if k != 0:
+                     A[i][j] = A[i][j] // A[k-1][k-1]
+            A[i][k]=0
+    return sign * A[-1][-1]
+</code></pre>
         </article>
         
         <footer>

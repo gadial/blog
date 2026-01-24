@@ -542,16 +542,16 @@
 <p>זו נוסחה רקורסיבית, אז היא צריכה תנאי התחלה - מקרה בסיסי כל כך שבו לא צריך לחשב דטרמיננטה של משהו קטן יותר. די מתבקש להסתכל על המקרה של מטריצה בת איבר בודד ואז הדטרמיננטה שלה היא האיבר הבודד הזה. ומה קורה עם מטריצה מסדר <span class="math">\(2\times2\)</span>?</p>
 <p><span class="math">\(A=\left[\begin{array}{cc} a_{11} & a_{12}\\ a_{21} & a_{22} \end{array}\right]\)</span></p>
 <p>נפתח את הדטרמיננטה על פי השורה הראשונה: ראשית ניקח את <span class="math">\(a_{11}\)</span>, נמחק את השורה והעמודה הראשונות ונקבל את המטריצה <span class="math">\(\left[a_{22}\right]\)</span> שהדטרמיננטה שלה היא <span class="math">\(a_{22}\)</span>, אז האיבר הראשון בסכום הוא <span class="math">\(a_{11}a_{22}\)</span>. עכשיו נעבור אל <span class="math">\(a_{12}\)</span>, נמחק שורה ראשונה ועמודה שניה, נקבל דטרמיננטה <span class="math">\(a_{21}\)</span>, נכפיל ונשים סימן חיסור על הכל, ונקבל בסך הכל ש-<span class="math">\(\left|A\right|=a_{11}a_{22}-a_{12}a_{21}\)</span>. עכשיו תנסו לעשות את אותו הדבר עם פיתוח של שורה אחרת או עמודה אחרת (למשל, עמודה 2) ותראו איך יוצא אותו דבר (אם סימני הפלוס/מינוס לא מסתדרים תזכרו את הגורם <span class="math">\(\left(-1\right)^{i+j}\)</span>; לא <strong>תמיד</strong> כשמפתחים לפי שורה או עמודה כלשהי, האיבר הראשון שבו מטפלים יהיה עם סימן חיובי).</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">det</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="n">minor_matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)]</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">k</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">det</span><span class="p">(</span><span class="n">minor_matrix</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">result</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">def det(A):
+    n = len(A)
+    if n == 1:
+        return A[0][0]
+    result = 0
+    for k in range(n):
+        minor_matrix = [[A[i][j] for j in range(n) if j != k] for i in range(1, n)]
+        result += (-1)**k * A[0][k] * det(minor_matrix)
+    return result
+</code></pre>
 
 <p>האם זה עובד טוב? לא, זה עובד איום ונורא. זה ירוץ ויחזיר את התוצאה הנכונה, אבל <strong>באיזה מחיר</strong>? המחיר יהיה זמן ריצה גדול (וגם צריכת זכרון מיותרת, אבל בהיקף פחות משמעותי כאן). חשבו על זה כך: אם אני מפעיל את האלגוריתם על מטריצה מסדר <span class="math">\(n\times n\)</span>, אני צריך לחשב את הדטרמיננטה של <span class="math">\(n\)</span> מטריצות מסדר <span class="math">\(\left(n-1\right)\times\left(n-1\right)\)</span>, וכל חישוב כזה דורש חישוב של <span class="math">\(n-1\)</span> דטרמיננטות של מטריצות מסדר <span class="math">\(\left(n-2\right)\times\left(n-2\right)\)</span> וכן הלאה - יוצא שאני מחשב <span class="math">\(n\left(n-1\right)\left(n-2\right)\cdots1=n!\)</span> דטרמיננטות. קצב הגידול של <span class="math">\(n!\)</span> הוא אקספוננציאלי - תמיד חדשות רעות שמדובר על זמן חישוב. על מטריצת <span class="math">\(4\times4\)</span> האלגוריתם הזה יעבוד מעולה ויסתיים חיש קל. על מטריצה מסדר <span class="math">\(1000\times1000\)</span>? אני לא מעז להפעיל אותו.</p>
 <p>האם ניתן לייעל את זה? למרבה השמחה כן, אפשר לייעל את החישוב בצורה קיצונית ממש, וכל זה בזכות תכונה קסומה אחת של הדטרמיננטה: היא <strong>כפלית</strong>. אם <span class="math">\(A,B\)</span> הן מטריצות ריבועיות, אז <span class="math">\(\left|AB\right|=\left|A\right|\cdot\left|B\right|\)</span>. ההוכחה היא אפילו לא כל כך מסובכת <a href="https://gadial.net/2011/11/21/matrix_revolutions/">ואני מציג אותה בפוסט שלי</a>, אבל היא דורשת את נקודת המבט התיאורטית יותר על דטרמיננטה שאני לא נכנס אליה כאן. גם לשאלה מה זה בדיוק כפל המטריצות <span class="math">\(AB\)</span> אני לא נכנס; זה לא כפל "איבר-איבר" אלא משהו מתוחכם יותר, אבל יש לי <a href="https://gadial.net/2011/10/06/matrix_product/">פוסט גם על זה</a> ומי שלא מכירים את המושג פשוט יוכלו לסמוך עלי בכמה טענות פשוטות שאני עוד מעט אטען.</p>
@@ -611,28 +611,28 @@
 <p>במקרה הזה, יש שתי אפשרויות: או ש<strong>כל</strong> האיברים בעמודה הראשונה הם אפס, ובמקרה הזה הדטרמיננטה של המטריצה היא אפס; או שיש איבר כלשהו ששונה מאפס. במקרה השני, <strong>נחליף</strong> את השורה של האיבר הזה עם השורה הראשונה הנוכחית, ונזכור שזה "עלה לנו" בהכפלת הדטרמיננטה הכוללת ב-<span class="math">\(-1\)</span> (ואם נחליף עוד שורות בהמשך זה עשוי לבטל את זה).</p>
 <p>האם האלגוריתם הזה יעיל? בהחלט. כדי לחשב דטרמיננטה של מטריצה מסדר <span class="math">\(n\times n\)</span> אנחנו צריכים לבצע בערך <span class="math">\(n^{2}\)</span> פעולות חשבוניות, ואחריהן לחשב דטרמיננטה של מטריצה <strong>אחת</strong> מסדר <span class="math">\(\left(n-1\right)\times\left(n-1\right)\)</span>, כלומר אם אנחנו מחפשים הערכה גסה לזמן הריצה היא תהיה <span class="math">\(n^{2}+\left(n-1\right)^{2}+\ldots+1^{2}\)</span> וזה בערך מסדר גודל של <span class="math">\(n^{3}\)</span> - משמעותית יותר טוב מזמן ריצה אקספוננציאלי (אבל זה <strong>עדיין</strong> זמן ריצה בעייתי עבור מטריצות ענק, ולכן יש כאן פתח לעולם שלם של אופטימיזציות שאני לא אדבר עליו).</p>
 <p>כשאני בא לממש את הדבר הזה בפועל, אני לא אטרח לממש רקורסיה כי זה סתם בזבזני (קריאה לפונקציה תמיד דורשת אקסטרה זמן ומשאבים), את כל השינויים אפשר לבצע כבר ברמת המטריצה המקורית. הנה קוד שעושה את העבודה:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">det</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-    <span class="c1"># go over all columns k=0,1,...,n-1</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-                    <span class="n">result</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-                    <span class="k">break</span>
-            <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">return</span> <span class="mi">0</span>
-        <span class="c1"># go over all rows i=k+1,k+2,...,n-1</span>
-        <span class="n">result</span> <span class="o">*=</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-            <span class="n">factor</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
-            <span class="c1"># go over all the nonzero elements in row i</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-                <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-=</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">result</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">def det(A):
+    result = 1
+    n = len(A)
+    # go over all columns k=0,1,...,n-1
+    for k in range(n):
+        if A[k][k] == 0:
+            for i in range(k+1, n):
+                if A[i][k] != 0:
+                    A[k], A[i] = A[i], A[k]
+                    result *= -1
+                    break
+            if A[k][k] == 0:
+                return 0
+        # go over all rows i=k+1,k+2,...,n-1
+        result *= A[k][k]
+        for i in range(k+1, n):
+            factor = A[i][k] / A[k][k]
+            # go over all the nonzero elements in row i
+            for j in range(k, n):
+                A[i][j] -= factor * A[k][j]
+    return result
+</code></pre>
 
 <p>אז זו הדרך הרגילה לחישוב דטרמיננטות; בפוסט הבא נראה משהו קצת שונה.</p>
         </article>

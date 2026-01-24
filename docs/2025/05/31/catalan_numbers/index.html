@@ -705,31 +705,31 @@
 <p>בואו ניזכר איך חומה בנויה. ברגע שמתחילים חומה חדשה, כי המסלול הגיע לגובה מתאים חדש ושינה צבע, אוטומטית יוצרים חומה חדשה עם טבעת ראשונה שכוללת את כל המספרים שהטבעת הראשונה חייבת לכלול. כלומר, כשמגיעים לראשונה לגובה <span class="math">\(2^{k}-1\)</span> יוצרים חומה חדשה עם הטבעת <span class="math">\(\left\{ 0,2,4,\ldots,2^{k}-2\right\} \)</span>. זה עדיין לא החלק של "להוסיף לבנים למגדל", זה פשוט יוצר לנו את החומה הבסיסית שהמסלול יבנה מעליה.</p>
 <p>עכשיו, אם המסלול רוצה להוסיף את הלבנה <span class="math">\(s\)</span> למגדל, אנחנו עוברים על הטבעות במגדל מהעליונה ביותר אל התחתונה. לכל טבעת כזו, אם <span class="math">\(s\)</span> או <span class="math">\(s+1\)</span> או <span class="math">\(s-1\)</span> (מודולו <span class="math">\(2^{k}\)</span>) נמצאות בה - "נתקענו" - אי אפשר להכניס את הלבנה לטבעת הזו (היא תתנגש באחת מהלבנים הללו) וגם אי אפשר לדחוף אותה דרכן אל טבעת נמוכה יותר כי הן חוסמות את הדרך (זו הצורה שבה כדאי לחשוב על זה כי זה נותן אינטואיציה למה הוספת לבנה מתנהגת כפי שהיא מתנהגת; הסיבה <strong>האמיתית</strong> להתנהגות הזו היא כי ככה הבניה עובדת). אם אף אחת מהלבנים הללו לא נמצאת בטבעת, אפשר לעבור לטבעת הבאה בתור, הנמוכה יותר, ולראות אם גם שם אפשר להתקדם או שנתקעים. בסופו של דבר מוסיף את הלבנה החדשה לטבעת הנמוכה ביותר שמצאנו שאפשר להוסיף את <span class="math">\(s\)</span> אליה - או, אם לא הייתה כזו, פותחים טבעת חדשה שכוללת רק את <span class="math">\(s\)</span>.</p>
 <p>זהו, זו כל הבניה! הנה קוד פייתון שעושה את הכל ואני מקווה שברור וחף מבאגים:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_brick</span><span class="p">(</span><span class="n">wall</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="k">while</span> <span class="ow">not</span> <span class="p">(</span><span class="n">s</span> <span class="ow">in</span> <span class="n">wall</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">wall</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">wall</span><span class="p">[</span><span class="n">m</span><span class="p">]):</span>
-        <span class="n">m</span> <span class="o">-=</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># new ring</span>
-        <span class="n">wall</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
-    <span class="n">wall</span><span class="p">[</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<pre class="highlight"><code class="language-python">def add_brick(wall, s, n):
+    m = len(wall) - 1
+    while not (s in wall[m] or (s+1) % n in wall[m] or (s-1) % n in wall[m]):
+        m -= 1
+    if m == len(wall) - 1: # new ring
+        wall.append([])
+    wall[m+1].append(s)
 
-<span class="k">def</span><span class="w"> </span><span class="nf">generate_kepler_tower_from_dyck</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
-    <span class="n">tower</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tower</span><span class="p">)</span>
-        <span class="n">current_border</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span>
-        <span class="n">next_border</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
-        <span class="n">height</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="s1">&#39;U&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">if</span> <span class="n">height</span> <span class="o">&gt;=</span> <span class="n">current_border</span> <span class="ow">and</span> <span class="n">ch</span> <span class="o">==</span> <span class="s1">&#39;D&#39;</span><span class="p">:</span>
-            <span class="n">add_brick</span><span class="p">(</span><span class="n">tower</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">height</span> <span class="o">-</span> <span class="n">current_border</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="n">k</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">height</span> <span class="o">&lt;=</span> <span class="n">current_border</span> <span class="ow">and</span> <span class="n">ch</span> <span class="o">==</span> <span class="s1">&#39;U&#39;</span><span class="p">:</span>
-            <span class="n">add_brick</span><span class="p">(</span><span class="n">tower</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">height</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="n">k</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">height</span> <span class="o">==</span> <span class="n">next_border</span><span class="p">:</span>
-            <span class="n">new_wall</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">k</span><span class="p">)]]</span>
-            <span class="n">tower</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_wall</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">tower</span>
-</code></pre></div>
+def generate_kepler_tower_from_dyck(word):
+    tower = []
+    height = 0
+    for ch in word:
+        k = len(tower)
+        current_border = 2**k-1
+        next_border = 2**(k+1)-1
+        height += 1 if ch == 'U' else -1
+        if height &gt;= current_border and ch == 'D':
+            add_brick(tower[-1], height - current_border, 2**k)
+        if height &lt;= current_border and ch == 'U':
+            add_brick(tower[-1], height, 2**k)
+        if height == next_border:
+            new_wall = [[2*i for i in range(2**k)]]
+            tower.append(new_wall)
+    return tower
+</code></pre>
 
 <p>השאלה הראשונה שאנחנו צריכים לשאול את עצמנו היא אם הבניה הזו באמת נותנת מגדל קפלר, אבל ברור שהיא עושה את זה כי כללי הוספת הלבנים שלנו מבטיחים שתמיד יהיה לנו מגדל חוקי - אנחנו מוסיף במפורש את הטבעת הראשונה בכל חומה, וכשאנחנו מוסיפים לבנה אנחנו מקפידים שהיא תיכנס למקום שבו מותר לה להיות, ובטבעת שמתחתיה היא כבר לא יכולה להיכנס כי יש שם לבנה <strong>שעליה היא יכולה להישען</strong>.</p>
 <p>שאלה קצת יותר טריקית היא למה מסלול מאורך <span class="math">\(2n\)</span> נותן מגדל קפלר עם בדיוק <span class="math">\(n\)</span> לבנים. בדוגמא שראינו למעלה, המסלול שלי היה מאורך 50, כלומר <span class="math">\(n=25\)</span>. אם סופרים את הלבנים שהמסלולים מוסיפים (המספרים שמתחת למסלולים, באיור השני) מגיעים ל-18. איפה הלבנים החסרות? ובכן, בטבעת הראשונה בכל חומה. יש לנו שלוש חומות. בחומה הראשונה הטבעת הראשונה היא <span class="math">\(\left\{ 0\right\} \)</span>, בשניה היא <span class="math">\(\left\{ 0,2\right\} \)</span> ובשלישית היא <span class="math">\(\left\{ 0,2,4,6\right\} \)</span>. בסך הכל קיבלנו את שבע הלבנים החסרות - אבל איך בדיוק אנחנו יודעים שזה לא הסתדר בפוקס?</p>
@@ -747,66 +747,66 @@
 <p>יש עוד אפשרויות. אם אני בגובה <span class="math">\(s\)</span> שהוא 1 לפחות אבל עדיין מתחת לקו האמצע, יכלתי להגיע לגובה הזו או בפעולת D שלא הייתה מוסיפה לבנה למגדל, או בפעולת U שכן הייתה מוסיפה - והיא הייתה מוסיפה בדיוק את הלבנה <span class="math">\(s\)</span>, כי זה מה שקורה כשאנחנו מתחת לקו האמצע, אנחנו מוסיפים לבנה ששווה לגובה שהגענו אליו <strong>אחרי</strong> ביצוע הצעד. אז אנחנו מנסים להסיר מהמגדל שלנו את הלבנה <span class="math">\(s\)</span>, כלומר בודקים אם היא נמצאת בחומה הנוכחית, במיקום שבו אין לבנים אחרות שיושבות עליה, באחת מהטבעות <strong>מעל</strong> הטבעת הראשונה (הטבעת הראשונה כזכור נבנית בצורה שונה). אם היא שם, אנחנו מסירים אותה ומסמנים שבוצע צעד U, ואחרת פשוט מסמנים שבוצע צעד D, ומעדכנים את הגובה שלנו בהתאם (אם בוצע צעד U אנחנו <strong>מקטינים</strong> את הגובה, כי הרי אנחנו רוצים לדעת באיזה גובה היינו <strong>קודם</strong>). באופן דומה מטפלים גם במקרה שבו אנחנו מעל קו האמצע.</p>
 <p>המקרה הכי בעייתי הוא זה שהוא אנחנו נמצאים <strong>בדיוק</strong> על קו האמצע. במקרה הזה יש שתי אפשרויות שונות להגעה לשם, ששתיהן מוסיפות לבנה למגדל - או עלייה למעלה שמוסיפה את הלבנה <span class="math">\(2^{k}-1\)</span>, או ירידה למטה שמוסיפה את הלבנה 0. אז מנסים לחלץ מהמגדל את שתי הלבנים הללו ורואים איזו מהן הצליחה. ברור ש<strong>רק אחת</strong> היא אפשרית, כי שתי הלבנים הללו הן שכנות ולכן מתנגשות אחת עם השניה ולא יכולות להיות באותה טבעת, ולכן אם הן נמצאות במגדל, אחת נמצאת גבוה יותר והיא זו שתקבע לנו איזה מהלך אנחנו משחזרים. אבל למה בעצם שאחת משתיהן תהיה במגדל? אי אפשר להנדס מגדלים שבהם זה לא קורה? זה הטיעון הכי עדין כאן: אפשר להראות שאלא אם החומה התרוקנה למעט הטבעת הראשונה, זה לא יכול לקרות כי <strong>בדרך</strong> אל קו האמצע הזה היינו מרוקנים מהחומה כל לבנה שלא תקועה - חוץ מאשר הלבנים <span class="math">\(0,2^{k-1}\)</span> שאפשר להוציא רק כשמגיעים לאמצע, וכל לבנה אחרת שאי אפשר להוציא כי אחת משתי הלבנים הללו חוסמת אותה. זה טיעון קצת מעצבן להוכחה פורמלית אבל הוא עובד; כל מה שנשאר לעשות הוא לדבר על מה שקורה כשמגיעים לאמצע כשהחומה ריקה חוץ מהטבעת הראשונה, וברור מה עושים בשלב הזה - מעיפים את החומה ומתחילים לשחזר את המסלול מהצבע הבא (כלומר, הקודם).</p>
 <p>הנה קוד (חף מבאגים, אני מקווה - היו בו כל כך הרבה בהתחלה!) שעושה את זה:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_brick</span><span class="p">(</span><span class="n">wall</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-    <span class="c1"># we are trying to understand if it&#39;s possible that s was the latest brick added to the tower</span>
-    <span class="c1"># for this, it&#39;s not enough that it&#39;s IN the tower, the way for it must be clear, meaning no s+1 and no s-1 in the way</span>
-    <span class="c1"># print(f&quot;Trying to remove brick {s} from wall {wall}, num_segments={num_segments}&quot;)</span>
-    <span class="k">for</span> <span class="n">ring</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">wall</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span> <span class="c1"># skip the first ring, it&#39;s not touched by add_brick()</span>
-        <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ring</span><span class="p">:</span>
-            <span class="n">ring</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># if the ring is empty, remove it</span>
-                <span class="n">wall</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ring</span> <span class="ow">or</span> <span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ring</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="kc">False</span>
+<pre class="highlight"><code class="language-python">def remove_brick(wall, s, n):
+    # we are trying to understand if it's possible that s was the latest brick added to the tower
+    # for this, it's not enough that it's IN the tower, the way for it must be clear, meaning no s+1 and no s-1 in the way
+    # print(f&quot;Trying to remove brick {s} from wall {wall}, num_segments={num_segments}&quot;)
+    for ring in reversed(wall[1:]): # skip the first ring, it's not touched by add_brick()
+        if s in ring:
+            ring.remove(s)
+            if len(ring) == 0: # if the ring is empty, remove it
+                wall.remove(ring)
+            return True
+        else:
+            if (s+1) % n in ring or (s-1) % n in ring:
+                return False
+    return False
 
-<span class="k">def</span><span class="w"> </span><span class="nf">generate_dyck_from_kepler</span><span class="p">(</span><span class="n">tower</span><span class="p">):</span>
-    <span class="n">tower</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">tower</span><span class="p">)</span> <span class="c1"># we&#39;re going to remove bricks</span>
-    <span class="n">word</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tower</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span> <span class="c1"># go over the walls from last to first</span>
-        <span class="n">wall</span> <span class="o">=</span> <span class="n">tower</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="n">current_border</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
-        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">height</span> <span class="o">!=</span> <span class="n">current_border</span><span class="p">:</span> <span class="c1"># continue until wall is empty except the first ring</span>
-            <span class="k">if</span> <span class="n">height</span> <span class="o">==</span> <span class="mi">2</span><span class="o">*</span><span class="n">current_border</span><span class="p">:</span>
-                <span class="c1"># we&#39;re near the next border. we can&#39;t reach it, otherwise the tower would have had more walls</span>
-                <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
-                <span class="n">height</span> <span class="o">-=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="n">height</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="c1"># we&#39;re at the bottom, we can&#39;t go down anymore</span>
-                <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
-                <span class="n">height</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="n">height</span> <span class="o">&gt;</span> <span class="n">current_border</span><span class="p">:</span> <span class="c1"># if s_down is in the tower, we made a &quot;down&quot; move, else nothing</span>
-                <span class="k">if</span> <span class="n">remove_brick</span><span class="p">(</span><span class="n">wall</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">current_border</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
-                    <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
-                    <span class="n">height</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
-                    <span class="n">height</span> <span class="o">-=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="n">height</span> <span class="o">&lt;</span> <span class="n">current_border</span><span class="p">:</span> <span class="c1"># if s_up is in the tower, we made an &quot;up&quot; move, else nothing</span>
-                <span class="k">if</span> <span class="n">remove_brick</span><span class="p">(</span><span class="n">wall</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
-                    <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
-                    <span class="n">height</span> <span class="o">-=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
-                    <span class="n">height</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="n">height</span> <span class="o">==</span> <span class="n">current_border</span><span class="p">:</span>
-                <span class="c1"># we reached the border either by &quot;down&quot; from above, and then s_down is in the tower, or by &quot;up&quot; from below, and then s_up is in the tower</span>
-                <span class="c1"># they can&#39;t both be in the tower since in this case, s_down = 1 and s_up = current_border + 1, which are adjacent (modulo current_border + 1)</span>
-                <span class="c1"># print(&quot;height == current_border, so we are at the border, trying to remove bricks&quot;, s_down, s_up)</span>
-                <span class="k">if</span> <span class="n">remove_brick</span><span class="p">(</span><span class="n">wall</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">current_border</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
-                    <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
-                    <span class="n">height</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">elif</span> <span class="n">remove_brick</span><span class="p">(</span><span class="n">wall</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
-                    <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
-                    <span class="n">height</span> <span class="o">-=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;This should not happen&quot;</span><span class="p">)</span>
-    <span class="n">word</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">)</span> <span class="c1"># first step is always U</span>
-    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">word</span><span class="p">))</span>
-</code></pre></div>
+def generate_dyck_from_kepler(tower):
+    tower = copy.deepcopy(tower) # we're going to remove bricks
+    word = []
+    height = 0
+    for k in range(len(tower)-1, -1, -1): # go over the walls from last to first
+        wall = tower[k]
+        current_border = 2**(k+1)-1
+        while len(wall) &gt; 1 or height != current_border: # continue until wall is empty except the first ring
+            if height == 2*current_border:
+                # we're near the next border. we can't reach it, otherwise the tower would have had more walls
+                word.append('U')
+                height -= 1
+            elif height == 0:
+                # we're at the bottom, we can't go down anymore
+                word.append('D')
+                height += 1
+            elif height &gt; current_border: # if s_down is in the tower, we made a &quot;down&quot; move, else nothing
+                if remove_brick(wall, height - current_border, 2**(k+1)):
+                    word.append('D')
+                    height += 1
+                else:
+                    word.append('U')
+                    height -= 1
+            elif height &lt; current_border: # if s_up is in the tower, we made an &quot;up&quot; move, else nothing
+                if remove_brick(wall, height, 2**(k+1)):
+                    word.append('U')
+                    height -= 1
+                else:
+                    word.append('D')
+                    height += 1
+            elif height == current_border:
+                # we reached the border either by &quot;down&quot; from above, and then s_down is in the tower, or by &quot;up&quot; from below, and then s_up is in the tower
+                # they can't both be in the tower since in this case, s_down = 1 and s_up = current_border + 1, which are adjacent (modulo current_border + 1)
+                # print(&quot;height == current_border, so we are at the border, trying to remove bricks&quot;, s_down, s_up)
+                if remove_brick(wall, height - current_border, 2**(k+1)):
+                    word.append('D')
+                    height += 1
+                elif remove_brick(wall, height, 2**(k+1)):
+                    word.append('U')
+                    height -= 1
+                else:
+                    raise ValueError(&quot;This should not happen&quot;)
+    word.append('U') # first step is always U
+    return ''.join(reversed(word))
+</code></pre>
 
 <p>זה מסיים את הסיפור מבחינתי, אבל מספרי קטלן לא נגמרים שם - הספר של Stanely עמוס בשלל דוגמאות אחרות (אם כי חייבים להודות שרובן הן פשוט וריאציות עם כל מני מגבלות ופרמטרים על אותה בעיה), אבל שולי הפוסט הזה כבר צרים מלהכילן.</p>
         </article>

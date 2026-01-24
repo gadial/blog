@@ -539,8 +539,8 @@
 <p>ראשית, הערה קטנה על המימוש שתהיה רלוונטית גם לאופן שבו אתאר את מבנה הנתונים - ב-Javascript אפשר לקחת אובייקטים ולהוסיף להם שדות שלפני רגע לא היו קיימים. מה זה שדה? משהו שמכיל מידע ו"מחובר" לאובייקט. הנה דוגמה:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="nx">edge</span><span class="p">.</span><span class="nx">weight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-javascript">edge.weight = 4
+</code></pre>
 
 
 </div>
@@ -549,10 +549,10 @@
 <p>אז נתחיל עם מה שברור שצריך להתחיל ממנו - פונקציה שבכלל מכניסה אובייקט כלשהו למשחק על ידי כך שהיא "יוצרת" קבוצה שמכילה רק אותו. הקבוצה הזו לא באמת תישמר בשום מקום; כל מה שיישמר הוא מידע בתוך האובייקט עצמו שאומר "כרגע, אתה הנציג של הקבוצה שלך", כי אין אחרים:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="nx">make_set</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
-<span class="w">        </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-javascript">make_set: function(x){
+        x.disjoint_set_rep = x;
+}
+</code></pre>
 
 
 </div>
@@ -564,13 +564,13 @@
 <p>אז מה עושים? משפרים את המהירות של Union על חשבון Find (בלתי נמנע, כי כרגע Find הוא סופר-יעיל). הרעיון הוא שאיבר לא חייב להצביע ישירות על הנציג שלו; מספיק שהוא יצביע על מישהו אחר מהמחלקה שלו, שהוא זה שמצביע על הנציג. או אפילו שהוא יצביע על מישהו שמצביע על מישהו שמצביע על הנציג. הבנתם את הרעיון. מבחינה פורמלית, אפשר לחשוב על כל מחלקת שקילות בתוך מבנה הנתונים שלנו בתור <strong>עץ</strong> מכוון שבו האבא של צומת הוא הצומת שעליו הוא מצביע, וכל הדרכים מובילות בסופו של דבר לצומת מרכזי אחד - השורש - שמצביע על עצמו. זה כמובן פחות יעיל מאשר שכל צומת יצביע ישירות על הנציג, אבל זה עדיין עובד, ונראה בערך ככה:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="nx">find</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">){</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">;</span>
-<span class="w">    </span><span class="p">},</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-javascript">find: function(x){
+        if (x != x.disjoint_set_pred){
+            return find(x.disjoint_set_pred);
+        }
+        return x.disjoint_set_pred;
+    },
+</code></pre>
 
 
 </div>
@@ -579,12 +579,12 @@
 <p>עכשיו, כמה קלקלנו? התשובה היא שדי הרבה. מה הסיטואציה הגרועה ביותר שיכולה להתרחש? שיש לנו מחלקת שקילות גדולה מסדר גודל של <span class="math">\(n\)</span> איברים, ואיכשהו יצא שהעץ שבו הם מסודרים הוא "שרוך", כלומר לכל צומת יש בן יחיד, ואנחנו מפעילים Find על העלה של השרוך הזה. אז Find יטפס לו למעלה למעלה בעץ עד שיגיע אל השורש, מה שייקח לו <span class="math">\(n\)</span> צעדים; הקפצנו את המחיר של Find מ-<span class="math">\(O(1)\)</span> ל-<span class="math">\(O(n)\)</span>. מצד שני, שיפרנו את Union פלאים, כי עכשיו כל מה שצריך לעשות כדי לאחד שתי קבוצות של אובייקטים שונים היא לקחת את הנציגים שלהם, ולגרום לאחד הנציגים להצביע אל הנציג השני. בקוד זה הולך להיראות ככה:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="nx">union</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
-<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
-<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-javascript">union: function(x,y){
+    var a = DisjointSets.find(x);
+    var b = DisjointSets.find(y);
+    a.disjoint_set_pred = b;
+}
+</code></pre>
 
 
 </div>
@@ -594,13 +594,13 @@
 <p>זה רעיון טוב, אבל אפשר טוב עוד יותר - לתקן <strong>את כל</strong> הצמתים שנמצאים על המסלול מ-x אל הנציג. ומה שבאמת נחמד - הקוד שעושה את זה הוא פשוט להחריד. אז הנה הקוד של Find בגרסה הסופית שלו, שבה אני משתמש בפועל:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="nx">find</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">){</span>
-<span class="w">            </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">;</span>
-<span class="w">    </span><span class="p">},</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-javascript">find: function(x){
+        if (x != x.disjoint_set_pred){
+            x.disjoint_set_pred = find(x.disjoint_set_pred);
+        }
+        return x.disjoint_set_pred;
+    },
+</code></pre>
 
 
 </div>
@@ -611,20 +611,20 @@
 <p>אז בואו נוסיף לכל צומת גם פיסת מידע נוספת, שאקרא לה rank (ולמה לא "עומק"? תכף אסביר, אבל נסו לחשוב בעצמכם) ואיחוד יפעל כך: קודם כל מוצאים את נציגי שתי המחלקות שרוצים לאחד; אחר כך משווים את ה-rank של שניהם; אם ה-rank של אחד מהם גדול מזה של השני, גורמים לשני להצביע על הראשון; אם הם שווים בוחרים אחד באופן שרירותי כדי שיצביע על השני, ומגדילים את ה-rank של זה שמצביעים עליו ב-1. הנה הקוד:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="nx">union</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
-<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
-<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">find</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="p">){</span>
-<span class="w">            </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">a</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">else</span><span class="p">{</span>
-<span class="w">            </span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">;</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="p">){</span>
-<span class="w">                </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-javascript">union: function(x,y){
+        var a = find(x);
+        var b = find(y);
+        if (a.disjoint_set_rank &gt; b.disjoint_set_rank){
+            b.disjoint_set_pred = a;
+        }
+        else{
+            a.disjoint_set_pred = b;
+            if (a.disjoint_set_rank == b.disjoint_set_rank){
+                b.disjoint_set_rank = b.disjoint_set_rank + 1;
+            }
+        }
+    }
+</code></pre>
 
 
 </div>
@@ -634,34 +634,34 @@
 <p>בואו נציג עכשיו את הקוד המלא של כל העסק, אחרי שהכנסתי את הפונקציות המתאימות לתוך משהו שנקרא DisjointSet כדי שלא יזהמו את מרחב השמות הכללי:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">make_set</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
-<span class="w">        </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span>
-<span class="w">        </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
-<span class="w">    </span><span class="p">},</span>
+<pre class="highlight"><code class="language-javascript">var DisjointSets = {
+    make_set: function(x){
+        x.disjoint_set_pred = x;
+        x.disjoint_set_rank = 0;
+    },
 
-<span class="w">    </span><span class="nx">find</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">){</span>
-<span class="w">            </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="p">;</span>
-<span class="w">    </span><span class="p">},</span>
+    find: function(x){
+        if (x != x.disjoint_set_pred){
+            x.disjoint_set_pred = DisjointSets.find(x.disjoint_set_pred);
+        }
+        return x.disjoint_set_pred;
+    },
 
-<span class="w">    </span><span class="nx">union</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
-<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
-<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="p">){</span>
-<span class="w">            </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">a</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">else</span><span class="p">{</span>
-<span class="w">            </span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">;</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="p">){</span>
-<span class="w">                </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">disjoint_set_rank</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+    union: function(x,y){
+        var a = DisjointSets.find(x);
+        var b = DisjointSets.find(y);
+        if (a.disjoint_set_rank &gt; b.disjoint_set_rank){
+            b.disjoint_set_pred = a;
+        }
+        else{
+            a.disjoint_set_pred = b;
+            if (a.disjoint_set_rank == b.disjoint_set_rank){
+                b.disjoint_set_rank = b.disjoint_set_rank + 1;
+            }
+        }
+    }
+}
+</code></pre>
 
 
 </div>
@@ -670,27 +670,27 @@
 <p>ועכשיו אפשר סוף סוף להציג את הפונקציה של קרוסקל, שהיא חלק מהמחלקה של גרף:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="nx">kruskal_min_spanning_tree</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span>
-<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">min_queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">();</span>
-<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">each_edge</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span><span class="nx">min_queue</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">)});</span>
-<span class="w">        </span><span class="nx">min_queue</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">w</span><span class="p">)})</span>
-<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">vertices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">();</span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">n</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-<span class="w">            </span><span class="nx">vertices</span><span class="p">.</span><span class="nx">push</span><span class="p">({});</span>
-<span class="w">            </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">make_set</span><span class="p">(</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">tree_edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">();</span>
-<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">min_queue</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">){</span>
-<span class="w">            </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">min_queue</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]])</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]])){</span>
-<span class="w">                </span><span class="nx">DisjointSets</span><span class="p">.</span><span class="nx">union</span><span class="p">(</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">0</span><span class="p">]],</span><span class="nx">vertices</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="mf">1</span><span class="p">]]);</span>
-<span class="w">                </span><span class="nx">tree_edges</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
+<pre class="highlight"><code class="language-javascript">kruskal_min_spanning_tree: function(){
+        var min_queue = new Array();
+        this.each_edge(function(e){min_queue.push(e)});
+        min_queue.sort(function(a,b){return (a.w - b.w)})
+        var vertices = new Array();
+        for (var i = 0; i &lt; this.n; i++){
+            vertices.push({});
+            DisjointSets.make_set(vertices[i]);
+        }
+        var tree_edges = new Array();
+        while (min_queue.length &gt; 0){
+            e = min_queue.shift();
+            if (DisjointSets.find(vertices[e[0]]) != DisjointSets.find(vertices[e[1]])){
+                DisjointSets.union(vertices[e[0]],vertices[e[1]]);
+                tree_edges.push(e);
+            }
+        }
 
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">tree_edges</span><span class="p">;</span>
-<span class="w">    </span><span class="p">},</span>
-</code></pre></div>
+        return tree_edges;
+    },
+</code></pre>
 
 
 </div>

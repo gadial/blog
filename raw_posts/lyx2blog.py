@@ -240,8 +240,9 @@ def convert(path: Path, out_dir: Path | None = None) -> Path:
     content = re.sub(r'\{%\s*highlight\s+\w+\s*%\}.*?\{%\s*endhighlight\s*%\}', 
                      save_protected_block, content, flags=re.DOTALL)
     
-    # Protect equation blocks (to preserve any formatting/line breaks around them)
-    content = re.sub(r'\{%\s*equation\s*%\}.*?\{%\s*endequation\s*%\}\s*', 
+    # Protect equation blocks (to preserve any formatting/line breaks inside them)
+    # Don't include trailing whitespace so inline equations can be joined with following text
+    content = re.sub(r'\{%\s*equation\s*%\}.*?\{%\s*endequation\s*%\}', 
                      save_protected_block, content, flags=re.DOTALL)
     
     # Now replace single newlines with spaces while preserving double newlines
