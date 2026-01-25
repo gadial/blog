@@ -17,7 +17,7 @@ FRONT_RGX = re.compile(
 )
 SKIP_CMDS = ['documentclass', 'usepackage', 'selectlanguage']
 SKIP_TAGS = ['document', 'L']
-SKIP_SPACE_AFTER = ['textquotedblleft']
+SKIP_SPACE_AFTER = ['textquotedblleft', 'textquotedblright', 'textquotedbl']
 _pending_skip = False # global flag to skip the next blank line after a quote
 
 _HEB_RE  = re.compile(r'[\u0590-\u05FF\uFB1D-\uFB4F]')   # Hebrew + presentation
