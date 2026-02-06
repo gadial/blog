@@ -136,7 +136,9 @@ tags:
 
 אם אני לוקח את {% equation %}P{% endequation %} ומוסיף לה את הנקודה {% equation %}c{% endequation %} (אלא אם {% equation %}c{% endequation %} כבר נמצאת בה), מה משתנה? אני יכול עכשיו להסתכל על {% equation %}P{% endequation %} בתור איחוד של שתי חלוקות, חלוקה {% equation %}P_{1}{% endequation %} של {% equation %}\left[a,c\right]{% endequation %} וחלוקה {% equation %}P_{2}{% endequation %} של {% equation %}\left[c,b\right]{% endequation %}. החלוקות הללו כוללת בדיוק את אותם קטעים כמו ב-{% equation %}P{% endequation %} למעט אולי קטע {% equation %}\left[t_{i-1},t_{i}\right]{% endequation %} שעבורו {% equation %}c\in\left(t_{i-1},t_{i}\right){% endequation %}, ובמקרה זה הקטע הזה הוחלף בשני הקטעים {% equation %}\left[t_{i-1},c\right]{% endequation %} ו-{% equation %}\left[c,t_{i}\right]{% endequation %}. כעת נכניס לתמונה את אי שוויון המשולש ב-{% equation %}\mathbb{R}^{n}{% endequation %}:
 
-{% equation %}\|\gamma\left(t_{i}\right)-\gamma\left(t_{i-1}\right)\|=\|\gamma\left(t_{i}\right)-\gamma\left(c\right)+\gamma\left(c\right)-\gamma\left(t_{i-1}\right)\|\le\|\gamma\left(t_{i}\right)-\gamma\left(c\right)\|+\|\gamma\left(c\right)-\gamma\left(t_{i-1}\right)\|{% endequation %}
+{% equation %}\|\gamma\left(t_{i}\right)-\gamma\left(t_{i-1}\right)\|=\|\gamma\left(t_{i}\right)-\gamma\left(c\right)+\gamma\left(c\right)-\gamma\left(t_{i-1}\right)\|\le{% endequation %}
+
+{% equation %}\le\|\gamma\left(t_{i}\right)-\gamma\left(c\right)\|+\|\gamma\left(c\right)-\gamma\left(t_{i-1}\right)\|{% endequation %}
 
 כלומר, אורך הקטע שהסרנו קטן או שווה לאורך שני הקטעים שהוספנו, ולכן נקבל
 
