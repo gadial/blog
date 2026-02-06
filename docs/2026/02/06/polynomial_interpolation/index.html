@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מה הקטע עם השלמת סדרות ואיך זה קשור לאינטרפולציה פולינומית? - לא מדויק</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <meta name="description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://gadial.net/2026/02/06/polynomial_interpolation/">
+    <meta property="og:title" content="מה הקטע עם השלמת סדרות ואיך זה קשור לאינטרפולציה פולינומית?">
+    <meta property="og:description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב">
+    <meta property="og:site_name" content="לא מדויק">
+    
+
+<meta property="og:image" content="http://gadial.net/img/main/default-card.png" />
+
+
+        
+    <!-- Twitter -->
+    
+
+<meta name="twitter:card" content="summary">
+
+
+    <meta name="twitter:url" content="https://gadial.net/2026/02/06/polynomial_interpolation/">
+    <meta name="twitter:description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב">
+    <meta name="twitter:site" content="@" />
+    <meta property="twitter:title" content="מה הקטע עם השלמת סדרות ואיך זה קשור לאינטרפולציה פולינומית?">
+    
+
+<meta property="twitter:image" content="http://gadial.net/img/main/default-card.png" />
+
+
+    
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="לא מדויק - RSS Feed" href="/feed.xml">
+       
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        /* Hamburger menu button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .menu-toggle:hover {
+            opacity: 0.8;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .top-nav .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .top-nav .site-title {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0;
+                padding: 10px 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* Hide nav links by default on mobile */
+            .top-nav .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            /* Show when expanded */
+            .top-nav .nav-links.expanded {
+                display: flex;
+            }
+            
+            .top-nav .nav-links > a {
+                text-align: center;
+                padding: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .top-nav .search-box {
+                width: 100%;
+                flex-direction: column;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .top-nav .search-box input {
+                width: 100%;
+                margin-bottom: 5px;
+                min-width: 0;
+            }
+            
+            .top-nav .search-box button {
+                width: 100%;
+            }
+        }
+        
+        /* Blockquote styling */
+        blockquote {
+            background: #f9f9f9;
+            border-right: 5px solid #ccc;
+            margin: 1.5em 10px;
+            padding: 0.75em 16px;
+            position: relative;
+            font-style: italic;
+        }
+        
+        blockquote:before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            right: 8px;
+            font-size: 3.5em;
+            color: #ccc;
+            line-height: 1;
+        }
+        
+        blockquote p {
+            display: block;
+            margin: 0 0 0.75em 0;
+        }
+        
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="site-title">
+                <a href="/" style="color: white; text-decoration: none;">לא מדויק</a>
+                <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="תפריט">
+                    ☰
+                </button>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <a href="/categories/">קטגוריות</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2026/01/24/are_most_primes_small/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר →</span>
+                <span class="nav-title">האם רוב הראשוניים הם קטנים?</span>
+            </a>
+            
+
+            
+            <div></div>
+            
+        </nav>
+        
+        
+        <header>
+            <h1>מה הקטע עם השלמת סדרות ואיך זה קשור לאינטרפולציה פולינומית?</h1>
+            <div class="post-meta">
+                <span class="date">2026-02-06</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/אלגברה.html">אלגברה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/אינטרפולציה פולינומית.html">אינטרפולציה פולינומית</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>ברשתות החברתיות יש הרבה סוגי שיקוצים שכל מטרתם היא למשוך אנשים כדי שיגיבו ואפילו טוב מכך - שיריבו, כי ריבים וסבל והרס שווים כסף עבור יוצרי השיקוצים הללו. ואחד מהשיקוצים הנאלחים ביותר הן חידות "מתמטיות" של השלמת סדרות. לדוגמא, זו:</p>
+<p><img src="/img/2026/OnlyGenius.png" alt=""/></p>
+<p>יש כאן כמה דברים ממש מעצבנים עבורי: משפט המחץ על "רק גאון יכול לפתור", סכמת הצבעים הגועלית, השימוש הלא נכון בסימן "=" - אבל כל אלו שטויות, הדברים הללו מהונדסים כדי לעצבן וכדי שנגיב (אבל לא תגובה כמו שלי, של תלונה בבלוג, אלא תגובה לציוץ המקורי בטוויטר כדי להכניס כסף ליוצרים שלו). מעבר לדברים המעצבנים הללו, מה התוכן המתמטי שיש כאן? ובכן, זה משהו שעתיק בהרבה מהרשתות החברתיות - בעיה שבה מציגים לנו סדרה כלשהי של מספרים ושואלים מה האיבר הבא בסדרה. אבל צריך קצת להיזהר - כאן יש <strong>שתי</strong> סדרות של מספרים. בעצם, מראים לנו מין התאמה שכזו בין המספר מצד שמאל למספר מצד ימין, ואנחנו צריכים להבין את החוקיות של ההתאמה הזו וליישם את החוקיות הזו על האיבר האחרון.</p>
+<p>תגובה נפוצה שלי על חידות כאלו היא שזה הכל בולשיט כי <strong>כל</strong> התאמה היא אפשרית. הרי כל ניחוש שלנו לגבי החוקיות כאן הוא ניחוש בלבד, ויש הרבה סדרות מספרים שבהן נדמה לנו שיש כלל טבעי נחמד אבל בעצם יש המון כללים אפשריים שנותנים תוצאות שונות. למשל, נניח שאני נותן את הסדרה <span class="math">\(2,3,5,7,11\)</span> ושואל מה האיבר הבא - לכאורה נראה ש-13 מתאים (זו התשובה שאני הייתי נותן) כי הסדרה כללה את כל המספרים הראשוניים עד וכולל 11 והבא בתור הוא 13. אבל בעצם, גם 101 מתאים אם אנחנו לא רוצים סתם מספרים ראשוניים אלא מספרים ראשוניים <strong>פלינדרומיים</strong>, כאלו שנכתבים בייצוג עשרוני בצורה כזו שאם הם נקראים מימין או משמאל הם אותו הדבר. או שאולי 17 הוא האיבר הבא בתור שמתאים כי הסדרה היא בכלל<span class="math">\(\left\lfloor \frac{3^{n}}{2^{n}}\right\rfloor\)</span> עבור <span class="math">\(n=2,3,4,5,6,7\)</span> ? ואולי האיבר הבא הוא 16 כי הסדרה סופרת כמה עלים יכולים להיות בעץ בינארי? את כל הדוגמאות הללו לא טרחתי להמציא - נכנסתי <a href="https://oeis.org/">לאתר המופלא</a> של האנציקלופדיה לסדרות מספרים, הקלדתי <span class="math">\(2,3,5,7,11\)</span> ובדקתי אילו השלמות הזויות הוא ימצא לי. ככה זה - העולם גדול ורחב ומעניין וההמשך ה"טבעי" שאנחנו חושבים עליו הוא לאו דווקא מה שחשבו עליו כשיצרו את הסדרה.</p>
+<p>אבל בואו ננסה לגשת לחידות הללו מנקודת מבט חיובית: נניח שכן יש פתרון אחד שהוא הרבה יותר סביר מכל פתרון אחר, וננסה למצוא אותו. הנה חידה שכזו, וריאציה על הסגנון של החידה הקודמת:</p>
+<p><img src="/img/2026/OnlyGenius2.png" alt=""/></p>
+<p>אני אסביר בסוף את הפתרון של החידה הזו. בואו ננסה עכשיו לחשוב מה יכול להיות הפתרון של החידה הקודמת, זו שבה סדרת המספרים היא:</p>
+<p><span class="math">\(88,70,54,40,??\)</span></p>
+<p>כשיש לנו סדרות של מספרים ואנחנו רוצים לדעת מה האיבר הבא, השאלה שאנחנו שואלים היא - נניח שהסדרה היא הדבר הכי <strong>פשוט</strong> שיכול להיות מבין כל מה שתואם את המספרים שאנחנו רואים - מהו הדבר הפשוט הזה?</p>
+<p>הסדרה הכי פשוטה היא זו שבה כל הערכים הם <strong>קבועים</strong>, כלומר למשל <span class="math">\(42,42,42,42,\ldots\)</span> . אבל זו לא סדרה כזו מעניינת. דרך אחת לגוון היא שכל איבר יהיה שווה לאיבר הקודם <strong>ועוד משהו</strong>. לסדרה כזו קוראים "סדרה חשבונית". למשל הסדרה <span class="math">\(2,12,22,33,42,\ldots\)</span> היא כזו: כל איבר בה שווה לאיבר הקודם ועוד 10. סדרות כאלו לא חייבות לעלות, הן יכולות גם לרדת. למשל <span class="math">\(78,66,54,42,\ldots\)</span> היא סדרה שכל איבר בה שווה לאיבר הקודם ועוד <span class="math">\(-12\)</span> , כלומר פחות 12.</p>
+<p>האם הסדרה <span class="math">\(88,70,54,40\)</span> היא חשבונית? לא, כי בואו נסתכל על הסדרה שמתקבלת ממנה כשלוקחים את <strong>ההפרש</strong> בין כל זוג איברים סמוך:</p>
+<p><span class="math">\(-18,-16,-14,\ldots\)</span></p>
+<p>אבל - אה-הא! הסדרה הזו של <strong>ההפרשים</strong> היא כן סדרה חשבונית! בכל פעם מוסיפים 2 לאיבר הבא! אז אפשר לנחש שההפרש הבא יהיה <span class="math">\(-12\)</span> ! ולכן, אם מוסיפים <span class="math">\(-12\)</span> אל <span class="math">\(40\)</span> שהיה האיבר האחרון שראינו, מקבלים <span class="math">\(28\)</span> ולכן זה הפתרון!</p>
+<p>נשמע סביר והגיוני? זה באמת סביר והגיוני! אבל נפלתי <strong>במלכודת</strong>. זכרו, החידה המקורית לא הייתה שעשוע מחשבה חביב למען רווחת הציבור; היא כלי שאנשים מניפולטיביים משתמשים בו כדי לעורר מהומות שיכניסו לכיסם כסף. אי לכך ובהתאם לזאת, החידה הזו כללה הטרלה: הטעיה מהסוג הניג'סי ביותר. כי אם נסתכל על העמודה השמאלית של המספרים, כתוב שם <span class="math">\(8,7,6,5,3\)</span> - שמים לב לקפיצה? ועכשיו יש שלושה סוגי פותרים: 1. פותרים שבכלל לא מתעניינים במה שקורה בעמודה השמאלית. מבחינתם מה שמגדיר את הסדרה הוא מה שיש בעמודה הימנית וזהו ולכן הפתרון הוא 28.</p>
+<ol>
+<li>
+<p>פותרים שרואים בעמודה השמאלית סוג של אינדקס ולכן אם קפצנו מ-5 אל 3 זה אומר שקפצנו על איבר, והאיבר הבא בתור אמור להיות 18 (למה? בשלב הזה כבר אפשר להבין) ולכן זה הפתרון.</p>
+</li>
+<li>
+<p>פותרים שחושבים כמו האלו מ-2 אבל פשוט פספסו או שכחו את הקפיצה הזו וחושבים במובלע שכתוב שם 4 ולכן לדעתם התשובה אמורה להיות 28 והם ירגישו מה-זה מטומטמים כשיבינו שעבדו עליהם.</p>
+</li>
+</ol>
+<p>בגלל שיש כאן שתי תשובות לגיטימיות, זה מזמין ויכוחים ומהומות בין שני צדדים שכל אחד לשיטתו צודק לגמרי - ועוד גל של אנשים ש"טועים"ואחרים שיתקנו אותם, ואז הטועים יגידו וואי וואי וואי איזה טיפשים היינו ועוד ועוד מלל יישפך על הבעיה המיותרת הזו כדי שנצלן אינטרנטי כלשהו יקבל עוד כמה גרושים. כל זה לא חדש, זה כמו המהומות סביב המשוואה <span class="math">\(6\div2(1+2)\)</span> <a href="https://gadial.net/2011/05/02/damn_stupid_equation/">שכתבתי עליה פעם פוסט</a>.</p>
+<p>אבל אני רוצה לנצל את החידה הזו בצורה פרודקטיבית, כדי להציג משהו נחמד במתמטיקה. אז בשביל זה, בואו נפסיק לחשוב על <span class="math">\(88,70,54,40,??\)</span> סתם בתור "סדרה"ונחשוב עליה בתור "התאמה": אנחנו מתאימים ל-8 את 88, ול-7 את 70 וכן הלאה. להתאמות כאלו יש שם במתמטית: <strong>פונקציות</strong>. אני מסמן פונקציה עם סימון כמו <span class="math">\(f\left(x\right)\)</span> שאומר "<span class="math">\(x\)</span> הוא <strong>משתנה</strong>, אפשר להציב בו ערכים שונים ומשונים, ו-<span class="math">\(f\)</span> זה הסימון שמתאר את הפונקציה עצמה וכשאני מציב ערך קונקרטי ב-<span class="math">\(x\)</span> היא מחזירה לי תוצאה קונקרטית". במקרה שלנו זה ייראה כך:</p>
+<p><span class="math">\(f\left(8\right)=88\)</span></p>
+<p><span class="math">\(f\left(7\right)=70\)</span></p>
+<p><span class="math">\(f\left(6\right)=54\)</span></p>
+<p><span class="math">\(f\left(5\right)=40\)</span></p>
+<p><span class="math">\(f\left(3\right)=??\)</span></p>
+<p>לכתוב פונקציה על ידי כך שכותבים את כל הערכים שלה במפורש זה מעייף. השאלה המעניינת היא האם יש דרך <strong>פשוטה</strong> לכתוב פונקציה, ולעתים קרובות יש. בואו נסתכל לרגע על הסדרה <span class="math">\(2,12,22,33,42,\ldots\)</span> . נניח שהטור השמאלי של מספרים שמתאים לה הוא <span class="math">\(0,1,2,3,4,\ldots\)</span> . במקרה הזה, קל לכתוב את הפונקציה שיוצרת את ההתאמה בין שני הטורים:</p>
+<p><span class="math">\(f\left(x\right)=10x+2\)</span> מה זה אומר? זה מתכון לאיך ליצור את הפלט בהינתן הקלט. נתנו לנו <span class="math">\(x\)</span> ? נכפיל אותו ב-10 ונוסיף 2 לתוצאה. למשל <span class="math">\(f\left(3\right)=10\cdot3+2=32\)</span> . זה עובד תמיד - קיבלנו כתיב קומפקטי יחסית עבור הסדרה הזו.</p>
+<p>האם אפשר לעשות את זה עבור החידה המקורית? הנה דרך לנסות לגלות. בואו נשתמש באותיות <span class="math">\(a,b\)</span> כדי לסמן מה שנקרא <strong>פרמטרים</strong> - ערכים מספריים שאני לא מתחייב עליהם כרגע. עכשיו אני אכתוב את הפונקציה בעזרת הפרמטרים:</p>
+<p><span class="math">\(f\left(x\right)=ax+b\)</span> הפונקציה <span class="math">\(f\left(x\right)=10x+2\)</span> שראינו לפני רגע התקבלה עבור הפרמטרים <span class="math">\(a=10\)</span> ו-<span class="math">\(b=2\)</span> , אבל כל הצבה של ערכים שונים לפרמטרים תניב לנו פונקציה שונה. מה ההבדל בין "משתנה"ובין "פרמטר"? אין הבדל עקרוני, פשוט אנחנו חושבים על הפרמטרים בתור משהו שאנחנו מציבים בו ערכים כדי לקבל <strong>פונקציה</strong> מתוך משפחה גדולה של פונקציות, ועל המשתנים בתור משהו שאנחנו מציבים בו ערך אחרי שכבר יש לנו ביד פונקציה קונקרטית, ואנחנו רוצים לדעת מה היא מחזירה על קלט קונקרטי.</p>
+<p>יופי, אז אני מסמן <span class="math">\(f\left(x\right)=ax+b\)</span> . עכשיו, אני יודע ש-<span class="math">\(f\left(8\right)=99\)</span> אז אם אני אציב את זה בנוסחה אני אקבל</p>
+<p><span class="math">\(8a+b=88\)</span> זה נותן לנו קשר כלשהו שצריך להתקיים בין <span class="math">\(a,b\)</span> אבל יש המון דרכים שונות לקיים אותו. למשל, <span class="math">\(a=10,b=8\)</span> . או למשל, <span class="math">\(a=0,b=88\)</span> . זה יותר מדי חופש, אז בואו ננסה לבדוק איזה קשר <span class="math">\(f\left(7\right)=70\)</span> מציע:</p>
+<p><span class="math">\(7a+b=70\)</span> עכשיו קיבלנו מערכת של שתי משוואות בשני משתנים. אפשר לנקוט בתעלול נפוץ - <strong>נחסר</strong> את המשוואה השניה מהראשונה, מה שייתן לנו</p>
+<p><span class="math">\(a=18\)</span> ועכשיו אפשר להסיק מהמשוואה הראשונה לבדה ש-<span class="math">\(b=-56\)</span> , כלומר הפונקציה שלנו היא <span class="math">\(f\left(x\right)=18x-56\)</span> ...? זה היה... מפתיע? זה בהחלט לא היה הדבר הראשון שחשבנו עליו. אבל כן, אפשר להוכיח את זה (ואסביר בהמשך גם איך) - <strong>אם</strong> יש פונקציה מהצורה <span class="math">\(f\left(x\right)=ax+b\)</span> שמתארת את הסדרה שבחידה, זו <strong>חייבת</strong> להיות הפונקציה הזו.</p>
+<p>רק שלרוע המזל, היא לא. אם נציב <span class="math">\(x=6\)</span> נקבל <span class="math">\(f\left(x\right)=52\)</span> וזה, מה לעשות, לא ה-54 שהיינו אמורים לקבל. כל מה שעשינו כרגע קרס ונחרב בקול רעש גדול. פשוט <strong>לא קיימת</strong> פונקציה מהצורה <span class="math">\(f\left(x\right)=ax+b\)</span> שמחזירה את הסדרה הזו.</p>
+<p>אז בואו נתפשר על פונקציה קצת פחות פשוטה. כשמסתכלים על משהו כמו <span class="math">\(f\left(x\right)=10x+2\)</span> , אילו פעולות בעצם ביצענו עם <span class="math">\(x\)</span> המסכן? הרשינו <strong>לחבר</strong> לו מספר כלשהו (וגם לחסר - אם היינו מחברים מספר שלילי). גם הרשינו <strong>לכפול</strong> אותו במספר קבוע כמו 10 (ואם היינו כופלים ב-<span class="math">\(\frac{1}{2}\)</span> זה היה כמו לחלק ב-2). מה שלא עשינו היה להרשות ל-<span class="math">\(x\)</span> לבצע פעולות <strong>עם עצמו</strong>. עכשיו, אם אני מחבר את <span class="math">\(x\)</span> עם עצמו אני מקבל <span class="math">\(x+x=2x\)</span> וזה כאילו כפלתי אותו ב-2 ואת זה אנחנו כבר מרשים, אז זה לא מעניין. אבל מה אם אני יכול <strong>לכפול</strong> את <span class="math">\(x\)</span> בעצמו? אני אקבל את <span class="math">\(x^{2}\)</span> , וזה כבר משהו חדש. אולי פונקציה מהצורה <span class="math">\(f\left(x\right)=ax^{2}+bx+c\)</span> כן תעבוד לנו?</p>
+<p>אפשר לעשות בדיוק את מה שעשינו קודם - להציב ערכים קונקרטיים בנוסחה הכללית הזו ולחלץ מהם קשרים בין <span class="math">\(a,b,c\)</span> . יש לנו שלושה משתנים אז נזדקק לשלוש משוואות. אני אציב את <span class="math">\(x=8,7,6\)</span> , אפשט ואקבל</p>
+<p><span class="math">\(64a+8b+c=88\)</span></p>
+<p><span class="math">\(49a+7b+c=70\)</span></p>
+<p><span class="math">\(36a+6b+c=54\)</span></p>
+<p>נחסר את המשוואה השניה מהראשונה, ואת השלישית מהשניה, ונקבל</p>
+<p><span class="math">\(15a+b=18\)</span></p>
+<p><span class="math">\(13a+b=16\)</span></p>
+<p>נחסר את המשוואה השניה מהראשונה ונקבל</p>
+<p><span class="math">\(2a=2\)</span></p>
+<p>כלומר </p>
+<p><span class="math">\(a=1\)</span></p>
+<p>התקדמנו! נציב את זה בשתי המשוואות שקיבלנו לפני רגע ונקבל</p>
+<p><span class="math">\(15+b=18\)</span></p>
+<p><span class="math">\(13+b=16\)</span></p>
+<p>כלומר </p>
+<p><span class="math">\(b=3\)</span></p>
+<p>התקדמנו! נציב את זה ב-<span class="math">\(64a+8b+c=88\)</span> שממנה התחלנו, ונקבל</p>
+<p><span class="math">\(64+24+c=88\)</span></p>
+<p>כלומר </p>
+<p><span class="math">\(c=0\)</span></p>
+<p>היי, זה יצא די פשוט! קיבלנו את הפונקציה <span class="math">\(f\left(x\right)=x^{2}+3x\)</span> . אם אציב <span class="math">\(x=3\)</span> אקבל <span class="math">\(f\left(3\right)=9+9=18\)</span> , וזו אכן התשובה ה"נכונה". יופי!</p>
+<p>האם היה אפשר להגיע לזה יותר בקלות? בוודאי. כשאני ראיתי את החידה לא פתרתי אותה ככה. אמרתי לעצמי - "יש פה <span class="math">\(8\)</span> ו-<span class="math">\(88\)</span> , כלומר <span class="math">\(8\)</span> כפול 11. אה, השורה הבאה זה 7 כפול 10. הבנתי את הקטע, מה שכופלים בו גם כן קטן ב-1. ההפרש ביניהם יישאר 3 באופן קבוע, כלומר זו המכפלה <span class="math">\(x\left(x+3\right)\)</span> ."זו בהחלט דרך סבירה להגיע לפתרון ואני מנחש שרוב הפותרים עושים משהו כזה, אבל מה שחשוב לי להדגיש פה הוא שיש דרך <strong>מסודרת</strong> להגיע לפתרון - בדיוק באמצעות כתיבת מערכת המשוואות שהצגתי. העניין הוא שיש דרך אפילו <strong>עוד יותר מסודרת</strong> ובמובן מסוים עוד יותר קלה להגיע לפתרון הזה - מה שנקרא <strong>אינטרפולציה פולינומית</strong>.</p>
+<p>יש כאן שתי מילים מפחידות, נתחיל עם השניה. <strong>פולינום</strong> זה מה שמקבלים כשיש לנו ביד <span class="math">\(x\)</span> ואנחנו מתעללים בו בדרכים שכבר ראינו: מחברים אותו עם דברים וכופלים אותו עם דברים, כולל איתו עצמו. אם אני כופל את <span class="math">\(x\)</span> בעצמו פעם אחת אני מקבל את <span class="math">\(x^{2}\)</span> , אבל אפשר להמשיך עם זה ולקבל את <span class="math">\(x^{3}\)</span> ואת <span class="math">\(x^{4}\)</span> וכן הלאה. פולינום זה משהו שמתקבל אחרי מספר סופי של פעולות כאלו, ולא קשה להשתכנע שהצורה הכללית שלו תהיה</p>
+<p><span class="math">\(a_{n}x^{n}+a_{n-1}x^{n-1}+\ldots+a_{1}x+a_{0}\)</span> כש-<span class="math">\(a_{0},a_{1},\ldots,a_{n}\)</span> הם מספרים שאני מכנה <strong>המקדמים</strong> של הפולינום (<span class="math">\(a_{k}\)</span> הוא המקדם של החזקה <span class="math">\(x^{k}\)</span> של <span class="math">\(x\)</span> ), ואני גם מוסיף את הדרישה ש-<span class="math">\(a_{n}=0\)</span> , כלומר <span class="math">\(x^{n}\)</span> היא החזקה הכי גבוהה של <span class="math">\(x\)</span> שמופיעה בפולינום הזה. הנתון הזה - מה החזקה הכי גבוהה של <span class="math">\(x\)</span> שמופיעה בפולינום - הוא די חשוב, אז אני נותן לו שם: <strong>הדרגה</strong> של הפולינום, או <strong>המעלה</strong> שלו (אלו מילים נרדפות פה). אז למשל <span class="math">\(x^{2}+3x\)</span> שראינו קודם הוא פולינום ממעלה שניה. כשבתיכון לומדים "לפתור משוואות ממעלה שניה"בעצם מה שקורה הוא שנתון פולינום <span class="math">\(p\left(x\right)=ax^{2}+bx+c\)</span> ממעלה שניה, ומחפשים ערכים להציב בו כך שיתקיים <span class="math">\(p\left(x\right)=0\)</span> .</p>
+<p>יש בעולם עוד כל מני דברים חוץ מפולינומים, למשל הפונקציה <span class="math">\(f\left(x\right)=2^{x}\)</span> היא לא פולינום, וגם <span class="math">\(f\left(x\right)=\sin x\)</span> וכדומה. מה שמעניין בפולינומים הוא שהם פונקציות <strong>פשוטות</strong> יחסית - ראינו שהם נבנים רק מפעולות חשבון הבסיסיות של חיבור, חיסור וכפל - אפילו לא חילוק! (אם היינו מרשים חילוק היינו מקבלים אובייקטים כמו <span class="math">\(\frac{1}{1+x}\)</span> שהם מעניינים בפני עצמם אבל הם לא פולינומים והסיפור שלהם מסובך יותר). הפשטות הזו מובילה לכך שבהרבה מקרים כשיש לנו פונקציה מסובכת, או מידע מבולגן, אנחנו שואלים את עצמנו - האם אפשר לתאר את אותו הדבר בעזרת פולינום? אולי אפילו רק <strong>בערך</strong>?</p>
+<p>התשובה למרבה השמחה היא "כן", מתברר שפולינומים הם עניין מועיל בשלל הקשרים. למשל הפונקציה <span class="math">\(f\left(x\right)=\sin x\)</span> שהזכרתי לפני שניה ממודלת לא רע על ידי הפולינום <span class="math">\(x-\frac{x^{3}}{6}+\frac{x^{5}}{120}\)</span> עבור ערכים קרובים לאפס של <span class="math">\(x\)</span> (ועבור ערכים רחוקים מאפס עדיין אפשר להיעזר בפולינום הזה תוך התבססות על כך שסינוס זו פונקציה שחוזרת שוב ושוב על תבנית בסיסית קטנה יחסית - אני מדבר על זה <a href="https://gadial.net/2021/05/13/trigonometry_intro/">כאן</a>). אפשר ובצדק לשאול מאיפה הפולינום המוזר הזה צץ - זה קשור למשהו שנקרא <strong>טורי טיילור</strong> ולא אכנס אליו פה אבל <a href="https://gadial.net/2024/05/03/taylor_series/">יש לי פוסט</a> בנושא. אני רוצה לדבר הפעם על שימוש אחר בפולינומים לצורך קירובים - בפרט עבור המקרה של "מידע מבולגן"שהזכרתי.</p>
+<p>הרעיון הוא כזה - נניח שיש לנו אוסף של פרטי מידע של זוגות מספרים. בואו נראה דוגמא עם נתונים שלקחתי מהאינטרנט ואין לי מושג אם הם נכונים - <strong>מרחק עצירה</strong>:</p>
+<p><img src="/img/2026/stopping_distance.png" alt=""/></p>
+<p>מרחק עצירה הוא המרחק שרכב עובר במקרה של בלימת פתע, החל מהרגע שבו הנהג מזהה את הסכנה שמצריכה בלימת פתע ועד שהרכב עוצר בפועל. זה כולל את המרחק שהרכב עובר בזמן שלוקח לנהג להתחיל לבלום, ואת המרחק שהוא עובר בזמן שהרכב מאט עד לעצירה מוחלטת. מן הסתם המרחק הזה מושפע משלל גורמים, החל במהירות התגובה של הנהג וכלה באיכות הבלמים של הרכב. לכן מלכתחילה הנתון הזה הוא לא איזו אמת מתמטית אבסולוטית שנחתה עלינו משמיים אלא <strong>הערכה</strong> בלבד, שהדרך הנכונה לאסוף אותה היא לבחון אותה בשטח ולקחת... ממוצע? עזבו, אני אפילו לא בטוח שזו הדרך הנכונה לאמוד אותה. אני כאמור נקטתי בשיטה הלא כל כך אמינה "לגגל באקראי באינטרנט כי אני בסך הכל רוצה מספרים לעבוד איתם".</p>
+<p>מבין כל הגורמים שמשפיעים על מרחק העצירה, מה הכי קריטי? שוב, בלי ניסוי מסודר קשה לדעת, אבל די סביר להניח ש<strong>מהירות</strong> הרכב הנוסע תהיה קריטית - רכב שנוסע מהר יותר לוקח יותר זמן לעצור, ובזמן שלוקח לעצור אותו הוא נוסע מרחק גדול יותר. אז הדיאגרמה שלנו מציגה את הזוגות של מהירות ומרחק העצירה שמתאים לה. הזוגות הם:</p>
+<p><span class="math">\(\left(20,8\right),\left(30,15\right),\left(40,23\right),\left(50,33\right),\left(60,45\right),\left(70,60\right),\left(80,78\right),\left(90,95\right),\left(100,114\right)\)</span> הנתונים שלקחתי נותנים את מרחק העצירה עבור מהירויות שמתחלקות ב-10, אבל מה אם אני רוצה לדעת את מרחק העצירה עבור 13? ובכלל, אם אני רוצה לדעת מה הפונקציה שמחזירה לכל מהירות את מרחק העצירה שמתאים לה? ובכן, אף אחד לא אומר שהפונקציה הזו הולכת להיראות נחמד - ככה זה עם מידע "מלוכלך"מהעולם האמיתי. אבל אם אני רוצה פונקציה פשוטה, אני יכול לקבל את זה שהיא בסך הכל תהיה <strong>קירוב</strong> של הדבר האמיתי, וכל עוד זה קירוב לא רע אני אהיה בסדר עם זה. קירוב כזה נקרא <strong>מודל</strong> ובסטטיסטיקה אוהבים להגיד "כל המודלים שגויים; חלקם יעילים"כדי שלא נשלה את עצמנו שהמודל הוא-הוא המציאות.</p>
+<p>בסטטיסטיקה יש תחום שלם שמוקדש למציאת המודל ה"אופטימלי", כזה שמביא למינימום את השגיאה בין המודל ובין המידע הנצפה, ומודל כזה נקרא <strong>רגרסיה</strong> וזה תחום מרתק שלא אגיד עליו כלום הפעם כי אני רוצה להסתפק בדיבור על משהו פשוט - אני רוצה למצוא מודל שמתאים <strong>בדיוק</strong> לחלק מהנתונים, ואני אהיה בסדר עם זה שהוא לא יתאר את היתר בצורה אופטימלית. ואני ארצה שהמודל שלי יהיה <strong>פולינום</strong>.</p>
+<p>הזוג הראשון של קלט/פלט הוא <span class="math">\(\left(20,9\right)\)</span> . הנה פולינום פשוט שעל קלט 20 מחזיר פלט 9: <span class="math">\(p\left(x\right)=9\)</span> . זה... קצת כמו רמאות? פולינום שבכלל לא מתייחס ל-<span class="math">\(x\)</span> ? כן, אבל הוא עובד! אבל בסדר, ברור שהוא לא עובד <strong>טוב</strong>. למשל, הזוג השני הוא <span class="math">\(\left(30,15\right)\)</span> והפולינום המגוחך שלנו מחזיר 9 גם על הקלט 30 וזה כבר די רחוק מהמספר הנכון. אז אנחנו רוצים פולינום שבו <span class="math">\(x\)</span> כן משתתף. אבל שימו לב רגע למשהו: הזוג <span class="math">\(\left(80,78\right)\)</span> . בזוג הזה הקלט גדול <strong>פי </strong><strong>4</strong> מאשר בזוג <span class="math">\(\left(20,9\right)\)</span> אבל הפלט גדול <strong>פי </strong><strong>9</strong>(בערך). זה רומז לנו שהיחס בין הקלט לפלט הוא לא יחס ישר (מה שפולינום ממעלה ראשונה מתאר) אלא יותר מזה - אז מה שמעניין אותי הוא למצוא פולינום <strong>ממעלה שניה</strong> שמתאים לנתונים. איך נעשה את זה? וכמה פולינומים כאלו יש? כאן אני רוצה לגלוש טיפה לתיאוריה.</p>
+<p>הנה הטענה התיאורטית המרכזית: אם יש לי סדרה של <span class="math">\(d+1\)</span> זוגות, <span class="math">\(\left(x_{0},y_{0}\right),\ldots,\left(x_{d},y_{d}\right)\)</span> אז <strong>קיים</strong> פולינום <strong>יחיד</strong> <span class="math">\(p\left(x\right)\)</span> ממעלה לכל היותר <span class="math">\(d\)</span> כך ש-<span class="math">\(p\left(x_{i}\right)=y_{i}\)</span> לכל <span class="math">\(0\le i\le d\)</span> .</p>
+<p>מכירות את הקטע הזה של "דרך כל שתי נקודות עובר קו ישר יחיד"? זה בדיוק זה - קו ישר הוא פונקציה שאפשר לתאר על ידי פולינום ממעלה ראשונה, ושני נקודות הן שני זוגות <span class="math">\(\left(x,y\right)\)</span> של מספרים. אז שתי נקודות קובעות חד משמעית קו ישר, ושלוש נקודות יקבעו חד משמעית פרבולה/מעגל (אלו אובייקטים שמתוארים על ידי משוואה ממעלה שניה, אם כי בצורה טיפה יותר מסובכת מאשר סתם פולינום אבל זה מגיע מאותו מקום) וכן הלאה. אני קודם רוצה להסביר למה הפולינום הזה הוא <strong>יחיד</strong> ואז נגיע לאקשן האמיתי - איך למצוא אותו.</p>
+<p>היחידות נובעת מטענה יותר בסיסית על פולינומים: לפולינום ממעלה <span class="math">\(d\)</span> יש לכל היותר <span class="math">\(d\)</span> שורשים - כש"שורש"הוא מספר שמציבים בפולינום ומחזיר 0. בהינתן הטענה הזו, הטענה על היחידות די קלה. נניח שיש לנו שני פולינומים <span class="math">\(p\left(x\right),q\left(x\right)\)</span> ממעלה לכל היותר <span class="math">\(d\)</span> כך ששניהם מקיימים <span class="math">\(p\left(x_{i}\right)=y_{i}=q\left(x_{i}\right)\)</span> לכל <span class="math">\(1\le i\le d\)</span> . עכשיו, בואו נסתכל על ההפרש שלהם, <span class="math">\(a\left(x\right)=p\left(x\right)-q\left(x\right)\)</span> . <strong>גם ההפרש הוא פולינום</strong> ממעלה לכל היותר <span class="math">\(d\)</span> , אבל הוא מקיים <span class="math">\(a\left(x_{i}\right)=p\left(x_{i}\right)-q\left(x_{i}\right)=0\)</span> לכל <span class="math">\(0\le x_{i}\le d\)</span> , כלומר יש לו <span class="math">\(d+1\)</span> שורשים <strong>שונים</strong>(אני מניח שכל ה-<span class="math">\(x\)</span> -ים שונים אחד מהשני כי אם אותו <span class="math">\(x\)</span> מופיע פעמיים זה חייב להיות עם אותו <span class="math">\(y\)</span> כי הרי זו פונקציה, אבל אז סתם שכפלתי מידע קיים ולא הוספתי מידע חדש). לכאורה הגענו לסתירה, אבל יש חריג אחד למשפט שאמרתי קודם - אם הפולינום הוא פולינום <strong>האפס</strong>, כלומר הפולינום <span class="math">\(a\left(x\right)=0\)</span> , אז מן הסתם יש לו אינסוף שורשים - לכן לפעמים מגדירים את הדרגה שלו בתור <span class="math">\(\infty\)</span> במקום 0 כמו שנראה שזה אמור להיות. אבל אם <span class="math">\(p\left(x\right)-q\left(x\right)=a\left(x\right)=0\)</span> אז <span class="math">\(p\left(x\right)=q\left(x\right)\)</span> לכל נקודה, מה שמראה את היחידות.</p>
+<p>אם אני כבר בשוונג - למה המשפט על "לכל היותר <span class="math">\(d\)</span> שורשים"הוא נכון? זו כבר טיפה סטייה מהנושא אבל למה לא. בבסיס העניין נמצאת העובדה שאפשר <strong>לחלק</strong> פולינומים: אם יש לנו <span class="math">\(a\left(x\right),b\left(x\right)\)</span> אז קיימים <span class="math">\(q\left(x\right),r\left(x\right)\)</span> כך ש-<span class="math">\(a\left(x\right)=q\left(x\right)b\left(x\right)+r\left(x\right)\)</span> כך שדרגת <span class="math">\(r\)</span> קטנה ממש מדרגת <span class="math">\(q\)</span> (או ש-<span class="math">\(r\)</span> הוא פולינום האפס).</p>
+<p>עכשיו, אם <span class="math">\(p\left(x\right)\)</span> הוא פולינום ו-<span class="math">\(\alpha\)</span> הוא שורש שלו, כלומר <span class="math">\(p\left(\alpha\right)=0\)</span> , אז בואו נחלק את <span class="math">\(p\)</span> בפולינום ממעלה ראשונה <span class="math">\(x-\alpha\)</span> : נקבל שיש <span class="math">\(q\left(x\right)\)</span> ו-<span class="math">\(r\left(x\right)\)</span> כך ש-<span class="math">\(p\left(x\right)=q\left(x\right)\left(x-\alpha\right)+r\left(x\right)\)</span> . אם נציב עכשיו <span class="math">\(x=\alpha\)</span> אז נקבל:</p>
+<p><span class="math">\(0=p\left(\alpha\right)=q\left(\alpha\right)\left(\alpha-\alpha\right)r\left(\alpha\right)=r\left(\alpha\right)\)</span> העניין הוא ש-<span class="math">\(r\)</span> הוא ממעלה קטנה מ-<span class="math">\(x-\alpha\)</span> , כלומר הוא ממעלה 0 <strong>או</strong> שהוא פולינום האפס. אבל אם הוא ממעלה 0, כלומר קבוע, והוא שווה ל-<span class="math">\(0\)</span> כש"מציבים"בו <span class="math">\(\alpha\)</span> הוא חייב להיות קבוע 0. המסקנה היא ש-<span class="math">\(\left(x-\alpha\right)\)</span> מחלק את <span class="math">\(p\left(x\right)\)</span> ללא שארית, עבור כל שורש <span class="math">\(\alpha\)</span> של <span class="math">\(p\left(x\right)\)</span> . כלומר, <span class="math">\(p\left(x\right)=q\left(x\right)\left(x-\alpha\right)\)</span> - כאן <span class="math">\(q\)</span> הוא ה"מנה"של החלוקה. שימו לב שכל שורש של <span class="math">\(p\)</span> ששונה מ-<span class="math">\(\alpha\)</span> יהיה גם שורש של <span class="math">\(q\)</span> .</p>
+<p>עכשיו אפשר להוכיח את הטענה על מספר השורשים באינדוקציה: לפולינום ממעלה 1 בבירור יש רק שורש אחד (כי פולינום כללי ממעלה <span class="math">\(1\)</span> הוא מהצורה <span class="math">\(ax+b\)</span> כאשר <span class="math">\(a\ne0\)</span> וזה מתאפס אך ורק עבור <span class="math">\(x=-\frac{b}{a}\)</span> ). נניח שלפולינום ממעלה <span class="math">\(d\)</span> יש לכל היותר <span class="math">\(d\)</span> שורשים, אז עבור פולינום ממעלה <span class="math">\(d+1\)</span> , אם קיים לו שורש <span class="math">\(\alpha\)</span> אז נחלק אותו ב-<span class="math">\(x-\alpha\)</span> , נקבל פולינום ממעלה <span class="math">\(d\)</span> , נפעיל עליו את הנחת האינדוקציה - יש לו לכל היותר <span class="math">\(d\)</span> שורשים. נצרף אליהם את <span class="math">\(\alpha\)</span> וקיבלנו של-<span class="math">\(p\)</span> יש לכל היותר <span class="math">\(d+1\)</span> שורשים, וסיימנו.</p>
+<p>כמובן, עדיין לא הוכחתי את הטענה על חלוקת פולינומים, אבל נראה לי שאעצור כאן - רק שימו לב שהטענה הזו <strong>לא נכונה</strong> באופן כללי; זה תלוי איפה הפולינומים "חיים". אצלנו אני מניח במובלע שהפולינומים הם עם מקדמים <strong>ממשיים</strong>, אבל בסיטואציות יותר מורכבות (פולינומים מעל שדות סופיים למשל) לא בהכרח מתקיימת תכונת החלוקה היפה שדיברתי עליה ולפולינום ממעלה <span class="math">\(d\)</span> יכולים להיות יותר מ-<span class="math">\(d\)</span> שורשים (דוגמא קלאסית למי שמכירות: מעל <span class="math">\(\mathbb{Z}_{8}\)</span> לפולינום <span class="math">\(x^{2}-1\)</span> יש ארבעה שורשים).</p>
+<p>חזרה אלינו - הראיתי שאם יש פולינום אינטרפולציה של <span class="math">\(d+1\)</span> נקודות אז הוא יחיד (מבין כל הפולינומים ממעלה עד וכולל <span class="math">\(d\)</span> ). אבל איך מוצאים אותו? יש לכך כמה דרכים, ואני אראה את הדרך הנפוצה - <strong>אינטרפולציית לגראנז'</strong>. אני יכול כמובן פשוט להפיל עלינו את הנוסחה ה"מפחידה", לתת לכולנו להיבהל ואז להסביר מה הולך שם - אבל אני לא אוהב את הגישה הזו, אני מעדיף להראות בדיוק מאיפה הנוסחה הזו מגיעה לפני שמציגים אותה בשלמותה. ולמרבה המזל, הרעיון הבסיסי שמאחוריה הוא פשוט מאוד.</p>
+<p>בואו נחזור על מה שיש לנו - אוסף של <span class="math">\(d+1\)</span> זוגות קלט/פלט: <span class="math">\(\left(x_{0},y_{0}\right),\ldots,\left(x_{d},y_{d}\right)\)</span> . אני רוצה לבנות פולינום <span class="math">\(p\left(x\right)\)</span> שמקיים <span class="math">\(p\left(x_{i}\right)=y_{i}\)</span> עבור <span class="math">\(0\le i\le d\)</span> . עכשיו, בואו נניח שהצלחתי למצוא בדרך פלא פולינום <span class="math">\(p_{i}\)</span> שהוא בעל התכונה המופלאה הבאה: על <span class="math">\(x_{i}\)</span> הוא מחזיר את <span class="math">\(y_{i}\)</span> ועל כל <span class="math">\(x_{j}\)</span> אחר מבין הקלטים הוא מחזיר 0. כלומר</p>
+<p><span class="math">\(p_{i}\left(x_{j}\right)=\begin{cases}
+y_{i} & j=i\\
+0 & j\ne i
+\end{cases}\)</span></p>
+<p>אם מצאתי <span class="math">\(p_{i}\)</span> כזה לכל <span class="math">\(0\le i\le d\)</span> , סיימתי! אני אגדיר <span class="math">\(p\left(x\right)=p_{0}\left(x\right)+p_{1}\left(x\right)+\ldots+p_{d}\left(x\right)\)</span> , ועכשיו כשאני מציב <span class="math">\(x_{i}\)</span> ב-<span class="math">\(p\)</span> , כל המחוברים מתאפסים חוץ מ-<span class="math">\(p_{i}\left(x_{i}\right)=y_{i}\)</span> .</p>
+<p>אז המטרה שלי עכשיו היא להבין איך לממש את <span class="math">\(p_{i}\)</span> . אבל לפני כן, בואו נציב לעצמנו מטרה קצת יותר צנועה - לבנות פולינום שמתאפס על כל <span class="math">\(x_{j}\)</span> עבורו <span class="math">\(j\ne i\)</span> , ולא חשוב כרגע מה הוא מחזיר על <span class="math">\(x_{i}\)</span> . האם אנחנו יודעים לבנות פולינום כזה? ובכן, כן! ראינו את זה לפני רגע למעשה. ראינו שאם <span class="math">\(\alpha\)</span> מאפס פולינום כלשהו, הפולינום <strong>חייב</strong> להתחלק ב-<span class="math">\(x-\alpha\)</span> , ולכן פולינום שמתאפס על כל <span class="math">\(x_{j}\)</span> כך ש-<span class="math">\(j\ne i\)</span> <strong>חייב</strong> להתחלק בכל ה-<span class="math">\(x-x_{j}\)</span> -ים הללו. אז בואו פשוט נכפול את כולם:</p>
+<p><span class="math">\(p_{i}\left(x\right)=\left(x-x_{0}\right)\left(x-x_{1}\right)\ldots\left(x-x_{i-1}\right)\left(x-x_{i+1}\right)\ldots\left(x-x_{d}\right)\)</span></p>
+<p>אוקיי הצילו, זה כתיב מסורבל מדי. בואו נכניס את הכתיב המקובל לכפל מקוצר:</p>
+<p><span class="math">\(p_{i}\left(x\right)=\prod_{j\ne j}\left(x-x_{j}\right)\)</span></p>
+<p>הבעיה עם הפולינום הזה היא שכשמציבים בו <span class="math">\(x_{i}\)</span> , לא מקבלים את <span class="math">\(y_{i}\)</span> . מקבלים איזה שהוא ערך שהוא עיסת מישמש לא ברורה:</p>
+<p><span class="math">\(p_{i}\left(x_{i}\right)=\prod_{j\ne j}\left(x_{i}-x_{j}\right)\)</span> </p>
+<p><strong>אין לי מושג</strong> מה המספר הזה, אני רק יודע שהוא לא 0, כי <span class="math">\(x_{i}-x_{j}\ne0\)</span> לכל <span class="math">\(i\ne j\)</span> . ואם המספר הזה הוא לא 0 אז אפשר <strong>לחלק</strong> בו. אז בואו נגדיר מחדש את <span class="math">\(p_{i}\)</span> :</p>
+<p><span class="math">\(p_{i}\left(x\right)=\prod_{i\ne j}\frac{x-x_{j}}{x_{i}-x_{j}}\)</span></p>
+<p>הפולינום הזה הוא בעל תכונה מאוד נחמדה:</p>
+<p><span class="math">\(p_{i}\left(x_{j}\right)=\begin{cases}
+1 & j=i\\
+0 & j\ne i
+\end{cases}\)</span></p>
+<p>מה שעשיתי כאן נקרא <strong>לנרמל</strong> - היה לי משהו שהגודל שלו הוא לא 1, אז חילקתי אותו בגודל שלו והופס, קיבלתי משהו מגודל 1. זה מעולה, אבל אני הרי רציתי שהפולינום יחזיר <span class="math">\(y_{i}\)</span> . למרבה המזל, מרגע שנירמלתי אני פשוט יכול לכפול את הכל ב-<span class="math">\(y_{i}\)</span> , כלומר להגיע להגדרה הסופית של <span class="math">\(p_{i}\)</span> :</p>
+<p><span class="math">\(p_{i}\left(x\right)=\prod_{i\ne j}\frac{x-x_{j}}{x_{i}-x_{j}}y_{i}\)</span></p>
+<p>ועכשיו אפשר להשתמש בסימון המקוצר לחיבור, ולקבל את פולינום האינטרפולציה:</p>
+<p><span class="math">\(p\left(x\right)=\sum_{i=0}^{d}\prod_{i\ne j}\frac{x-x_{j}}{x_{i}-x_{j}}y_{i}\)</span></p>
+<p>הפולינום הזה <strong>עובד</strong>. שימו לב לכך שהוא ממעלה <span class="math">\(d\)</span> , כי במכפלה <span class="math">\(\prod_{i\ne j}\frac{x-x_{j}}{x_{i}-x_{j}}\)</span> משתתפים רק <span class="math">\(d\)</span> מוכפלים, כל אחד מהם תורם 1 לחזקה של <span class="math">\(x\)</span> . סיימנו! זו הנוסחה המפחידה שדיברתי עליה!</p>
+<p>עכשיו אפשר לחזור אל הנתונים הגולמיים שראינו קודם. אם נלך לנתוני מרחק העצירה, ונבצע אינטרפולציה על הנקודות <span class="math">\(\left(20,9\right),\left(30,15\right),\left(40,23\right)\)</span> נקבל את הפולינום <span class="math">\(\frac{x^{2}}{100}+\frac{x}{10}+3\)</span> ובאמת אם ננסה להציב בו <span class="math">\(20,30,40\)</span> נקבל <span class="math">\(9,15,23\)</span> בהתאמה. קסם! אבל מה עם יתר הערכים שיש לנו? אם נציב 50 נקבל 33 ואם נציב 60 נקבל 45, בדיוק כמו בנתונים שלנו! אבל... אם נציב 70 נקבל 59, לא 60. כאן המודל שלנו כבר חורג מהתוצאות הנצפות בפועל.</p>
+<p>כמובן, אפשר לנסות לבצע אינטרפולציה חדשה שכוללת את אותן הנקודות <span class="math">\(\left(20,9\right),\left(30,15\right),\left(40,23\right)\)</span> מקודם ובנוסף לכך את הנקודה החדשה <span class="math">\(\left(70,60\right)\)</span> . התוצאה תהיה פולינום ממעלה שלוש שנראה די מפחיד:</p>
+<p><span class="math">\(\frac{x^{3}}{6000}+\frac{17x^{2}}{2000}+\frac{43x}{300}+\frac{13}{5}\)</span> הפולינום הזה תואם את כל הנקודות שהזנתי לאינטרפולציה, אבל הוא מזייף בנקודות אחרות. למשל, עבור <span class="math">\(80\)</span> הוא יחזיר 77 ולא 78. אבל גרוע מכך, על 50 הוא יחזיר <span class="math">\(\frac{331}{10}=33.1\)</span> , לא 33 - איבדנו תוצאה שקיבלנו קודם "במזל"(כי היא הייתה על ערך שלא השתתף באינטרפולציה). אני חושב שהרעיון ברור - אינטרפולציה במובן שהצגתי כאן נותנת התאמה מדויקת לערכים שהזנתי לה, במחיר של ויתור על כל יתר הערכים שלא הזנתי. לכן השיטה הזו היא רק תחילת הסיפור, לא סופו. אבל זו התחלה יפה!</p>
+<p>בואו נחזור עכשיו לחידה מתחילת הפוסט:</p>
+<p><img src="/img/2026/OnlyGenius.png" alt=""/></p>
+<p>מה שיש לנו פה הוא את סדרת הנקודות <span class="math">\(\left(8,88\right),\left(7,70\right),\left(6,54\right),\left(5,40\right)\)</span> . להזין את זה לנוסחת האינטרפולציה יניב באופן לא מפתיע את הפולינום <span class="math">\(x^{2}+3x\)</span> שהצבה של 3 בו מחזירה 18. האם זה אומר ש-18 הוא אכן הפתרון לחידה? רק אם אנחנו בוחרים להניח שהחידה שואלת משהו בסגנון "אם מוצאים פונקציה פשוטה ביותר שמייצגת את הקשר שמעביר את הקלטים באגף שמאל לפלטים באף ימין ומציבים בה את הערך התחתון ביותר באגף שמאל מה נקבל?" ומוסיפים על זה את ההנחה ש"פשוטה ביותר" זה "פולינומית ממעלה מינימלית". אז כן, אפשר להניח את כל ההנחות הללו, אבל... במקרה הזה, מה בעצם נשאר מהחידה? כמו שאנחנו רואים, אין כאן חשיבה, יש אלגוריתם אינטרפולציה כללי שפשוט צריך להפעיל אותו פה. <strong>מה הכיף כאן?</strong> אוקיי, ומה עם החידה השניה שהצגתי?</p>
+<p><img src="/img/2026/OnlyGenius2.png" alt=""/></p>
+<p>כאן אינטרפולציה של ארבעת הזוגות הראשונים תניב את הפולינום <span class="math">\(p\left(x\right)=-32335x^{3}+392510x^{2}-950185x+591010\)</span> שאיך נגיד, לא מעורר תחושות פשוטות במיוחד. להציב בו <span class="math">\(x=5\)</span> ייתן <span class="math">\(1610960\)</span> שהוא... מספר... כלשהו? מה הקטע פה? ובכן הקטע כמובן הוא שסדרת המספרים הזו <strong>לא</strong> הגיעה משום פולינום או משום דבר מתמטי כלשהו אלא מהראש המאוד כאוטי של דני סנדרסון - ההתאמה פה היא "<span class="math">\(n\)</span> עובר למספר שאותו שרים בשורה ה-<span class="math">\(n\)</span> בבית האחרון של השיר 'אלף כבאים'": </p>
+<blockquote>
+<p>אלף כבאים, לא יצליחו לכבות</p>
+<p>אלפיים צבעים, לא יצליחו לכבות</p>
+<p>ארבע מאות אלף פרשים, לא יצליחו לכבות</p>
+<p>מיליון ותשע מאות תשעים, לא יצליחו לכבות</p>
+<p>אלף כבאים, לא יצליחו לכבות אותי</p>
+</blockquote>
+<p>אז התשובה היא 1,000. סליחה, פולינומים, מתברר שפשוט יש דברים שאתם לא מתאימים להם.</p>
+        </article>
+        
+        <footer>
+            <p>© כל הזכויות שמורות לגדי אלכסנדרוביץ'</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('expanded');
+        }
+        
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>
