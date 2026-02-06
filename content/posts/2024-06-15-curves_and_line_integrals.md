@@ -328,7 +328,9 @@ tags:
 
 בינתיים אני <strong>לא יכול</strong> לפשט את {% equation %}z\left(t_{i}\right)-z\left(t_{i-1}\right){% endequation %} כי אין לי אנלוג ישיר למשפט לגראנז' עבור פונקציות עם טווח מרוכב. אז מה אני אעשה? אני אלך עם הראש בקיר ואציב דברים:
 
-{% equation %}\sum_{i=1}^{n}f\left(z\left(t_{i}^{*}\right)\right)\left(z\left(t_{i}\right)-z\left(t_{i-1}\right)\right)=\sum_{i=1}^{n}\left[\left(u\left(t_{i}^{*}\right)+iv\left(t_{i}^{*}\right)\right)\left(x\left(t_{i}\right)+iy\left(t_{i}\right)-x\left(t_{i-1}\right)-iy\left(t_{i-1}\right)\right)\right]={% endequation %}
+{% equation %}\sum_{i=1}^{n}f\left(z\left(t_{i}^{*}\right)\right)\left(z\left(t_{i}\right)-z\left(t_{i-1}\right)\right)={% endequation %}
+
+{% equation %}=\sum_{i=1}^{n}\left[\left(u\left(t_{i}^{*}\right)+iv\left(t_{i}^{*}\right)\right)\left(x\left(t_{i}\right)+iy\left(t_{i}\right)-x\left(t_{i-1}\right)-iy\left(t_{i-1}\right)\right)\right]={% endequation %}
 
 {% equation %}=\sum_{i=1}^{n}\left[u\left(t_{i}^{*}\right)\left(x\left(t_{i}\right)-x\left(t_{i-1}\right)\right)-v\left(t_{i}^{*}\right)\left(y\left(t_{i}\right)-y\left(t_{i-1}\right)\right)\right]+{% endequation %}
 
@@ -353,7 +355,9 @@ tags:
 
 עכשיו, ראינו איך אפשר לפצל גם את {% equation %}S_{P}^{z}{% endequation %} וגם את {% equation %}\int_{a}^{b}f\left(z\left(t\right)\right)z^{\prime}\left(t\right)dt{% endequation %} לארבעה חלקים שמתאימים זה לזה בזוגות. לכן כדי לחסום את ההפרש, אני משתמש באי שוויון המשולש על פיצול לארבעה חלקים של כל אחד מהביטויים. בואו נראה איך דבר כזה נראה, סכמטית:
 
-{% equation %}\left|\left(A_{1}+B_{1}+C_{1}+D_{1}\right)-\left(A_{2}+B_{2}+C_{2}+D_{2}\right)\right|\le\left|A_{1}-A_{2}\right|+\left|B_{1}-B_{2}\right|+\left|C_{1}-C_{2}\right|+\left|D_{1}-D_{2}\right|{% endequation %}
+{% equation %}\left|\left(A_{1}+B_{1}+C_{1}+D_{1}\right)-\left(A_{2}+B_{2}+C_{2}+D_{2}\right)\right|\le{% endequation %}
+
+{% equation %}\le\left|A_{1}-A_{2}\right|+\left|B_{1}-B_{2}\right|+\left|C_{1}-C_{2}\right|+\left|D_{1}-D_{2}\right|{% endequation %}
 
 במקרה שלנו המקבילה ל-{% equation %}\left|A_{1}-A_{2}\right|{% endequation %} תהיה
 
