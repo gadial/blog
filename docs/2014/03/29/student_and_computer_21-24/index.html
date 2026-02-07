@@ -313,20 +313,20 @@
 <p>הנה הקוד שלי:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Array</span>
-<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">exist?</span>
-<span class="w">    </span><span class="n">each</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kp">true</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">yield</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
-<span class="w">    </span><span class="kp">false</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">sum</span>
-<span class="w">    </span><span class="n">inject</span><span class="p">(</span><span class="ss">:+</span><span class="p">)</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="k">end</span>
+<pre class="highlight"><code class="language-ruby">class Array
+  def exist?
+    each{|x| return true if yield(x)}
+    false
+  end
+  def sum
+    inject(:+)
+  end
+end
 
-<span class="n">sides</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">ARGV</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="n">x</span><span class="o">.</span><span class="n">to_i</span><span class="p">}</span>
-<span class="nb">print</span><span class="w"> </span><span class="s2">&quot;il&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">sides</span><span class="o">.</span><span class="n">exist?</span><span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">sides</span><span class="o">.</span><span class="n">sum</span><span class="p">}</span>
-<span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;legal triangle&quot;</span>
-</code></pre></div>
+sides = ARGV.collect{|x| x.to_i}
+print &quot;il&quot; if sides.exist?{|a| 2*a &gt; sides.sum}
+puts &quot;legal triangle&quot;
+</code></pre>
 
 
 </div>
@@ -338,9 +338,9 @@
 <p>כאן אני קצת תוהה מה השאלה הזו עושה בחלק השני של הספר - היא קלה ולא מחכימה. אבל מילא. הפתרון הוא של שורה קצרה אחת וזהו:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">ARGV</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="n">x</span><span class="o">.</span><span class="n">to_i</span><span class="p">}</span>
-<span class="nb">puts</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">a, b = ARGV.collect{|x| x.to_i}
+puts (a/b) + 1
+</code></pre>
 
 
 </div>
@@ -350,9 +350,9 @@
 כאן מקבלים מספר כלשהו ומוצאים מה המספר שצריך להוסיף לו כדי לקבל משהו שמתחלק ב-10. הפתרון המקורי בספר מסובך נורא, כי כנראה חסר לו אופרטור סטנדרטי בשפות תכנות, של מודולו. <span class="math">\(a % b\)</span> הוא שארית החלוקה של <span class="math">\(a\)</span> ב-<span class="math">\(b\)</span> וכמעט מה שאנחנו צריכים פה:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">ARGV</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">to_i</span>
-<span class="nb">puts</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">10</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">a = ARGV.first.to_i
+puts (10 - a) % 10
+</code></pre>
 
 
 </div>
@@ -362,9 +362,9 @@
 זו השאלה ה"קלה מדי" האחרונה, ובמובן מסויים גם הגרועה שבכולן. נתון לנו ריבוע עם אורך צלע <span class="math">\(a\)</span> ובונים ממנו ריבוע חדש, על ידי כך שמותחים קווים בין אמצעי הצלעות של הריבוע הקיים. השאלה היא מה שטח הריבוע החדש. הנה פתרון ישיר:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">ARGV</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">to_i</span>
-<span class="nb">puts</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">to_f</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-ruby">a = ARGV.first.to_i
+puts 2*(a.to_f/2)**2
+</code></pre>
 
 
 </div>

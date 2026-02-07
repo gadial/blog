@@ -343,8 +343,8 @@
 <p>בואו נסביר את הקוד שורה שורה, עבור מי שלא מכיר שפות תכנות. אין כאן שום דבר שמעבר ליכולת ההבנה שלכם - זה קוד מאוד פשוט. רק טיפה טרמינולוגיה קודם: כשאני מדבר על "מספר ממשי" אני מתכוון לכל מספר שאנחנו יודעים לכתוב עם ייצוג עשרוני, למשל 3 או 3.141 או 0.333 וכדומה. ליתר דיוק, אני מתכוון רק לאלו מתוכם שאנחנו יודעים לייצג במחשב, אבל מי אלו בדיוק נראה רק בהמשך. באופן דומה, "מספר שלם" הוא מספר שאין לו כלום אחרי הנקודה העשרונית. 3 הוא שלם ו-3.1 או 0.3 הם לא שלמים. גם על השלמים יש הגבלה, שלא אתאר כרגע, לגבי מי מהם יכול להיות מיוצג במחשב.</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="kt">float</span><span class="w"> </span><span class="n">Q_rsqrt</span><span class="p">(</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="p">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-cpp">float Q_rsqrt( float number )
+</code></pre>
 
 
 </div>
@@ -353,10 +353,10 @@
 <p>שלוש השורות הבאות מגדירות משתנים וקבועים שבהם ישתמשו בהמשך הפונקציה:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="kt">long</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
-<span class="kt">float</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
-<span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">threehalfs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.5F</span><span class="p">;</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-cpp">long i;
+float x2, y;
+const float threehalfs = 1.5F;
+</code></pre>
 
 
 </div>
@@ -366,9 +366,9 @@
 <p>שתי השורות הבאות מאתחלות את המשתנים שהוגדרו קודם:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5F</span><span class="p">;</span>
-<span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-cpp">x2 = number * 0.5F;
+y = number;
+</code></pre>
 
 
 </div>
@@ -377,10 +377,10 @@
 <p>שלוש השורות הבאות הן ללא ספק החלק הכי לא ברור בכל הקוד:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="c1">// evil floating point bit level hacking</span>
-<span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x5f3759df</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="c1">// what the fuck?</span>
-<span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">i</span><span class="p">;</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-cpp">i = * ( long * ) &amp;y; // evil floating point bit level hacking
+i = 0x5f3759df - ( i &gt;&gt; 1 ); // what the fuck?
+y = * ( float * ) &amp;i;
+</code></pre>
 
 
 </div>
@@ -392,9 +392,9 @@
 <p>התשובה היא שהשורות הללו נותנות לנו <strong>קירוב</strong> לערך של <span class="math">\(\frac{1}{\sqrt{x}}\)</span>. הקירוב הזה רחוק מלהיות מושלם, אבל הוא טוב בצורה מפתיעה. כדי לשפר את הקירוב הזה עוד יותר מגיעות השורות האחרונות בקוד:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">threehalfs</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="c1">// 1st iteration</span>
-<span class="c1">// y = y * ( threehalfs - ( x2 * y * y ) ); // 2nd iteration, this can be removed</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-cpp">y = y * ( threehalfs - ( x2 * y * y ) ); // 1st iteration
+// y = y * ( threehalfs - ( x2 * y * y ) ); // 2nd iteration, this can be removed
+</code></pre>
 
 
 </div>
@@ -420,10 +420,10 @@
 <p>האם הנוסחה האחרונה נראית לכם מוכרת? בואו נסתכל שוב בשורות הרלוונטיות בקוד:</p>
 <div class="code-block">
 
-<div class="highlight"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">threehalfs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.5F</span><span class="p">;</span>
-<span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5F</span><span class="p">;</span>
-<span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">threehalfs</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="c1">// 1st iteration</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-cpp">const float threehalfs = 1.5F;
+x2 = number * 0.5F;
+y = y * ( threehalfs - ( x2 * y * y ) ); // 1st iteration
+</code></pre>
 
 
 </div>
