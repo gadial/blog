@@ -22,10 +22,16 @@ social_media_share: true
 
 כדי להסביר מה מחשב קוונטי בעצם <strong>עושה</strong>, אני זקוק לחתולים. תודה ל<a href="https://noa.null.co.il/">נועה ליברמן-פלשקס</a> שאיירה לי את המחשב הקוונטי הראשון בעולם שנבנה באמצעות חתולים!
 
-{% include image-with-caption.html src='/2019/02/Catputer-color-A.jpg' alt='שלושה חתולים יושבים על מה שנראה דומה למחשב קוונטי אמיתי' caption='איור: נועה ליברמן-פלשקס' %}
+<figure class="alignnone">
+<img class="size-full" src="{{site.baseurl}}{{site.post_images}}/2019/02/Catputer-color-A.jpg" alt="שלושה חתולים יושבים על מה שנראה דומה למחשב קוונטי אמיתי" />
+<figcaption style="text-align: center; font-style: italic; color: #666; padding: 8px; margin-top: 5px; border-top: 1px solid #ddd;">איור: נועה ליברמן-פלשקס</figcaption>
+</figure>
 
 מה הולך פה? יש לנו משהו מוזר שכולל שלושה חתולים, שאתן להם שמות במקום סתם לקרוא להם א', ב', ג': ארצ'יבלד, בהמות וגריזלדה (מלמעלה למטה). כרגע שלושתם נראים חייכנים ומרוצים מהחיים, אבל חכו חכו, עוד רגע המחשב יופעל ויקרה להם משהו מוזר מאוד!
-{% include image-with-caption.html src="/2019/02/Catputer-color-B.jpg" alt="המחשב הקוונטי שהפך לענן שמתוכו מציצות שתי גרסאות של כל חתול" caption="איור: נועה ליברמן-פלשקס" %}
+<figure class="alignnone">
+<img class="size-full" src="{{site.baseurl}}{{site.post_images}}/2019/02/Catputer-color-B.jpg" alt="המחשב הקוונטי שהפך לענן שמתוכו מציצות שתי גרסאות של כל חתול" />
+<figcaption style="text-align: center; font-style: italic; color: #666; padding: 8px; margin-top: 5px; border-top: 1px solid #ddd;">איור: נועה ליברמן-פלשקס</figcaption>
+</figure>
 
 <h2>סופרפוזיציה, או: מה הולך פה בכלל?</h2>
 אם במחשב רגיל יחידת המידע הבסיסית נקראת <strong>ביט</strong>, אז במחשב קוונטי יחידת המידע הבסיסית נקראת <strong>קיוביט</strong>. להבדיל מביט שיכול להיות או 0 או 1 וזהו, קיוביט יכול להיות <strong>סופרפוזיציה</strong> של הערכים 0 ו--1. סופרפוזיציה היא התופעה הבסיסית שביסוד תורת הקוונטים, והיא מה שהופך מחשבים קוונטיים לשונים כל כך ממחשבים רגילים. לכן אנחנו צריכים להבין מה המושג הזה אומר ומה הוא לא אומר. אני מייצג בתמונה סופרפוזיציה בתור "ענן של מהומה" אבל צריך להסביר מה קורה בתוך הענן הזה.
