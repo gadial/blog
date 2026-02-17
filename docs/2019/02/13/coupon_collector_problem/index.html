@@ -250,6 +250,7 @@
                 <a href="/random.html">פוסט אקראי</a>
                 <a href="/post_list.html">כל הפוסטים</a>
                 <a href="/categories/">קטגוריות</a>
+                <a href="/lecture_notes.html">סיכומי הרצאות</a>
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="חיפוש...">
                     <button onclick="searchPosts()">חפש</button>
@@ -318,27 +319,27 @@
 <p>כמובן, אין טעם באמת לתת לשחקנים לשחק; אפשר לעשות משהו מהיר יותר - סימולציה במחשב. אז הנה קוד בשפת פייתון שעושה בדיוק את זה:</p>
 <div class="code-block">
 
-<pre class="highlight"><code class="language-python">import random
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 
-def experiment(n):
-    visited = [False] * n
-    visited_count = 0
-    rounds = 0
-    while visited_count &lt; n:
-        rounds += 1
-        i = random.randrange(n)
-        if not visited[i]:
-            visited[i] = True
-            visited_count += 1           
-    return rounds
+<span class="k">def</span><span class="w"> </span><span class="nf">experiment</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+    <span class="n">visited_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">visited_count</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">rounds</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">visited_count</span> <span class="o">+=</span> <span class="mi">1</span>           
+    <span class="k">return</span> <span class="n">rounds</span>
 
-tries = 10000
-N = 103
-total = 0
-for i in range(tries):
-    total += experiment(N)
-print(total / tries)
-</code></pre>
+<span class="n">tries</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">103</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tries</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">experiment</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">total</span> <span class="o">/</span> <span class="n">tries</span><span class="p">)</span>
+</code></pre></div>
 
 
 </div>
@@ -383,8 +384,8 @@ print(total / tries)
 <p>הנוסחה שמצאתי עכשיו, <span class="math">\(N\cdot H_{N}\)</span>, לא נותנת קירוב של התוחלת אלא את התוחלת עצמה, במדויק; אבל עוד יותר חשוב מכך, אפשר לחשב אותה <strong>מהר</strong>, בשורה אחת של פייתון:</p>
 <div class="code-block">
 
-<pre class="highlight"><code class="language-python">print(N * sum(1 / k for k in range(1,N+1)))
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
+</code></pre></div>
 
 
 </div>
@@ -398,10 +399,10 @@ print(total / tries)
 <p>וזו נוסחה ש<strong>מאוד קל</strong> לחשב ביעילות, גם אם הערך של <span class="math">\(N\)</span> הוא אדיר (בן מאות ספרות - מה שמונע לגמרי חישוב של הסכום <span class="math">\(1+\frac{1}{2}+\dots+\frac{1}{N}\)</span>). ככל ש-<span class="math">\(N\)</span> גדול יותר כך הקירוב יהיה טוב יותר; עד כמה הוא טוב עבור <span class="math">\(N=103\)</span>? ובכן, הבה וננסה:</p>
 <div class="code-block">
 
-<pre class="highlight"><code class="language-python">import numpy
-gamma = 0.5772156649
-print(N * numpy.log(N) + gamma * N + 1/2)
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.5772156649</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
 
 
 </div>

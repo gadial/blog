@@ -250,6 +250,7 @@
                 <a href="/random.html">פוסט אקראי</a>
                 <a href="/post_list.html">כל הפוסטים</a>
                 <a href="/categories/">קטגוריות</a>
+                <a href="/lecture_notes.html">סיכומי הרצאות</a>
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="חיפוש...">
                     <button onclick="searchPosts()">חפש</button>
@@ -410,29 +411,29 @@
 <p>מה שאני עושה הוא לכתוב סקריפט פייתון שמקבל אלפבית כלשהו, גם שרירותי ומונפץ, ומחשב את נוסחת הנסיגה עבור כל אות שלו. למה פייתון? כי אני מתבסס על ספריה מתמטית שנקראת Sympy והיא שימושית מאוד לחישובים שאני מבצע. הנה קטע הקוד המלא שמקבל את האלפבית (בתור מילון שבו המפתחות הן אותיות והערך שמותאם לכל מפתח הוא הכתיב של האות) ומוציא את רשימת נוסחאות הנסיגה:</p>
 <div class="code-block">
 
-<pre class="highlight"><code class="language-python">def gf_to_recurrence_relation(gf):
-    gf = gf.simplify()
-    coeffs = Poly(fraction(gf)[1],x).coeffs()
-    c = (-1 / coeffs.pop())
-    coeffs = [co*c for co in coeffs]
-    init_vals = Poly(gf.nseries(x,0,len(coeffs))).coeffs()
-    init_vals.pop()
-    init_vals.reverse()
-    return (coeffs, init_vals)
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">gf_to_recurrence_relation</span><span class="p">(</span><span class="n">gf</span><span class="p">):</span>
+    <span class="n">gf</span> <span class="o">=</span> <span class="n">gf</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">Poly</span><span class="p">(</span><span class="n">fraction</span><span class="p">(</span><span class="n">gf</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">coeffs</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="p">[</span><span class="n">co</span><span class="o">*</span><span class="n">c</span> <span class="k">for</span> <span class="n">co</span> <span class="ow">in</span> <span class="n">coeffs</span><span class="p">]</span>
+    <span class="n">init_vals</span> <span class="o">=</span> <span class="n">Poly</span><span class="p">(</span><span class="n">gf</span><span class="o">.</span><span class="n">nseries</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)))</span><span class="o">.</span><span class="n">coeffs</span><span class="p">()</span>
+    <span class="n">init_vals</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">init_vals</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">init_vals</span><span class="p">)</span>
 
-def find_gfs(letters, letter_names):
-    n = len(letters)
-    m = Matrix([[letter_names[letters[j]].count(letters[i]) for i in range(n)] for j in range(n)])
-    u = Matrix([[1] for k in range(n)])
-    gfs = (eye(n) - x * m)**(-1) * u
-    return gfs
+<span class="k">def</span><span class="w"> </span><span class="nf">find_gfs</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="n">letter_names</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="n">letter_names</span><span class="p">[</span><span class="n">letters</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">letters</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span>
+    <span class="n">gfs</span> <span class="o">=</span> <span class="p">(</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span> <span class="o">*</span> <span class="n">m</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span>
+    <span class="k">return</span> <span class="n">gfs</span>
 
-def find_recurrence_relations(letter_names):
-    letters = letter_names.keys()
-    letters.sort()
-    gfs = find_gfs(letters, letter_names)
-    return [(letter, gf_to_recurrence_relation(gf)) for letter,gf in zip(letters,gfs)]
-</code></pre>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_recurrence_relations</span><span class="p">(</span><span class="n">letter_names</span><span class="p">):</span>
+    <span class="n">letters</span> <span class="o">=</span> <span class="n">letter_names</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">letters</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">gfs</span> <span class="o">=</span> <span class="n">find_gfs</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="n">letter_names</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">letter</span><span class="p">,</span> <span class="n">gf_to_recurrence_relation</span><span class="p">(</span><span class="n">gf</span><span class="p">))</span> <span class="k">for</span> <span class="n">letter</span><span class="p">,</span><span class="n">gf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span><span class="n">gfs</span><span class="p">)]</span>
+</code></pre></div>
 
 
 </div>
@@ -441,14 +442,14 @@ def find_recurrence_relations(letter_names):
 <p>הדבר הראשון שעושים, כמובן, הוא להפעיל את זה על עברית (עם האיות החריג של תא"ו ושל וא"ו) ולראות שזה עובד. הנה חלק מהתוצאות שקיבלתי:</p>
 <div class="code-block">
 
-<pre class="highlight"><code class="language-python">Letter: א, Recurrence: ([-1, 3], [1, 3])
-Letter: ד, Recurrence: ([2, -7, 5], [1, 3, 9])
-Letter: ו, Recurrence: ([2, -7, 5], [1, 3, 9])
-Letter: ל, Recurrence: ([-1, 3], [1, 3])
-Letter: מ, Recurrence: ([2], [1])
-Letter: פ, Recurrence: ([-1, 3], [1, 2])
-Letter: ת, Recurrence: ([2, -7, 5], [1, 3, 9])
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="n">Letter</span><span class="p">:</span> <span class="n">א</span><span class="p">,</span> <span class="n">Recurrence</span><span class="p">:</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">Letter</span><span class="p">:</span> <span class="n">ד</span><span class="p">,</span> <span class="n">Recurrence</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+<span class="n">Letter</span><span class="p">:</span> <span class="n">ו</span><span class="p">,</span> <span class="n">Recurrence</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+<span class="n">Letter</span><span class="p">:</span> <span class="n">ל</span><span class="p">,</span> <span class="n">Recurrence</span><span class="p">:</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">Letter</span><span class="p">:</span> <span class="n">מ</span><span class="p">,</span> <span class="n">Recurrence</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">Letter</span><span class="p">:</span> <span class="n">פ</span><span class="p">,</span> <span class="n">Recurrence</span><span class="p">:</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">Letter</span><span class="p">:</span> <span class="n">ת</span><span class="p">,</span> <span class="n">Recurrence</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+</code></pre></div>
 
 
 </div>

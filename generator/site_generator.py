@@ -294,6 +294,17 @@ class SiteGenerator:
         
         self.generation_log.append("Generated: random.html")
     
+    def generate_lecture_notes(self):
+        """Generate lecture notes page."""
+        template = self.jinja_env.get_template('lecture_notes.html')
+        html = template.render(baseurl=self.baseurl)
+        
+        output_file = self.output_dir / 'lecture_notes.html'
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(html)
+        
+        self.generation_log.append("Generated: lecture_notes.html")
+
     def generate_rss(self, posts: list, max_items: int = 20):
         """Generate RSS feed.
         
@@ -474,6 +485,7 @@ class SiteGenerator:
             self.generate_index(processed_posts)
             self.generate_post_list(processed_posts)
             self.generate_random(processed_posts)
+            self.generate_lecture_notes()
             self.generate_rss(processed_posts)
             
             # Generate categories if enabled
