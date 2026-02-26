@@ -43,6 +43,10 @@ class SiteGenerator:
             autoescape=True
         )
         
+        # Add custom filter for safe filenames
+        import re as _re
+        self.jinja_env.filters['safe_filename'] = lambda s: _re.sub(r'[<>:"/\\|?*]', '_', s)
+        
         # Initialize markdown processor
         self.md_processor = MarkdownProcessor()
         
@@ -407,6 +411,78 @@ class SiteGenerator:
         
         self.generation_log.append("Generated: categories/index.html")
     
+    @staticmethod
+    def _safe_filename(name) -> str:
+        """Create a filesystem-safe filename from a name.
+        
+        Replaces characters that are invalid on Windows (< > : " / \\ | ? *)
+        with underscores.
+        """
+        import re
+        return re.sub(r'[<>:"/\\|?*]', '_', str(name))
+    
+    def generate_tags(self, posts: list):
+        """Generate tag pages.
+        
+        Args:
+            posts: List of Post objects
+        """
+        from collections import defaultdict
+        
+        # Build tag index
+        tags = defaultdict(list)
+        for post in posts:
+            for tag in post.tags:
+                url = f"{self.baseurl}/{post.date.strftime('%Y/%m/%d')}/{post.slug}/"
+                tags[tag].append({
+                    'title': post.title,
+                    'date': post.date.strftime('%Y-%m-%d'),
+                    'url': url,
+                    'summary': post.metadata.get('summary', '')
+                })
+        
+        # Sort posts within each tag by date (newest first)
+        for tag in tags:
+            tags[tag].sort(key=lambda p: p['date'], reverse=True)
+        
+        # Create tags directory in output
+        tags_dir = self.output_dir / 'tags'
+        tags_dir.mkdir(exist_ok=True)
+        
+        # Generate individual tag pages
+        template = self.jinja_env.get_template('tag.html')
+        for tag, tag_posts in tags.items():
+            safe_tag = self._safe_filename(tag)
+            tag_filename = f"{safe_tag}.html"
+            
+            html = template.render(
+                tag_name=tag,
+                posts=tag_posts,
+                post_count=len(tag_posts),
+                baseurl=self.baseurl
+            )
+            
+            output_file = tags_dir / tag_filename
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(html)
+            
+            self.generation_log.append(f"Generated: tags/{tag_filename}")
+        
+        # Generate tags index page
+        tags_list = [
+            {'name': str(tag), 'count': len(posts_list), 'url': f"{self.baseurl}/tags/{self._safe_filename(tag)}.html"}
+            for tag, posts_list in sorted(tags.items(), key=lambda x: str(x[0]))
+        ]
+        
+        template = self.jinja_env.get_template('tags.html')
+        html = template.render(tags=tags_list, baseurl=self.baseurl)
+        
+        output_file = tags_dir / 'index.html'
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(html)
+        
+        self.generation_log.append("Generated: tags/index.html")
+    
     def generate_all(self):
         """Generate HTML for all posts in content directory."""
         start_time = datetime.now()
@@ -492,6 +568,11 @@ class SiteGenerator:
             if self.site_config.get('generate_categories', False):
                 print("Generating category pages...")
                 self.generate_categories(processed_posts)
+            
+            # Generate tags if enabled
+            if self.site_config.get('generate_tags', False):
+                print("Generating tag pages...")
+                self.generate_tags(processed_posts)
         
         print()
         
