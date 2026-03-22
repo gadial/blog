@@ -5,6 +5,8 @@ date: 2008-01-20 23:36:00
 layout: post
 categories: 
   - אנליזה מתמטית
+tags:
+  - חשבון אינפיניטסימלי
 social_media_share: true
 ---
 <a href="http://www.gadial.net/2008/01/13/radians_and_trigo_functions/">בפוסט הקודם</a> דיברתי על החשיבות הרבה של הגבול הבא: {% equation %}\lim_{x\to 0}\frac{\sin(x)}{x}=1{% endequation %}. בקצרה - ממנו נובע כל <a href="http://he.wikipedia.org/wiki/%D7%97%D7%A9%D7%91%D7%95%D7%9F_%D7%90%D7%99%D7%A0%D7%A4%D7%99%D7%A0%D7%99%D7%98%D7%A1%D7%99%D7%9E%D7%9C%D7%99">החשבון האינפיניטסימלי</a> של פונקציות <a href="http://he.wikipedia.org/wiki/%D7%98%D7%A8%D7%99%D7%92%D7%95%D7%A0%D7%95%D7%9E%D7%98%D7%A8%D7%99%D7%94">טריגונומטריות</a>. כזכור, היה עוד גבול מעצבן שהייתי צריך להתמודד איתו - {% equation %}\lim_{x\to 0}\frac{1-\cos(x)}{x}{% endequation %}, אך בעזרת הגבול הקודם ושימוש ברציפות של הפונקציות הטריגונומטריות (דבר שבפני עצמו צריך להוכיח אך אינו קשה עד כדי כך) לא קשה להוכיח שהוא 0 (כופלים ומחלקים ב-{% equation %}1+\cos(x){% endequation %} ומשתמשים בכך ש-{% equation %}\sin^2(x)+\cos^2(x)=1{% endequation %}).

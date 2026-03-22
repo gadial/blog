@@ -4,6 +4,8 @@ title: "Heaven & Earth"
 date: 2007-10-20 11:36:40
 layout: post
 categories: 
+tags:
+  - חידות
   - משחקים וחידות מתמטיות
 ---
 משחקי הריצוף של <a href="http://www.gadial.net/2007/10/17/tilings/">הפוסט הקודם</a> הזכירו לי משחק מחשב מצוין, בשם Heaven &amp; Earth, שהיה מלא וגדוש בפאזלים שכאלו ודומים להם.

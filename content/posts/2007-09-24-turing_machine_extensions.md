@@ -4,6 +4,10 @@ title: "עוד מכונות מופלאות"
 date: 2007-09-24 20:26:29
 layout: post
 categories: 
+tags:
+  - חישוביות
+  - מודלים חישוביים
+  - מכונת טיורינג
   - חישוביות
 ---
 <h1><span style="font-family: arial, helvetica, sans-serif;">הרחבות של המודל</span></h1>

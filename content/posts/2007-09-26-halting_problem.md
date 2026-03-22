@@ -6,6 +6,10 @@ layout: post
 categories: 
   - חישוביות
   - תכנות
+tags:
+  - בעיית העצירה
+  - חישוביות
+  - תכנות
 social_media_share: true
 ---
 <a href="http://www.gadial.net/2007/09/23/turing_machine/">בפוסטים</a> <a href="http://www.gadial.net/2007/09/24/turing_machine_extensions/">האחרונים</a> דיברנו על <a href="http://he.wikipedia.org/wiki/%D7%9E%D7%9B%D7%95%D7%A0%D7%AA_%D7%98%D7%99%D7%95%D7%A8%D7%99%D7%A0%D7%92">מכונת טיורינג</a>. מכונת טיורינג היא מעין מחשב זעיר, שמקבל כקלט סדרה של אפסים ואחדים, "רץ" עליהם (מבצע כל מני פעולות חישוב), ובסופו של דבר עוצר ואומר "כן" או "לא". אחלה.

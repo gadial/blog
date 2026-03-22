@@ -6,6 +6,11 @@ layout: post
 categories: 
   - הסתברות
   - משחקים וחידות מתמטיות
+tags:
+  - הסתברות
+  - חידות
+  - פרדוקסים
+  - תורת ההסתברות
 social_media_share: true
 ---
 ביום רביעי האחרון התמזל מזלי והייתי נוכח בהרצאה של פרופ' <a href="http://he.wikipedia.org/wiki/%D7%A0%D7%95%D7%92%D7%94_%D7%90%D7%9C%D7%95%D7%9F">נוגה אלון</a> על "חשיבה הסתברותית". אלון הוא מרצה בחסד עליון, וייתכן שזו (או אולי <a href="http://www.math.technion.ac.il/Site/events/special-lectures/Mathclub/">הפורום הספציפי</a> שבו ניתנה ההרצאה) הסיבה לכך שהוא לא היסס להציג את הנושאים שעליהם הוא דיבר בצורה קצת יותר מורכבת מההצגה הסטנדרטית שלהם. הוא דיבר על <a href="http://www.gadial.net/2008/02/23/monty_hall/">הבעיה של מונטי הול</a>, על <a href="http://he.wikipedia.org/wiki/%D7%90%D7%9C%D7%92%D7%95%D7%A8%D7%99%D7%AA%D7%9D_%D7%90%D7%A7%D7%A8%D7%90%D7%99">אלגוריתמים הסתברותיים</a> ודה-רנדומיזציה שלהם (הפיכתם לדטרמיניסטיים בלי שהדבר ילווה בפגיעה משמעותית בזמן הריצה), עם דגש על <a href="http://en.wikipedia.org/wiki/AKS_primality_test">אלגוריתם בדיקת הראשוניות AKS</a> (שהזכרתי את הדיווח הנלהב-יתר-על-המידה עליו ב"הארץ" ב<a href="http://www.gadial.net/2008/07/20/bad_math_haaretz_on_aks/">פוסט קודם</a>, ואני מקווה להציג בצורה יותר קונקרטית בעתיד) שהושג באמצעות דה-רנדומיזציה של אלגוריתם אחר; וכמובן, <a href="http://en.wikipedia.org/wiki/Probabilistic_method">בשיטה ההסתברותית</a> (שאלון חיבר <a href="http://www.amazon.com/Probabilistic-Wiley-Interscience-Discrete-Mathematics-Optimization/dp/0471370460">ספר</a> עליה) שהצגתי את קצה הקרחון שלה ב<a href="http://www.gadial.net/2007/06/30/nonconstructive_proofs_probablistic_logic/">פוסט קודם</a>. עם זאת, החלק שהכי עניין אותי בהרצאה ועליו אני רוצה לדבר בפוסט הזה היה <a href="http://en.wikipedia.org/wiki/Two_envelopes_problem">פרדוקס המעטפות</a>.

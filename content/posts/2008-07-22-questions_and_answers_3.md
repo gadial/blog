@@ -4,6 +4,8 @@ title: "שאלות ותשובות - מקבץ מס' 3"
 date: 2008-07-22 08:24:34
 layout: post
 categories: 
+tags:
+  - שאלות ותשובות
   - שאלות ותשובות
 ---
 די בזריזות אחרי הפוסט <a href="http://www.gadial.net/2008/06/20/questions_and_answers_2/">השני</a> הצטברו שאלות רבות, והנה התשובות:

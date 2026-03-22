@@ -4,6 +4,9 @@ title: "דילמת הבלונדינית האלטרואיסטית"
 date: 2007-04-27 11:15:17
 layout: post
 categories: 
+tags:
+  - דילמת האסיר
+  - תורת המשחקים
   - תורת המשחקים
 ---
 <title></title>   	 	 	 	 	 	 	 	<!-- 		@page { size: 8.5in 11in; margin: 0.79in } 		P { margin-bottom: 0.08in } 	-->

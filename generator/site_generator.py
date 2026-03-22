@@ -45,7 +45,7 @@ class SiteGenerator:
         
         # Add custom filter for safe filenames
         import re as _re
-        self.jinja_env.filters['safe_filename'] = lambda s: _re.sub(r'[<>:"/\\|?*]', '_', s)
+        self.jinja_env.filters['safe_filename'] = lambda s: _re.sub(r'[<>:"/\\|?*]', '_', str(s))
         
         # Initialize markdown processor
         self.md_processor = MarkdownProcessor()
