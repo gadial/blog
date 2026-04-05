@@ -19,7 +19,7 @@ description: "איך בערך מוכיחים את משפט הגבול המרכז
 
 {% equation %}Z_{n}=\frac{X_{1}+\ldots+X_{n}-n\mu}{\sigma\sqrt{n}}{% endequation %}
 
-אז הסדרה {% equation %}Z_{n}{% endequation %} שואפת להתפלגות הנורמלית {% equation %}N\left(0,1\right){% endequation %} כאשר {% equation %}n{% endequation %} שואף לאינסוף. פורמלית, לכל {% equation %}-\infty<a<\infty{% endequation %}:
+אז הסדרה {% equation %}Z_{n}{% endequation %} שואפת להתפלגות הנורמלית {% equation %}N\left(0,1\right){% endequation %} כאשר {% equation %}n{% endequation %} שואף לאינסוף. פורמלית, לכל {% equation %}-\infty&lt;a&lt;\infty{% endequation %}:
 
 {% equation %}\lim_{n\to\infty}P\left(Z_{n}\le a\right)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{a}e^{-x^{2}/2}dx{% endequation %}
 
@@ -93,7 +93,7 @@ description: "איך בערך מוכיחים את משפט הגבול המרכז
 
 אז מה שאנחנו רוצים להבין הוא את הגבול {% equation %}\lim_{n\to\infty}\left[M\left(\frac{t}{\sqrt{n}}\right)\right]^{n}{% endequation %}. זה בעצם המקום הראשון שבו קופץ לעיניים למה "צריך" ש-{% equation %}e{% endequation %} יופיע בהתפלגות נורמלית. כזכור, אחת מהדרכים השקולות לתאר את {% equation %}e^{x}{% endequation %} היא באמצעות גבול: {% equation %}e^{x}=\lim_{n\to\infty}\left(1+\frac{x}{n}\right)^{n}{% endequation %}, אז העובדה שיש לנו בביטוי {% equation %}\lim_{n\to\infty}\left[M\left(\frac{t}{\sqrt{n}}\right)\right]^{n}{% endequation %} גבול שתלוי ב-{% equation %}n{% endequation %}, חזקה שהיא {% equation %}n{% endequation %} ואיבר פנימי שהוא {% equation %}\frac{t}{\sqrt{n}}{% endequation %} זה... מעורר חשד. 
 
-עכשיו, איך מטפלים בביטוי {% equation %}\left[M\left(\frac{t}{\sqrt{n}}\right)\right]^{n}{% endequation %}? ה-{% equation %}n{% endequation %} במעריך הוא מעצבן, והדרך הסטנדרטית להיפטר ממנו היא לקחת לוגריתם להכל, כי {% equation %}\left(a^{n}\right)=n\log a{% endequation %}{% equation %}\log{% endequation %}. אז בואו נשאל את עצמנו מהו הגבול
+עכשיו, איך מטפלים בביטוי {% equation %}\left[M\left(\frac{t}{\sqrt{n}}\right)\right]^{n}{% endequation %}? ה-{% equation %}n{% endequation %} במעריך הוא מעצבן, והדרך הסטנדרטית להיפטר ממנו היא לקחת לוגריתם להכל, כי {% equation %}\log\left(a^{n}\right)=n\log a{% endequation %}. אז בואו נשאל את עצמנו מהו הגבול
 
 {% equation %}\lim_{n\to\infty}n\log M\left(\frac{t}{\sqrt{n}}\right){% endequation %}
 
