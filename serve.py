@@ -16,7 +16,10 @@ DIRECTORY = "docs"
 def open_browser():
     """Open browser after a short delay."""
     time.sleep(1)
-    webbrowser.open(f'http://localhost:{PORT}')
+    try:
+        webbrowser.open(f'http://localhost:{PORT}')
+    except Exception:
+        pass
 
 if __name__ == '__main__':
     # Change to docs directory

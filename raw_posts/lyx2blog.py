@@ -17,7 +17,7 @@ FRONT_RGX = re.compile(
 )
 SKIP_CMDS = ['documentclass', 'usepackage', 'selectlanguage']
 SKIP_TAGS = ['document', 'L']
-SKIP_SPACE_AFTER = ['textquotedblleft', 'textquotedblright', 'textquotedbl']
+SKIP_SPACE_AFTER = ['textquotedblleft']
 _pending_skip = False # global flag to skip the next blank line after a quote
 
 _HEB_RE  = re.compile(r'[\u0590-\u05FF\uFB1D-\uFB4F]')   # Hebrew + presentation
@@ -82,7 +82,7 @@ def emit(node: TexNode) -> str:
     if _pending_skip:
         _pending_skip = False
         if isinstance(node, str) and node[0].isspace():
-            return node[1:]
+            return parentheses_fix(node[1:])
         if str(node).isspace():              # TokenWithPosition case
             return ''
     # print("Processing node:", node)
@@ -100,7 +100,9 @@ def emit(node: TexNode) -> str:
     if node.name == "textbf":
         return f'**{"".join(map(emit, node))}**'
     if node.name in {"textquotedblleft", "textquotedblright", "textquotedbl"}:
-        if node.name in SKIP_SPACE_AFTER:
+        # Skip space only when command has no {} argument.
+        # With {}, the space after is intentional (closing quote pattern).
+        if not node.args:
             _pending_skip = True             # eat the very next blank
         return '"'                           # emit the actual quote
 
@@ -130,10 +132,10 @@ def emit(node: TexNode) -> str:
         return f'<!-- Could not parse image path: {img_path} -->\n'
     if node.name == "itemize":
         items = [f"- {''.join(map(emit, it))}" for it in node.children if it.name == "item"]
-        return "\n".join(items) + "\n"
+        return "\n\n" + "\n\n".join(items) + "\n"
     if node.name == "enumerate":
-        items = [f"1. {''.join(map(emit, it))}" for it in node.children if it.name == "item"]
-        return "\n".join(items) + "\n"
+        items = [f"{i+1}. {''.join(map(emit, it))}" for i, it in enumerate(c for c in node.children if c.name == "item")]
+        return "\n\n" + "\n\n".join(items) + "\n"
     # 4. verbatim* or minted or lstlisting
     if node.name in {"verbatim*", "minted"}:
         lang = "python"
@@ -251,6 +253,15 @@ def convert(path: Path, out_dir: Path | None = None) -> Path:
     # Restore protected blocks
     for i, block in enumerate(protected_blocks):
         content = content.replace(f'___PROTECTED_BLOCK_{i}___', block)
+    
+    # Fix TexSoup eating spaces between \textbf{} and following parentheses
+    content = re.sub(r'\*\*([()])', r'** \1', content)
+    
+    # Fix TexSoup eating spaces between closing quotes and following parentheses
+    content = re.sub(r'"(\()', r'" \1', content)
+    
+    # Remove space before commas (TeX formatting artifact)
+    content = re.sub(r' ,', ',', content)
     
     # Clean up multiple spaces
     content = re.sub(r' +', ' ', content)
