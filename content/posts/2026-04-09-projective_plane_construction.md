@@ -265,8 +265,7 @@ z
 
 {% highlight python %}
 from itertools import product
-# order of the field; needs to be a prime number
-N = 7
+N = 7 # order of the field; needs to be a prime number
 projective_points = [
  (a,b,1) for (a,b) in product(range(N), repeat=2) # affine points
 ] + [
