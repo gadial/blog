@@ -125,25 +125,41 @@ z
 
 {% equation %}a_{1}x_{1}+a_{2}x_{2}+a_{3}x_{3}=0{% endequation %}
 
-{% equation %}b_{1}x_{1}+b_{2}x_{2}+b_{3}x_{3}=0{% endequation %} ולהראות שהישר הזה הוא **יחיד**. למי שמכירים אלגברה לינארית זה נראה מאוד מוכר - יש לנו פה מערכת של שתי משוואות לינאריות בשלושה נעלמים ויש דרכים די סטנדרטיות להבין איך נראה מרחב הפתרונות. אבל בואו נמשיך בלי התיאוריה הכללית הזו.
+{% equation %}b_{1}x_{1}+b_{2}x_{2}+b_{3}x_{3}=0{% endequation %}
+
+ ולהראות שהישר הזה הוא **יחיד**. למי שמכירים אלגברה לינארית זה נראה מאוד מוכר - יש לנו פה מערכת של שתי משוואות לינאריות בשלושה נעלמים ויש דרכים די סטנדרטיות להבין איך נראה מרחב הפתרונות. אבל בואו נמשיך בלי התיאוריה הכללית הזו.
 
 מכיוון שאני יודע ש-{% equation %}\left(a_{1},a_{2},a_{3}\right){% endequation %} שונה מ-{% equation %}\left(0,0,0\right){% endequation %}, יש לה קואורדינטה אחת לפחות ששונה מאפס. **בלי הגבלת הכלליות** אני אניח שזו {% equation %}a_{1}\ne0{% endequation %} ולכן אפשר לחלק ב-{% equation %}a_{1}{% endequation %} (זה בלי הגבלת הכלליות כי אם קואורדינטה אחרת שונה מאפס ההוכחה תהיה אותו הדבר רק בשינוי הסימונים). עכשיו נסתכל על המשוואה {% equation %}a_{1}x_{1}+a_{2}x_{2}+a_{3}x_{3}=0{% endequation %} ונחלץ ממנה את {% equation %}x_{1}{% endequation %}, כלומר נעביר את שני האיברים האחרים אגף ונחלק ב-{% equation %}a_{1}{% endequation %} ונקבל:
 
-{% equation %}x_{1}=-\frac{\left(a_{2}x_{2}+a_{3}x_{3}\right)}{a_{1}}{% endequation %} אני אציב את {% equation %}x_{1}{% endequation %} במשוואה השניה, {% equation %}b_{1}x_{1}+b_{2}x_{2}+b_{3}x_{3}=0{% endequation %}, ואקבל את המפלצת הבאה:
+{% equation %}x_{1}=-\frac{\left(a_{2}x_{2}+a_{3}x_{3}\right)}{a_{1}}{% endequation %} 
 
-{% equation %}-\frac{b_{1}}{a_{1}}a_{2}x_{2}-\frac{b_{1}}{a_{1}}a_{3}x_{3}+b_{2}x_{2}+b_{3}x_{3}=0{% endequation %} זה נראה מבורחש אבל יש לנו פה בסך הכל ארבעה איברים, שניים מהם הם {% equation %}x_{2}{% endequation %} כפול משהו ושניים הם {% equation %}x_{3}{% endequation %} כפול משהו, אז אפשר לקבץ:
+אני אציב את {% equation %}x_{1}{% endequation %} במשוואה השניה, {% equation %}b_{1}x_{1}+b_{2}x_{2}+b_{3}x_{3}=0{% endequation %}, ואקבל את המפלצת הבאה:
 
-{% equation %}\left(b_{2}-\frac{b_{1}}{a_{1}}a_{2}\right)x_{2}+\left(b_{3}-\frac{b_{1}}{a_{1}}a_{3}\right)x_{3}=0{% endequation %} כדי לפשט, נסמן
+{% equation %}-\frac{b_{1}}{a_{1}}a_{2}x_{2}-\frac{b_{1}}{a_{1}}a_{3}x_{3}+b_{2}x_{2}+b_{3}x_{3}=0{% endequation %} 
+
+זה נראה מבורחש אבל יש לנו פה בסך הכל ארבעה איברים, שניים מהם הם {% equation %}x_{2}{% endequation %} כפול משהו ושניים הם {% equation %}x_{3}{% endequation %} כפול משהו, אז אפשר לקבץ:
+
+{% equation %}\left(b_{2}-\frac{b_{1}}{a_{1}}a_{2}\right)x_{2}+\left(b_{3}-\frac{b_{1}}{a_{1}}a_{3}\right)x_{3}=0{% endequation %} 
+
+כדי לפשט, נסמן
 
 {% equation %}\alpha_{2}=b_{2}-\frac{b_{1}}{a_{1}}a_{2}{% endequation %}
 
-{% equation %}\alpha_{3}=b_{3}-\frac{b_{1}}{a_{1}}a_{3}{% endequation %} כך שהמשוואה היא כעת {% equation %}\alpha_{2}x_{2}+\alpha_{3}x_{3}=0{% endequation %} . עכשיו נשאלת השאלה אם המקדמים הללו יכולים להיות 0. ראשית, האם ייתכן ששניהם אפס? {% equation %}\alpha_{2}=\alpha_{3}=0{% endequation %} ? אם {% equation %}\alpha_{2}=0{% endequation %} אז
+{% equation %}\alpha_{3}=b_{3}-\frac{b_{1}}{a_{1}}a_{3}{% endequation %}
 
-{% equation %}b_{2}=\frac{b_{1}}{a_{1}}a_{2}{% endequation %} ובדומה אם {% equation %}\alpha_{3}=0{% endequation %} אז
+ כך שהמשוואה היא כעת {% equation %}\alpha_{2}x_{2}+\alpha_{3}x_{3}=0{% endequation %} . עכשיו נשאלת השאלה אם המקדמים הללו יכולים להיות 0. ראשית, האם ייתכן ששניהם אפס? {% equation %}\alpha_{2}=\alpha_{3}=0{% endequation %} ? אם {% equation %}\alpha_{2}=0{% endequation %} אז
 
-{% equation %}b_{3}=\frac{b_{1}}{a_{1}}a_{3}{% endequation %} רואים את התבנית הכללית פה? אפשר לעשות משוואה דומה גם עבור {% equation %}b_{1}{% endequation %} :
+{% equation %}b_{2}=\frac{b_{1}}{a_{1}}a_{2}{% endequation %}
 
-{% equation %}b_{1}=\frac{b_{1}}{a_{1}}a_{1}{% endequation %} זו משוואה שנכונה בצורה די טריוויאלית, אבל היא מאותו מבנה כמו האחרות. ומה ששלוש המשוואות הללו מראות הוא ש-{% equation %}\left(b_{1},b_{2},b_{3}\right){% endequation %} מתקבל מ-{% equation %}\left(a_{1},a_{2},a_{3}\right){% endequation %} על ידי כפל בסקלר {% equation %}\lambda=\frac{b_{1}}{a_{1}}{% endequation %}, מה שסותר את זה שאלו נקודות שונות (זכרו שכשאני אומר "נקודה" אני מתכוון נקודה פרוייקטיבית, שמיוצגת על ידי ישר, שבתורו מיוצג על ידי נקודה לא פרוייקטיבית אבל כל כפל של הנקודה הזו בסקלר נותן את אותה נקודה פרוייקטיבית). אז המקרה {% equation %}\alpha_{2}=\alpha_{3}=0{% endequation %} לא יכול להתקיים.
+ ובדומה אם {% equation %}\alpha_{3}=0{% endequation %} אז
+
+{% equation %}b_{3}=\frac{b_{1}}{a_{1}}a_{3}{% endequation %}
+
+ רואים את התבנית הכללית פה? אפשר לעשות משוואה דומה גם עבור {% equation %}b_{1}{% endequation %} :
+
+{% equation %}b_{1}=\frac{b_{1}}{a_{1}}a_{1}{% endequation %}
+
+ זו משוואה שנכונה בצורה די טריוויאלית, אבל היא מאותו מבנה כמו האחרות. ומה ששלוש המשוואות הללו מראות הוא ש-{% equation %}\left(b_{1},b_{2},b_{3}\right){% endequation %} מתקבל מ-{% equation %}\left(a_{1},a_{2},a_{3}\right){% endequation %} על ידי כפל בסקלר {% equation %}\lambda=\frac{b_{1}}{a_{1}}{% endequation %}, מה שסותר את זה שאלו נקודות שונות (זכרו שכשאני אומר "נקודה" אני מתכוון נקודה פרוייקטיבית, שמיוצגת על ידי ישר, שבתורו מיוצג על ידי נקודה לא פרוייקטיבית אבל כל כפל של הנקודה הזו בסקלר נותן את אותה נקודה פרוייקטיבית). אז המקרה {% equation %}\alpha_{2}=\alpha_{3}=0{% endequation %} לא יכול להתקיים.
 
 מה אם למשל (בלי הגבלת הכלליות...) {% equation %}\alpha_{2}=0{% endequation %} אבל {% equation %}\alpha_{3}\ne0{% endequation %} ? במקרה הזה נשארנו עם המשוואה
 
@@ -151,13 +167,19 @@ z
 
 {% equation %}x_{1}=-\frac{\left(a_{2}x_{2}+a_{3}x_{3}\right)}{a_{1}}{% endequation %} ונקבל
 
-{% equation %}x_{1}=-\frac{a_{2}}{a_{1}}x_{2}{% endequation %} כלומר, כל {% equation %}\left(x_{1},x_{2},x_{3}\right){% endequation %} שפותר את המשוואה (דהיינו, מייצג ישר שחל עם שתי הנקודות שאיתן התחלנו) הוא מהצורה {% equation %}\left(-\frac{a_{2}}{a_{1}}\lambda,\lambda,0\cdot\lambda\right){% endequation %} - כפל בסקלר של {% equation %}\left(-\frac{a_{2}}{a_{1}},1,0\right){% endequation %} . לכן במקרה הזה יש לנו ישר יחיד.
+{% equation %}x_{1}=-\frac{a_{2}}{a_{1}}x_{2}{% endequation %}
+
+ כלומר, כל {% equation %}\left(x_{1},x_{2},x_{3}\right){% endequation %} שפותר את המשוואה (דהיינו, מייצג ישר שחל עם שתי הנקודות שאיתן התחלנו) הוא מהצורה {% equation %}\left(-\frac{a_{2}}{a_{1}}\lambda,\lambda,0\cdot\lambda\right){% endequation %} - כפל בסקלר של {% equation %}\left(-\frac{a_{2}}{a_{1}},1,0\right){% endequation %} . לכן במקרה הזה יש לנו ישר יחיד.
 
 ומה אם {% equation %}\alpha_{2}\ne0{% endequation %} וגם {% equation %}\alpha_{3}\ne0{% endequation %} ? במקרה הזה אפשר לחלק בהם ולכן מהמשוואה {% equation %}\alpha_{2}x_{2}+\alpha_{3}x_{3}=0{% endequation %} אפשר לקבל
 
-{% equation %}x_{2}=-\frac{\alpha_{3}}{\alpha_{2}}x_{3}{% endequation %} ואת זה אפשר להציב במשוואה עבור {% equation %}x_{1}{% endequation %} ולקבל
+{% equation %}x_{2}=-\frac{\alpha_{3}}{\alpha_{2}}x_{3}{% endequation %}
 
-{% equation %}x_{1}=-\frac{\left(\frac{a_{2}\alpha_{3}}{\alpha_{2}}+a_{3}\right)}{a_{1}}x_{3}{% endequation %} וזה נראה מחריד, אבל זה לא! כי בסך הכל קיבלנו ש-{% equation %}x_{1},x_{2}{% endequation %} שניהם כפולה של {% equation %}x_{3}{% endequation %} בסקלר כלשהו, ולכן גם פה כל הפתרונות הם כפולה בסקלר אחד של השני ולכן גם במקרה הזה הפתרון הוא יחיד. זה מסיים את ההוכחה של התכונה הראשונה, ולכן גם את זו של השניה.
+ ואת זה אפשר להציב במשוואה עבור {% equation %}x_{1}{% endequation %} ולקבל
+
+{% equation %}x_{1}=-\frac{\left(\frac{a_{2}\alpha_{3}}{\alpha_{2}}+a_{3}\right)}{a_{1}}x_{3}{% endequation %}
+
+ וזה נראה מחריד, אבל זה לא! כי בסך הכל קיבלנו ש-{% equation %}x_{1},x_{2}{% endequation %} שניהם כפולה של {% equation %}x_{3}{% endequation %} בסקלר כלשהו, ולכן גם פה כל הפתרונות הם כפולה בסקלר אחד של השני ולכן גם במקרה הזה הפתרון הוא יחיד. זה מסיים את ההוכחה של התכונה הראשונה, ולכן גם את זו של השניה.
 
 מה עם השלישית?
 
