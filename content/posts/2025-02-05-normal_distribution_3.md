@@ -5,7 +5,7 @@ categories:
   - הסתברות
 tags:
   - התפלגות נורמלית
-image: "/assets/img/2025/histogram_12.png"
+image: "/img/2025/histogram_12.png"
 description: "מה זה תוחלת ושונות, איך קשורים מרקוב וצ'בישב, ועל הקסם שבהפיכת המתמטיקה למדע אמפירי"
 ---
 

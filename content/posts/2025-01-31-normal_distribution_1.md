@@ -6,7 +6,7 @@ categories:
   - הסתברות
 tags:
   - התפלגות נורמלית
-image: "/assets/img/2025/histogram_8.png"
+image: "/img/2025/histogram_8.png"
 description: "על עקומה מסתורית שמתעקשת לצוץ שוב ושוב כשאנחנו סוכמים תוצאות בניסויים הסתברותיים שרירותיים לגמרי"
 ---
 

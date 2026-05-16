@@ -5,7 +5,7 @@ categories:
   - הסתברות
 tags:
   - התפלגות נורמלית
-image: "/assets/img/2025/histogram_11.png"
+image: "/img/2025/histogram_11.png"
 description: 'על הסתברות בדידה והסתברות רציפה, איך הסתברות 0 אומרת "לא סביר אבל עדיין אפשרי" ומהומה טכנית גדולה לקינוח'
 ---
 

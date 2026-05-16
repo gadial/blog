@@ -5,7 +5,7 @@ categories:
   - הסתברות
 tags:
   - התפלגות נורמלית
-image: "/assets/img/2025/histogram_10.png"
+image: "/img/2025/histogram_10.png"
 description: "איך בערך מוכיחים את משפט הגבול המרכזי ולמה הוא נראה כמו שהוא נראה"
 
 ---

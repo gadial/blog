@@ -5,7 +5,7 @@ categories:
   - תורת הקבוצות
 tags:
   - סודרים
-image: "/assets/img/main/set_theory.png"
+image: "/img/main/set_theory.png"
 ---
 
 
