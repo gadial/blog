@@ -96,13 +96,13 @@ social_media_share: true
 
 כעת, לכל {% equation %}x\ne y{% endequation %} שניתנים להשוואה צריך להתקיים {% equation %}fg\left(x,y\right)=\epsilon\left(x,y\right)=0{% endequation %}, ולכן על פי הנוסחה {% equation %}\sum_{x\le z\le y}f\left(x,z\right)g\left(z,y\right)=0{% endequation %}. בואו נבודד מהסכום הזה את האיבר שמתקבל כש-{% equation %}z=x{% endequation %} ונעביר אגף, נקבל ש:
 
-{% equation %}g\left(x,y\right)=-\left(f\left(x,x\right)\right)^{-1}\sum_{x&lt;z\le y}f\left(x,z\right)g\left(z,y\right){% endequation %}.
+{% equation %}g\left(x,y\right)=-\left(f\left(x,x\right)\right)^{-1}\sum_{x<z\le y}f\left(x,z\right)g\left(z,y\right){% endequation %}.
 
 הנוסחה הזו מספיקה כדי <strong>להגדיר</strong> את {% equation %}g{% endequation %} לכל קטע באופן רקורסיבי. זה לא מבטיח לנו נוסחה פשוטה יותר עבור {% equation %}g{% endequation %}, ומכאן בפרט שאין לנו תמיד נוסחה פשוטה עבור {% equation %}\mu{% endequation %}. מה כן יש לנו? ובכן, אם נציב את {% equation %}\zeta{% endequation %} בתור {% equation %}f{% endequation %} בנוסחאות הללו, נקבל ש-{% equation %}\mu{% endequation %} מתוארת על ידי הנוסחאות הבאות:
 
 {% equation %}\mu\left(x,x\right)=1{% endequation %} לכל {% equation %}x\in X{% endequation %}.
 
-{% equation %}\mu\left(x,y\right)=-\sum_{x&lt;z\le y}\mu\left(z,y\right)=-\sum_{x\le z&lt;y}\mu\left(x,z\right){% endequation %} לכל {% equation %}x<y{% endequation %}.
+{% equation %}\mu\left(x,y\right)=-\sum_{x<z\le y}\mu\left(z,y\right)=-\sum_{x\le z<y}\mu\left(x,z\right){% endequation %} לכל {% equation %}x<y{% endequation %}.
 
 את נוסחת ההיפוך עצמה ניתן לתאר עם סכומים באופן הבא: אם {% equation %}f\zeta=g{% endequation %} זה אומר ש-{% equation %}g\left(x,y\right)=\sum_{x\le z\le y}f\left(x,z\right){% endequation %}, ולכן {% equation %}f\left(x,y\right)=\sum_{x\le z\le y}g\left(x,z\right)\mu\left(z,y\right){% endequation %}.
 

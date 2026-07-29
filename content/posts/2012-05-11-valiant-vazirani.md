@@ -49,7 +49,7 @@ tags:
 
 כדי להקל על הסימונים, בואו נסמן בתור {% equation %}A_{x}{% endequation %} את המאורע "{% equation %}h\left(x\right)=0{% endequation %}" (כלומר, {% equation %}A_{x}{% endequation %} היא קבוצת ה-{% equation %}h{% endequation %}-ים שמקיימים {% equation %}h\left(x\right)=0{% endequation %}) ובדומה נסמן ב-{% equation %}A_{x,y}{% endequation %} את המאורע "{% equation %}h\left(x\right)=0\wedge h\left(y\right)=0{% endequation %}". כעת:
 
-{% equation %}\text{Pr}_{h}\left[N\ge2\right]=\text{Pr}\left[\bigcup_{x&lt;y\in S}A_{x,y}\right]\le\sum_{x&lt;y\in S}\text{Pr}\left[A_{x,y}\right]=\sum_{x&lt;y\in S}p^{2}={\left|S\right| \choose 2}p^{2}{% endequation %}
+{% equation %}\text{Pr}_{h}\left[N\ge2\right]=\text{Pr}\left[\bigcup_{x<y\in S}A_{x,y}\right]\le\sum_{x<y\in S}\text{Pr}\left[A_{x,y}\right]=\sum_{x<y\in S}p^{2}={\left|S\right| \choose 2}p^{2}{% endequation %}
 
 השתמשתי כאן במה שנקרא Union-bound - ההסתברות של איחוד מאורעות חסומה מלעיל על ידי סכום ההסתברויות של כולם. זה לרוב חסם גס מאוד, אבל כאן הוא מספיק טוב לנו.
 
@@ -65,7 +65,7 @@ tags:
 
 {% equation %}\text{Pr}\left[N=1\right]=\text{Pr}_{h}\left[N\ge1\right]-\text{Pr}_{h}\left[N\ge2\right]\ge\left|S\right|p-2{\left|S\right| \choose 2}p^{2}\ge\left|S\right|p-\left(\left|S\right|p\right)^{2}{% endequation %}
 
-עכשיו, את הפונקציה {% equation %}f\left(t\right)=t-t^{2}{% endequation %} קל לחקור אם יודעים טיפה אינפי; מהר מאוד רואים שבקטע {% equation %}\left[\frac{1}{4},\frac{1}{2}\right]{% endequation %} היא פונקציה עולה, לכן המינימום שלה מתקבל ב-{% equation %}t=\frac{1}{4}{% endequation %} והוא {% equation %}\frac{1}{4}-\frac{1}{16}=\frac{3}{16}&gt;\frac{1}{8}{% endequation %}. לכן הגענו למסקנה הבאה: אם {% equation %}\frac{1}{4}\le\left|S\right|p\le\frac{1}{2}{% endequation %}, אז {% equation %}\text{Pr}\left[N=1\right]\ge\frac{1}{8}{% endequation %}. לא רע בכלל!
+עכשיו, את הפונקציה {% equation %}f\left(t\right)=t-t^{2}{% endequation %} קל לחקור אם יודעים טיפה אינפי; מהר מאוד רואים שבקטע {% equation %}\left[\frac{1}{4},\frac{1}{2}\right]{% endequation %} היא פונקציה עולה, לכן המינימום שלה מתקבל ב-{% equation %}t=\frac{1}{4}{% endequation %} והוא {% equation %}\frac{1}{4}-\frac{1}{16}=\frac{3}{16}>\frac{1}{8}{% endequation %}. לכן הגענו למסקנה הבאה: אם {% equation %}\frac{1}{4}\le\left|S\right|p\le\frac{1}{2}{% endequation %}, אז {% equation %}\text{Pr}\left[N=1\right]\ge\frac{1}{8}{% endequation %}. לא רע בכלל!
 
 עכשיו, מהו {% equation %}p{% endequation %}? כזכור, {% equation %}p=2^{-k}{% endequation %}. ומי זה {% equation %}k{% endequation %}? את {% equation %}k{% endequation %} בחרנו באקראי בתחום {% equation %}\left\{ 2,\dots,n+1\right\} {% endequation %}. אז כדי שיתקיים {% equation %}\frac{1}{4}\le\left|S\right|p\le\frac{1}{2}{% endequation %} צריך שיתקיים {% equation %}2^{k-2}\le\left|S\right|\le2^{k-1}{% endequation %}. אבל, מכיוון ש-{% equation %}1\le\left|S\right|\le2^{n}{% endequation %}, זה <strong>בהכרח</strong> קורה לאחד מה-{% equation %}k{% endequation %}-ים בדיוק בתחום {% equation %}\left\{ 2,\dots,n+1\right\} {% endequation %}, שאני מקווה שעכשיו נראה קצת יותר ברור. לכן ההסתברות שלנו לבחור {% equation %}k{% endequation %} "נכון" היא {% equation %}\frac{1}{n}{% endequation %} (גודל התחום), ולכן ההסתברות של הרדוקציה כולה לעבור היא לפחות {% equation %}\frac{1}{8n}{% endequation %} - בדיוק מה שהבטחתי שאוכיח. סיימנו!
 

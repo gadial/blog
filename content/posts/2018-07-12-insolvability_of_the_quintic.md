@@ -55,7 +55,7 @@ social_media_share: true
 
 {% equation %}s_{2}=a_{1}a_{2}+a_{1}a_{3}+\dots+a_{n-1}a_{n}{% endequation %}
 
-וכן הלאה. {% equation %}s_{k}{% endequation %} הוא סכום של כל {% equation %}{n \choose k}{% endequation %} המכפלות {% equation %}a_{i_{1}}\cdots a_{i_{k}}{% endequation %} כך ש-{% equation %}1\le i_{1}&lt;i_{2}&lt;\dots&lt;i_{k}\le n{% endequation %}.
+וכן הלאה. {% equation %}s_{k}{% endequation %} הוא סכום של כל {% equation %}{n \choose k}{% endequation %} המכפלות {% equation %}a_{i_{1}}\cdots a_{i_{k}}{% endequation %} כך ש-{% equation %}1\le i_{1}<i_{2}<\dots<i_{k}\le n{% endequation %}.
 
 ה-{% equation %}s_{k}{% endequation %}-ים הללו נקראים <strong>הפונקציות הסימטריות האלמנטריות</strong> באיברים {% equation %}a_{1},\dots,a_{n}{% endequation %}. השם "פונקציה סימטרית" מגיע מכך שאם ניקח {% equation %}\sigma{% endequation %} שהיא פרמוטציה על {% equation %}a_{1},\dots,a_{n}{% endequation %} ונרחיב אותה לפונקציה על {% equation %}F\left(a_{1},\dots,a_{n}\right){% endequation %}, אז בבירור {% equation %}\sigma\left(s_{k}\right)=s_{k}{% endequation %} לכל פונקציה סימטרית אלמנטרית (כי {% equation %}\sigma{% endequation %} רק מערבבת את האיברים בסכום שמרכיב את {% equation %}s_{k}{% endequation %}; היא לא מעלימה אף אחד ולא מוסיפה משהו חדש). כעת, <strong>כל</strong> פרמוטציה {% equation %}\sigma{% endequation %} על הקבוצה {% equation %}a_{1},\dots,a_{n}{% endequation %} מגדיר לנו פונקציה כזו על {% equation %}F\left(a_{1},\dots,a_{n}\right){% endequation %}, וקל לבדוק שהפונקציה הזו היא <strong>אוטומורפיזם</strong> של {% equation %}F\left(a_{1},\dots,a_{n}\right){% endequation %}. זה מראה לנו ש-{% equation %}S_{n}{% endequation %} היא <strong>תת-חבורה</strong> של {% equation %}\text{Aut}\left(F\left(a_{1},\dots,a_{n}\right)\right){% endequation %}.
 

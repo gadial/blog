@@ -43,9 +43,9 @@ tags:
 
 <div class="code-block">
 {% highlight ruby %}sage: f_to_k = 0.0003048
-sage: m_to_k = 1.60934&lt;br /&gt;sage: a = 102*f_to_k
+sage: m_to_k = 1.60934<br />sage: a = 102*f_to_k
 sage: S = 25000 * m_to_k
-sage: S 40233.5000000000&lt;br /&gt;sage: R = S / (2*pi)
+sage: S 40233.5000000000<br />sage: R = S / (2*pi)
 sage: x= sqrt(a^2+2*R*a)
 sage: x.n()
 19.9538666359798

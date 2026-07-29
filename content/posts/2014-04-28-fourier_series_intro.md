@@ -27,7 +27,7 @@ social_media_share: true
 
 {% equation %}\left\langle f,g\right\rangle =\int_{-\pi}^{\pi}f\left(x\right)g\left(x\right)dx{% endequation %}
 
-והמרחב שלי יכלול את כל הפונקציות שההגדרה הזו "עובדת" בשבילן - כלומר, כל הפונקציות שמקיימות {% equation %}\int_{-\pi}^{\pi}f^{2}\left(x\right)dx&lt;\infty{% endequation %}.
+והמרחב שלי יכלול את כל הפונקציות שההגדרה הזו "עובדת" בשבילן - כלומר, כל הפונקציות שמקיימות {% equation %}\int_{-\pi}^{\pi}f^{2}\left(x\right)dx<\infty{% endequation %}.
 
 כדי לפשט חישובים בהמשך, בואו ניזכר בכמה תכונות של סינוסים וקוסינוסים. ראשית כל, סינוס הוא מה שנקרא <strong>פונקציה אי זוגית</strong>, ואילו קוסינוס הוא מה שנקרא <strong>פונקציה זוגית</strong>. פונקציה אי זוגית היא פונקציה שמקיימת {% equation %}f\left(-x\right)=-f\left(x\right){% endequation %} ופונקציה זוגית היא פונקציה שמקיימת {% equation %}f\left(-x\right)=f\left(x\right){% endequation %}. לפונקציות אי זוגיות שאינטגרביליות בתחום מסויים שהוא סימטרי סביב הראשית יש את התכונה הנחמדה שהאיטגרל שלהן הוא 0, כי
 
@@ -75,7 +75,7 @@ social_media_share: true
 
 הפונקציה בסך הכל תקבל את הערכים 1 ו-{% equation %}-1{% endequation %}, כשהיא מחליפה ביניהם אחרי מרחק של {% equation %}\pi{% endequation %}. כלומר, נגדיר
 
-{% equation %}f\left(x\right)=\begin{cases}-1 & -\pi\le x&lt;0\\1 & 0\le x\le\pi\end{cases}{% endequation %}
+{% equation %}f\left(x\right)=\begin{cases}-1 & -\pi\le x<0\\1 & 0\le x\le\pi\end{cases}{% endequation %}
 
 וכמובן, אפשר להרחיב את הפונקציה הזו לכל {% equation %}\mathbb{R}{% endequation %} באופן מחזורי (כלומר, שיתקיים {% equation %}f\left(x+2\pi\right)=f\left(x\right){% endequation %}). התוצאה היא פונקציה שנראית כך:
 

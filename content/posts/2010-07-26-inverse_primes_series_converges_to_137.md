@@ -23,7 +23,7 @@ tags:
 
 אם כן, יהיה {% equation %}n{% endequation %} מספר טבעי כלשהו, ויהיו {% equation %}p_{1},p_{2},\dots,p_{\pi\left(n\right)}{% endequation %} כל הראשוניים הקטנים מ-{% equation %}n{% endequation %} ({% equation %}\pi\left(n\right){% endequation %} הוא מספרם; זהו סימון סטנדרטי). הפאנץ' המרכזי הוא שכל מספר טבעי עד וכולל {% equation %}n{% endequation %} הוא מכפלה של חזקות של הראשוניים הללו <strong>בלבד</strong>; ראשוניים גדולים יותר מן הסתם אינם רלוונטיים כי לא ניתן להגיע על ידי מכפלה שלהם אלו באלו למספר שקטן יותר מהם. כאן מגיע התעלול ודומני שהכי פשוט להציג אותו. נתבונן במכפלה {% equation %}\lambda\left(n\right)=\frac{1}{1-\frac{1}{p_{1}}}\cdot\frac{1}{1-\frac{1}{p_{2}}}\cdots\frac{1}{1-\frac{1}{p_{\pi\left(n\right)}}}{% endequation %}. מה יש לנו כאן?
 
-מצד אחד, זוהי מכפלה סופית של מספרים רציונליים, כך שברור שאין כאן שום בעייתיות מבחינת התכנסות וכדומה. מהצד השני אני הולך לעשות להטוט. הבה ונתבונן באיבר הכללי של המכפלה הזו: {% equation %}\frac{1}{1-\frac{1}{p_{k}}}{% endequation %}. חלקכם ודאי שמים לב שהיצור הזה דומה לסכום של סדרה הנדסית <strong>אינסופית</strong>: {% equation %}1+q+q^{2}+\dots=\frac{1}{1-q}{% endequation %} כאשר {% equation %}\left|q\right|<1{% endequation %}. ובכן, כאן {% equation %}\left|\frac{1}{p_{k}}\right|&lt;1{% endequation %} בבירור, שכן {% equation %}p_{k}\ge2{% endequation %}; ולכן {% equation %}\frac{1}{1-\frac{1}{p_{k}}}=1+p_{k}^{-1}+p_{k}^{-2}+\dots{% endequation %}. במילים אחרות, את המכפלה שלעיל אפשר לכתוב גם כ:
+מצד אחד, זוהי מכפלה סופית של מספרים רציונליים, כך שברור שאין כאן שום בעייתיות מבחינת התכנסות וכדומה. מהצד השני אני הולך לעשות להטוט. הבה ונתבונן באיבר הכללי של המכפלה הזו: {% equation %}\frac{1}{1-\frac{1}{p_{k}}}{% endequation %}. חלקכם ודאי שמים לב שהיצור הזה דומה לסכום של סדרה הנדסית <strong>אינסופית</strong>: {% equation %}1+q+q^{2}+\dots=\frac{1}{1-q}{% endequation %} כאשר {% equation %}\left|q\right|<1{% endequation %}. ובכן, כאן {% equation %}\left|\frac{1}{p_{k}}\right|<1{% endequation %} בבירור, שכן {% equation %}p_{k}\ge2{% endequation %}; ולכן {% equation %}\frac{1}{1-\frac{1}{p_{k}}}=1+p_{k}^{-1}+p_{k}^{-2}+\dots{% endequation %}. במילים אחרות, את המכפלה שלעיל אפשר לכתוב גם כ:
 
 {% equation %}\left(1+p_{1}^{-1}+p_{1}^{-2}+\dots\right)\cdots\left(1+p_{\pi\left(n\right)}^{-1}+p_{\pi\left(n\right)}^{-2}+\dots\right){% endequation %}
 
@@ -47,7 +47,7 @@ tags:
 
 הסכום השמאלי מבין השניים הוא בדיוק סכום חלקי של הטור שאנחנו רוצים לתקוף. ומה לגבי הסכום הימני? ובכן, הוא לא יכול להיות כל כך גדול, שכן:
 
-{% equation %}\sum_{m=2}^{\infty}\frac{p_{k}^{-m}}{m}&lt;\sum_{m=2}^{\infty}p_{k}^{-m}=p_{k}^{-2}\left(\sum_{m=0}^{\infty}p_{k}^{-m}\right)=p_{k}^{-2}\left(1-p_{k}^{-1}\right)^{-1}&lt;2p_{k}^{-2}{% endequation %}
+{% equation %}\sum_{m=2}^{\infty}\frac{p_{k}^{-m}}{m}<\sum_{m=2}^{\infty}p_{k}^{-m}=p_{k}^{-2}\left(\sum_{m=0}^{\infty}p_{k}^{-m}\right)=p_{k}^{-2}\left(1-p_{k}^{-1}\right)^{-1}<2p_{k}^{-2}{% endequation %}
 
 כל המעברים הללו הם פשוטים יחסית - הקורא יכול כתרגול להבין מה הולך פה (סטודנט שמכיר קצת אינפי אמור להסתדר).
 

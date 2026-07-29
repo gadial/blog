@@ -66,7 +66,7 @@ for N in [10, 100, 1000, 10000, 100000, 1000000]:
 
 ההוכחה של אי שוויון מרקוב מצחיקה בכמה שהיא פשוטה. אני מגדיר משתנה מקרי {% equation %}I{% endequation %} שהוא מה שנקרא <strong>אינדיקטור</strong>: משתנה מקרי שמקבל או 0 או 1, ולכן בעצם נותן "אינדיקציה" לכך שאירוע מסוים קרה או לא. במקרה שלנו:
 
-{% equation %}I=\begin{cases} 1 & X\ge a\\ 0 & X&lt;a \end{cases}{% endequation %}
+{% equation %}I=\begin{cases} 1 & X\ge a\\ 0 & X<a \end{cases}{% endequation %}
 
 
 התוחלת של אינדיקטור, ממש על פי ההגדרה, היא ההסתברות שהאירוע שנותן 1 קרה, כלומר {% equation %}E\left[I\right]=P\left(X\ge a\right){% endequation %}. עכשיו, שימו לב ש-{% equation %}I\le\frac{X}{a}{% endequation %} ותאמינו לי שאפשר פשוט לקחת תוחלת לשני האגפים ולהוציא את הקבוע החוצה, ונקבל

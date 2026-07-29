@@ -75,7 +75,7 @@ tags:
 
 הפולינום הזה יהיה לכל היותר ממעלה {% equation %}n-1{% endequation %} ולכן אפשר להשתמש עליו בהנחת האינדוקציה ולקבל:
 
-{% equation %}a^{\prime}\left(x\right)=q^{\prime}\left(x\right)b\left(x\right)+r\left(x\right){% endequation %} כך ש-{% equation %}\deg\left(r^{\prime}\right)&lt;\deg\left(b\right){% endequation %} או {% equation %}r=0{% endequation %} (שימו לב - לא שמתי תג על {% equation %}b{% endequation %} מכיוון שאנחנו מוכיחים את המשפט עבור כל ה-{% equation %}a\left(x\right){% endequation %}-ים האפשריים ועם {% equation %}b\left(x\right){% endequation %} <strong>קבוע</strong> עבור כולם; ועל {% equation %}r{% endequation %} לא שמתי תג כי הוא יהיה גם השארית הסופית שארצה לקבל).
+{% equation %}a^{\prime}\left(x\right)=q^{\prime}\left(x\right)b\left(x\right)+r\left(x\right){% endequation %} כך ש-{% equation %}\deg\left(r^{\prime}\right)<\deg\left(b\right){% endequation %} או {% equation %}r=0{% endequation %} (שימו לב - לא שמתי תג על {% equation %}b{% endequation %} מכיוון שאנחנו מוכיחים את המשפט עבור כל ה-{% equation %}a\left(x\right){% endequation %}-ים האפשריים ועם {% equation %}b\left(x\right){% endequation %} <strong>קבוע</strong> עבור כולם; ועל {% equation %}r{% endequation %} לא שמתי תג כי הוא יהיה גם השארית הסופית שארצה לקבל).
 
 יש לנו עכשיו שתי משוואות שמערבות את {% equation %}a^{\prime}\left(x\right){% endequation %}. נשווה את שתיהן ונקבל:
 

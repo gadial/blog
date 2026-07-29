@@ -162,7 +162,7 @@ tags:
 
 הפונקציה המורכבת יותר תהיה סוג של <strong>תבנית ריבועית</strong> עם הזזה אפינית. לא אומר לכם כלום? זו פשוט פונקציה {% equation %}q\left(x\right):\mathbb{Z}_{2}^{n}\to\mathbb{Z}_{4}{% endequation %} (שימו לב: הטווח הוא {% equation %}\mathbb{Z}_{4}{% endequation %} ולא {% equation %}\mathbb{Z}_{2}{% endequation %}) שמוגדרת בעזרת מטריצה {% equation %}A\in\mathbb{Z}_{2}^{n\times n}{% endequation %} ווקטור {% equation %}b\in\mathbb{Z}_{2}^{n}{% endequation %} כך ש-
 
-{% equation %}q\left(x\right)=2x^{t}Ax+bx=2\sum_{1\le i&lt;j\le n}A_{i,j}x_{i}x_{j}+\sum_{i=1}^{n}b_{i}x_{i}{% endequation %}
+{% equation %}q\left(x\right)=2x^{t}Ax+bx=2\sum_{1\le i<j\le n}A_{i,j}x_{i}x_{j}+\sum_{i=1}^{n}b_{i}x_{i}{% endequation %}
 
 הפונקציה {% equation %}q{% endequation %} נתונה במפורש; אנחנו לא מתעניינים בדיוק בה, אלא בפונקציה לינארית {% equation %}f{% endequation %} שהיא <strong>הצמצום</strong> של {% equation %}q{% endequation %} לתת-מרחב מסויים של {% equation %}\mathbb{Z}_{2}^{n}{% endequation %}. תת-המרחב מוגדר כך:
 

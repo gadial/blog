@@ -12,7 +12,7 @@ social_media_share: true
 ---
 בואו ניגש ללב העניין. התבוננו בנוסחה הבאה:
 
-{% equation %}\frac{1}{2}&lt;\left\lfloor \text{mod}\left(\left\lfloor \frac{y}{17}\right\rfloor 2^{-17\left\lfloor x\right\rfloor -\text{mod}\left(\left\lfloor y\right\rfloor ,17\right)},2\right)\right\rfloor {% endequation %}
+{% equation %}\frac{1}{2}<\left\lfloor \text{mod}\left(\left\lfloor \frac{y}{17}\right\rfloor 2^{-17\left\lfloor x\right\rfloor -\text{mod}\left(\left\lfloor y\right\rfloor ,17\right)},2\right)\right\rfloor {% endequation %}
 
 בלי פאניקה! הכל יוסבר.
 

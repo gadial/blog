@@ -23,14 +23,14 @@ tags:
 
 כעת אני רוצה להציג דרך אחרת לפתרון, שהמעניין בה היא שהיא אינה קונסטרוקטיבית במיוחד - למעשה, האסטרטגיה שהיא מציעה יכולה להיות מעורפלת כמעט כמו שיטת בחירת הכסף למעטפות. הרעיון פשוט: בחר באקראי מספר ממשי, כשהדרישה היחידה היא שכל מספר ממשי יכול להיבחר (פורמלית - פונקצית צפיפות ההסתברות של ההגרלה צריכה להיות חיובית תמיד) והשווה אותו ל-{% equation %}x{% endequation %} שראית במעטפה שלך. אם המספר שהגרלת גדול יותר, תחליף; אחרת, תישאר.
 
-מה קורה כאן? צריך להבדיל בין שלושה מקרים אפשריים, לפי הזהות של המספר שהגרלתי, שאסמנו {% equation %}y{% endequation %}. אם {% equation %}y\le a<b{% endequation %}, אז לא משנה מה נמצא במעטפה שפתחתי, אני לא הולך להחליף; לכן ההסתברות שלי להצליח היא בדיוק חצי. באופן דומה, אם {% equation %}a<b&lt;y{% endequation %} אז לא משנה מה נמצא במעטפה שפתחתי, כן אחליף, ולכן שוב ההסתברות שלי להצליח היא חצי. האקשן מתחיל כאשר {% equation %}a<y\le b{% endequation %}; במקרה זה <strong>תמיד אנצח</strong>. לא משנה אם ראיתי את {% equation %}a{% endequation %} או {% equation %}b{% endequation %}. אם ראיתי את {% equation %}a{% endequation %}, אז ה-{% equation %}y{% endequation %} שהגרלתי גדול יותר ממנו, ולכן אחליף ואנצח; ואם ראיתי את {% equation %}b{% endequation %} אז ה-{% equation %}y{% endequation %} שלי קטן יותר ממנו ולכן לא אחליף ואנצח.
+מה קורה כאן? צריך להבדיל בין שלושה מקרים אפשריים, לפי הזהות של המספר שהגרלתי, שאסמנו {% equation %}y{% endequation %}. אם {% equation %}y\le a<b{% endequation %}, אז לא משנה מה נמצא במעטפה שפתחתי, אני לא הולך להחליף; לכן ההסתברות שלי להצליח היא בדיוק חצי. באופן דומה, אם {% equation %}a<b<y{% endequation %} אז לא משנה מה נמצא במעטפה שפתחתי, כן אחליף, ולכן שוב ההסתברות שלי להצליח היא חצי. האקשן מתחיל כאשר {% equation %}a<y\le b{% endequation %}; במקרה זה <strong>תמיד אנצח</strong>. לא משנה אם ראיתי את {% equation %}a{% endequation %} או {% equation %}b{% endequation %}. אם ראיתי את {% equation %}a{% endequation %}, אז ה-{% equation %}y{% endequation %} שהגרלתי גדול יותר ממנו, ולכן אחליף ואנצח; ואם ראיתי את {% equation %}b{% endequation %} אז ה-{% equation %}y{% endequation %} שלי קטן יותר ממנו ולכן לא אחליף ואנצח.
 
 הבה ונעשה כעת את החישוב הפורמלי. אנחנו צריכים להבדיל בין ההסתברות של שלושה מקרים: {% equation %}P\left(y\le a\right),P\left(y>b\right),P\left(a<y\le b\right){% endequation %}. אלו שלושת המקרים האפשריים היחידים, ולכן סכום ההסתברויות שלהם הוא 1, וכדי לחשב את ההסתברות שאנצח צריך לכפול כל אחד מהם בהסתברות לנצח בהניתן שהוא קרה. נקבל את הסכום הבא:
 
-{% equation %}\frac{1}{2}P\left(y\le a\right)+\frac{1}{2}P\left(y&gt;b\right)+P\left(a&lt;y\le b\right){% endequation %}
+{% equation %}\frac{1}{2}P\left(y\le a\right)+\frac{1}{2}P\left(y>b\right)+P\left(a<y\le b\right){% endequation %}
 
-{% equation %}= \frac{1}{2}\left(P\left(y\le a\right)+P\left(y&gt;b\right)+P\left(a&lt;y\le b\right)\right)+\frac{1}{2}P\left(a&lt;y\le b\right){% endequation %}
-{% equation %}= \frac{1}{2}+\frac{1}{2}P\left(a&lt;y\le b\right){% endequation %}
+{% equation %}= \frac{1}{2}\left(P\left(y\le a\right)+P\left(y>b\right)+P\left(a<y\le b\right)\right)+\frac{1}{2}P\left(a<y\le b\right){% endequation %}
+{% equation %}= \frac{1}{2}+\frac{1}{2}P\left(a<y\le b\right){% endequation %}
 
 אם כן, שוב קיבלתי הסתברות הצלחה של "חצי ועוד קצת". כל מה שנדרש ממני הוא שההתפלגות שבה אני בוחר את {% equation %}y{% endequation %} תהיה כזו שבה לכל {% equation %}a<b{% endequation %}, ההסתברות שיתקיים {% equation %}a<y\le b{% endequation %} תהיה חיובית. התפלגות נורמלית היא הדוגמה הקלאסית להתפלגות שבה זה מתקיים, אך כאמור - כל התפלגות עם פונקצית צפיפות הסתברות חיובית תמיד עובדת (ואין בעיה גם עם פונקציות מוגבלות יותר, עם נקודות אי רציפות סליקות - אבל למה לחפור בכך?)
 

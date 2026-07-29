@@ -19,7 +19,7 @@ description: "איך בערך מוכיחים את משפט הגבול המרכז
 
 {% equation %}Z_{n}=\frac{X_{1}+\ldots+X_{n}-n\mu}{\sigma\sqrt{n}}{% endequation %}
 
-אז הסדרה {% equation %}Z_{n}{% endequation %} שואפת להתפלגות הנורמלית {% equation %}N\left(0,1\right){% endequation %} כאשר {% equation %}n{% endequation %} שואף לאינסוף. פורמלית, לכל {% equation %}-\infty&lt;a&lt;\infty{% endequation %}:
+אז הסדרה {% equation %}Z_{n}{% endequation %} שואפת להתפלגות הנורמלית {% equation %}N\left(0,1\right){% endequation %} כאשר {% equation %}n{% endequation %} שואף לאינסוף. פורמלית, לכל {% equation %}-\infty<a<\infty{% endequation %}:
 
 {% equation %}\lim_{n\to\infty}P\left(Z_{n}\le a\right)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{a}e^{-x^{2}/2}dx{% endequation %}
 
