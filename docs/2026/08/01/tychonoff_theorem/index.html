@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מבוא לטופולוגיה קבוצתית: משפט טיכונוף - לא מדויק</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <meta name="description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://gadial.net/2026/08/01/tychonoff_theorem/">
+    <meta property="og:title" content="מבוא לטופולוגיה קבוצתית: משפט טיכונוף">
+    <meta property="og:description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב">
+    <meta property="og:site_name" content="לא מדויק">
+    
+
+<meta property="og:image" content="http://gadial.net/img/main/default-card.png" />
+
+
+        
+    <!-- Twitter -->
+    
+
+<meta name="twitter:card" content="summary">
+
+
+    <meta name="twitter:url" content="https://gadial.net/2026/08/01/tychonoff_theorem/">
+    <meta name="twitter:description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב">
+    <meta name="twitter:site" content="@" />
+    <meta property="twitter:title" content="מבוא לטופולוגיה קבוצתית: משפט טיכונוף">
+    
+
+<meta property="twitter:image" content="http://gadial.net/img/main/default-card.png" />
+
+
+    
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="לא מדויק - RSS Feed" href="/feed.xml">
+       
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        /* Hamburger menu button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .menu-toggle:hover {
+            opacity: 0.8;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .top-nav .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .top-nav .site-title {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0;
+                padding: 10px 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* Hide nav links by default on mobile */
+            .top-nav .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            /* Show when expanded */
+            .top-nav .nav-links.expanded {
+                display: flex;
+            }
+            
+            .top-nav .nav-links > a {
+                text-align: center;
+                padding: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .top-nav .search-box {
+                width: 100%;
+                flex-direction: column;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .top-nav .search-box input {
+                width: 100%;
+                margin-bottom: 5px;
+                min-width: 0;
+            }
+            
+            .top-nav .search-box button {
+                width: 100%;
+            }
+        }
+        
+        /* Blockquote styling */
+        blockquote {
+            background: #f9f9f9;
+            border-right: 5px solid #ccc;
+            margin: 1.5em 10px;
+            padding: 0.75em 16px;
+            position: relative;
+            font-style: italic;
+        }
+        
+        blockquote:before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            right: 8px;
+            font-size: 3.5em;
+            color: #ccc;
+            line-height: 1;
+        }
+        
+        blockquote p {
+            display: block;
+            margin: 0 0 0.75em 0;
+        }
+        
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="site-title">
+                <a href="/" style="color: white; text-decoration: none;">לא מדויק</a>
+                <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="תפריט">
+                    ☰
+                </button>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <a href="/categories/">קטגוריות</a>
+                <a href="/lecture_notes.html">סיכומי הרצאות</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2026/07/28/topological_spaces_compactness/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר →</span>
+                <span class="nav-title">מבוא לטופולוגיה קבוצתית: קומפקטיות</span>
+            </a>
+            
+
+            
+            <div></div>
+            
+        </nav>
+        
+        
+        <header>
+            <h1>מבוא לטופולוגיה קבוצתית: משפט טיכונוף</h1>
+            <div class="post-meta">
+                <span class="date">2026-08-01</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/טופולוגיה.html">טופולוגיה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/משפט טיכונוף.html">משפט טיכונוף</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <p>משפט טיכונוף הוא מהמשפטים הללו שקלים לניסוח אבל טריקיים להוכחה. הוא אומר ש<strong>מכפלה של מרחבים קומפקטיים היא קומפקטית</strong>, כשכאן "מרחבים" הם מרחבים טופולוגיים ו"מכפלה" היא מרחב המכפלה <strong>עם טופולוגיית המכפלה</strong> (עם טופולוגיית הקופסה המשפט לא נכון). זה משפט חזק מאוד בגלל שהמכפלה יכולה להיות של קבוצה כלשהי של מרחבים, אפילו קבוצה לא בת מניה שלהם; אבל זו גם הסיבה שבהוכחה אנחנו נזקקים לכלי חזק למדי - <strong>אקסיומת הבחירה</strong> (לא נשתמש בה ישירות אלא בלמה של צורן ששקולה לה). אפשר גם לתת הוכחה פשוטה יותר ונטולת אקסיומת הבחירה לכך שמכפלה <strong>סופית</strong> של מרחבים קומפקטיים היא קומפקטית אבל אני אוותר על זה כאן.</p>
+<p>ההוכחה יכולה להיות טיפה מאתגרת כשנתקלים בה לראשונה, אבל היא די דומה באופיה להוכחות דומות שמתבססות על בניה כמו של הלמה של צורן. הראיתי בבלוג את <a href="https://gadial.net/2013/02/26/godel_completeness_proof_2/">משפט השלמות של גדל</a> שבו יש משהו כזה, וגם <a href="https://gadial.net/2013/06/21/ultrafilters_and_ultraproducts/">הראיתי הוכחה</a> לקיום על-מסנן שגם היא מאוד דומה. בפוסט הקודם הזכרתי את איך שמשפט טיכונוף יכול להוכיח את <strong>משפט הקומפקטיות</strong> בלוגיקה, ואותו משפט יכול לנבוע גם ממשפט השלמות של גדל וגם מקיום על-מסנן. במילים אחרות - ראינו כבר את החדק והזנב של הסיפור הזה, היום אנחנו הולכים לראות את האוזניים.</p>
+<p>יהיה נוח להשתמש בהגדרה של קומפקטיות בעזרת חיתוכים, אז בואו נזכיר אותה: מרחב <span class="math">\(X\)</span> הוא קומפקטי אם לכל אוסף של קבוצות סגורות שמקיים את <strong>תכונת החיתוך הסופי</strong> יש חיתוך לא ריק. </p>
+<p>כלומר, פורמלית: לכל אוסף <span class="math">\(\left\{ C_{\alpha}\right\} _{\alpha\in\Lambda}\)</span> של קבוצות סגורות ב-<span class="math">\(X\)</span> כך שלכל תת-אוסף <strong>סופי</strong><span class="math">\(\Lambda^{\prime}\subseteq\Lambda\)</span> מתקיים <span class="math">\(\bigcap_{\alpha\in\Lambda^{\prime}}C_{\alpha}\ne\emptyset\)</span> מתקיים ש-<span class="math">\(\bigcap_{\alpha\in\Lambda}C_{\alpha}\ne\emptyset\)</span> .</p>
+<p>הרעיון "בגדול" של ההוכחה הוא מאוד פשוט; הוא הולך להיכשל בשתי צורות שונות, אחת לא כזו נוראית ואחת יותר מורכבת, אבל הוא מאוד פשוט. נניח לצורך הפשטות ש-<span class="math">\(X=A\times B\)</span> ו-<span class="math">\(A,B\)</span> קומפקטיים. נסתכל על אוסף <span class="math">\(\left\{ C_{\alpha}\right\} _{\alpha\in\Lambda}\)</span> של קבוצות סגורות ב-<span class="math">\(X\)</span> שמקיים את תכונת החיתוך הסופי. אנחנו רוצים למצוא איבר <span class="math">\(\left(a,b\right)\in A\times B\)</span> כך ש-<span class="math">\(\left(a,b\right)\in\bigcap_{\alpha\in\Lambda}C_{\alpha}\)</span> . הנה דרך פשוטה (וכאמור, שגויה כל עוד מבצעים את זה נאיבית) לעשות את זה:</p>
+<ul>
+<li>
+<p>נסתכל על <strong>ההטלה</strong> של הקבוצות באוסף על <span class="math">\(A\)</span>, כלומר על <span class="math">\(\pi_{A}\left(C_{\alpha}\right)\)</span> לכל <span class="math">\(\alpha\in\Lambda\)</span> . קיבלנו אוסף של קבוצות ב-<span class="math">\(A\)</span> והוא מקיים את תכונת החיתוך הסופי כי ה-<span class="math">\(C_{\alpha}\)</span> המקוריים קיימו אותה (הטענה הספציפית הזו <strong>כן נכונה</strong> אבל גם אותה אוכיח בהמשך). לכן קיים <span class="math">\(a\in\bigcap_{\alpha\in\Lambda}\pi_{A}\left(C_{\alpha}\right)\)</span> .</p>
+</li>
+<li>
+<p>נעשה את אותו דבר עם <span class="math">\(B\)</span> ונמצא <span class="math">\(b\in\bigcap_{\alpha\in\Lambda}\pi_{B}\left(C_{\alpha}\right)\)</span> .</p>
+</li>
+<li>
+<p>קיבלנו איבר <span class="math">\(\left(a,b\right)\in A\times B\)</span> כך ש-<span class="math">\(\left(a,b\right)\in\bigcap_{\alpha\in\Lambda}C_{\alpha}\)</span> וסיימנו.</p>
+</li>
+</ul>
+<p>למה זה לא עובד? ראשית, כי אני משתמש בהגדרת החיתוך של קומפקטיות על <strong>ההטלות</strong><span class="math">\(\pi_{A}\left(C_{\alpha}\right)\)</span>, אבל בשביל שאוכל להשתמש בה, ההטלות צריכות להיות קבוצות <strong>סגורות</strong>. והן לא. למרבה המזל זו לא בעיה רצינית כי אפשר יהיה להסתכל על הסגור שלהן, <span class="math">\(\overline{\pi_{A}\left(C_{\alpha}\right)}\)</span>, והוא כן יהיה קבוצה סגורה ונקבל אוסף של קבוצות סגורות שמקיים את תכונת החיתוך הסופי, כך שנקבל את ה-<span class="math">\(a\)</span> שלנו בסוף.</p>
+<p>אבל הבעיה המהותית הרבה יותר היא זו - אוקיי, מצאנו <span class="math">\(a\)</span> ששייך לכל ההטלות של הקבוצות על <span class="math">\(A\)</span> ; מצאנו <span class="math">\(b\)</span> ששייך לכל ההטלות של הקבוצות על <span class="math">\(B\)</span> ; אבל למה זה מבטיח ש-<span class="math">\(\left(a,b\right)\)</span> שייך לכל הקבוצות המקוריות? וזו בעיה משמעותית כי <strong>הוא לא</strong>. בואו נראה דוגמא קונקרטית פשוטה לזה. נניח ש-<span class="math">\(X=\left[0,1\right]^{2}\)</span>, כלומר <span class="math">\(A=B=\left[0,1\right]\)</span>, וניקח קבוצה סגורה <strong>אחת</strong>, האלכסון <span class="math">\(C=\left\{ \left(x,x\right)\ |\ x\in\left[0,1\right]\right\}\)</span> . ההטלה של <span class="math">\(C\)</span> על <span class="math">\(A\)</span> היא פשוט <span class="math">\(A\)</span> כולה ובדומה גם ההטלה של <span class="math">\(C\)</span> על <span class="math">\(B\)</span> . עכשיו נניח שנבחר <span class="math">\(a=0\)</span> ו-<span class="math">\(b=1\)</span>, נקבל את הנקודה <span class="math">\(\left(0,1\right)\)</span> שכמובן לא על האלכסון. זה מחרב לנו את כל הרעיון. מחרב בצורה כזו של "אוקיי, למה בעצם חשבנו שהכיוון הזה יכול לעבוד, חזרה לשולחן השרטוט".</p>
+<p>אבל לא! אולי אפשר עוד קצת להתעקש. הרי אחרי שבחרתי <span class="math">\(a=0\)</span> זה לא שהסיפור היה אבוד, הייתי יכול לבחר <span class="math">\(b=0\)</span> ולקבל נקודה שבאמת שייכת ל-<span class="math">\(C\)</span> . אז אולי הייתי צריך שהבחירה <span class="math">\(a=0\)</span> <strong>תגביל</strong> איכשהו את הבחירה שלי ב-<span class="math">\(B\)</span> ? אולי אפשר לעשות את זה, אבל כשיש לנו מספר <strong>אינסופי</strong> של מרחבים שאנחנו מכפילים זה בזה, נצטרך סוג של אינדוקציה כדי לפרמל את הטיעון; וכשיש לנו מספר <strong>לא בן מניה</strong> של מרחבים נצטרך להשתמש במה שנקרא <strong>אינדוקציה טרנספיניטית</strong> (או בשמה העברי, "על-סופית"; אני מדבר עליה <a href="https://gadial.net/2023/01/18/classes_and_transfinite/">כאן</a>). הכיוון הזה בהחלט <strong>יכול</strong> לעבוד, אבל אפשר לטפל בבעיה יותר באלגנטיות - למעשה, זה מה שהופך את ההוכחה הזו לאחת מהחביבות עלי במתמטיקה. הרעיון של "בואו נגביל את מה שאפשר לבחור ב-<span class="math">\(B\)</span> כי בבירור היה לנו <strong>יותר מדי חופש בחירה</strong> וזה פעל לרעתנו" הוא נכון, אבל אפשר לטפל בו על ידי הגבלה של חופש הבחירה <strong>מראש</strong>, לפני שמתחילים להסתכל על הטלות.</p>
+<p>עכשיו, מה זו "הגבלה"? כשבחרתי את <span class="math">\(a\)</span>, ההגבלה הייתה שיתקיים <span class="math">\(a\in\bigcap_{\alpha\in\Lambda}\pi_{A}\left(C_{\alpha}\right)\)</span> . כלומר, הקבוצות <span class="math">\(C_{\alpha}\)</span> המקוריות שלי היו אחראיות ליצירת האילוץ על <span class="math">\(a\)</span> . הרעיון במשפט טיכונוף הוא <strong>להוסיף עוד קבוצות כאלו</strong> ולכן להחמיר את ההגבלה על ה-<span class="math">\(a\)</span> שאפשר למצוא. כמובן שהוספת קבוצות כאלו לא יכולה להפריע, במובן זה שאם נמצא <span class="math">\(a\)</span> ששייך לחיתוך הקבוצות כולל אלו שהוספנו במהלך ההרחבה, אז הוא יהיה שייך גם לחיתך הקבוצות המקוריות בלבד.</p>
+<p>אוקיי, אז נוסיף עוד קבוצות. אבל כמה? אילו? וכאן יש את תשובת המחץ: <strong>נוסיף את המקסימום האפשרי שנוכל</strong> כי בדיוק המקסימום הזה הולך ליצור את האילוץ האולטימטיבי שיגרום להכל לעבוד; ולגבי ה"אילו", ובכן: <strong>אין לנו מושג</strong> איזה קבוצות הולכות להתווסף. רק שזה יהיה אפשרי. הרי לנו לב הבעיה, שתמיד חוזר על עצמו בהוכחות שמסתמכות על הלמה של צורן/אקסיומת הבחירה: מה שאנחנו עושים הוא לא <strong>קונסטרוקטיבי</strong>.</p>
+<p>בואו ניזכר איך הקטע הזה של הלמה של צורן עובד בכללי. אם יש לנו קבוצה סדורה חלקית <span class="math">\(\left(A,\le\right)\)</span>, הלמה של צורן מראה שבתנאים מסויימים קיים ל-<span class="math">\(A\)</span> <strong>איבר מקסימלי</strong>, כלומר <span class="math">\(M\in A\)</span> כך שאין <span class="math">\(a\in A\)</span> שמקיים <span class="math">\(M\lt a\)</span> (שימו לב שזה לא אותו דבר כמו <span class="math">\(a\le M\)</span> לכל <span class="math">\(a\in A\)</span> כי לא כל איבר של <span class="math">\(A\)</span> בהכרח יהיה ניתן להשוואה עם <span class="math">\(M\)</span>, יחס הסדר הוא <strong>חלקי</strong> ). מה התנאים שצריך כדי שדבר כזה יקרה? ובכן, אפשר לחשוב איך היינו מנסים למצוא איבר מקסימלי: היינו לוקחים <span class="math">\(a\in A\)</span> כלשהו (כלומר, <span class="math">\(A\ne\emptyset\)</span>, נתחיל מזה) ואם הוא מקסימלי, סיימנו. אחרת יש <span class="math">\(b\in A\)</span> כך ש-<span class="math">\(a\lt b\)</span> . אם <span class="math">\(b\)</span> מקסימלי, סיימנו, אחרת יש <span class="math">\(c\)</span> כך ש-<span class="math">\(a\lt b\lt c\)</span> וכן הלאה. מה שקורה הוא שאם אנחנו לא מוצאים איבר מקסימלי, אנחנו מקבלים <strong>שרשרת</strong>: תת-קבוצה של <span class="math">\(A\)</span> שכל האיברים שלה ניתנים להשוואה זה עם זה (מה שכאמור - לא בהכרח מתקיים לכל <span class="math">\(A\)</span> כי הסדר הוא חלקי). בצורה הזו אפשר לבנות שרשרת שהיא סדרה <span class="math">\(a_{1},a_{2},a_{3},\ldots\)</span> . אם <span class="math">\(A\)</span> הייתה סופית, זה היה מספיק; מתישהו היו נגמרים לנו האיברים והאחרון היה האיבר המקסימלי. אבל אם <span class="math">\(A\)</span> אינסופית צריך איכשהו להמשיך - לקבל את "האיבר הבא" שבסוף הסדרה הזו. עבור מי שבקיאים בסודרים, הרעיון פה הוא לבנות איבר בסדרה לכל סודר קיים, ובשביל הסודרים <strong>הגבוליים</strong> צריך איכשהו למצוא איבר שגדול יותר מכל מה שהיה עד כה. כאן נכנסת ההנחה של צורן: <strong>לכל שרשרת יש חסם מלעיל</strong>, כלומר לכל שרשרת אנחנו יכולים למצוא איבר שגדול מכל איבריה. עם ההנחה הזו, אפשר לבנות שרשרת כל כך ארוכה שמתישהו היא תהיה חייבת למצות את האיברים של <span class="math">\(A\)</span> ולכן שנקבל איבר מקסימלי. כאן גם אקסיומת הבחירה נכנסת לתמונה - בשביל לבנות את השרשרת הזו צריך <strong>לבחור</strong> איברים להוסיף וזה מצריך את האקסיומה, אם כי אני לא אכנס לדקויות של זה הפעם.</p>
+<p>בהרבה שימושים, ובפרט בשימוש הנוכחי שלנו, הקבוצה הסדורה היא משפחה של <strong>קבוצות</strong> ויחס הסדר הוא פשוט יחס ההכלה הרגיל של קבוצות. אני אסמן את זה ככה: <span class="math">\(\left(\Phi,\subseteq\right)\)</span> כאשר <span class="math">\(\Phi\)</span> היא "משפחה של קבוצות" (שזו דרך אחרת לומר "זו קבוצה של קבוצות אבל בואו נגיד שהיא <strong>משפחה</strong> כדי לא להתבלבל בינה ובין הקבוצות שהיא מכילה", וזה גם למה אני משתמש באות יוונית גדולה כמו <span class="math">\(\Phi\)</span> ). בדרך כלל יהיה קריטריון כלשהו שקובע שייכות ל-<span class="math">\(\Phi\)</span> . עכשיו, בהינתן שרשרת ב-<span class="math">\(\Phi\)</span> הדרך הסטנדרטית לבנות לה חסם מלעיל היא לאחד את כל איבריה; זה בוודאי ייתן קבוצה חדשה שמכילה את הקודמות, האתגר יהיה להוכיח שגם היא מקיימת את קריטריון השייכות ל-<span class="math">\(\Phi\)</span> .</p>
+<p>אצלנו יש רמה נוספת של סיבוך: כל איבר של <span class="math">\(\Phi\)</span> שלנו הוא משהו מהצורה <span class="math">\(\left\{ C_{\alpha}\right\} _{\alpha\in\Lambda}\)</span>, שכיניתי <strong>אוסף</strong> של קבוצות. נוח לחשוב עליו בתור קבוצה של קבוצות (אבל אפשר גם לחשוב עליו בתור פונקציה מ-<span class="math">\(\Lambda\)</span> לקבוצות) ואז יש לנו <strong>ארבע</strong> רמות של איברים:</p>
+<ul>
+<li>
+<p><strong>איברים</strong> של המרחב הטופולוגי <span class="math">\(X\)</span> שלנו, שאני מסמן באותיות לטיניות קטנות, למשל <span class="math">\(a,b\in X\)</span> .</p>
+</li>
+<li>
+<p><strong>קבוצות סגורות</strong> של איברים במרחב הטופולוגי <span class="math">\(X\)</span>, שאני מסמן באותיות לטיניות גדולות, למשל <span class="math">\(C\)</span> .</p>
+</li>
+<li>
+<p><strong>אוספים</strong> של קבוצות סגורות כאלו, שאני אסמן באותיות לטיניות קליגרפיות, למשל <span class="math">\(\mathcal{C}\)</span> כי כמובן שזה לא מבלבל בכלל.</p>
+</li>
+<li>
+<p><strong>משפחה</strong><span class="math">\(\Phi\)</span> שכוללת את כל האוספים <span class="math">\(\mathcal{C}\)</span> שמקיימים את תכונת החיתוכים הסופיים.</p>
+</li>
+</ul>
+<p>מה שאנחנו צריכים לעשות כדי להשתמש בלמה של צורן הוא להראות שאם יש לנו שרשרת של קבוצות <span class="math">\(\mathcal{C}\)</span> שמקיימות את תכונת החיתוכים הסופיים, אז גם האיחוד שלהן מקיים את תכונת החיתוכים הסופיים. פורמלית, בואו נסמן ב-<span class="math">\(\Psi\)</span> את השרשרת ונגדיר <span class="math">\(\mathcal{D}=\bigcup\Psi\)</span> אז לכל <span class="math">\(\mathcal{C}\in\Psi\)</span> מתקיים <span class="math">\(\mathcal{C}\subseteq\mathcal{D}\)</span>, והאתגר שלנו הוא להבין למה <span class="math">\(\mathcal{D}\)</span> מקיימת את תכונת החיתוכים הסופיים (מעבר לאתגר של להבין מה הולך עם כל האותיות הללו).</p>
+<p>מה שאנחנו צריכים להראות הוא שלכל תת-קבוצה <strong>סופית</strong> של <span class="math">\(\mathcal{D}\)</span> יש חיתוך לא ריק. אני אסמן תת-קבוצה כללית כזו ב-<span class="math">\(\left\{ D_{1},D_{2},\ldots,D_{n}\right\}\)</span> . הסופיות הזו היא בדיוק מה שיאפשר לנו להשתמש בטריק הסטנדרטי שבו משתמשים בהוכחות כאלו של הלמה של צורן שבהן פשוט מאחדים את אברי השרשרת שלנו. מכיוון שכל <span class="math">\(D\in\mathcal{D}\)</span> הגיע מאחת מהקבוצות שהשתתפו באיחוד (כלומר, מקבוצה כלשהי מהשרשרת <span class="math">\(\Psi\)</span> ) אז בואו נסמן ב-<span class="math">\(\mathcal{C}_{i}\)</span> את הקבוצה שממנה <span class="math">\(D_{i}\)</span> הגיע, <span class="math">\(D_{i}\in\mathcal{C}_{i}\)</span> . עכשיו, ה-<span class="math">\(\mathcal{C}\)</span> -ים הללו הם איברים של <strong>שרשרת</strong>, כלומר הם סדורים בסדר מלא ביחס להכלה. אז אפשר לבחור מלכתחילה את האינדקסים מ-<span class="math">\(1\)</span> עד <span class="math">\(n\)</span> כך שיתקיים</p>
+<p><span class="math">\(\mathcal{C}_{1}\subseteq\mathcal{C}_{2}\subseteq\ldots\subseteq\mathcal{C}_{n}\)</span> אבל זה אומר <strong>שכל</strong> האיברים <span class="math">\(D_{1},\ldots,D_{n}\)</span> שייכים כולם אל <span class="math">\(\mathcal{C}_{n}\)</span> ; ומכיוון ש-<span class="math">\(\mathcal{C}_{n}\)</span> מקיימת את תכונת החיתוכים הסופיים, אז <span class="math">\(\bigcap^{n}_{i=1}D_{i}\ne\emptyset\)</span>, סיימנו; הוכחנו שלכל שרשרת יש חסם מלעיל ולכן יש איבר מקסימלי ב-<span class="math">\(\Phi\)</span> .</p>
+<p>נסכם: הוכחנו שבמרחב הטופולוגי <span class="math">\(X\)</span>, לכל אוסף <span class="math">\(\mathcal{C}\)</span> של תת-קבוצות של <span class="math">\(X\)</span> שמקיים את <strong>תכונת החיתוכים הסופיים</strong> יש קבוצה <span class="math">\(\mathcal{C}^{\prime}\)</span> כך ש-<span class="math">\(\mathcal{C}\subseteq\mathcal{C}^{\prime}\)</span> ו-<span class="math">\(\mathcal{C}^{\prime}\)</span> היא <strong>מקסימלית</strong> - כל איבר שנוסיף לה יוביל לכך שהיא לא תקיים את תכונת החיתוכים הסופיים.</p>
+<p>מה שעדיין לא ברור היא איך המקסימליות הזו עוזרת לנו. התשובה לזה פשוטה: אם <span class="math">\(\mathcal{C}\)</span> מקסימלית, יותר קל להראות שדברים שייכים אליה וזה בדיוק מה שנזדקק לו בהמשך. ליתר דיוק נזדקק לשתי התכונות הבאות:</p>
+<ul>
+<li>
+<p>אם <span class="math">\(\mathcal{C}\)</span> מקסימלית ביחס לתכונת החיתוכים הסופיים אז היא סגורה תחת חיתוכים סופיים (כלומר, חיתוך סופי של איברים שלה גם הוא שייך אליה).</p>
+</li>
+<li>
+<p>אם <span class="math">\(\mathcal{C}\)</span> מקסימלית ביחס לתכונת החיתוכים הסופיים ואם <span class="math">\(D\)</span> היא קבוצה שיש לה חיתוך לא ריק עם <strong>כל</strong> אבר ב-<span class="math">\(\mathcal{C}\)</span>, אז <span class="math">\(D\in\mathcal{C}\)</span> .</p>
+</li>
+</ul>
+<p>התכונה הראשונה פשוטה מאוד להוכחה. נניח ש-<span class="math">\(D=C_{1}\cap\ldots\cap C_{n}\)</span> הוא חיתוך סופי של אברי <span class="math">\(\mathcal{C}\)</span>, ונראה שגם אם מוסיפים את <span class="math">\(D\)</span> אל <span class="math">\(\mathcal{C}\)</span> היא עדיין שומרת על תכונת החיתוכים הסופיים שלה - כלומר <span class="math">\(D\)</span> היה חייב מראש להיות איבר שלה, אחרת היינו מקבלים סתירה למקסימליות (כי במקרה כזה, <span class="math">\(\mathcal{C}\cup\left\{ D\right\}\)</span> הייתה קבוצה שמקיימת את תכונת החיתוכים הסופיים <strong>וגם</strong> מכילה ממש את <span class="math">\(\mathcal{C}\)</span> ).</p>
+<p>למה אחרי שמוסיפים את <span class="math">\(D\)</span> תכונת החיתוכים הסופיים משתמרת? כי נניח שאנחנו מסתכלים על החיתוך הסופי <span class="math">\(C^{\prime}_{1}\cap\ldots\cap C^{\prime}_{m}\cap D\)</span> . אפשר פשוט לכתוב במקום <span class="math">\(D\)</span> את הקבוצות שהרכיבו אותו ולקבל <span class="math">\(C^{\prime}_{1}\cap\ldots\cap C^{\prime}_{m}\cap C_{1}\cap\ldots\cap C_{n}\)</span> וזה חיתוך סופי של אברי <span class="math">\(\mathcal{C}\)</span> ולכן לא ריק. זה מסיים את הוכחת הטענה הראשונה.</p>
+<p>את הטענה השניה קל להוכיח בעזרת הראשונה. גם פה, הרעיון הוא להראות שלהוסיף את <span class="math">\(D\)</span> אל <span class="math">\(\mathcal{C}\)</span> לא פוגע בתכונת החיתוכים הסופיים. זה לא נראה מובן מאליו: אם <span class="math">\(C_{1},C_{2}\)</span> שתי קבוצות שונות אז סתם להגיד שקיים <span class="math">\(y_{1}\in C_{1}\cap D\)</span> וקיים <span class="math">\(y_{2}\in C_{2}\cap D\)</span> לא עוזר לי - אני רוצה להשתכנע בכך ש-<span class="math">\(C_{1}\cap C_{2}\cap D\)</span> לא ריקה, ואם <span class="math">\(y_{1}\ne y_{2}\)</span> בהחלט ייתכן שאף אחד מהם לא ייכנס לחיתוך הזה (כי ייתכן ש-<span class="math">\(y_{2}\notin C_{1}\)</span> וההפך). אלא מה - כמו שראינו קודם, לא צריך להתעסק עם <strong>הרבה</strong> קבוצות שונות. באופן כללי אם יש לנו את החיתוך <span class="math">\(D\cap C_{1}\cap\ldots\cap C_{n}\)</span> אז מהטענה הקודמת, כל <span class="math">\(C_{1}\cap\ldots\cap C_{n}\)</span> הוא בעצמו קבוצה ב-<span class="math">\(\mathcal{C}\)</span> ולכן החיתוך שלו עם <span class="math">\(D\)</span> לא ריק, וסיימנו.</p>
+<p>עכשיו אפשר לעבור להוכחה של משפט טיכונוף עצמו. בואו ניקח מרחב מכפלה <span class="math">\(X=\prod A_{i}\)</span> כך שכל <span class="math">\(A_{i}\)</span> הוא קומפקטי (אני לא מניח כלום על מספר המוכפלים - יכול להיות סופי, בן מניה, לא בן מניה, מה שתרצו). ניקח אוסף <span class="math">\(\mathcal{C}\)</span> של קבוצות <strong>סגורות</strong> ב-<span class="math">\(X\)</span> שמקיים את תכונת החיתוכים הסופיים (החיתוך של כל מספר סופי של איברים של <span class="math">\(\mathcal{C}\)</span> לא ריקה) ונוכיח ש-<span class="math">\(\bigcap\mathcal{C}\)</span> לא ריקה על ידי זה שנציג איבר קונקרטי <span class="math">\(x\in\bigcap\mathcal{C}\)</span> .</p>
+<p>בשלב ראשון, נרחיב את <span class="math">\(\mathcal{C}\)</span> אל <span class="math">\(\mathcal{C}^{\prime}\)</span> מקסימלית שמקיימת את תכונת החיתוכים הסופיים. מכיוון ש-<span class="math">\(\mathcal{C}\subseteq\mathcal{C}^{\prime}\)</span> אז <span class="math">\(\bigcap\mathcal{C}^{\prime}\subseteq\bigcap\mathcal{C}\)</span> ולכן אם נוכיח ש-<span class="math">\(x\in\bigcap\mathcal{C}^{\prime}\)</span> סיימנו; אז אפשר פשוט להוכיח את המשפט מלכתחילה עבור <span class="math">\(\mathcal{C}\)</span> מקסימלית ולא לסחוב את התיוג הזה כל הזמן.</p>
+<p>לכל <span class="math">\(A_{i}\)</span> במכפלה שמגדירה את <span class="math">\(X\)</span>, נסמן ב-<span class="math">\(\pi_{i}\)</span> את ההטלה <span class="math">\(\pi_{i}:X\to A_{i}\)</span> . עכשיו נגדיר אוסף של קבוצות סגורות ב-<span class="math">\(A_{i}\)</span> : <span class="math">\(\mathcal{D}_{i}=\left\{ \overline{\pi_{i}\left(C\right)}\ |\ C\in\mathcal{C}\right\}\)</span> . כלומר: אנחנו לוקחים את הקבוצות של <span class="math">\(\mathcal{C}\)</span>, מטילים אותן אל <span class="math">\(A_{i}\)</span>, ואז לוקחים את הסגור שלהן. עכשיו, <span class="math">\(\mathcal{D}_{i}\)</span> מקיימת גם היא את תכונת החיתוכים הסופיים: חיתוך של מספר סופי של איברים ב-<span class="math">\(\mathcal{D}_{i}\)</span> הוא מהצורה</p>
+<p><span class="math">\(\overline{\pi_{i}\left(C_{1}\right)}\cap\ldots\cap\overline{\pi_{i}\left(C_{n}\right)}\)</span> עבור <span class="math">\(C_{1},\ldots,C_{n}\in\mathcal{C}\)</span> . ההנחה שאיתה התחלנו הייתה ש-<span class="math">\(\mathcal{C}\)</span> מקיימת את תכונת החיתוכים הסופיים, ולכן יש <span class="math">\(c\in C_{1}\cap\ldots\cap C_{n}\)</span> ומכאן ש-<span class="math">\(\pi_{i}\left(c\right)\in\overline{\pi_{i}\left(C_{1}\right)}\cap\ldots\cap\overline{\pi_{i}\left(C_{n}\right)}\)</span> (צריך לזכור שלקחת סגור של קבוצה רק מגדיל אותה).</p>
+<p>מכיוון ש-<span class="math">\(\mathcal{D}_{i}\)</span> מקיימת את תכונת החיתוכים הסופיים <strong>וגם</strong><span class="math">\(A_{i}\)</span> הוא מרחב קומפקטי, קיים <span class="math">\(d_{i}\in\bigcap\mathcal{D}_{i}\)</span> . את הדבר הזה נעשה לכל <span class="math">\(A_{i}\)</span> שמשתתף במכפלה שמגדירה את <span class="math">\(X\)</span>, ולסיום נגדיר <span class="math">\(x=\left(d_{i}\right)_{i}\)</span>, כלומר <span class="math">\(x\)</span> הוא האיבר שבקואורדינטה ה-<span class="math">\(i\)</span> -ית שלו יש את <span class="math">\(d_{i}\)</span> .</p>
+<p>כל מה שנשאר לעשות הוא להוכיח ש-<span class="math">\(x\in\bigcap\mathcal{C}\)</span>, כלומר ש-<span class="math">\(x\in C\)</span> לכל <span class="math">\(C\in\mathcal{C}\)</span> .</p>
+<p>איך עושים את זה? מאיפה להתחיל?</p>
+<p>שימו לב שעד כה בכלל לא השתמשתי בזה ש-<span class="math">\(C\)</span> <strong>סגורה</strong>; כשהסתכלתי על <span class="math">\(\pi_{i}\left(C\right)\)</span> קודם לקחתי את הסגור, ואת זה אפשר לעשות לכל קבוצה. האופן שבו אני אשתמש בזה הוא על ידי כך שלא אוכיח ישירות ש-<span class="math">\(x\in C\)</span> אלא אוכיח ש-<span class="math">\(x\in\overline{C}\)</span> ואשתמש בכך ש-<span class="math">\(C\)</span> סגורה ולכן <span class="math">\(\overline{C}=C\)</span> . כדי להוכיח ש-<span class="math">\(x\in\overline{C}\)</span> מספיק להראות שלכל סביבה של <span class="math">\(x\)</span> יש חיתוך לא ריק עם <span class="math">\(C\)</span> ; ולא באמת צריך להראות את זה לכל סביבה, מספיק להראות את זה לאברי הבסיס של מרחב המכפלה <span class="math">\(X\)</span> . בשביל להראות את זה מספיק להראות שכל איבר בסיס של <span class="math">\(X\)</span> שמכיל את <span class="math">\(x\)</span> <strong>שייך</strong> אל <span class="math">\(\mathcal{C}\)</span> בעצמו. למה? כי אז, לכל <span class="math">\(C\)</span> שניקח, החיתוך של <span class="math">\(C\)</span> עם איבר הבסיס הזה הוא לא ריק כי <span class="math">\(\mathcal{C}\)</span> מקיימת את <strong>תכונת החיתוכים הסופיים</strong>.</p>
+<p>עכשיו אנחנו חוזרים אל שתי הטענות הכלליות שהוכחתי קודם ונעזרו בכך ש-<span class="math">\(\mathcal{C}\)</span> מקסימלית:</p>
+<ul>
+<li>
+<p>אם <span class="math">\(\mathcal{C}\)</span> מקסימלית ביחס לתכונת החיתוכים הסופיים אז היא סגורה תחת חיתוכים סופיים.</p>
+</li>
+<li>
+<p>אם <span class="math">\(\mathcal{C}\)</span> מקסימלית ביחס לתכונת החיתוכים הסופיים ואם <span class="math">\(D\)</span> היא קבוצה שיש לה חיתוך לא ריק עם <strong>כל</strong> אבר ב-<span class="math">\(\mathcal{C}\)</span>, אז <span class="math">\(D\in\mathcal{C}\)</span> .</p>
+</li>
+</ul>
+<p>אנחנו רוצים להראות שכל איבר <strong>בסיס</strong> שמכיל את <span class="math">\(x\)</span> שייך אל <span class="math">\(\mathcal{C}\)</span>, אבל בזכות הטענה הראשונה מספיק שנראה את זה לכל איבר <strong>תת-בסיס</strong> שמכיל את <span class="math">\(x\)</span> . כי כל איבר בסיס שמכיל את <span class="math">\(x\)</span> מתקבל מחיתוך של אברי תת-בסיס שכולם מכילים את <span class="math">\(x\)</span>, ולכן אם כולם היו שייכים אל <span class="math">\(\mathcal{C}\)</span> כך גם איבר הבסיס.</p>
+<p>עכשיו זה המקום שבו אנחנו משתמשים בכך שהטופולוגיה על <span class="math">\(X\)</span> היא טופולוגיית <strong>המכפלה</strong> ולא טופולוגיית <strong>הקופסה</strong>. בטופולוגיית המכפלה, אברי תת-הבסיס הם פשוטים במיוחד: <span class="math">\(U_{i}=\pi^{-1}_{i}\left(V_{i}\right)\)</span> עבור כל קבוצה פתוחה <span class="math">\(V_{i}\subseteq A_{i}\)</span> . כל מה שנשאר לנו לעשות הוא להראות שאם <span class="math">\(x\in U_{i}\)</span> אז <strong>לכל</strong> איבר ב-<span class="math">\(\mathcal{C}\)</span> יש חיתוך לא ריק עם <span class="math">\(U_{i}\)</span> .</p>
+<p>במבט ראשון, לא ברור לי איך עושים את זה - מה לקבוצה <span class="math">\(U_{i}\)</span> ו<strong>לכל</strong> אברי <span class="math">\(\mathcal{C}\)</span> ? צריך להיזכר מה קרה במהלך ההוכחה. מה שאנחנו יודעים על <span class="math">\(U_{i}\)</span> הוא ש-<span class="math">\(x\)</span> שם; ו-<span class="math">\(x\)</span> הוא לא סתם איבר, הוא האיבר שבנינו בזהירות קואורדינטה-קואורדינטה, כשהקואורדינטה ה-<span class="math">\(i\)</span> -ית היא <span class="math">\(d_{i}\in\bigcap\mathcal{D}_{i}.\)</span>, כאשר <span class="math">\(\mathcal{D}_{i}=\left\{ \overline{\pi_{i}\left(C\right)}\ |\ C\in\mathcal{C}\right\}\)</span> - הנה לנו הקשר של <span class="math">\(U_{i}\)</span> אל <strong>כל</strong> הקבוצות ב-<span class="math">\(\mathcal{C}\)</span> .</p>
+<p>תהא אם כן <span class="math">\(C\in\mathcal{C}\)</span> כלשהי ונסמן <span class="math">\(D_{i}=\pi_{i}\left(C\right)\)</span> . אז <span class="math">\(d_{i}\in\overline{D_{i}}\)</span> . כעת, בנוסף לכך, <span class="math">\(d_{i}\in V_{i}\)</span>, כלומר יש לנו סביבה <span class="math">\(V_{i}\)</span> של <span class="math">\(d_{i}\)</span>, ומההגדרה של סגור של קבוצה ומכך ש-<span class="math">\(d_{i}\in\overline{D_{i}}\)</span> נקבל שהחיתוך <span class="math">\(V_{i}\cap D_{i}\)</span> לא ריק, כלומר יש <span class="math">\(y\in C\)</span> שמקיים <span class="math">\(\pi_{i}\left(y\right)\in V_{i}\)</span>, ולכן <span class="math">\(y\in\pi^{-1}_{i}\left(V_{i}\right)=U_{i}\)</span> וקיבלנו בדיוק את מה שחיפשנו: <span class="math">\(y\in U_{i}\cap C\)</span>, ולכן יש חיתוך לא ריק, כמבוקש. זה מסיים באופן קצת מפתיע את כל ההוכחה של משפט טיכונוף.</p>
+<p>בואו נסכם ונראה מה עשינו:</p>
+<ul>
+<li>
+<p>בחרנו להוכיח את הקומפקטיות של <span class="math">\(X\)</span> בעזרת ההגדרה שמתבססת על קבוצות סגורות ותכונת החיתוך הסופי.</p>
+</li>
+<li>
+<p>לקחנו אוסף <span class="math">\(\mathcal{C}\)</span> של קבוצות שמקיים את תכונת החיתוך הסופי והרחבנו אותו לאוסף <strong>מקסימלי</strong> שמקיים את התכונה הזו, בעזרת הלמה של צורן.</p>
+</li>
+<li>
+<p>בנינו <span class="math">\(x\)</span> על ידי כך שהסתכלנו בכל ההטלות <span class="math">\(\pi_{i}\)</span>, ולכל הטלה כזו הפעלנו אותה על אברי <span class="math">\(\mathcal{C}\)</span>, לקחנו את הסגור של התוצאה, חתכנו את הכל וקיבלנו (בזכות הקומפקטיות של הרכיב ה-<span class="math">\(i\)</span> ) איבר <span class="math">\(d_{i}\)</span> שנמצא בחיתוך. <span class="math">\(x\)</span> נבנה כך שבקואורדינטה ה-<span class="math">\(i\)</span> שלו יש את <span class="math">\(d_{i}\)</span> .</p>
+</li>
+<li>
+<p>הראינו שלכל אברי התת-בסיס הסטנדרטי של טופולוגיית המכפלה, אם הם מכילים את <span class="math">\(x\)</span> הם שייכים אל <span class="math">\(\mathcal{C}\)</span> . זה נעזר במקסימליות של <span class="math">\(\mathcal{C}\)</span> .</p>
+</li>
+<li>
+<p>אז השתמשנו במקסימליות של <span class="math">\(\mathcal{C}\)</span> כדי לקבל מזה שכל איבר בסיס של <span class="math">\(X\)</span> שמכיל את <span class="math">\(x\)</span> שייך אל <span class="math">\(\mathcal{C}\)</span> בעצמו, ולכן החיתוך שלו עם כל איבר ב-<span class="math">\(\mathcal{C}\)</span> לא ריק שכן <span class="math">\(\mathcal{C}\)</span> מקיימת את תכונת החיתוכים הסופיים.</p>
+</li>
+<li>
+<p>הסקנו שלכל <span class="math">\(C\in\mathcal{C}\)</span> ולכל סביבה של <span class="math">\(x\)</span> יש חיתוך לא ריק עם <span class="math">\(C\)</span> ; לכן <span class="math">\(x\in\overline{C}\)</span> ומכך ש-<span class="math">\(C\)</span> סגורה קיבלנו ש-<span class="math">\(x\in C\)</span>, ומכאן ש-<span class="math">\(x\in\bigcap\mathcal{C}\)</span>, כפי שרצינו.</p>
+</li>
+</ul>
+<p>זו לא הוכחה שבאה לי טבעי מהראש (אני מסתבך יפה מאוד בחלקים האחרונים, למרות שאת הקטע עם הלמה של צורן אני זוכר) אבל היא לא כזו מסובכת כפי שהיה אפשר לחשוש!</p>
+        </article>
+        
+        <footer>
+            <p>© כל הזכויות שמורות לגדי אלכסנדרוביץ'</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('expanded');
+        }
+        
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>
