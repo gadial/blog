@@ -1,0 +1,754 @@
+%% LyX 2.5.1 created this file.  For more info, see https://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english,hebrew]{article}
+\usepackage[HE8,T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{cprotect}
+\usepackage{amstext}
+\usepackage[unicode=true]
+ {hyperref}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% custom text accent \LyxTextAccent[<rise value (length)>]{<accent>}{<base>}
+\newcommand*{\LyxTextAccent}[3][0ex]{%
+  \hmode@bgroup\ooalign{\null#3\crcr\hidewidth
+  \raise#1\hbox{#2}\hidewidth}\egroup}
+%% select a font size smaller than the current font size:
+\newcommand{\LyxAccentSize}[1][\sf@size]{%
+  \check@mathfonts\fontsize#1\z@\math@fontsfalse\selectfont
+}
+\ProvideTextCommandDefault{\textcommabelow}[1]{%%
+  \LyxTextAccent[-.31ex]{\LyxAccentSize,}{#1}}
+
+\ProvideTextCommandDefault{\textcommaabove}[1]{%%
+  \LyxTextAccent[.5ex]{\LyxAccentSize`}{#1}}
+
+%% use comma accent instead of cedilla for these characters:
+\DeclareTextCompositeCommand{\c}{T1}{g}{\textcommaabove{g}}
+\DeclareTextCompositeCommand{\c}{T1}{G}{\textcommabelow{G}}
+\DeclareTextCompositeCommand{\c}{T1}{k}{\textcommabelow{k}}
+\DeclareTextCompositeCommand{\c}{T1}{K}{\textcommabelow{K}}
+\DeclareTextCompositeCommand{\c}{T1}{l}{\textcommabelow{l}}
+\DeclareTextCompositeCommand{\c}{T1}{L}{\textcommabelow{L}}
+\DeclareTextCompositeCommand{\c}{T1}{n}{\textcommabelow{n}}
+\DeclareTextCompositeCommand{\c}{T1}{N}{\textcommabelow{N}}
+\DeclareTextCompositeCommand{\c}{T1}{r}{\textcommabelow{r}}
+\DeclareTextCompositeCommand{\c}{T1}{R}{\textcommabelow{R}}
+
+
+\makeatother
+
+\usepackage{listings}
+\addto\captionsenglish{\renewcommand{\lstlistingname}{\protect\inputencoding{latin9}Listing}}
+\addto\captionshebrew{\renewcommand{\lstlistingname}{\protect\inputencoding{cp1255}����� ���}}
+\renewcommand{\lstlistingname}{\protect\inputencoding{cp1255}����� ���}
+
+\begin{document}
+\title{אז מה הקטע עם מודלי שפה גדולים? )חלק ב' - בואו נראה את זה בתכל'ס(}
+\maketitle
+\begin{description}
+\item [{קטגוריות:}] כללי
+\item [{תגים:}] מודל שפה גדול
+\item [{מזהה:}] \L{large\_language\_models}
+\end{description}
+
+\section{מבוא}
+
+\href{https://gadial.net/2026/08/29/large_language_models/}{בפוסט הקודם בבלוג}
+דיברתי על \L{LLM}-ים ואיך בערך הם עובדים. ספציפית, מה שתיארתי הוא
+מין גרסת צעצוע של מה שנקרא \L{Transformer}. בתיאור הצעצוע הזה, מה
+שטרנספורמר עושה כלל את השלבים הבאים:
+\begin{enumerate}
+\item פירוק של הטקסט לסדרה של יחידות בסיסיות )\textquotedblleft טוקנים\textquotedblright (
+\item המרה של כל טוקן לוקטור שמייצג אותו.
+\item הפעלה של שלב שנקרא \L{Attention} שבו כל וקטור אוסף מידע מוקטורים שבאו
+לפניו בסדרה.
+\item הפעלה של שלב שנקרא \L{MLP} שבו מתוך כל וקטור מחושב וקטור חדש שאמור
+לתאר את \textquotedblleft מה שצריך לבוא אחריו\textquotedblright .
+\item תרגום של כל וקטור אל \textbf{דירוג} של כל הטוקנים שנקרא \L{logits}.
+\end{enumerate}
+בתיאור הזה, שלבים {\beginL 3-4\endL} לא מתרחשים פעם אחת אלא חוזרים
+על עצמם שוב ושוב מספר כלשהו של פעמים. מה שלכאורה חסר פה הוא השלב שבו
+הטרנספורמר \textquotedblleft מנבא את הטוקן הבא\textquotedblright ,
+כי זה לא שלב שהטרנספורמר עצמו מבצע אלא מי שמפעיל אותו, והוא יכול לעשות
+את זה עם ה-\L{logits} בשלל דרכים שונות.
+
+התיאור הזה מצוין כדי להבין את הרעיון הכללי, אבל עבורי אישית הוא לא
+מספיק. בגלל ש-\L{LLM}-ים הם כזה קסם, אני אישית חש צורך לראות את כל
+התהליך הזה בפעולה כדי להשתכנע שמה שמתואר למעלה הוא כל מה שקורה ואין
+גרמלינים שמתחבאים מתחת לשולחן ועושים את כל העבודה בפועל - במילים אחרות,
+שאנחנו לא בשידור חוזר מוזר במיוחד של \textquotedblleft\href{https://en.wikipedia.org/wiki/Mechanical_Turk}{הטורקי המכני}\textquotedblright .
+אז בפוסט הזה אני אקח מודל קונקרטי שהוא פשוט מספיק עד כדי כך שאני יכול
+להריץ אותו מקומית אצלי, ונראה מה קורה.
+
+הפוסט הזה \textbf{לא} אמור להיות מדריך שימוש בטרנספורמרים או פוסט
+העמקה במודל ספציפי כי המודל הספציפי הזה מעניין אותי; הרי הדברים הללו
+הולכים להתיישן בצורה נוראית ועוד כמה שנים יש מצב שאי אפשר יהיה להריץ
+את הקוד שלי. המטרה פה היא לראות את הקסם קורה בעיניים; לפתוח את הפרגוד
+ולראות את האיש שמאחוריו; לחשוף את כל החוטים הסודיים, את כל הטריקים
+והשטיקים האפשריים, ואחרי כל זה - להישאר עם אותה תחושת פלא ראשונית,
+כי זה קסם אחד שלא נעלם גם אחרי שמבינים את כל מה שעומד מאחוריו )כמו,
+לשמחתי, הרבה דברים במתמטיקה(.
+
+בואו נתחיל.
+
+\section{שובו של שלכטיון}
+
+כדי לראות אם המודל שאני משתמש בו באמת עושה את הקסם שאני רוצה, אני
+הולך להשתמש במבחן שלכטיון. מה זה שלכטיון? טוב ששאלתם. שלכטיון הוא
+לוויתן מעופף שכותב סיפורים. הוא פותח במעבדה, בתהליך קפדני שנמשך כמה
+דורות כדי להבטיח שסנפיריו יתפתחו לאיברים דמויי כנף שיאפשרו לו לעוף.
+כמו כן, לימדו אותו בהדרגה קרוא וכתוב. הוא בעל ידע נרחב בספרות מודרנית
+ומסוגל לכתוב סיפורי מסתורין ראויים לפרסום.
+
+מוזר מאוד.
+
+האם אתם חושבים ששלכטיונים קיימים?
+
+הזכרתי את שלכטיון \href{https://gadial.net/2012/09/27/turing_test/}{בפוסט שלי}
+מ-{\beginL 2012\endL} על מבחן טיורינג. המקור שלו הוא בספר \textquotedblleft אלגוריתמיקה\textquotedblright{}
+של דוד הראל משנת {\beginL 1991\endL}. יש לי פינה חמה בלב לספר הזה
+שמעבר לכך שהוא מצוין בפני עצמו, הוא הראשון שגרם לי להתלהב ממדעי המחשב
+ולרצות ללכת בכיוון האקדמי הזה )ולא התאכזבתי(. את שלכטיון דוד הראל
+מציג בפרק שעוסק בבינה מלאכותית כדי להמחיש את האתגר שעומד בפני בינות
+כאלו; מה שקורה הוא שבוחנת שואלת את ה\textquotedblright נבחן\textquotedblright{}
+)שיכול להיות בינה מלאכותית או אדם אמיתי, במיטב המסורת של מבחן טיורינג(
+האם הוא חושב ששלכטיונים כאלו קיימים, והנבחן עונה שלא, כי-
+
+\textquotedblleft ראשית, יכולות ההנדסה הגנטית שלנו אפילו אינן מתקרבות
+למה שנדרש להפיכת סנפירים לכנפיים, שלא לדבר על חוסר היכולת שלנו לגרום
+ליצורים חסרי מנוע במשקל עשרה טון להפר את כוח המשיכה פשוט על ידי נפנוף
+באיברים שכאלה. שנית, החלק הנוגע לכתיבת סיפורים אינו ראוי אפילו לתגובה,
+כיוון שכתיבת סיפור טוב דורשת הרבה יותר מאשר יכולת טכנית לקרוא ולכתוב.
+הרעיון כולו נשמע מגוחך. אין לך נושאי שיחה מעניינים יותר?\textquotedblright{}
+
+מה שדוד הראל אומר הוא לא שמחשב לא יוכל אף פעם לענות ככה, אלא להפנות
+את תשומת הלב שלנו לשלל הדברים המורכבים שמחשב צריך לדעת והחיבורים שהוא
+צריך לבצע ביניהם כדי שיוכל לענות ככה )מומלץ לקרוא את הספר, הוא מתעמק
+בזה יפה(. כמובן, זה בפני עצמו זה לא מבחן \textbf{עד כדי כך} מאתגר
+- עוד לפני מהפכת ה-\L{LLM}-ים היו ליבמ מחשבים שיודעים לנצח בג'פרדי
+ולנהל דיבייטים וסביר שהיו מתמודדים גם עם שלכטיון )לא בדקתי(, אבל זו
+דרישת מינימום נחמדה.
+
+אוקיי, בואו נתחיל. המודל שבחרתי להשתמש בו הוא \L{SmolLM2-1.7B-Instruct}.
+היתרונות: הוא קטן מאוד ולכן פשוט יחסית לתיאור, אבל הוא חזק מספיק כדי
+לעבור את מבחן שלכטיון. מה הולך בשם של המודל הזה? ובכן, \L{SmolLM2}
+זו \textbf{המשפחה} של המודלים - כל מודל במשפחה הזו בנוי בדרך דומה
+אבל יש מודלים עם כמות גדולה או קטנה יותר של פרמטרים )במקרה הנוכחי
+זה המודל הכי גדול(. ה-\L{1.7B} אומר כמה פרמטרים יש במודל - יש \textbf{בערך}
+מיליארד ושבע מאות אלף מספרים ממשיים שחיים בתוך המודל הזה והם מה שמשתמשים
+בו בשלבים {\beginL 2-4\endL} שתיארתי קודם; אנחנו נראה את זה בפירוט
+וגם נעשה חשבון מדויק של כמה פרמטרים יש. ה-\L{Instruct} בסוף אומר שזו
+גרסה של המודל שנוצרה על ידי \L{fine tuning} של מודל הבסיס כדי שתתאים
+יותר למבנה של צ'אטים - עוד מעט נבדוק בדיוק איך זה מתבטא.
+
+אני הולך להשתמש בספריה \L{transformers} של פייתון, שמיועדת בדיוק כדי
+להקל על החיים בזמן שימוש בטרנספורמרים. הנה האופן שבו אני משתמש בה
+כדי להטעין את המודל:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_id = "HuggingFaceTB/SmolLM2-1.7B-Instruct"
+
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    torch_dtype="auto",
+)
+\end{lstlisting}
+\leavevmode\egroup}%
+
+מה שקורה פה מאחורי הקלעים הוא שאנחנו מתחברים לאתר \L{HuggingFace}
+שמארח מודלים אצלו, מורידים ממנו את המודל )זה מודל חופשי, כל אחד יכול
+להוריד אותו אבל זה כן דורש התחברות לממשק של \L{HuggingFace} כדי להוריד
+אותו ככה משורת הפקודה( ואז משתמשים בו כדי לייצר שני דברים: את ה-\L{tokenizer}
+שאחראי לשלב ){\beginL 1\endL}( ברשימה שנתתי למעלה, ואת \L{model} שהוא
+המודל עצמו שעושה את שלבים {\beginL 2-5\endL}.
+
+עוד נתעמק במה שכל אחד מהם עושה, אבל בואו ננצל אותם כרגע כדי לבצע את
+מבחן שלכטיון. לשם כך צריך: לכתוב שאלה על שלכטיון )אני מעתיק את הטקסט
+מהגרסה האנגלית של \textquotedblleft אלגוריתמיקה\textquotedblright (,
+להמיר אותה לפורמט של צ'אט )הטוקניזר יודע לעשות את זה(, לתת למודל לרוץ
+על זה, לקבל חזרה תשובה ולהמיר את התשובה חזרה לטקסט שאני יכול לקרוא.
+הנה הקוד שעושה את זה:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why."}
+]
+
+inputs = tokenizer.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    return_tensors="pt",
+    return_dict=True,
+)
+
+with torch.inference_mode():
+    output = model.generate(
+        **inputs,
+        max_new_tokens=500,
+        do_sample=False,
+    )
+
+print(tokenizer.decode(output[0, inputs["input_ids"].shape[1]:], skip_special_tokens=True))
+\end{lstlisting}
+\leavevmode\egroup}%
+
+אין צורך להתעמק בכל מה שהולך שם, כמובן; אני אסביר את זה בהמשך. בינתיים,
+הנה התשובה:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+Zupchoks do not exist. The concept of a "zupchok" is a fictional creature, created as a combination of a whale and a flying machine. The idea of a whale evolving into a flying creature with wings is not biologically plausible. Whales are mammals that live in the water, and they do not have the necessary physical adaptations to fly.
+
+The idea of a whale evolving into a flying creature is based on a misunderstanding of evolutionary biology. Whales evolved from land-dwelling mammals that returned to the water. Over time, they developed the necessary adaptations to live in the water, such as flippers, fins, and a streamlined body. They did not evolve wings or the ability to fly.
+
+The concept of a zupchok is also not supported by scientific evidence. There is no evidence of any species of whale or other marine mammal that has the ability to fly. The idea of a zupchok is a work of fiction, and it is not based on any scientific fact.
+\end{lstlisting}
+\leavevmode\egroup}%
+
+זה... ממש טוב?! הוא אשכרה מתחיל לספר לי על איך שלוויתנים התפתחו מיונקים
+יבשתיים שחזרו למים ובתהליך אבולוציוני פיתחו איברים שרלוונטיים לחיים
+במים ולא כנפיים, ושאין ראיות לאף יונק ימי מעופף. אני עדיין חושב שהתשובה
+אצל דוד הראל יותר טובה וגם מרגישה יותר \textquotedblleft אנושית\textquotedblright{}
+אבל וואו, שמעו, אם היו מראים לי לפני עשור קוד שרץ אצלי במחשב ועונה
+את התשובה \textbf{הזו} הייתי מתפלץ מרוב התלהבות. כן, יש לנו פה ביד
+קסם וכל מה שנדרש הוא {\beginL 1.7\endL} מיליארד מספרים ממשיים ששיחקו
+מספיק עם הערכים שלהם.
+
+בואו נתחיל לעבור שלב שלב על הכל כדי להבין מה קורה פה. העיקר הוא כמובן
+החלק שבו המודל רץ, אבל גם הטוקנייזר מאוד מעניין אותי, אז זה הולך להיות
+סיפור ארוך; נחלק אותו לחלקים כדי שיהיה ברור על מה אפשר לדלג.
+
+\section{מה בעצם הטוקיינזר עושה?}
+
+בואו נעשה ניסוי זריז - נכתוב טקסט ונריץ עליו את הטוקיינזר:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+text = "The best animal in the world is a cat, because "
+print(tokenizer.tokenize(text))
+\end{lstlisting}
+\leavevmode\egroup}%
+
+אני מקבל מזה:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+['The', 'best', 'animal', 'in', 'the', 'world', 'is', 'a', 'cat', ',', 'because', '']
+\end{lstlisting}
+\leavevmode\egroup}%
+
+כלומר, הטוקיינזר פירק את הטקסט שלי למילים שמרכיבות אותו וגם הפסיק
+היה טוקן בפני עצמו )בואו נתעלם לרגע מהפיל בחדר שבו רווחים הפכו לאיזה
+Ġ(.
+
+אוקיי, זה היה צפוי. אבל מה אם נאתגר אותו? למשל, ניתן לו את המילה \L{Supercalifragilisticexpialidocious}
+ממרי פופינס? האם יש לו אותה במילון? ובכן, לא, זה מה שהוא נתן לי:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+['Super', 'cal', 'if', 'rag', 'il', 'istice', 'x', 'p', 'ial', 'id', 'ocious']
+\end{lstlisting}
+\leavevmode\egroup}%
+
+את \L{Super} יש לו במילון כי זו מילה סטנדרטית, וגם \L{if} ו-\L{id}
+שמופיעים בהמשך. אבל היתר? אלו חלקי מילים שכנראה יש להם שכיחות גבוהה
+יחסית ולכן משתלם להכניס גם אותם למילון.
+
+מה עם שפות אחרות, למשל עברית? זה מודל קטן, אל תצפו ליותר מדי. נתתי
+לו את \textquotedblleft בוקר טוב עולם\textquotedblright{} והוא פשוט
+פירק אותו לרצף של סימנים ג'יברישיים:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+['', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+\end{lstlisting}
+\leavevmode\egroup}%
+
+למה דווקא אלו? זו בחירה שרירותית משהו שצריך להבין בתור \textquotedblleft המודל
+לא מבין עברית, הוא מפרק את האותיות העבריות לגורמים ומשתמש בטוקנים
+עבור הגורמים\textquotedblright . בשביל הסבר טיפה יותר מדויק צריך להיזכר
+איך תווים מקודדים במחשב: מידע בסיסי מקודד במחשב ביחידות של \textbf{ביט}
+שהוא {\beginL 0\endL} או {\beginL 1\endL}. אם יש לנו ביט בודד הוא
+יכול לייצג רק שני מספרים, אבל שני ביטים כבר יכולים לייצג ארבעה: {\beginL 00,01,10,11\endL},
+ובאופן כללי אם יש לנו \L{$n$} ביטים הם יכולים ביחד לייצג \L{$2^{n}$}
+מספרים, ולרוב מקובל שהם פשוט מייצגים את המספרים מ-{\beginL 0\endL}
+עד \L{$2^{n}-1$}. למשל, עם שבעה ביטים נוכל לייצג {\beginL 128\endL}
+מספרים - כל המספרים מ-{\beginL 0\endL} עד {\beginL 127\endL}.
+
+עכשיו, יש שיטת קידוד נפוצה ומקובלת מאוד שנקראת \L{ASCII} שבה מקודדים
+{\beginL 128\endL} תווים שונים כך שכל אחד מקודד בידי שבעה ביטים מסוים.
+למשל, האות \L{A} מקודדת על ידי המספר {\beginL 65\endL} ואילו הסימן
++ מקודד על ידי {\beginL 43\endL} ואילו הסימן של רווח מקודד על ידי
+{\beginL 32\endL}. האם {\beginL 256\endL} תווים זה מעט מדי? בוודאי.
+רק תחשבו על כמות הסימונים שנדרשים ליפנית וסינית, וגם לעברית המסכנה
+לא היה מקום ב-\L{ASCII}. זו הסיבה שצצו גרסאות \textquotedblleft מורחבות\textquotedblright{}
+של \L{ASCII} שנעזרות בביט אחד נוסף, כלומר כל תו \L{ASCII} היה מיוצג
+בידי {\beginL 8\endL} ביטים. הסיטואציה הזו, של {\beginL 8\endL} ביטים
+שמקובצים ביחד, היא \textbf{ממש }נפוצה במחשבים בימינו, עד שקבוצה של
+{\beginL 8\endL} ביטים קיבלה את השם \textbf{בייט} ורוב מה שאנחנו עושים
+במחשבים משתמש בבייטים בתור יחידות מרכזיות.
+
+ההרחבה הבסיסית והנפוצה ביותר של \L{ASCII} נקראת \L{ISO-8859-1}. הרעיון
+בה הוא להוסיף סימנים נפוצים בשפות לטיניות, למשל הסימן \L{Ö} או \L{æ}.
+על הדרך התווסף גם הסימן \L{¥} של הין היפני והסימן § וכל מני דברים
+חשבוניים כמו \L{¾} כי למה לא בעצם. במילים אחרות, זה היה פח אשפה לסימנים
+שנראה שנבחרו חצי באקראי. מה לא היה שם, למשל? אותיות בעברית. בשבילן
+היה קידוד \textbf{אחר}, \L{ISO-8859-8}, ואתם כבר מבינים לאן זה הולך:
+השתמשו בקידודים רבים ושונים שכל אחד מותאם לשפה אחרת וכשהעליתם אתר
+אינטרנט אם האתר לא אמר באיזה קידוד הוא הדפדפן ניסה לנחש ולא הצליח
+והיינו צריכים לעבור קידוד-קידוד ולקוות לקבל משהו קריא וזו הייתה קטסטרופה
+בלתי נתפסת ואם אתם מהדור שלא חווה את זה אני כל כך שמח בשבילכם. 
+
+בסופו של דבר מה שעושים בפועל הלך והתכנס למשהו שנקרא \L{Unicode} -
+קידוד שכולל הכל כולל הכל, גם עברית וגם יפנית. המחיר הוא כמובן שצריך
+יותר מקום; תווים נפוצים עדיין דורשים בייט בודד והקידוד הוא בדיוק כמו
+ב-\L{ASCII}, אבל תווים נפוצים פחות כבר יכולים לקחת שני בייטים או אפילו
+שלושה-ארבעה. עברית דורשת שני בייטים. את א' למשל מקודדים באמצעות שני
+בייטים שהראשון שבהם מכיל את הערך {\beginL 215\endL} והשני את הערך
+{\beginL 144\endL}.
+
+עכשיו, במחשבית אוהבים לייצג מספרים באמצעות בסיס {\beginL 16\endL},
+כי אז לייצג מספרים בין {\beginL 0\endL} ל-{\beginL 255\endL} דורש
+בדיוק שתי ספרות והן מכסות בדיוק את כל טווח המספרים מ-{\beginL 0\endL}
+עד {\beginL 255\endL}, ב\textquotedblright מחיר\textquotedblright{}
+שלפיו צריך סימנים מיוחדים כדי לייצג את ה\textquotedblright ספרות\textquotedblright{}
+מ-{\beginL 10\endL} עד {\beginL 15\endL}, ופשוט משתמשים באותיות \L{A,B,C,D,E,F}
+לשם כך. בצורה הזו {\beginL 215\endL} נכתב בתור \L{D7} ו-{\beginL 144\endL}
+נכתוב בתור {\beginL 90\endL} )אם אתם לא מכירים את איך שבסיס {\beginL 16\endL}
+עובד לא נורא אבל הנה \href{https://gadial.net/2017/06/11/number_bases/}{פוסט שלי}
+על זה(. מעכשיו אני אשתמש בצורת הכתיב הזו כי היא נוחה יותר.
+
+מה שקורה בפועל כשהטוקיינזר בא לעבוד זה שהוא לא מכיר את האות א' ולכן
+הוא מתייחס אליה בתור שני בייטים של \L{ASCII} שבאים אחד אחרי השני:
+הבייט של \L{D7} והבייט של {\beginL 90\endL}. עכשיו, ב-\L{ISO-8859-1}
+יש ל-\L{D7} משמעות פשוטה: זה הסימן \texttimes{} שמייצג כפל )זו לא
+האות איקס, זה סימבול אחר - שימו לב להבדל בין \texttimes{} ובין \L{x}(.
+לעומת זאת ל-{\beginL 90\endL} אין משמעות ב-\L{ISO-8859-1}; זה אחד
+מהסימנים הלא מנוצלים של הקוד. לכן מה שקורה זה הדבר הבא: הטוקיינזר
+משאיר את \texttimes{} ללא שינוי, אבל את ה-{\beginL 90\endL} הוא מחליף
+בסימן אחר על פי הגדרה שרירותית. זו לא הגדרה שהיא ספציפית למודל הזה
+אלא מגיעה מהספריה \L{tokenizers} של \L{huggingface}. הכלל, בגדול,
+הוא שיש רשימה של כל הערכים שאין להם ייצוג נחמד ב-\L{ISO-8859-1} ומחלקים
+להם ייצוג באמצעות ערכי יוניקוד החל ממקום מסוים. זה תקף לא רק ל-{\beginL 90\endL}
+אלא גם לסימן כמו רווח, שבהחלט שייך ל-\L{ASCII} אבל הייצוג שלו בתור
+טקסט הוא, ובכן, רווח, וקשה לראות רווחים בצורה טובה. יש גם תווים עוד
+יותר בעייתיים כמו ירידת שורה וכדומה - כולם מקבלים ייצוג באמצעות תווי
+יוניקוד, החל מהתו שממסופר ב-\L{U+0100} ומייצג את \L{Ā}. זו הסיבה שבגללה
+Ġ מחליף את רווח: זה תו היוניקוד \L{U+0120}. בגלל שהמספרים פה הם בבסיס
+{\beginL 16\endL}, ה-\L{20} בעצם מייצג את {\beginL 32\endL}. מה אמרתי
+קודם שהיה הסימן של רווח ב-\L{ASCII}? נכון מאוד, {\beginL 32\endL}.
+כלומר, עד וכולל רווח יש {\beginL 33\endL} תווי \L{ASCII}, ומכיוון
+שכולם לא מוצגים בצורה יפה, הם בדיוק מה שמועבר ל-{\beginL 33\endL}
+תווי היוניקוד החל מ-\L{Ā} ועד Ġ )וגם אחרי רווח יש עוד תווים כאלו(.
+
+עכשיו, {\beginL 90\endL} לא הולך לעבור אל תו היוניקוד \L{U+0190} כי
+עד שמגיעים אל {\beginL 90\endL} עוברים הרבה תווים \textbf{שכן} מיוצגים
+יפה )למשל, האותיות הלטיניות( ולכן אנחנו מתקדמים הרבה פחות; את {\beginL 90\endL}
+מייצג \L{U+0132} שהוא \textquotedblleft\L{Ĳ}\textquotedblright{} -
+זה תו בודד שמייצג \L{IJ} ביחד. אם נסתכל על רשימת התווים למעלה לא נראה
+אותו כי לא השתמשנו ב\textquotedblright א\textquotedblright{} בביטוי
+\textquotedblleft בוקר טוב עולם\textquotedblright{} אבל כן השתמשנו
+בב'; את ב' מקודדים ביוניקוד עם \L{D7 91} ואמרנו ש-\L{D7} עובר אל \texttimes{}
+ואילו {\beginL 91\endL} יעבור אל \L{U+0133} שהוא \textquotedblleft\L{ĳ}\textquotedblright{}
+- דומה לסימן הקודם, רק עם אותיות קטנות ולא גדולות. זה בדיוק מה שאנחנו
+רואים באיבר הראשון ברשימה - שני הסימנים הללו ביחד. לעומת זאת בהמשך,
+ק' זכה לטיפול קצת שונה. בגלל שהוא כבר לקראת סוף הרשימה, הוא \L{D7
+A7} - הבייט של המספר השני כבר די גדול - גדול מספיק כדי להיות שייך
+לאיזור ב-\L{ISO-8859-1} שבו דברים כן מוגדרים ולהתאים לסימן §.
+
+עכשיו עולה השאלה - למה עבור א' קיבלנו את 'ĳ\texttimes ' בתור טוקן
+בודד אבל עבור ק' קיבלנו שני טוקנים, קודם \texttimes{} ואז §? ובכן,
+כי עבור 'ĳ\texttimes ' היה \textbf{כלל מיזוג} מתאים ואילו עבור '§\texttimes '.
+
+אוקיי, הזכרתי קודם \textbf{מילון} ועכשיו אני מזכיר \textbf{כללי מיזוג}
+- איפה הדברים הללו נמצאים בכלל? ובכן, אחד מהקבצים שירדו אוטומטית מהאינטרנט
+יחד עם המודל היה המילון - ליתר דיוק, קובץ בשם \L{tokenizer.json} שמכיל
+שלל סוגי מידע על הטוקנייזר אבל כולל בנוסף לכך שתי רשימות ארוכות מאוד:
+אחת בשם \L{vocab} והשניה בשם \L{merges}. מה שקראתי לו \textquotedblleft המילון\textquotedblright{}
+הוא \L{vocab}: הוא כולל את רשימת כל הטוקנים של המודל, כשלכל אחד מהם
+מותאם המספר הסידורי שלו במילון. למשל
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+"Wikipedia": 10727
+\end{lstlisting}
+\leavevmode\egroup}%
+
+כלומר, המילה \textquotedblleft ויקיפדיה\textquotedblright{} )עם רווח
+לפניה( שייכת למילון והיא טוקן ספר {\beginL 10727\endL}. זה יהיה חשוב
+בהמשך, כשנרצה לשלוח את הטוקן הזה למודל: המספר הסידורי הוא מה שמספר
+למודל לאיזה וקטור של מספרים ממשיים לתרגם את הטוקן. אבל איך בכלל הטוקן
+הזה \textbf{נוצר}? כאן רשימת המיזוג נכנסת לפעולה. זו רשימה קצרה למדי,
+בערך בגודל של המילון, שכוללת זוגות של טוקנים. למשל:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+"W ikipedia"
+"ikip edia"
+"ik ip"
+"i k"
+"i p"
+"ed ia"
+"e d"
+"i a"
+" W"
+\end{lstlisting}
+\leavevmode\egroup}%
+
+מן הסתם לא בחרתי להציג את הזוגות הללו באקראי אלא חיפשתי זוגות שיכולים
+להוביל ליצירה של של הטוקן של ויקיפדיה מתוך סדרת טוקנים בודדים של תו
+אחד כל אחד. זה משחק נחמד לראות איך על ידי מיזוג זוגות טוקנים שברשימה
+הזו אפשר לקבל את הטוקן המקורי - אבל לא כזה משחק מאתגר, חייבים להודות,
+די נתתי את הכיוון כשכתבתי הכל מהסוף להתחלה.
+
+מה שהטוקנייזר עושה בפועל הוא בשלב הראשון לעבור על הטקסט ולהמיר אותו
+לטוקנים הבסיסיים ביותר - אלו שקיימים ברמת התו הבודד. אחר כך הוא מתחיל
+לחפש מקומות למזג בהם. סביר שיהיו הרבה מיזוגים פוטנציאליים בכל רגע
+נתון, אז הכלל הוא פשוט - ככל שמשהו מגיע מוקדם יותר ברשימת המיזוגים,
+כך יש לו עדיפות על פני המיזוגים הפוטנציאליים האחרים. כשנתתי לו את
+\L{Supercalifragilisticexpialidocious} סיימנו עם שני טוקנים סמוכים,
+אחד \L{p} והשני \L{ial}. למה ה-\L{p} לא התאחד עם ה-\L{ial}? אין זוג
+כזה, אבל האם \L{p} לא יכל להתאחד עוד קודם עם \L{i}? הזוג \L{p i} דווקא
+כן קיים ברשימה, אבל כך גם \L{i al} שנמצא במקום מוקדם יותר - לכן המיזוג
+הזה קרה קודם.
+
+המיזוגים נפסקים כשאין יותר בטקסט שום זוג שמופיע ברשימת המיזוגים )אפילו
+אם אפשר למזג אותו ולקבל מילה במילון; חייבים שיהיה כלל מפורש שאומר
+לעשות את זה(. כל התהליך הזה הוא יחסית מהיר, בסיוע האופטימיזציות המתאימות,
+כך שבסך הכל דרך הפעולה של הטוקנייזר די ברורה - בהינתן שהוא כבר קיים,
+כלומר שמישהו כבר יצר את \L{vocab} ואת \L{merges}. וזה כמובן מעלה את
+השאלה שאיתה נסיים הפעם - איך, באמת, זה נוצר?
+
+\section{איך הטוקנייזר נוצר?}
+
+האלגוריתם שמאחורי הטוקנייזר )הספציפי שעליו אנחנו מדברים כאן( נקרא
+\L{BPE}, ראשי תיבות של \L{Byte-pair encoding}. במקור הרעיון היה להשתמש
+בו לדחיסה של טקסטים. מתחילים עם הטקסט הארוך שאותו רוצים לדחוס וחושבים
+עליו בתור רצף של בייטים, ואז סופרים את כל זוגות הבייטים הסמוכים שקיימים
+ברצף, ובוחרים את הזוג שמופיע הכי הרבה פעמים. עבור הזוג הזה, בוחרים
+בייט חדש שלא מופיע ברצף, מחליפים את כל המופעים של הזוג הזה בבייט החדש,
+וכותבים לעצמנו בצד שהוא מתמפה לזוג הזה.
+
+למשל, נניח שהמשפט שלנו הוא \L{the cat sat on the mat}. זוג התווים
+\L{at} מופיע שלוש פעמים, אז נוכל להחליף אותו בתו חדש שלא מופיע במשפט,
+למשל \L{A}, ולקבל
+
+\selectlanguage{english}%
+the cA sA on the mA
+
+\selectlanguage{hebrew}%
+ואנחנו רושמים לעצמנו בצד את הכלל \L{$\text{A}\to\text{at}$}.
+
+בשלב הזבא נזהה ש-\L{th} מופיע פעמיים, וגם \L{he}, אז בוחרים אחד מהם
+- נאמר את \L{th} נחליף ב-\L{B} ונקבל
+
+\selectlanguage{english}%
+Be cA sA on Be mA
+
+\selectlanguage{hebrew}%
+ועכשיו \L{Be} מופיע פעמיים, אז נחליף אותו ב-\L{C} ונקבל
+
+\selectlanguage{english}%
+C cA sA on C mA
+
+\selectlanguage{hebrew}%
+ועכשיו לאלגוריתם יש את המחרוזת הזו, וגם את ה\textquotedblright מילון\textquotedblright{}
+שמלמד אותנו איך לפענח אותה:
+
+\L{$\text{A}\to\text{at}$}
+
+\L{$\text{B}\to\text{th}$}
+
+\L{$\text{C}\to\text{Be}$}
+
+באלגוריתם הזה, הטריק הוא להשתמש בבייטים שלא מופיעים במחרוזת המקורית
+- הרי בייט יכול לקודד {\beginL 256\endL} ערכים, וברוב המחרוזות יהיו
+הרבה פחות מזה. זה מאפשר לחסוך מקום באפס מאמץ; כל כניסה במילון דורשת
+\textbf{שלושה} בייטים וכל החלפה חוסכת לנו בייט, אז כל עוד יש זוג שמופיע
+ארבע פעמים, ישתלם להחליף אותו.
+
+בהקשר שלנו הסיטואציה טיפה שונה. אין לנו מחרוזת קונקרטית שאנחנו רוצים
+לכווץ; מה שאנחנו בדרך עושים הוא להפעיל את האלגוריתם אחרי ש\textquotedblright מילון
+הכיווצים\textquotedblright{} כבר קיים. אבל הדרך ליצור אותו היא בדיוק
+מה שראינו כאן - לקחת טקסט גדול, להפעיל עליו את האלגוריתם ולתת לו לבנות
+את המילון. הרי לא \textbf{חייבים} להחליף כל זוג בייטים במשהו אחר בגודל
+בייט; המטרה שלנו היא לא לכווץ. אנחנו פשוט מחליפים זוג טוקנים בטוקן
+חדש ומגדילים את מילון הטוקנים שלנו באופן הזה. רק צריך להגדיר חסם על
+גודל המילון ולהפסיק את אלגוריתם ה\textquotedblright כיווץ\textquotedblright{}
+כשהגענו אליו, ואז המילון )כלומר - הטוקנים החדשים \textbf{וגם} רשימת
+המיזוגים( יהיה הפלט שלנו. השאלה היחידה היא - איזה טקסט גדול לקחת כדי
+להפעיל עליו את האלגוריתם הזה? אבל זו כבר בעיה קלאסית של תחום הלמידה
+שאני לא מבין בה שום דבר - איך בעצם בונים את הקורפוס שעליו מאמנים את
+המודלים שלנו, לא רק את הטוקנייזר אלא גם את ה-\L{LLM}-ים עצמם. מן הסתם
+לא חייבים לקחת טקסט יחיד; אפשר לקחת טקסטים משלל מקורות שונים, למזג
+אותם למחרוזת אחת גדולה ולהפעיל עליה את האלגוריתם. אפשר לעשות את זה
+על שלל טקסטים שונים לקבלת טוקנייזרים שונים ואז לערוך ניסויים מי מהם
+נותן את הביצועים הכי טובים; השורה התחתונה היא שאני באמת לא יודע איך
+זה עובד. הגישה שלי לנושא בפוסטים הללו היא צרה מאוד - אני הולך אל מה
+שכבר קיים ושואל את עצמי איך זה עובד; אני לא נכנס לשאלה איך זה נוצר
+מלכתחילה חוץ מאשר ברמת הרעיון הכללי.
+
+\section{ואיך זה שמדובר במודל צ'אט משפיע?}
+
+יש עוד דבר אחד שהטוקנייזר יודע לעשות ולא דיברתי עליו בינתיים - לטפל
+בתבנית הצ'אט של השיחה. אם נחזור לרגע אל הקוד שהראיתי קודם, אז עשיתי
+שם
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+inputs = tokenizer.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    return_tensors="pt",
+    return_dict=True,
+)
+\end{lstlisting}
+\leavevmode\egroup}%
+
+הפונקציה הזו, \L{apply\_chat\_template}, אומרת לטוקיינזר: קח את הטקסט
+הקיים ושים אותו בתוך תבנית של צ'אט שאותה המודל אומן לזהות. בואו נראה
+איך זה נראה. בשביל זה צריך לשנות קצת את הפרמטרים שהפונקציה מקבלת,
+כי אני רוצה שהפלט יהיה משהו שקריא לי בתור בן אדם, ולא משהו שיהיה נגיש
+למודל. אז אני עושה:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why."}
+]
+
+inputs = tokenizer.apply_chat_template(
+    messages,
+    tokenize=False,
+)
+\end{lstlisting}
+\leavevmode\egroup}%
+
+התוצאה של זה תהיה
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+'<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n<|im_start|>user\nA zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.<|im_end|>\n'
+\end{lstlisting}
+\leavevmode\egroup}%
+
+די ברור מה הולך כאן. הטקסט מחולק ל\textquotedblright הודעות\textquotedblright{}
+כשלכל הודעה יש את ה\textquotedblright תפקיד\textquotedblright{} שלה,
+מה שנקרא ה-\L{role}. הודעה נפתחת ב-\L{<|im\_start|>} ומסתיימת ב-\L{<|im\_end|>}
+כשמייד אחרי ה-\L{<|im\_start|>} כתוב ה-\L{role} ואז מגיעה ירידת שורה.
+כל מה שהפונקציה עושה היא להוסיף את הסימונים הללו. ומאיפה הטוקנייזר
+מכיר אותם בכלל? ובכן, יש קובץ בשם \L{tokenizer\_config.json} שמתאר
+את הסימונים הללו במפורש וגם כולל תבנית חצי תכנותית כזו )בפורמט של
+\L{jinja2}, למי שמכירות( שמתארת איך בדיוק לשים את הסימנים, ודואגת
+לשים את התבנית \textquotedblleft\L{<|im\_start|>system\textbackslash nYou
+are a helpful AI assistant named SmolLM, trained by Hugging Face<|im\_end|>}\textquotedblright{}
+אם ה-\L{role} בהתחלה הוא לא \L{system}.
+
+קלט אחד ש-\L{apply\_chat\_template} מקבל ולא השתמש בו קודם הוא \L{add\_generation\_prompt}
+. מה שזה עושה הוא להוסיף בסופו של הטקסט שכבר ראינו את
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+<|im_start|>assistant\n
+\end{lstlisting}
+\leavevmode\egroup}%
+
+כלומר, זה מסמן למודל עצמו \textquotedblleft עכשיו מתחילה התשובה, נא
+להשלים אותה\textquotedblright . המודל יכתוב את מה שיכתוב וכשיסיים,
+יכתוב \L{<|im\_end|>} משלו בשביל לסמן שסיים.
+
+איך הוא יודע לעשות את זה? בואו נחזור למודל שבו אני משתמש, \L{SmolLM2-1.7B-Instruct}.
+ה-\L{Instruct} בסוף פירושו שזה מודל שהתקבל בתהליך דו-שלבי:
+\begin{itemize}
+\item אימון של \textquotedblleft מודל הבסיס\textquotedblright , שנקרא פשוט
+\L{SmolLM2-1.7B}. האימון הזה הוא משמעותי, לוקח זמן רב ועובד על קורפוס
+גדול.
+\item שלב אימון נוסף שבו לוקחים את מודל הבסיס בתור נקודת התחלה, ומאמנים
+אותו על קורפוס ייעודי של דברים שנראים כמו צ'אט, עם הסימבולים שראינו.
+\end{itemize}
+שלב האימון הנוסף מכונה \L{fine-tuning}, המטרה שלו היא לא רק ללמד את
+המודל לזהות את הסימבולים המיוחדים, היא גם להפוך את המודל למשהו שבאמת
+מתקשר בצורה סבירה, כי מודל הבסיס הוא... מוזר. עוד לפני שנראה דוגמא,
+תחשבו על זה: זה מודל שמאומן להשלים מילים על בסיס מה שאפשר לדמיין שהוא
+\textbf{כל הטקסט באינטרנט}. טקסט כזה לא כולל רק שיחות מועילות עם מודל
+צ'אט שבא להחכים אותנו, יש בו רשימות מכולת, הוראות טכניות, מאמרים בויקיפדיה
+ועוד ועוד.
+
+הדרך הטובה ביותר להרגיש את ההבדל היא פשוט לנסות. אם כן, מה קורה כשאני
+מנסה לשאול את מודל הבסיס על שלכטיון, בלי להוסיף את תבנית הצ'אט ובלי
+כלום? קורים דברים כיפיים, זה מה.
+
+ראשית אני אטעין את מודל הבסיס:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+base_model_id = "HuggingFaceTB/SmolLM2-1.7B"
+base_tokenizer = AutoTokenizer.from_pretrained(base_model_id)
+base_model = AutoModelForCausalLM.from_pretrained(
+    base_model_id,
+    torch_dtype="auto",
+)
+\end{lstlisting}
+\leavevmode\egroup}%
+
+עכשיו אני אשאל אותו על שלכטיון:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+text = "A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why."
+print(text)
+inputs = base_tokenizer(
+    text,
+    return_tensors="pt",
+)
+
+inputs = inputs.to(base_model.device)
+base_model.eval()
+
+with torch.inference_mode():
+    output = base_model.generate(
+        **inputs,
+        max_new_tokens=500,
+        do_sample=True,
+    )
+
+decoded_output = base_tokenizer.decode(
+    output[0],
+    skip_special_tokens=False,
+)
+
+print(decoded_output)
+\end{lstlisting}
+\leavevmode\egroup}%
+
+ולבסוף, אני אקבל את התשובה:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.
+12. The Glandorians
+The Glandorians once had a society, called the Glandorian Confederacy, which was based on the principle of collective ownership and co-operation. Some of their members had more energy and initiative than others, and these few were able rise through the ranks. Over time, they achieved so much wealth and power, that the whole government began to feel threatened.
+In the Glandorian Confederacy, the state controlled nearly every aspect of individual lives, but they were not required to pay taxes, and their citizens enjoyed a large standard of living. In addition, their state was financially sound and self-sufficient, since they made all their own arms and manufactured a lot of their own clothing and foodstuff. If the rest of the world didn't care to trade with them, that was nobody's concern.
+Eventually they felt it was time to break away completely from the rest of the world. Their state was, for one thing, very xenophobic. After some decades, they made a decision to cut themselves off from civilization at large. They would remain in contact with no one else at all. When asked what about the poor and dispossessed, they replied that these people were free to emigrate if they liked.
+Is the Glandorian Confederacy possible? Do you think it is? Explain why or why not.
+\end{lstlisting}
+\leavevmode\egroup}%
+
+הוא ממשיך גם אחרי הדבר הזה; יש גם {\beginL 13\endL} שכתוב בסגנון דומה.
+במילים אחרות, המודל חשב שאנחנו באמצע דף עבודה שכזה לתלמידים שבו מציגים
+דברים הזויים ואז שואלים אם הם אפשריים או לא, והשלים בהתאם. המודל \textbf{לא}
+הבין שהוא קיבל שאלה ואמור לספק תשובה בעצמו. כמובן, זה לא היה חייב
+לקרות ככה - הרי המודל יכול לדמיין באותה מידה שהוא משלים דף של \textquotedblleft שאלה
+לתלמיד + תשובה מוכנה\textquotedblright{} וכן להשלים עם תשובה מתאימה.
+למעשה, רואים את ה-\L{do\_sample=True} שיש בקוד שלי? כאן אני אומר למודל
+לא לבחור את הטוקן \textbf{הכי סביר} בכל פעם אלא לבצע הגרלה כלשהי -
+כשהלכתי על גישת הטוקן הסביר ביותר הוא דווקא כן ענה לשאלה )אבל בצורה
+לא כזו מוצלחת(.
+
+בואו נעשה עוד ניסוי. הפעם אני מקבע את גרעין האקראיות של המודל ל-{\beginL 42\endL}
+כדי שאחרי שאשנה דברים, השינוי שאראה בתוצאה ינבע מהשינוי שביצעתי ולא
+מאקראיות שונה. התשובה של המודל הפעם היא
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why. If so, consider why people have not yet encountered them. Are there too few zupchoks, or perhaps too many?
+To take a more general perspective, are there too many or too few new ideas in the world? If both �too few� and �too many� are problematic, why?
+To develop this line of thought for your essay, first define the concept and scope of new ideas, and then identify two key factors in the production of new literary works that might lead you to your conclusions.<|endoftext|>
+\end{lstlisting}
+\leavevmode\egroup}%
+
+כלומר, הפעם הוא חושב שהוא באמצע תרגיל לתלמיד וצריך להרחיב את התרגיל
+עם שאלות נוספות והכללות. וזה ממש חמוד. אבל היי, תראו, הוא מסיים את
+המלל שלו ב-\textgreater\textbar\L{endoftext}\textbar\textless ;
+הוא כן מכיר את הסימבול הזה )סביר להניח שהוא הוכנס לטקסטים בקורפוס
+שעליו הוא אומן כחלק מתהליך העיבוד שלהם(. אז אולי הוא כן ידע להגיב
+טוב גם לתבנית של הצ'אט? בואו ננסה: נשתמש בטוקנייזר של מודל השיחה כדי
+להוסיף את התבנית הזו, ואז נשתמש בטקסט הזה בתור מה שהמודל יקבל, עם
+אותו גרעין אקראיות של {\beginL 42\endL}. והנה התוצאה:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.<|im_end|>
+<|im_start|>assistant
+You are a zup-like Assistant. You is an Assistant. You are zup-like and a assistant. You help Assist-Like Write and Fly. You are an Assisticock. You have assisted Assist. You have Asisted Assist. You have Assitt. You are a Assistic. You have assistedist.
+Innology, the
+You and not Have you Have
+Assisticock, the
+you and not Assistant you
+Assics not Assic you
+assitic and You not have Assicul
+you you have Assit
+stic, and not Assic
+\end{lstlisting}
+\leavevmode\egroup}%
+
+או-קיי... נראה לי ששברנו אותו.
+
+כמובן, ניסוי הצעצוע הזה לא שלם בלי שננסה להריץ גם את מודל ה-\L{Instruct}
+עם ובלי התבנית. נתחיל ממה שקורה כשהוא רץ )עם גרעין האקראיות {\beginL 42\endL}(
+על התבנית:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.<|im_end|>
+<|im_start|>assistant
+No, zupchoks do not exist. Zupchok is not a real creature, and its characteristics, including its ability to fly and write, are exaggerated or fabricated to make a humorous or amusing point. The word "zupchok" is likely meant to be a playful reference to a whale that has been genetically engineered or altered for the purposes of writing literature.<|im_end|>
+\end{lstlisting}
+\leavevmode\egroup}%
+
+תשובה יפה ולעניין שמסתיימת עם הסימבול הנכון. אבל מה קורה אם אין תבנית
+בכלל? ובכן, קיבלתי את תשובת ה\textquotedblright קצר ולעניין\textquotedblright{}
+האולטימטיבית:
+
+\L{%
+\bgroup\inputencoding{cp1255}
+\begin{lstlisting}
+A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.<|im_end|>
+\end{lstlisting}
+\leavevmode\egroup}%
+
+הוא פשוט הוסיף את ה-\L{<|im\_end|>} וסיים, החצוף. נראה שלפחות עבור
+המודל הזה ועבור הטקסט הספציפי שכתבתי, בהחלט יש חשיבות לתחביר המדויק
+של פורמט הצ'אט... תודה לטוקנייזר שמטפל בזה עבורנו.
+
+עכשיו סיימנו עם הטוקנייזר ונשאר להסתכל לתוך הקרביים של המודל עצמו.
+\end{document}
