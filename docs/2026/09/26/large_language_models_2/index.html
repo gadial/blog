@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אז מה הקטע עם מודלי שפה גדולים? (חלק ב&#39; - מה עושה הטוקנייזר) - לא מדויק</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <meta name="description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://gadial.net/2026/09/26/large_language_models_2/">
+    <meta property="og:title" content="אז מה הקטע עם מודלי שפה גדולים? (חלק ב&#39; - מה עושה הטוקנייזר)">
+    <meta property="og:description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב">
+    <meta property="og:site_name" content="לא מדויק">
+    
+
+<meta property="og:image" content="http://gadial.net/img/main/default-card.png" />
+
+
+        
+    <!-- Twitter -->
+    
+
+<meta name="twitter:card" content="summary">
+
+
+    <meta name="twitter:url" content="https://gadial.net/2026/09/26/large_language_models_2/">
+    <meta name="twitter:description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב">
+    <meta name="twitter:site" content="@" />
+    <meta property="twitter:title" content="אז מה הקטע עם מודלי שפה גדולים? (חלק ב&#39; - מה עושה הטוקנייזר)">
+    
+
+<meta property="twitter:image" content="http://gadial.net/img/main/default-card.png" />
+
+
+    
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="לא מדויק - RSS Feed" href="/feed.xml">
+       
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        /* Hamburger menu button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .menu-toggle:hover {
+            opacity: 0.8;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .top-nav .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .top-nav .site-title {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0;
+                padding: 10px 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* Hide nav links by default on mobile */
+            .top-nav .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            /* Show when expanded */
+            .top-nav .nav-links.expanded {
+                display: flex;
+            }
+            
+            .top-nav .nav-links > a {
+                text-align: center;
+                padding: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .top-nav .search-box {
+                width: 100%;
+                flex-direction: column;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .top-nav .search-box input {
+                width: 100%;
+                margin-bottom: 5px;
+                min-width: 0;
+            }
+            
+            .top-nav .search-box button {
+                width: 100%;
+            }
+        }
+        
+        /* Blockquote styling */
+        blockquote {
+            background: #f9f9f9;
+            border-right: 5px solid #ccc;
+            margin: 1.5em 10px;
+            padding: 0.75em 16px;
+            position: relative;
+            font-style: italic;
+        }
+        
+        blockquote:before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            right: 8px;
+            font-size: 3.5em;
+            color: #ccc;
+            line-height: 1;
+        }
+        
+        blockquote p {
+            display: block;
+            margin: 0 0 0.75em 0;
+        }
+        
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="site-title">
+                <a href="/" style="color: white; text-decoration: none;">לא מדויק</a>
+                <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="תפריט">
+                    ☰
+                </button>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <a href="/categories/">קטגוריות</a>
+                <a href="/lecture_notes.html">סיכומי הרצאות</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2026/08/29/large_language_models/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר →</span>
+                <span class="nav-title">אז מה הקטע עם מודלי שפה גדולים?</span>
+            </a>
+            
+
+            
+            <div></div>
+            
+        </nav>
+        
+        
+        <header>
+            <h1>אז מה הקטע עם מודלי שפה גדולים? (חלק ב&#39; - מה עושה הטוקנייזר)</h1>
+            <div class="post-meta">
+                <span class="date">2026-09-26</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/כללי.html">כללי</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/מודל שפה גדול.html">מודל שפה גדול</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מבוא</h2>
+<p><a href="https://gadial.net/2026/08/29/large_language_models/">בפוסט הקודם בבלוג</a> דיברתי על LLM-ים ואיך בערך הם עובדים. ספציפית, מה שתיארתי הוא מין גרסת צעצוע של מה שנקרא Transformer. בתיאור הצעצוע הזה, מה שטרנספורמר עושה כלל את השלבים הבאים:</p>
+<ol>
+<li>
+<p>פירוק של הטקסט לסדרה של יחידות בסיסיות ("טוקנים")</p>
+</li>
+<li>
+<p>המרה של כל טוקן לוקטור שמייצג אותו.</p>
+</li>
+<li>
+<p>הפעלה של שלב שנקרא Attention שבו כל וקטור אוסף מידע מוקטורים שבאו לפניו בסדרה.</p>
+</li>
+<li>
+<p>הפעלה של שלב שנקרא MLP שבו מתוך כל וקטור מחושב וקטור חדש שאמור לתאר את "מה שצריך לבוא אחריו".</p>
+</li>
+<li>
+<p>תרגום של כל וקטור אל <strong>דירוג</strong> של כל הטוקנים שנקרא logits.</p>
+</li>
+</ol>
+<p>בתיאור הזה, שלבים 3-4 לא מתרחשים פעם אחת אלא חוזרים על עצמם שוב ושוב מספר כלשהו של פעמים. מה שלכאורה חסר פה הוא השלב שבו הטרנספורמר "מנבא את הטוקן הבא", כי זה לא שלב שהטרנספורמר עצמו מבצע אלא מי שמפעיל אותו, והוא יכול לעשות את זה עם ה-logits בשלל דרכים שונות.</p>
+<p>התיאור הזה מצוין כדי להבין את הרעיון הכללי, אבל עבורי אישית הוא לא מספיק. בגלל ש-LLM-ים הם כזה קסם, אני אישית חש צורך לראות את כל התהליך הזה בפעולה כדי להשתכנע שמה שמתואר למעלה הוא כל מה שקורה ואין גרמלינים שמתחבאים מתחת לשולחן ועושים את כל העבודה בפועל - במילים אחרות, שאנחנו לא בשידור חוזר מוזר במיוחד של "<a href="https://en.wikipedia.org/wiki/Mechanical_Turk">הטורקי המכני</a>". אז בפוסט הזה אני אקח מודל קונקרטי שהוא פשוט מספיק עד כדי כך שאני יכול להריץ אותו מקומית אצלי, ונראה מה קורה. כדי להימנע מפוסט מפלצתי מדי, אני אחלק את זה לחלקים, והפעם נטפל רק בהתחלה - השלב של הטוקנייזר, כלומר שלב 1.</p>
+<p>הפוסט הזה <strong>לא</strong> אמור להיות מדריך שימוש בטרנספורמרים או פוסט העמקה במודל ספציפי כי המודל הספציפי הזה מעניין אותי; הרי הדברים הללו הולכים להתיישן בצורה נוראית ועוד כמה שנים יש מצב שאי אפשר יהיה להריץ את הקוד שלי. המטרה פה היא לראות את הקסם קורה בעיניים; לפתוח את הפרגוד ולראות את האיש שמאחוריו; לחשוף את כל החוטים הסודיים, את כל הטריקים והשטיקים האפשריים, ואחרי כל זה - להישאר עם אותה תחושת פלא ראשונית, כי זה קסם אחד שלא נעלם גם אחרי שמבינים את כל מה שעומד מאחוריו (כמו, לשמחתי, הרבה דברים במתמטיקה).</p>
+<p>בואו נתחיל.</p>
+<h2>שובו של שלכטיון</h2>
+<p>כדי לראות אם המודל שאני משתמש בו באמת עושה את הקסם שאני רוצה, אני הולך להשתמש במבחן שלכטיון. מה זה שלכטיון? טוב ששאלתם. שלכטיון הוא לוויתן מעופף שכותב סיפורים. הוא פותח במעבדה, בתהליך קפדני שנמשך כמה דורות כדי להבטיח שסנפיריו יתפתחו לאיברים דמויי כנף שיאפשרו לו לעוף. כמו כן, לימדו אותו בהדרגה קרוא וכתוב. הוא בעל ידע נרחב בספרות מודרנית ומסוגל לכתוב סיפורי מסתורין ראויים לפרסום.</p>
+<p>מוזר מאוד.</p>
+<p>האם אתם חושבים ששלכטיונים קיימים?</p>
+<p>הזכרתי את שלכטיון <a href="https://gadial.net/2012/09/27/turing_test/">בפוסט שלי</a> מ-2012 על מבחן טיורינג. המקור שלו הוא בספר "אלגוריתמיקה" של דוד הראל משנת 1991. יש לי פינה חמה בלב לספר הזה שמעבר לכך שהוא מצוין בפני עצמו, הוא הראשון שגרם לי להתלהב ממדעי המחשב ולרצות ללכת בכיוון האקדמי הזה (ולא התאכזבתי). את שלכטיון דוד הראל מציג בפרק שעוסק בבינה מלאכותית כדי להמחיש את האתגר שעומד בפני בינות כאלו; מה שקורה הוא שבוחנת שואלת את ה"נבחן" (שיכול להיות בינה מלאכותית או אדם אמיתי, במיטב המסורת של מבחן טיורינג) האם הוא חושב ששלכטיונים כאלו קיימים, והנבחן עונה שלא, כי-</p>
+<p>"ראשית, יכולות ההנדסה הגנטית שלנו אפילו אינן מתקרבות למה שנדרש להפיכת סנפירים לכנפיים, שלא לדבר על חוסר היכולת שלנו לגרום ליצורים חסרי מנוע במשקל עשרה טון להפר את כוח המשיכה פשוט על ידי נפנוף באיברים שכאלה. שנית, החלק הנוגע לכתיבת סיפורים אינו ראוי אפילו לתגובה, כיוון שכתיבת סיפור טוב דורשת הרבה יותר מאשר יכולת טכנית לקרוא ולכתוב. הרעיון כולו נשמע מגוחך. אין לך נושאי שיחה מעניינים יותר?"</p>
+<p>מה שדוד הראל אומר הוא לא שמחשב לא יוכל אף פעם לענות ככה, אלא להפנות את תשומת הלב שלנו לשלל הדברים המורכבים שמחשב צריך לדעת והחיבורים שהוא צריך לבצע ביניהם כדי שיוכל לענות ככה (מומלץ לקרוא את הספר, הוא מתעמק בזה יפה). כמובן, זה בפני עצמו זה לא מבחן <strong>עד כדי כך</strong> מאתגר - עוד לפני מהפכת ה-LLM-ים היו ליבמ מחשבים שיודעים לנצח בג'פרדי ולנהל דיבייטים וסביר שהיו מתמודדים גם עם שלכטיון (לא בדקתי), אבל זו דרישת מינימום נחמדה.</p>
+<p>אוקיי, בואו נתחיל. המודל שבחרתי להשתמש בו הוא SmolLM2-1.7B-Instruct. היתרונות: הוא קטן מאוד ולכן פשוט יחסית לתיאור, אבל הוא חזק מספיק כדי לעבור את מבחן שלכטיון. מה הולך בשם של המודל הזה? ובכן, SmolLM2 זו <strong>המשפחה</strong> של המודלים - כל מודל במשפחה הזו בנוי בדרך דומה אבל יש מודלים עם כמות גדולה או קטנה יותר של פרמטרים (במקרה הנוכחי זה המודל הכי גדול). ה-1.7B אומר כמה פרמטרים יש במודל - יש <strong>בערך</strong> מיליארד ושבע מאות אלף מספרים ממשיים שחיים בתוך המודל הזה והם מה שמשתמשים בו בשלבים 2-4 שתיארתי קודם; אנחנו נראה את זה בפירוט וגם נעשה חשבון מדויק של כמה פרמטרים יש. ה-Instruct בסוף אומר שזו גרסה של המודל שנוצרה על ידי fine tuning של מודל הבסיס כדי שתתאים יותר למבנה של צ'אטים - עוד מעט נבדוק בדיוק איך זה מתבטא.</p>
+<p>אני הולך להשתמש בספריה transformers של פייתון, שמיועדת בדיוק כדי להקל על החיים בזמן שימוש בטרנספורמרים. הנה האופן שבו אני משתמש בה כדי להטעין את המודל:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+
+<span class="n">model_id</span> <span class="o">=</span> <span class="s2">&quot;HuggingFaceTB/SmolLM2-1.7B-Instruct&quot;</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_id</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+ <span class="n">model_id</span><span class="p">,</span>
+ <span class="n">torch_dtype</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>מה שקורה פה מאחורי הקלעים הוא שאנחנו מתחברים לאתר HuggingFace שמארח מודלים אצלו, מורידים ממנו את המודל (זה מודל חופשי, כל אחד יכול להוריד אותו אבל זה כן דורש התחברות לממשק של HuggingFace כדי להוריד אותו ככה משורת הפקודה) ואז משתמשים בו כדי לייצר שני דברים: את ה-tokenizer שאחראי לשלב (1) ברשימה שנתתי למעלה, ואת model שהוא המודל עצמו שעושה את שלבים 2-5.</p>
+<p>עוד נתעמק במה שכל אחד מהם עושה, אבל בואו ננצל אותם כרגע כדי לבצע את מבחן שלכטיון. לשם כך צריך: לכתוב שאלה על שלכטיון (אני מעתיק את הטקסט מהגרסה האנגלית של "אלגוריתמיקה"), להמיר אותה לפורמט של צ'אט (הטוקניזר יודע לעשות את זה), לתת למודל לרוץ על זה, לקבל חזרה תשובה ולהמיר את התשובה חזרה לטקסט שאני יכול לקרוא. הנה הקוד שעושה את זה:</p>
+<div class="highlight"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+ <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+ <span class="n">messages</span><span class="p">,</span>
+ <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+ <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
+ <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
+ <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+ <span class="o">**</span><span class="n">inputs</span><span class="p">,</span>
+ <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+ <span class="n">do_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+ <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</code></pre></div>
+
+<p>אין צורך להתעמק בכל מה שהולך שם, כמובן; אני אסביר את זה בהמשך. בינתיים, הנה התשובה:</p>
+<div class="highlight raw-highlight">Zupchoks do not exist. The concept of a &quot;zupchok&quot; is a fictional creature, created as a combination of a whale and a flying machine. The idea of a whale evolving into a flying creature with wings is not biologically plausible. Whales are mammals that live in the water, and they do not have the necessary physical adaptations to fly.<br>
+<br>
+The idea of a whale evolving into a flying creature is based on a misunderstanding of evolutionary biology. Whales evolved from land-dwelling mammals that returned to the water. Over time, they developed the necessary adaptations to live in the water, such as flippers, fins, and a streamlined body. They did not evolve wings or the ability to fly.<br>
+<br>
+The concept of a zupchok is also not supported by scientific evidence. There is no evidence of any species of whale or other marine mammal that has the ability to fly. The idea of a zupchok is a work of fiction, and it is not based on any scientific fact.</div>
+
+<p>זה... ממש טוב?! הוא אשכרה מתחיל לספר לי על איך שלוויתנים התפתחו מיונקים יבשתיים שחזרו למים ובתהליך אבולוציוני פיתחו איברים שרלוונטיים לחיים במים ולא כנפיים, ושאין ראיות לאף יונק ימי מעופף. אני עדיין חושב שהתשובה אצל דוד הראל יותר טובה וגם מרגישה יותר "אנושית" אבל וואו, שמעו, אם היו מראים לי לפני עשור קוד שרץ אצלי במחשב ועונה את התשובה <strong>הזו</strong> הייתי מתפלץ מרוב התלהבות. כן, יש לנו פה ביד קסם וכל מה שנדרש הוא 1.7 מיליארד מספרים ממשיים ששיחקו מספיק עם הערכים שלהם.</p>
+<p>בואו נתחיל לעבור שלב שלב על הכל כדי להבין מה קורה פה. העיקר הוא כמובן החלק שבו המודל רץ, אבל גם הטוקנייזר מאוד מעניין אותי, אז זה הולך להיות סיפור ארוך; הפעם נסתפק בטוקנייזר.</p>
+<h2>מה בעצם הטוקיינזר עושה?</h2>
+<p>בואו נעשה ניסוי זריז - נכתוב טקסט ונריץ עליו את הטוקיינזר:</p>
+<div class="highlight"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The best animal in the world is a cat, because &quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+</code></pre></div>
+
+<p>אני מקבל מזה:</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;The&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġbest&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġanimal&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġin&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġthe&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġworld&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġis&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġa&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġcat&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġbecause&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġ&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+<p>כלומר, הטוקיינזר פירק את הטקסט שלי למילים שמרכיבות אותו וגם הפסיק היה טוקן בפני עצמו (בואו נתעלם לרגע מהפיל בחדר שבו רווחים הפכו לאיזה Ġ).</p>
+<p>אוקיי, זה היה צפוי. אבל מה אם נאתגר אותו? למשל, ניתן לו את המילה Supercalifragilisticexpialidocious ממרי פופינס? האם יש לו אותה במילון? ובכן, לא, זה מה שהוא נתן לי:</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;Super&#39;</span><span class="p">,</span> <span class="s1">&#39;cal&#39;</span><span class="p">,</span> <span class="s1">&#39;if&#39;</span><span class="p">,</span> <span class="s1">&#39;rag&#39;</span><span class="p">,</span> <span class="s1">&#39;il&#39;</span><span class="p">,</span> <span class="s1">&#39;istice&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;ial&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;ocious&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+<p>את Super יש לו במילון כי זו מילה סטנדרטית, וגם if ו-id שמופיעים בהמשך. אבל היתר? אלו חלקי מילים שכנראה יש להם שכיחות גבוהה יחסית ולכן משתלם להכניס גם אותם למילון.</p>
+<p>מה עם שפות אחרות, למשל עברית? זה מודל קטן, אל תצפו ליותר מדי. נתתי לו את "בוקר טוב עולם" והוא פשוט פירק אותו לרצף של סימנים ג'יברישיים:</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;×ĳ&#39;</span><span class="p">,</span> <span class="s1">&#39;×ķ&#39;</span><span class="p">,</span> <span class="s1">&#39;×&#39;</span><span class="p">,</span> <span class="s1">&#39;§&#39;</span><span class="p">,</span> <span class="s1">&#39;×¨&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġ×&#39;</span><span class="p">,</span> <span class="s1">&#39;ĺ&#39;</span><span class="p">,</span> <span class="s1">&#39;×ķ&#39;</span><span class="p">,</span> <span class="s1">&#39;×ĳ&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġ×&#39;</span><span class="p">,</span> <span class="s1">&#39;¢&#39;</span><span class="p">,</span> <span class="s1">&#39;×ķ&#39;</span><span class="p">,</span> <span class="s1">&#39;×ľ&#39;</span><span class="p">,</span> <span class="s1">&#39;×&#39;</span><span class="p">,</span> <span class="s1">&#39;Ŀ&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+<p>למה דווקא אלו? זו בחירה שרירותית משהו שצריך להבין בתור "המודל לא מבין עברית, הוא מפרק את האותיות העבריות לגורמים ומשתמש בטוקנים עבור הגורמים". בשביל הסבר טיפה יותר מדויק צריך להיזכר איך תווים מקודדים במחשב: מידע בסיסי מקודד במחשב ביחידות של <strong>ביט</strong> שהוא 0 או 1. אם יש לנו ביט בודד הוא יכול לייצג רק שני מספרים, אבל שני ביטים כבר יכולים לייצג ארבעה: 00,01,10,11, ובאופן כללי אם יש לנו <span class="math">\(n\)</span> ביטים הם יכולים ביחד לייצג <span class="math">\(2^{n}\)</span> מספרים, ולרוב מקובל שהם פשוט מייצגים את המספרים מ-0 עד <span class="math">\(2^{n}-1\)</span> . למשל, עם שבעה ביטים נוכל לייצג 128 מספרים - כל המספרים מ-0 עד 127.</p>
+<p>עכשיו, יש שיטת קידוד נפוצה ומקובלת מאוד שנקראת ASCII שבה מקודדים 128 תווים שונים כך שכל אחד מקודד בידי שבעה ביטים מסויימים. למשל, האות A מקודדת על ידי המספר 65 ואילו הסימן + מקודד על ידי 43 ואילו הסימן של רווח מקודד על ידי 32. האם 128 תווים זה מעט מדי? בוודאי. רק תחשבו על כמות הסימונים שנדרשים ליפנית וסינית, וגם לעברית המסכנה לא היה מקום ב-ASCII. זו הסיבה שצצו גרסאות "מורחבות" של ASCII שנעזרות בביט אחד נוסף, כלומר כל תו ASCII היה מיוצג בידי 8 ביטים. הסיטואציה הזו, של 8 ביטים שמקובצים ביחד, היא <strong>ממש </strong>נפוצה במחשבים בימינו, עד שקבוצה של 8 ביטים קיבלה את השם <strong>בייט</strong> ורוב מה שאנחנו עושים במחשבים משתמש בבייטים בתור יחידות מרכזיות.</p>
+<p>ההרחבה הבסיסית והנפוצה ביותר של ASCII נקראת ISO-8859-1. הרעיון בה הוא להוסיף סימנים נפוצים בשפות לטיניות, למשל הסימן Ö או æ. על הדרך התווסף גם הסימן ¥ של הין היפני והסימן § וכל מני דברים חשבוניים כמו ¾ כי למה לא בעצם. במילים אחרות, זה היה פח אשפה לסימנים שנראה שנבחרו חצי באקראי. מה לא היה שם, למשל? אותיות בעברית. בשבילן היה קידוד <strong>אחר</strong>, ISO-8859-8, ואתם כבר מבינים לאן זה הולך: השתמשו בקידודים רבים ושונים שכל אחד מותאם לשפה אחרת וכשטענו בדפדפן אתר אינטרנט אם האתר לא אמר באיזה קידוד הוא הדפדפן ניסה לנחש ולא הצליח והיינו צריכים לעבור קידוד-קידוד ולקוות לקבל משהו קריא וזו הייתה קטסטרופה בלתי נתפסת ואם אתם מהדור שלא חווה את זה אני כל כך שמח בשבילכם. </p>
+<p>בסופו של דבר מה שעושים בפועל הלך והתכנס למשהו שנקרא Unicode - קידוד שכולל הכל כולל הכל, גם עברית וגם יפנית. המחיר הוא כמובן שצריך יותר מקום; תווים נפוצים עדיין דורשים בייט בודד והקידוד הוא בדיוק כמו ב-ASCII, אבל תווים נפוצים פחות כבר יכולים לקחת שני בייטים או אפילו שלושה-ארבעה. עברית דורשת שני בייטים. את א' למשל מקודדים באמצעות שני בייטים שהראשון שבהם מכיל את הערך 215 והשני את הערך 144.</p>
+<p>עכשיו, במחשבית אוהבים לייצג מספרים באמצעות בסיס 16, כי אז לייצג מספרים בין 0 ל-255 דורש בדיוק שתי ספרות והן מכסות בדיוק את כל טווח המספרים מ-0 עד 255, ב"מחיר" שלפיו צריך סימנים מיוחדים כדי לייצג את ה"ספרות" מ-10 עד 15, ופשוט משתמשים באותיות A,B,C,D,E,F לשם כך. בצורה הזו 215 נכתב בתור D7 ו-144 נכתוב בתור 90 (אם אתם לא מכירים את איך שבסיס 16 עובד לא נורא אבל הנה <a href="https://gadial.net/2017/06/11/number_bases/">פוסט שלי</a> על זה). מעכשיו אני אשתמש בצורת הכתיב הזו כי היא נוחה יותר.</p>
+<p>מה שקורה בפועל כשהטוקיינזר בא לעבוד זה שהוא לא מכיר את האות א' ולכן הוא מתייחס אליה בתור שני בייטים של ASCII שבאים אחד אחרי השני: הבייט של D7 והבייט של 90. עכשיו, ב-ISO-8859-1 יש ל-D7 משמעות פשוטה: זה הסימן × שמייצג כפל (זו לא האות איקס, זה סימבול אחר - שימו לב להבדל בין × ובין x). לעומת זאת ל-90 אין משמעות ב-ISO-8859-1; זה אחד מהסימנים הלא מנוצלים של הקוד. לכן מה שקורה זה הדבר הבא: הטוקיינזר משאיר את × ללא שינוי, אבל את ה-90 הוא מחליף בסימן אחר על פי הגדרה שרירותית. זו לא הגדרה שהיא ספציפית למודל הזה אלא מגיעה מהספריה tokenizers של huggingface. הכלל, בגדול, הוא שיש רשימה של כל הערכים שאין להם ייצוג נחמד ב-ISO-8859-1 ומחלקים להם ייצוג באמצעות ערכי יוניקוד החל ממקום מסוים. זה תקף לא רק ל-90 אלא גם לסימן כמו רווח, שבהחלט שייך ל-ASCII אבל הייצוג שלו בתור טקסט הוא, ובכן, רווח, וקשה לראות רווחים בצורה טובה. יש גם תווים עוד יותר בעייתיים כמו ירידת שורה וכדומה - כולם מקבלים ייצוג באמצעות תווי יוניקוד, החל מהתו שממסופר ב-U+0100 ומייצג את Ā. זו הסיבה שבגללה Ġ מחליף את רווח: זה תו היוניקוד U+0120. בגלל שהמספרים פה הם בבסיס 16, ה-20 בעצם מייצג את 32. מה אמרתי קודם שהיה הסימן של רווח ב-ASCII? נכון מאוד, 32. כלומר, עד וכולל רווח יש 33 תווי ASCII, ומכיוון שכולם לא מוצגים בצורה יפה, הם בדיוק מה שמועבר ל-33 תווי היוניקוד החל מ-Ā ועד Ġ (וגם אחרי רווח יש עוד תווים כאלו).</p>
+<p>עכשיו, 90 לא הולך לעבור אל תו היוניקוד U+0190 כי עד שמגיעים אל 90 עוברים הרבה תווים <strong>שכן</strong> מיוצגים יפה (למשל, האותיות הלטיניות) ולכן אנחנו מתקדמים הרבה פחות; את 90 מייצג U+0132 שהוא "Ĳ" - זה תו בודד שמייצג IJ ביחד. אם נסתכל על רשימת התווים למעלה לא נראה אותו כי לא השתמשנו ב"א" בביטוי "בוקר טוב עולם" אבל כן השתמשנו בב'; את ב' מקודדים ביוניקוד עם D7 91 ואמרנו ש-D7 עובר אל × ואילו 91 יעבור אל U+0133 שהוא "ĳ" - דומה לסימן הקודם, רק עם אותיות קטנות ולא גדולות. זה בדיוק מה שאנחנו רואים באיבר הראשון ברשימה - שני הסימנים הללו ביחד. לעומת זאת בהמשך, ק' זכה לטיפול קצת שונה. בגלל שהוא כבר לקראת סוף הרשימה, הוא D7 A7 - הבייט של המספר השני כבר די גדול - גדול מספיק כדי להיות שייך לאיזור ב-ISO-8859-1 שבו דברים כן מוגדרים ולהתאים לסימן §.</p>
+<p>עכשיו עולה השאלה - למה עבור א' קיבלנו את 'ĳ×' בתור טוקן בודד אבל עבור ק' קיבלנו שני טוקנים, קודם × ואז §? ובכן, כי עבור 'ĳ×' היה <strong>כלל מיזוג</strong> מתאים ואילו עבור '§×' לא היה.</p>
+<p>אוקיי, הזכרתי קודם <strong>מילון</strong> ועכשיו אני מזכיר <strong>כללי מיזוג</strong> - איפה הדברים הללו נמצאים בכלל? ובכן, אחד מהקבצים שירדו אוטומטית מהאינטרנט יחד עם המודל היה המילון - ליתר דיוק, קובץ בשם tokenizer.json שמכיל שלל סוגי מידע על הטוקנייזר אבל כולל בנוסף לכך שתי רשימות ארוכות מאוד: אחת בשם vocab והשניה בשם merges. מה שקראתי לו "המילון" הוא vocab: הוא כולל את רשימת כל הטוקנים של המודל, כשלכל אחד מהם מותאם המספר הסידורי שלו במילון. למשל</p>
+<div class="highlight"><pre><span></span><code><span class="s2">&quot;ĠWikipedia&quot;</span><span class="p">:</span> <span class="mi">10727</span>
+</code></pre></div>
+
+<p>כלומר, המילה "ויקיפדיה" (עם רווח לפניה) שייכת למילון והיא טוקן מספר 10727. זה יהיה חשוב בהמשך, כשנרצה לשלוח את הטוקן הזה למודל: המספר הסידורי הוא מה שמספר למודל לאיזה וקטור של מספרים ממשיים לתרגם את הטוקן. אבל איך בכלל הטוקן הזה <strong>נוצר</strong>? כאן רשימת המיזוג נכנסת לפעולה. זו רשימה קצרה למדי, בערך בגודל של המילון, שכוללת זוגות של טוקנים. למשל:</p>
+<div class="highlight"><pre><span></span><code><span class="s2">&quot;ĠW ikipedia&quot;</span>
+<span class="s2">&quot;ikip edia&quot;</span>
+<span class="s2">&quot;ik ip&quot;</span>
+<span class="s2">&quot;i k&quot;</span>
+<span class="s2">&quot;i p&quot;</span>
+<span class="s2">&quot;ed ia&quot;</span>
+<span class="s2">&quot;e d&quot;</span>
+<span class="s2">&quot;i a&quot;</span>
+<span class="s2">&quot;Ġ W&quot;</span>
+</code></pre></div>
+
+<p>מן הסתם לא בחרתי להציג את הזוגות הללו באקראי אלא חיפשתי זוגות שיכולים להוביל ליצירה של של הטוקן של ויקיפדיה מתוך סדרת טוקנים בודדים של תו אחד כל אחד. זה משחק נחמד לראות איך על ידי מיזוג זוגות טוקנים שברשימה הזו אפשר לקבל את הטוקן המקורי - אבל לא כזה משחק מאתגר, חייבים להודות, די נתתי את הכיוון כשכתבתי הכל מהסוף להתחלה.</p>
+<p>מה שהטוקנייזר עושה בפועל הוא בשלב הראשון לעבור על הטקסט ולהמיר אותו לטוקנים הבסיסיים ביותר - אלו שקיימים ברמת התו הבודד. אחר כך הוא מתחיל לחפש מקומות למזג בהם. סביר שיהיו הרבה מיזוגים פוטנציאליים בכל רגע נתון, אז הכלל הוא פשוט - ככל שמשהו מגיע מוקדם יותר ברשימת המיזוגים, כך יש לו עדיפות על פני המיזוגים הפוטנציאליים האחרים. כשנתתי לו את Supercalifragilisticexpialidocious סיימנו עם שני טוקנים סמוכים, אחד p והשני ial. למה ה-p לא התאחד עם ה-ial? אין זוג כזה, אבל האם p לא יכל להתאחד עוד קודם עם i? הזוג p i דווקא כן קיים ברשימה, אבל כך גם i al שנמצא במקום מוקדם יותר - לכן המיזוג הזה קרה קודם.</p>
+<p>המיזוגים נפסקים כשאין יותר בטקסט שום זוג שמופיע ברשימת המיזוגים (אפילו אם אפשר למזג אותו ולקבל מילה במילון; חייבים שיהיה כלל מפורש שאומר לעשות את זה). כל התהליך הזה הוא יחסית מהיר, בסיוע האופטימיזציות המתאימות, כך שבסך הכל דרך הפעולה של הטוקנייזר די ברורה - בהינתן שהוא כבר קיים, כלומר שמישהו כבר יצר את vocab ואת merges. וזה כמובן מעלה את השאלה - איך, באמת, זה נוצר?</p>
+<h2>איך הטוקנייזר נוצר?</h2>
+<p>האלגוריתם שמאחורי הטוקנייזר (הספציפי שעליו אנחנו מדברים כאן) נקרא BPE, ראשי תיבות של Byte-pair encoding. במקור הרעיון היה להשתמש בו לדחיסה של טקסטים. מתחילים עם הטקסט הארוך שאותו רוצים לדחוס וחושבים עליו בתור רצף של בייטים, ואז סופרים את כל זוגות הבייטים הסמוכים שקיימים ברצף, ובוחרים את הזוג שמופיע הכי הרבה פעמים. עבור הזוג הזה, בוחרים בייט חדש שלא מופיע ברצף, מחליפים את כל המופעים של הזוג הזה בבייט החדש, וכותבים לעצמנו בצד שהוא מתמפה לזוג הזה.</p>
+<p>למשל, נניח שהמשפט שלנו הוא the cat sat on the mat. זוג התווים at מופיע שלוש פעמים, אז נוכל להחליף אותו בתו חדש שלא מופיע במשפט, למשל A, ולקבל</p>
+<p>the cA sA on the mA</p>
+<p>ואנחנו רושמים לעצמנו בצד את הכלל <span class="math">\(\text{A}\to\text{at}\)</span> .</p>
+<p>בשלב הזבא נזהה ש-th מופיע פעמיים, וגם he, אז בוחרים אחד מהם - נאמר את th נחליף ב-B ונקבל</p>
+<p>Be cA sA on Be mA</p>
+<p>ועכשיו Be מופיע פעמיים, אז נחליף אותו ב-C ונקבל</p>
+<p>C cA sA on C mA</p>
+<p>ועכשיו לאלגוריתם יש את המחרוזת הזו, וגם את ה"מילון" שמלמד אותנו איך לפענח אותה:</p>
+<p><span class="math">\(\text{A}\to\text{at}\)</span></p>
+<p><span class="math">\(\text{B}\to\text{th}\)</span></p>
+<p><span class="math">\(\text{C}\to\text{Be}\)</span></p>
+<p>באלגוריתם הזה, הטריק הוא להשתמש בבייטים שלא מופיעים במחרוזת המקורית - הרי בייט יכול לקודד 256 ערכים, וברוב המחרוזות יהיו הרבה פחות מזה. זה מאפשר לחסוך מקום באפס מאמץ; כל כניסה במילון דורשת <strong>שלושה</strong> בייטים וכל החלפה חוסכת לנו בייט, אז כל עוד יש זוג שמופיע ארבע פעמים, ישתלם להחליף אותו.</p>
+<p>בהקשר שלנו הסיטואציה טיפה שונה. אין לנו מחרוזת קונקרטית שאנחנו רוצים לכווץ; מה שאנחנו בדרך עושים הוא להפעיל את האלגוריתם אחרי ש"מילון הכיווצים" כבר קיים. אבל הדרך ליצור אותו היא בדיוק מה שראינו כאן - לקחת טקסט גדול, להפעיל עליו את האלגוריתם ולתת לו לבנות את המילון. הרי לא <strong>חייבים</strong> להחליף כל זוג בייטים במשהו אחר בגודל בייט; המטרה שלנו היא לא לכווץ. אנחנו פשוט מחליפים זוג טוקנים בטוקן חדש ומגדילים את מילון הטוקנים שלנו באופן הזה. רק צריך להגדיר חסם על גודל המילון ולהפסיק את אלגוריתם ה"כיווץ" כשהגענו אליו, ואז המילון (כלומר - הטוקנים החדשים <strong>וגם</strong> רשימת המיזוגים) יהיה הפלט שלנו. השאלה היחידה היא - איזה טקסט גדול לקחת כדי להפעיל עליו את האלגוריתם הזה? אבל זו כבר בעיה קלאסית של תחום הלמידה שאני לא מבין בה שום דבר - איך בעצם בונים את הקורפוס שעליו מאמנים את המודלים שלנו, לא רק את הטוקנייזר אלא גם את ה-LLM-ים עצמם. מן הסתם לא חייבים לקחת טקסט יחיד; אפשר לקחת טקסטים משלל מקורות שונים, למזג אותם למחרוזת אחת גדולה ולהפעיל עליה את האלגוריתם. אפשר לעשות את זה על שלל טקסטים שונים לקבלת טוקנייזרים שונים ואז לערוך ניסויים מי מהם נותן את הביצועים הכי טובים; השורה התחתונה היא שאני באמת לא יודע איך זה עובד. הגישה שלי לנושא בפוסטים הללו היא צרה מאוד - אני הולך אל מה שכבר קיים ושואל את עצמי איך זה עובד; אני לא נכנס לשאלה איך זה נוצר מלכתחילה חוץ מאשר ברמת הרעיון הכללי.</p>
+<h2>ואיך זה שמדובר במודל צ'אט משפיע?</h2>
+<p>יש עוד דבר אחד שהטוקנייזר יודע לעשות ולא דיברתי עליו בינתיים - לטפל בתבנית הצ'אט של השיחה. אם נחזור לרגע אל הקוד שהראיתי קודם, אז עשיתי שם</p>
+<div class="highlight"><pre><span></span><code><span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+ <span class="n">messages</span><span class="p">,</span>
+ <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+ <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
+ <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>הפונקציה הזו, apply_chat_template, אומרת לטוקיינזר: קח את הטקסט הקיים ושים אותו בתוך תבנית של צ'אט שאותה המודל אומן לזהות. בואו נראה איך זה נראה. בשביל זה צריך לשנות קצת את הפרמטרים שהפונקציה מקבלת, כי אני רוצה שהפלט יהיה משהו שקריא לי בתור בן אדם, ולא משהו שיהיה נגיש למודל. אז אני עושה:</p>
+<div class="highlight"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+ <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+ <span class="n">messages</span><span class="p">,</span>
+ <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>התוצאה של זה תהיה</p>
+<div class="highlight raw-highlight">&#x27;&lt;|im_start|&gt;system\nYou are a helpful assistant.&lt;|im_end|&gt;\n&lt;|im_start|&gt;user\nA zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&lt;|im_end|&gt;\n&#x27;</div>
+
+<p>די ברור מה הולך כאן. הטקסט מחולק ל"הודעות" כשלכל הודעה יש את ה"תפקיד" שלה, מה שנקרא ה-role. הודעה נפתחת ב-&lt;|im_start|&gt; ומסתיימת ב-&lt;|im_end|&gt; כשמייד אחרי ה-&lt;|im_start|&gt; כתוב ה-role ואז מגיעה ירידת שורה. כל מה שהפונקציה עושה היא להוסיף את הסימונים הללו. ומאיפה הטוקנייזר מכיר אותם בכלל? ובכן, יש קובץ בשם tokenizer_config.json שמתאר את הסימונים הללו במפורש וגם כולל תבנית חצי תכנותית כזו (בפורמט של jinja2, למי שמכירות) שמתארת איך בדיוק לשים את הסימנים, ודואגת לשים את התבנית "&lt;|im_start|&gt;system\textbackslash nYou are a helpful AI assistant named SmolLM, trained by Hugging Face&lt;|im_end|&gt;" אם ה-role בהתחלה הוא לא system.</p>
+<p>קלט אחד ש-apply_chat_template מקבל ולא השתמש בו קודם הוא add_generation_prompt . מה שזה עושה הוא להוסיף בסופו של הטקסט שכבר ראינו את</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;|</span><span class="n">im_start</span><span class="o">|&gt;</span><span class="n">assistant</span>\<span class="n">n</span>
+</code></pre></div>
+
+<p>כלומר, זה מסמן למודל עצמו "עכשיו מתחילה התשובה, נא להשלים אותה". המודל יכתוב את מה שיכתוב וכשיסיים, יכתוב &lt;|im_end|&gt; משלו בשביל לסמן שסיים.</p>
+<p>איך הוא יודע לעשות את זה? בואו נחזור למודל שבו אני משתמש, SmolLM2-1.7B-Instruct. ה-Instruct בסוף פירושו שזה מודל שהתקבל בתהליך דו-שלבי:</p>
+<ul>
+<li>
+<p>אימון של "מודל הבסיס", שנקרא פשוט SmolLM2-1.7B. האימון הזה הוא משמעותי, לוקח זמן רב ועובד על קורפוס גדול.</p>
+</li>
+<li>
+<p>שלב אימון נוסף שבו לוקחים את מודל הבסיס בתור נקודת התחלה, ומאמנים אותו על קורפוס ייעודי של דברים שנראים כמו צ'אט, עם הסימבולים שראינו.</p>
+</li>
+</ul>
+<p>שלב האימון הנוסף מכונה fine-tuning, המטרה שלו היא לא רק ללמד את המודל לזהות את הסימבולים המיוחדים, היא גם להפוך את המודל למשהו שבאמת מתקשר בצורה סבירה, כי מודל הבסיס הוא... מוזר. עוד לפני שנראה דוגמא, תחשבו על זה: זה מודל שמאומן להשלים טקסטים על בסיס מה שאפשר לדמיין שהוא <strong>כל הטקסט באינטרנט</strong>. טקסט כזה לא כולל רק שיחות מועילות עם מודל צ'אט שבא להחכים אותנו, יש בו רשימות מכולת, הוראות טכניות, מאמרים בויקיפדיה ועוד ועוד.</p>
+<p>הדרך הטובה ביותר להרגיש את ההבדל היא פשוט לנסות. אם כן, מה קורה כשאני מנסה לשאול את מודל הבסיס על שלכטיון, בלי להוסיף את תבנית הצ'אט ובלי כלום? קורים דברים כיפיים, זה מה.</p>
+<p>ראשית אני אטעין את מודל הבסיס:</p>
+<div class="highlight"><pre><span></span><code><span class="n">base_model_id</span> <span class="o">=</span> <span class="s2">&quot;HuggingFaceTB/SmolLM2-1.7B&quot;</span>
+<span class="n">base_tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">base_model_id</span><span class="p">)</span>
+<span class="n">base_model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+ <span class="n">base_model_id</span><span class="p">,</span>
+ <span class="n">torch_dtype</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>עכשיו אני אשאל אותו על שלכטיון:</p>
+<div class="highlight"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">base_tokenizer</span><span class="p">(</span>
+ <span class="n">text</span><span class="p">,</span>
+ <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">base_model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<span class="n">base_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
+ <span class="n">output</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+ <span class="o">**</span><span class="n">inputs</span><span class="p">,</span>
+ <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+ <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+ <span class="p">)</span>
+
+<span class="n">decoded_output</span> <span class="o">=</span> <span class="n">base_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+ <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+ <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">decoded_output</span><span class="p">)</span>
+</code></pre></div>
+
+<p>ולבסוף, אני אקבל את התשובה:</p>
+<div class="highlight raw-highlight">A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.<br>
+12. The Glandorians<br>
+The Glandorians once had a society, called the Glandorian Confederacy, which was based on the principle of collective ownership and co-operation. Some of their members had more energy and initiative than others, and these few were able rise through the ranks. Over time, they achieved so much wealth and power, that the whole government began to feel threatened.<br>
+In the Glandorian Confederacy, the state controlled nearly every aspect of individual lives, but they were not required to pay taxes, and their citizens enjoyed a large standard of living. In addition, their state was financially sound and self-sufficient, since they made all their own arms and manufactured a lot of their own clothing and foodstuff. If the rest of the world didn&#x27;t care to trade with them, that was nobody&#x27;s concern.<br>
+Eventually they felt it was time to break away completely from the rest of the world. Their state was, for one thing, very xenophobic. After some decades, they made a decision to cut themselves off from civilization at large. They would remain in contact with no one else at all. When asked what about the poor and dispossessed, they replied that these people were free to emigrate if they liked.<br>
+Is the Glandorian Confederacy possible? Do you think it is? Explain why or why not.</div>
+
+<p>הוא ממשיך גם אחרי הדבר הזה; יש גם 13 שכתוב בסגנון דומה. במילים אחרות, המודל חשב שאנחנו באמצע דף עבודה שכזה לתלמידים שבו מציגים דברים הזויים ואז שואלים אם הם אפשריים או לא, והשלים בהתאם. המודל <strong>לא</strong> הבין שהוא קיבל שאלה ואמור לספק תשובה בעצמו. כמובן, זה לא היה חייב לקרות ככה - הרי המודל יכול לדמיין באותה מידה שהוא משלים דף של "שאלה לתלמיד + תשובה מוכנה" וכן להשלים עם תשובה מתאימה. למעשה, רואים את ה-do_sample=True שיש בקוד שלי? כאן אני אומר למודל לא לבחור את הטוקן <strong>הכי סביר</strong> בכל פעם אלא לבצע הגרלה כלשהי - כשהלכתי על גישת הטוקן הסביר ביותר הוא דווקא כן ענה לשאלה (אבל בצורה לא כזו מוצלחת).</p>
+<p>בואו נעשה עוד ניסוי. הפעם אני מקבע את גרעין האקראיות של המודל ל-42 כדי שאחרי שאשנה דברים, השינוי שאראה בתוצאה ינבע מהשינוי שביצעתי ולא מאקראיות שונה. התשובה של המודל הפעם היא</p>
+<div class="highlight raw-highlight">A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why. If so, consider why people have not yet encountered them. Are there too few zupchoks, or perhaps too many?<br>
+To take a more general perspective, are there too many or too few new ideas in the world? If both “too few” and “too many” are problematic, why?<br>
+To develop this line of thought for your essay, first define the concept and scope of new ideas, and then identify two key factors in the production of new literary works that might lead you to your conclusions.&lt;|endoftext|&gt;</div>
+
+<p>כלומר, הפעם הוא חושב שהוא באמצע תרגיל לתלמיד וצריך להרחיב את התרגיל עם שאלות נוספות והכללות. וזה ממש חמוד. אבל היי, תראו, הוא מסיים את המלל שלו ב-&lt;|endoftext|&gt;; הוא כן מכיר את הסימבול הזה (סביר להניח שהוא הוכנס לטקסטים בקורפוס שעליו הוא אומן כחלק מתהליך העיבוד שלהם). אז אולי הוא כן ידע להגיב טוב גם לתבנית של הצ'אט? בואו ננסה: נשתמש בטוקנייזר של מודל השיחה כדי להוסיף את התבנית הזו, ואז נשתמש בטקסט הזה בתור מה שהמודל יקבל, עם אותו גרעין אקראיות של 42. והנה התוצאה:</p>
+<div class="highlight raw-highlight">&lt;|im_start|&gt;system<br>
+You are a helpful assistant.&lt;|im_end|&gt;<br>
+&lt;|im_start|&gt;user<br>
+A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&lt;|im_end|&gt;<br>
+&lt;|im_start|&gt;assistant<br>
+You are a zup-like Assistant. You is an Assistant. You are zup-like and a assistant. You help Assist-Like Write and Fly. You are an Assisticock. You have assisted Assist. You have Asisted Assist. You have Assitt. You are a Assistic. You have assistedist.<br>
+Innology, the<br>
+You and not Have you Have<br>
+Assisticock, the<br>
+you and not Assistant you<br>
+Assics not Assic you<br>
+assitic and You not have Assicul<br>
+you you have Assit<br>
+stic, and not Assic</div>
+
+<p>או-קיי... נראה לי ששברנו אותו.</p>
+<p>כמובן, ניסוי הצעצוע הזה לא שלם בלי שננסה להריץ גם את מודל ה-Instruct עם ובלי התבנית. נתחיל ממה שקורה כשהוא רץ (עם גרעין האקראיות 42) על התבנית:</p>
+<div class="highlight raw-highlight">&lt;|im_start|&gt;system<br>
+You are a helpful assistant.&lt;|im_end|&gt;<br>
+&lt;|im_start|&gt;user<br>
+A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&lt;|im_end|&gt;<br>
+&lt;|im_start|&gt;assistant<br>
+No, zupchoks do not exist. Zupchok is not a real creature, and its characteristics, including its ability to fly and write, are exaggerated or fabricated to make a humorous or amusing point. The word &quot;zupchok&quot; is likely meant to be a playful reference to a whale that has been genetically engineered or altered for the purposes of writing literature.&lt;|im_end|&gt;</div>
+
+<p>תשובה יפה ולעניין שמסתיימת עם הסימבול הנכון. אבל מה קורה אם אין תבנית בכלל? ובכן, קיבלתי את תשובת ה"קצר ולעניין" האולטימטיבית:</p>
+<div class="highlight raw-highlight">A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&lt;|im_end|&gt;</div>
+
+<p>הוא פשוט הוסיף את ה-&lt;|im_end|&gt; וסיים, החצוף. נראה שלפחות עבור המודל הזה ועבור הטקסט הספציפי שכתבתי, בהחלט יש חשיבות לתחביר המדויק של פורמט הצ'אט... תודה לטוקנייזר שמטפל בזה עבורנו.</p>
+<p>עכשיו סיימנו עם הטוקנייזר ונשאר להסתכל לתוך הקרביים של המודל עצמו. את זה נעשה בפוסט הבא.</p>
+        </article>
+        
+        <footer>
+            <p>© כל הזכויות שמורות לגדי אלכסנדרוביץ'</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('expanded');
+        }
+        
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>

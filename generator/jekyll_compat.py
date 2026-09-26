@@ -1,4 +1,5 @@
 """Jekyll compatibility layer for processing Jekyll-specific syntax."""
+import html
 import re
 
 
@@ -78,7 +79,26 @@ class JekyllProcessor:
         Returns:
             Content with tags processed
         """
-        # Remove highlight tags (we use markdown fenced code blocks)
+        # Raw highlights look like code blocks, but contain prose rather than code.
+        # Emit their HTML directly so Markdown/Pygments does not syntax-highlight it.
+        def replace_raw_highlight(match):
+            raw_text = match.group(1).strip('\r\n')
+            escaped_text = html.escape(raw_text)
+            escaped_text = re.sub(r'\r\n?|\n', '<br>\n', escaped_text)
+            return (
+                '<div class="highlight raw-highlight">'
+                f'{escaped_text}'
+                '</div>'
+            )
+
+        content = re.sub(
+            r'{%\s*highlight\s+raw\s*%}(.*?){%\s*endhighlight\s*%}',
+            replace_raw_highlight,
+            content,
+            flags=re.DOTALL | re.IGNORECASE
+        )
+
+        # Convert language-specific highlights to Markdown fenced code blocks.
         content = re.sub(r'{%\s*highlight\s+(\w+)\s*%}', r'```\1', content)
         content = re.sub(r'{%\s*endhighlight\s*%}', '```', content)
         

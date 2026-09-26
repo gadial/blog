@@ -22,6 +22,18 @@ _pending_skip = False # global flag to skip the next blank line after a quote
 
 _HEB_RE  = re.compile(r'[\u0590-\u05FF\uFB1D-\uFB4F]')   # Hebrew + presentation
 _LAT_RE  = re.compile(r'[A-Za-z]')                       # plain Latin letters
+_UNICODE_MARKER_RE = re.compile(r'UNICODEU([0-9A-Fa-f]{4,6})END')
+
+
+def expand_unicode_markers(text: str) -> str:
+    """Restore characters written as ASCII-only ``UNICODEUXXXXEND`` markers."""
+    def replace_marker(match: re.Match) -> str:
+        codepoint = int(match.group(1), 16)
+        if codepoint > 0x10FFFF or 0xD800 <= codepoint <= 0xDFFF:
+            raise ValueError(f"invalid Unicode marker: {match.group(0)}")
+        return chr(codepoint)
+
+    return _UNICODE_MARKER_RE.sub(replace_marker, text)
 
 def is_mostly_hebrew(text: str, ratio: float = 1.2) -> bool:
     """
@@ -184,6 +196,7 @@ def convert(path: Path, out_dir: Path | None = None) -> Path:
             tex = path.read_text(encoding="cp1255")
         except UnicodeDecodeError:
             tex = path.read_text(encoding="utf-8", errors="ignore")
+    tex = expand_unicode_markers(tex)
     tex, meta = extract_front(tex)
     #tex = re.sub(r'(?m)^\s*%%.*$', '', tex)
     tex = re.sub(r'(?m)^\s*\\selectlanguage\{[^}]+\}%\s*$', '', tex)
