@@ -23,6 +23,7 @@ _pending_skip = False # global flag to skip the next blank line after a quote
 _HEB_RE  = re.compile(r'[\u0590-\u05FF\uFB1D-\uFB4F]')   # Hebrew + presentation
 _LAT_RE  = re.compile(r'[A-Za-z]')                       # plain Latin letters
 _UNICODE_MARKER_RE = re.compile(r'UNICODEU([0-9A-Fa-f]{4,6})END')
+_PARAGRAPH_BREAK_MARKER = '___LYX2BLOG_PARAGRAPH_BREAK___'
 
 
 def expand_unicode_markers(text: str) -> str:
@@ -198,6 +199,13 @@ def convert(path: Path, out_dir: Path | None = None) -> Path:
             tex = path.read_text(encoding="utf-8", errors="ignore")
     tex = expand_unicode_markers(tex)
     tex, meta = extract_front(tex)
+    tex = re.sub(r'(\\begin\{document\})\s+', r'\1\n', tex, count=1)
+    # TexSoup collapses a blank line immediately following a command (for
+    # example ``\L{$...$}\n\nText``) to a single newline.  Protect TeX
+    # paragraph breaks before parsing so the Markdown cleanup below can still
+    # distinguish them from cosmetic line wrapping.
+    tex = re.sub(r'[ \t]*\n[ \t]*\n(?:[ \t]*\n)*',
+                 f'\n{_PARAGRAPH_BREAK_MARKER}\n', tex)
     #tex = re.sub(r'(?m)^\s*%%.*$', '', tex)
     tex = re.sub(r'(?m)^\s*\\selectlanguage\{[^}]+\}%\s*$', '', tex)
     tex = re.sub(r'\{\\beginL\s*(.*?)\s*\\endL\}',lambda m: m.group(1), tex, flags=re.S)
@@ -209,6 +217,7 @@ def convert(path: Path, out_dir: Path | None = None) -> Path:
 
     # Join the markdown parts
     md_text = "".join(md_parts)
+    md_text = md_text.replace(_PARAGRAPH_BREAK_MARKER, '\n\n')
     
     # Split into frontmatter and content
     parts = md_text.split('---\n', 2)
