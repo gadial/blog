@@ -1,0 +1,7943 @@
+#LyX 2.5 created this file. For more info see https://www.lyx.org/
+\lyxformat 643
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language hebrew
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "David"
+\font_sans "default" "David"
+\font_typewriter "default" "David"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification default
+\crossref_package prettyref
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\backgroundcolor none
+\fontcolor none
+\notefontcolor lightgray
+\boxbgcolor red
+\table_border_color default
+\table_odd_row_color default
+\table_even_row_color default
+\table_alt_row_colors_start 1
+\index אינדקס
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\docbook_mathml_version 0
+\end_header
+
+\begin_body
+
+\begin_layout Title
+אז מה הקטע עם מודלי שפה גדולים?
+ (חלק ד' - מטריצות,
+ הרבה מטריצות)
+\end_layout
+
+\begin_layout Description
+קטגוריות:
+ כללי
+\end_layout
+
+\begin_layout Description
+תגים:
+ מודל שפה גדול
+\end_layout
+
+\begin_layout Description
+מזהה:
+
+\family roman
+\series bold
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+large_language_models_4
+\end_layout
+
+\begin_layout Section
+מבוא
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "בפוסט הקודם בבלוג"
+target "https://gadial.net/2026/10/09/large_language_models_3/"
+literal "false"
+
+\end_inset
+
+ המשכתי לעבור ברמה הטכנית על מה ש-
+\lang english
+LLM
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ספציפי שמבוסס על טרנספורמר עושה.
+ כרגיל,
+ בואו נזכיר את התמונה הגדולה לפני שנמשיך.
+ מה שטרנספורמר עושה מחולק בגדול לחלקים הבאים:
+\end_layout
+
+\begin_layout Enumerate
+המרה של כל טוקן לוקטור שמייצג אותו.
+\end_layout
+
+\begin_layout Enumerate
+הפעלה של שלב שנקרא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שבו כל וקטור אוסף מידע מוקטורים שבאו לפניו בסדרה.
+\end_layout
+
+\begin_layout Enumerate
+הפעלה של שלב שנקרא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שבו מתוך כל וקטור מחושב וקטור חדש שאמור לתאר את 
+\begin_inset Quotes eld
+\end_inset
+
+מה שצריך לבוא אחריו
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+תרגום של כל וקטור אל 
+\series bold
+דירוג
+\series default
+ של כל הטוקנים שנקרא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+logits
+\lang hebrew
+.
+\end_layout
+
+\begin_layout Standard
+את שלבים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ו-
+\numeric on
+4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ראינו בפוסט הקודם.
+ בשני המקרים אפשר לחשוב עליהם פשוט בתור כפל של מטריצה (גדולה) בוקטור.
+ בשלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+,
+ יש לנו וקטור שהאורך שלו הוא כמספר הטוקנים שה-
+\lang english
+LLM
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מכיר (
+\series bold
+גודל המילון
+\series default
+) שלו ויש בו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בכניסה שמתאימה לטוקן שעובדים עליו כרגע,
+ ו-
+\numeric on
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ביתר הכניסות,
+ וכופלים אותו במטריצה שמספר השורות בה הוא גודל המילון ומספר העמודות בה הוא הגודל של הוקטור שמייצג את הטוקן.
+ התוצאה היא אחת מהשורות של המטריצה הזו (בפועל השלב הזה לא ממומש בתור כפל מטריצות כי יש דרכים יעילות יותר לעשות את זה).
+ את הוקטור שמתקבל אני מסמן ב-
+\begin_inset Formula $h$
+\end_inset
+
+ וקורא לו 
+\lang english
+hidden state
+\lang hebrew
+.
+ עבור המודל הספציפי שאנחנו מסתכלים עליו,
+ גודל המילון הוא 
+\begin_inset Formula $49,152$
+\end_inset
+
+ וגודל ה-
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הוא 
+\begin_inset Formula $2,048$
+\end_inset
+
+,
+ אז המטריצה של שלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+היא מסדר 
+\begin_inset Formula $49152\times2048$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+בשלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+עושים משהו מאוד דומה:
+ יש לנו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+hidden state
+\lang hebrew
+ 
+\begin_inset Formula $h$
+\end_inset
+
+ ואנחנו כופלים אותו במטריצה מסדר 
+\begin_inset Formula $2048\times49512$
+\end_inset
+
+ כדי לקבל בחזרה וקטור שהאורך שלו הוא כמספר הטוקנים;
+ כל כניסה שלו מכונה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+logit
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+והיא מין דירוג מספרי של כמה הטוקן הספציפי הזה רלוונטי אל ה-
+\lang english
+hidden state
+\lang hebrew
+.
+ במודל הספציפי שלנו המטריצה של שלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+היא אותה מטריצה כמו בשלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+(עד כדי ביצוע של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שחלוף שהופך כל שורה לעמודה וההפך).
+ בפוסט הקודם שיחקתי את המשחק של להפעיל את שלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ואז מייד להפעיל את שלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ולראות מה מקבלים;
+ מילה כמו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+cat
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+החזירה הרבה וריאציות על
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+cat
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+(למשל עם אותיות גדולות או רווח בהתחלה) וגם למשל את
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+feline
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שהיא מילה שונה ואפילו לא דומה בכלל בתור מחרוזת (אין לה אותיות משותפות עם
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+cat
+\lang hebrew
+) אבל מבחינת הסמנטיקה היא בוודאי מילה רלוונטית.
+ זה משכנע אותנו ששלבים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ו-
+\numeric on
+4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הם באמת תרגום טוב מ
+\begin_inset Quotes erd
+\end_inset
+
+עולם הטוקנים
+\begin_inset Quotes erd
+\end_inset
+
+ אל 
+\begin_inset Quotes eld
+\end_inset
+
+עולם הוקטורים
+\begin_inset Quotes erd
+\end_inset
+
+,
+ אבל מה שלא קורה כאן הוא מה ש-
+\lang english
+LLM
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אמור לעשות - להציע את 
+\series bold
+הטוקן הבא
+\series default
+ אחרי הטוקן הנוכחי,
+ בהתבסס על הטוקן הנוכחי אבל גם על ההיסטוריה של יתר הטוקנים עד כה.
+ את האפקט הקסום הזה משיגים על ידי חזרה שוב ושוב על שלבים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ו-
+\numeric on
+3
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+(במודל שלנו - חוזרים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+24
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+פעמים על השלבים הללו,
+ כל פעם עם פרמטרים אחרים),
+ אז בואו נבין בפוסט הזה מה קורה בהם.
+\end_layout
+
+\begin_layout Standard
+וכמיטב המסורת הלא לינארית,
+ בואו נתחיל דווקא עם שלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+3
+\numeric off
+,
+ שהוא פשוט יותר קונספטואלית.
+\end_layout
+
+\begin_layout Section
+מה קורה בשלב ה-
+\lang english
+MLP
+\lang hebrew
+?
+\end_layout
+
+\begin_layout Standard
+בגדול,
+ מאוד בגדול,
+ שלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הוא
+\end_layout
+
+\begin_layout Itemize
+מכפילים את 
+\begin_inset Formula $h$
+\end_inset
+
+ במטריצה ומקבלים וקטור ארוך יותר.
+\end_layout
+
+\begin_layout Itemize
+מפעילים על הוקטור הארוך יותר פונקציה לא לינארית.
+\end_layout
+
+\begin_layout Itemize
+מכפילים אותו במטריצה שמחזירה אותנו לאורך המקורי של 
+\begin_inset Formula $h$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+כלומר,
+ יש לנו שתי מטריצות 
+\begin_inset Formula $A,B$
+\end_inset
+
+ ופונקציה לא לינארית כלשהי 
+\begin_inset Formula $f$
+\end_inset
+
+,
+ ואנחנו מחשבים את 
+\begin_inset Formula $B\left(f\left(Ah\right)\right)$
+\end_inset
+
+.
+ הרעיון הוא ש-
+\begin_inset Formula $f$
+\end_inset
+
+ היא פונקציה ספציפית שבה משתמשים תמיד,
+ אבל 
+\begin_inset Formula $A,B$
+\end_inset
+
+ הן מטריצות שמורכבות מפרמטרים שמחושבים כחלק מתהליך האימון של המודל,
+ ושונים בין חזרות שונות של שלב ה-
+\lang english
+MLP
+\lang hebrew
+.
+\end_layout
+
+\begin_layout Standard
+כמובן,
+ נשאלת השאלה מה בעצם הרעיון בשלב הזה - מה 
+\series bold
+המשמעות
+\series default
+ של מה שעושים פה.
+ העניין הוא שאין לנו הסבר לזה - ליתר דיוק,
+ אין לנו הסבר פשוט שאני מבין,
+ כי בהחלט אפשר לחקור מודלים יותר לעומק ולחלץ הסברים על מה קורה בשלבים שונים שלהם,
+ אבל אני אפילו לא אנסה לעשות את זה כאן.
+ במקום זה אני אתן נפנופי ידיים שמיועדים לתת אינטואיציה,
+ אבל לא בהכרח תואמים את מה שקורה 
+\begin_inset Quotes eld
+\end_inset
+
+באמת
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+אז הנה אינטואיציה שכזו.
+ כשכופלים את 
+\begin_inset Formula $h$
+\end_inset
+
+ במטריצה,
+ אפשר לחשוב על זה כאילו אנחנו מחשבים הרבה פונקציות לינאריות על 
+\begin_inset Formula $h$
+\end_inset
+
+ שכל אחת מהן מחזירה ערך מספרי בודד (כל שורה של המטריצה מקודדת את החישוב של אחת הפונקציות הללו).
+ על כל פלט כזה אפשר לחשוב בתור 
+\begin_inset Quotes eld
+\end_inset
+
+פיצ'ר
+\begin_inset Quotes erd
+\end_inset
+
+ של 
+\begin_inset Formula $h$
+\end_inset
+
+ - ערך שמתאר אותו עבור תכונה ספציפית:
+ האם 
+\begin_inset Formula $h$
+\end_inset
+
+ הוא שם עצם?
+ האם הוא טורף?
+ האם הוא מילה גסה?
+ וכו' וכו'.
+ כלומר אנחנו מחלצים הרבה סוגי מידע שונים ומשונים על 
+\begin_inset Formula $h$
+\end_inset
+
+ לוקטור גדול יותר.
+ עכשיו אנחנו מפעילים את 
+\begin_inset Formula $f$
+\end_inset
+
+ על סוגי המידע הללו;
+ הרעיון פה הוא לחזק את מה שכבר חזק,
+ בצורה לא לינארית.
+ למה לא לינארית?
+ כי בשלב הבא אנחנו שוב כופלים במטריצה;
+ אם כל מה שהיינו עושים היה לכפול במטריצה וא לכפול בעוד מטריצה,
+ היה אפשר להחליף את שני השלבים הללו בשלב יחיד של כפל במטריצה (המכפלה של שתי המטריצות הללו),
+ כלומר הייתה לנו פחות אינפורמציה שיכולה לבוא לידי ביטוי.
+ המבנה הזה של 
+\begin_inset Quotes eld
+\end_inset
+
+מטריצה-לא לינארי-מטריצה
+\begin_inset Quotes erd
+\end_inset
+
+ מאפשר לנו ליצור טרנספורמציות עשירות יותר (זו אבחנה שהייתה מוכרת כבר זמן רב לפני שהיו טרנספורמרים).
+\end_layout
+
+\begin_layout Standard
+השלב הבא אוסף את פרטי המידע הבודדים ומנסה להחליט מה צריך להיות 
+\series bold
+הטוקן הבא
+\series default
+ על בסיס המידע הקיים.
+ אם למשל הפיצ'ר של 
+\begin_inset Quotes eld
+\end_inset
+
+פועל
+\begin_inset Quotes erd
+\end_inset
+
+ הוא עם ערך גבוה והפיצ'ר של 
+\begin_inset Quotes eld
+\end_inset
+
+אכילה
+\begin_inset Quotes erd
+\end_inset
+
+ הוא עם ערך גבוה,
+ אז השלב הבא יכול להחליט שמתאים פה אוכל,
+ ולכן הוקטור שהוא מייצר יהיה שייך לאיזור שבו נמצאים וקטורים של אוכל (בהנחה שהוקטורים של אוכל אכן קרובים אלו לאלו).
+ ושוב,
+ זה לא 
+\series bold
+באמת
+\series default
+ מה שקורה שם,
+ אבל זו אינטואיציה לא רעה.
+\end_layout
+
+\begin_layout Standard
+במודל הספציפי שלנו השלב הזה הוא טיפה יותר מורכב.
+ יש מטריצה שלישית מעורבת,
+ שהתפקיד שלה היא לשמש בתור מעין 
+\begin_inset Quotes eld
+\end_inset
+
+שער
+\begin_inset Quotes erd
+\end_inset
+
+ - להחליט על פיצ'רים מסויימים שאנחנו הולכים להתעלם מהם יותר ופחות,
+ בהתבסס על 
+\begin_inset Formula $h$
+\end_inset
+
+ המקורית.
+ בואו נקרא למטריצה הזו 
+\begin_inset Formula $C$
+\end_inset
+
+.
+ מה שעושים הוא:
+\end_layout
+
+\begin_layout Itemize
+מחשבים את 
+\begin_inset Formula $Ah$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+מחשבים את 
+\begin_inset Formula $Ch$
+\end_inset
+
+ ומקבלים את וקטור ה
+\begin_inset Quotes erd
+\end_inset
+
+שער
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+מפעילים את 
+\begin_inset Formula $f$
+\end_inset
+
+ על 
+\series bold
+השער
+\series default
+,
+ 
+\begin_inset Formula $f\left(Ch\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+ההפעלה של השער עצמו היא על ידי כפל נקודתי:
+ 
+\begin_inset Formula $\left(Ah\right)\odot\left(f\left(Ch\right)\right)$
+\end_inset
+
+,
+ כלומר כופלים כל זוג כניסות באותו מקום בשני הוקטורים.
+\end_layout
+
+\begin_layout Itemize
+את כל זה כופלים ב-
+\begin_inset Formula $B$
+\end_inset
+
+ כדי לחזור לוקטור בגודל ה-
+\lang english
+hidden state
+\end_layout
+
+\begin_layout Standard
+עכשיו אפשר לתת לדברים את השמות שיש להם במודל עצמו.
+ המטריצה 
+\begin_inset Formula $A$
+\end_inset
+
+ נקראת 
+\begin_inset Formula $W_{up}$
+\end_inset
+
+ (כי היא 
+\begin_inset Quotes eld
+\end_inset
+
+מרימה
+\begin_inset Quotes erd
+\end_inset
+
+ את ה-
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אל רמת ה
+\begin_inset Quotes erd
+\end_inset
+
+פיצ'רים
+\begin_inset Quotes erd
+\end_inset
+
+).
+ המטריצה 
+\begin_inset Formula $C$
+\end_inset
+
+ נקראת 
+\begin_inset Formula $W_{gate}$
+\end_inset
+
+ ואילו 
+\begin_inset Formula $B$
+\end_inset
+
+ נקראת 
+\begin_inset Formula $W_{down}$
+\end_inset
+
+.
+ הפונקציה 
+\begin_inset Formula $f$
+\end_inset
+
+ נקראת 
+\begin_inset Formula $\text{SiLU}$
+\end_inset
+
+,
+ ולכן הפעולה הכוללת ששלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מבצע הוא
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\text{MLP}\left(h\right)=W_{down}\left[\text{SiLU}\left(W_{gate}h\right)\odot W_{up}h\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+מה זו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+SiLU
+\lang hebrew
+?
+ ה-
+\lang english
+Si
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ מגיע מ-
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Sigmoid
+\lang hebrew
+,
+ שזה שם כללי לפונקציות עם גרף דמוי האות 
+\begin_inset Formula $S$
+\end_inset
+
+,
+ וה-
+\lang english
+LU
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אומר
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Linear Unit
+\lang hebrew
+.
+ הרעיון הוא שלוקחים את הפונקציה הלינארית הפשוטה 
+\begin_inset Formula $f\left(x\right)=x$
+\end_inset
+
+ ומוסיפים לה כפל בפקטור של פונקציה לא לינארית,
+ במקרה הזה הפונקציה 
+\begin_inset Formula $\frac{1}{1+e^{-x}}$
+\end_inset
+
+ (זו פונקציה שכאשר 
+\begin_inset Formula $x=0$
+\end_inset
+
+ היא בדיוק
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+,
+ כאשר 
+\begin_inset Formula $x$
+\end_inset
+
+ שואף לאינסוף היא בדיוק
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+וכשהוא שואף למינוס אינסוף היא בדיוק
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+0
+\numeric off
+).
+ כלומר בסך הכל
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\text{SiLU}\left(x\right)=\frac{x}{1+e^{-x}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+זהו,
+ זה כל התיאור של השלב הזה!
+ ה
+\begin_inset Quotes erd
+\end_inset
+
+מוח
+\begin_inset Quotes erd
+\end_inset
+
+ האמיתי שלו הוא שלוש המטריצות 
+\begin_inset Formula $W_{up},W_{down},W_{gate}$
+\end_inset
+
+.
+ מה הגודל שלהן?
+ מימד אחד שלהן צריך להיות 
+\begin_inset Formula $2048$
+\end_inset
+
+,
+ כגודל ה-
+\lang english
+hidden state
+\lang hebrew
+,
+ אבל יש למודל חופש לבחור את המימד השני;
+ במודל הספציפי שלנו זה 
+\begin_inset Formula $8192$
+\end_inset
+
+ (כלומר,
+ גדול פי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מה-
+\lang english
+hidden state
+\lang hebrew
+).
+ זה אומר ש-
+\begin_inset Formula $W_{up},W_{gate}$
+\end_inset
+
+ שתיהן ממימד 
+\begin_inset Formula $8192\times2048$
+\end_inset
+
+ ואילו 
+\begin_inset Formula $W_{down}$
+\end_inset
+
+ ממימד 
+\begin_inset Formula $2048\times8192$
+\end_inset
+
+.
+ בכל שלושת המקרים,
+ מספר הפרמטרים שלהן הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+16,777,216
+\numeric off
+,
+ כך שיוצא שכל שלב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+משתמש בערך 
+\series bold
+בחמישים מיליון
+\series default
+ פרמטרים.
+ זה לא מעט!
+ שלב התרגום של טוקן לוקטור דרש בערך מאה מיליון פרמטרים,
+ אבל אצלנו שלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+לא קורה פעם אחת אלא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+24
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+פעמים,
+ ובכל פעם עם פרמטרים שונים,
+ כך שבסך הכל יש לנו בפעולה
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1.2
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מיליארד פרמטרים!
+ כזכור,
+ המודל שלנו נקרא 
+\lang english
+SmolLM2-1.7B-Instruct
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+,
+ כשה-
+\numeric on
+1.7
+\numeric off
+\lang english
+B
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שם אומר 
+\begin_inset Quotes eld
+\end_inset
+
+בערך
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1.7
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מיליארד פרמטרים
+\begin_inset Quotes erd
+\end_inset
+
+.
+ זה עתה ראינו שרובם המוחץ נמצא בשלב ה-
+\lang english
+MLP
+\lang hebrew
+.
+ איפה היתר שטרם דיברנו עליהם נמצאים?
+ בשלב ה-
+\lang english
+Attention
+\lang hebrew
+,
+ אז בואו נדבר על השלב הזה...
+ רגע רגע רגע,
+ עוד לא סיימנו.
+ עדיין צריך לדבר על משהו שלא נחשב בדיוק חלק משלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+אבל מגיע מייד לפניו ואחריו,
+ אחרת לא באמת נבין עד הסוף מה קורה פה.
+\end_layout
+
+\begin_layout Standard
+ראשית,
+ התוצר של שלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+לא הופך להיות ה-
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+החדש שלנו - הוא מתווסף אליו.
+ כלומר,
+ אנחנו מבצעים
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $h\leftarrow h+\text{MLP}\left(h\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+כשהחיבור הוא נקודתי,
+ רכיב-רכיב.
+ אינטואיטיבית אפשר לחשוב על זה כאילו שלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+לא צריך להטריח את עצמו בשימור המידע של המצב המקורי,
+ אלא רק לחשוב באילו דרכים צריך 
+\begin_inset Quotes eld
+\end_inset
+
+לתקן
+\begin_inset Quotes erd
+\end_inset
+
+ אותו.
+\end_layout
+
+\begin_layout Standard
+שנית,
+ בואו נעשה ניסוי קטן.
+ אני מקודד את 
+\begin_inset Quotes eld
+\end_inset
+
+
+\lang english
+cat
+\lang hebrew
+
+\begin_inset Quotes erd
+\end_inset
+
+ בתור וקטור ומדפיס אותו.
+ ההתחלה היא 
+\begin_inset Formula $\left[0.0845,0.0258,0.0012,\ldots\right]$
+\end_inset
+
+.
+ אוקיי,
+ נחמד.
+ עכשיו אני מפעיל את שלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ פעם אחת,
+ כולל החיבור בסוף;
+ אני מקבל 
+\begin_inset Formula $\left[-0.2773,1.5938,-0.8242,\ldots\right]$
+\end_inset
+
+ שזה שונה אבל אוקיי,
+ סבבה,
+ אני אמור לקבל משהו שונה.
+ עכשיו אני מפעיל את שלב ה-
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שוב ומקבל 
+\begin_inset Formula $\left[158.,306.,-220,\ldots\right]$
+\end_inset
+
+ וזה...
+ קצת מוזר.
+ קודם היו לי מספרים קטנים,
+ עכשיו פתאום המספרים הם מסדר גודל של מאה.
+ מה הולך פה?
+ אחרי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+6
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שלבים אני מקבל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+NaN
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בכל הכניסות - מה שקרה הוא שהמספרים התנפחו יותר מדי,
+ מעבר לגודל הייצוג של מספרי נקודה צפה שפייתון יודע להתמודד איתם.
+\end_layout
+
+\begin_layout Standard
+זה לא דבר מפתיע בשום צורה.
+ זה קורה באופן כללי באלגברה לינארית - טרנספורמציות לינאריות שרירותיות יכולות 
+\begin_inset Quotes eld
+\end_inset
+
+להגדיל
+\begin_inset Quotes erd
+\end_inset
+
+ את הוקטור.
+ יש לנו מושג קונקרטי של 
+\series bold
+נורמה
+\series default
+ כדי לתאר את זה - גם של וקטור וגם של הטרנספורמציה עצמה.
+ יש מחלקה שלמה של טרנספורמציות שמשמרות נורמה - טרנספורמציות 
+\series bold
+אוניטריות
+\series default
+,
+ שמשחקות תפקיד חשוב בחישוב קוונטי,
+ ובגלל שאני מתעסק עם חישוב קוונטי ביומיום אני כבר רגיל לכך שאפשר לפעול על וקטור שוב ושוב ושוב והוא יישאר נחמד - אבל אצלנו זה לא המצב.
+ אז מה עושים?
+ 
+\series bold
+מנרמלים
+\series default
+.
+ עושים משהו על הוקטור כדי להקטין את הכניסות שלו מבלי לפגום ב
+\begin_inset Quotes erd
+\end_inset
+
+משמעות
+\begin_inset Quotes erd
+\end_inset
+
+ שאנחנו מייחסים לו.
+ יש כל מני דרכים לעשות את זה,
+ ובדרך שבה משתמשים כאן לא סתם מפעילים על הוקטור פונקצייה קונקרטית כדי לנרמל אותו - משתמשים בפונקציה שתלויה 
+\series bold
+בפרמטרים
+\series default
+ שהמודל לומד.
+ זה משהו שעדיין לא סיפרתי עליו - אמרתי שהמודל לומד פרמטרים בשביל התרגום הראשוני מ-
+\lang english
+token
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+והחזרה אל מרחב ה-
+\lang english
+token
+\lang hebrew
+-ים בסיום,
+ והוא לומד פרמטרים לשלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+והוא לומד פרמטרים גם לשלב ה-
+\lang english
+Attention
+\lang hebrew
+;
+ אבל בנוסף לכך,
+ וזה כבר ממצה סופית את רשימת הפרמטרים,
+ הוא לומד (יחסית מעט מאוד) פרמטרים עבור שלבי הנרמול שמופעלים גם לפני
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+וגם לפני
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Attention
+\lang hebrew
+.
+ כפי שאנחנו רואים עכשיו,
+ אלו אולי שלבים 
+\begin_inset Quotes eld
+\end_inset
+
+קטנים
+\begin_inset Quotes erd
+\end_inset
+
+ אבל הם קריטיים;
+ בלעדיהם המודל לא יעבוד.
+\end_layout
+
+\begin_layout Standard
+הפונקציה של הנירמול שבה משתמש המודל שלנו נקראת 
+\lang english
+RMSNorm
+\lang hebrew
+,
+ קיצור של 
+\lang english
+Root Mean Square Normalization
+\lang hebrew
+.
+ זה הולך ככה:
+ יש לנו וקטור 
+\begin_inset Formula $x=\left(x_{1},x_{2},\ldots,x_{N}\right)$
+\end_inset
+
+ של מספרים ממשיים,
+ אז קודם כל נחשב את 
+\series bold
+הממוצע החשבוני
+\series default
+ של סדרת 
+\series bold
+הריבועים
+\series default
+ של אברי הוקטור,
+ כלומר נחשב
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $m=\frac{1}{N}\sum^{N}_{i=1}x^{2}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ועכשיו נוציא שורש לדבר הזה ונחלק בו את הוקטור המקורי - אבל בעצם,
+ לא,
+ זהירות.
+ ה-
+\begin_inset Formula $m$
+\end_inset
+
+ הזה עשוי להיות קרוב לאפס (אם כי אני מודה שזה לא נראה לי הכי סביר שזה יקרה) ואז חלוקה בו תגרום לתוצאה שלנו 
+\begin_inset Quotes eld
+\end_inset
+
+להתפוצץ
+\begin_inset Quotes erd
+\end_inset
+
+.
+ כדי למנוע את זה מרחיקים אותו מאפס על ידי הוספה של 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ קטן כלשהו - במודל שלנו זה 
+\begin_inset Formula $\varepsilon=10^{-5}$
+\end_inset
+
+.
+ כלומר,
+ החישוב מבצע
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x\leftarrow\frac{x}{\sqrt{m+\varepsilon}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אבל לא סיימנו - בשלב הזה אנחנו לוקחים וקטור של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\begin_inset Formula $N$
+\end_inset
+
+ פרמטרים וכופלים אותו רכיב-רכיב ב-
+\begin_inset Formula $x$
+\end_inset
+
+;
+ זה שלב הנירמול הסופי שתלוי בפרמטרים שהזכרתי.
+ פורמלית,
+ לכל 
+\begin_inset Formula $1\le i\le N$
+\end_inset
+
+,
+ מה שעשינו הוא לחשב את
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x_{i}\leftarrow\frac{\gamma_{i}x_{i}}{\sqrt{\frac{1}{N}\sum^{N}_{j=1}x^{2}_{j}+\varepsilon}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ואצלנו 
+\begin_inset Formula $N=2048$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+עכשיו אפשר לעשות את חשבון הפרמטרים:
+ כל נרמול משתמש ב-
+\numeric on
+2048
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+פרמטרים.
+ יש שני שלבי נירמול בכל סיבוב ויש
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+24
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+סיבובים.
+ בנוסף לכך,
+ ממש לפני התרגום ל-
+\lang english
+logits
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בסוף עושים נרמול אחד אחרון.
+ בסך הכל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+49
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+נרמולים,
+ כל אחד עם סט הפרמטרים שלו - בסך הכל בערך מאה אלף פרמטרים שזה...
+ כמעט כלום.
+ ראינו שמטריצה 
+\series bold
+אחת
+\series default
+ של שלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+היא כבר עם סביבות ה-
+\numeric on
+16
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מיליון פרמטרים,
+ כך שבספירת הפרמטרים הכוללת הנירמול כמעט ולא משפיע.
+\end_layout
+
+\begin_layout Standard
+עכשיו באמת אפשר לעבור לדבר על שלב ה-
+\lang english
+Attention
+\lang hebrew
+,
+ קיוויתי שאפשר יהיה אולי לעשות ניסוי נחמד ולהריץ את המודל 
+\series bold
+בלי
+\series default
+ השלב הזה,
+ אבל התוצאות שאני מקבל נראות כמו ג'יבריש וזה לא מפתיע כי גם המודל עצמו לא אמור לתת תוצאה טובה על 
+\begin_inset Quotes eld
+\end_inset
+
+
+\lang english
+cat
+\lang hebrew
+
+\begin_inset Quotes erd
+\end_inset
+
+ לבדו (הרי יש פורמט שלם של פנייה אליו,
+ כבר דיברתי על זה) אבל גם כי שלבי ה-
+\lang english
+Attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+משנים את ה-
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בצורה שאי אפשר סתם להחליק.
+ אז נוותר על הניסוי הזה כאן.
+\end_layout
+
+\begin_layout Section
+מה קורה בשלב ה-
+\lang english
+Attention
+\lang hebrew
+?
+\end_layout
+
+\begin_layout Standard
+כאן אנחנו מגיעים לחלק המעניין ביותר של המודל - אבל לא לדאוג,
+ זה לא חלק מסובך במיוחד,
+ והפשטות שלו היא חלק מהיופי.
+\end_layout
+
+\begin_layout Standard
+ראשית,
+ מה המטרה של השלב הזה?
+ אם נשים לב,
+ כל מה שעשינו עד עכשיו התמקד בכולו ברמת ה-
+\lang english
+token
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הבודד.
+ הפכנו אותו ל-
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ובשלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+פעלנו על
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בודד.
+ לא הייתה שום התייחסות לכך שהמודל לא עובד על טוקן בודד אלא על 
+\series bold
+רצף
+\series default
+ של טוקנים כאלו,
+ שנותן קונטקסט קריטי.
+ התשובה לשאלה 
+\begin_inset Quotes eld
+\end_inset
+
+האם החיה החמודה בעולם היא חתול?
+\begin_inset Quotes erd
+\end_inset
+
+ תהיה שונה מהתשובה לשאלה 
+\begin_inset Quotes eld
+\end_inset
+
+האם החיה הגדולה בעולם היא חתול?
+\begin_inset Quotes erd
+\end_inset
+
+ למרות שבשני המקרים בסופו של דבר המודל יפעל על ה-
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שנוצר מתוך 
+\begin_inset Quotes eld
+\end_inset
+
+חתול
+\begin_inset Quotes erd
+\end_inset
+
+.
+ אנחנו 
+\series bold
+חייבים
+\series default
+ שה-
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שאנחנו פועלים עליו בשלב ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+יכיל עוד מידע שאפשר לעבוד איתו על 
+\begin_inset Quotes eld
+\end_inset
+
+מה היה קודם
+\begin_inset Quotes erd
+\end_inset
+
+ - בלי זה ברור ששום דבר לא יעבוד.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "בפוסט המבוא שלי לנושא"
+target "https://gadial.net/2026/08/29/large_language_models/"
+literal "false"
+
+\end_inset
+
+ הסברתי מה בגדול קורה בשלב הזה ולמהת אבל עכשיו כשניכנס לפרטים נראה שזה טיפה יותר מסובך מזה.
+\end_layout
+
+\begin_layout Standard
+הרעיון הבסיסי היה ונשאר כזה:
+ מכיוון שאנחנו מתחילים עם סדרה של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+token
+\lang hebrew
+-ים,
+ בשלב שאליו אנחנו מגיעים נוצרה מהם סדרה של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+hidden states
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שאני אסמן ב-
+\begin_inset Formula $h_{1},h_{2},h_{3},\ldots,h_{N}$
+\end_inset
+
+.
+ שימו לב שה-
+\begin_inset Formula $N$
+\end_inset
+
+ הזה הוא 
+\series bold
+לא
+\series default
+ מספר שקשור למודל עצמו,
+ כמו ה-
+\numeric on
+2048
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שהוא הגודל של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+או ה-
+\begin_inset Formula $49512$
+\end_inset
+
+ שהוא גודל המילון.
+ זה מספר שמתאר את כמות הטוקנים שהמודל מתייחס אליהם - מה שנמצא ב
+\begin_inset Quotes erd
+\end_inset
+
+קונטקסט
+\begin_inset Quotes erd
+\end_inset
+
+ שלו.
+ מודלים צריכים להגביל את גודל הקונטקסט שלהם ועוד מעט גם נבין למה,
+ אבל 
+\begin_inset Formula $N$
+\end_inset
+
+ יכול להיות גם נמוך בהרבה מההגבלה הזו.
+ אני כנראה בהמשך אתייחס בטעות הרבה אל ה-
+\lang english
+hidden states
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הללו בתור 
+\begin_inset Quotes eld
+\end_inset
+
+טוקנים
+\begin_inset Quotes erd
+\end_inset
+
+ - תסלחו לי,
+ אתם מבינים את הכוונה.
+\end_layout
+
+\begin_layout Standard
+עכשיו,
+ בשלב ה-
+\lang english
+attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שבו אנחנו נמצאים,
+ יש שלוש מטריצות,
+ כל אחת עם
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2048
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ עמודות ומספר שורות שנתון לבחירת המודל שלנו ובינתיים בשביל הכלליות אני אסמן אותו ב-
+\begin_inset Formula $d$
+\end_inset
+
+.
+ המטריצות הן
+\end_layout
+
+\begin_layout Itemize
+מטריצת השאילתא (
+\lang english
+query
+\lang hebrew
+),
+ 
+\begin_inset Formula $W_{Q}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+מטריצת המפתח (
+\lang english
+key
+\lang hebrew
+),
+ 
+\begin_inset Formula $W_{K}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+מטריצת הערך (
+\lang english
+value
+\lang hebrew
+),
+ 
+\begin_inset Formula $W_{V}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+ניקח
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+כלשהו,
+ 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+,
+ נכפול אותו בשלוש המטריצות ונקבל שלושה וקטורים מאורך 
+\begin_inset Formula $d$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $q_{i}=W_{Q}h_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $k_{i}=W_{K}h_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $v_{i}=W_{V}h_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+השאילתא 
+\begin_inset Formula $q_{i}$
+\end_inset
+
+ היא הדרך של 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ לשאול 
+\begin_inset Formula $h_{j}$
+\end_inset
+
+-ים אחרים - 
+\begin_inset Quotes eld
+\end_inset
+
+עד כמה המידע שיש בכם רלוונטי למה שאני צריך?
+\begin_inset Quotes erd
+\end_inset
+
+.
+ המפתח 
+\begin_inset Formula $k_{i}$
+\end_inset
+
+ הוא הדרך של 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ 
+\series bold
+לענות
+\series default
+ לשאילתא הזו כשאחרים שואלים אותה.
+ הערך 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ הוא המידע ש-
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ נותן לאחרים כשהתשובה שלו לשאילתא שלהם מוצאת חן בעיניהם.
+ כל זו כמובן אינטואיציה שאין לה משמעות אמיתית;
+ יש משמעות אמיתית לחישוב שעושים בפועל,
+ שהוא לחשב את 
+\series bold
+המכפלה הסקלרית
+\series default
+ 
+\begin_inset Formula $q_{i}\cdot k_{j}$
+\end_inset
+
+ ולהשתמש בסקלר שמתקבל ממנו בתור 
+\series bold
+המקדם
+\series default
+ של 
+\begin_inset Formula $v_{j}$
+\end_inset
+
+.
+ פורמלית,
+ עבור המצב 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+,
+ אנחנו בונים את הערך
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sum^{N}_{j=1}\left(q_{i}\cdot k_{j}\right)v_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+והערך הזה הוא הפלט של שלב ה-
+\lang english
+attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+עבור 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+.
+ את הפלט הזה 
+\series bold
+מחברים
+\series default
+ אל 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+,
+ בדיוק כמו שעשינו בסוף שלב ה-
+\lang english
+MLP
+\lang hebrew
+.
+ ולפני שהשלב מתחיל,
+ מנרמלים עם 
+\lang english
+RMSNorm
+\lang hebrew
+,
+ כמו בשלב ה-
+\lang english
+MLP
+\lang hebrew
+.
+ אז האם סיימנו?
+ וואו,
+ ממש לא,
+ כמה שחיפפתי בפרטים.
+ בואו נתחיל לסבך.
+\end_layout
+
+\begin_layout Standard
+ראשית,
+ משהו שכבר הזכרתי בפוסט המקורי:
+ אנחנו לא באמת משתמשים ב-
+\begin_inset Formula $q_{i}\cdot k_{j}$
+\end_inset
+
+ בתור המקדמים של ה-
+\begin_inset Formula $v_{j}$
+\end_inset
+
+-ים.
+ אנחנו מבצעים לערכים הללו 
+\series bold
+נירמול
+\series default
+ שהופך אותם להתפלגות של הסתברות,
+ כלומר לסדרת ערכים 
+\begin_inset Formula $p_{1},\ldots,p_{N}$
+\end_inset
+
+ שכולם אי שליליים והסכום שלהם הוא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1
+\numeric off
+,
+ ואת זה עושים בעזרת פעולה שנקראת
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+softmax
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שהולכת ככה:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\text{softmax}\left(z_{1},\ldots,z_{N},i\right)=p_{i}=\frac{e^{z_{i}}}{\sum^{N}_{j=1}e^{z_{j}}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+עניין רלוונטי אחר הוא שטרנספורמרים בנויים כך ש-
+\lang english
+Attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מתבסס תמיד על מה שהיה 
+\series bold
+לפני
+\series default
+ הטוקן שלנו בקלט,
+ לא על מה שיש 
+\series bold
+אחריו
+\series default
+.
+ ממה שאחריו צריך פשוט להתעלם.
+ למה,
+ בעצם?
+ הרי בוודאי יכול להיות שם מידע רלוונטי;
+ אבל העניין הוא שהמודל בנוי כדי לייצר טקסטים ארוכים בשיטת 
+\begin_inset Quotes eld
+\end_inset
+
+טוקן אחרי טוקן
+\begin_inset Quotes erd
+\end_inset
+
+ - מייצרים טוקן חדש,
+ מוסיפים אותו לסדרה הקיימת,
+ ואז מייצרים את הטוקן הבא - כלומר,
+ למעט השלב ההתחלתי שבו המודל מעבד את הטקסט הראשוני שהוא קיבל,
+ רוב הזמן 
+\series bold
+לא יהיו
+\series default
+ לו טוקנים עתידיים להתבסס עליהם ממילא.
+ זה לא אומר,
+ כמובן,
+ ש
+\begin_inset Quotes erd
+\end_inset
+
+אסור
+\begin_inset Quotes erd
+\end_inset
+
+ לעשות דברים כאלו - אבל זה פשוט איך שהמודל שלנו עובד,
+ והוא די מייצג בקטע הזה.
+\end_layout
+
+\begin_layout Standard
+אם כן,
+ דה פקטו מה שעושים,
+ כשבאים לחשב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ל-
+\begin_inset Formula $h_{i}$
+\end_inset
+
+,
+ זה פשוט להתעלם מכל ה-
+\begin_inset Formula $j>i$
+\end_inset
+
+-ים במסגרת החישובים.
+\end_layout
+
+\begin_layout Standard
+את כל זה הזכרתי כבר בפוסט המקורי.
+ עכשיו בואו נדבר על שני סיבוכים אחרים שלא הזכרתי.
+\end_layout
+
+\begin_layout Standard
+ראשית,
+ אם נסתכל על מה שקורה כרגע בחישוב
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Attention
+\lang hebrew
+,
+ נראה שהדבר היחיד שמעניין טוקן בנוגע ל
+\series bold
+מיקום
+\series default
+ של טוקנים אחרים זה אם הם אחריו (ואז הוא מתעלם מהם) או לפניו (ואז הוא מתייחס לכולם באותו האופן).
+ אין חשיבות נוספת למיקום שלהם,
+ אבל זה מן הסתם רלוונטי.
+ במשפט 
+\begin_inset Quotes eld
+\end_inset
+
+הבוקר היה יפה למרות הכיעור של החתול
+\begin_inset Quotes erd
+\end_inset
+
+ יש בדיוק אותן מילים כמו 
+\begin_inset Quotes eld
+\end_inset
+
+למרות הכיעור של הבוקר היה יפה החתול
+\begin_inset Quotes erd
+\end_inset
+
+,
+ אבל מבחינת 
+\begin_inset Quotes eld
+\end_inset
+
+החתול
+\begin_inset Quotes erd
+\end_inset
+
+ המשפטים כמובן שונים מאוד - אחד משמיץ את החתול ואחד מהלל אותו.
+ כש
+\begin_inset Quotes erd
+\end_inset
+
+יפה
+\begin_inset Quotes erd
+\end_inset
+
+ יותר קרוב לחתול,
+ המשפט מהלל אותו;
+ כש
+\begin_inset Quotes erd
+\end_inset
+
+יפה
+\begin_inset Quotes erd
+\end_inset
+
+ רחוק יותר ודווקא 
+\begin_inset Quotes eld
+\end_inset
+
+הכיעור
+\begin_inset Quotes erd
+\end_inset
+
+ קרוב,
+ המשפט מבזה אותו.
+ אבל מה שהצגנו עד כה לא יודע להבדיל בין שני המשפטים בכלל,
+ מנקודת מבטו של החתול.
+ אז מה עושים?
+ משנים קצת את וקטורי המפתח והשאילתא של כל טוקן בהתאם למיקום שלו במשפט.
+ הטריק הזה לא היה במאמר המקורי של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Attention is All You Need
+\lang hebrew
+;
+ הוא שיפור שהגיע אחר כך.
+\end_layout
+
+\begin_layout Standard
+השיטה שבה המודל שלנו משתמש נקראת 
+\lang english
+RoPE
+\lang hebrew
+,
+ קיצור של 
+\lang english
+Rotary Positional Embeddings
+\lang hebrew
+.
+ הרעיון הבסיסי הוא פשוט:
+ בואו נחלק את הוקטור שאנחנו רוצים להתעלל בו לאוסף של 
+\series bold
+זוגות
+\series default
+,
+ כלומר אוסף של וקטורים דו ממדיים.
+ ומה שנחמד בוקטורים דו ממדיים הוא שאנחנו יודעים איך 
+\series bold
+לסובב
+\series default
+ אותם:
+ כופלים אותם במטריצה
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(\begin{array}{cc}
+\cos\alpha & -\sin\alpha\\
+\sin\alpha & \cos\alpha
+\end{array}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אז מה שעושים הוא לקחת זוגות-זוגות של איברים מהוקטורים שמעניינים אותנו,
+ לבחור זוויות ספציפיות שתלויות במיקום של האיברים הללו,
+ ולהפעיל את הסיבובים המתאימים.
+ נראה את הפורמליזם של זה עוד מעט,
+ אחרי שנראה את הסיבוך הבא,
+ העיקרי.
+\end_layout
+
+\begin_layout Standard
+הסיבוך הזה הוא שאנחנו לא מבצעים חישוב 
+\lang english
+Attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ בודד,
+ אלא קונספטואלית מבצעים 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+32
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+חישובי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+נפרדים,
+ קטנים יותר,
+ ואז משלבים איכשהו את התוצאות שלהם - זה מה שנקרא
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Multi-head attention
+\lang hebrew
+.
+ תחשבו על זה ככה:
+ במקום שתהיה לנו שאילתא 
+\begin_inset Formula $q_{i}=W_{Q}h_{i}$
+\end_inset
+
+ בודדת,
+ יש לנו סדרה 
+\begin_inset Formula $q^{1}_{i},q^{2}_{i},\ldots,q^{32}_{i}$
+\end_inset
+
+ של שאילתות;
+ אם במקור 
+\begin_inset Formula $q_{i}$
+\end_inset
+
+ היה וקטור מגודל 
+\begin_inset Formula $d$
+\end_inset
+
+,
+ אז עכשיו כל 
+\begin_inset Formula $q^{r}_{i}$
+\end_inset
+
+יהיה מגודל 
+\begin_inset Formula $\frac{d}{32}$
+\end_inset
+
+.
+ מעשית כל מה שזה אומר הוא שמבצעים את החישוב 
+\begin_inset Formula $q_{i}=W_{Q}h_{i}$
+\end_inset
+
+ שתיארתי קודם,
+ אבל מחלקים את 
+\begin_inset Formula $q_{i}$
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+לחלקים
+\begin_inset Quotes erd
+\end_inset
+
+.
+ במודל שלנו 
+\begin_inset Formula $T=2048$
+\end_inset
+
+ ולכן הגודל של כל שאילתא הוא 
+\begin_inset Formula $64$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+את אותו הדבר בדיוק עושים גם עבור המפתח:
+ מחשבים את 
+\begin_inset Formula $k_{i}=W_{K}h_{i}$
+\end_inset
+
+ ומחלקים אותו ל-
+\numeric on
+32
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+חלקים.
+ וכך גם עבור הערך 
+\begin_inset Formula $v_{i}=W_{V}h_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+אז מה ההבדל?
+ ההבדל הוא בשלב שבו מרכיבים את הערך החדש.
+\end_layout
+
+\begin_layout Standard
+קודם אמרנו:
+ נניח שאנחנו טוקן 
+\begin_inset Formula $i$
+\end_inset
+
+ ועכשיו רוצים לראות מה טוקן 
+\begin_inset Formula $j$
+\end_inset
+
+ תורם לנו.
+ אז נחשב את 
+\begin_inset Formula $q_{i}\cdot k_{j}$
+\end_inset
+
+ לכל 
+\begin_inset Formula $j$
+\end_inset
+
+ כזה,
+ ואז נפעיל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+softmax
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+על כולם ונקבל את המקדמים של ה-
+\begin_inset Formula $v_{j}$
+\end_inset
+
+-ים.
+\end_layout
+
+\begin_layout Standard
+עכשיו אנחנו אומרים:
+ עבור הראש ה-
+\begin_inset Formula $r$
+\end_inset
+
+,
+ נחשב את כל ה-
+\begin_inset Formula $q^{r}_{i}\cdot k^{r}_{j}$
+\end_inset
+
+-ים לכל 
+\begin_inset Formula $j$
+\end_inset
+
+ ונפעיל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+softmax
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+על כולם ונקבל את המקדמים של ה-
+\begin_inset Formula $v^{r}_{j}$
+\end_inset
+
+-ים.
+\end_layout
+
+\begin_layout Standard
+כלומר:
+ אנחנו כבר לא מחשבים מכפלה סקלרית בודדת אחת לכל אחד מ-
+\begin_inset Formula $j$
+\end_inset
+
+ ה-
+\lang english
+tokens
+\lang hebrew
+;
+ אנחנו מחשבים
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+32
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מכפלות כאלו (על וקטורים קטנים יותר) ומנרמלים אותן בנפרד.
+ בסיטואציה המקורית,
+ כל 
+\begin_inset Formula $v_{j}$
+\end_inset
+
+ היה משתתף בפלט הסופי באופן שמוכתב על ידי 
+\series bold
+מקדם יחיד
+\series default
+ ואילו עכשיו 
+\begin_inset Formula $v_{j}$
+\end_inset
+
+ מחולק לחלקים וכל חלק בנפרד משתתף בצורה שונה.
+ די ברור שהגישה הזו נותנת אקסטרה גמישות שהמודל יכול לנצל.
+\end_layout
+
+\begin_layout Standard
+עוד דבר שלא אמרתי במפורש הפעם הוא שלא סתם מבצעים מכפלה פנימית;
+ כדי למנוע מהערכים להתנפח מדי,
+ מנרמלים אותה על ידי חלוקה בשורש של אורך הוקטור,
+ מה שבפוסט המקורי סימנתי ב-
+\begin_inset Formula $\sqrt{d}$
+\end_inset
+
+.
+ כאן זה טיפה יותר טריקי כי כאמור,
+ מטפלים בכל ראש בנפרד והגודל של כל ראש הוא קטן יותר;
+ הוא מאורך
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+64
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ולכן מנרמלים על ידי חלוקה ב-
+\begin_inset Formula $\sqrt{64}=8$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+ועכשיו אפשר גם לחזור אל איך 
+\lang english
+RoPE
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+עובד:
+ הוא עובד על כל וקטור מאורך
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+64
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בנפרד.
+ הוא מחלק את הוקטור לשני חצאים ואת הכניסות מזווג על פי החצאים (הראשונים בשני החצאים;
+ השניים בשני החצאים וכו').
+ עכשיו כל זוג מאופיין על ידי שני פרמטרים:
+ האינדקס 
+\begin_inset Formula $j$
+\end_inset
+
+ של הטוקן ברשימת הטוקנים (זה מספר שיכול להיות גדול למדי),
+ והאינדקס 
+\begin_inset Formula $t$
+\end_inset
+
+ של הזוג ברשימת הזוגות של הוקטור (מספר שרץ מ-
+\numeric on
+0
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+עד
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+31
+\numeric off
+).
+ במודל שלנו,
+ הזווית שמתאימה לזוג הזה היא
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\alpha_{j,t}=\frac{j}{130000^{2t/64}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+אינטואיטיבי בסך הכל!
+\end_layout
+
+\begin_layout Standard
+נשאר רק דבר אחד שטרם תיארתי:
+ הסיום.
+ אחרי שמקבלים מכל ראש
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בנפרד וקטור מאורך
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+64
+\numeric off
+,
+ משרשרים את כולם ומקבלים וקטור מאורך
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2048
+\numeric off
+,
+ ואז,
+ פורמלית,
+ כופלים אותו בעוד מטריצה עם פרמטרים נלמדים - מטריצה שטרם הזכרתי עד כה שנקראת ה-
+\lang english
+output projection
+\lang hebrew
+.
+ למה?
+ ובכן,
+ זה מעביר אותנו שוב מרמת הפורמליזם לרמת האינטואיציות ונפנופי הידיים:
+ מה שקרה הוא שלפני הכפל במטריצה הזו היו לנו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+32
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+וקטורים נפרדים ש
+\begin_inset Quotes erd
+\end_inset
+
+לא קשורים אחד לשני
+\begin_inset Quotes erd
+\end_inset
+
+ במובן מסוים,
+ אבל אנחנו רוצים לאפשר למידע הרלוונטי מכולם להתערבל יחד כדי לקבל וקטור יחיד מאורך
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+2048
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שמייצג את השילוב של כל המידע.
+ אנחנו לא יודעים איך נכון לעשות את זה,
+ אז אנחנו נותנים למודל ללמוד את זה בעצמו,
+ במחיר של עוד מטריצה עתירת פרמטרים,
+ במקרה הזה 
+\begin_inset Formula $2048^{2}$
+\end_inset
+
+,
+ בדיוק כמו שלוש המטריצות האחרות שמעורבות בשלב הזה.
+\end_layout
+
+\begin_layout Standard
+זה מעביר אותנו לשלב 
+\begin_inset Quotes eld
+\end_inset
+
+ספירת הפרמטרים
+\begin_inset Quotes erd
+\end_inset
+
+,
+ שהוא למעשה די פשוט:
+ יש לנו כאמור
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+4
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מטריצות של 
+\begin_inset Formula $2048^{2}=4,194,304$
+\end_inset
+
+ פרמטרים ולכן בסך הכל 
+\begin_inset Formula $16,777,216$
+\end_inset
+
+ פרמטרים לכל אחד מ-
+\numeric on
+24
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שלבי ה-
+\lang english
+Attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ולכן בסך הכל 
+\begin_inset Formula $402,653,184$
+\end_inset
+
+ פרמטרים:
+ הרבה,
+ אבל עדיין בערך שליש משלב ה-
+\lang english
+MLP
+\lang hebrew
+.
+\end_layout
+
+\begin_layout Standard
+רגע,
+ זהו?
+ סיימנו...
+ את הכל?
+ ובכן,
+ כן;
+ חוץ מלהבין את התמונה העוד יותר גדולה
+\end_layout
+
+\begin_layout Section
+סוף דבר - התמונה העוד יותר גדולה
+\end_layout
+
+\begin_layout Standard
+בואו נתחיל עם מה שקל.
+ כשאני מוריד מודל,
+ ה
+\begin_inset Quotes erd
+\end_inset
+
+מידע
+\begin_inset Quotes erd
+\end_inset
+
+ שאני מוריד הוא הפרמטרים שלו,
+ ולכן כדי לודא שאני מבין את 
+\series bold
+כל
+\series default
+ מה שהמודל עושה אני קודם כל צריך לוודא שאני יודע מה כל הפרמטרים עושים.
+ מה שראינו הוא:
+\end_layout
+
+\begin_layout Itemize
+בשלב ה-
+\lang english
+embedding
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+(הפיכה של טוקן לוקטור) משתמשים ב-
+\begin_inset Formula $100,663,296$
+\end_inset
+
+ פרמטרים,
+ ובשלב ה-
+\lang english
+LM head
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+(הפיכה של וקטור ל-
+\lang english
+logits
+\lang hebrew
+) במודל הספציפי שלנו משתמשים בדיוק באותה מטריצה ולכן אין עוד פרמטרים.
+\end_layout
+
+\begin_layout Itemize
+בשלבי ה-
+\lang english
+attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+משתמשים בסך הכל ב-
+\begin_inset Formula $402,653,184$
+\end_inset
+
+ פרמטרים.
+\end_layout
+
+\begin_layout Itemize
+בשלבי ה-
+\lang english
+MLP
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+משתמשים בסך הכל ב-
+\begin_inset Formula $1,207,959,552$
+\end_inset
+
+ פרמטרים.
+\end_layout
+
+\begin_layout Itemize
+בשלבי הנירמול משתמשים ב-
+\begin_inset Formula $100,352$
+\end_inset
+
+ פרמטרים.
+\end_layout
+
+\begin_layout Standard
+הסך הכל הסופי הוא 
+\begin_inset Formula $1,711,376,384$
+\end_inset
+
+ פרמטרים;
+ זה ה-
+\lang english
+1.7B
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+בשם המודל.
+\end_layout
+
+\begin_layout Standard
+עכשיו אפשר לקחת את כל הידע שכבר יש לנו ולכתוב קוד שמבצע לבד את כל החישובים,
+ רק בעזרת המטריצות של המודל,
+ בלי שום ספרייה מסביב.
+ מה שיפה זה שהקוד אפילו לא יהיה ארוך במיוחד - לא צריך אפילו מאתיים שורות (טוב,
+ תלוי עד כמה רוצים לממש 
+\series bold
+הכל
+\series default
+ מאפס - למשל,
+ האם גם את
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+softmax
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+נממש?).
+ כמובן שלי לא היה כוח לעשות את זה וביקשתי מ-
+\lang english
+LLM
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שיעשה את זה בשבילי;
+ המטרה הייתה לקבל קוד שמייצר בדיוק את אותו פלט כמו המודל ה
+\begin_inset Quotes erd
+\end_inset
+
+רגיל
+\begin_inset Quotes erd
+\end_inset
+
+ שמריצים בפייתון.
+ זה התגלה בתור אתגר לא טריוויאלי,
+ כי אפילו שגיאות עיגול קטנות ברמת ה-
+\lang english
+floating point
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+יכלו ליצור הבדלים בפלט הסופי ולכן גם כשכותבים קוד 
+\begin_inset Quotes eld
+\end_inset
+
+עצמאי
+\begin_inset Quotes erd
+\end_inset
+
+,
+ אם רוצים להשיג את אותה תוצאה כמו הקוד ה
+\begin_inset Quotes erd
+\end_inset
+
+רגיל
+\begin_inset Quotes erd
+\end_inset
+
+ חייבים לנקוט בכל מני תעלולים שהוא מבצע (למשל,
+ הוא לא עובד טוקן-טוקן על הפרומפט המקורי אלא על כולם בבת אחת,
+ בתור מטריצה גדולה).
+ אז ויתרתי על זה.
+\end_layout
+
+\begin_layout Standard
+עדיין,
+ אם ננסה לכתוב את הכל מאפס ולהריץ בצורה שבה ה-
+\lang english
+LLM
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+יוצר תשובה ארוכה,
+ קופצים לנו לעיניים העניינים האחרונים שטרם דיברתי עליהם.
+ ספציפית,
+ משהו שנקרא ה-
+\lang english
+KV cache
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+והוא דווקא לא משעמם כמו שזה נשמע!
+\end_layout
+
+\begin_layout Standard
+העניין הוא כזה:
+ נניח שנתנו לי פרומפט של
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1,000
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+טוקנים.
+ אני רוצה לייצר לו תשובה,
+ ואני יודע שמה שה-
+\lang english
+LLM
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שלי יודע לעשות,
+ בהינתן טוקן,
+ הוא להגיד מה יהיה הטוקן הבא.
+ אז אני מתעניין בעצם רק במה שיקרה כשאריץ את המודל על הטוקן ה-
+\numeric on
+1,000
+\numeric off
+;
+ אני אקבל פלט שהוא טוקן חדש,
+ אצרף אותו לתגובה שלי,
+ ואז אריץ את המודל שוב,
+ רק על הטוקן החדש,
+ וכן הלאה וכן הלאה.
+\end_layout
+
+\begin_layout Standard
+אבל איפה פה באים לידי ביטוי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+999
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הטוקנים הראשונים?
+\end_layout
+
+\begin_layout Standard
+כבר אמרנו קודם שהם באים ליד ביטוי בשלב ה-
+\lang english
+Attention
+\lang hebrew
+.
+ מה שקורה הוא שאנחנו מייצרים 
+\begin_inset Formula $q$
+\end_inset
+
+ עבור הטוקן החדש,
+ ואז מחשבים את 
+\begin_inset Formula $q\cdot k_{i}$
+\end_inset
+
+ עבור 
+\series bold
+כל
+\series default
+ הטוקנים הקודמים,
+ ואז מקבלים מקדמים עבור 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ - כל הערכים של הטוקנים הקודמים.
+ כלומר,
+ אנחנו לא צריכים את 
+\series bold
+כל
+\series default
+ המידע על הטוקנים הקודמים:
+ אנחנו רק צריכים,
+ לכל טוקן 
+\begin_inset Formula $i$
+\end_inset
+
+,
+ את שני הוקטורים הללו:
+ 
+\begin_inset Formula $k_{i},v_{i}$
+\end_inset
+
+ (ליתר דיוק,
+ את כל
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+24
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הזוגות של 
+\begin_inset Formula $k_{i},v_{i}$
+\end_inset
+
+ כי יש
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+24
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שלבי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+Attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+וצריך לזכור את המידע הזה מכל אחד מהם).
+ כל המידע על ה-
+\lang english
+hidden state
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שבהם הטוקן היה במהלך החישוב,
+ וגם כל המידע על ה-
+\begin_inset Formula $q_{i}$
+\end_inset
+
+-ים שבהם הוא השתמש?
+ זה כבר לא חשוב.
+ אבל הערכים הללו של 
+\begin_inset Formula $k_{i},v_{i}$
+\end_inset
+
+?
+ נצטרך אותם בהמשך.
+ נצטרך אותם עבור 
+\series bold
+כל
+\series default
+ טוקן חדש שאנחנו מנסים ליצור.
+ גם אם אנחנו בטוקן ה-
+\numeric on
+10,000
+\numeric off
+,
+ עדיין נצטרך להשתמש בהם.
+ אז אנחנו שומרים אותם במקום מיוחד שנקרא ה-
+\lang english
+KV cache
+\lang hebrew
+.
+\end_layout
+
+\begin_layout Standard
+בחישוב 
+\begin_inset Quotes eld
+\end_inset
+
+אמיתי
+\begin_inset Quotes erd
+\end_inset
+
+,
+ בהינתן פרומפט,
+ קודם כל רצים על כל הטוקנים של הפרומפט,
+ לא כדי לנבא את הטוקן הבא (כי לכל הטוקנים הללו חוץ מהאחרון כבר 
+\series bold
+קיים
+\series default
+ הטוקן הבא,
+ שלאו דווקא יהיה דומה למה שאנחנו מנבאים) אלא כדי ליצור את ערכי ה-
+\lang english
+KV
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הרלוונטיים.
+ השלב הזה נקרא ה-
+\lang english
+prefill
+\lang hebrew
+,
+ וכאמור - בגלל שיש לנו את כל הטוקנים מראש בשלב הזה אפשר להכניס אותם למטריצה גדולה ולבצע חישוב יותר יעיל בעזרת תעלולי מטריצות.
+ זו הסיבה שבגללה לפעמים נראה שמודלים יודעים 
+\begin_inset Quotes eld
+\end_inset
+
+לאכול
+\begin_inset Quotes erd
+\end_inset
+
+ את הפרומפט הראשוני בקלות אבל אז הם מתחילים להאט כשהם מייצרים את הפלט.
+ כמובן,
+ ככל שמתקדמים יותר בפלט,
+ כך החישובים שנדרשים לכל טוקן נהיים ארוכים יותר כי יש יותר איברים ב-
+\lang english
+KV cache
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+שצריך להשתמש בהם;
+ זו הסיבה שבגללה מתישהו צריך להגביל את הגודל שלו - כלומר,
+ את 
+\series bold
+הקונטקסט
+\series default
+ שיש למודל - כמה טוקנים אחורה הוא 
+\begin_inset Quotes eld
+\end_inset
+
+זוכר
+\begin_inset Quotes erd
+\end_inset
+
+ במובן זה שמידע ה-
+\lang english
+attention
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+הרלוונטי שלהם עדיין קיים במערכת.
+\end_layout
+
+\begin_layout Standard
+אבל זהו,
+ זה הכל;
+ אני לא מצליח לחשוב על עוד משהו מהותי שחסר לנו אם אנחנו רוצים להבין איך זה עובד 
+\begin_inset Quotes eld
+\end_inset
+
+מאפס
+\begin_inset Quotes erd
+\end_inset
+
+.
+ כמובן שזו רק נקודת המוצא לשלל השיפורים הנוספים שיש בעולם האמיתי,
+ אבל כמו שמבחן שלכטיון שלי מראה,
+ כבר הדברים הפשוטים יחסית שהסברתי כאן,
+ כשהם משולבים עם 
+\begin_inset Quotes eld
+\end_inset
+
+בסך הכל
+\begin_inset Quotes erd
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\numeric on
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+1.7
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\numeric off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מיליארד פרמטרים שהשד יודע איך הצליחו לכוונן אותם ככה,
+ מניבים תשובות מרהיבות שלפני עשור היו גורמות לי ליפול מהכיסא והיום נראות לנו כמעט בנאליות כי אנחנו כבר מוקפים בכלי
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+AI
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+מכל עבר.
+\end_layout
+
+\begin_layout Standard
+באופן הולם למדי,
+ בזמן שחלף מאז שהתחלתי לכתוב את סדרת הפוסטים הזו
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+LLM
+\lang hebrew
+-ים גרמו לזעזועים בעולם המתמטי כשהתחילו למצוא עצמאית פתרונות למאות בעיות מורכבות,
+ ולכו תדעו איפה זה ייעצר (האם יפתרו את בעיית 
+\begin_inset Formula $\text{P=NP}$
+\end_inset
+
+ סוף כל סוף?!).
+ יש שלל דברים שאפשר לומר כנגד הוכחות מתמטיות מבוססות
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+LLM
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang hebrew
+ אבל יש לי גם דבר חיובי אחד להגיד - כשלוקחים הוכחות כאלו,
+ ומפשטים עוד יותר את מה שאפשר,
+ ומחדדים עוד יותר את מה שאפשר,
+ והופכים את התוצר לנגיש ככל הניתן,
+ אז אנחנו יכולים לקרוא אותו ולהבין גם ולחוש את הפליאה וההתלהבות שמרגישים כשנתקלים במשהו יפה במתמטיקה.
+ ואת אותן פליאה והתלהבות אני מרגיש גם כשאני מסתכל על האופן שבו 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang english
+LLM
+\lang hebrew
+-ים עובדים שתיארתי כאן,
+ ויכול להגיד לעצמי שאני מבין איך זה עובד אבל זה עדיין נראה לי כאילו יושב בפנים איזה חד קרן קסום שמשליך קשת בענן לכל עבר.
+\end_layout
+
+\end_body
+\end_document
