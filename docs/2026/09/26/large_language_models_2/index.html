@@ -336,41 +336,41 @@
 <p>מה שדוד הראל אומר הוא לא שמחשב לא יוכל אף פעם לענות ככה, אלא להפנות את תשומת הלב שלנו לשלל הדברים המורכבים שמחשב צריך לדעת והחיבורים שהוא צריך לבצע ביניהם כדי שיוכל לענות ככה (מומלץ לקרוא את הספר, הוא מתעמק בזה יפה). כמובן, זה בפני עצמו זה לא מבחן <strong>עד כדי כך</strong> מאתגר - עוד לפני מהפכת ה-LLM-ים היו ליבמ מחשבים שיודעים לנצח בג'פרדי ולנהל דיבייטים וסביר שהיו מתמודדים גם עם שלכטיון (לא בדקתי), אבל זו דרישת מינימום נחמדה.</p>
 <p>אוקיי, בואו נתחיל. המודל שבחרתי להשתמש בו הוא SmolLM2-1.7B-Instruct. היתרונות: הוא קטן מאוד ולכן פשוט יחסית לתיאור, אבל הוא חזק מספיק כדי לעבור את מבחן שלכטיון. מה הולך בשם של המודל הזה? ובכן, SmolLM2 זו <strong>המשפחה</strong> של המודלים - כל מודל במשפחה הזו בנוי בדרך דומה אבל יש מודלים עם כמות גדולה או קטנה יותר של פרמטרים (במקרה הנוכחי זה המודל הכי גדול). ה-1.7B אומר כמה פרמטרים יש במודל - יש <strong>בערך</strong> מיליארד ושבע מאות אלף מספרים ממשיים שחיים בתוך המודל הזה והם מה שמשתמשים בו בשלבים 2-4 שתיארתי קודם; אנחנו נראה את זה בפירוט וגם נעשה חשבון מדויק של כמה פרמטרים יש. ה-Instruct בסוף אומר שזו גרסה של המודל שנוצרה על ידי fine tuning של מודל הבסיס כדי שתתאים יותר למבנה של צ'אטים - עוד מעט נבדוק בדיוק איך זה מתבטא.</p>
 <p>אני הולך להשתמש בספריה transformers של פייתון, שמיועדת בדיוק כדי להקל על החיים בזמן שימוש בטרנספורמרים. הנה האופן שבו אני משתמש בה כדי להטעין את המודל:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="highlight"><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-<span class="n">model_id</span> <span class="o">=</span> <span class="s2">&quot;HuggingFaceTB/SmolLM2-1.7B-Instruct&quot;</span>
+model_id = &quot;HuggingFaceTB/SmolLM2-1.7B-Instruct&quot;
 
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_id</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
- <span class="n">model_id</span><span class="p">,</span>
- <span class="n">torch_dtype</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(
+ model_id,
+ torch_dtype=&quot;auto&quot;,
+)
+</code></pre>
 
 <p>מה שקורה פה מאחורי הקלעים הוא שאנחנו מתחברים לאתר HuggingFace שמארח מודלים אצלו, מורידים ממנו את המודל (זה מודל חופשי, כל אחד יכול להוריד אותו אבל זה כן דורש התחברות לממשק של HuggingFace כדי להוריד אותו ככה משורת הפקודה) ואז משתמשים בו כדי לייצר שני דברים: את ה-tokenizer שאחראי לשלב (1) ברשימה שנתתי למעלה, ואת model שהוא המודל עצמו שעושה את שלבים 2-5.</p>
 <p>עוד נתעמק במה שכל אחד מהם עושה, אבל בואו ננצל אותם כרגע כדי לבצע את מבחן שלכטיון. לשם כך צריך: לכתוב שאלה על שלכטיון (אני מעתיק את הטקסט מהגרסה האנגלית של "אלגוריתמיקה"), להמיר אותה לפורמט של צ'אט (הטוקניזר יודע לעשות את זה), לתת למודל לרוץ על זה, לקבל חזרה תשובה ולהמיר את התשובה חזרה לטקסט שאני יכול לקרוא. הנה הקוד שעושה את זה:</p>
-<div class="highlight"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
- <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
- <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;</span><span class="p">}</span>
-<span class="p">]</span>
+<pre class="highlight"><code class="language-python">messages = [
+ {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+ {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;}
+]
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
- <span class="n">messages</span><span class="p">,</span>
- <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
- <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
- <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
+inputs = tokenizer.apply_chat_template(
+ messages,
+ add_generation_prompt=True,
+ return_tensors=&quot;pt&quot;,
+ return_dict=True,
+)
 
-<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
- <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
- <span class="o">**</span><span class="n">inputs</span><span class="p">,</span>
- <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
- <span class="n">do_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
- <span class="p">)</span>
+with torch.inference_mode():
+ output = model.generate(
+ **inputs,
+ max_new_tokens=500,
+ do_sample=False,
+ )
 
-<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-</code></pre></div>
+print(tokenizer.decode(output[0, inputs[&quot;input_ids&quot;].shape[1]:], skip_special_tokens=True))
+</code></pre>
 
 <p>אין צורך להתעמק בכל מה שהולך שם, כמובן; אני אסביר את זה בהמשך. בינתיים, הנה התשובה:</p>
 <div class="highlight raw-highlight">Zupchoks do not exist. The concept of a &quot;zupchok&quot; is a fictional creature, created as a combination of a whale and a flying machine. The idea of a whale evolving into a flying creature with wings is not biologically plausible. Whales are mammals that live in the water, and they do not have the necessary physical adaptations to fly.<br>
@@ -383,26 +383,26 @@ The concept of a zupchok is also not supported by scientific evidence. There is 
 <p>בואו נתחיל לעבור שלב שלב על הכל כדי להבין מה קורה פה. העיקר הוא כמובן החלק שבו המודל רץ, אבל גם הטוקנייזר מאוד מעניין אותי, אז זה הולך להיות סיפור ארוך; הפעם נסתפק בטוקנייזר.</p>
 <h2>מה בעצם הטוקיינזר עושה?</h2>
 <p>בואו נעשה ניסוי זריז - נכתוב טקסט ונריץ עליו את הטוקיינזר:</p>
-<div class="highlight"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The best animal in the world is a cat, because &quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">text = &quot;The best animal in the world is a cat, because &quot;
+print(tokenizer.tokenize(text))
+</code></pre>
 
 <p>אני מקבל מזה:</p>
-<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;The&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġbest&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġanimal&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġin&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġthe&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġworld&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġis&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġa&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġcat&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġbecause&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġ&#39;</span><span class="p">]</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">['The', 'Ġbest', 'Ġanimal', 'Ġin', 'Ġthe', 'Ġworld', 'Ġis', 'Ġa', 'Ġcat', ',', 'Ġbecause', 'Ġ']
+</code></pre>
 
 <p>כלומר, הטוקיינזר פירק את הטקסט שלי למילים שמרכיבות אותו וגם הפסיק היה טוקן בפני עצמו (בואו נתעלם לרגע מהפיל בחדר שבו רווחים הפכו לאיזה Ġ).</p>
 <p>אוקיי, זה היה צפוי. אבל מה אם נאתגר אותו? למשל, ניתן לו את המילה Supercalifragilisticexpialidocious ממרי פופינס? האם יש לו אותה במילון? ובכן, לא, זה מה שהוא נתן לי:</p>
-<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;Super&#39;</span><span class="p">,</span> <span class="s1">&#39;cal&#39;</span><span class="p">,</span> <span class="s1">&#39;if&#39;</span><span class="p">,</span> <span class="s1">&#39;rag&#39;</span><span class="p">,</span> <span class="s1">&#39;il&#39;</span><span class="p">,</span> <span class="s1">&#39;istice&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;ial&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;ocious&#39;</span><span class="p">]</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">['Super', 'cal', 'if', 'rag', 'il', 'istice', 'x', 'p', 'ial', 'id', 'ocious']
+</code></pre>
 
 <p>את Super יש לו במילון כי זו מילה סטנדרטית, וגם if ו-id שמופיעים בהמשך. אבל היתר? אלו חלקי מילים שכנראה יש להם שכיחות גבוהה יחסית ולכן משתלם להכניס גם אותם למילון.</p>
 <p>מה עם שפות אחרות, למשל עברית? זה מודל קטן, אל תצפו ליותר מדי. נתתי לו את "בוקר טוב עולם" והוא פשוט פירק אותו לרצף של סימנים ג'יברישיים:</p>
-<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="s1">&#39;×ĳ&#39;</span><span class="p">,</span> <span class="s1">&#39;×ķ&#39;</span><span class="p">,</span> <span class="s1">&#39;×&#39;</span><span class="p">,</span> <span class="s1">&#39;§&#39;</span><span class="p">,</span> <span class="s1">&#39;×¨&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġ×&#39;</span><span class="p">,</span> <span class="s1">&#39;ĺ&#39;</span><span class="p">,</span> <span class="s1">&#39;×ķ&#39;</span><span class="p">,</span> <span class="s1">&#39;×ĳ&#39;</span><span class="p">,</span> <span class="s1">&#39;Ġ×&#39;</span><span class="p">,</span> <span class="s1">&#39;¢&#39;</span><span class="p">,</span> <span class="s1">&#39;×ķ&#39;</span><span class="p">,</span> <span class="s1">&#39;×ľ&#39;</span><span class="p">,</span> <span class="s1">&#39;×&#39;</span><span class="p">,</span> <span class="s1">&#39;Ŀ&#39;</span><span class="p">]</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">['×ĳ', '×ķ', '×', '§', '×¨', 'Ġ×', 'ĺ', '×ķ', '×ĳ', 'Ġ×', '¢', '×ķ', '×ľ', '×', 'Ŀ']
+</code></pre>
 
 <p>למה דווקא אלו? זו בחירה שרירותית משהו שצריך להבין בתור "המודל לא מבין עברית, הוא מפרק את האותיות העבריות לגורמים ומשתמש בטוקנים עבור הגורמים". בשביל הסבר טיפה יותר מדויק צריך להיזכר איך תווים מקודדים במחשב: מידע בסיסי מקודד במחשב ביחידות של <strong>ביט</strong> שהוא 0 או 1. אם יש לנו ביט בודד הוא יכול לייצג רק שני מספרים, אבל שני ביטים כבר יכולים לייצג ארבעה: 00,01,10,11, ובאופן כללי אם יש לנו <span class="math">\(n\)</span> ביטים הם יכולים ביחד לייצג <span class="math">\(2^{n}\)</span> מספרים, ולרוב מקובל שהם פשוט מייצגים את המספרים מ-0 עד <span class="math">\(2^{n}-1\)</span> . למשל, עם שבעה ביטים נוכל לייצג 128 מספרים - כל המספרים מ-0 עד 127.</p>
-<p>עכשיו, יש שיטת קידוד נפוצה ומקובלת מאוד שנקראת ASCII שבה מקודדים 128 תווים שונים כך שכל אחד מקודד בידי שבעה ביטים מסויימים. למשל, האות A מקודדת על ידי המספר 65 ואילו הסימן + מקודד על ידי 43 ואילו הסימן של רווח מקודד על ידי 32. האם 128 תווים זה מעט מדי? בוודאי. רק תחשבו על כמות הסימונים שנדרשים ליפנית וסינית, וגם לעברית המסכנה לא היה מקום ב-ASCII. זו הסיבה שצצו גרסאות "מורחבות" של ASCII שנעזרות בביט אחד נוסף, כלומר כל תו ASCII היה מיוצג בידי 8 ביטים. הסיטואציה הזו, של 8 ביטים שמקובצים ביחד, היא <strong>ממש </strong>נפוצה במחשבים בימינו, עד שקבוצה של 8 ביטים קיבלה את השם <strong>בייט</strong> ורוב מה שאנחנו עושים במחשבים משתמש בבייטים בתור יחידות מרכזיות.</p>
+<p>עכשיו, יש שיטת קידוד נפוצה ומקובלת מאוד שנקראת ASCII שבה מקודדים 128 תווים שונים כך שכל אחד מקודד בידי שבעה ביטים מסויימים. למשל, האות A מקודדת על ידי המספר 65 ואילו הסימן + מקודד על ידי 43 ואילו הסימן של רווח מקודד על ידי 32. האם 128 תווים זה מעט מדי? בוודאי. רק תחשבו על כמות הסימונים שנדרשים ליפנית וסינית, וגם לעברית המסכנה לא היה מקום ב-ASCII. זו הסיבה שצצו גרסאות "מורחבות" של ASCII שנעזרות בביט אחד נוסף, כלומר כל תו ASCII היה מיוצג בידי 8 ביטים. הסיטואציה הזו, של 8 ביטים שמקובצים ביחד, היא **ממש **נפוצה במחשבים בימינו, עד שקבוצה של 8 ביטים קיבלה את השם <strong>בייט</strong> ורוב מה שאנחנו עושים במחשבים משתמש בבייטים בתור יחידות מרכזיות.</p>
 <p>ההרחבה הבסיסית והנפוצה ביותר של ASCII נקראת ISO-8859-1. הרעיון בה הוא להוסיף סימנים נפוצים בשפות לטיניות, למשל הסימן Ö או æ. על הדרך התווסף גם הסימן ¥ של הין היפני והסימן § וכל מני דברים חשבוניים כמו ¾ כי למה לא בעצם. במילים אחרות, זה היה פח אשפה לסימנים שנראה שנבחרו חצי באקראי. מה לא היה שם, למשל? אותיות בעברית. בשבילן היה קידוד <strong>אחר</strong>, ISO-8859-8, ואתם כבר מבינים לאן זה הולך: השתמשו בקידודים רבים ושונים שכל אחד מותאם לשפה אחרת וכשטענו בדפדפן אתר אינטרנט אם האתר לא אמר באיזה קידוד הוא הדפדפן ניסה לנחש ולא הצליח והיינו צריכים לעבור קידוד-קידוד ולקוות לקבל משהו קריא וזו הייתה קטסטרופה בלתי נתפסת ואם אתם מהדור שלא חווה את זה אני כל כך שמח בשבילכם. </p>
 <p>בסופו של דבר מה שעושים בפועל הלך והתכנס למשהו שנקרא Unicode - קידוד שכולל הכל כולל הכל, גם עברית וגם יפנית. המחיר הוא כמובן שצריך יותר מקום; תווים נפוצים עדיין דורשים בייט בודד והקידוד הוא בדיוק כמו ב-ASCII, אבל תווים נפוצים פחות כבר יכולים לקחת שני בייטים או אפילו שלושה-ארבעה. עברית דורשת שני בייטים. את א' למשל מקודדים באמצעות שני בייטים שהראשון שבהם מכיל את הערך 215 והשני את הערך 144.</p>
 <p>עכשיו, במחשבית אוהבים לייצג מספרים באמצעות בסיס 16, כי אז לייצג מספרים בין 0 ל-255 דורש בדיוק שתי ספרות והן מכסות בדיוק את כל טווח המספרים מ-0 עד 255, ב"מחיר" שלפיו צריך סימנים מיוחדים כדי לייצג את ה"ספרות" מ-10 עד 15, ופשוט משתמשים באותיות A,B,C,D,E,F לשם כך. בצורה הזו 215 נכתב בתור D7 ו-144 נכתוב בתור 90 (אם אתם לא מכירים את איך שבסיס 16 עובד לא נורא אבל הנה <a href="https://gadial.net/2017/06/11/number_bases/">פוסט שלי</a> על זה). מעכשיו אני אשתמש בצורת הכתיב הזו כי היא נוחה יותר.</p>
@@ -410,20 +410,20 @@ The concept of a zupchok is also not supported by scientific evidence. There is 
 <p>עכשיו, 90 לא הולך לעבור אל תו היוניקוד U+0190 כי עד שמגיעים אל 90 עוברים הרבה תווים <strong>שכן</strong> מיוצגים יפה (למשל, האותיות הלטיניות) ולכן אנחנו מתקדמים הרבה פחות; את 90 מייצג U+0132 שהוא "Ĳ" - זה תו בודד שמייצג IJ ביחד. אם נסתכל על רשימת התווים למעלה לא נראה אותו כי לא השתמשנו ב"א" בביטוי "בוקר טוב עולם" אבל כן השתמשנו בב'; את ב' מקודדים ביוניקוד עם D7 91 ואמרנו ש-D7 עובר אל × ואילו 91 יעבור אל U+0133 שהוא "ĳ" - דומה לסימן הקודם, רק עם אותיות קטנות ולא גדולות. זה בדיוק מה שאנחנו רואים באיבר הראשון ברשימה - שני הסימנים הללו ביחד. לעומת זאת בהמשך, ק' זכה לטיפול קצת שונה. בגלל שהוא כבר לקראת סוף הרשימה, הוא D7 A7 - הבייט של המספר השני כבר די גדול - גדול מספיק כדי להיות שייך לאיזור ב-ISO-8859-1 שבו דברים כן מוגדרים ולהתאים לסימן §.</p>
 <p>עכשיו עולה השאלה - למה עבור א' קיבלנו את 'ĳ×' בתור טוקן בודד אבל עבור ק' קיבלנו שני טוקנים, קודם × ואז §? ובכן, כי עבור 'ĳ×' היה <strong>כלל מיזוג</strong> מתאים ואילו עבור '§×' לא היה.</p>
 <p>אוקיי, הזכרתי קודם <strong>מילון</strong> ועכשיו אני מזכיר <strong>כללי מיזוג</strong> - איפה הדברים הללו נמצאים בכלל? ובכן, אחד מהקבצים שירדו אוטומטית מהאינטרנט יחד עם המודל היה המילון - ליתר דיוק, קובץ בשם tokenizer.json שמכיל שלל סוגי מידע על הטוקנייזר אבל כולל בנוסף לכך שתי רשימות ארוכות מאוד: אחת בשם vocab והשניה בשם merges. מה שקראתי לו "המילון" הוא vocab: הוא כולל את רשימת כל הטוקנים של המודל, כשלכל אחד מהם מותאם המספר הסידורי שלו במילון. למשל</p>
-<div class="highlight"><pre><span></span><code><span class="s2">&quot;ĠWikipedia&quot;</span><span class="p">:</span> <span class="mi">10727</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">&quot;ĠWikipedia&quot;: 10727
+</code></pre>
 
 <p>כלומר, המילה "ויקיפדיה" (עם רווח לפניה) שייכת למילון והיא טוקן מספר 10727. זה יהיה חשוב בהמשך, כשנרצה לשלוח את הטוקן הזה למודל: המספר הסידורי הוא מה שמספר למודל לאיזה וקטור של מספרים ממשיים לתרגם את הטוקן. אבל איך בכלל הטוקן הזה <strong>נוצר</strong>? כאן רשימת המיזוג נכנסת לפעולה. זו רשימה קצרה למדי, בערך בגודל של המילון, שכוללת זוגות של טוקנים. למשל:</p>
-<div class="highlight"><pre><span></span><code><span class="s2">&quot;ĠW ikipedia&quot;</span>
-<span class="s2">&quot;ikip edia&quot;</span>
-<span class="s2">&quot;ik ip&quot;</span>
-<span class="s2">&quot;i k&quot;</span>
-<span class="s2">&quot;i p&quot;</span>
-<span class="s2">&quot;ed ia&quot;</span>
-<span class="s2">&quot;e d&quot;</span>
-<span class="s2">&quot;i a&quot;</span>
-<span class="s2">&quot;Ġ W&quot;</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">&quot;ĠW ikipedia&quot;
+&quot;ikip edia&quot;
+&quot;ik ip&quot;
+&quot;i k&quot;
+&quot;i p&quot;
+&quot;ed ia&quot;
+&quot;e d&quot;
+&quot;i a&quot;
+&quot;Ġ W&quot;
+</code></pre>
 
 <p>מן הסתם לא בחרתי להציג את הזוגות הללו באקראי אלא חיפשתי זוגות שיכולים להוביל ליצירה של של הטוקן של ויקיפדיה מתוך סדרת טוקנים בודדים של תו אחד כל אחד. זה משחק נחמד לראות איך על ידי מיזוג זוגות טוקנים שברשימה הזו אפשר לקבל את הטוקן המקורי - אבל לא כזה משחק מאתגר, חייבים להודות, די נתתי את הכיוון כשכתבתי הכל מהסוף להתחלה.</p>
 <p>מה שהטוקנייזר עושה בפועל הוא בשלב הראשון לעבור על הטקסט ולהמיר אותו לטוקנים הבסיסיים ביותר - אלו שקיימים ברמת התו הבודד. אחר כך הוא מתחיל לחפש מקומות למזג בהם. סביר שיהיו הרבה מיזוגים פוטנציאליים בכל רגע נתון, אז הכלל הוא פשוט - ככל שמשהו מגיע מוקדם יותר ברשימת המיזוגים, כך יש לו עדיפות על פני המיזוגים הפוטנציאליים האחרים. כשנתתי לו את Supercalifragilisticexpialidocious סיימנו עם שני טוקנים סמוכים, אחד p והשני ial. למה ה-p לא התאחד עם ה-ial? אין זוג כזה, אבל האם p לא יכל להתאחד עוד קודם עם i? הזוג p i דווקא כן קיים ברשימה, אבל כך גם i al שנמצא במקום מוקדם יותר - לכן המיזוג הזה קרה קודם.</p>
@@ -445,33 +445,33 @@ The concept of a zupchok is also not supported by scientific evidence. There is 
 <p>בהקשר שלנו הסיטואציה טיפה שונה. אין לנו מחרוזת קונקרטית שאנחנו רוצים לכווץ; מה שאנחנו בדרך עושים הוא להפעיל את האלגוריתם אחרי ש"מילון הכיווצים" כבר קיים. אבל הדרך ליצור אותו היא בדיוק מה שראינו כאן - לקחת טקסט גדול, להפעיל עליו את האלגוריתם ולתת לו לבנות את המילון. הרי לא <strong>חייבים</strong> להחליף כל זוג בייטים במשהו אחר בגודל בייט; המטרה שלנו היא לא לכווץ. אנחנו פשוט מחליפים זוג טוקנים בטוקן חדש ומגדילים את מילון הטוקנים שלנו באופן הזה. רק צריך להגדיר חסם על גודל המילון ולהפסיק את אלגוריתם ה"כיווץ" כשהגענו אליו, ואז המילון (כלומר - הטוקנים החדשים <strong>וגם</strong> רשימת המיזוגים) יהיה הפלט שלנו. השאלה היחידה היא - איזה טקסט גדול לקחת כדי להפעיל עליו את האלגוריתם הזה? אבל זו כבר בעיה קלאסית של תחום הלמידה שאני לא מבין בה שום דבר - איך בעצם בונים את הקורפוס שעליו מאמנים את המודלים שלנו, לא רק את הטוקנייזר אלא גם את ה-LLM-ים עצמם. מן הסתם לא חייבים לקחת טקסט יחיד; אפשר לקחת טקסטים משלל מקורות שונים, למזג אותם למחרוזת אחת גדולה ולהפעיל עליה את האלגוריתם. אפשר לעשות את זה על שלל טקסטים שונים לקבלת טוקנייזרים שונים ואז לערוך ניסויים מי מהם נותן את הביצועים הכי טובים; השורה התחתונה היא שאני באמת לא יודע איך זה עובד. הגישה שלי לנושא בפוסטים הללו היא צרה מאוד - אני הולך אל מה שכבר קיים ושואל את עצמי איך זה עובד; אני לא נכנס לשאלה איך זה נוצר מלכתחילה חוץ מאשר ברמת הרעיון הכללי.</p>
 <h2>ואיך זה שמדובר במודל צ'אט משפיע?</h2>
 <p>יש עוד דבר אחד שהטוקנייזר יודע לעשות ולא דיברתי עליו בינתיים - לטפל בתבנית הצ'אט של השיחה. אם נחזור לרגע אל הקוד שהראיתי קודם, אז עשיתי שם</p>
-<div class="highlight"><pre><span></span><code><span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
- <span class="n">messages</span><span class="p">,</span>
- <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
- <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
- <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">inputs = tokenizer.apply_chat_template(
+ messages,
+ add_generation_prompt=True,
+ return_tensors=&quot;pt&quot;,
+ return_dict=True,
+)
+</code></pre>
 
 <p>הפונקציה הזו, apply_chat_template, אומרת לטוקיינזר: קח את הטקסט הקיים ושים אותו בתוך תבנית של צ'אט שאותה המודל אומן לזהות. בואו נראה איך זה נראה. בשביל זה צריך לשנות קצת את הפרמטרים שהפונקציה מקבלת, כי אני רוצה שהפלט יהיה משהו שקריא לי בתור בן אדם, ולא משהו שיהיה נגיש למודל. אז אני עושה:</p>
-<div class="highlight"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
- <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
- <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;</span><span class="p">}</span>
-<span class="p">]</span>
+<pre class="highlight"><code class="language-python">messages = [
+ {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+ {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;}
+]
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
- <span class="n">messages</span><span class="p">,</span>
- <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
+inputs = tokenizer.apply_chat_template(
+ messages,
+ tokenize=False,
+)
+</code></pre>
 
 <p>התוצאה של זה תהיה</p>
 <div class="highlight raw-highlight">&#x27;&lt;|im_start|&gt;system\nYou are a helpful assistant.&lt;|im_end|&gt;\n&lt;|im_start|&gt;user\nA zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&lt;|im_end|&gt;\n&#x27;</div>
 
 <p>די ברור מה הולך כאן. הטקסט מחולק ל"הודעות" כשלכל הודעה יש את ה"תפקיד" שלה, מה שנקרא ה-role. הודעה נפתחת ב-&lt;|im_start|&gt; ומסתיימת ב-&lt;|im_end|&gt; כשמייד אחרי ה-&lt;|im_start|&gt; כתוב ה-role ואז מגיעה ירידת שורה. כל מה שהפונקציה עושה היא להוסיף את הסימונים הללו. ומאיפה הטוקנייזר מכיר אותם בכלל? ובכן, יש קובץ בשם tokenizer_config.json שמתאר את הסימונים הללו במפורש וגם כולל תבנית חצי תכנותית כזו (בפורמט של jinja2, למי שמכירות) שמתארת איך בדיוק לשים את הסימנים, ודואגת לשים את התבנית "&lt;|im_start|&gt;system\textbackslash nYou are a helpful AI assistant named SmolLM, trained by Hugging Face&lt;|im_end|&gt;" אם ה-role בהתחלה הוא לא system.</p>
 <p>קלט אחד ש-apply_chat_template מקבל ולא השתמש בו קודם הוא add_generation_prompt . מה שזה עושה הוא להוסיף בסופו של הטקסט שכבר ראינו את</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;|</span><span class="n">im_start</span><span class="o">|&gt;</span><span class="n">assistant</span>\<span class="n">n</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">&lt;|im_start|&gt;assistant\n
+</code></pre>
 
 <p>כלומר, זה מסמן למודל עצמו "עכשיו מתחילה התשובה, נא להשלים אותה". המודל יכתוב את מה שיכתוב וכשיסיים, יכתוב &lt;|im_end|&gt; משלו בשביל לסמן שסיים.</p>
 <p>איך הוא יודע לעשות את זה? בואו נחזור למודל שבו אני משתמש, SmolLM2-1.7B-Instruct. ה-Instruct בסוף פירושו שזה מודל שהתקבל בתהליך דו-שלבי:</p>
@@ -486,38 +486,38 @@ The concept of a zupchok is also not supported by scientific evidence. There is 
 <p>שלב האימון הנוסף מכונה fine-tuning, המטרה שלו היא לא רק ללמד את המודל לזהות את הסימבולים המיוחדים, היא גם להפוך את המודל למשהו שבאמת מתקשר בצורה סבירה, כי מודל הבסיס הוא... מוזר. עוד לפני שנראה דוגמא, תחשבו על זה: זה מודל שמאומן להשלים טקסטים על בסיס מה שאפשר לדמיין שהוא <strong>כל הטקסט באינטרנט</strong>. טקסט כזה לא כולל רק שיחות מועילות עם מודל צ'אט שבא להחכים אותנו, יש בו רשימות מכולת, הוראות טכניות, מאמרים בויקיפדיה ועוד ועוד.</p>
 <p>הדרך הטובה ביותר להרגיש את ההבדל היא פשוט לנסות. אם כן, מה קורה כשאני מנסה לשאול את מודל הבסיס על שלכטיון, בלי להוסיף את תבנית הצ'אט ובלי כלום? קורים דברים כיפיים, זה מה.</p>
 <p>ראשית אני אטעין את מודל הבסיס:</p>
-<div class="highlight"><pre><span></span><code><span class="n">base_model_id</span> <span class="o">=</span> <span class="s2">&quot;HuggingFaceTB/SmolLM2-1.7B&quot;</span>
-<span class="n">base_tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">base_model_id</span><span class="p">)</span>
-<span class="n">base_model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
- <span class="n">base_model_id</span><span class="p">,</span>
- <span class="n">torch_dtype</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">base_model_id = &quot;HuggingFaceTB/SmolLM2-1.7B&quot;
+base_tokenizer = AutoTokenizer.from_pretrained(base_model_id)
+base_model = AutoModelForCausalLM.from_pretrained(
+ base_model_id,
+ torch_dtype=&quot;auto&quot;,
+)
+</code></pre>
 
 <p>עכשיו אני אשאל אותו על שלכטיון:</p>
-<div class="highlight"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;</span>
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">base_tokenizer</span><span class="p">(</span>
- <span class="n">text</span><span class="p">,</span>
- <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-<span class="p">)</span>
+<pre class="highlight"><code class="language-python">text = &quot;A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.&quot;
+inputs = base_tokenizer(
+ text,
+ return_tensors=&quot;pt&quot;,
+)
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">base_model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-<span class="n">base_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+inputs = inputs.to(base_model.device)
+base_model.eval()
 
-<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
- <span class="n">output</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
- <span class="o">**</span><span class="n">inputs</span><span class="p">,</span>
- <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
- <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
- <span class="p">)</span>
+with torch.inference_mode():
+ output = base_model.generate(
+ **inputs,
+ max_new_tokens=500,
+ do_sample=True,
+ )
 
-<span class="n">decoded_output</span> <span class="o">=</span> <span class="n">base_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
- <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
- <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
+decoded_output = base_tokenizer.decode(
+ output[0],
+ skip_special_tokens=False,
+)
 
-<span class="nb">print</span><span class="p">(</span><span class="n">decoded_output</span><span class="p">)</span>
-</code></pre></div>
+print(decoded_output)
+</code></pre>
 
 <p>ולבסוף, אני אקבל את התשובה:</p>
 <div class="highlight raw-highlight">A zupchok is a flying, novel-writing whale. It has been carefully cultivated in a laboratory over several generations to ensure that its fins evolve into wing-like things that enable it to fly. It has also been gradually taught to read and write. It has a thorough knowledge of modern literature, and has the ability to write publishable mystery stories. Do you think zupchoks exist? If not, explain why.<br>

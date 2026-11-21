@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מבוא לטופולוגיה קבוצתית: קשירות - לא מדויק</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <meta name="description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://gadial.net/2026/11/21/connectedness/">
+    <meta property="og:title" content="מבוא לטופולוגיה קבוצתית: קשירות">
+    <meta property="og:description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב">
+    <meta property="og:site_name" content="לא מדויק">
+    
+
+<meta property="og:image" content="http://gadial.net/img/main/default-card.png" />
+
+
+        
+    <!-- Twitter -->
+    
+
+<meta name="twitter:card" content="summary">
+
+
+    <meta name="twitter:url" content="https://gadial.net/2026/11/21/connectedness/">
+    <meta name="twitter:description" content="לא מדויק - בלוג על מתמטיקה ומדעי המחשב">
+    <meta name="twitter:site" content="@" />
+    <meta property="twitter:title" content="מבוא לטופולוגיה קבוצתית: קשירות">
+    
+
+<meta property="twitter:image" content="http://gadial.net/img/main/default-card.png" />
+
+
+    
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="לא מדויק - RSS Feed" href="/feed.xml">
+       
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'David', 'Tahoma', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Top navigation bar */
+        .top-nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .top-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .top-nav .site-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .top-nav .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        
+        .top-nav .nav-links a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-nav .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 150px;
+        }
+        
+        .top-nav .search-box button {
+            padding: 5px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .top-nav .search-box button:hover {
+            background: #2980b9;
+        }
+        
+        /* Hamburger menu button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .menu-toggle:hover {
+            opacity: 0.8;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .top-nav .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .top-nav .site-title {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0;
+                padding: 10px 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* Hide nav links by default on mobile */
+            .top-nav .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            /* Show when expanded */
+            .top-nav .nav-links.expanded {
+                display: flex;
+            }
+            
+            .top-nav .nav-links > a {
+                text-align: center;
+                padding: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .top-nav .search-box {
+                width: 100%;
+                flex-direction: column;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .top-nav .search-box input {
+                width: 100%;
+                margin-bottom: 5px;
+                min-width: 0;
+            }
+            
+            .top-nav .search-box button {
+                width: 100%;
+            }
+        }
+        
+        /* Blockquote styling */
+        blockquote {
+            background: #f9f9f9;
+            border-right: 5px solid #ccc;
+            margin: 1.5em 10px;
+            padding: 0.75em 16px;
+            position: relative;
+            font-style: italic;
+        }
+        
+        blockquote:before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            right: 8px;
+            font-size: 3.5em;
+            color: #ccc;
+            line-height: 1;
+        }
+        
+        blockquote p {
+            display: block;
+            margin: 0 0 0.75em 0;
+        }
+        
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="site-title">
+                <a href="/" style="color: white; text-decoration: none;">לא מדויק</a>
+                <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="תפריט">
+                    ☰
+                </button>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="/">דף הבית</a>
+                <a href="/random.html">פוסט אקראי</a>
+                <a href="/post_list.html">כל הפוסטים</a>
+                <a href="/categories/">קטגוריות</a>
+                <a href="/lecture_notes.html">סיכומי הרצאות</a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="חיפוש...">
+                    <button onclick="searchPosts()">חפש</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="container">
+        <!-- Post Navigation -->
+        
+        <nav class="post-navigation">
+            
+            <a href="/2026/10/30/large_language_models_4/" class="nav-link nav-prev">
+                <span class="nav-label">פוסט ישן יותר →</span>
+                <span class="nav-title">אז מה הקטע עם מודלי שפה גדולים? (חלק ד&#39; - מטריצות, הרבה מטריצות)</span>
+            </a>
+            
+
+            
+            <div></div>
+            
+        </nav>
+        
+        
+        <header>
+            <h1>מבוא לטופולוגיה קבוצתית: קשירות</h1>
+            <div class="post-meta">
+                <span class="date">2026-11-21</span>
+                
+                <span class="categories">
+                    | קטגוריות:
+                    
+                    <a href="/categories/טופולוגיה.html">טופולוגיה</a>
+                    
+                </span>
+                
+                
+                <span class="tags">
+                    | תגיות:
+                    
+                    <a href="/tags/קשירות.html">קשירות</a>
+                    
+                </span>
+                
+            </div>
+        </header>
+        
+        <article>
+            <h2>מה זה בכלל?</h2>
+<p>סדרת הפוסטים שלי על טופולוגיה קבוצתית <a href="https://gadial.net/2026/07/28/topological_spaces_compactness/">הגיעה אל מושג הקומפקטיות</a> ויצאה שם להפסקה. בואו נחזור עם נושא אחר שגם הוא באותה רוח, אבל קצת יותר פשוט: <strong>קשירות</strong> (connectedness) של מרחב טופולוגי. כמו עם קומפקטיות, גם פה אפשר לתת מוטיבציה ראשונית לנושא מתוך משפט בסיסי על פונקציות רציפות שרואים בחדו"א; אם עבור קומפקטיות אלו היו משפטי ויירשטראס, הפעם זה יהיה <strong>משפט ערך הביניים</strong>. בואו נזכיר אותו:</p>
+<p>משפט ערך הביניים בחדו"א אומר שאם יש לנו פונקציה <span class="math">\(f:\left[a,b\right]\to\mathbb{R}\)</span> שהיא רציפה (כלומר - היא רציפה על הקטע הסגור <span class="math">\(\left[a,b\right]\)</span> ; היא יכולה להיות מוגדרת גם מחוץ לקטע הזה אבל לא חשוב לנו אם היא רציפה או לא שם) אז היא מחזירה על <span class="math">\(\left[a,b\right]\)</span> כל ערך שהוא בין <span class="math">\(f\left(a\right)\)</span> ו-<span class="math">\(f\left(b\right)\)</span>, כלומר כל ערך שהוא "בין לבין" שני הערכים הללו, ומכאן שם המשפט. פורמלית, לכל <span class="math">\(y\in\mathbb{R}\)</span> שמקיים <span class="math">\(f\left(a\right)\le y\le f\left(b\right)\)</span> או <span class="math">\(f\left(b\right)\le y\le f\left(a\right)\)</span> (זה תלוי בשאלה מי גדול ממי מבין <span class="math">\(f\left(a\right),f\left(b\right)\)</span> ) קיים <span class="math">\(c\in\left[a,b\right]\)</span> כך ש-<span class="math">\(f\left(c\right)=y\)</span> .</p>
+<p>זה משפט שימושי וחשוב מאוד; שימוש לא טריוויאלי חמוד מאוד שלו הוא להראות שאם <span class="math">\(p\left(x\right)\)</span> הוא פולינום ממעלה אי זוגית, קיים לו שורש ממשי, כלומר <span class="math">\(c\)</span> כך ש-<span class="math">\(p\left(c\right)=0\)</span> . זה עובד בגלל שפולינום הוא פונקציה רציפה, וגם כשמשאיפים את <span class="math">\(x\)</span> לאינסוף וכשמשאיפים אותו למינוס אינסוף, אז החזקה הגבוהה ביותר של הפולינום תשאף פעם אחת לאינסוף ופעם אחת למינוס אינסוף (להבדיל מהמקרה של פולינום ממעלה זוגית, שבה שני הכיוונים ישאפו לאותו דבר, זה רק תלוי בשאלה אם המקדם המוביל הוא חיובי או שלילי). בפרט אפשר למצוא <span class="math">\(a,b\)</span> כך ש-<span class="math">\(p\left(a\right)\le0\le p\left(b\right)\)</span> ומשפט ערך הביניים משלים את העבודה. <a href="https://gadial.net/2009/10/29/fundemental_theorem_of_algebra_algebraic_proof/">בפוסט שלי על ההוכחה האלגברית</a> למשפט היסודי של האלגברה אני מציג בדיוק את השימוש הזה בתור הצעד הראשון בהוכחה (הצעד ה"לא אלגברי" שחייבים לבצע לפני שמגיעים להוכחה האלגברית עצמה).</p>
+<p>איך מוכיחים את המשפט? ראשית, שמים לב שהוא לא נכון אם התחום של הפונקציה הוא המספרים הרציונליים <span class="math">\(\mathbb{Q}\)</span> . במקרה הזה אפשר לקחת פונקציה קבועה שהרציפות שלה "נשברת" והיא מבצעת קפיצה על נקודה לא רציונלית ומכיוון שהפונקציה מוגדרת רק על הרציונליים היא לא תשים לב לזה. הנה דוגמא. נגדיר <span class="math">\(f:\mathbb{Q}\to\mathbb{Q}\)</span> על ידי</p>
+<p><span class="math">\(f\left(x\right)=\begin{cases}
+0 &amp; x^{2}\lt 2\\
+1 &amp; x^{2}\ge2
+\end{cases}\)</span> </p>
+<p>כלומר, הפונקציה "שוברת את הרציפות שלה" על <span class="math">\(\sqrt{2}\)</span>, אבל כל עוד העולם שלנו הוא <span class="math">\(\mathbb{Q}\)</span>, הנקודה <span class="math">\(\sqrt{2}\)</span> לא קיימת בכלל; לעומת זאת הקריטריון <span class="math">\(x^{2}\lt 2\)</span> הוא דרך קונקרטית לבדוק ש-<span class="math">\(x\lt \sqrt{2}\)</span> גם בלי לדעת שהנקודה הזו קיימת. עכשיו, קחו כל נקודה <span class="math">\(x_{0}\in\mathbb{Q}\)</span> שהיא; אם <span class="math">\(x^{2}_{0}\lt 2\)</span> אז קיימת לה סביבה שכל נקודה בה עדיין מקיימת <span class="math">\(x^{2}\lt 2\)</span> ולכן הפונקציה תהיה רציונלית על <span class="math">\(x_{0}\)</span>, וכך גם אם <span class="math">\(x^{2}_{0}\gt 2\)</span> . המקרה הבעייתי האפשרי היחיד הוא <span class="math">\(x^{2}_{0}=2\)</span> שכאמור, לא יכול לקרות. אז קיבלנו פונקציה רציפה על הרציונליים שמקבלת 0 ומקבלת 1 אבל לא מקבלת <span class="math">\(\frac{1}{2}\)</span> בשום מקום, בסתירה למשפט.</p>
+<p>מה השתבש כאן? בבירור יש לנו בעיה עם <strong>התחום</strong> של הפונקציה. הצלחנו איכשהו לחלק אותו לשני חלקים שונים שנקודת ההפרדה ביניהם היא בכלל לא חלק מהמרחב ולכן אנחנו לא רואים אותה. חילקנו את המרחב לשתי <strong>קבוצות פתוחות</strong> זרות: <span class="math">\(\left(-\infty,\sqrt{2}\right)\)</span> ו-<span class="math">\(\left(\sqrt{2},\infty\right)\)</span> . הקטע הזה של חלוקה של המרחב לשתי קבוצות פתוחות זרות? זו הולכת להיות <strong>ההגדרה</strong> שנשתמש בה בהמשך.</p>
+<p>למה ב-<span class="math">\(\mathbb{R}\)</span> זה לא קורה? אינטואיטיבית, אנחנו אומרים שב-<span class="math">\(\mathbb{R}\)</span> "אין חורים" בגלל שהוא "רציף". פורמלית אנחנו מדברים על מה שנקרא <strong>אקסיומת השלמות</strong> שאני מזכיר <a href="https://gadial.net/2024/10/12/real_numbers_two_completness/">בפוסט הזה</a> וכבר דיברנו עליה כשדיברנו על קומפקטיות. האקסיומה הזו לא מאפשרת למשהו כמו <span class="math">\(\sqrt{2}\)</span> פשוט לא להתקיים: אם אני יכול לדבר על קבוצה כמו <span class="math">\(\left\{ x\in\mathbb{R}|x^{2}\lt 2\right\}\)</span> אז גם החסם העליון שלה, <span class="math">\(\sqrt{2}\)</span>, הולך להיות קיים. ככה עובדת בערך ההוכחה של משפט ערך הביניים: מסתכלים על הקבוצה <span class="math">\(\left\{ x\in\left[a,b\right]|f\left(x\right)\le y\right\}\)</span>, מראים שיש לה חסם עליון <span class="math">\(c\)</span>, ומשתמשים ברציפות של <span class="math">\(f\)</span> כדי להראות ש-<span class="math">\(f\left(c\right)=y\)</span> .</p>
+<p>עכשיו אנחנו רוצים לקחת את כל זה ולהכליל למרחבים טופולוגיים. במרחב טופולוגי לא תהיה לנו את אקסיומת השלמות, אבל כל הרעיון הוא לא להתבסס עליה כי היא תכונה "חדו"אתית" של הישר הממשי, אלא לזהות מה <strong>התכונה הטופולוגית</strong> הרלוונטית; וכבר ראינו אותה, זו התכונה "אי אפשר לפרק את המרחב שלנו לשתי קבוצות פתוחות זרות", אז בואו נגדיר פורמלית:</p>
+<ul>
+<li>מרחב טופולוגי <span class="math">\(X\)</span> נקרא <strong>קשיר</strong> אם לא קייימות <span class="math">\(A,B\subseteq X\)</span> שהן קבוצות פתוחות זרות (<span class="math">\(A\cap B=\emptyset\)</span> ) שאיחודן כל <span class="math">\(X\)</span> (<span class="math">\(A\cup B=X\)</span> ).</li>
+</ul>
+<p>יש לזה קריטריון שקול חמוד. כזכור, <strong>קבוצה סגורה</strong> במרחב טופולוגי היא קבוצה שהמשלימה שלה היא קבוצה פתוחה (ומה זו קבוצה פתוחה? כמובן, קבוצה שהמשלימה שלה סגורה). שתי הקבוצות הפתוחות שיש בכל מרחב טופולוגי <span class="math">\(X\)</span> הן <span class="math">\(\emptyset\)</span> ו-<span class="math">\(X\)</span> עצמה והן המשלימות זו של זו, כך ששתיהן פתוחות וסגורות בו זמנית, מה שבאנגלית מכונה בכינוי clopen האלגנטי ובעברית מכונה "פסגורה" שזה ביטוי שלא כדי להגיד בהרצאה כדי לא להתיז רוק על השורות הראשונות וסלחו לי אבל לא אשתמש לא בזה ולא בזה.</p>
+<p>האם יש עוד קבוצות שהן פתוחות וסגורות בו זמנית? אה-הא! זה שקול לטענה ש-<span class="math">\(X\)</span> <strong>לא קשיר</strong>. אם <span class="math">\(X\)</span> לא קשיר אז <span class="math">\(A,B\)</span> הפתוחות הללו הן משלימות זו של זו (תוכיחו!) ולכן שתיהן גם סגורות, כך שמרחב לא קשיר מכיל קבוצות כאלו. ואם יש לנו מרחב <span class="math">\(X\)</span> שמכיל קבוצה <span class="math">\(A\)</span> שהיא גם פתוחה וגם סגורה, אז נגדיר <span class="math">\(B=X\backslash A\)</span> ונקבל מכך ש-<span class="math">\(A\)</span> סגורה ש-<span class="math">\(B\)</span> פתוחה וקיבלנו פירוק של המרחב לאיחוד זר של שתי קבוצות פתוחות ולכן המרחב לא קשיר. זה היה פשוט אבל חמוד.</p>
+<h2>משפט ערך הביניים</h2>
+<p>עכשיו, איך ננסח גרסה מוכללת של משפט ערך הביניים? אנחנו לוקחים פונקציה <span class="math">\(f:X\to Y\)</span> שהיא רציפה כך ש-<span class="math">\(X\)</span> קשיר; ואנחנו לוקחים שתי נקודות <span class="math">\(a,b\in X\)</span>, ועכשיו אנחנו רוצים נקודת <strong>ביניים</strong><span class="math">\(y\in Y\)</span> שנמצאת בין <span class="math">\(f\left(a\right)\)</span> ו-<span class="math">\(f\left(b\right)\)</span> . בשביל בכלל לדבר על נקודה כזו, אנחנו צריכים שעל <span class="math">\(Y\)</span> יהיה מבנה של <strong>סדר</strong> כלשהו, ואם אנחנו רוצים הוכחה טופולוגית, הטופולוגיה של <span class="math">\(Y\)</span> צריכה איכשהו להתקשר אל הסדר שמוגדר על <span class="math">\(Y\)</span> . למרבה המזל יש לנו בדיוק את הדבר הזה - <strong>טופולוגיית הסדר</strong> שכבר <a href="https://gadial.net/2026/07/07/topological_spaces_and_bases/">דיברתי עליה כאן</a>. אז הנה הניסוח הפורמלי של המשפט שלנו:</p>
+<ul>
+<li>(משפט ערך הביניים): אם <span class="math">\(f:X\to Y\)</span> היא פונקציה רציפה כך ש-<span class="math">\(X\)</span> מרחב טופולוגי קשיר ו-<span class="math">\(Y\)</span> מרחב טופולוגי סדור עם טופולוגיית הסדר, ואם יש <span class="math">\(a,b\in X\)</span> ו-<span class="math">\(y\in Y\)</span> כך ש-<span class="math">\(f\left(a\right)\le y\le f\left(b\right)\)</span>, אז קיים <span class="math">\(c\in X\)</span> כך ש-<span class="math">\(f\left(c\right)=y\)</span> .</li>
+</ul>
+<p>איך מוכיחים את זה? בחדו"א ההוכחה הסתמכה על כל מני תעלולי אפסילון-דלתא מעיקים של פונקציות רציפות, אבל אצלנו זה פשוט לא קיים. מראש דרך החשיבה צריכה להיות שונה, "גלובלית" יותר. אז הנה שני הרעיונות שיתנו לנו את המשפט:</p>
+<ul>
+<li>
+<p>תמונה של מרחב קשיר על ידי פונקציה רציפה הוא מרחב קשיר, כלומר <span class="math">\(f\left(X\right)\subseteq Y\)</span> יהיה קשיר.</p>
+</li>
+<li>
+<p>תת-מרחב קשיר בטופולוגיית הסדר לא מכיל "חורים באמצע".</p>
+</li>
+</ul>
+<p>את הטענה השנייה קל לראות מייד: אם <span class="math">\(Y\)</span> סדור בטופולוגיית הסדר, ו-<span class="math">\(W\subseteq Y\)</span> הוא תת-מרחב קשיר, בואו ניקח <span class="math">\(a\in Y\)</span> כלשהו ונסתכל על שתי הקבוצות הבאות של כל מה שגדול וכל מה שקטן מ-<span class="math">\(a\)</span> :</p>
+<p><span class="math">\(\left(-\infty,a\right)=\left\{ y\in Y\ |\ y\lt a\right\}\)</span></p>
+<p><span class="math">\(\left(a,\infty\right)=\left\{ y\in Y\ |\ a\lt y\right\}\)</span> </p>
+<p>בטופולוגיית הסדר, שתי הקבוצות הללו הן קבוצות פתוחות. עכשיו בואו נסתכל על החיתוך שלהן עם <span class="math">\(W\)</span>, כלומר על הקבוצות</p>
+<p><span class="math">\(W\cap\left(-\infty,a\right)=\left\{ y\in W\ |\ y\lt a\right\}\)</span></p>
+<p><span class="math">\(W\cap\left(a,\infty\right)=\left\{ y\in W\ |\ a\lt y\right\}\)</span> </p>
+<p>הטופולוגיה של <span class="math">\(W\)</span> היא מה שנקרא <strong>טופולוגיית תת-המרחב</strong> שתיארתי <a href="https://gadial.net/2026/07/25/topological_spaces_subspace_and_product_topology/">בפוסט הזה</a>, ובטופולוגיה הזו הקבוצות הפתוחות הן בדיוק חיתוך של קבוצות פתוחות במרחב המקורי עם תת-המרחב, כלומר שתי הקבוצות שתיארתי עכשיו פתוחות ב-<span class="math">\(W\)</span> . הן גם זרות, כי אין <span class="math">\(y\)</span> כך ש-<span class="math">\(y\lt a\)</span> וגם <span class="math">\(a\lt y\)</span> . אחת מהן <strong>יכולה</strong> להיות ריקה; אם למשל אין ב-<span class="math">\(W\)</span> איברים קטנים מ-<span class="math">\(a\)</span> הקבוצה הראשונה תהיה ריקה, אבל במקרה הזה <span class="math">\(a\)</span> הוא לא "באמצע"<span class="math">\(W\)</span> אלא בהתחלה (או לפני ההתחלה) של <span class="math">\(W\)</span> . כמו כן, האיחוד של הקבוצות לא בהכרח נותן את כל <span class="math">\(W\)</span> ; אם <span class="math">\(a\in W\)</span> אז הוא יישאר בחוץ. עכשיו, אם <span class="math">\(W\)</span> קשיר זה אומר ש<strong>לא ייתכן</strong> ששתי הקבוצות לא ריקות והאיחוד שלהן נותן את כל <span class="math">\(W\)</span> כי אז קיבלנו פירוק של <span class="math">\(W\)</span> ; לכן, אם יש <span class="math">\(a\notin W\)</span> כלשהו, בהכרח <span class="math">\(a\lt x\)</span> לכל <span class="math">\(x\in W\)</span> או <span class="math">\(a\gt x\)</span> לכל <span class="math">\(x\in W\)</span> . זו המשמעות של "אין חורים באמצע".</p>
+<p>עכשיו נחזור להוכחה המקורית: <span class="math">\(X\)</span> קשיר, <span class="math">\(f\)</span> רציפה, נסמן <span class="math">\(f\left(X\right)=W\)</span>, נשתמש בטענה שטרם הוכחתי לפיה נובע ש-<span class="math">\(W\)</span> קשיר, ניקח <span class="math">\(a,b\in X\)</span>, ו-<span class="math">\(y\in Y\)</span> כך ש-<span class="math">\(f\left(a\right)\le y\le f\left(b\right)\)</span> ונסיק מהקשירות של <span class="math">\(W\)</span> שבהכרח <span class="math">\(y\in W\)</span> כי אם היה מתקיים <span class="math">\(y\notin W\)</span> הוא לא היה יכול בו זמנית להיות גם גדול וגם קטן מאיברים ב-<span class="math">\(W\)</span> . מכיוון ש-<span class="math">\(y\in W=f\left(X\right)\)</span> קיים <span class="math">\(c\in X\)</span> כך ש-<span class="math">\(f\left(c\right)=y\)</span> וסיימנו.</p>
+<p>יפה, אז כדי להשלים את ההוכחה של משפט ערך הביניים המוכלל צריך להוכיח שתמונה רציפה של מרחב קשיר הוא קשיר. שימו לב: לא תמונה הומיאומורפית. אם שני מרחבים הם הומיאומורפיים, כלומר קיימת בינם פונקציה חח"ע ועל שהיא וההופכית שלה שתיהן רציפות, זה אומר שבשני המרחבים יש בדיוק את אותן קבוצות פתוחות ולכן ברור שאם אחד קשיר גם השני קשיר. כאן אנחנו צריכים להתבסס על פחות - הפונקציה ההפוכה לא חייבת להיות רציפה או קיימת בכלל כי ייתכן שהפונקציה שלנו לא חח"ע. עדיין, האינטואיציה ברורה - הרציפות לא מאפשרת "לקרוע" מרחב שהוא חתיכה אחת לשתי חתיכות שונות.</p>
+<p>בואו נניח ש-<span class="math">\(X\)</span> קשיר ו-<span class="math">\(f\)</span> פונקציה רציפה מעל <span class="math">\(X\)</span> ונסמן <span class="math">\(f\left(X\right)=Y\)</span> . אני רוצה להוכיח ש-<span class="math">\(Y\)</span> קשיר, אז בואו נסתכל על פירוק <span class="math">\(Y=A\cup B\)</span> כך ש-<span class="math">\(A\cap B=\emptyset\)</span> ושתי הקבוצות הללו פתוחות, ונוכיח שלפחות אחת מהן ריקה.</p>
+<p>כל מה שיש לנו להסתמך עליו הוא ש-<span class="math">\(f\)</span> רציפה. מה זה אומר? זה אומר ש-<span class="math">\(f^{-1}\left(A\right)=\left\{ x\in X\ |\ f\left(x\right)\in A\right\}\)</span> היא קבוצה פתוחה ובדומה גם <span class="math">\(f^{-1}\left(B\right)\)</span> פתוחה. עכשיו, <a href="https://gadial.net/2026/07/12/topological_spaces_closure_and_continuous_functions/">בפוסט שלי על פונקציות רציפות</a> כבר ראינו שמתקיים</p>
+<p><span class="math">\(f^{-1}\left(A\right)\cup f^{-1}\left(B\right)=f^{-1}\left(A\cup B\right)=\)</span></p>
+<p><span class="math">\(=f^{-1}\left(Y\right)=X\)</span> </p>
+<p>כלומר, קיבלנו שתי קבוצות פתוחות שהאיחוד שלהן הוא <span class="math">\(X\)</span> . האם הן זרות? בוודאי, כי</p>
+<p><span class="math">\(f^{-1}\left(A\right)\cap f^{-1}\left(B\right)=f^{-1}\left(A\cap B\right)=f^{-1}\left(\emptyset\right)=\emptyset\)</span> </p>
+<p>אם כן, בגלל ש-<span class="math">\(X\)</span> קשיר, אחת משתי הקבוצות הללו חייבת להיות ריקה, נאמר <span class="math">\(f^{-1}\left(A\right)=\emptyset\)</span> . אבל מכיוון ש-<span class="math">\(A\subseteq f\left(X\right)\)</span>, <strong>לכל</strong><span class="math">\(y\in A\)</span> קיים <span class="math">\(x\in X\)</span> כך ש-<span class="math">\(f\left(x\right)=y\)</span>, ולכן אם <span class="math">\(f^{-1}\left(A\right)=\emptyset\)</span> אז <span class="math">\(A=\emptyset\)</span>, מה שמשלים את ההוכחה.</p>
+<p>זה מסיים עם המוטיבציה לפוסט הזה - הכללת משפט ערך הביניים. אבל אם אנחנו כבר כאן, יש עוד כמה דברים בסיסיים מועילים לומר על קשירות.</p>
+<h2>בונים קבוצות קשירות מקבוצות קשירות</h2>
+<p>ראשית, בטופולוגיה אוהבים לבנות מרחבים חדשים מתוך מרחבים קיימים, ואם הרכיבים שלנו קשירים זה תמיד מעניין לראות האם גם התוצאה תהיה קשירה. דרך אחת לבנות מרחב חדש ממרחב קיים כבר ראינו - להפעיל עליו פונקציה רציפה, מה שאכן משמר קשירות. מה עם איחוד של כמה תתי-מרחבים? ברור שבאופן כללי הוא לא ישמר קשירות - הקטעים <span class="math">\(\left(0,1\right)\)</span> ו-<span class="math">\(\left(2,3\right)\)</span> בישר הממשי הם קשירים כל אחד בנפרד (בעצם... עוד לא הוכחתי את זה! אבל נחכה עם זה להמשך) ואילו <span class="math">\(\left(0,1\right)\cup\left(2,3\right)\)</span> הוא בבירור לא קשיר כי הנה, זה עתה ראינו פירוק שלו. מה שכן, אם הייתה להם נקודה משותפת, אז כבר ברור שהאיחוד היה יוצא קשיר. וזה נכון באופן כללי, לכל מספר של תת-מרחבים שאנחנו מאחדים:</p>
+<ul>
+<li>אם <span class="math">\(X\)</span> מרחב טופולוגי ו-<span class="math">\(\left\{ W_{i}\right\} _{i\in\Lambda}\)</span> היא משפחה כלשהי של תת-מרחבים קשירים של <span class="math">\(W\)</span> כך ש-<span class="math">\(\bigcap_{i\in\Lambda}W_{i}\ne\emptyset\)</span> אז <span class="math">\(\bigcup_{i\in\Lambda}W_{i}\)</span> קשיר.</li>
+</ul>
+<p>זה די מפתיע, אותי לפחות, כי איכשהו התחושה האינטואיטיבית שלי היא שקשירות היא דווקא לא תכונה "נקודתית" כי, נו, אנחנו מדברים על פירוק של המרחב לקבוצות פתוחות והן שמנות כאלה, נקודה בודדת זה יותר קטע של קבוצות סגורות. כמובן שזו אינטואיציה רעה וכבר ראינו קודם שקשירות ניתנת לניסוח גם עם שתי קבוצות סגורות ולא פתוחות, ועוד מעט נראה עוד סוג של קשירות שגם בו עניינים "נקודתיים" דווקא מסתדרים טוב, אבל בואו נעבור עכשיו להוכחה של הטענה עצמה.</p>
+<p>נניח שיש ל-<span class="math">\(\bigcup_{i\in\Lambda}W_{i}\)</span> פירוק לשתי קבוצות פתוחות זרות <span class="math">\(A,B\)</span> . עבור <span class="math">\(W_{k}\)</span> ספציפי, הקבוצות <span class="math">\(A_{k}=W_{k}\cap A\)</span> ו-<span class="math">\(B_{k}=W_{k}\cap B\)</span> הן פתוחות ב-<span class="math">\(W_{k}\)</span> לפי טופולוגיית תת-המרחב. כמו כן <span class="math">\(W_{k}\subseteq\bigcup_{i\in\Lambda}W_{i}=A\cup B\)</span> ולכן</p>
+<p><span class="math">\(A_{k}\cup B_{k}=W_{k}\cap\left(A\cup B\right)=W_{k}\)</span> </p>
+<p>אז קיבלנו שתי קבוצות פתוחות זרות שאיחודן הוא המרחב הקשיר <span class="math">\(W_{k}\)</span> ולכן <span class="math">\(A_{k}=\emptyset\)</span> או <span class="math">\(B_{k}=\emptyset\)</span> . בואו נניח בלי הגבלת הכלליות ש-<span class="math">\(A_{k}=\emptyset\)</span>, אז באותו אופן גם <span class="math">\(A_{i}=\emptyset\)</span> לכל <span class="math">\(i\in\Lambda\)</span> ולכן <span class="math">\(A=\bigcup A_{i}=\emptyset\)</span> ... רגע רגע רגע, זה לא נכון. זה שהנחתי בלי הגבלת הכלליות ש-<span class="math">\(A_{k}=\emptyset\)</span> לא אומר שאני יכול להניח את זה <strong>לכל</strong><span class="math">\(i\in\Lambda\)</span> ; זה בדיוק <strong>ויתור</strong> על המקרה הכללי, שבו ייתכן שבחלק מהקבוצות זה יהיה <span class="math">\(A_{i}\)</span> ובחלק מהן זה יהיה <span class="math">\(B_{i}\)</span> .</p>
+<p>למרבה המזל, קל להראות שזה לא באמת קורה, בעזרת הנתון שעד כה לא השתמשנו בו למרות שהוא קריטי: יש לכל המרחבים נקודה משותפת, <span class="math">\(a\in\bigcap_{i\in\Lambda}W_{i}\)</span> . עבור ה-<span class="math">\(W_{k}\)</span> שלנו שעבורו <span class="math">\(W_{k}=A_{k}\cup B_{k}\)</span> והנחנו בלי הגבלת הכלליות ש-<span class="math">\(B_{k}=\emptyset\)</span> חייב להתקיים <span class="math">\(a\in A_{k}\subseteq A\)</span> . אבל עכשיו, עבור <span class="math">\(W_{i}=A_{i}\cup B_{i}\)</span> אחר כלשהו, <strong>עדיין</strong> חייב להתקיים <span class="math">\(a\in A_{i}\)</span> ; כי אם היה מתקיים <span class="math">\(a\in B_{i}\subseteq B\)</span> היינו מקבלים <span class="math">\(A\cap B\ne\emptyset\)</span> בסתירה לכך ש-<span class="math">\(A,B\)</span> זרות. אז המסקנה היא שגם כאן, <span class="math">\(A_{i}\ne\emptyset\)</span> ו-<span class="math">\(B_{i}=\emptyset\)</span> וזה לכל <span class="math">\(i\in\Lambda\)</span>, כך שסיימנו את ההוכחה.</p>
+<p>אז בניה אחת עברה בשלום - איחוד של מרחבים קשירים עם נקודה משותפת הוא קשיר. הדבר המתבקש הבא לטעמי הוא מכפלה, אבל זה יהיה קצת יותר טריקי, אז בואו נדבר קודם על משהו אחר, מתבקש קצת פחות: אם <span class="math">\(A\)</span> היא קבוצה קשירה, אז גם <span class="math">\(\overline{A}\)</span>, הסגור של <span class="math">\(A\)</span>, היא קבוצה קשירה. כזכור, <span class="math">\(\overline{A}\)</span> הוא מה שמתקבל מ-<span class="math">\(A\)</span> כשמוסיפים את כל נקודות השפה - אלו שבכל סביבה שלהן יש משהו מתוך <span class="math">\(A\)</span> ומשהו מחוץ ל-<span class="math">\(A\)</span> . מכיוון שנקודות השפה של <span class="math">\(A\)</span> "צמודות" ככה ל-<span class="math">\(A\)</span> עצמה, הגיוני שלהוסיף אותן לא יאפשר פתאום לפצל את <span class="math">\(\overline{A}\)</span> לשתי קבוצות פתוחות זרות. אפשר, כמובן, לדמיין מצב שבו יש לנו עיגול פתוח ואנחנו מוסיפים לו את השפה שלו שהיא מעגל, ואז התוצאה בנויה משתי חתיכות זרות - העיגול, והמעגל שמהווה את השפה שלו. אבל המעגל הזה הוא לא קבוצה פתוחה - יש בה נקודות שהן לא "עמוק בפנים" אלא כל סביבה שלהן יוצאת החוצה מהקבוצה. אז הגיון יש פה, אבל איך הפורמליזם עובד?</p>
+<p>ובכן, בואו נניח שיש פירוק <span class="math">\(\overline{A}=B\cup C\)</span> . איפה <span class="math">\(A\)</span> נמצאת ביחס לפירוק הזה? בוודאי ש-</p>
+<p><span class="math">\(A=\left(B\cup C\right)\cap A=\left(B\cap A\right)\cup\left(C\cap A\right)\)</span> </p>
+<p>אבל בגלל ש-<span class="math">\(A\)</span> קשירה, אחת משתי הקבוצות הללו חייבת להיות ריקה, למשל <span class="math">\(C\cap A=\emptyset\)</span> ולכן <span class="math">\(A\subseteq B\)</span> . עכשיו ניקח את הסגור של שתי הקבוצות הללו ונקבל <span class="math">\(\overline{A}\subseteq\overline{B}\)</span> (לא הוכחתי שלקחת סגור לשתי הקבוצות משמר את ההכלה, אבל קל לראות את זה - סגור של קבוצה הוא חיתוך כל הקבוצות הסגורות שמכילות אותה, וכל מי שמכיל את <span class="math">\(B\)</span> מכיל גם את <span class="math">\(A\)</span> ולכן החיתוך שמגדיר את <span class="math">\(\overline{A}\)</span> כולל <strong>לכל הפחות</strong> את אותן קבוצות בחיתוך שמגדיר את <span class="math">\(\overline{B}\)</span> ).</p>
+<p>עכשיו, התחלנו מזה ש-<span class="math">\(\overline{A}=B\cup C\)</span> . בגלל ש-<span class="math">\(B,C\)</span> זרות, זה אומר ש-<span class="math">\(B=\overline{A}\backslash C\)</span> (כי כל מה שלא ב-<span class="math">\(C\)</span> חייב להיות ב-<span class="math">\(B\)</span>, וההפך). אז מה קיבלנו פה? תזכרו שהמרחב שבתוכו אנחנו עובדים כרגע הוא <span class="math">\(\overline{A}\)</span> - זה ה"עולם" הטופולוגי שלנו. הקבוצה <span class="math">\(C\)</span> פתוחה ביחס לעולם הזה, ולכן אם <span class="math">\(B\)</span> היא המשלימה של <span class="math">\(C\)</span> ביחס לעולם הזה, <span class="math">\(B\)</span> היא סגורה ולכן שווה לסגור שלה בעולם הזה. הסגור הזה הוא <span class="math">\(\overline{A}\cap\overline{B}\)</span> (כי הסגור של <span class="math">\(B\)</span> ביחס לתת-מרחב מסוים הוא החיתוך של הסגור של <span class="math">\(B\)</span> במרחב כולו עם תת המרחב הזה) ולכן קיבלנו <span class="math">\(\overline{A}\subseteq\overline{A}\cap\overline{B}=B\)</span> ולכן <span class="math">\(C\)</span> חייבת להיות ריקה, מה שמסיים את ההוכחה הזו.</p>
+<p>אפשר לקחת את הרעיון הזה צעד אחד קדימה - לא רק <span class="math">\(\overline{A}\)</span> תהיה קשירה, אלא כל קבוצה שמתקבלת מהוספת "חלק מהשפה" של <span class="math">\(A\)</span> אל <span class="math">\(A\)</span>, כלומר כל <span class="math">\(A\subseteq A^{\prime}\subseteq\overline{A}\)</span> . הרעיון זהה: הפעם <span class="math">\(A^{\prime}\)</span> תהיה ה"עולם" שלנו. לוקחים פירוק <span class="math">\(A^{\prime}=B\cup C\)</span>, מסיקים ש-<span class="math">\(A\)</span> מוכלת ב-<span class="math">\(B\)</span> ולכן <span class="math">\(\overline{A}\subseteq\overline{B}\)</span> . כעת <span class="math">\(B=A^{\prime}\backslash C\)</span> סגורה ב-<span class="math">\(A^{\prime}\)</span> ולכן שווה לסגור שלה, <span class="math">\(A^{\prime}\cap\overline{B}\)</span>, ולכן נסיק <span class="math">\(A^{\prime}\subseteq A^{\prime}\cap\overline{B}=B\)</span> ונסיים באותו האופן.</p>
+<p>אוקיי, עכשיו - מה עם מכפלה? קל לדמיין מכפלה בהקשר של <span class="math">\(\mathbb{R}\)</span> : למשל, המכפלה של הקטע <span class="math">\(\left[0,1\right]\)</span> בקטע <span class="math">\(\left[3,6\right]\)</span> היא המלבן במישור <span class="math">\(\left\{ \left(x,y\right)\ |\ 0\le x\le1,3\le y\le6\right\}\)</span> . די ברור שאם נכפול משהו לא קשיר במשהו קשיר נקבל משהו לא קשיר, למשל איחוד של שני קטעים זרים שמוכפל בקטע אחד יתן לנו שני מלבנים זרים. מצד שני, מכפלה של שתי קבוצות קשירות - כלומר, של שני קטעים - כן נותנת לנו קבוצה קשירה. אז מתבקש להניח שזה קורה באופן כללי, שמכפלה של מרחבים קשירים היא קשירה. זה למעשה נכון, אבל נשאלת השאלה - <strong>איזו</strong> מכפלה? או ליתר דיוק - איזו <strong>טופולוגיה</strong> יש על מרחב המכפלה?</p>
+<p><a href="https://gadial.net/2026/07/25/topological_spaces_subspace_and_product_topology/">כשהצגתי מרחבי מכפלה</a>, היו שתי טופולוגיות שאפשר להגדיר באופן "טבעי" על מרחבים כאלו: טופולוגיית התיבה וטופולוגיית המכפלה. מבין שניהם טופולוגיית התיבה נראתה הכי טבעית: קבוצה פתוחה היא פשוט מכפלה של קבוצות פתוחות, וזהו. טופולוגיית המכפלה הייתה קצת יותר מוזרה - קבוצה פתוחה היא מכפלה של קבוצות פתוחות אבל כל הקבוצות הללו פרט למספר סופי חייבות להיות <strong>כל המרחב</strong>. היה איזה הסבר טוב להגדרה הזו - משהו עם תת-בסיסים והטלות - אבל נעזוב את זה; הפואנטה הייתה שבטופולוגיית המכפלה קורים דברים יפים, כמו משפט טיכונוף שאומר שמכפלה של מרחבים קומפקטיים היא קומפקטית, ובטופולוגיית התיבה זה לא קורה. זה בדיוק המצב גם עם קשירות: בטופולוגיית התיבה, מכפלה של מרחבים קשירים לא חייבת להיות קשירה, ובטופולוגיית המכפלה כן.</p>
+<p>בואו נתחיל עם הדוגמא הנגדית עבור טופולוגיית התיבה. מן הסתם, ממש פשוט זה לא יהיה - זה חייב לערב מכפלה אינסופית, אבל בואו נשמור את זה פשוט ככל הניתן ונכפול מספר בן מניה של עותקים של <span class="math">\(\mathbb{R}\)</span>, כלומר נסתכל על הקבוצה <span class="math">\(\mathbb{R}^{\omega}\)</span> שאפשר לחשוב על האיברים שלה פשוט בתור סדרות אינסופיות <span class="math">\(\left\{ a_{n}\right\} ^{\infty}_{n=0}\)</span> של מספרים ממשיים. עכשיו, סדרה של ממשיים יכולה להיות אחד משניים: או שהיא <strong>חסומה</strong>, כלומר קיים <span class="math">\(M\)</span> כך ש-<span class="math">\(\left|a_{i}\right|\le M\)</span> לכל <span class="math">\(i\in\mathbb{N}\)</span>, או שהיא לא. נסמן ב-<span class="math">\(A\)</span> את קבוצת כל הסדרות החסומות וב-<span class="math">\(B\)</span> את קבוצת כל הסדרות הלא חסומות. מן הסתם הן זרות ומשלימות - האיחוד שלהן נותן את כל <span class="math">\(\mathbb{R}^{\omega}\)</span>, ולכן אם <span class="math">\(A,B\)</span> שתיהן פתוחות אנחנו בצרה צרורה כי מצאנו פירוק של המרחב ומכאן שהוא לא קשיר.</p>
+<p>כדי להראות שקבוצה היא פתוחה, ניקח סדרה <span class="math">\(a_{0},a_{1},a_{2},\ldots\)</span> כללית ונמצא קבוצה פתוחה שמכילה אותה ומוכלת כולה באחת מהקבוצות. אנחנו לא צריכים אפילו להתאמץ עם אפסילונים הפעם, פשוט נסתכל על הקבוצה</p>
+<p><span class="math">\(\left(a_{0}-1,a_{0}+1\right)\times\left(a_{1}-1,a_{1}+1\right)\times\ldots\)</span> </p>
+<p>שכוללת את כל הסדרות שהאיברים שלהן, בכל קואורדינטה, הם לכל היותר במרחק 1 (בחירה שרירותית לגמרי) מאברי הסדרה המקורית. זו קבוצה פתוחה כי היא מכפלה של קבוצות פתוחות ב-<span class="math">\(\mathbb{R}\)</span> . עכשיו, מן הסתם אם הסדרה המקורית הייתה חסומה, גם כל סדרה שמתקבלת ממנה בכך שזזים ב-1 לכל היותר בכל מקום עדיין תהיה חסומה, ואם הסדרה המקורית הייתה לא חסומה גם כל סדרה שמתקבלת ממנה ככה לא תהיה חסומה - אז הקבוצה הזו מוכלת כולה או ב-<span class="math">\(A\)</span> או ב-<span class="math">\(B\)</span>, בהתאם לשאלה באיזה משתי הקבוצות הללו הסדרה המקורית שלנו נמצאת. זה מסיים את הסיפור עבור טופולוגיית התיבה, אם כי ברור שהבניה הזו לא תעבוד לטופולוגיית המכפלה כי כמעט כל המוכפלים יהיו חייבים להיות <span class="math">\(\mathbb{R}\)</span>, כלומר בכל קבוצה פתוחה שמכילה את הסדרה שלנו יוכלו להיות גם סדרות חסומות וגם סדרות לא חסומות.</p>
+<p>בואו נעבור עכשיו להוכחה עבור המקרה שבו זה עובד. ראשית, מקרה הבסיס הפשוט שלנו יהיה מכפלה <span class="math">\(A\times B\)</span> של שני מרחבים קשירים. אם נוכיח את זה, אפשר לקבל באינדוקציה שמכפלה של מספר <strong>סופי</strong> כלשהו של מרחבים קשירים הוא קשיר (כזכור, במקרה הסופי טופולוגיית התיבה וטופולוגיית המכפלה נותנות את אותה הטופולוגיה). כאן אנחנו קוטפים את הפירות של מה שכבר ראינו - שאיחוד של מרחבים קשירים עם נקודה משותפת הוא קשיר, ושתמונה רציפה של מרחב קשיר היא קשירה.</p>
+<p>ראשית, בואו נבחר נקודה <span class="math">\(\left(a,b\right)\in A\times B\)</span> כלשהי (אם אין, כי <span class="math">\(A\)</span> או <span class="math">\(B\)</span> ריקה, זה מקרה מנוון אבל לא בעייתי כי טכנית הפירוק <span class="math">\(\emptyset=\emptyset\cup\emptyset\)</span> מראה שהקבוצה הריקה קשירה). עכשיו, בואו נדמיין שניה ש-<span class="math">\(A\)</span> ו-<span class="math">\(B\)</span> שניהם <span class="math">\(\mathbb{R}\)</span> ולכן אפשר לחשוב עליהם בתור קווים ישרים ועל המכפלה שלהם בתור המישור ולכן על <span class="math">\(\left(a,b\right)\)</span> בתור נקודה במישור. מה זו הקבוצה <span class="math">\(A\times b\)</span> ? זה הקו <span class="math">\(A\)</span> (שנדמיין בתור קו אופקי) שעובר דרך ראשית הצירים בקואורדינטה <span class="math">\(\left(0,b\right)\)</span> . באופן דומה <span class="math">\(a\times B\)</span> הוא קו אנכי, ולכן האיחוד של שניהם <span class="math">\(\left(A\times b\right)\cup\left(a\times B\right)\)</span> הוא מין "צלב" כזה שבו נמצאת הנקודה <span class="math">\(\left(a,b\right)\)</span> שמשותפת לשני המרחבים. עכשיו, <span class="math">\(A\times b\)</span> הומיאומורפי ל-<span class="math">\(A\)</span> (על ידי הפונקציה <span class="math">\(f\left(x\right)=\left(x,b\right)\)</span> שקל להראות שהיא חח"ע, על ורציפה) ולכן אם <span class="math">\(A\)</span> קשיר גם <span class="math">\(A\times b\)</span> קשיר; מאותו נימוק <span class="math">\(a\times B\)</span> קשיר; ולכן ה"צלב"<span class="math">\(\left(A\times b\right)\cup\left(a\times B\right)\)</span> הוא קשיר בעצמו. רק מה, הצלב הזה לא מכסה את כל <span class="math">\(A\times B\)</span>, צריך עוד קבוצות. אבל זו התחלה טובה.</p>
+<p>כדי להמשיך, בואו נבחר <span class="math">\(a^{\prime}\in A\)</span> כלשהו ונגדיר צלב דומה, <span class="math">\(\left(A\times b\right)\cup\left(a^{\prime}\times B\right)\)</span> . גם הוא יהיה קשיר מאותו נימוק כמו קודם. עכשיו בואו נאחד את כל הצלבים שנוצרים באופן הזה: <span class="math">\(\bigcup_{a^{\prime}\in A}\left(A\times b\right)\cup\left(a^{\prime}\times B\right)\)</span> . מה קיבלנו? ראשית, קיבלנו את כל המרחב; עבור נקודה שרירותית כלשהי <span class="math">\(\left(x,y\right)\)</span> היא שייכת אל <span class="math">\(a^{\prime}\times B\)</span> עבור המקרה <span class="math">\(x=a^{\prime}\)</span> . שנית, כל הצלבים חולקים נקודה משותפת כי כולם חולקים את <span class="math">\(A\times b\)</span> - תדמיינו את זה כאילו יש לנו ישר אופקי קבוע, וישר אנכי שעובר דרכו וזז ימינה ושמאלה עד שהוא מכסה את כל המישור. זה מסיים את ההוכחה במקרה של מכפלה של שני מרחבים, ולכן של מספר סופי כלשהו.</p>
+<p>נשאר רק המקרה של מכפלה אינסופית עם טופולוגיית המכפלה. הרעיון הבסיסי מאוד דומה למה שראינו במקרה הסופי - אנחנו עדיין עובדים עם "צלבים" קשירים שכאלו עם נקודה אחת משותפת ומנסים לתפוס באמצעות איחוד שלהם כמה שיותר מהמרחב. ההבדל הוא שהפעם האיחוד לא ייתן לנו את <strong>כל</strong> המרחב, אבל הוא ייתן לנו קבוצה ש<strong>הסגור</strong> שלה הוא כל המרחב, וכבר ראינו שאם קבוצה היא קשירה גם הסגור שלה קשיר.</p>
+<p>אם כן, בואו ניקח מכפלה כללית <span class="math">\(\prod_{i\in\Lambda}A_{i}\)</span> של קבוצות קשירות. אם היא ריקה, קיבלנו מרחב קשיר וסיימנו. אחרת, יש בה נקודה ספציפית <span class="math">\(a=\left\{ a_{i}\right\} _{i\in\Lambda}\)</span> . עכשיו, בואו ניקח תת-קבוצה <strong>סופית</strong> של האינדקסים, <span class="math">\(F\subseteq\Lambda\)</span>, ונסתכל על "צלב" שנבנה בעזרת <span class="math">\(F\)</span> : הקבוצה</p>
+<p><span class="math">\(C_{F}=\left\{ x\in\prod_{i\in\Lambda}A_{i}\ |\ i\notin F\Rightarrow x_{i}=a_{i}\right\}\)</span> </p>
+<p>כלומר, זו קבוצת כל הנקודות במכפלה ש<strong>זהות</strong> ל-<span class="math">\(a\)</span> בכל האינדקסים למעט אולי הכמות הסופית של האינדקסים שיש ב-<span class="math">\(F\)</span> . לא קשה לראות שהקבוצה הזו הומיאומורפית למכפלה <strong>הסופית</strong><span class="math">\(\prod_{i\in F}A_{i}\)</span> והמכפלה הזו קשירה על פי מה שכבר ראינו. בנוסף, <span class="math">\(a\in C_{F}\)</span> . לכן, אם ניקח את <strong>כל</strong> ה-<span class="math">\(C_{F}\)</span> -ים האפשריים שמתקבלים מלקיחת קבוצה סופית <strong>כלשהי</strong><span class="math">\(F\subseteq\Lambda\)</span>, נקבל איחוד של מרחבים קשירים עם נקודה משותפת (<span class="math">\(a\)</span> ). זה איחוד עצום, שיכול להיות גם של מספר לא בן מניה של מרחבים; זה לא משנה, ההוכחה שלנו על איחוד עבדה גם במקרים הללו. אז אפשר להגדיר <span class="math">\(C=\bigcup_{F}C_{F}\)</span> ולקבל תת-מרחב קשיר <span class="math">\(C\subseteq\prod_{i\in\Lambda}A_{i}\)</span> . נשאר רק להראות ש-<span class="math">\(\overline{C}\)</span> כולל את כל <span class="math">\(\prod_{i\in\Lambda}A_{i}\)</span> . זה דורש להראות שלכל איבר במכפלה יש סביבה פתוחה עם חיתוך לא ריק עם <span class="math">\(C\)</span>, אבל אפשר למעשה להראות יותר מזה: ש-<span class="math">\(C\)</span> <strong>צפופה</strong> במכפלה. אני לא חושב שהזכרתי את המושג הזה עדיין, אבל הוא פשוט: <span class="math">\(C\)</span> צפופה במרחב כלשהו אם כל קבוצה פתוחה לא ריקה במרחב היא בעלת חיתוך לא ריק עם <span class="math">\(C\)</span> . הדוגמא הקלאסית היא <span class="math">\(\mathbb{Q}\)</span> שצפופה במרחב <span class="math">\(\mathbb{R}\)</span> .</p>
+<p>אם כן, בואו ניקח קבוצה פתוחה לא ריקה כללית <span class="math">\(U=\prod_{i\in\Lambda}U_{i}\)</span> במרחב המכפלה שלנו. כאן נכנסת לתמונה העובדה שאנחנו עובדים בטופולוגיית המכפלה - הקבוצה הפתוחה הזו חייבת להיות <strong>די פשוטה</strong>, כלומר <span class="math">\(U_{i}=A_{i}\)</span> לכל האינדקסים חוץ ממספר סופי. רואות לאן זה הולך? נסמן את קבוצת האינדקסים שבהם <span class="math">\(U_{i}\ne A_{i}\)</span> ב-<span class="math">\(F\)</span>, ועכשיו ניקח איבר <span class="math">\(x\in\prod_{i\in\Lambda}U_{i}\)</span> כלשהו ונתעלל באינדקסים שלו - נשנה את כולם לאינדקסים של <span class="math">\(a\)</span> חוץ מאשר את האינדקסים ב-<span class="math">\(F\)</span> . כלומר, נגדיר</p>
+<p><span class="math">\(x^{\prime}_{i}=\begin{cases}
+x_{i} &amp; i\in F\\
+a_{i} &amp; i\notin F
+\end{cases}\)</span> </p>
+<p>ועכשיו <span class="math">\(x^{\prime}\in C_{F}\)</span> ממש על פי ההגדרה. בנוסף, לא ברחנו מגבולות <span class="math">\(U\)</span> ; עדיין מתקיים <span class="math">\(x^{\prime}\in U\)</span> כי בכל אינדקס שאינו ב-<span class="math">\(F\)</span>, הערך של אברי <span class="math">\(U\)</span> <strong>הוא בלתי מוגבל</strong>. ההוכחה הזו נחמדה כי אנחנו רואים בדיוק את האופן שבו טופולוגיית המכפלה מאפשרת לנו "לקפוץ" מהמקרה הסופי למקרה הכללי: במקרה הסופי הצלחנו להוכיח משהו לכל קבוצה סופית <span class="math">\(F\)</span>, וטופולוגיית המכפלה מאפשרת לנו להסתפק <strong>רק</strong> בכך שהוכחנו עבור <span class="math">\(F\)</span> סופית ולא עבור דברים גדולים יותר.</p>
+<h2>קשירות מסילתית</h2>
+<p>אם כבר אני כותב פוסט על קשירות, בואו ננצל את שולי הפוסט כדי להזכיר מושג קשור ורלוונטי בפני עצמו, שאולי אפילו יותר מתאים לאינטואיציה הראשונית של "קשירות" - <strong>קשירות מסילתית</strong>. בשביל זה אולי נוח לדמין גרף - בתורת הגרפים, גרף הוא <strong>קשיר</strong> אם יש מסלול בין כל שני צמתים בו. אם אנחנו מציירים גרף עם צמתים בתור נקודות וקשתות בתור קווים, אז מסלול בגרף הוא פשוט קו שבור ארוך, ו"קשירות" מתבטאת בכך שיש קו כזה שעובר כולו בתוך הגרף עבור כל שתי נקודות בגרף.</p>
+<p>קשירות מסילתית היא רעיון דומה - מרחב <span class="math">\(X\)</span> הוא קשיר מסילתית אם לכל זוג נקודות <span class="math">\(x,y\in X\)</span> יש מסלול רציף שכזה שמגיע מ-<span class="math">\(x\)</span> אל <span class="math">\(y\)</span> . כמובן, יש פה בעיה קטנה - מרחב טופולוגי כללי <span class="math">\(X\)</span> הוא משהו אבסטרקטי שכזה, איך נראה "מסלול" בו? והתשובה לזה פשוטה ודומה להרבה תשובות אחרות; בואו נסתכל על <span class="math">\(\mathbb{R}\)</span> שבו אנחנו כן מבינים דברים ואז נזרום משם הלאה עם פונקציות רציפות.</p>
+<p>ב-<span class="math">\(\mathbb{R}\)</span> מסלול בין שתי נקודות <span class="math">\(a\lt b\)</span> הוא פשוט הקטע <span class="math">\(\left[a,b\right]\)</span> שמתחיל ב-<span class="math">\(a\)</span> ונגמר ב-<span class="math">\(b\)</span> ועובר בכל הנקודות באמצע. כמובן, אפשר לדמיין מסלולים מסובכים יותר שהולכים קדימה ואחורה ונעצרים קצת באמצע לראות את הנוף וכדומה, אבל גם אותם אפשר לקבל מהמסלול הפשוט <span class="math">\(\left[a,b\right]\)</span> . פורמלית: במרחב <span class="math">\(X\)</span> נגדיר מסלול מ-<span class="math">\(x\)</span> אל <span class="math">\(y\)</span> בתור פונקציה רציפה <span class="math">\(\gamma:\left[a,b\right]\to X\)</span> עבור <span class="math">\(a,b\in\mathbb{R}\)</span>, כך ש-<span class="math">\(\gamma\left(a\right)=x\)</span> ו-<span class="math">\(\gamma\left(b\right)=y\)</span> .</p>
+<p>בואו נראה דוגמא פשוטה. ניקח <span class="math">\(X=\mathbb{R}^{2}\)</span> כדי שעדיין יהיה משהו שאפשר לדמיין, ונבחר את הנקודות שעל הצירים, <span class="math">\(x=\left(1,0\right)\)</span> ו-<span class="math">\(y=\left(0,1\right)\)</span> . עכשיו בואו ניקח מעגל היחידה שעובר דרך שתי הנקודות הללו - אם נסתכל רק על הרבע שלו שהולך מ-<span class="math">\(x\)</span> אל <span class="math">\(y\)</span>, יש לנו דוגמא למסלול בין שתי הנקודות הללו. איך נגדיר אותו פורמלית? ניקח את הקטע <span class="math">\(\left[0,\frac{\pi}{2}\right]\)</span> ונגדיר עליו <span class="math">\(\gamma\left(t\right)=\left(\cos t,\sin t\right)\)</span> - זו הפרמטריזציה הסטנדרטית של מעגל, כך שאין פה משהו מרגש - אבל זה עובד יפה.</p>
+<p>עכשיו בואו נראה שאם <span class="math">\(X\)</span> קשיר מסילתית אז הוא קשיר. ניקח פירוק כלשהו, <span class="math">\(X=A\cup B\)</span> כך ש-<span class="math">\(A,B\)</span> קבוצות פתוחות זרות. נניח בשלילה ששתיהן לא ריקות, כך שיש <span class="math">\(x\in A,y\in B\)</span> . מכיוון שהמרחב קשיר מסילתית, קיימת פונקציה רציפה <span class="math">\(\gamma:\left[a,b\right]\to X\)</span> כך ש-<span class="math">\(\gamma\left(a\right)\in A\)</span> ו-<span class="math">\(\gamma\left(b\right)\in B\)</span> . מצד שני, <span class="math">\(\gamma\)</span> רציפה והקטע <span class="math">\(\left[a,b\right]\)</span> קשיר (לא הוכחתי את זה בפוסט הזה! אני מסתמך על זה שאנחנו כבר יודעים שאקסיומת השלמות נותנת את זה) ולכן התמונה <span class="math">\(\gamma\left(\left[a,b\right]\right)\)</span> היא תת-קבוצה קשירה של <span class="math">\(X\)</span> . כבר ראינו בהוכחות קודמות שזה אומר שהיא מוכלת כולה ב-<span class="math">\(A\)</span> או ב-<span class="math">\(B\)</span> (אחרת החיתוך שלה עם שניהם יתן פירוק שלה) וזה בסתירה לכך ש-<span class="math">\(\gamma\left(a\right)\in A\)</span> ו-<span class="math">\(\gamma\left(b\right)\in B\)</span> . הוכחה פשוטה! וגם די אינטואיטיבית, הרי אם המרחב מפורק לשתי חתיכות לא נוכל למצוא מסלול רציף מאחת לשניה.</p>
+<p>מה שמעניין פה הוא שההפך לא נכון. מרחב יכול להיות קשיר אבל לא קשיר מסילתית, כי, ובכן, טופולוגיה מתעסקת לפעמים עם מרחבים מוזרים שבהם האינטואיציה שלנו לא עובדת. זה ממחיש למה ההגדרה הטופולוגית לקשירות, עם הפירוק הזה לשתי קבוצות, יותר רלוונטית (לטופולוגיה) מאשר זו של קשירות מסילתית שנראית אולי טבעית יותר (והיא שימושית מאוד בפני עצמה, לא סתם טרחו לתת לה שם). אלא שכדי להיות אקסטרה מעליבים, הדוגמא הנגדית היא אפילו לא כזו מוזרה - היא עקום די פשוט שחי לו בסבבה ב-<span class="math">\(\mathbb{R}^{2}\)</span> (לא צריך מרחבים שהם מכפלות אינסופיות מוזרות) ונקרא בשם היפה והקולע "עקומת הסינוס של הטופולוגים". ככה זה נראה:</p>
+<p><img src="/img/2026/topologists_sine_curve.svg" alt=""/></p>
+<p>הדבר הזה הוא בסך הכל הגרף של הפונקציה <span class="math">\(f\left(x\right)=\sin\frac{1}{x}\)</span> בקטע <span class="math">\((0,1]\)</span>, כלומר אוסף הנקודות מהצורה <span class="math">\(\left(x,\sin\frac{1}{x}\right)\)</span> עבור <span class="math">\(0\lt x\le1\)</span>, יחד עם הקו האנכי שעובר דרך ראשית הצירים, <span class="math">\(\left\{ 0\right\} \times\left[-1,1\right]\)</span>, שאותו מוסיפים כדי לקבל את הסגור של הגרף של הסינוס. תחשבו על זה ככה: ככל ש-<span class="math">\(x\)</span> מתקרב ל-<span class="math">\(0\)</span>, <span class="math">\(\frac{1}{x}\)</span> שואף לאינסוף יותר ויותר מהר, ולכן <span class="math">\(\sin\frac{1}{x}\)</span>, שתמיד "מזפזפ" בין כל הערכים האפשריים בין <span class="math">\(1\)</span> ובין <span class="math">\(-1\)</span> ממשיך לזפזפ בינם יותר ויותר מהר, ולכן לכל <span class="math">\(\varepsilon\gt 0\)</span> קטן כרצוננו, תמיד אפשר יהיה למצוא נקודה על העקום שעבורה <span class="math">\(x\lt \varepsilon\)</span> ואילו <span class="math">\(\sin\frac{1}{x}\)</span> הוא נקודה <span class="math">\(t\in\left[-1,1\right]\)</span> כלשהי ולכן המרחק של הנקודה על העקום מהנקודה <span class="math">\(\left(0,t\right)\)</span> על הקו האנכי הוא קטן מ-<span class="math">\(\varepsilon\)</span>, כלומר <span class="math">\(\left(0,t\right)\)</span> היא נקודת הצטברות של גרף הסינוס, ולכן אם לוקחים את הסגור שלו צריך להוסיף את כל הנקודות מהצורה הזו. אני אסמן <span class="math">\(S=\left\{ \left(x,\sin\frac{1}{x}\right)\ |\ 0\lt x\le1\right\}\)</span> ואז עקומית הסינוס של הטופולוגים היא <span class="math">\(\overline{S}\)</span> .</p>
+<p>עכשיו, זה ש-<span class="math">\(\overline{S}\)</span> היא קבוצה קשירה נובע מיידית מדברים שכבר ראינו: הגרף של <span class="math">\(\sin\frac{1}{x}\)</span> הוא תמונה רציפה של הקטע הקשיר <span class="math">\((0,1]\)</span> ולכן קשיר; וכשלוקחים את הסגור שלו, מקבלים קבוצה קשירה. אבל מצד שני, הגרף של הסינוס לא באמת <strong>נוגע</strong> בקו האנכי, נכון? הוא רק מתקרב אליו באופן מעוך שכזה. זה מספיק לקשירות אבל זה <strong>לא</strong> מספיק לקשירות מסילתית. עדיין, איך מראים את זה פורמלית?</p>
+<p>בואו נניח שהמרחב כן קשיר מסילתית וניקח מסלול <span class="math">\(\gamma:\left[a,b\right]\to\overline{S}\)</span> כך ש-<span class="math">\(\gamma\left(a\right)\in\overline{S}\backslash S\)</span> (כלומר, בקו האנכי) ו-<span class="math">\(\gamma\left(b\right)\in S\)</span> (כלומר, על גרף הסינוס עצמו). איך המסלול נראה? בהתחלה הוא יכול לזוז אנה ואנה בקו האנכי, כמו מישהו שמתרוצץ על שפת נהר. אולי הוא אפילו יעבור באורח קסום אל <span class="math">\(S\)</span> ואז יחזור אל הקו האנכי, מי יודע? מה שאנחנו רוצים לעשות הוא להתמקד בשלב האחרון - הרגע שבו הוא עוזב את הקו האנכי על מנת שלא לחזור עוד. המושג הזה של "רגע" מתאים יפה לחשיבה על <span class="math">\(\gamma:\left[a,b\right]\to\overline{S}\)</span> בתור פונקציה שממפה <strong>זמן</strong> למקום, כלומר אנחנו חושבים על <span class="math">\(\gamma\left(t\right)\)</span> בתור "איפה המסלול נמצא בזמן <span class="math">\(t\)</span> ". אז בואו נסתכל על קבוצת "כל הרגעים שבהם המסלול נמצא בקו האנכי": זה בדיוק <strong>המקור</strong> של הקו האנכי על פי <span class="math">\(\gamma\)</span>, כלומר הקבוצה <span class="math">\(\gamma^{-1}\left(\left\{ 0\right\} \times\left[-1,1\right]\right)\)</span> . עכשיו, מכיוון שהקו האנכי הוא קבוצה סגורה ו-<span class="math">\(\gamma\)</span> רציפה, גם המקור שלה הוא קבוצה סגורה. מכיוון שהיא חסומה (על ידי <span class="math">\(b\)</span> ), יש לה <strong>חסם עליון</strong>, ומכיוון שהיא סגור החסם העליון הזה שייך לקבוצה עצמה, כלומר גם הוא איבר שמועבר על ידי <span class="math">\(\gamma\)</span> אל הקו האנכי. נסמן אותו ב-<span class="math">\(c\)</span> .</p>
+<p>מכיוון ש-<span class="math">\(\gamma\left(b\right)\in S\)</span> ו-<span class="math">\(\gamma\left(c\right)\in\overline{S}\backslash S\)</span>, אנחנו יודעים ש-<span class="math">\(c\lt b\)</span>, מה שאומר שאפשר עכשיו להסתכל רק על <span class="math">\(\gamma:\left[c,b\right]\to\overline{S}\)</span> : זה מסלול שברגע הראשון שלו הוא לא ב-<span class="math">\(\overline{S}\)</span> אבל בכל רגע אחר הוא כן.</p>
+<p>אבל מה הבעיה פה? מן הסתם, משהו ברציפות של <span class="math">\(\gamma\)</span> חייב להשתבש. מכיוון ש-<span class="math">\(\gamma\)</span> היא פונקציה עם שני רכיבים, אפשר לכתוב אותם במפורש: <span class="math">\(\gamma\left(t\right)=\left(x\left(t\right),y\left(t\right)\right)\)</span> . מספיק יהיה להראות שהרכיב <span class="math">\(y\)</span> הוא לא רציף, אבל גם ב-<span class="math">\(x\)</span> יהיה לנו שימוש.</p>
+<p>דרך פשוטה לשבש רציפות של פונקציה הוא למצוא <strong>סדרה</strong> של נקודות שמתכנסות לנקודה שבה אנחנו רוצים לרסק את הרציפות, וסדרת <strong>הפלטים</strong> על הנקודות הללו בבירור לא מתכנסת אל הערך של הפונקציה בנקודה הזו. אצלנו הנקודה הבעייתית היא <span class="math">\(c\)</span> : נרצה לבנות סדרה <span class="math">\(\left\{ t_{n}\right\} ^{\infty}_{n=1}\)</span> כך ש-<span class="math">\(\lim_{n\to\infty}y\left(t_{n}\right)\ne y\left(c\right)\)</span> למרות ש-<span class="math">\(\lim_{n\to\infty}t_{n}=c\)</span> . עם סינוס שמתפרע זה קל במיוחד: אני אבנה את הסדרה שלי כך ש-<span class="math">\(y\left(t_{n}\right)=\left(-1\right)^{n}\)</span> (כלומר, או 1 או <span class="math">\(-1\)</span>, בהתאם לזוגיות של <span class="math">\(n\)</span> ) ואקבל סדרה שפשוט <strong>לא מתכנסת</strong>.</p>
+<p>איך נעשה את זה? כמו שכבר אמרתי, הקטע עם <span class="math">\(\sin\frac{1}{x}\)</span> הוא שככל שמתקרבים ל-0 הוא מזפזפ מהר יותר ויותר. אבל הנה הפורמליזם: לכל <span class="math">\(n\)</span>, בואו נסתכל על <span class="math">\(\left[0,x\left(c+\frac{1}{n}\right)\right]\)</span>, כלומר על כל הנקודות על ציר <span class="math">\(x\)</span> החל מ-0 ועד לנקודה שאליה המסלול מגיע בזמן <span class="math">\(c+\frac{1}{n}\)</span> . שימו לב שהקטע הזה הוא לא טריוויאלית <span class="math">\(\left\{ 0\right\}\)</span> ותו לא, בגלל שלכל נקודה גדולה מ-<span class="math">\(c\)</span>, ה-<span class="math">\(x\)</span> על הנקודה הזו הוא לא 0 (כי הפלט של <span class="math">\(\gamma\)</span> על <span class="math">\(c+\frac{1}{n}\)</span> לא נמצא על הקו האנכי). לכן, מהתכונה של <span class="math">\(\sin\frac{1}{x}\)</span> שתיארתי, קיימת בקטע הזה נקודה <span class="math">\(s\in\left[0,x\left(c+\frac{1}{n}\right)\right]\)</span> כך ש-<span class="math">\(\sin\frac{1}{s}=\left(-1\right)^{n}\)</span> . מה נשאר? למצוא <span class="math">\(c\lt t_{n}\le c+\frac{1}{n}\)</span> כך ש-<span class="math">\(x\left(t_{n}\right)=s\)</span> . למה זה קיים? ובכן, נכון ש-<span class="math">\(x\)</span> היא רכיב של <span class="math">\(\gamma\)</span> הרציפה ולכן היא בעצמה פונקציה רציפה? ומתקיים <span class="math">\(x\left(c\right)=0\)</span> ? ומתקיים, ובכן, <span class="math">\(x\left(c+\frac{1}{n}\right)=x\left(c+\frac{1}{n}\right)\)</span> ? אז יש לנו פונקציה <strong>רציפה</strong> שמוגדרת על קטע סגור, ויש לנו **ערך ביניים **<span class="math">\(s\in\left[x\left(c\right),x\left(c+\frac{1}{n}\right)\right]\)</span>, ולכן אנחנו יודעים שקיים <span class="math">\(t_{n}\)</span> כך ש-<span class="math">\(x\left(t_{n}\right)=s\)</span>, ממשפט ערך הביניים שאיתו התחלנו את כל הסיפור. אמרתי שהוא הולך להיות שימושי!</p>
+        </article>
+        
+        <footer>
+            <p>© כל הזכויות שמורות לגדי אלכסנדרוביץ'</p>
+        </footer>
+    </div>
+
+    
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('expanded');
+        }
+        
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                window.location.href = '/post_list.html?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+    </script>
+    
+    
+    <!-- Auto-render KaTeX math -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+
+</body>
+</html>
